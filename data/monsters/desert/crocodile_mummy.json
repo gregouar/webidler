@@ -1,0 +1,26 @@
+{
+  "name"    : "Desiccated Crocodile",
+  "portrait": "monsters/desert/crocodile.webp",
+  "max_life": 20,
+  "size"    : "Large",
+  "armor"   : {"Poison": 100, "Fire": 100},
+  "skills"  : [
+    {
+      "name"      : "Desiccated Bite",
+      "icon"      : "skills/croc_jaws.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 6], "Fire": [8, 16] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

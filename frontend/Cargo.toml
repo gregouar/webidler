@@ -19,10 +19,11 @@ leptos-use = { version = "0.18.3", features = [
     "use_window_size",
     "on_click_outside",
     "use_infinite_scroll",
+    "use_interval_fn",
     "storage",
     "watch_throttled",
 ] }
-web-sys = { version = "0.3.95", features = ["Performance", "Selection", "ValidityState"] }
+web-sys = { version = "0.3.95", features = ["Performance", "Selection", "Storage", "ValidityState"] }
 js-sys = "0.3.95"
 
 console_error_panic_hook = "0.1.7"
@@ -33,6 +34,7 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
 serde_plain = "1.0.2"
 codee = { version = "0.3.5", features = ["msgpack_serde"] }
+base64 = "0.22.1"
 strum = "0.27.2"
 nutype = { version = "0.6.2",  features = ["serde", "regex"] }
 uuid = { version = "1.20.0", features = ["v4","js"] }

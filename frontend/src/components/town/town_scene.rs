@@ -16,12 +16,14 @@ use crate::{
     components::{
         data_context::DataContext,
         game::portrait::CharacterPortrait,
-        icons::area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
+        icons::{
+            area::{BossAreaIcon, CrucibleAreaIcon, TrainingAreaIcon},
+            battle_scene::RushIcon,
+        },
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
-            skills::{SkillProgressBar, skill_specs_from_base},
-            tooltips::SkillTooltip,
+            skills::{SkillMasteryCard, skill_specs_with_mastery},
         },
         town::{TownContext, items_browser::ItemDetailsPanel},
         ui::{
@@ -29,10 +31,8 @@ use crate::{
             buttons::{CloseButton, MenuButton},
             card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
-            number::format_duration_in_days,
-            tooltip::{
-                DynamicTooltipContext, DynamicTooltipPosition, StaticTooltip, StaticTooltipPosition,
-            },
+            number::{format_duration, format_duration_in_days},
+            tooltip::{StaticTooltip, StaticTooltipPosition},
         },
     },
 };
@@ -61,7 +61,42 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                 <Card class="w-2/3 aspect-[12/8]">
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
                     flex justify-between">
-                        <CardTitle>"Grinds"</CardTitle>
+                        <div class="flex items-center gap-2 items-center">
+                            <CardTitle>"Grinds"</CardTitle>
+                            <StaticTooltip
+                                position=StaticTooltipPosition::Bottom
+                                tooltip=move || {
+                                    let stamina = town_context.character.read().resource_stamina;
+                                    view! {
+                                        <div class="max-w-xs whitespace-normal">
+                                            {if stamina.is_zero() {
+                                                "Stamina can only be accumulated while offline in a Grind."
+                                                    .to_string()
+                                            } else {
+                                                format!(
+                                                    "{} Stamina available for your next Grind.",
+                                                    format_duration(stamina, false),
+                                                )
+                                            }}
+                                        </div>
+                                    }
+                                }
+                            >
+                                <span class=move || {
+                                    format!(
+                                        "inline-flex text-base xl:text-xl text-amber-300 {}",
+                                        if town_context.character.read().resource_stamina.is_zero()
+                                        {
+                                            "grayscale"
+                                        } else {
+                                            ""
+                                        },
+                                    )
+                                }>
+                                    <RushIcon />
+                                </span>
+                            </StaticTooltip>
+                        </div>
                         <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-base xl:text-lg">
                             {move || {
                                 (!town_context.character.read().played_time.is_zero())
@@ -99,7 +134,7 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                                                 .get(&area.area_id)
                                                 .map(|area_specs| (
                                                     !area_specs.training,
-                                                    area_specs.coming_soon,
+                                                    area_specs.crucible,
                                                     area_specs.required_level,
                                                 ))
                                                 .unwrap_or_default()
@@ -132,10 +167,10 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <Card class="w-1/3">
+        <Card class="w-1/3 min-h-0">
             <PlayerName />
 
-            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+            <div class="min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
                         {move || {
@@ -156,23 +191,12 @@ fn PlayerCard() -> impl IntoView {
                 </div>
             </div>
 
+            // <div class="min-h-0 overflow-y-auto grid grid-cols-2 gap-1 xl:gap-2">
             <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
-                <For
-                    each=move || {
-                        0..town_context
-                            .last_grind
-                            .with(|last_grind| {
-                                last_grind
-                                    .as_ref()
-                                    .map(|last_grind| last_grind.skills.len().min(4))
-                                    .unwrap_or_default()
-                            })
-                    }
-                    key=|i| *i
-                    let(i)
-                >
-                    <PlayerSkill index=i />
-                </For>
+                <PlayerFavoriteSkillMastery index=0 />
+                <PlayerFavoriteSkillMastery index=1 />
+                <PlayerFavoriteSkillMastery index=2 />
+                <PlayerFavoriteSkillMastery index=3 />
             </div>
         </Card>
     }
@@ -204,92 +228,60 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn PlayerSkill(index: usize) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
+    let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
 
-    let skill_entry = Signal::derive(move || {
-        town_context.last_grind.with(|last_grind| {
-            last_grind
-                .as_ref()
-                .and_then(|last_grind| last_grind.skills.get_index(index))
-                .map(|(skill_id, player_base_skill)| (skill_id.clone(), player_base_skill.clone()))
-        })
+    let favorite_mastery = Memo::new(move |_| {
+        let player_skill_masteries = town_context.player_skill_masteries.get();
+        let skill_mastery_skill_specs = town_context.skill_mastery_skill_specs.get();
+        let skill_id = player_skill_masteries.favorite_skills.get(index)?.clone();
+        let mastery = player_skill_masteries.masteries.get(&skill_id)?.clone();
+        let base_skill_specs = data_context.skill_specs.read().get(&skill_id)?.clone();
+        let skill_specs = skill_specs_with_mastery(
+            skill_id.clone(),
+            &base_skill_specs,
+            &skill_mastery_skill_specs,
+        );
+
+        Some((skill_id, mastery, skill_specs))
     });
-
-    let skill_specs = Signal::derive(move || {
-        skill_entry.get().map(|(skill_id, player_base_skill)| {
-            skill_specs_from_base(skill_id, &player_base_skill.base_skill_specs)
-        })
-    });
-    let skill_progress = Memo::new(move |_| {
-        skill_specs
-            .read()
-            .as_ref()
-            .map(|skill_specs| (skill_specs.skill_type, skill_specs.icon.clone()))
-    });
-
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
-    let tooltip_id = RwSignal::new(0);
-    let show_tooltip = move || {
-        if let Some((_, player_base_skill)) = skill_entry.get()
-            && let Some(skill_specs) = skill_specs.get()
-        {
-            let skill_specs = Arc::new(skill_specs);
-            let player_base_skill = Some(Arc::new(player_base_skill));
-            tooltip_id.set(tooltip_context.set_content(
-                move || {
-                    let skill_specs = skill_specs.clone();
-                    let player_base_skill = player_base_skill.clone();
-                    view! { <SkillTooltip skill_specs=skill_specs player_base_skill=player_base_skill /> }
-                    .into_any()
-                },
-                DynamicTooltipPosition::TopRight,
-            ));
-        }
-    };
-
-    let hide_tooltip = move || {
-        tooltip_context.hide(tooltip_id.get_untracked());
-    };
-    on_cleanup(hide_tooltip);
 
     view! {
-        <div class="flex flex-col">
-            <div
-                on:touchstart=move |_| show_tooltip()
-                on:contextmenu=move |ev| {
-                    ev.prevent_default();
-                }
-                on:mouseenter=move |_| show_tooltip()
-                on:mouseleave=move |_| hide_tooltip()
-                on:click=move |_| hide_tooltip()
-            >
-                // <button
-                // class="btn p-1 w-full h-full
-                // active:brightness-50 active:sepia"
-                // disabled=true
-                // >
-                <div class="p-1 w-full h-full">
-                    {move || {
-                        skill_progress
-                            .read()
-                            .as_ref()
-                            .map(|(skill_type, skill_icon)| {
-                                view! {
-                                    <SkillProgressBar
-                                        skill_type=*skill_type
-                                        skill_icon=skill_icon.clone()
-                                        value=Signal::derive(|| 0.0)
-                                        bar_width=4
-                                    />
-                                }
-                                    .into_any()
+        {move || {
+            favorite_mastery
+                .get()
+                .map(|(skill_id, skill_mastery_state, skill_specs)| {
+                    let skill_id_for_click = skill_id.clone();
+                    view! {
+                        <SkillMasteryCard
+                            skill_specs
+                            skill_mastery_state
+                            compact=true
+                            on_click=Callback::new(move |_| {
+                                town_context
+                                    .selected_skill_mastery
+                                    .set(Some(skill_id_for_click.clone()));
+                                town_context.open_skill_mastery_details.set(true);
                             })
-                    }}
-                </div>
-            // </button>
-            </div>
-        </div>
+                        />
+                    }
+                        .into_any()
+                })
+                .unwrap_or_else(|| {
+                    view! {
+                        <SkillMasteryCard
+                            empty_label=format!("Favorite {}", index + 1)
+                            compact=true
+                            on_click=Callback::new(move |_| {
+                                town_context.selected_skill_mastery.set(None);
+                                town_context.open_skill_masteries.set(true);
+                            })
+                        />
+                    }
+                        .into_any()
+                })
+        }}
     }
 }
 
@@ -412,7 +404,7 @@ fn GrindingAreaCard(
                             />
                         </div>
 
-                        <div class="p-2 xl:p-4 xl:space-y-1 flex-1 flex flex-col justify-around">
+                        <div class="p-2 xl:p-3 xl:space-y-1 flex-1 flex flex-col justify-around">
                             <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
                                 {move || area_specs.read().name.clone()}
                             </div>
@@ -431,6 +423,12 @@ fn GrindingAreaCard(
                                 {move || {
                                     if area_specs.read().training {
                                         "Training".to_string()
+                                    } else if area.max_power_shard_level > 0 {
+                                        format!(
+                                            "Level Reached: {} ({})",
+                                            area.max_level_reached,
+                                            area.max_power_shard_level,
+                                        )
                                     } else if area.max_level_reached > 0 {
                                         format!("Level Reached: {}", area.max_level_reached)
                                     } else {
@@ -484,6 +482,12 @@ pub fn StartGrindPanel(
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
     let data_context: DataContext = expect_context();
+
+    Effect::new(move || {
+        if open.get() {
+            town_context.selected_item_index.set(None);
+        }
+    });
 
     let area_specs = move || {
         selected_area.read().as_ref().map(|selected_area| {
@@ -563,7 +567,7 @@ pub fn StartGrindPanel(
                                 </div>
 
                                 <CardInset class="xl:space-y-4">
-                                    <div class="w-full flex text-lg xl:text-2xl font-bold text-shadow-lg/100 shadow-gray-950 text-amber-300 justify-center items-center gap-4">
+                                    <div class="w-full flex text-lg xl:text-2xl font-bold text-shadow-lg/100 shadow-gray-950 text-amber-200 justify-center items-center gap-4">
                                         {area_specs
                                             .crucible
                                             .then(|| view! { <CrucibleAreaIcon /> })}
@@ -571,7 +575,9 @@ pub fn StartGrindPanel(
                                             .training
                                             .then(|| view! { <TrainingAreaIcon /> })}
                                         {area_specs.boss.then(|| view! { <BossAreaIcon /> })}
-                                        <span class="font-display">{area_specs.name}</span>
+                                        <span class="[font-variant:small-caps] font-display">
+                                            {area_specs.name}
+                                        </span>
                                     </div>
 
                                     <span class="block text-xs xl:text-sm font-medium text-zinc-400 italic
@@ -587,6 +593,27 @@ pub fn StartGrindPanel(
                                                 {*area_specs.power_level + *area_specs.item_level_modifier}
                                             </span>
                                         </li>
+                                        {if !area_specs.crucible && !area_specs.training
+                                            && !area_specs.hidden
+                                        {
+                                            view! {
+                                                <li>
+                                                    "Power Shards unlocked up to Area Level: "
+                                                    <span class="font-semibold text-white">
+                                                        {selected_area
+                                                            .read()
+                                                            .as_ref()
+                                                            .map(|area| area.max_power_shard_level)
+                                                            .unwrap_or_default()}
+                                                    </span>
+                                                </li>
+                                            }
+                                                .into_any()
+                                        } else {
+                                            view! { <li>"No Power Shards in this Grind"</li> }
+                                                .into_any()
+                                        }}
+
                                     </ul>
 
                                     <div class="w-full h-full px-4 flex items-center justify-center">

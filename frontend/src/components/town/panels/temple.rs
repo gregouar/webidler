@@ -8,7 +8,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     events::{EventsContext, Key},
     settings::SettingsContext,
@@ -93,7 +92,6 @@ fn ConfirmButton(
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
 
     let do_buy = Arc::new({
         let toaster = expect_context::<Toasts>();
@@ -103,13 +101,10 @@ fn ConfirmButton(
             spawn_local({
                 async move {
                     match backend
-                        .post_buy_benedictions(
-                            &auth_context.token(),
-                            &BuyBenedictionsRequest {
-                                character_id,
-                                player_benedictions: player_benedictions.get_untracked(),
-                            },
-                        )
+                        .post_buy_benedictions(&BuyBenedictionsRequest {
+                            character_id,
+                            player_benedictions: player_benedictions.get_untracked(),
+                        })
                         .await
                     {
                         Ok(response) => {
@@ -266,6 +261,7 @@ fn BenedictionCategorySection(
             });
             let available_gold = town_context.character.read().resource_gold - cost.get();
 
+            #[allow(clippy::explicit_counter_loop)]
             for _ in 0..10 {
                 if category_specs
                     .max_upgrade_level
@@ -345,10 +341,10 @@ fn BenedictionCategorySection(
                             }
                         })}
                     <div class="flex gap-1">
-                        <span class="font-bold text-zinc-100">{move || allocated_points.get()}</span>
-                        <span class="text-zinc-600">"/"</span>
-                        <span class="font-bold text-zinc-500">{move || bought_points.get()}</span>
-                        <span class="font-semibold text-zinc-500">" Spent"</span>
+                        <span class="font-bold text-zinc-100">{move || bought_points.get().saturating_sub(allocated_points.get())}</span>
+                        <span class="text-zinc-400">"/"</span>
+                        <span class="font-bold text-zinc-400">{move || bought_points.get()}</span>
+                        <span class="font-semibold text-zinc-400">" Remaining Points"</span>
                     </div>
 
                 </div>
@@ -360,10 +356,10 @@ fn BenedictionCategorySection(
                 <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-end">
 
                     <div class="flex gap-1">
-                        <span class="font-semibold text-zinc-500">"Prayed"</span>
+                        <span class="font-semibold text-zinc-400">"Prayed"</span>
                         <span class="font-bold text-zinc-100">{move || bought_points.get()}</span>
-                        <span class="text-zinc-500">"/"</span>
-                        <span class="font-bold text-zinc-500">{max_level_text}</span>
+                        <span class="text-zinc-400">"/"</span>
+                        <span class="font-bold text-zinc-400">{max_level_text}</span>
                     </div>
 
                     {(!view_only)
@@ -556,6 +552,7 @@ fn BenedictionRow(
                 </div>
                 {(!view_only)
                     .then(|| {
+                        let bold = move || upgrade_level.get() > 0;
                         view! {
                             <div class="flex w-9 flex-col items-center justify-center gap-1 ml-2">
                                 <MenuButton
@@ -565,8 +562,14 @@ fn BenedictionRow(
                                 >
                                     "+"
                                 </MenuButton>
-                                <div class="min-w-9 text-center text-sm xl:text-base font-bold text-amber-100 font-number">
-                                    {move || upgrade_level.get()}
+                                <div class="min-w-9 text-center text-sm xl:text-base font-number">
+                                    <span class=move || {
+                                        if bold() {
+                                            "font-bold text-zinc-100"
+                                        } else {
+                                            "text-zinc-400"
+                                        }
+                                    }>{move || upgrade_level.get()}</span>
                                 </div>
                                 <MenuButton
                                     on:click=remove_point
@@ -636,7 +639,7 @@ pub fn EffectDescription(
                         }
                     })
                     .unwrap_or_else(|| {
-                        view! { <li class="text-zinc-500">"No effect"</li> }.into_any()
+                        view! { <li class="text-zinc-400">"No effect"</li> }.into_any()
                     })
             }}
         </ul>

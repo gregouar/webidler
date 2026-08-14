@@ -4,29 +4,29 @@ use leptos::{html::*, prelude::*};
 
 use leptos_use::watch_throttled;
 use shared::{
+    computations,
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
         item_affix::AffixEffectScope,
         loot::{LootState, QueuedLoot},
+        modifier::invert_formatted_effect_value,
         player::EquippedSlot,
         skill::DamageType,
     },
     messages::client::PickUpLootMessage,
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        accessibility::AccessibilityContext,
-        game::{GameContext, websocket::WebsocketContext},
-        settings::SettingsContext,
-        shared::{
-            item_card::ItemCard,
-            loot_filter::{FilterRule, FilterRuleType, LootFilter},
-        },
-        ui::{number::format_number, tooltip::DynamicTooltipPosition},
+use crate::components::{
+    accessibility::AccessibilityContext,
+    game::{GameContext, websocket::WebsocketContext},
+    settings::SettingsContext,
+    shared::{
+        item_card::ItemCard,
+        loot_filter::{FilterRule, FilterRuleType, LootFilter},
+        resources::{ResourceReward, ResourceRewardOverlay},
     },
+    ui::tooltip::DynamicTooltipPosition,
 };
 
 #[component]
@@ -179,7 +179,19 @@ pub fn LootQueue() -> impl IntoView {
                 {
                     let item_rarity = loot.item_specs.modifiers.rarity;
                     let gold_price = loot.item_specs.gold_price;
+                    let gems_price = computations::item_gems_price(
+                        loot.item_specs.modifiers.level,
+                        item_rarity,
+                        game_context.realm.get_untracked().is_ssf(),
+                    );
                     let can_sell = !matches!(loot.item_specs.modifiers.rarity, ItemRarity::Unique);
+                    let resource_reward = Signal::derive(move || {
+                        if matches!(loot_state(loot.identifier), LootState::Sold) {
+                            (loot.identifier as u64 + 1, gold_price, gems_price)
+                        } else {
+                            ResourceReward::default()
+                        }
+                    });
                     let is_new = RwSignal::new(true);
                     let stack_style = move || {
                         format!(
@@ -289,22 +301,7 @@ pub fn LootQueue() -> impl IntoView {
                                 class="absolute bottom-0 w-[12%] aspect-[2/3] z-30 pointer-events-none"
                                 style=saved_position_style
                             >
-                                <Show when=move || {
-                                    matches!(loot_state(loot.identifier), LootState::Sold)
-                                }>
-                                    <div class="
-                                    reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
-                                    absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                                    flex items-center gap-1 font-number">
-                                        <span>+{format_number(gold_price)}</span>
-                                        <img
-                                            draggable="false"
-                                            src=img_asset("ui/gold.webp")
-                                            alt="Gold"
-                                            class="h-[2em] aspect-square"
-                                        />
-                                    </div>
-                                </Show>
+                                <ResourceRewardOverlay reward=resource_reward />
                             </div>
 
                         </div>
@@ -341,6 +338,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         item_level,
         req_item_level,
         req_affix_level,
+        max_power_shard_level,
         item_rarity,
         item_category,
         item_damages,
@@ -423,6 +421,23 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                 .affixes
                 .iter()
                 .all(|affix| affix.item_level <= req_affix_level),
+        })
+        .unwrap_or_default()
+    {
+        return false;
+    }
+
+    if max_power_shard_level
+        .map(|max_power_shard_level| {
+            item_specs
+                .map_specs
+                .as_ref()
+                .and_then(|map_specs| map_specs.max_power_shard_level)
+                .map(|item_max_power_shard_level| match rule_type {
+                    FilterRuleType::Pickup => item_max_power_shard_level < max_power_shard_level,
+                    FilterRuleType::Sell => item_max_power_shard_level > max_power_shard_level,
+                })
+                .unwrap_or(true)
         })
         .unwrap_or_default()
     {
@@ -623,26 +638,73 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         .modifiers
         .aggregate_effects(AffixEffectScope::Global, true)
         .0;
-    for stat_filter in stat_filters {
-        if let Some(((stat_type, stat_modifier), stat_value)) = stat_filter.as_ref()
-            && !effects
-                .get(&(stat_type.clone(), *stat_modifier, false))
-                .map(|value| {
-                    if *value == 0.0 {
-                        return false;
-                    };
-                    stat_value
-                        .map(|stat_value| match rule_type {
-                            FilterRuleType::Pickup => *value >= stat_value,
-                            FilterRuleType::Sell => *value <= stat_value,
-                        })
-                        .unwrap_or(true)
-                })
-                .unwrap_or_default()
+    for stat_filter in stat_filters.iter() {
+        if let Some(((stat_type, stat_modifier), stat_value, stat_excluded)) = stat_filter.as_ref()
         {
-            return false;
+            let effect_value = effects
+                .get(&(stat_type.clone(), *stat_modifier, false))
+                .copied();
+
+            if !stat_filter_matches(
+                effect_value,
+                *stat_value,
+                *stat_excluded,
+                *stat_modifier,
+                *rule_type,
+            ) {
+                return false;
+            }
         }
     }
 
     true
+}
+
+fn stat_filter_matches(
+    effect_value: Option<f64>,
+    filter_value: Option<f64>,
+    exclude: bool,
+    stat_modifier: shared::data::modifier::Modifier,
+    rule_type: FilterRuleType,
+) -> bool {
+    let effect_value = effect_value.filter(|value| *value != 0.0);
+    let filter_value = filter_value.filter(|value| *value != 0.0).map(|value| {
+        (
+            invert_formatted_effect_value(value, stat_modifier),
+            value < 0.0,
+        )
+    });
+
+    if exclude {
+        match filter_value {
+            Some((filter_value, is_negative)) => effect_value
+                .map(|value| match (rule_type, is_negative) {
+                    (FilterRuleType::Pickup, false) | (FilterRuleType::Sell, true) => {
+                        value < filter_value
+                    }
+                    (FilterRuleType::Pickup, true) | (FilterRuleType::Sell, false) => {
+                        value > filter_value
+                    }
+                })
+                .unwrap_or(true),
+            None => effect_value.is_none(),
+        }
+    } else {
+        effect_value
+            .map(|value| {
+                filter_value
+                    .map(
+                        |(filter_value, is_negative)| match (rule_type, is_negative) {
+                            (FilterRuleType::Pickup, false) | (FilterRuleType::Sell, true) => {
+                                value >= filter_value
+                            }
+                            (FilterRuleType::Pickup, true) | (FilterRuleType::Sell, false) => {
+                                value <= filter_value
+                            }
+                        },
+                    )
+                    .unwrap_or(true)
+            })
+            .unwrap_or_default()
+    }
 }

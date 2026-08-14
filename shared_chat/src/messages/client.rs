@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::types::{ChatChannel, ChatContent, LinkedItemBytes};
+use crate::types::{CharacterId, ChatChannel, ChatContent, LinkedItemBytes};
 
 use super::macros::impl_into_message;
 
@@ -35,6 +35,7 @@ pub struct ClientConnectMessage {
 pub struct ClientPostMessage {
     pub channel: ChatChannel,
     pub content: ChatContent,
+    pub character_id: Option<CharacterId>,
     pub linked_item: Option<LinkedItemBytes>,
     // pub linked_item: Option<(LinkedItemBytes, [u8; 32])>,
 }

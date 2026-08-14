@@ -1,8 +1,12 @@
 {
-  "meta": {
-    "enabled": true
-  },
+  "meta"     : {"enabled": true},
   "resources": {
-    "skills": ["skills.json"]
+    "skills"         : ["attacks.json", "blessings.json", "curses.json", "spells.json"],
+    "skill_masteries": [
+      "attacks_mastery.json",   "blessings_mastery.json", "curses_mastery.json",    "spells_mastery.json"
+    ],
+    "statuses"       : [
+      "attacks_statuses.json",   "blessings_statuses.json", "curses_statuses.json",    "spells_statuses.json"
+    ]
   }
 }

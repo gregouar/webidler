@@ -11,10 +11,7 @@ use shared::{
         realms::Realm,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserDetails, UserId},
     },
-    http::{
-        client::{CreateCharacterRequest, UpdateCharacterRequest},
-        server::NewsEntry,
-    },
+    http::client::{CreateCharacterRequest, UpdateCharacterRequest},
     types::{AssetName, Username},
 };
 
@@ -22,12 +19,11 @@ use crate::{
     assets::img_asset,
     components::{
         accessibility::AccessibilityContext,
-        auth::AuthContext,
         backend_client::BackendClient,
         chat::{chat_context::ChatContext, chat_panel::ChatPanel},
         settings::SettingsContext,
         shared::{
-            account::AccountSettingsPanel, leaderboard::LeaderboardPanel,
+            account::AccountSettingsPanel, leaderboard::LeaderboardPanel, news::NewsInset,
             player_count::PlayerCount, settings::SettingsModal,
         },
         ui::{
@@ -38,8 +34,8 @@ use crate::{
             confirm::ConfirmContext,
             header::BaseHeaderMenu,
             input::ValidatedInput,
+            loading_screen::LoadingScreen,
             menu_panel::MenuPanel,
-            number::format_datetime,
             toast::*,
             tooltip::{StaticTooltip, StaticTooltipPosition},
         },
@@ -54,7 +50,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let async_data = LocalResource::new({
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         move || async move {
             let _ = refresh_trigger.read();
 
@@ -64,16 +59,12 @@ pub fn UserDashboardPage() -> impl IntoView {
                 .map(|r| r.areas)
                 .unwrap_or_default();
 
-            let user_details = backend
-                .get_me(&auth_context.token())
-                .await
-                .map(|r| r.user_details)
-                .ok();
+            let user_details = backend.get_me().await.map(|r| r.user_details).ok();
 
             match user_details {
                 Some(user_details) => {
                     let characters = backend
-                        .get_user_characters(&auth_context.token(), &user_details.user.user_id)
+                        .get_user_characters(&user_details.user.user_id)
                         .await
                         .map(|r| r.characters)
                         .unwrap_or_default();
@@ -95,10 +86,13 @@ pub fn UserDashboardPage() -> impl IntoView {
 
     let sign_out = {
         let navigate = use_navigate();
-        let auth_context = expect_context::<AuthContext>();
+        let backend = expect_context::<BackendClient>();
         move || {
             exit_fullscreen();
-            auth_context.sign_out();
+            backend.sign_out();
+            spawn_local(async move {
+                let _ = backend.post_signout().await;
+            });
             navigate("/", Default::default());
         }
     };
@@ -179,7 +173,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                 <AccountSettingsPanel open=open_account refresh_trigger />
 
                 <Transition fallback=move || {
-                    view! { <p class="text-zinc-400">"Loading..."</p> }
+                    view! { <LoadingScreen detail="Loading your characters and account data." /> }
                 }>
                     {move || {
                         Suspend::new(async move {
@@ -296,20 +290,17 @@ fn CharacterSlot(
     selected_character_portrait: RwSignal<Option<AssetName>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
-    let is_legacy = matches!(character.realm, Realm::Legacy);
-    let is_ssf = character.is_ssf || matches!(character.realm, Realm::StandardSSF);
+    let is_legacy = matches!(character.realm, Realm::Legacy | Realm::LegacySSF);
+    let is_ssf =
+        character.is_ssf || matches!(character.realm, Realm::StandardSSF | Realm::LegacySSF);
     let delete_character = Arc::new({
         let backend = expect_context::<BackendClient>();
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
         let character_id = character.character_id;
 
         move || {
             spawn_local(async move {
-                match backend
-                    .delete_character(&auth_context.token(), &character_id)
-                    .await
-                {
+                match backend.delete_character(&character_id).await {
                     Ok(_) => {
                         refresh_trigger.update(|n| *n += 1);
                         show_toast(
@@ -627,7 +618,6 @@ pub fn CreateCharacterPanel(
     });
 
     let on_submit = {
-        let auth_context = expect_context::<AuthContext>();
         let toaster = expect_context::<Toasts>();
         let backend = expect_context::<BackendClient>();
 
@@ -642,7 +632,6 @@ pub fn CreateCharacterPanel(
                     match selected_character_id.get_untracked() {
                         Some(character_id) => match backend
                             .post_update_character(
-                                &auth_context.token(),
                                 &character_id,
                                 &UpdateCharacterRequest {
                                     name: selected_character_name.get_untracked().unwrap(),
@@ -667,14 +656,12 @@ pub fn CreateCharacterPanel(
                         },
                         None => match backend
                             .post_create_character(
-                                &auth_context.token(),
                                 &user_id,
                                 &CreateCharacterRequest {
                                     name: selected_character_name.get_untracked().unwrap(),
                                     portrait: selected_character_portrait.get_untracked().unwrap(),
                                     is_ssf: is_ssf_character.get_untracked(),
-                                    legacy: is_legacy_character.get_untracked()
-                                        && !is_ssf_character.get_untracked(),
+                                    legacy: is_legacy_character.get_untracked(),
                                 },
                             )
                             .await
@@ -700,7 +687,7 @@ pub fn CreateCharacterPanel(
     };
 
     let portraits = [
-        "human_male_1",
+        "human_male_1_gdca",
         "human_female_1",
         "human_male_2",
         "human_female_2",
@@ -745,19 +732,25 @@ pub fn CreateCharacterPanel(
                 <Show when=move || selected_character_id.read().is_none()>
                     <CardInset class="h-fit">
                         <div class="flex flex-col gap-2 text-left">
-                            <div
-                                class:opacity-50=move || is_ssf_character.get()
-                                class:pointer-events-none=move || is_ssf_character.get()
-                            >
+                            <div class="flex items-center gap-2">
                                 <Checkbox
                                     label="Legacy Character".to_string()
                                     checked=Signal::derive(move || is_legacy_character.get())
                                     on_change=move |checked| {
-                                        if !is_ssf_character.get_untracked() {
-                                            is_legacy_character.set(checked);
-                                        }
+                                        is_legacy_character.set(checked);
                                     }
                                 />
+
+                                <StaticTooltip
+                                    position=StaticTooltipPosition::Top
+                                    tooltip=|| {
+                                        "Legacy: this character plays in the permanent Legacy realm, with a separate economy and leaderboards."
+                                    }
+                                >
+                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
+                                        "?"
+                                    </span>
+                                </StaticTooltip>
                             </div>
 
                             <div class="flex items-center gap-2">
@@ -766,9 +759,6 @@ pub fn CreateCharacterPanel(
                                     checked=Signal::derive(move || is_ssf_character.get())
                                     on_change=move |checked| {
                                         is_ssf_character.set(checked);
-                                        if checked {
-                                            is_legacy_character.set(false);
-                                        }
                                     }
                                 />
 
@@ -844,7 +834,6 @@ pub fn CreateCharacterPanel(
 #[component]
 fn DiscordInviteBanner() -> impl IntoView {
     let backend = expect_context::<BackendClient>();
-    let auth = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let invite_url = RwSignal::new(None::<String>);
@@ -854,7 +843,7 @@ fn DiscordInviteBanner() -> impl IntoView {
         loading.set(true);
 
         spawn_local(async move {
-            match backend.get_discord_invite(&auth.token()).await {
+            match backend.get_discord_invite().await {
                 Ok(resp) => invite_url.set(Some(format!("https://discord.gg/{}", resp.code))),
                 Err(e) => {
                     show_toast(
@@ -916,71 +905,13 @@ fn DiscordInviteBanner() -> impl IntoView {
 
 #[component]
 fn NewsPanel() -> impl IntoView {
-    let news_data = LocalResource::new({
-        let backend = expect_context::<BackendClient>();
-        move || async move { backend.get_news().await.unwrap_or_default().entries }
-    });
-
     view! {
         <Card class="text-left w-3xl">
             <div class="px-4">
                 <CardTitle>"News"</CardTitle>
             </div>
 
-            <CardInset class="w-full gap-3">
-                <Transition fallback=move || {
-                    view! { <p class="text-zinc-400">"Loading..."</p> }
-                }>
-                    {move || {
-                        Suspend::new(async move {
-                            let news = news_data.await;
-                            view! {
-                                <For
-                                    each=move || news.clone()
-                                    key=|c| c.timestamp
-                                    children=move |news| {
-                                        view! { <NewsCard news /> }
-                                    }
-                                />
-                            }
-                        })
-                    }}
-                </Transition>
-            </CardInset>
+            <NewsInset />
         </Card>
-    }
-}
-
-#[component]
-fn NewsCard(news: NewsEntry) -> impl IntoView {
-    let mut lines = news.content.lines();
-
-    let title = lines.next().unwrap_or("").trim().to_string();
-
-    let body = lines.collect::<Vec<_>>().join("\n");
-
-    view! {
-        <div class="rounded-[10px] border border-[#5f5137]/60
-        select-text
-        bg-[linear-gradient(180deg,rgba(214,177,102,0.035),rgba(0,0,0,0.08)),linear-gradient(135deg,rgba(39,38,44,0.96),rgba(18,18,22,1))]
-        shadow-[0_6px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.035)]
-        p-4 flex flex-col gap-3">
-            // <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
-            // <span class="pointer-events-none absolute inset-x-6 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/25 to-transparent"></span>
-
-            <div class="relative z-10 flex items-start justify-between gap-3">
-                <span class="text-amber-300 font-semibold text-base font-display text-shadow-lg/100 shadow-gray-950 leading-tight">
-                    {title}
-                </span>
-
-                <span class="shrink-0 text-xs text-gray-500 uppercase tracking-[0.08em]">
-                    {format_datetime(news.timestamp)}
-                </span>
-            </div>
-
-            <p class="relative z-10 text-zinc-300 text-sm whitespace-pre-line leading-relaxed">
-                {body}
-            </p>
-        </div>
     }
 }

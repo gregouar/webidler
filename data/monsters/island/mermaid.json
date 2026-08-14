@@ -2,8 +2,6 @@
   "name": "Enthralling Mermaid",
   "portrait": "monsters/island/mermaid.webp",
   "max_life": 10,
-  "power_factor": 2.0,
-  "initiative": [ 0.5, 1.0 ],
   "skills": [
     {
       "name": "Mermaid's Kiss",
@@ -48,7 +46,7 @@
     },
     {
       "name": "Appeasing Song",
-      "icon": "skills/curse_weakness.svg",
+      "icon": "skills/double_quaver.svg",
       "cooldown": 5.0,
       "skill_type": "Curse",
       "targets": [
@@ -56,27 +54,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": "ManaRegen",
-                        "debuff": true
-                      }
-                    },
-                    "value": 100
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "Speed": { } },
-                        "debuff": true
-                      }
-                    },
-                    "value": 50
-                  }
-                ]
+                "status_id": "mermaid_song",
+                "value": 100
               }
             }
           ]

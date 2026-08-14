@@ -114,7 +114,7 @@ pub fn HorizontalProgressBar(
                     <div
                         class=move || {
                             format!(
-                                "relative block h-full w-full origin-left
+                                "progress-bar-animation relative block h-full w-full origin-left
                                 {} {} {}",
                                 if settings.uses_heavy_effects() {
                                     "shadow-[inset_0_1px_0_rgba(255,255,255,0.14),inset_0_-1px_0_rgba(0,0,0,0.18)]"
@@ -129,7 +129,10 @@ pub fn HorizontalProgressBar(
                     ></div>
                     // Fake copy for glow effect on reset
                     <div
-                        class=format!("absolute h-full w-full inset-0 z-1 {}", bar_color)
+                        class=format!(
+                            "progress-bar-animation absolute h-full w-full inset-0 z-1 {}",
+                            bar_color,
+                        )
                         style=reset_bar_animation
                     ></div>
                 </div>
@@ -223,7 +226,7 @@ pub fn VerticalProgressBar(
                     <div
                         class=move || {
                             format!(
-                                "relative block h-full w-full origin-bottom
+                                "progress-bar-animation relative block h-full w-full origin-bottom
                                 transition-progress-bar
                                 {} {}",
                                 if settings.uses_heavy_effects() {
@@ -240,7 +243,10 @@ pub fn VerticalProgressBar(
 
                     // Fake copy for glow effect on reset
                     <div
-                        class=format!("absolute inset-0 z-1 h-full w-full {}", bar_color)
+                        class=format!(
+                            "progress-bar-animation absolute inset-0 z-1 h-full w-full {}",
+                            bar_color,
+                        )
                         style=reset_bar_animation
                     ></div>
                 </div>
@@ -406,7 +412,7 @@ pub fn CircularProgressBar(
                     }
                 }}
                 <div
-                    class="absolute inset-0 transition-opacity duration-500"
+                    class="progress-bar-animation absolute inset-0 transition-opacity duration-500"
                     class:opacity-0=move || disabled.get() || active_buffer.get()
                 >
                     <div
@@ -414,7 +420,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || front_progress.get() <= 0.0
                     >
                         <div
-                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -445,7 +451,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || front_progress.get() <= 50.0
                     >
                         <div
-                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -463,9 +469,11 @@ pub fn CircularProgressBar(
                                     )
                                 };
                                 format!(
-                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ opacity: {}; transform: rotate({}deg); transform-origin: 50% 50%; transition: opacity 0ms linear {}ms, transform {}ms linear {}ms;",
                                     background,
+                                    u8::from(front_progress.get() > 50.0),
                                     front_left_deg(),
+                                    front_left_delay_ms.get(),
                                     front_left_transition_ms.get(),
                                     front_left_delay_ms.get(),
                                 )
@@ -474,7 +482,7 @@ pub fn CircularProgressBar(
                     </div>
                 </div>
                 <div
-                    class="absolute inset-0 transition-opacity duration-500"
+                    class="progress-bar-animation absolute inset-0 transition-opacity duration-500"
                     class:opacity-0=move || disabled.get() || !active_buffer.get()
                 >
                     <div
@@ -482,7 +490,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || back_progress.get() <= 0.0
                     >
                         <div
-                            class="absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 -left-full w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -513,7 +521,7 @@ pub fn CircularProgressBar(
                         class:invisible=move || back_progress.get() <= 50.0
                     >
                         <div
-                            class="absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
+                            class="progress-bar-animation absolute inset-y-0 left-0 w-[200%] rounded-full transform-gpu will-change-transform"
                             style=move || {
                                 let background = if matches!(
                                     settings.graphics_quality(),
@@ -531,9 +539,11 @@ pub fn CircularProgressBar(
                                     )
                                 };
                                 format!(
-                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ transform: rotate({}deg); transform-origin: 50% 50%; transition: transform {}ms linear {}ms;",
+                                    "background: {}; /*mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%); -webkit-mask-image: linear-gradient(90deg, #000 50.8%, transparent 51%);*/ opacity: {}; transform: rotate({}deg); transform-origin: 50% 50%; transition: opacity 0ms linear {}ms, transform {}ms linear {}ms;",
                                     background,
+                                    u8::from(back_progress.get() > 50.0),
                                     back_left_deg(),
+                                    back_left_delay_ms.get(),
                                     back_left_transition_ms.get(),
                                     back_left_delay_ms.get(),
                                 )
@@ -541,42 +551,47 @@ pub fn CircularProgressBar(
                         ></div>
                     </div>
                 </div>
-                <div class=move || {
-                    match settings.graphics_quality() {
-                        GraphicsQuality::High => {
-                            format!(
-                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
-                            bg-radial {} to-zinc-950 to-70%
-                            border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
-                                bar_width / 2,
-                                tint_background.unwrap_or("from-stone-600"),
-                            )
-                        }
-                        GraphicsQuality::Medium => {
-                            format!(
-                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
-                            bg-radial {} to-zinc-950 to-70%
-                            border border-[#6d532e]/70",
-                                bar_width / 2,
-                                tint_background.unwrap_or("from-stone-600"),
-                            )
-                        }
-                        GraphicsQuality::Low => {
-                            format!(
-                                "absolute inset-{} 2xl:inset-{bar_width} rounded-full
-                            bg-radial {} to-zinc-950 to-70%
-                            border border-[#5c4a2e]",
-                                bar_width / 2,
-                                tint_background.unwrap_or("from-stone-600"),
-                            )
+                <div
+                    style="clip-path: circle(50% at 50% 50%);"
+                    class=move || {
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                format!(
+                                    "absolute inset-{} 2xl:inset-{bar_width} rounded-full
+                                bg-radial {} to-zinc-950 to-70%
+                                border border-[#6d532e]/70 shadow-[inset_0_2px_6px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(236,210,148,0.14),0_1px_2px_rgba(0,0,0,0.35)]",
+                                    bar_width / 2,
+                                    tint_background.unwrap_or("from-stone-600"),
+                                )
+                            }
+                            GraphicsQuality::Medium => {
+                                format!(
+                                    "absolute inset-{} 2xl:inset-{bar_width} rounded-full
+                                bg-radial {} to-zinc-950 to-70%
+                                border border-[#6d532e]/70",
+                                    bar_width / 2,
+                                    tint_background.unwrap_or("from-stone-600"),
+                                )
+                            }
+                            GraphicsQuality::Low => {
+                                format!(
+                                    "absolute inset-{} 2xl:inset-{bar_width} rounded-full
+                                bg-radial {} to-zinc-950 to-70%
+                                border border-[#5c4a2e]",
+                                    bar_width / 2,
+                                    tint_background.unwrap_or("from-stone-600"),
+                                )
+                            }
                         }
                     }
-                }>// Icon
+                >// Icon
                 </div>
                 <div
-                    class="absolute top-1/2 start-1/2 transform -translate-y-1/2 -translate-x-1/2
-                    scale-120 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)]
-                    transition-transform duration-500"
+                    class=format!(
+                        "progress-bar-animation absolute inset-{} 2xl:inset-{bar_width} flex items-center justify-center transform
+                       scale-80 xl:drop-shadow-[0_2px_0px_rgba(0,0,0,0.5)] transition-transform duration-500",
+                        bar_width / 2,
+                    )
                     style=reset_icon_animation
                     class:brightness-50=move || disabled.get()
                 >

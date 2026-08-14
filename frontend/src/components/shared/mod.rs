@@ -3,6 +3,7 @@ pub mod inventory;
 pub mod item_card;
 pub mod leaderboard;
 pub mod loot_filter;
+pub mod news;
 pub mod passives;
 pub mod player_count;
 pub mod resources;

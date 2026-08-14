@@ -8,6 +8,7 @@ use super::items_store::ItemId;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LootTable {
+    pub area_specific: bool,
     pub entries: Vec<LootTableEntry>,
 }
 

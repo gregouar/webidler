@@ -8,15 +8,17 @@ use argon2::{
 use axum::{
     body::Body,
     extract::{Request, State},
-    http::Response,
+    http::{Response, header::COOKIE},
     middleware::Next,
 };
 use axum_extra::TypedHeader;
+
 use base64::{
     Engine as _, alphabet,
     engine::{self, general_purpose},
 };
 use chrono::{Duration, Utc};
+
 use headers::{Authorization, authorization::Bearer};
 use jsonwebtoken::{Header, TokenData, Validation, decode, encode};
 use rand::RngCore;
@@ -35,6 +37,9 @@ use crate::{
 
 const B64_ENGINE: engine::GeneralPurpose =
     engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
+const REFRESH_COOKIE_NAME: &str = "refresh_token";
+const ACCESS_TOKEN_DURATION: Duration = Duration::minutes(15);
+const REFRESH_TOKEN_DURATION: Duration = Duration::days(30);
 
 pub async fn verify_captcha(token: &str) -> anyhow::Result<bool> {
     // TODO: move to app_settings
@@ -58,13 +63,27 @@ pub struct Claims {
     pub iat: usize,  // Issued at time of the token
     pub sub: UserId, // Subject associated with the token
     pub username: String,
+    pub token_kind: TokenKind,
 }
+
+#[derive(Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum TokenKind {
+    Access,
+    Refresh,
+}
+
+pub struct AuthTokens {
+    pub access_token: String,
+    pub refresh_token: String,
+}
+
 pub async fn sign_in(
     app_settings: &AppSettings,
     db_pool: &db::DbPool,
     username: &str,
     password: &str,
-) -> Result<String, AppError> {
+) -> Result<AuthTokens, AppError> {
     let (user, password_hash_opt) = db::users::auth_user(db_pool, username)
         .await?
         .ok_or_else(|| AppError::Unauthorized("incorrect username or password".to_string()))?;
@@ -78,7 +97,7 @@ pub async fn sign_in(
         db::users::update_last_login(db_pool, &user.user_id)
             .await
             .unwrap_or_else(|e| tracing::error!("couldn't update user last login: {e}"));
-        Ok(encode_jwt(app_settings, user)?)
+        Ok(auth_tokens(app_settings, user)?)
     } else {
         Err(AppError::Unauthorized(
             "incorrect username or password".to_string(),
@@ -92,29 +111,72 @@ pub async fn authorization_middleware(
     mut req: Request,
     next: Next,
 ) -> Result<Response<Body>, AppError> {
-    let user = authorize_jwt(&state.app_settings, bearer.token())
+    let user = authorize_access_jwt(&state.app_settings, bearer.token())
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     req.extensions_mut().insert(user);
     Ok(next.run(req).await)
 }
 
-pub fn authorize_jwt(app_settings: &AppSettings, token: &str) -> Option<User> {
+pub fn refresh_cookie_from_headers(headers: &axum::http::HeaderMap) -> Option<String> {
+    let cookie = headers.get(COOKIE)?.to_str().ok()?;
+
+    cookie.split(';').find_map(|part| {
+        let (name, value) = part.trim().split_once('=')?;
+        (name == REFRESH_COOKIE_NAME).then(|| value.to_string())
+    })
+}
+
+pub fn authorize_access_jwt(app_settings: &AppSettings, token: &str) -> Option<User> {
+    authorize_jwt(app_settings, token, TokenKind::Access)
+}
+
+pub fn authorize_refresh_jwt(app_settings: &AppSettings, token: &str) -> Option<User> {
+    authorize_jwt(app_settings, token, TokenKind::Refresh)
+}
+
+fn authorize_jwt(app_settings: &AppSettings, token: &str, token_kind: TokenKind) -> Option<User> {
     decode(
         token,
         &app_settings.jwt_decoding_key,
         &Validation::default(),
     )
     .ok()
+    .filter(|token_data: &TokenData<Claims>| token_data.claims.token_kind == token_kind)
     .map(|token_data: TokenData<Claims>| User {
         user_id: token_data.claims.sub,
         username: token_data.claims.username,
     })
 }
 
-fn encode_jwt(app_settings: &AppSettings, user: User) -> anyhow::Result<String> {
+pub fn access_token(app_settings: &AppSettings, user: User) -> anyhow::Result<String> {
+    encode_jwt(app_settings, user, TokenKind::Access, ACCESS_TOKEN_DURATION)
+}
+
+fn refresh_token(app_settings: &AppSettings, user: User) -> anyhow::Result<String> {
+    encode_jwt(
+        app_settings,
+        user,
+        TokenKind::Refresh,
+        REFRESH_TOKEN_DURATION,
+    )
+}
+
+fn auth_tokens(app_settings: &AppSettings, user: User) -> anyhow::Result<AuthTokens> {
+    Ok(AuthTokens {
+        access_token: access_token(app_settings, user.clone())?,
+        refresh_token: refresh_token(app_settings, user)?,
+    })
+}
+
+fn encode_jwt(
+    app_settings: &AppSettings,
+    user: User,
+    token_kind: TokenKind,
+    duration: Duration,
+) -> anyhow::Result<String> {
     let now = Utc::now();
-    let exp: usize = (now + Duration::hours(24)).timestamp() as usize;
+    let exp: usize = (now + duration).timestamp() as usize;
     let iat: usize = now.timestamp() as usize;
 
     Ok(encode(
@@ -124,9 +186,31 @@ fn encode_jwt(app_settings: &AppSettings, user: User) -> anyhow::Result<String> 
             exp,
             sub: user.user_id,
             username: user.username,
+            token_kind,
         },
         &app_settings.jwt_encoding_key,
     )?)
+}
+
+pub fn refresh_cookie(token: &str) -> String {
+    let same_site = if cfg!(debug_assertions) {
+        "SameSite=Lax"
+    } else {
+        "SameSite=None; Secure"
+    };
+    format!(
+        "{REFRESH_COOKIE_NAME}={token}; HttpOnly; Path=/; {same_site}; Max-Age={}",
+        REFRESH_TOKEN_DURATION.num_seconds()
+    )
+}
+
+pub fn expired_refresh_cookie() -> String {
+    let same_site = if cfg!(debug_assertions) {
+        "SameSite=Lax"
+    } else {
+        "SameSite=None; Secure"
+    };
+    format!("{REFRESH_COOKIE_NAME}=; HttpOnly; Path=/; {same_site}; Max-Age=0")
 }
 
 pub fn hash_password(password: &str) -> anyhow::Result<String> {

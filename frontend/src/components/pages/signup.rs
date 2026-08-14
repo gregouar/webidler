@@ -11,7 +11,7 @@ use crate::components::{
     pages::{privacy::PrivacyContent, terms::TermsContent},
     ui::{
         buttons::MenuButton,
-        card::{Card, CardTitle},
+        card::{Card, CardInset, CardTitle},
         input::{Input, ValidatedInput},
         toast::*,
     },
@@ -72,8 +72,6 @@ pub fn SignUpPage() -> impl IntoView {
                         .await
                     {
                         Ok(_) => {
-                            // Or directly signin and go to user dashboard?
-                            // set_jwt_storage.set(response.jwt);
                             set_username_storage.set(username.get());
                             navigate("/", Default::default());
                         }
@@ -107,7 +105,7 @@ pub fn SignUpPage() -> impl IntoView {
                     </div>
                 </div>
 
-                <div class="space-y-4 text-left text-white">
+                <CardInset class="space-y-4 text-left text-white">
                     <ValidatedInput
                         label="Username"
                         id="username"
@@ -174,7 +172,7 @@ pub fn SignUpPage() -> impl IntoView {
                     <div class="w-full flex justify-center">
                         <Captcha token=captcha_token />
                     </div>
-                </div>
+                </CardInset>
                 <MenuButton class="w-full" on:click=on_submit disabled=disable_submit>
                     "Confirm"
                 </MenuButton>

@@ -16,7 +16,10 @@ use crate::{
 
 use super::{
     game_data::GameInstanceData,
-    systems::{loot_controller, passives_controller, player_controller, skills_controller},
+    systems::{
+        inventory_controller, loot_controller, passives_controller, player_controller,
+        skills_controller,
+    },
 };
 
 /// Handle client events, return whether the game should stop or continue
@@ -114,6 +117,7 @@ fn handle_client_message(
         }
         ClientMessage::EquipItem(m) => {
             if let Err(err) = player_controller::equip_item_from_bag(
+                master_store,
                 game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
@@ -129,6 +133,7 @@ fn handle_client_message(
         }
         ClientMessage::UnequipItem(m) => {
             if let Err(err) = player_controller::unequip_item_to_bag(
+                &master_store.statuses_store,
                 game_data.player_base_specs.mutate(),
                 game_data.player_inventory.mutate(),
                 &mut game_data.player_state,
@@ -144,6 +149,7 @@ fn handle_client_message(
         }
         ClientMessage::SheathItem(m) => {
             if let Err(err) = player_controller::toggle_sheathe_item(
+                &master_store.skills_store,
                 game_data.player_base_specs.mutate(),
                 &mut game_data.player_state,
                 &mut game_data.player_controller,
@@ -165,8 +171,12 @@ fn handle_client_message(
                     game_data.player_inventory.mutate(),
                     game_data.player_resources.mutate(),
                     item_index,
+                    game_data.realm.is_ssf(),
                 )
             }
+        }
+        ClientMessage::SortInventory(m) => {
+            inventory_controller::sort_bag(game_data.player_inventory.mutate(), m.sort_type);
         }
         // ClientMessage::FilterLoot(m) => {
         //     game_data.player_controller.preferred_loot = m.preferred_loot;
@@ -176,7 +186,11 @@ fn handle_client_message(
                 if let Some(item_specs) =
                     loot_controller::take_loot(game_data.queued_loot.mutate(), m.loot_identifier)
                 {
-                    player_controller::sell_item(game_data.player_resources.mutate(), &item_specs);
+                    player_controller::sell_item(
+                        game_data.player_resources.mutate(),
+                        &item_specs,
+                        game_data.realm.is_ssf(),
+                    );
                 }
             } else if let Err(e) = loot_controller::pickup_loot(
                 game_data.player_inventory.mutate(),

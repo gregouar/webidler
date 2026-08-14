@@ -17,6 +17,8 @@ pub struct SettingsData {
     #[serde(default)]
     pub graphics_quality: GraphicsQuality,
     #[serde(default = "default_true")]
+    pub enable_animations: bool,
+    #[serde(default = "default_true")]
     pub shake_on_crit: bool,
 }
 
@@ -75,6 +77,10 @@ impl SettingsContext {
         self.settings_data.read_untracked().graphics_quality
     }
 
+    pub fn animations_enabled(&self) -> bool {
+        self.settings_data.read().enable_animations
+    }
+
     pub fn uses_heavy_effects(&self) -> bool {
         self.graphics_quality().uses_heavy_effects()
     }
@@ -119,10 +125,30 @@ pub fn provide_settings_context() {
         storage::use_local_storage::<SettingsData, JsonSerdeCodec>("settings");
     let settings_data = RwSignal::new(get_settings.get_untracked());
 
+    set_animations_enabled(settings_data.read_untracked().enable_animations);
+    Effect::new(move |_| {
+        set_animations_enabled(settings_data.read().enable_animations);
+    });
+
     provide_context(SettingsContext {
         settings_data,
         set_settings,
     });
+}
+
+fn set_animations_enabled(enabled: bool) {
+    let Some(document_element) = web_sys::window()
+        .and_then(|window| window.document())
+        .and_then(|document| document.document_element())
+    else {
+        return;
+    };
+
+    if enabled {
+        let _ = document_element.remove_attribute("data-animations-disabled");
+    } else {
+        let _ = document_element.set_attribute("data-animations-disabled", "");
+    }
 }
 
 fn default_true() -> bool {

@@ -4,15 +4,12 @@ use shared::{
     computations,
     constants::{
         CHAMPION_LEVEL_INC, MONSTER_LIFE_INCREASE_FACTOR, MONSTER_REWARD_INCREASE_FACTOR,
-        MONSTERS_DEFAULT_DAMAGE_INCREASE,
+        MONSTERS_DEFAULT_DAMAGE_INCREASE, SKILL_REWARD_INCREASE_FACTOR,
     },
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
-        character::CharacterId,
-        character_status::StatusSpecs,
         modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
-        skill::SkillEffectType,
         stat_effect::{StatEffect, StatType},
     },
 };
@@ -21,7 +18,7 @@ use crate::game::{
     data::{
         DataInit,
         area::{BossBlueprint, MonsterWaveBlueprint, MonsterWaveSpawnBlueprint},
-        master_store::MonstersSpecsStore,
+        master_store::{MonstersSpecsStore, StatusesStore},
         monster::BaseMonsterSpecs,
     },
     systems::characters_updater,
@@ -45,13 +42,20 @@ impl RandomWeighted for &BossBlueprint {
 /// Return generated monsters
 pub fn generate_monsters_wave(
     monsters_specs_store: &MonstersSpecsStore,
+    statuses_store: &StatusesStore,
     waves: &[MonsterWaveBlueprint],
     bosses: &[BossBlueprint],
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
-    let (monster_specs, is_boss) =
-        generate_monsters_wave_specs(monsters_specs_store, waves, bosses, area_specs, area_state)?;
+    let (monster_specs, is_boss) = generate_monsters_wave_specs(
+        monsters_specs_store,
+        statuses_store,
+        waves,
+        bosses,
+        area_specs,
+        area_state,
+    )?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
     area_state.is_boss = is_boss;
     Ok((monster_specs, monster_states))
@@ -60,6 +64,7 @@ pub fn generate_monsters_wave(
 /// Return generated monsters + if it is boss
 fn generate_monsters_wave_specs(
     monsters_specs_store: &MonstersSpecsStore,
+    statuses_store: &StatusesStore,
     waves: &[MonsterWaveBlueprint],
     bosses: &[BossBlueprint],
     area_specs: &AreaSpecs,
@@ -80,6 +85,7 @@ fn generate_monsters_wave_specs(
             return Ok((
                 generate_all_monsters_specs(
                     monsters_specs_store,
+                    statuses_store,
                     area_specs,
                     area_state,
                     &boss.spawns,
@@ -99,7 +105,13 @@ fn generate_monsters_wave_specs(
 
     if let Some(wave) = rng::random_weighted_pick(&available_waves) {
         return Ok((
-            generate_all_monsters_specs(monsters_specs_store, area_specs, area_state, &wave.spawns),
+            generate_all_monsters_specs(
+                monsters_specs_store,
+                statuses_store,
+                area_specs,
+                area_state,
+                &wave.spawns,
+            ),
             false,
         ));
     }
@@ -109,6 +121,7 @@ fn generate_monsters_wave_specs(
 
 fn generate_all_monsters_specs(
     monsters_specs_store: &MonstersSpecsStore,
+    statuses_store: &StatusesStore,
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     spawns: &[MonsterWaveSpawnBlueprint],
@@ -142,10 +155,10 @@ fn generate_all_monsters_specs(
                 );
 
                 let mut specs = generate_monster_specs(
+                    statuses_store,
                     area_specs,
                     area_state,
                     base_monster_specs,
-                    CharacterId::Monster(monsters.len()),
                 );
                 specs.character_specs.character_static.position_x = (x + 1) as u8;
                 specs.character_specs.character_static.position_y = (y + 1) as u8;
@@ -189,21 +202,16 @@ fn occupy_space(
 }
 
 fn generate_monster_specs(
+    statuses_store: &StatusesStore,
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     base_monster_specs: &BaseMonsterSpecs,
-    monster_id: CharacterId,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(base_monster_specs);
     let mut monster_level = area_state.area_level + *area_specs.power_level;
-    monster_specs
-        .character_specs
-        .triggers
-        .extend(area_specs.triggers.clone());
 
-    for trigger in monster_specs.character_specs.triggers.iter_mut() {
-        trigger.owner = Some(monster_id);
-    }
+    // TODO: Add owner?
+    monster_specs.character_specs.triggers = area_specs.triggers.clone();
 
     if monster_specs.rarity == MonsterRarity::Normal
         && rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state)
@@ -213,21 +221,25 @@ fn generate_monster_specs(
         monster_level += CHAMPION_LEVEL_INC;
     };
 
-    let life_factor = computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR);
-    let power_factor = computations::exponential(
+    // Level power
+    monster_specs.experience_reward *= computations::exponential(
         area_state.area_level + *area_specs.power_level / 2,
         MONSTER_REWARD_INCREASE_FACTOR,
     );
-    let reward_factor =
+    monster_specs.gold_reward *=
         computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR);
-
-    monster_specs.power_factor *= power_factor;
-    monster_specs.reward_factor *= reward_factor;
+    monster_specs.skill_reward *= computations::exponential(
+        area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,
+        SKILL_REWARD_INCREASE_FACTOR,
+    );
     monster_specs
         .character_specs
         .character_attrs
         .max_life
-        .apply_modifier((life_factor - 1.0) * 100.0, Modifier::More);
+        .apply_modifier(
+            (computations::exponential(monster_level, MONSTER_LIFE_INCREASE_FACTOR) - 1.0) * 100.0,
+            Modifier::More,
+        );
 
     // Apply upgrade effects
     let upgrade_effects = [StatEffect {
@@ -246,13 +258,15 @@ fn generate_monster_specs(
         .skills
         .iter()
         .map(|base_skill_specs| {
-            let mut skill_specs = if base_skill_specs.upgrade_effects.is_empty() {
+            if base_skill_specs.upgrade_effects.is_empty() {
                 skills_updater::update_skill_specs(
+                    statuses_store,
                     "".to_string(),
                     base_skill_specs,
                     1,
                     &upgrade_effects,
                     &monster_specs.character_specs.character_attrs,
+                    None,
                     None,
                 )
             } else {
@@ -262,49 +276,31 @@ fn generate_monster_specs(
                 ))
                     .into();
                 skills_updater::update_skill_specs(
+                    statuses_store,
                     "".to_string(),
                     base_skill_specs,
                     1,
                     &effects,
                     &monster_specs.character_specs.character_attrs,
                     None,
+                    None,
                 )
-            };
-
-            // Link monster_id to triggers of skills
-            for trigger in skill_specs.triggers.iter_mut() {
-                trigger.triggered_effect.owner = Some(monster_id);
             }
-
-            for effect in skill_specs
-                .targets
-                .iter_mut()
-                .flat_map(|target| target.effects.iter_mut())
-            {
-                if let SkillEffectType::ApplyStatus {
-                    ref mut statuses, ..
-                } = effect.effect_type
-                {
-                    for status in statuses {
-                        if let StatusSpecs::Trigger(ref mut trigger_specs) = status.status_type {
-                            trigger_specs.triggered_effect.owner = Some(monster_id);
-                        }
-                    }
-                }
-            }
-
-            skill_specs
         })
         .collect();
 
-    let mut effects: Vec<_> = (&area_specs.effects).into();
-    let (character_specs, converted_effects) =
-        characters_updater::update_character_specs(&monster_specs.character_specs, &effects);
-    monster_specs.character_specs = character_specs;
-    effects.extend(converted_effects);
-    // monster_specs.character_specs.effects = effects_map;
+    monster_specs.character_specs = characters_updater::update_character_specs(
+        statuses_store,
+        &Default::default(),
+        &monster_specs.character_specs,
+        &Default::default(),
+        None,
+        (&area_specs.effects).into(),
+    );
+
+    let effects = &monster_specs.character_specs.effects;
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
     }
 
     monster_specs

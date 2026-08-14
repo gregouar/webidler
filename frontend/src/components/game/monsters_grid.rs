@@ -7,7 +7,7 @@ use rand::Rng;
 use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
 use shared::data::skill::{DamageType, SkillType};
-use shared::data::stat_effect::{StatSkillFilter, StatStatusType};
+use shared::data::stat_effect::{StatSkillFilter, StatStatusFilter};
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 use strum::IntoEnumIterator;
 
@@ -16,9 +16,12 @@ use crate::components::icons::monster_tags::{
     ArmorIcon, EvadeIcon, LifeRegenIcon, ResilientIcon, ShieldIcon,
 };
 use crate::components::settings::{GraphicsQuality, SettingsContext};
-use crate::components::shared::skills::SkillProgressBar;
 use crate::components::shared::tooltips::effects_tooltip;
 use crate::components::shared::tooltips::skill_tooltip::skill_type_str;
+use crate::components::shared::{
+    resources::{ResourceReward, ResourceRewardOverlay, show_resource_reward},
+    skills::SkillProgressBar,
+};
 use crate::components::ui::progress_bars::predictive_cooldown;
 use crate::components::{
     shared::tooltips::SkillTooltip,
@@ -50,7 +53,10 @@ pub fn MonstersGrid() -> impl IntoView {
             set_timeout(
                 move || {
                     // Repeat in case the state would have change in-between
-                    if switch_all_monsters_dead.get_untracked() {
+                    if switch_all_monsters_dead
+                        .try_get_untracked()
+                        .unwrap_or_default()
+                    {
                         all_monsters_dead.set(true);
                     }
                 },
@@ -196,8 +202,7 @@ fn DamageNumber(tick: DamageTick) -> impl IntoView {
 #[component]
 fn MonsterFeedbackOverlay(
     damage_ticks: ArcRwSignal<Vec<DamageTick>>,
-    gold_reward: RwSignal<f64>,
-    gems_reward: RwSignal<f64>,
+    resource_reward: RwSignal<ResourceReward>,
 ) -> impl IntoView {
     view! {
         <div class="absolute inset-0 z-30 pointer-events-none" style="contain: paint;">
@@ -205,35 +210,7 @@ fn MonsterFeedbackOverlay(
                 <DamageNumber tick />
             </For>
 
-            <Show when=move || { gold_reward.get() > 0.0 }>
-                <div class="
-                reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
-                absolute left-1/2 top-[45%] transform -translate-y-1/2 -translate-x-1/2
-                flex items-center gap-1 font-number">
-                    <span>+{format_number(gold_reward.get())}</span>
-                    <img
-                        draggable="false"
-                        src=img_asset("ui/gold.webp")
-                        alt="Gold"
-                        class="h-[2em] aspect-square"
-                    />
-                </div>
-            </Show>
-
-            <Show when=move || { gems_reward.get() > 0.0 }>
-                <div class="
-                reward-float gems-text text-fuchsia-400 text-lg text-2xl text-shadow-md
-                absolute left-1/2 top-[65%] transform  -translate-y-1/2 -translate-x-1/2
-                flex items-center gap-1 font-number">
-                    <span>+{format_number(gems_reward.get())}</span>
-                    <img
-                        draggable="false"
-                        src=img_asset("ui/gems.webp")
-                        alt="Gems"
-                        class="h-[1.2em] aspect-square"
-                    />
-                </div>
-            </Show>
+            <ResourceRewardOverlay reward=resource_reward />
         </div>
     }
 }
@@ -417,8 +394,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             .unwrap_or_default()
     });
 
-    let gold_reward = RwSignal::new(0.0);
-    let gems_reward = RwSignal::new(0.0);
+    let resource_reward = RwSignal::<ResourceReward>::new(Default::default());
 
     Effect::new(move |_| {
         if is_dead.get() {
@@ -429,9 +405,13 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 .map(|x| (x.gold_reward, x.gems_reward))
                 .unwrap_or_default();
 
-            gold_reward.set(gold);
-
-            gems_reward.set(gems);
+            let current_reward = resource_reward.get_untracked();
+            if (gold > 0.0 || gems > 0.0) && (gold != current_reward.1 || gems != current_reward.2)
+            {
+                show_resource_reward(resource_reward, gold, gems);
+            }
+        } else if resource_reward.get_untracked() != ResourceReward::default() {
+            resource_reward.set(Default::default());
         }
     });
 
@@ -508,7 +488,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                     />
                 // enable_blink=true
                 </div>
-                <MonsterFeedbackOverlay damage_ticks gold_reward gems_reward />
+                <MonsterFeedbackOverlay damage_ticks resource_reward />
             </div>
 
             <div class="w-full flex flex-col justify-center gap-1">
@@ -653,11 +633,14 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
         }
     };
 
-    let mut grouped: HashMap<Option<StatStatusType>, Vec<(SkillType, f64)>> = HashMap::new();
-    for ((skill_type, status_type), value) in attrs.status_resistances.iter() {
+    let mut grouped: HashMap<StatStatusFilter, Vec<(SkillType, f64)>> = HashMap::new();
+    for ((skill_type, status_id), value) in attrs.status_resistances.iter() {
         if **value > 0.0 {
             grouped
-                .entry(status_type.clone())
+                .entry(StatStatusFilter {
+                    status_id: status_id.clone(),
+                    ..Default::default()
+                })
                 .or_default()
                 .push((*skill_type, **value));
         }
@@ -665,7 +648,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 
     let skill_type_count = SkillType::iter().count();
     let mut resilient_values = Vec::new();
-    for (status_type, mut entries) in grouped {
+    for (status_filter, mut entries) in grouped {
         entries.sort_by_key(|(skill_type, _)| *skill_type);
         if entries.len() == skill_type_count
             && entries
@@ -679,7 +662,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                 entries[0].1,
                 format!(
                     "{} Resilience",
-                    effects_tooltip::opt_status_type_str(status_type.as_ref()),
+                    effects_tooltip::status_filter_str(&status_filter),
                 ),
             ));
         } else {
@@ -688,12 +671,12 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                     value,
                     format!(
                         "{} Resilience",
-                        effects_tooltip::skill_status_type_str(
+                        effects_tooltip::skill_status_filter_str(
                             &StatSkillFilter {
                                 skill_type: Some(skill_type),
                                 ..Default::default()
                             },
-                            status_type.as_ref(),
+                            &status_filter,
                             true,
                         ),
                     ),
@@ -732,7 +715,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
                     <span class="font-semibold">{format!("{:.1}%", life_regen)}</span>
-                    " Life Regenerated per Second"
+                    " Life Regenerated per second"
                 </span>
             </div>
         }

@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{f64::consts::LOG10_2, time::Duration};
 
 use crate::data::{area::AreaLevel, item::ItemCategory, stash::StashPrice};
 
@@ -7,7 +7,7 @@ pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
 pub const PLAYER_LIFE_PER_LEVEL: f64 = 2.0;
 pub const DEFAULT_MAX_LEVEL: u8 = 70;
 pub const SKILL_BASE_COST: f64 = 100.0;
-pub const SKILL_COST_FACTOR: f64 = 1_000.0;
+pub const SKILL_BASE_COST_FACTOR: f64 = 1_000.0;
 pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;
 pub const CHAMPION_INC_CHANCE: f64 = 0.000005;
 pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
@@ -15,17 +15,29 @@ pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
 pub const WAVES_PER_AREA_LEVEL: u8 = 5;
 pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
 pub const MAX_PLAYER_STAMINA: Duration = Duration::from_hours(24);
+pub const STAMINA_SPILL_PERCENT: f64 = 0.1;
 
 pub const MONSTERS_DEFAULT_DAMAGE_INCREASE: f64 = 5.0;
-// pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.12;
-pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07765;
-pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.12;
-pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
-pub const XP_INCREASE_FACTOR: f64 = 0.39;
+// pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07765;
+// pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.12;
+// pub const SKILL_COST_INCREASE_FACTOR: f64 = 0.31;
+// pub const XP_INCREASE_FACTOR: f64 = 0.39;
+pub const MONSTER_LIFE_INCREASE_FACTOR: f64 = 0.07;
+pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.10; // X10 every 10 levels
+pub const SKILL_COST_INCREASE_FACTOR: f64 = LOG10_2; // X2 every level
+pub const XP_INCREASE_FACTOR: f64 = 0.40;
+
+pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X10 every 200 levels
+pub const SKILL_MASTERY_BASE_COST: f64 = 10_000.0;
+pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
+
+pub const POWER_SHARD_LEVELS_NEEDED: AreaLevel = 10;
+pub const MAX_POWER_SHARD_LEVEL_BASE: AreaLevel = 100;
+
 pub const ARMOR_FACTOR: f64 = 100.0;
 pub const MAX_BLOCK: f32 = 80.0;
 pub const MAX_EVADE: f32 = 80.0;
-pub const MAX_STATUS_STACKS: usize = 50;
+// pub const MAX_DAMAGE_RESISTANCE: f64 = 90.0;
 pub const MAX_SKILL_LEVEL: u16 = 500;
 pub const MAX_AREA_LEVEL: u16 = 9999;
 
@@ -40,7 +52,9 @@ pub const ITEM_REWARD_MIN_SLOTS: u8 = 2;
 pub const ITEM_REWARD_MIN_PICKS: u8 = 1;
 pub const ITEM_REWARDS_MIN_LEVEL: u16 = 50;
 pub const ITEM_REWARDS_MAP_MIN_LEVEL: u16 = 100;
+pub const ITEM_REWARDS_BOSS_FACTOR: f64 = 10.0;
 pub const ITEM_REWARDS_RARE_FACTOR: f64 = 69.0;
+pub const UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR: f64 = 20.0;
 
 pub const STASH_USER_PRICE: StashPrice = StashPrice {
     start_price: 1e5,

@@ -2,7 +2,6 @@
   "name": "Oni Pyromaniac",
   "portrait": "monsters/yokai/oni_pyro.webp",
   "max_life": 7,
-  "power_factor": 2.0,
   "armor": { "Fire": 100 },
   "skills": [
     {
@@ -15,15 +14,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 2, 4 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Fire" }
-                    },
-                    "value": 5
-                  }
-                ]
+                "status_id": "burn",
+                "value": 5
               }
             }
           ]
@@ -40,23 +32,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Fire"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 30
-                  }
-                ]
+                "status_id": "vulnerability_fire",
+                "value": 30
               }
             }
           ]

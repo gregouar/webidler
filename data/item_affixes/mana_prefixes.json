@@ -1,363 +1,262 @@
 [
   {
-    "name": "Novice",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 10, 15 ]
-      }
+    "name"        : "Novice",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 1,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [10, 15] }
     ]
   },
   {
-    "name": "Studious",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 50,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 20, 25 ]
-      }
+    "name"        : "Studious",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 50,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [20, 25] }
     ]
   },
   {
-    "name": "Learned",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 30, 35 ]
-      }
+    "name"        : "Learned",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 100,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [30, 35] }
     ]
   },
   {
-    "name": "Scholastic",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 150,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 40, 45 ]
-      }
+    "name"        : "Scholastic",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 150,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [40, 45] }
     ]
   },
   {
-    "name": "Cultivated",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 200,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 50, 55 ]
-      }
+    "name"        : "Cultivated",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 200,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [50, 55] }
     ]
   },
   {
-    "name": "Academic",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 260,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 60, 65 ]
-      }
+    "name"        : "Academic",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 260,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [60, 65] }
     ]
   },
   {
-    "name": "Sage",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 330,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 70, 75 ]
-      }
+    "name"        : "Sage",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 330,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [70, 75] }
     ]
   },
   {
-    "name": "Erudite",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 8,
-    "weight": 400,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 410,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 80, 85 ]
-      }
+    "name"        : "Erudite",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 410,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [80, 85] }
     ]
   },
   {
-    "name": "Magisterial",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 9,
-    "weight": 200,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 500,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 90, 95 ]
-      }
+    "name"        : "Magisterial",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 500,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [90, 95] }
     ]
   },
   {
-    "name": "Illuminated",
-    "family": "add_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 10,
-    "weight": 100,
-    "restrictions": [ "SpellWeapon", "Focus" ],
-    "item_level": 600,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Flat",
-        "value": [ 100, 120 ]
-      }
-    ]
-  },
-
-  {
-    "name": "Thoughtful",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 2, 4 ]
-      }
+    "name"        : "Illuminated",
+    "family"      : "add_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["SpellWeapon", "Focus"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Flat", "value": [100, 120] }
     ]
   },
   {
-    "name": "Cognitive",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 50,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 5, 7 ]
-      }
+    "name"        : "Thoughtful",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 1,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [2, 4] }
     ]
   },
   {
-    "name": "Analytical",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 8, 10 ]
-      }
+    "name"        : "Cognitive",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 50,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [5, 7] }
     ]
   },
   {
-    "name": "Knowing",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 150,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 11, 13 ]
-      }
+    "name"        : "Analytical",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 100,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [8, 10] }
     ]
   },
   {
-    "name": "Sagacious",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 200,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 14, 16 ]
-      }
+    "name"        : "Knowing",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 150,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [11, 13] }
     ]
   },
   {
-    "name": "Insightful",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 260,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 17, 19 ]
-      }
+    "name"        : "Sagacious",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 200,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [14, 16] }
     ]
   },
   {
-    "name": "Intelligent",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 330,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 20, 22 ]
-      }
+    "name"        : "Insightful",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 260,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [17, 19] }
     ]
   },
   {
-    "name": "Intuitive",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 8,
-    "weight": 400,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 410,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 23, 25 ]
-      }
+    "name"        : "Intelligent",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 330,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [20, 22] }
     ]
   },
   {
-    "name": "Gifted",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 9,
-    "weight": 200,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 500,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 26, 28 ]
-      }
+    "name"        : "Intuitive",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 410,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [23, 25] }
     ]
   },
   {
-    "name": "Genius",
-    "family": "inc_mana",
-    "tags": [ "Mana" ],
-    "affix_type": "Prefix",
-    "tier": 10,
-    "weight": 100,
-    "restrictions": [ "SpellWeapon", "Focus", "Helmet", "Jewelry" ],
-    "item_level": 600,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": "Mana",
-        "modifier": "Increased",
-        "value": [ 29, 32 ]
-      }
+    "name"        : "Gifted",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 500,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [26, 28] }
+    ]
+  },
+  {
+    "name"        : "Genius",
+    "family"      : "inc_mana",
+    "tags"        : ["Mana"],
+    "affix_type"  : "Prefix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["SpellWeapon", "Focus", "Helmet", "Jewelry"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "scope": "Global", "stat": "Mana", "modifier": "Increased", "value": [29, 32] }
     ]
   }
 ]

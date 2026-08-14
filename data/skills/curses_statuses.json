@@ -1,0 +1,182 @@
+{
+    "curse_conductivity"    : {
+        "name"      : "Curse of Conductivity",
+        "icon"      : "skills/curse_conductivity.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Storm"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
+    "curse_flammability"    : {
+        "name"      : "Curse of Flammability",
+        "icon"      : "skills/curse_flammability.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Fire"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
+    "curse_frailty"         : {
+        "name"      : "Curse of Frailty",
+        "icon"      : "skills/curse_frailty.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Physical"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
+    "curse_frailty_destroy" : {
+        "name"      : "Broken Armor",
+        "icon"      : "statuses/debuff_armor.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : { "stat": {"Armor": "Physical"}, "modifier": "More", "debuff": true },
+                "value"                : 1e+200,
+                "modifier"             : "Flat"
+            }
+        ]
+    },
+    "curse_putridity"       : {
+        "name"      : "Curse of Putridity",
+        "icon"      : "skills/curse_putridity.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Poison"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
+    "curse_weakness"        : {
+        "name"      : "Curse of Weakness",
+        "icon"      : "skills/curse_weakness.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {
+                    "stat"    : { "Damage": {"skill_type": null, "damage_type": null} },
+                    "modifier": "More",
+                    "debuff"  : true
+                },
+                "value"                : 100,
+                "modifier"             : "Percent"
+            }
+        ]
+    },
+    "curse_clumsy"          : {
+        "name"      : "Clumsiness",
+        "icon"      : "skills/curse_clumsy.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {"stat": "BlockDamageTaken", "modifier": "Flat", "debuff": false},
+                "value"                : 10,
+                "modifier"             : "Flat"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {"stat": "EvadeDamageTaken", "modifier": "Flat", "debuff": false},
+                "value"                : 10,
+                "modifier"             : "Flat"
+            }
+        ]
+    },
+    "curse_vampirism"       : {
+        "name"      : "Curse of Vampirism",
+        "icon"      : "skills/curse_vampirism.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {
+                    "stat"    : { "RestoreOnHit": {"skill_type": "Attack", "restore_type": "Life"} },
+                    "modifier": "Flat"
+                },
+                "value"                : 2,
+                "modifier"             : "Percent"
+            },
+            {
+                "replace_on_value_only": true,
+                "StatModifier"         : {"stat": "LifeRegen", "modifier": "Flat", "debuff": true},
+                "value"                : 10,
+                "modifier"             : "Flat"
+            }
+        ]
+    },
+    "curse_vampirism_damage": {
+        "name"      : "Covered in Blood",
+        "icon"      : "skills/blood.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 20,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : {
+                        "StatConditionalModifier": {
+                            "stat"      : {"Damage": {}},
+                            "conditions": [
+                                { "HasStatus": {"status_id": "curse_vampirism"} }
+                            ]
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 10,
+                "modifier"    : "Flat"
+            }
+        ]
+    }
+}

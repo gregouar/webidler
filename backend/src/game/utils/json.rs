@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use indexmap::IndexMap;
-use std::{collections::HashMap, path::Path};
+use std::{collections::HashMap, hash::Hash, path::Path};
 
 use serde::de::DeserializeOwned;
 use serde_ignored;
@@ -59,5 +59,10 @@ where
 }
 
 impl<T: LoadJsonFromFile> LoadJsonFromFile for HashMap<String, T> {}
-impl<T: LoadJsonFromFile> LoadJsonFromFile for IndexMap<String, T> {}
+impl<K, T> LoadJsonFromFile for IndexMap<K, T>
+where
+    K: DeserializeOwned + Eq + Hash + Send + Sync + 'static,
+    T: LoadJsonFromFile,
+{
+}
 impl<T: LoadJsonFromFile> LoadJsonFromFile for Vec<T> {}

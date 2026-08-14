@@ -2,7 +2,6 @@
   "name": "Ohaguro Bettari",
   "portrait": "monsters/yokai/ohaguro_bettari.webp",
   "max_life": 10,
-  "power_factor": 2.0,
   "skills": [
     {
       "name": "Forbidden Kiss",
@@ -21,15 +20,8 @@
             },
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Physical" }
-                    },
-                    "value": 20
-                  }
-                ]
+                "status_id": "bleed",
+                "value": 20
               }
             }
           ]

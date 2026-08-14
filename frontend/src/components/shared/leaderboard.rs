@@ -14,10 +14,11 @@ use crate::components::{
     },
 };
 
-const LEADERBOARD_REALM_TABS: [(Realm, &str); 3] = [
+const LEADERBOARD_REALM_TABS: [(Realm, &str); 4] = [
     (Realm::Standard, "Standard"),
     (Realm::StandardSSF, "Standard SSF"),
     (Realm::Legacy, "Legacy"),
+    (Realm::LegacySSF, "Legacy SSF"),
 ];
 
 #[component]
@@ -57,7 +58,7 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <CardHeader title="Leaderboard" on_close=move || open.set(false)>
-            <div class="px-4 w-full grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <div class="px-4 w-full grid grid-cols-1 gap-2 sm:grid-cols-4">
                 {LEADERBOARD_REALM_TABS
                     .into_iter()
                     .map(|(realm, label)| {
@@ -130,7 +131,7 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                                                             let navigate = use_navigate();
                                                             let href = format!(
                                                                 "/view-character/{}",
-                                                                &entry.character_name,
+                                                                entry.character_name,
                                                             );
                                                             move || {
                                                                 navigate(&href, Default::default());

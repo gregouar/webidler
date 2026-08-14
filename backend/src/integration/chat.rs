@@ -30,6 +30,7 @@ impl ChatIntegration {
             .json(&ClientPostMessage {
                 channel: ChatChannel::System,
                 content: ChatContent::try_new(content)?,
+                character_id: None,
                 linked_item: linked_item.and_then(to_linked_item_bytes),
             })
             .send()
@@ -54,6 +55,7 @@ impl ChatIntegration {
             .json(&ClientPostMessage {
                 channel: ChatChannel::System,
                 content: ChatContent::try_new(content)?,
+                character_id: None,
                 linked_item: linked_item.and_then(to_linked_item_bytes),
             })
             .send()

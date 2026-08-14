@@ -10,6 +10,7 @@ mod view_character;
 
 pub use game::GamePage;
 pub use main_menu::MainMenuPage;
+pub(crate) use main_menu::{LogoCog, LogoWord};
 pub use reset_password::ResetPasswordPage;
 pub use signup::SignUpPage;
 pub use town::TownPage;

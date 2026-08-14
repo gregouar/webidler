@@ -46,8 +46,9 @@ pub enum AffixTag {
     // TODO: add others
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum AffixEffectScope {
+    #[default]
     Local,
     Global,
 }

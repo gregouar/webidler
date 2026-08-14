@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
-    area::StartAreaConfig, item::ItemSlot, passive::PassiveNodeId, user::UserCharacterId,
+    area::StartAreaConfig,
+    item::{InventorySortType, ItemSlot},
+    passive::PassiveNodeId,
+    user::UserCharacterId,
 };
 
 use super::macros::impl_into_message;
@@ -28,6 +31,7 @@ impl_into_message! {
         UnequipItem(UnequipItemMessage),
         SheathItem(SheathItemMessage),
         SellItems(SellItemsMessage),
+        SortInventory(SortInventoryMessage),
 
         // FilterLoot(FilterLootMessage),
         PickupLoot(PickUpLootMessage),
@@ -108,6 +112,11 @@ pub struct SheathItemMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SellItemsMessage {
     pub item_indexes: Vec<u8>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SortInventoryMessage {
+    pub sort_type: InventorySortType,
 }
 
 // #[derive(Serialize, Deserialize, Debug, Clone)]

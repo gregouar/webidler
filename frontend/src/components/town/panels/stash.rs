@@ -16,7 +16,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     shared::{
         inventory::InventoryEquipFilter,
@@ -76,6 +75,13 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         selected_item.set(SelectedItem::None);
         active_tab.set(new_tab);
     };
+
+    Effect::new(move || {
+        if open.get() || town_context.open_inventory.get() {
+            selected_item.set(SelectedItem::None);
+            town_context.selected_item_index.set(None);
+        }
+    });
 
     view! {
         <MenuPanel open=open>
@@ -260,7 +266,6 @@ fn StashTypeRow(stash: RwSignal<Stash>, selected_stash: RwSignal<Option<Stash>>)
 fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
     let backend = expect_context::<BackendClient>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let current_max_size = move || {
@@ -291,13 +296,10 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                 spawn_local({
                     async move {
                         match backend
-                            .upgrade_stash(
-                                &auth_context.token(),
-                                &UpgradeStashRequest {
-                                    character_id,
-                                    stash_type,
-                                },
-                            )
+                            .upgrade_stash(&UpgradeStashRequest {
+                                character_id,
+                                stash_type,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -443,7 +445,6 @@ fn StashBrowser(
     Effect::new({
         let backend = expect_context::<BackendClient>();
         let town_context = expect_context::<TownContext>();
-        let auth_context = expect_context::<AuthContext>();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
@@ -456,7 +457,6 @@ fn StashBrowser(
                 spawn_local(async move {
                     let response = backend
                         .browse_stash_items(
-                            &auth_context.token(),
                             &BrowseStashItemsRequest {
                                 realm,
                                 skip,
@@ -556,7 +556,6 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let disabled = Signal::derive({
@@ -591,7 +590,6 @@ pub fn TakeDetails(stash: RwSignal<Stash>, selected_item: RwSignal<SelectedItem>
                     async move {
                         match backend
                             .take_stash_item(
-                                &auth_context.token(),
                                 &TakeStashItemRequest {
                                     character_id,
                                     item_index: item.index as u32,
@@ -648,7 +646,6 @@ pub fn StoreDetails(
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let disabled = Signal::derive(move || selected_item.read().is_empty());
@@ -662,7 +659,6 @@ pub fn StoreDetails(
                     async move {
                         match backend
                             .store_stash_item(
-                                &auth_context.token(),
                                 &StoreStashItemRequest {
                                     character_id,
                                     item_index: item.index,
@@ -710,7 +706,6 @@ pub fn StoreDetails(
 pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let value = Signal::derive(move || stash.read().resource_gems);
@@ -729,7 +724,6 @@ pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
                     async move {
                         match backend
                             .exchange_gems_stash(
-                                &auth_context.token(),
                                 &ExchangeGemsStashRequest {
                                     character_id,
                                     amount,
@@ -769,7 +763,6 @@ pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
                     async move {
                         match backend
                             .exchange_gems_stash(
-                                &auth_context.token(),
                                 &ExchangeGemsStashRequest {
                                     character_id,
                                     amount,

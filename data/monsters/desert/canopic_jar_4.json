@@ -1,0 +1,25 @@
+{
+  "name"    : "Canopic Jar",
+  "portrait": "monsters/desert/canopic_jar_4.webp",
+  "rarity"  : "Boss",
+  "max_life": 150,
+  "armor"   : {"Poison": 200},
+  "skills"  : [
+    {
+      "name"      : "Babi's Plague",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 4.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            {
+              "ApplyStatus": { "status_id": "poison", "value": [10, 20] }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

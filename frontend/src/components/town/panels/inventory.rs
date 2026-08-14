@@ -2,15 +2,15 @@ use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
 
 use shared::http::client::{
-    InventoryDeleteRequest, InventoryEquipRequest, InventoryUnequipRequest,
+    InventoryDeleteRequest, InventoryEquipRequest, InventorySortRequest, InventoryUnequipRequest,
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     shared::{
         inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
         loot_filter::LootFilterPanel,
+        resources::show_resource_reward,
     },
     town::TownContext,
     ui::toast::*,
@@ -21,12 +21,12 @@ pub fn TownInventoryPanel(
     open: RwSignal<bool>,
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
-    let auth_context = expect_context::<AuthContext>();
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
     let town_context = expect_context::<TownContext>();
 
     let open_loot_filter = RwSignal::new(false);
+    let sell_reward = RwSignal::new(Default::default());
 
     let on_equip = move |item_index| {
         let character_id = town_context.character.read_untracked().character_id;
@@ -36,13 +36,10 @@ pub fn TownInventoryPanel(
                 InventoryEquipFilter::Slot => spawn_local({
                     async move {
                         match backend
-                            .inventory_equip(
-                                &auth_context.token(),
-                                &InventoryEquipRequest {
-                                    character_id,
-                                    item_index,
-                                },
-                            )
+                            .inventory_equip(&InventoryEquipRequest {
+                                character_id,
+                                item_index,
+                            })
                             .await
                         {
                             Ok(response) => town_context.inventory.set(response.inventory),
@@ -79,13 +76,10 @@ pub fn TownInventoryPanel(
                 InventoryEquipFilter::Slot => spawn_local({
                     async move {
                         match backend
-                            .inventory_unequip(
-                                &auth_context.token(),
-                                &InventoryUnequipRequest {
-                                    character_id,
-                                    item_slot,
-                                },
-                            )
+                            .inventory_unequip(&InventoryUnequipRequest {
+                                character_id,
+                                item_slot,
+                            })
                             .await
                         {
                             Ok(response) => town_context.inventory.set(response.inventory),
@@ -114,13 +108,10 @@ pub fn TownInventoryPanel(
         spawn_local({
             async move {
                 match backend
-                    .inventory_delete(
-                        &auth_context.token(),
-                        &InventoryDeleteRequest {
-                            character_id,
-                            item_indexes: item_indexes.clone(),
-                        },
-                    )
+                    .inventory_delete(&InventoryDeleteRequest {
+                        character_id,
+                        item_indexes: item_indexes.clone(),
+                    })
                     .await
                 {
                     Ok(response) => {
@@ -138,6 +129,15 @@ pub fn TownInventoryPanel(
                             });
 
                         town_context.inventory.set(response.inventory);
+                        town_context.character.update(|character| {
+                            character.resource_gold = response.resource_gold;
+                            character.resource_gems = response.resource_gems;
+                        });
+                        show_resource_reward(
+                            sell_reward,
+                            response.gold_reward,
+                            response.gems_reward,
+                        );
                     }
                     Err(e) => show_toast(
                         toaster,
@@ -147,6 +147,27 @@ pub fn TownInventoryPanel(
                 }
             }
         })
+    };
+
+    let on_sort = move |sort_type| {
+        let character_id = town_context.character.read_untracked().character_id;
+
+        spawn_local(async move {
+            match backend
+                .inventory_sort(&InventorySortRequest {
+                    character_id,
+                    sort_type,
+                })
+                .await
+            {
+                Ok(response) => town_context.inventory.set(response.inventory),
+                Err(e) => show_toast(
+                    toaster,
+                    format!("Failed to sort inventory: {e}"),
+                    ToastVariant::Error,
+                ),
+            }
+        });
     };
 
     let inventory_config = if view_only {
@@ -163,7 +184,9 @@ pub fn TownInventoryPanel(
             on_sheathe: None,
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),
+            on_sort: Some(Arc::new(on_sort)),
             sell_type: SellType::Discard,
+            sell_reward,
             max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
             equip_filter: town_context.equip_filter.into(),
         }

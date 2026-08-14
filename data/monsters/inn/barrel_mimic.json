@@ -1,24 +1,20 @@
 {
-  "name": "Barrel Mimic",
+  "name"    : "Barrel Mimic",
   "portrait": "monsters/inn/barrel_mimic.webp",
   "max_life": 15,
-  "power_factor": 3.0,
-  "initiative": [ 3.0, 5.0 ],
-  "armor": { "Physical": 50 },
-  "skills": [
+  "armor"   : {"Physical": 50},
+  "skills"  : [
     {
-      "name": "Hungry Kiss",
-      "icon": "skills/bite.svg",
-      "cooldown": 3.0,
+      "name"      : "Hungry Kiss",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 3.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 5 ]
-                }
+                "damage": { "Physical": [3, 5] }
               }
             }
           ]
@@ -26,18 +22,16 @@
       ]
     },
     {
-      "name": "Splintered Caress",
-      "icon": "skills/claw.svg",
-      "cooldown": 2.0,
+      "name"      : "Splintered Caress",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 2.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 4 ]
-                }
+                "damage": { "Physical": [2, 4] }
               }
             }
           ]

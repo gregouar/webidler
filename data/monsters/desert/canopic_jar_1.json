@@ -1,0 +1,27 @@
+{
+  "name"    : "Canopic Jar",
+  "portrait": "monsters/desert/canopic_jar_1.webp",
+  "rarity"  : "Boss",
+  "max_life": 150,
+  "armor"   : {"Physical": 200},
+  "skills"  : [
+    {
+      "name"      : "Osiris' Decree",
+      "icon"      : "skills/ankh_attack.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [8, 16] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

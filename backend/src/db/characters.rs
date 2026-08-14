@@ -26,6 +26,7 @@ pub struct CharacterEntry {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
+    pub resource_stamina: f64,
     pub played_time_seconds: f64,
 
     pub created_at: UtcDateTime,
@@ -49,6 +50,7 @@ pub struct CharacterAreaEntry {
     pub character_id: UserCharacterId,
     pub area_id: String,
     pub max_area_level: i32,
+    pub max_power_shard_level: i32,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -123,6 +125,7 @@ pub async fn read_character<'c>(
             resource_gems,
             resource_shards,
             resource_gold,
+            resource_stamina,
             played_time_seconds,
             created_at,
             updated_at,
@@ -152,6 +155,7 @@ pub async fn read_character_area_completed<'c>(
             character_id as "character_id: UserCharacterId",
             area_id,
             max_area_level as "max_area_level!: i32",
+            max_power_shard_level as "max_power_shard_level!: i32",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -175,6 +179,7 @@ pub async fn read_character_areas_completed<'c>(
             character_id as "character_id: UserCharacterId",
             area_id,
             max_area_level as "max_area_level!: i32",
+            max_power_shard_level as "max_power_shard_level!: i32",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -203,6 +208,7 @@ pub async fn read_all_user_characters<'c>(
             resource_gems,
             resource_shards,
             resource_gold,
+            resource_stamina,
             played_time_seconds,
             created_at,
             updated_at,
@@ -298,6 +304,28 @@ pub async fn update_character_resources<'c>(
     .await
 }
 
+pub async fn set_character_stamina<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    resource_stamina: f64,
+) -> Result<(), sqlx::Error> {
+    sqlx::query!(
+        r#"
+        UPDATE characters
+        SET
+            resource_stamina = $2,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE character_id = $1
+        "#,
+        character_id,
+        resource_stamina,
+    )
+    .execute(executor)
+    .await?;
+
+    Ok(())
+}
+
 pub async fn update_character_max_area_level<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
@@ -324,25 +352,27 @@ pub async fn update_character_area_progress<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
     area_id: &str,
-    delta_area_level: i32,
+    max_area_level_ever: i32,
+    max_power_shard_level_ever: i32,
 ) -> Result<(), sqlx::Error> {
-    if delta_area_level > 0 {
+    if max_area_level_ever > 0 {
         sqlx::query!(
-        "INSERT INTO character_area_completed (character_id, area_id, max_area_level) VALUES ($1, $2, $3)
+        "INSERT INTO character_area_completed (character_id, area_id, max_area_level,max_power_shard_level) VALUES ($1, $2, $3, $4)
          ON CONFLICT(character_id, area_id) DO UPDATE 
          SET max_area_level = CASE
             WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
             THEN EXCLUDED.max_area_level
             ELSE character_area_completed.max_area_level
-        END,
-        updated_at = CASE
-            WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
-            THEN CURRENT_TIMESTAMP
-            ELSE character_area_completed.updated_at
-        END;",
+         END,
+         max_power_shard_level = CASE
+            WHEN EXCLUDED.max_power_shard_level > character_area_completed.max_power_shard_level
+            THEN EXCLUDED.max_power_shard_level
+            ELSE character_area_completed.max_power_shard_level
+         END,
+         updated_at = CURRENT_TIMESTAMP;",
         character_id,
         area_id,
-        delta_area_level
+        max_area_level_ever,max_power_shard_level_ever
     )
     .execute(&mut **executor)
     .await?;

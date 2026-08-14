@@ -1,32 +1,65 @@
+use std::collections::{BTreeMap, BTreeSet};
+
 use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::BoundedChance,
-    conditional_modifier::Condition,
-    modifier::Modifier,
-    skill::{DamageType, RestoreType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusType, StatType},
+    character_status::StatusId,
+    skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
+    stat_effect::{EffectsMap, StatSkillFilter, StatType},
     trigger::TriggerSpecs,
 };
 use strum::IntoEnumIterator;
 
 use crate::components::{
+    data_context::DataContext,
     game::GameContext,
     shared::tooltips::{
         effects_tooltip::{self, format_multiplier_stat_name},
+        skill_tooltip::{skill_filter_str, skill_type_str},
         trigger_tooltip,
     },
     ui::{
         Separator,
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         menu_panel::MenuPanel,
-        number::{format_duration, format_number},
+        number::{Number, format_duration, format_number},
+    },
+    utils::stats_computations::{
+        compute_stats_effects_crit_chance_value, compute_stats_effects_crit_damage_value,
+        compute_stats_effects_damage_value, compute_stats_effects_mana_cost_value,
+        compute_stats_effects_restore_value, compute_stats_effects_speed_value,
+        compute_stats_effects_status_duration_value, compute_stats_effects_status_power_value,
+        compute_stats_effects_status_value, compute_stats_effects_success_chance_value,
     },
 };
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+struct HitDamageKind {
+    skill_type: SkillType,
+    damage_type: DamageType,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+enum DamageMultiplierStatKind {
+    Hit(HitDamageKind),
+    Status {
+        skill_type: SkillType,
+        status_id: StatusId,
+    },
+}
+
+#[derive(Debug, Clone, PartialEq)]
+struct DamageMultiplierStat {
+    kind: DamageMultiplierStatKind,
+    label: String,
+    multiplier: f64,
+}
 
 #[component]
 pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let data_context = expect_context::<DataContext>();
     // let effect = move |stat: StatType, modifier: Modifier| {
     //     game_context
     //         .player_specs
@@ -38,6 +71,139 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     //         .copied()
     //         .unwrap_or_default()
     // };
+
+    let effects_map = Memo::new(move |_| {
+        EffectsMap::from(
+            game_context
+                .player_specs
+                .read()
+                .character_specs
+                .effects
+                .clone(),
+        )
+    });
+
+    let damage_multipliers = Memo::new(move |_| {
+        let player_specs = game_context.player_specs.read();
+        let statuses_specs = data_context.statuses_specs.read();
+        let mut kinds = BTreeSet::new();
+        let mut status_multipliers = BTreeMap::new();
+
+        {
+            let mut add_damage_effect =
+                |source_id: &String,
+                 skill_type: SkillType,
+                 effect: &SkillEffect,
+                 allow_zero_status: bool| match &effect.effect_type {
+                    SkillEffectType::FlatDamage { damage, .. } => {
+                        for &damage_type in damage
+                            .iter()
+                            .filter(|(_, value)| value.min.get() > 0.0 || value.max.get() > 0.0)
+                            .map(|(damage_type, _)| damage_type)
+                        {
+                            kinds.insert(HitDamageKind {
+                                skill_type,
+                                damage_type,
+                            });
+                        }
+                    }
+                    SkillEffectType::ApplyStatus {
+                        status_id, value, ..
+                    } if value.min.get() > 0.0 || value.max.get() > 0.0 || allow_zero_status => {
+                        if let Some(status_specs) = statuses_specs.get(status_id)
+                            && let Some(damage_type) = status_specs.damage_type
+                        {
+                            status_multipliers
+                                .entry((skill_type, status_id.clone()))
+                                .or_insert_with(|| {
+                                    compute_stats_effects_status_value(
+                                        &effects_map.read(),
+                                        &effect.ignore_stat_effects,
+                                        Some(source_id),
+                                        Some(skill_type),
+                                        status_id,
+                                        Some(damage_type),
+                                        status_specs.debuff,
+                                    )
+                                });
+                        }
+                    }
+                    _ => {}
+                };
+
+            for skill in player_specs
+                .character_specs
+                .skills_specs
+                .iter()
+                .filter(|skill| skill.usable)
+            {
+                for effect in skill
+                    .targets
+                    .iter()
+                    .flat_map(|target| target.effects.iter())
+                {
+                    add_damage_effect(&skill.skill_id, skill.skill_type, effect, false);
+                }
+            }
+
+            for trigger_effect in player_specs
+                .character_specs
+                .triggers
+                .iter()
+                .flat_map(|(_, owned_triggers)| owned_triggers.iter())
+                .map(|owned_trigger| &owned_trigger.trigger_effect)
+            {
+                for effect in &trigger_effect.effects {
+                    add_damage_effect(
+                        &trigger_effect.trigger_id,
+                        trigger_effect.skill_type,
+                        effect,
+                        !trigger_effect.modifiers.is_empty(),
+                    );
+                }
+            }
+        }
+
+        let hit_stats = kinds.into_iter().map(|kind| DamageMultiplierStat {
+            kind: DamageMultiplierStatKind::Hit(kind),
+            label: format_hit_damage_kind(kind),
+            multiplier: compute_stats_effects_damage_value(
+                &effects_map.read(),
+                kind.skill_type,
+                kind.damage_type,
+                true,
+            ),
+        });
+        let status_stats =
+            status_multipliers
+                .into_iter()
+                .map(
+                    |((skill_type, status_id), multiplier)| DamageMultiplierStat {
+                        label: format!(
+                            "{} Damage{}",
+                            statuses_specs
+                                .get(&status_id)
+                                .map(|status| status.name.as_str())
+                                .unwrap_or(status_id.as_str()),
+                            skill_filter_str(
+                                &StatSkillFilter {
+                                    skill_type: Some(skill_type),
+                                    ..Default::default()
+                                },
+                                " with ",
+                                true,
+                            ),
+                        ),
+                        kind: DamageMultiplierStatKind::Status {
+                            skill_type,
+                            status_id,
+                        },
+                        multiplier,
+                    },
+                );
+
+        hit_stats.chain(status_stats).collect::<Vec<_>>()
+    });
 
     view! {
         <MenuPanel open=open center=false>
@@ -93,7 +259,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
-                                    label="Average Damage per Second"
+                                    label="Power Shards Unlocked up to Level"
+                                    value=move || {
+                                        game_context
+                                            .area_state
+                                            .read()
+                                            .max_power_shard_level_ever
+                                            .to_string()
+                                    }
+                                />
+                                <Stat
+                                    label="Average Damage per second"
                                     value=move || {
                                         format_number(game_context.game_local_stats.average_dps())
                                     }
@@ -103,14 +279,6 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format_number(
                                             game_context.game_local_stats.average_damage_tick(),
-                                        )
-                                    }
-                                />
-                                <Stat
-                                    label="Gold Collected"
-                                    value=move || {
-                                        format_number(
-                                            game_context.player_resources.read().gold_total,
                                         )
                                     }
                                 />
@@ -149,7 +317,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
-                                    label="Life Regeneration per Second"
+                                    label="Life Regeneration per second"
                                     value=move || {
                                         let value = *game_context
                                             .player_specs
@@ -179,7 +347,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }
                                 />
                                 <Stat
-                                    label="Mana Regeneration per Second"
+                                    label="Mana Regeneration per second"
                                     value=move || {
                                         let value = *game_context
                                             .player_specs
@@ -285,22 +453,26 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         )
                                     }
                                 />
-                                <Stat
-                                    label="Attack Block Chance (max 80%)"
-                                    value=move || {
-                                        format_chance(
-                                            &game_context
-                                                .player_specs
-                                                .read()
-                                                .character_specs
-                                                .character_attrs
-                                                .block
-                                                .get(&SkillType::Attack)
-                                                .copied()
-                                                .unwrap_or_default(),
-                                        )
-                                    }
-                                />
+                                {move || {
+                                    let block_spell = game_context
+                                        .player_specs
+                                        .read()
+                                        .character_specs
+                                        .character_attrs
+                                        .block
+                                        .get(&SkillType::Attack)
+                                        .copied()
+                                        .unwrap_or_default();
+                                    (block_spell.value.get() != 0.0)
+                                        .then(move || {
+                                            view! {
+                                                <Stat
+                                                    label="Attack Block Chance (max 80%)"
+                                                    value=move || { format_chance(&block_spell) }
+                                                />
+                                            }
+                                        })
+                                }}
                                 {move || {
                                     let block_spell = game_context
                                         .player_specs
@@ -426,25 +598,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                 {move || {
                                     DamageType::iter()
                                         .filter_map(|damage_type| {
-                                            let value = -game_context
+                                            let value = game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
-                                                .effects
-                                                .0
-                                                .get(
-                                                    &(
-                                                        StatType::DamageResistance {
-                                                            skill_type: None,
-                                                            damage_type: Some(damage_type),
-                                                        },
-                                                        Modifier::Flat,
-                                                        false,
-                                                    ),
-                                                )
-                                                .copied()
-                                                .unwrap_or_default();
-                                            (value != 0.0)
+                                                .character_attrs
+                                                .damage_taken
+                                                .get(&(SkillType::Attack, damage_type))
+                                                .map(|x| **x)
+                                                .unwrap_or(100.0);
+                                            (value != 100.0)
                                                 .then(|| {
                                                     view! {
                                                         <Stat
@@ -452,13 +615,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                                 "{}Damage Taken",
                                                                 effects_tooltip::damage_type_str(Some(damage_type)),
                                                             )
-                                                            value=move || {
-                                                                format!(
-                                                                    "{}{}%",
-                                                                    if value >= 0.0 { "+" } else { "-" },
-                                                                    format_number(value.abs()),
-                                                                )
-                                                            }
+                                                            value=move || { format!("{}%", format_number(value.abs())) }
                                                         />
                                                     }
                                                 })
@@ -477,238 +634,194 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         )
                                     }
                                 />
-                                {make_stat(
-                                    StatType::Restore {
-                                        restore_type: None,
-                                        skill_filter: Default::default(),
-                                    },
-                                    Modifier::Increased,
-                                )}
-                                {make_opt_stat(
-                                    StatType::Restore {
-                                        restore_type: Some(RestoreType::Life),
-                                        skill_filter: Default::default(),
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::Restore {
-                                        restore_type: Some(RestoreType::Mana),
-                                        skill_filter: Default::default(),
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_stat(
-                                    StatType::StatusDuration {
-                                        status_type: None,
-                                        skill_filter: Default::default(),
-                                    },
-                                    Modifier::Increased,
-                                )}
-                                {make_stat(
-                                    StatType::StatusPower {
-                                        status_type: None,
-                                        skill_filter: Default::default(),
-                                        min_max: None,
-                                    },
-                                    Modifier::Increased,
-                                )}
-                                // TODO: More for stun?
-                                {make_opt_stat(
-                                    StatType::StatusPower {
-                                        status_type: None,
-                                        skill_filter: StatSkillFilter {
-                                            skill_type: Some(SkillType::Blessing),
+                                <OptionalMultiplierStat
+                                    label="Life Restore"
+                                    multiplier=move || {
+                                        compute_stats_effects_restore_value(
+                                            &effects_map.read(),
+                                            RestoreType::Life,
+                                        )
+                                    }
+                                />
+                                <OptionalMultiplierStat
+                                    label="Mana Restore"
+                                    multiplier=move || {
+                                        compute_stats_effects_restore_value(
+                                            &effects_map.read(),
+                                            RestoreType::Mana,
+                                        )
+                                    }
+                                />
+                                {[
+                                    SkillType::Attack,
+                                    SkillType::Spell,
+                                    SkillType::Curse,
+                                    SkillType::Blessing,
+                                ]
+                                    .into_iter()
+                                    .map(|skill_type| {
+                                        let label = format_multiplier_stat_name(
+                                            &StatType::ManaCost {
+                                                skill_filter: StatSkillFilter {
+                                                    skill_type: Some(skill_type),
+                                                    ..Default::default()
+                                                },
+                                            },
+                                        );
+                                        view! {
+                                            <OptionalMultiplierStat
+                                                label=label
+                                                multiplier=move || {
+                                                    compute_stats_effects_mana_cost_value(
+                                                        &effects_map.read(),
+                                                        skill_type,
+                                                    )
+                                                }
+                                            />
+                                        }
+                                    })
+                                    .collect_view()}
+                                {[SkillType::Blessing, SkillType::Curse]
+                                    .into_iter()
+                                    .flat_map(|skill_type| {
+                                        let skill_filter = StatSkillFilter {
+                                            skill_type: Some(skill_type),
                                             ..Default::default()
-                                        },
-                                        min_max: None,
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::StatusDuration {
-                                        status_type: None,
-                                        skill_filter: StatSkillFilter {
-                                            skill_type: Some(SkillType::Blessing),
-                                            ..Default::default()
-                                        },
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::StatusPower {
-                                        status_type: None,
-                                        skill_filter: StatSkillFilter {
-                                            skill_type: Some(SkillType::Curse),
-                                            ..Default::default()
-                                        },
-                                        min_max: None,
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::StatusDuration {
-                                        status_type: None,
-                                        skill_filter: StatSkillFilter {
-                                            skill_type: Some(SkillType::Curse),
-                                            ..Default::default()
-                                        },
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::SuccessChance {
-                                        skill_filter: Default::default(),
-                                        effect_type: None,
-                                    },
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
+                                        };
+                                        let power_label = format_multiplier_stat_name(
+                                            &StatType::StatusPower {
+                                                status_filter: Default::default(),
+                                                skill_filter: skill_filter.clone(),
+                                                min_max: None,
+                                            },
+                                        );
+                                        let duration_label = format_multiplier_stat_name(
+                                            &StatType::StatusDuration {
+                                                status_filter: Default::default(),
+                                                skill_filter,
+                                            },
+                                        );
+                                        [
+                                            view! {
+                                                <OptionalMultiplierStat
+                                                    label=power_label
+                                                    multiplier=move || {
+                                                        compute_stats_effects_status_power_value(
+                                                            &effects_map.read(),
+                                                            skill_type,
+                                                        )
+                                                    }
+                                                />
+                                            }
+                                                .into_any(),
+                                            view! {
+                                                <OptionalMultiplierStat
+                                                    label=duration_label
+                                                    multiplier=move || {
+                                                        compute_stats_effects_status_duration_value(
+                                                            &effects_map.read(),
+                                                            skill_type,
+                                                        )
+                                                    }
+                                                />
+                                            }
+                                                .into_any(),
+                                        ]
+                                    })
+                                    .collect_view()}
+                                {[
+                                    SkillType::Attack,
+                                    SkillType::Spell,
+                                    SkillType::Curse,
+                                    SkillType::Blessing,
+                                ]
+                                    .into_iter()
+                                    .map(|skill_type| {
+                                        view! {
+                                            <OptionalMultiplierStat
+                                                label=format!(
+                                                    "{}Success Chance",
+                                                    skill_type_str(Some(skill_type)),
+                                                )
+                                                multiplier=move || {
+                                                    compute_stats_effects_success_chance_value(
+                                                        &effects_map.read(),
+                                                        skill_type,
+                                                    )
+                                                }
+                                            />
+                                        }
+                                    })
+                                    .collect_view()}
                             </StatCategory>
 
                             <StatCategory title="Combat">
-                                {make_stat(
-                                    StatType::Speed(Default::default()),
-                                    Modifier::Increased,
-                                )}
-                                {make_stat(
-                                    StatType::Speed(StatSkillFilter {
-                                        skill_type: Some(SkillType::Attack),
-                                        ..Default::default()
-                                    }),
-                                    Modifier::Increased,
-                                )}
-                                {make_stat(
-                                    StatType::Speed(StatSkillFilter {
-                                        skill_type: Some(SkillType::Spell),
-                                        ..Default::default()
-                                    }),
-                                    Modifier::Increased,
-                                )}
-                                {make_stat(
-                                    StatType::CritChance(Default::default()),
-                                    Modifier::Increased,
-                                )}
-                                {make_opt_stat(
-                                    StatType::CritChance(StatSkillFilter {
-                                        skill_type: Some(SkillType::Spell),
-                                        ..Default::default()
-                                    }),
-                                    Modifier::Increased,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::StatConditionalModifier {
-                                        stat: Box::new(StatType::Damage {
-                                            skill_filter: Default::default(),
-                                            damage_type: None,
-                                            min_max: None,
-                                            is_hit: None,
-                                        }),
-                                        conditions: vec![Condition::ThreatLevel],
-                                        conditions_duration: 0,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )}
+                                <MultiplierStat
+                                    label="Attack Speed"
+                                    multiplier=move || {
+                                        compute_stats_effects_speed_value(
+                                            &effects_map.read(),
+                                            SkillType::Attack,
+                                        )
+                                    }
+                                />
+                                <MultiplierStat
+                                    label="Spell Speed"
+                                    multiplier=move || {
+                                        compute_stats_effects_speed_value(
+                                            &effects_map.read(),
+                                            SkillType::Spell,
+                                        )
+                                    }
+                                />
+                                <OptionalMultiplierStat
+                                    label="Attack Critical Hit Chance"
+                                    multiplier=move || {
+                                        compute_stats_effects_crit_chance_value(
+                                            &effects_map.read(),
+                                            SkillType::Attack,
+                                        )
+                                    }
+                                />
+                                <OptionalMultiplierStat
+                                    label="Spell Critical Hit Chance"
+                                    multiplier=move || {
+                                        compute_stats_effects_crit_chance_value(
+                                            &effects_map.read(),
+                                            SkillType::Spell,
+                                        )
+                                    }
+                                />
+                                <OptionalMultiplierStat
+                                    label="Attack Critical Hit Damage"
+                                    multiplier=move || {
+                                        compute_stats_effects_crit_damage_value(
+                                            &effects_map.read(),
+                                            SkillType::Attack,
+                                        )
+                                    }
+                                />
+                                <OptionalMultiplierStat
+                                    label="Spell Critical Hit Damage"
+                                    multiplier=move || {
+                                        compute_stats_effects_crit_damage_value(
+                                            &effects_map.read(),
+                                            SkillType::Spell,
+                                        )
+                                    }
+                                />
                             </StatCategory>
                             <StatCategory title="Damage">
-                                {make_opt_stat(
-                                    StatType::Damage {
-                                        skill_filter: Default::default(),
-                                        damage_type: None,
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )}
-                                {make_stat(
-                                    StatType::Damage {
-                                        skill_filter: StatSkillFilter {
-                                            skill_type: Some(SkillType::Attack),
-                                            ..Default::default()
-                                        },
-                                        damage_type: None,
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                )}
-                                {make_stat(
-                                    StatType::Damage {
-                                        skill_filter: StatSkillFilter {
-                                            skill_type: Some(SkillType::Spell),
-                                            ..Default::default()
-                                        },
-                                        damage_type: None,
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                )}
-                                {make_opt_stat(
-                                    StatType::Damage {
-                                        skill_filter: Default::default(),
-                                        damage_type: Some(DamageType::Physical),
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::Damage {
-                                        skill_filter: Default::default(),
-                                        damage_type: Some(DamageType::Fire),
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::Damage {
-                                        skill_filter: Default::default(),
-                                        damage_type: Some(DamageType::Poison),
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::Damage {
-                                        skill_filter: Default::default(),
-                                        damage_type: Some(DamageType::Storm),
-                                        min_max: None,
-                                        is_hit: None,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )} // TODO: Elemental dot?
-                                {make_opt_stat(
-                                    StatType::StatusPower {
-                                        status_type: Some(StatStatusType::DamageOverTime {
-                                            damage_type: None,
-                                        }),
-                                        skill_filter: Default::default(),
-                                        min_max: None,
-                                    },
-                                    Modifier::More,
-                                    0.0,
-                                )}
-                                {make_opt_stat(
-                                    StatType::CritDamage(Default::default()),
-                                    Modifier::More,
-                                    0.0,
-                                )}
+                                <For
+                                    each=move || damage_multipliers.get()
+                                    key=|stat| stat.kind.clone()
+                                    let:stat
+                                >
+                                    <MultiplierStat
+                                        label=stat.label
+                                        multiplier=move || stat.multiplier
+                                    />
+                                </For>
                             </StatCategory>
 
                         </div>
@@ -734,50 +847,6 @@ fn StatCategory(title: &'static str, children: Children) -> impl IntoView {
     }
 }
 
-fn make_opt_stat(stat_type: StatType, modifier: Modifier, default: f64) -> impl IntoView + use<> {
-    let game_context = expect_context::<GameContext>();
-
-    view! {
-        {move || {
-            let value = game_context
-                .player_specs
-                .read()
-                .character_specs
-                .effects
-                .0
-                .get(&(stat_type.clone(), modifier, false))
-                .copied()
-                .unwrap_or_default();
-            (default != value).then(|| make_stat(stat_type.clone(), modifier))
-        }}
-    }
-}
-
-fn make_stat(stat_type: StatType, modifier: Modifier) -> impl IntoView + use<> {
-    let game_context = expect_context::<GameContext>();
-
-    view! {
-        <Stat
-            label=format!(
-                "{} {}",
-                effects_tooltip::modifier_str(modifier),
-                format_multiplier_stat_name(&stat_type),
-            )
-            value=move || format_effect_value(
-                game_context
-                    .player_specs
-                    .read()
-                    .character_specs
-                    .effects
-                    .0
-                    .get(&(stat_type.clone(), modifier, false))
-                    .copied()
-                    .unwrap_or_default(),
-            )
-        />
-    }
-}
-
 #[component]
 fn Stat(
     #[prop(into)] label: String,
@@ -791,16 +860,42 @@ fn Stat(
     }
 }
 
-pub fn format_effect_value(value: f64) -> String {
-    if value >= 0.0 {
-        format!("+{}%", format_number(value))
-    } else {
-        let div = (1.0 - value * 0.01).max(0.0);
-        format!(
-            "-{}%",
-            format_number(-(if div != 0.0 { value / div } else { 0.0 }))
-        )
+#[component]
+fn MultiplierStat(
+    #[prop(into)] label: String,
+    multiplier: impl Fn() -> f64 + Send + Sync + 'static,
+) -> impl IntoView {
+    let value = Signal::derive(move || multiplier() * 100.0);
+
+    view! {
+        <div class="flex justify-between px-6 text-sm xl:text-base">
+            <span class="text-zinc-400">{label}</span>
+            <span class="text-amber-100 font-medium font-number">
+                <Number value=value />
+                "%"
+            </span>
+        </div>
     }
+}
+
+#[component]
+fn OptionalMultiplierStat(
+    #[prop(into)] label: String,
+    multiplier: impl Fn() -> f64 + Send + Sync + 'static,
+) -> impl IntoView {
+    let multiplier = Signal::derive(multiplier);
+
+    view! {
+        <Show when=move || { (multiplier.get() - 1.0).abs() > f64::EPSILON }>
+            <MultiplierStat label=label.clone() multiplier=move || multiplier.get() />
+        </Show>
+    }
+}
+
+fn format_hit_damage_kind(kind: HitDamageKind) -> String {
+    let damage_type = effects_tooltip::damage_type_str(Some(kind.damage_type));
+    let skill_type = skill_type_str(Some(kind.skill_type));
+    format!("{damage_type}{skill_type}Hit Damage")
 }
 
 #[component]
@@ -812,8 +907,14 @@ fn TriggersStats() -> impl IntoView {
             .read()
             .character_specs
             .triggers
-            .clone();
-        triggers.sort_by_key(|trigger| trigger.trigger_id.clone());
+            .iter()
+            .flat_map(|(event_trigger, owned_triggers)| {
+                owned_triggers.iter().map(|owned_trigger| {
+                    (event_trigger.clone(), owned_trigger.trigger_effect.clone())
+                })
+            })
+            .collect::<Vec<_>>();
+        triggers.sort_by_key(|(_, trigger_effect)| trigger_effect.trigger_id.clone());
         triggers
     });
 
@@ -828,27 +929,22 @@ fn TriggersStats() -> impl IntoView {
             <div class="columns-2 xl:columns-3 gap-1">
                 <For
                     each=move || triggers.get().into_iter()
-                    key=|triggered_effect| triggered_effect.trigger_id.clone()
-                    let(triggered_effect)
+                    key=|(trigger, trigger_effect)| {
+                        (trigger.clone(), trigger_effect.trigger_id.clone())
+                    }
+                    let((trigger, trigger_effect))
                 >
                     <div class="relative pb-2 list-none break-inside-avoid">
                         {move || {
-                            let stat_effects = game_context
-                                .player_specs
-                                .read()
-                                .character_specs
-                                .effects
-                                .clone();
                             trigger_tooltip::format_trigger(
                                 TriggerSpecs {
-                                    name: None,
-                                    icon: None,
+                                    trigger: trigger.clone(),
                                     description: None,
-                                    triggered_effect: triggered_effect.clone(),
-                                    is_debuff: false,
+                                    trigger_effect: trigger_effect.clone(),
                                 },
                                 true,
-                                Some(&stat_effects),
+                                None,
+                                None,
                             )
                         }} <Separator />
                     </div>

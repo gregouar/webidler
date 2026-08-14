@@ -1,0 +1,40 @@
+{
+  "name"              : "Mortuary Priest",
+  "portrait"          : "monsters/desert/priest.webp",
+  "max_life"          : 10,
+  "status_resistances": [ {"skill_type": "Curse", "value": 50} ],
+  "skills"            : [
+    {
+      "name"      : "Moonstruck",
+      "icon"      : "skills/crescent_staff.svg",
+      "cooldown"  : 3,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 12], "Fire": [4, 8] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Anubis Judgment",
+      "icon"      : "skills/anubis.svg",
+      "cooldown"  : 8,
+      "skill_type": "Curse",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            { "ApplyStatus": {"status_id": "desert_priest_curse", "value": 50} }
+          ]
+        }
+      ]
+    }
+  ]
+}

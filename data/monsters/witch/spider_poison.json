@@ -2,8 +2,6 @@
   "name": "Nasty Spider",
   "portrait": "monsters/witch/spider_poison.webp",
   "max_life": 5,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 0.5 ],
   "armor": { "Poison": 100 },
   "skills": [
     {
@@ -23,15 +21,9 @@
             },
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
-                    },
-                    "value": 4
-                  }
-                ]
+                "status_id": "poison",
+                "value": 4,
+                "escalation": 20
               }
             }
           ]

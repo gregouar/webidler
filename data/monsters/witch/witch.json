@@ -4,20 +4,18 @@
   "rarity": "Boss",
   "max_life": 1000,
   "size": "Gargantuan",
-  "power_factor": 20,
-  "initiative": 2,
   "armor": { "Physical": 100, "Fire": 100, "Poison": 100, "Storm": 100 },
   "stun_lockout": 3.0,
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],
   "skills": [
     {
       "name": "Evil Cackling",
-      "icon": "skills/curse_weakness.svg",
+      "icon": "skills/pointy_hat.svg",
       "skill_type": "Curse",
       "cooldown": 10.0,
       "targets": [
@@ -25,18 +23,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "SuccessChance": { } },
-                        "debuff": true
-                      }
-                    },
-                    "value": 33
-                  }
-                ]
+                "status_id": "witch_curse",
+                "value": 33
               }
             }
           ]
@@ -94,15 +82,9 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
-                    },
-                    "value": 8
-                  }
-                ]
+                "status_id": "poison",
+                "value": 8,
+                "escalation": 30
               }
             }
           ]

@@ -1,0 +1,2 @@
+ALTER TABLE characters
+ADD COLUMN resource_stamina DOUBLE PRECISION NOT NULL DEFAULT 0;

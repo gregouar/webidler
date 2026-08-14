@@ -1,5 +1,6 @@
 use frontend::components::{
     accessibility::provide_accessibility_context,
+    backend_client::BackendClient,
     data_context::provide_data_context,
     events::provide_events_context,
     settings::provide_settings_context,
@@ -22,6 +23,11 @@ use crate::pages;
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
+    provide_context(BackendClient::new(
+        option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),
+        option_env!("BACKEND_WS_URL").unwrap_or("ws://localhost:4200"),
+    ));
+
     provide_accessibility_context();
     provide_settings_context();
     provide_events_context();
@@ -38,6 +44,7 @@ pub fn App() -> impl IntoView {
             <Routes fallback=|| "Page not found.">
                 <Route path=path!("/") view=pages::HomePage />
                 <Route path=path!("/passives") view=pages::PassivesPage />
+                <Route path=path!("/skills") view=pages::SkillsPage />
                 <Route path=path!("/ui_tests") view=pages::UiTestsPage />
                 <Route path=path!("/items") view=pages::ItemsPage />
                 <Route path=path!("/logo") view=pages::LogoPage />

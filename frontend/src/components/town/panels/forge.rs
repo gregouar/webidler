@@ -17,7 +17,6 @@ use shared::{
 use std::sync::Arc;
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     shared::{
         inventory::{InventoryEquipFilter, loot_filter_category_to_str},
@@ -47,14 +46,23 @@ enum ForgeTab {
 
 #[component]
 pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
+    let town_context: TownContext = expect_context();
     let selected_item = RwSignal::new(SelectedItem::None);
     let gamble_category = RwSignal::new(None);
     let active_tab = RwSignal::new(ForgeTab::Affix);
 
     let switch_tab = move |new_tab| {
         selected_item.set(SelectedItem::None);
+        town_context.selected_item_index.set(None);
         active_tab.set(new_tab);
     };
+
+    Effect::new(move || {
+        if open.get() || town_context.open_inventory.get() {
+            selected_item.set(SelectedItem::None);
+            town_context.selected_item_index.set(None);
+        }
+    });
 
     view! {
         <MenuPanel open=open>
@@ -165,6 +173,8 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
                     deleted_by: None,
                 }));
             }
+
+            town_context.selected_item_index.set(None);
         }
     });
 
@@ -228,7 +238,6 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) 
 pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
-    let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
     let confirm_context: ConfirmContext = expect_context();
 
@@ -248,14 +257,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 spawn_local({
                     async move {
                         match backend
-                            .forge_affix(
-                                &auth_context.token(),
-                                &ForgeAffixRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                    operation,
-                                },
-                            )
+                            .forge_affix(&ForgeAffixRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                                operation,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -344,7 +350,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 if item.item_specs.base.rarity == ItemRarity::Unique {
                     return None;
                 }
-                forge::affix_price(item.item_specs.modifiers.count_nonunique_affixes())
+                forge::affix_operation_price(
+                    ForgeAffixOperation::Add(None),
+                    item.item_specs.modifiers.count_nonunique_affixes(),
+                    &item.item_specs.base,
+                )
             }
             _ => None,
         })
@@ -361,8 +371,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
 
                 if prefixes == suffixes {
-                    forge::affix_price(prefixes + suffixes)
-                        .map(|price| price * forge::PREFIX_PRICE_FACTOR)
+                    forge::affix_operation_price(
+                        ForgeAffixOperation::Add(Some(AffixType::Prefix)),
+                        prefixes + suffixes,
+                        &item.item_specs.base,
+                    )
                 } else {
                     None
                 }
@@ -382,8 +395,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
 
                 if suffixes == prefixes {
-                    forge::affix_price(prefixes + suffixes)
-                        .map(|price| price * forge::SUFFIX_PRICE_FACTOR)
+                    forge::affix_operation_price(
+                        ForgeAffixOperation::Add(Some(AffixType::Suffix)),
+                        prefixes + suffixes,
+                        &item.item_specs.base,
+                    )
                 } else {
                     None
                 }
@@ -394,9 +410,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 
     let remove_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => {
-                forge::remove_price(item.item_specs.modifiers.count_nonunique_affixes())
-            }
+            SelectedItem::InMarket(item) => forge::affix_operation_price(
+                ForgeAffixOperation::Remove,
+                item.item_specs.modifiers.count_nonunique_affixes(),
+                &item.item_specs.base,
+            ),
             _ => None,
         })
     };
@@ -514,7 +532,6 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
-    let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
@@ -533,13 +550,10 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                 spawn_local({
                     async move {
                         match backend
-                            .forge_upgrade(
-                                &auth_context.token(),
-                                &ForgeUpgradeRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .forge_upgrade(&ForgeUpgradeRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -682,7 +696,6 @@ pub fn GambleDetails(
 ) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
-    let auth_context: AuthContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
@@ -696,13 +709,10 @@ pub fn GambleDetails(
             spawn_local({
                 async move {
                     match backend
-                        .gamble_item(
-                            &auth_context.token(),
-                            &GambleItemRequest {
-                                character_id,
-                                item_category: gamble_category.get(),
-                            },
-                        )
+                        .gamble_item(&GambleItemRequest {
+                            character_id,
+                            item_category: gamble_category.get(),
+                        })
                         .await
                     {
                         Ok(response) => {
@@ -743,13 +753,10 @@ pub fn GambleDetails(
                 spawn_local({
                     async move {
                         match backend
-                            .inventory_delete(
-                                &auth_context.token(),
-                                &InventoryDeleteRequest {
-                                    character_id,
-                                    item_indexes: [selected_item.index as u8].into(),
-                                },
-                            )
+                            .inventory_delete(&InventoryDeleteRequest {
+                                character_id,
+                                item_indexes: [selected_item.index as u8].into(),
+                            })
                             .await
                         {
                             Ok(_) => do_gamble(),

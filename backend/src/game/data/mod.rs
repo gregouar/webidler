@@ -1,5 +1,6 @@
 pub mod area;
 pub mod event;
+pub mod indexed_store;
 pub mod inventory_data;
 pub mod items_store;
 pub mod loot_table;

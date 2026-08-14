@@ -2,7 +2,6 @@
   "name": "Raiju Whelp",
   "portrait": "monsters/yokai/raiju_whelp.webp",
   "max_life": 5,
-  "power_factor": 1.0,
   "armor": { "Storm": 100 },
   "evade": {
     "Physical": 20,

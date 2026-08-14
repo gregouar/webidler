@@ -9,7 +9,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::{BackendClient, BackendError},
     chat::chat_panel::ChatPanel,
     data_context::DataContext,
@@ -18,11 +17,17 @@ use crate::components::{
         TownContext,
         header_menu::HeaderMenu,
         panels::{
-            forge::ForgePanel, inventory::TownInventoryPanel, market::MarketPanel,
-            passives::PassivesPanel, stash::StashPanel, temple::TemplePanel,
+            forge::ForgePanel,
+            inventory::TownInventoryPanel,
+            market::MarketPanel,
+            passives::PassivesPanel,
+            skill_masteries::{SkillMasteriesPanel, SkillMasteryDetailsModal},
+            stash::StashPanel,
+            temple::TemplePanel,
         },
         town_scene::TownScene,
     },
+    ui::loading_screen::LoadingScreen,
 };
 
 #[component]
@@ -32,7 +37,6 @@ pub fn TownPage() -> impl IntoView {
 
     let data_context: DataContext = expect_context();
     let backend = expect_context::<BackendClient>();
-    let auth = expect_context::<AuthContext>();
 
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
@@ -68,7 +72,7 @@ pub fn TownPage() -> impl IntoView {
     let initial_load = LocalResource::new({
         move || async move {
             match backend
-                .get_character_details(&auth.token(), &get_character_id_storage.get())
+                .get_character_details(&get_character_id_storage.get())
                 .await
             {
                 Ok(GetCharacterDetailsResponse {
@@ -78,10 +82,12 @@ pub fn TownPage() -> impl IntoView {
                     ascension,
                     passives_build,
                     benedictions,
-                    last_grind,
+                    // last_grind,
                     character_stash,
                     user_stash,
                     market_stash,
+                    skill_masteries,
+                    skill_mastery_skill_specs,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
                         use_navigate()("/game", Default::default())
@@ -92,7 +98,11 @@ pub fn TownPage() -> impl IntoView {
                     town_context.passives_tree_ascension.set(ascension);
                     town_context.passives_tree_build.set(passives_build);
                     town_context.player_benedictions.set(benedictions);
-                    town_context.last_grind.set(last_grind);
+                    town_context.player_skill_masteries.set(skill_masteries);
+                    town_context
+                        .skill_mastery_skill_specs
+                        .set(skill_mastery_skill_specs);
+                    // town_context.last_grind.set(last_grind);
                     if let Some(character_stash) = character_stash {
                         town_context.character_stash.set(character_stash);
                     }
@@ -116,7 +126,7 @@ pub fn TownPage() -> impl IntoView {
             <PlayerCount />
 
             <Transition fallback=move || {
-                view! { <p class="text-zinc-400">"Loading..."</p> }
+                view! { <LoadingScreen detail="Loading your character and town data." /> }
             }>
                 {move || Suspend::new(async move {
                     data_load.await;
@@ -127,8 +137,10 @@ pub fn TownPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
-                            <ChatPanel />
+                            <ChatPanel character_id=get_character_id_storage.get_untracked() />
                             <TemplePanel open=town_context.open_temple />
+                            <SkillMasteriesPanel open=town_context.open_skill_masteries />
+                            <SkillMasteryDetailsModal />
                             <MarketPanel open=town_context.open_market />
                             <StashPanel open=town_context.open_stash />
                             <PassivesPanel open=town_context.open_ascend />

@@ -1,6 +1,6 @@
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
-use indexmap::IndexSet;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
@@ -12,6 +12,8 @@ use crate::data::{
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     quest::QuestRewards,
+    realms::Realm,
+    skill::SkillSpecs,
     user::UserCharacterId,
 };
 
@@ -21,6 +23,7 @@ impl_into_message! {
     #[derive(Serialize, Deserialize, Debug, Clone,)]
     pub enum ServerMessage {
         Connect(ConnectMessage),
+        ServerDown(ServerDownMessage),
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
@@ -30,6 +33,11 @@ impl_into_message! {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ConnectMessage {}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ServerDownMessage {
+    pub expected_launch_time: DateTime<Utc>,
+}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ErrorMessage {
@@ -47,6 +55,7 @@ pub enum ErrorType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
     pub character_id: UserCharacterId,
+    pub realm: Realm,
     pub map_item: Option<ItemSpecs>,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,
@@ -54,9 +63,9 @@ pub struct InitGameMessage {
     pub passives_tree_state: PassivesTreeState,
     pub passives_tree_build: PurchasedNodes,
     pub player_base_specs: PlayerBaseSpecs,
+    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
-    pub last_skills_bought: IndexSet<String>,
     pub auto_skills: Vec<bool>,
 }
 

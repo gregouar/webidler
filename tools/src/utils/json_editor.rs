@@ -22,6 +22,15 @@ where
         move || value.get(),
         {
             move |value, _, _| {
+                // A valid intermediate edit updates `value`, but this watcher is
+                // debounced. By the time it runs, the user may have typed newer,
+                // temporarily invalid JSON. Preserve that invalid draft, while
+                // still allowing valid input to be normalized and completed with
+                // default values from the model.
+                if error.get_untracked().is_some() {
+                    return;
+                }
+
                 let json = serde_json::to_string_pretty(value).unwrap();
 
                 text.set(json.clone());

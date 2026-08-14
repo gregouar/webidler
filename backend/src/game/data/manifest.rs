@@ -14,6 +14,8 @@ pub enum ManifestCategory {
     Passives,
     Benedictions,
     Skills,
+    SkillMasteries,
+    Statuses,
     Items,
     ItemAffixes,
     ItemAdjectives,

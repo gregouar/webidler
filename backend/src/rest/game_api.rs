@@ -11,12 +11,13 @@ use shared::{
     data::area::AreaLevel,
     http::{
         client::{
-            AscendPassivesRequest, BuyBenedictionsRequest, SavePassivesRequest,
-            SocketPassiveRequest,
+            AscendPassivesRequest, BuyBenedictionsRequest, SaveFavoriteSkillsRequest,
+            SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SocketPassiveRequest,
         },
         server::{
             AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, SavePassivesResponse,
+            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, GetStatusesResponse,
+            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
             SocketPassiveResponse,
         },
     },
@@ -31,7 +32,10 @@ use crate::{
             inventory_data::inventory_data_to_player_inventory,
             passives::ascension_data_to_passives_tree_ascension,
         },
-        systems::{benedictions_controller, inventory_controller, passives_controller},
+        systems::{
+            benedictions_controller, inventory_controller, passives_controller,
+            skill_masteries_controller, skills_updater,
+        },
     },
     rest::utils::{verify_character_in_town, verify_character_user},
 };
@@ -44,6 +48,14 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/game/passives/socket", post(post_socket_passive))
         .route("/game/passives/build", post(post_save_passives_build))
         .route("/game/benedictions", post(post_buy_benedictions))
+        .route(
+            "/game/skill-masteries/favorites",
+            post(post_save_favorite_skills),
+        )
+        .route(
+            "/game/skill-masteries/upgrades",
+            post(post_save_skill_mastery_upgrades),
+        )
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -52,6 +64,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/game/areas", get(get_areas))
         .route("/game/skills", get(get_skills))
+        .route("/game/statuses", get(get_statuses))
         .route("/game/passives", get(get_passives))
         .route("/game/benedictions", get(get_benedictions))
         .merge(auth_routes)
@@ -74,6 +87,15 @@ pub async fn get_skills(
 ) -> Result<Json<GetSkillsResponse>, AppError> {
     Ok(Json(GetSkillsResponse {
         skills: (*master_store.skills_store).clone(),
+        skill_masteries: master_store.skill_masteries_store.as_ref().clone(),
+    }))
+}
+
+pub async fn get_statuses(
+    State(master_store): State<MasterStore>,
+) -> Result<Json<GetStatusesResponse>, AppError> {
+    Ok(Json(GetStatusesResponse {
+        statuses: (*master_store.statuses_store).clone().into_iter().collect(),
     }))
 }
 
@@ -112,7 +134,7 @@ pub async fn post_ascend_passives(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let (_, ascension_data, _) =
+    let (_, ascension_data, _, _) =
         db::characters_data::load_character_data(&db_pool, &payload.character_id)
             .await?
             .ok_or(AppError::NotFound)?;
@@ -139,7 +161,7 @@ pub async fn post_ascend_passives(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, ascension_data, _) = character_data?.unwrap_or_default();
+    let (_, ascension_data, _, _) = character_data?.unwrap_or_default();
 
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
@@ -165,7 +187,7 @@ pub async fn post_socket_passive(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
-    let (inventory_data, ascension_data, _) =
+    let (inventory_data, ascension_data, _, _) =
         db::characters_data::load_character_data(&db_pool, &payload.character_id)
             .await?
             .ok_or(AppError::NotFound)?;
@@ -261,10 +283,90 @@ pub async fn post_buy_benedictions(
     );
 
     let character = character?.ok_or(AppError::NotFound)?.into();
-    let (_, _, player_benedictions) = character_data?.unwrap_or_default();
+    let (_, _, player_benedictions, _) = character_data?.unwrap_or_default();
 
     Ok(Json(BuyBenedictionsResponse {
         character,
         player_benedictions,
+    }))
+}
+
+pub async fn post_save_favorite_skills(
+    State(db_pool): State<db::DbPool>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<SaveFavoriteSkillsRequest>,
+) -> Result<Json<SaveFavoriteSkillsResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    skill_masteries_controller::update_favorite_skills(
+        &mut tx,
+        &payload.character_id,
+        &payload.favorite_skills,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(SaveFavoriteSkillsResponse {
+        favorite_skills: payload.favorite_skills,
+    }))
+}
+
+pub async fn post_save_skill_mastery_upgrades(
+    State(master_store): State<MasterStore>,
+    State(db_pool): State<db::DbPool>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<SaveSkillMasteryUpgradesRequest>,
+) -> Result<Json<SaveSkillMasteryUpgradesResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    skill_masteries_controller::update_skill_mastery_upgrades(
+        &mut tx,
+        &master_store,
+        &payload.character_id,
+        &payload.skill_id,
+        &payload.upgrades_bought,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    let (_, _, _, skill_masteries) =
+        db::characters_data::load_character_data(&db_pool, &payload.character_id)
+            .await?
+            .unwrap_or_default();
+
+    let skill_mastery = skill_masteries
+        .masteries
+        .get(&payload.skill_id)
+        .cloned()
+        .unwrap_or_default();
+
+    let skill_specs = skills_updater::compute_skill_mastery_skill_specs_for_skill(
+        &master_store.statuses_store,
+        &master_store.skills_store,
+        &master_store.skill_masteries_store,
+        &payload.skill_id,
+        &skill_mastery,
+    )
+    .ok_or(AppError::NotFound)?;
+
+    Ok(Json(SaveSkillMasteryUpgradesResponse {
+        skill_specs,
+        skill_mastery,
     }))
 }

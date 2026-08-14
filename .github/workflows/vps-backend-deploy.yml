@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install stable Rust
-        uses: dtolnay/rust-toolchain@1.91.1
+        uses: dtolnay/rust-toolchain@1.97.1
         with:
           components: clippy
 
@@ -119,6 +119,7 @@ jobs:
             echo "HMAC_KEY=${{ secrets.HMAC_KEY }}" >> /webidler/tmp/.env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> /webidler/tmp/.env
             echo "DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }}" >> /webidler/tmp/.env
+            echo "GAME_START_AT_UTC=2026-08-14T19:00:00Z" >> /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
 
             BACKUP_DIR="/webidler/backups"

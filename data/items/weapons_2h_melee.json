@@ -100,7 +100,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": null,
             "is_hit": null
@@ -116,7 +115,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Min",
             "is_hit": null
@@ -132,7 +130,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Fire",
             "min_max": "Max",
             "is_hit": null
@@ -148,7 +145,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -164,31 +160,85 @@
       },
       {
         "stat": {
-          "SuccessChance": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_type": {
-                  "DamageOverTime": {
-                    "damage_type": "Fire"
-                  }
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "burn",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null
                 }
               }
-            }
+            ]
           }
         },
-        "modifier": "Increased",
+        "modifier": "More",
         "scope": "Global",
-        "value": [
-          50.0,
-          100.0
-        ],
+        "value": 5.0,
         "ignore_quality": true
       }
     ],
-    "triggers": [],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": "Fire",
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "sootreaver_burn_refresh",
+        "target": "SameTarget",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 20.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "burn",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
@@ -227,14 +277,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Min",
               "is_hit": null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value": 5.0
         }
       },
       {
@@ -244,14 +293,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Fire",
               "min_max": "Max",
               "is_hit": null
             }
           },
           "modifier": "Flat",
-          "value": 8.0
+          "value": 13.0
         }
       },
       {
@@ -261,14 +309,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
             }
           },
           "modifier": "Increased",
-          "value": 30.0
+          "value": 35.0
         }
       }
     ]
@@ -312,6 +359,395 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "oversized_axe": {
+    "name": "Oversized Axe",
+    "icon": "items/weapons_2h/oversized_axe.webp",
+    "description": "Urdnot claims he can slay both dragons and dungeons with it.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": "Min",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": [
+          30.0,
+          40.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": [
+          40.0,
+          50.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": -2.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": "Attack",
+          "range": null,
+          "is_crit": true,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "oversized_axe",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "rage",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": 10.0,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          8.0,
+          26.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 8.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 80.0
+        }
+      }
+    ]
+  },
+  "spider_hammer": {
+    "name": "The Hatchery",
+    "icon": "items/weapons_2h/spider_hammer.webp",
+    "description": "Every wound left open is a cradle for the next brood.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "StatusEscalation": {
+            "status_id": "open_wound",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SuccessChance": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_id": "open_wound",
+                "debuff": null
+              }
+            }
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e200,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": "Attack"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 3.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          8.0,
+          26.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 8.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "RestoreOnHit": {
+              "restore_type": "Life",
+              "skill_type": "Attack"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
+      }
+    ]
   },
   "halberd": {
     "name": "Halberd",
@@ -374,7 +810,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -393,7 +828,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": "Min",
             "is_hit": null
@@ -409,7 +843,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Poison",
             "min_max": "Max",
             "is_hit": null
@@ -427,7 +860,7 @@
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Mana",
-            "skill_type": null
+            "skill_type": "Attack"
           }
         },
         "modifier": "Flat",
@@ -438,10 +871,11 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
             "skill_type": "Curse",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -459,7 +893,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -467,11 +900,12 @@
             },
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "conditions": [
               {
                 "StatusStacks": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
                   "skill_type": "Curse"
                 }
               }
@@ -481,6 +915,37 @@
         "modifier": "More",
         "scope": "Global",
         "value": 140.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": "Curse",
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
@@ -521,7 +986,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -538,7 +1002,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -555,14 +1018,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 40.0
         }
       },
       {
@@ -574,7 +1036,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
@@ -582,11 +1043,12 @@
               },
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "conditions": [
                 {
                   "StatusStacks": {
-                    "status_type": null,
+                    "status_id": null,
+                    "damage_type": null,
+                    "debuff": null,
                     "skill_type": "Curse"
                   }
                 }
@@ -595,6 +1057,19 @@
           },
           "modifier": "More",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "RestoreOnHit": {
+              "restore_type": "Mana",
+              "skill_type": "Attack"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
         }
       }
     ]
@@ -659,13 +1134,12 @@
         "stat": {
           "CritDamage": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
         "scope": "Local",
-        "value": 800.0,
+        "value": 300.0,
         "ignore_quality": true
       },
       {
@@ -673,7 +1147,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -692,7 +1165,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": "Min",
             "is_hit": null
@@ -711,7 +1183,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Physical",
             "min_max": "Max",
             "is_hit": null
@@ -728,10 +1199,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "tidesbreaker_anchor",
         "OnHit": {
           "skill_type": "Attack",
           "range": null,
@@ -743,6 +1210,8 @@
           "skill_ids": null,
           "conditions": []
         },
+        "description": null,
+        "trigger_id": "tidesbreaker_anchor",
         "target": "SameTarget",
         "modifiers": [
           {
@@ -750,7 +1219,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Storm",
                 "min_max": null,
                 "is_hit": null
@@ -759,12 +1227,20 @@
             "modifier": "Flat",
             "factor": 0.1,
             "source": {
-              "HitDamage": "Physical"
+              "HitDamage": null
             }
           }
         ],
-        "skill_range": "Any",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Attack",
+        "skill_range": "Any",
+        "skill_shape": "All",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -775,46 +1251,44 @@
               "damage": {
                 "Storm": 0.0
               },
+              "damage_factors": {},
               "crit_chance": {
                 "value": 0.0,
                 "lucky_chance": 0.0
               },
               "crit_damage": 0.0,
-              "unblockable": true
+              "unblockable": true,
+              "armor_penetration": 0.0
             },
             "ignore_stat_effects": [
               {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
                 "CritChance": {
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
+                  "skill_id": null
                 }
               },
               {
                 "CritDamage": {
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
-                }
-              },
-              {
-                "Damage": {
-                  "skill_type": "Attack",
-                  "skill_id": null,
-                  "skill_description": null,
-                  "damage_type": "Physical",
-                  "min_max": null,
-                  "is_hit": null
+                  "skill_id": null
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "All",
-        "owner": null,
-        "trigger_propagate": false,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": {
@@ -852,14 +1326,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value": 5.0
         }
       },
       {
@@ -869,14 +1342,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
             }
           },
           "modifier": "Flat",
-          "value": 8.0
+          "value": 11.0
         }
       },
       {
@@ -886,14 +1358,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 45.0
         }
       }
     ]
@@ -959,7 +1430,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -977,8 +1447,7 @@
         "stat": {
           "CritChance": {
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Flat",
@@ -990,8 +1459,7 @@
         "stat": {
           "Speed": {
             "skill_type": "Attack",
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -1004,7 +1472,6 @@
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "whirlwind",
-            "skill_description": null,
             "range": null,
             "shape": null,
             "repeat": {
@@ -1055,7 +1522,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Min",
               "is_hit": null
@@ -1072,7 +1538,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Physical",
               "min_max": "Max",
               "is_hit": null
@@ -1089,14 +1554,13 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
             }
           },
           "modifier": "Increased",
-          "value": 25.0
+          "value": 40.0
         }
       }
     ]
@@ -1166,6 +1630,365 @@
         "Physical": [
           18.0,
           66.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "spider_hammer_uber": {
+    "name": "Mother of Broods",
+    "icon": "items/weapons_2h/spider_hammer_uber.webp",
+    "description": "Her flesh was the final offering. Her womb became eternal.",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Poison",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusEscalation": {
+            "status_id": "open_wound",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          400.0,
+          500.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "SuccessChance": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "effect_type": {
+              "ApplyStatus": {
+                "status_id": "open_wound",
+                "debuff": null
+              }
+            }
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e200,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": "Attack"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 8.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": [
+            "voodoo_doll"
+          ],
+          "conditions": [
+            {
+              "HasStatus": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "not": false
+              }
+            }
+          ]
+        },
+        "description": null,
+        "trigger_id": "spider_hammer_uber",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "StatusValue": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null
+              }
+            }
+          }
+        ],
+        "inherit_source_effects": false,
+        "trigger_propagate": true,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Cross",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "spider_hammer_uber",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          18.0,
+          66.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 8.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "RestoreOnHit": {
+              "restore_type": "Life",
+              "skill_type": "Attack"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
+      }
+    ]
+  },
+  "weapon_2h_9": {
+    "name": "Twinblade",
+    "icon": "items/weapons_2h/twinblade.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          20.0,
+          74.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 200.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "weapon_2h_10": {
+    "name": "Great Axe",
+    "icon": "items/weapons_2h/greataxe.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon2H"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Vertical2",
+      "cooldown": 3.0,
+      "damage": {
+        "Physical": [
+          22.0,
+          82.0
         ]
       },
       "crit_chance": {

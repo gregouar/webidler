@@ -2,9 +2,7 @@
   "name": "Crow's Nest",
   "portrait": "monsters/island/pirate_lookout.webp",
   "max_life": 12,
-  "power_factor": 2,
   "size": "Tall",
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {
@@ -28,7 +26,7 @@
     },
     {
       "name": "Lookout!",
-      "icon": "skills/blessing_crit.svg",
+      "icon": "skills/crow_nest.svg",
       "cooldown": 8.0,
       "skill_type": "Blessing",
       "targets": [
@@ -38,27 +36,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": [ 5, 10 ],
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "CritChance": { "skill_type": "Attack" } },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 20
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": { "CritDamage": { "skill_type": "Attack" } },
-                        "modifier": "Flat"
-                      }
-                    },
-                    "value": 300
-                  }
-                ]
+                "status_id": "lookout",
+                "value": 200
               }
             }
           ]

@@ -2,8 +2,6 @@
   "name": "Mourning Basin",
   "portrait": "monsters/castle/mourning_basin.webp",
   "max_life": 5,
-  "power_factor": 2.0,
-  "initiative": [ 2.0, 3.0 ],
   "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {
@@ -35,37 +33,8 @@
           "effects": [
             {
               "ApplyStatus": {
-                "duration": 3,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Physical"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 30
-                  },
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": {
-                          "DamageResistance": {
-                            "damage_type": "Poison"
-                          }
-                        },
-                        "modifier": "Flat",
-                        "debuff": true
-                      }
-                    },
-                    "value": 30
-                  }
-                ]
+                "status_id": "lamenting_cry",
+                "value": 30
               }
             }
           ]

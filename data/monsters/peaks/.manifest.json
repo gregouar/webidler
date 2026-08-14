@@ -15,6 +15,9 @@
       "wyvern_poison.json",
       "wyvern_snow.json",
       "yeti.json"
+    ],
+    "statuses": [
+      "0_statuses.json"
     ]
   }
 }

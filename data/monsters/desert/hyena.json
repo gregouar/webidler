@@ -1,0 +1,40 @@
+{
+  "name"    : "Hungry Hyena",
+  "portrait": "monsters/desert/hyena.webp",
+  "max_life": 8,
+  "skills"  : [
+    {
+      "name"      : "Hungry Bite",
+      "icon"      : "skills/bite.svg",
+      "skill_type": "Attack",
+      "cooldown"  : 3.0,
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 8] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Call of the Pack",
+      "icon"      : "skills/wolf_howl.svg",
+      "skill_type": "Blessing",
+      "cooldown"  : 8.0,
+      "targets"   : [
+        {
+          "target_type": "Friend",
+          "range"      : "Melee",
+          "shape"      : "Contact",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "wolf_howl", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

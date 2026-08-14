@@ -2,7 +2,6 @@
   "name": "Kasha",
   "portrait": "monsters/yokai/kasha.webp",
   "max_life": 8,
-  "power_factor": 2.0,
   "skills": [
     {
       "name": "Burning Bite",

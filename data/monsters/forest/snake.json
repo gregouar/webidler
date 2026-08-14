@@ -1,39 +1,23 @@
 {
-  "name": "Venomous Snake",
+  "name"    : "Swamp Viper",
   "portrait": "monsters/forest/snake.webp",
   "max_life": 15,
-  "size": "Large",
-  "power_factor": 3.0,
-  "initiative": [ 1, 2 ],
-  "skills": [
+  "size"    : "Large",
+  "skills"  : [
     {
-      "name": "Venomous Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 5.0,
+      "name"      : "Venomous Bite",
+      "icon"      : "skills/snake_bite.svg",
+      "cooldown"  : 5.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 4 ]
-                }
+                "damage": { "Physical": [2, 4] }
               }
             },
-            {
-              "ApplyStatus": {
-                "duration": 5,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "DamageOverTime": { "damage_type": "Poison" }
-                    },
-                    "value": 4
-                  }
-                ]
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 4, "escalation": 20} }
           ]
         }
       ]

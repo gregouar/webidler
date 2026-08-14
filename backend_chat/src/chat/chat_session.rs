@@ -14,7 +14,7 @@ use shared_chat::{
 };
 
 use crate::{
-    chat::chat_state::ChatState,
+    chat::{character_resolver::CharacterResolver, chat_state::ChatState},
     websocket::{WebSocketReceiver, WebSocketSender},
 };
 
@@ -24,20 +24,26 @@ pub struct ChatSession {
     session_id: Uuid,
     chat_state: ChatState,
     user_details: UserDetails,
+    character_resolver: CharacterResolver,
     // TODO: ConnectedAt, other?
 }
 
 impl ChatSession {
-    pub fn new(chat_state: ChatState, user_details: UserDetails) -> Self {
+    pub fn new(
+        chat_state: ChatState,
+        user_details: UserDetails,
+        character_resolver: CharacterResolver,
+    ) -> Self {
         Self {
             session_id: Uuid::new_v4(),
             chat_state,
             user_details,
+            character_resolver,
         }
     }
 
     pub async fn run(
-        &self,
+        &mut self,
         mut ws_sender: WebSocketSender,
         mut ws_receiver: WebSocketReceiver,
     ) -> Result<()> {
@@ -159,7 +165,7 @@ impl ChatSession {
         Ok(())
     }
 
-    async fn handle_client_message(&self, msg: ClientChatMessage) -> Option<ErrorMessage> {
+    async fn handle_client_message(&mut self, msg: ClientChatMessage) -> Option<ErrorMessage> {
         match msg {
             ClientChatMessage::Heartbeat => {}
             ClientChatMessage::Connect(_) => {
@@ -172,20 +178,29 @@ impl ChatSession {
             }
             // ClientChatMessage::Disconnect(m) => {}
             ClientChatMessage::PostMessage(m) => {
-                if let Err(err) = self.handle_chat_message(*m).await {
-                    return Some(ErrorMessage {
-                        error_type: ErrorType::Chat,
-                        message: err.to_string(),
-                        must_disconnect: true,
-                    });
+                if let Err(error_message) = self.handle_chat_message(*m).await {
+                    return Some(error_message);
                 }
             }
         }
         None
     }
 
-    async fn handle_chat_message(&self, msg: ClientPostMessage) -> Result<()> {
+    async fn handle_chat_message(
+        &mut self,
+        msg: ClientPostMessage,
+    ) -> std::result::Result<(), ErrorMessage> {
         // let (linked_item, item_signature) = msg.linked_item.unzip();
+        let character_name = self
+            .character_resolver
+            .resolve(msg.character_id)
+            .await
+            .map_err(|err| ErrorMessage {
+                error_type: ErrorType::Chat,
+                message: err.to_string(),
+                must_disconnect: false,
+            })?;
+
         self.chat_state
             .inbound_tx
             .send((
@@ -194,6 +209,8 @@ impl ChatSession {
                     channel: msg.channel,
                     user_id: Some(self.user_details.user.user_id),
                     username: Some(self.user_details.user.username.clone()),
+                    character_id: msg.character_id,
+                    character_name,
                     chat_badge: self.user_details.chat_badge.clone(),
                     content: msg.content.into_inner(),
                     linked_item: msg.linked_item,
@@ -201,7 +218,15 @@ impl ChatSession {
                     sent_at: Utc::now(),
                 },
             ))
-            .await?;
+            .await
+            .map_err(|err| {
+                tracing::error!("failed to queue chat message: {err}");
+                ErrorMessage {
+                    error_type: ErrorType::Server,
+                    message: "failed to process chat message".to_string(),
+                    must_disconnect: true,
+                }
+            })?;
 
         Ok(())
     }

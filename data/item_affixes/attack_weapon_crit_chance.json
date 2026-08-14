@@ -1,0 +1,132 @@
+[
+    {
+        "name"        : "of the Owl",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 1,
+        "weight"      : 1000,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 1,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
+        ]
+    },
+    {
+        "name"        : "of the Tyto",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 2,
+        "weight"      : 1000,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 50,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 2 }
+        ]
+    },
+    {
+        "name"        : "of the Hawk",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 3,
+        "weight"      : 1000,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 100,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 3 }
+        ]
+    },
+    {
+        "name"        : "of the Kestrel",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 4,
+        "weight"      : 1000,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 150,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 4 }
+        ]
+    },
+    {
+        "name"        : "of the Eagle",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 5,
+        "weight"      : 1000,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 200,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 5 }
+        ]
+    },
+    {
+        "name"        : "of the Falcon",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 6,
+        "weight"      : 900,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 260,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 6 }
+        ]
+    },
+    {
+        "name"        : "of the Harrier",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 7,
+        "weight"      : 800,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 330,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 7 }
+        ]
+    },
+    {
+        "name"        : "of the Osprey",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 8,
+        "weight"      : 400,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 410,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 8 }
+        ]
+    },
+    {
+        "name"        : "of the Peregrine",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 9,
+        "weight"      : 200,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 500,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 9 }
+        ]
+    },
+    {
+        "name"        : "of the Harpy",
+        "family"      : "add_crit_chance",
+        "tags"        : ["Attack", "Critical"],
+        "affix_type"  : "Suffix",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["AttackWeapon"],
+        "item_level"  : 600,
+        "effects"     : [
+            { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Flat", "value": 10 }
+        ]
+    }
+]

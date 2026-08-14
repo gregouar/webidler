@@ -104,15 +104,16 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
+        "OnWaveCompleted": null,
         "description": null,
         "trigger_id": "pathwalker_remains",
-        "OnWaveCompleted": null,
         "target": "Me",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -128,12 +129,11 @@
               "modifier": "Percent"
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -291,17 +291,18 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
+        "OnKill": {
+          "conditions": []
+        },
         "description": null,
         "trigger_id": "treasure_compass_blessing",
-        "OnKill": {
-          "conditions": []
-        },
         "target": "Me",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -309,50 +310,20 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": {
-                          "skill_type": "Attack",
-                          "skill_id": null,
-                          "skill_description": null
-                        }
-                      },
-                      "modifier": "Increased",
-                      "debuff": false
-                    }
-                  },
-                  "value": 30.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Speed": {
-                          "skill_type": "Spell",
-                          "skill_id": null,
-                          "skill_description": null
-                        }
-                      },
-                      "modifier": "Increased",
-                      "debuff": false
-                    }
-                  },
-                  "value": 30.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "compass_speed",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           },
           {
             "success_chance": {
@@ -360,34 +331,20 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": null,
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "compass_damage",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           },
           {
             "success_chance": {
@@ -395,56 +352,36 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat",
-                      "debuff": false
-                    }
-                  },
-                  "value": 30.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "ManaRegen",
-                      "modifier": "Flat",
-                      "debuff": false
-                    }
-                  },
-                  "value": 30.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "compass_regen",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       },
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "treasure_compass_curse",
         "OnKill": {
           "conditions": []
         },
+        "description": null,
+        "trigger_id": "treasure_compass_curse",
         "target": "Me",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -452,30 +389,20 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "DamageResistance": {
-                          "skill_type": null,
-                          "damage_type": null
-                        }
-                      },
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 1000.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 5.0
+              "status_id": "compass_resistance",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           },
           {
             "success_chance": {
@@ -483,43 +410,22 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "ManaRegen",
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 100.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 3.0
+              "status_id": "compass_degen",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -575,6 +481,168 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "yeti_boots": {
+    "name": "Abominable Steps",
+    "icon": "items/boots/yeti_boots.webp",
+    "description": "The fur is warm. The smell is unforgettable.",
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 260,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "Life",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          60.0,
+          80.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          60.0,
+          80.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": "blizzard"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "blizzard_vulnerability",
+            "damage_type": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnWaveCompleted": null,
+        "description": null,
+        "trigger_id": "yeti_boots_stinky",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "stinky",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 60.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Storm"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
+  },
   "sabatons_unique": {
     "name": "Wings of the Tempest Drake",
     "icon": "items/boots/dragon_boots.webp",
@@ -622,14 +690,10 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": {
-              "DamageOverTime": {
-                "damage_type": "Poison"
-              }
-            },
+            "status_id": "poison",
+            "damage_type": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -643,24 +707,22 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "sabatons_unique",
         "OnApplyStatus": {
           "skill_type": null,
-          "status_type": {
-            "DamageOverTime": {
-              "damage_type": "Poison"
-            }
-          },
+          "status_id": null,
+          "damage_type": "Poison",
           "is_triggered": null,
           "is_evaded": false
         },
+        "description": null,
+        "trigger_id": "sabatons_unique",
         "target": "Me",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -668,39 +730,22 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": "Storm",
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "Increased",
-                      "debuff": false
-                    }
-                  },
-                  "value": 200.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 10.0
+              "status_id": "drake_voyage",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -833,17 +878,18 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "spirit_walker",
         "OnKill": {
           "conditions": []
         },
+        "description": null,
+        "trigger_id": "spirit_walker",
         "target": "Me",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -851,30 +897,22 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "MovementSpeed",
-                      "modifier": "Increased",
-                      "debuff": false
-                    }
-                  },
-                  "value": 5.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 5.0
+              "status_id": "spirit_walker",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "damage_type": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -940,6 +978,56 @@
     "weapon_specs": null,
     "armor_specs": {
       "armor": 80.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "boots_9": {
+    "name": "Mithril Sollerets",
+    "icon": "items/boots/mithril_sollerets.webp",
+    "description": null,
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 90.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "boots_10": {
+    "name": "Adamantium Greaves",
+    "icon": "items/boots/adamentium_greaves.webp",
+    "description": null,
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 400,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 100.0,
       "block": 0.0
     },
     "rune_specs": null,

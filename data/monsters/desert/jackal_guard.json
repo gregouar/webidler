@@ -1,0 +1,25 @@
+{
+  "name"    : "War Chariot",
+  "portrait": "monsters/desert/jackal.webp",
+  "max_life": 15,
+  "armor"   : {"Physical": 100},
+  "skills"  : [
+    {
+      "name"      : "Jackal Smite",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 2.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [6, 12] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

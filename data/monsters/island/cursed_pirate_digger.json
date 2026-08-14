@@ -2,8 +2,6 @@
   "name": "Gilt Digger",
   "portrait": "monsters/island/cursed_pirate_digger.webp",
   "max_life": 15,
-  "power_factor": 1,
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 50, "Storm": 50 },
   "skills": [
     {
@@ -36,19 +34,9 @@
           "effects": [
             {
               "ApplyStatus": {
+                "status_id": "gold_negative",
                 "duration": 30,
-                "statuses": [
-                  {
-                    "status_type": {
-                      "StatModifier": {
-                        "stat": "GoldFind",
-                        "modifier": "More",
-                        "debuff": true
-                      }
-                    },
-                    "value": 100
-                  }
-                ]
+                "value": 100
               }
             }
           ]

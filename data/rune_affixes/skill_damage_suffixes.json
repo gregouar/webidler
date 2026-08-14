@@ -1,362 +1,361 @@
 [
   {
-    "name": "of Ire",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 1,
-    "effects": [
+    "name"        : "of Ire",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 1,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 5, 10 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [10, 20]
       }
     ]
   },
   {
-    "name": "of Temper",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 100,
-    "effects": [
+    "name"        : "of Temper",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 100,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 15, 20 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [30, 40]
       }
     ]
   },
   {
-    "name": "of Wrath",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 200,
-    "effects": [
+    "name"        : "of Wrath",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 200,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 25, 30 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [50, 60]
       }
     ]
   },
   {
-    "name": "of Belligerence",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 300,
-    "effects": [
+    "name"        : "of Belligerence",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 300,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 35, 40 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [70, 80]
       }
     ]
   },
   {
-    "name": "of Ferocity",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 400,
-    "effects": [
+    "name"        : "of Ferocity",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 400,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 45, 50 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [90, 100]
       }
     ]
   },
   {
-    "name": "of Aggression",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "Rune" ],
-    "item_level": 500,
-    "effects": [
+    "name"        : "of Aggression",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["Rune"],
+    "item_level"  : 500,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 55, 60 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [110, 120]
       }
     ]
   },
   {
-    "name": "of Rage",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "Rune" ],
-    "item_level": 600,
-    "effects": [
+    "name"        : "of Rage",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["Rune"],
+    "item_level"  : 600,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 65, 70 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [130, 140]
       }
     ]
   },
   {
-    "name": "of Hatred",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 8,
-    "weight": 400,
-    "restrictions": [ "Rune" ],
-    "item_level": 700,
-    "effects": [
+    "name"        : "of Hatred",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["Rune"],
+    "item_level"  : 700,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 75, 80 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [150, 160]
       }
     ]
   },
   {
-    "name": "of Fury",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 9,
-    "weight": 200,
-    "restrictions": [ "Rune" ],
-    "item_level": 800,
-    "effects": [
+    "name"        : "of Fury",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["Rune"],
+    "item_level"  : 800,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 85, 90 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [170, 180]
       }
     ]
   },
   {
-    "name": "of Bloodlust",
-    "family": "inc_attack_damage",
-    "tags": [ "Attack" ],
-    "affix_type": "Suffix",
-    "tier": 10,
-    "weight": 100,
-    "restrictions": [ "Rune" ],
-    "item_level": 900,
-    "effects": [
+    "name"        : "of Bloodlust",
+    "family"      : "inc_attack_damage",
+    "tags"        : ["Attack"],
+    "affix_type"  : "Suffix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Rune"],
+    "item_level"  : 900,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Attack" } },
-        "modifier": "More",
-        "value": [ 95, 100 ]
-      }
-    ]
-  },
-
-  {
-    "name": "of Spellcasting",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 5, 10 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Attack"} },
+        "modifier": "Increased",
+        "value"   : [190, 200]
       }
     ]
   },
   {
-    "name": "of Wizardry",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 100,
-    "effects": [
+    "name"        : "of Spellcasting",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 1,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 15, 20 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [10, 20]
       }
     ]
   },
   {
-    "name": "of Sorcery",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 200,
-    "effects": [
+    "name"        : "of Wizardry",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 100,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 25, 30 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [30, 40]
       }
     ]
   },
   {
-    "name": "of Thaumaturgy",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 300,
-    "effects": [
+    "name"        : "of Sorcery",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 200,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 35, 40 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [50, 60]
       }
     ]
   },
   {
-    "name": "of Arcanum",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 400,
-    "effects": [
+    "name"        : "of Thaumaturgy",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 300,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 45, 50 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [70, 80]
       }
     ]
   },
   {
-    "name": "of Theurgy",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "Rune" ],
-    "item_level": 500,
-    "effects": [
+    "name"        : "of Arcanum",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 400,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 55, 60 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [90, 100]
       }
     ]
   },
   {
-    "name": "of Enchantment",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "Rune" ],
-    "item_level": 600,
-    "effects": [
+    "name"        : "of Theurgy",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["Rune"],
+    "item_level"  : 500,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 65, 70 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [110, 120]
       }
     ]
   },
   {
-    "name": "of Incantation",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 8,
-    "weight": 400,
-    "restrictions": [ "Rune" ],
-    "item_level": 700,
-    "effects": [
+    "name"        : "of Enchantment",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["Rune"],
+    "item_level"  : 600,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 75, 80 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [130, 140]
       }
     ]
   },
   {
-    "name": "of Conjuration",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 9,
-    "weight": 200,
-    "restrictions": [ "Rune" ],
-    "item_level": 800,
-    "effects": [
+    "name"        : "of Incantation",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["Rune"],
+    "item_level"  : 700,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 85, 90 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [150, 160]
       }
     ]
   },
   {
-    "name": "of Invocation",
-    "family": "inc_spell_damage",
-    "tags": [ "Spell" ],
-    "affix_type": "Suffix",
-    "tier": 10,
-    "weight": 100,
-    "restrictions": [ "Rune" ],
-    "item_level": 900,
-    "effects": [
+    "name"        : "of Conjuration",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["Rune"],
+    "item_level"  : 800,
+    "effects"     : [
       {
-        "scope": "Global",
-        "stat": { "Damage": { "skill_type": "Spell" } },
-        "modifier": "More",
-        "value": [ 95, 100 ]
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [170, 180]
+      }
+    ]
+  },
+  {
+    "name"        : "of Invocation",
+    "family"      : "inc_spell_damage",
+    "tags"        : ["Spell"],
+    "affix_type"  : "Suffix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Rune"],
+    "item_level"  : 900,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"skill_type": "Spell"} },
+        "modifier": "Increased",
+        "value"   : [190, 200]
       }
     ]
   }

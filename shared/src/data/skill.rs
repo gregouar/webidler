@@ -1,21 +1,28 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::{Chance, ChanceRange},
-    character::CharacterId,
-    conditional_modifier::{Condition, ConditionalModifier},
-    item::ItemCategory,
-    modifier::ModifiableValue,
-    stat_effect::{Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatType},
-    trigger::TriggerSpecs,
-    values::{Cooldown, NonNegative},
+use crate::{
+    data::{
+        chance::{Chance, ChanceRange},
+        character::CharacterId,
+        character_status::StatusId,
+        conditional_modifier::{Condition, ConditionalModifier},
+        item::{ItemCategory, ItemSpecs},
+        modifier::ModifiableValue,
+        stat_effect::{
+            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
+            StatType,
+        },
+        trigger::{TriggerEffect, TriggerSpecs},
+        values::{Cooldown, NonNegative, Percent},
+    },
+    serde_utils::default_1f64,
 };
 
 pub use super::stat_effect::DamageType;
-use super::{character_status::StatusSpecs, item::ItemSlot, stat_effect::DamageMap};
+use super::{item::ItemSlot, stat_effect::DamageMap};
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct BaseSkillSpecs {
@@ -30,11 +37,13 @@ pub struct BaseSkillSpecs {
     pub cooldown: NonNegative,
     #[serde(default)]
     pub mana_cost: NonNegative,
+    #[serde(default)]
+    pub required_item: Option<SkillRequiredItem>,
 
     #[serde(default)]
     pub upgrade_cost: f64,
     #[serde(default)]
-    pub upgrade_effects: Vec<StatEffect>,
+    pub upgrade_effects: Vec<SkillUpgradeEffect>,
 
     #[serde(default)]
     pub modifier_effects: Vec<ModifierEffect>,
@@ -47,15 +56,25 @@ pub struct BaseSkillSpecs {
     #[serde(default)]
     pub auto_use_conditions: Vec<Condition>,
 
-    // #[serde(default)]
-    // pub skill_id: String,
     #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+
+    #[serde(default)]
+    pub hidden: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct SkillUpgradeEffect {
+    #[serde(flatten)]
+    pub stat_effect: StatEffect,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct SkillSpecs {
-    // pub base: BaseSkillSpecs,
     pub skill_id: String,
 
     pub name: String,
@@ -64,6 +83,7 @@ pub struct SkillSpecs {
     pub skill_type: SkillType,
 
     // Should we split in two here?
+    pub usable: bool,
     pub cooldown: ModifiableValue<NonNegative>,
     pub mana_cost: ModifiableValue<NonNegative>,
 
@@ -72,8 +92,9 @@ pub struct SkillSpecs {
 
     pub level_modifier: u16,
 
-    #[serde(default)]
     pub ignore_stat_effects: HashSet<StatType>,
+    pub extra_modifier_effects: Vec<ModifierEffect>,
+    pub auto_use_conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -101,6 +122,26 @@ impl Matchable for SkillType {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+pub struct SkillRequiredItem {
+    #[serde(default)]
+    pub slot: Option<ItemSlot>,
+    #[serde(default)]
+    pub category: Option<ItemCategory>,
+}
+
+impl SkillRequiredItem {
+    pub fn is_match(&self, item_slot: ItemSlot, item_specs: &ItemSpecs) -> bool {
+        self.slot
+            .map(|slot| slot == item_slot || item_specs.base.extra_slots.contains(&slot))
+            .unwrap_or(true)
+            && self
+                .category
+                .map(|category| item_specs.base.categories.contains(&category))
+                .unwrap_or(true)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
@@ -113,10 +154,9 @@ pub struct ModifierEffect {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum ModifierEffectSource {
     ItemStats {
-        slot: Option<ItemSlot>,
         item_stats: ItemStatsSource,
-        #[serde(default)]
-        category: Option<ItemCategory>,
+        #[serde(flatten)]
+        required_item: SkillRequiredItem,
     },
     CharacterStats(StatConverterSource),
 }
@@ -134,8 +174,8 @@ pub enum ItemStatsSource {
         #[serde(default)]
         min_max: Option<MinMax>,
     },
-    Range,
-    Shape,
+    Target,
+    Equipped,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -170,8 +210,8 @@ impl Default for SkillRepeat {
                 max: 1,
                 lucky_chance: Default::default(),
             },
-            target: SkillRepeatTarget::Any,
-            repeat_cooldown: Default::default(),
+            target: SkillRepeatTarget::Same,
+            repeat_cooldown: NonNegative(0.3),
         }
     }
 }
@@ -196,22 +236,69 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub conditional_modifiers: Vec<ConditionalModifier>,
+
+    #[serde(default)]
+    pub independent_application: bool,
+    #[serde(default)]
+    pub optional_application: bool,
+
+    #[serde(default)]
+    pub description: Option<String>,
 }
 
+#[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum SkillEffectType {
+    WeaponEffect {
+        item_slot: ItemSlot,
+        #[serde(default)]
+        factor: ModifiableValue<f64>,
+    },
     FlatDamage {
         damage: DamageMap,
+        #[serde(default)]
+        damage_factors: HashMap<DamageType, f64>, // For tooltip purposes
         #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]
         crit_damage: ModifiableValue<f64>,
         #[serde(default)]
         unblockable: bool,
+        #[serde(default)]
+        armor_penetration: Percent,
     },
     ApplyStatus {
-        statuses: Vec<ApplyStatusEffect>,
-        duration: ChanceRange<ModifiableValue<NonNegative>>,
+        status_id: StatusId,
+
+        value: ChanceRange<ModifiableValue<NonNegative>>,
+        #[serde(default = "default_1f64")]
+        value_factor: f64, // For tooltip purposes
+
+        // On skill definition, overwrite default status value when some
+        // On skill computed specs, get derived values
+        #[serde(default)]
+        duration: Option<ChanceRange<ModifiableValue<NonNegative>>>,
+        #[serde(default)]
+        escalation: Option<ModifiableValue<NonNegative>>,
+        #[serde(default)]
+        max_stacks: Option<ModifiableValue<u8>>,
+        // #[serde(default)]
+        // damage_type: Option<DamageType>,
+        #[serde(default)]
+        avoidable: Option<bool>,
+        // #[serde(default)]
+        // armor_penetration: Option<Percent>,
+        #[serde(default)]
+        replace_on_value_only: bool,
+
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        computed_status_triggers: Option<HashMap<String, TriggerEffect>>,
+    },
+    RefreshStatus {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        value: ChanceRange<ModifiableValue<f64>>,
+        modifier: RestoreModifier,
     },
     Restore {
         restore_type: RestoreType,
@@ -219,6 +306,7 @@ pub enum SkillEffectType {
         modifier: RestoreModifier,
     },
     Resurrect,
+    Kill,
     RefreshCooldown {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
@@ -231,21 +319,6 @@ pub enum SkillEffectType {
 pub enum RestoreModifier {
     Flat,
     Percent,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub struct ApplyStatusEffect {
-    pub status_type: StatusSpecs,
-    #[serde(default)]
-    pub value: ChanceRange<ModifiableValue<NonNegative>>,
-    #[serde(default)]
-    pub cumulate: bool,
-    #[serde(default)]
-    pub replace_on_value_only: bool,
-    #[serde(default)]
-    pub unavoidable: bool,
-    #[serde(default)]
-    pub escalation: ModifiableValue<f64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
@@ -266,6 +339,12 @@ pub enum SkillRange {
     Any,
 }
 
+impl Matchable for SkillRange {
+    fn is_match(&self, other: &Self) -> bool {
+        *self == *other
+    }
+}
+
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default, Eq, Hash, PartialOrd, Ord,
 )]
@@ -278,6 +357,7 @@ pub enum SkillShape {
     Square4,
     All,
     Contact,
+    Cross,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

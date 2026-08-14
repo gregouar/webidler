@@ -1,0 +1,27 @@
+{
+  "name"    : "Canopic Jar",
+  "portrait": "monsters/desert/canopic_jar_3.webp",
+  "rarity"  : "Boss",
+  "max_life": 150,
+  "armor"   : {"Storm": 200},
+  "skills"  : [
+    {
+      "name"      : "Horus' Bolt",
+      "icon"      : "skills/chain_lightning.svg",
+      "cooldown"  : 4.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 15] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

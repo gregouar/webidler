@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, hash_map};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
@@ -6,11 +6,12 @@ use strum_macros::EnumIter;
 use crate::{
     data::{
         chance::ChanceRange,
-        character_status::StatusSpecs,
+        character_status::StatusId,
         conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
-        skill::{RestoreType, SkillEffectType, SkillRepeatTarget},
+        skill::{RestoreType, SkillRepeatTarget},
+        trigger::TriggerEffectModifierSource,
         values::NonNegative,
     },
     serde_utils::is_false,
@@ -64,12 +65,8 @@ impl Matchable for MinMax {
 pub struct StatSkillFilter {
     #[serde(default)]
     pub skill_type: Option<SkillType>,
-
     #[serde(default)]
     pub skill_id: Option<String>,
-    // TODO: This is awful....
-    #[serde(default)]
-    pub skill_description: Option<String>,
 }
 
 impl Matchable for StatSkillFilter {
@@ -79,15 +76,90 @@ impl Matchable for StatSkillFilter {
     }
 }
 
-// pub trait SkillFilterMatchable {
-//     fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool;
-// }
-
-// impl SkillFilterMatchable for StatSkillFilter {
 impl StatSkillFilter {
     pub fn is_match_with_skill(&self, skill_type: SkillType, skill_id: &String) -> bool {
         compare_options(&self.skill_type, &Some(skill_type))
             && compare_options(&self.skill_id.as_ref(), &Some(skill_id))
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum StatusDamageType {
+    Any,
+    Physical,
+    Fire,
+    Poison,
+    Storm,
+}
+
+impl Matchable for StatusDamageType {
+    fn is_match(&self, other: &Self) -> bool {
+        use StatusDamageType::*;
+        match (self, other) {
+            (Any, _) | (_, Any) => true,
+            (x, y) if x == y => true,
+            _ => false,
+        }
+    }
+}
+
+impl From<DamageType> for StatusDamageType {
+    fn from(value: DamageType) -> Self {
+        use StatusDamageType::*;
+        match value {
+            DamageType::Physical => Physical,
+            DamageType::Fire => Fire,
+            DamageType::Poison => Poison,
+            DamageType::Storm => Storm,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct StatStatusFilter {
+    #[serde(default)]
+    pub status_id: Option<StatusId>,
+    #[serde(default)]
+    pub damage_type: Option<StatusDamageType>,
+    #[serde(default)]
+    pub debuff: Option<bool>,
+}
+
+impl Matchable for StatStatusFilter {
+    fn is_match(&self, second: &StatStatusFilter) -> bool {
+        compare_options(&self.status_id, &second.status_id)
+            && compare_options(&self.debuff, &second.debuff)
+            && match (self.damage_type, second.damage_type) {
+                (None, None) => true,
+                (None, Some(_)) | (Some(_), None) => false,
+                (Some(damage_type), Some(damage_type_2)) => damage_type.is_match(&damage_type_2),
+            }
+    }
+}
+
+impl StatStatusFilter {
+    pub fn is_match_with_status(
+        &self,
+        status_id: &StatusId,
+        damage_type: Option<DamageType>,
+        debuff: bool,
+    ) -> bool {
+        self.status_id
+            .as_ref()
+            .map(|filter_status_id| filter_status_id == status_id.as_str())
+            .unwrap_or(true)
+            && self
+                .damage_type
+                .as_ref()
+                .map(|filter_damage_type| match damage_type {
+                    None => false, // not damage over time
+                    Some(damage_type) => filter_damage_type.is_match(&damage_type.into()),
+                })
+                .unwrap_or(true)
+            && self
+                .debuff
+                .map(|filter_debuff| filter_debuff == debuff)
+                .unwrap_or(true)
     }
 }
 
@@ -104,10 +176,11 @@ pub enum StatType {
     Description(String),
     GemsFind,
     ItemRarity,
+    ItemAreaChance,
     ItemLevel,
     SkillLevel(#[serde(default)] StatSkillFilter),
     Armor(Option<ArmorStatType>),
-    DamageResistance {
+    DamageTaken {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
@@ -119,9 +192,9 @@ pub enum StatType {
     EvadeDamageTaken,
     StatusResistance {
         #[serde(default)]
-        skill_type: Option<SkillType>,
+        status_id: Option<StatusId>,
         #[serde(default)]
-        status_type: Option<StatStatusType>,
+        skill_type: Option<SkillType>,
     },
     Damage {
         #[serde(flatten)]
@@ -136,30 +209,36 @@ pub enum StatType {
     CritChance(#[serde(default)] StatSkillFilter),
     CritDamage(#[serde(default)] StatSkillFilter),
     StatusPower {
-        #[serde(default)]
-        status_type: Option<StatStatusType>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
         min_max: Option<MinMax>,
     },
     StatusDuration {
-        #[serde(default)]
-        status_type: Option<StatStatusType>,
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
+    StatusStacks {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
     StatusEscalation {
         #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        #[serde(flatten)]
         skill_filter: StatSkillFilter,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
     },
     StatusFaster {
         #[serde(flatten)]
+        status_filter: StatStatusFilter,
+        #[serde(flatten)]
         skill_filter: StatSkillFilter,
-        #[serde(default)]
-        damage_type: Option<DamageType>,
     },
     SuccessChance {
         #[serde(flatten)]
@@ -211,7 +290,6 @@ pub enum StatType {
     },
     StatConverter(StatConverterSpecs),
     SkillTargetModifier {
-        // TODO: More control and options?
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
@@ -220,6 +298,24 @@ pub enum StatType {
         shape: Option<SkillShape>,
         #[serde(default)]
         repeat: Option<StatSkillRepeat>,
+    },
+    SkillRepeat {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
+    SkillEffectModifier {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+        #[serde(default)]
+        unblockable: Option<bool>,
+        #[serde(default)]
+        avoidable: Option<bool>,
+    },
+    TriggerEffectModifier {
+        stat: Box<StatType>,
+        source: TriggerEffectModifierSource,
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
     },
     GoldFind,
     PowerLevel,
@@ -250,11 +346,11 @@ impl Matchable for StatType {
                     && compare_options(is_hit, is_hit_2)
             }
             (
-                DamageResistance {
+                DamageTaken {
                     skill_type,
                     damage_type,
                 },
-                DamageResistance {
+                DamageTaken {
                     skill_type: skill_type_2,
                     damage_type: damage_type_2,
                 },
@@ -310,68 +406,61 @@ impl Matchable for StatType {
             (Evade(first), Evade(second)) => compare_options(first, second),
             (
                 StatusPower {
-                    status_type,
+                    status_filter,
                     skill_filter,
                     min_max,
                 },
                 StatusPower {
-                    status_type: status_type_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                     min_max: min_max_2,
                 },
             ) => {
-                compare_options(status_type, status_type_2)
+                status_filter.is_match(status_filter_2)
                     && skill_filter.is_match(skill_filter_2)
                     && compare_options(min_max, min_max_2)
             }
             (
                 StatusDuration {
-                    status_type,
+                    status_filter,
                     skill_filter,
                 },
                 StatusDuration {
-                    status_type: status_type_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => {
-                compare_options(status_type, status_type_2) && skill_filter.is_match(skill_filter_2)
-            }
+            ) => status_filter.is_match(status_filter_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusEscalation {
-                    damage_type,
+                    status_filter,
                     skill_filter,
                 },
                 StatusEscalation {
-                    damage_type: damage_type_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => {
-                compare_options(damage_type, damage_type_2) && skill_filter.is_match(skill_filter_2)
-            }
+            ) => status_filter.is_match(status_filter_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusFaster {
-                    damage_type,
+                    status_filter,
                     skill_filter,
                 },
                 StatusFaster {
-                    damage_type: damage_type_2,
+                    status_filter: status_filter_2,
                     skill_filter: skill_filter_2,
                 },
-            ) => {
-                compare_options(damage_type, damage_type_2) && skill_filter.is_match(skill_filter_2)
-            }
+            ) => status_filter.is_match(status_filter_2) && skill_filter.is_match(skill_filter_2),
             (
                 StatusResistance {
-                    status_type,
+                    status_id,
                     skill_type,
                 },
                 StatusResistance {
-                    status_type: status_type_2,
+                    status_id: status_id_2,
                     skill_type: skill_type_2,
                 },
             ) => {
-                compare_options(status_type, status_type_2)
-                    && compare_options(skill_type, skill_type_2)
+                compare_options(status_id, status_id_2) && compare_options(skill_type, skill_type_2)
             }
             (SkillLevel(first), SkillLevel(second)) => first.is_match(second),
             (
@@ -384,21 +473,6 @@ impl Matchable for StatType {
             _ => self == stat_type,
         }
     }
-
-    // pub fn is_multiplicative(&self) -> bool {
-    //     use StatType::*;
-
-    //     matches!(
-    //         self,
-    //         Damage { .. }
-    //             | CritDamage(_)
-    //             | StatusPower {
-    //                 status_type: Some(StatStatusType::DamageOverTime { .. }),
-    //                 ..
-    //             }
-    //             | GoldFind
-    //     )
-    // }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -439,99 +513,24 @@ impl ArmorStatType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum StatStatusType {
-    Stun,
-    DamageOverTime {
-        #[serde(default)]
-        damage_type: Option<DamageType>,
-    },
-    StatModifier {
-        #[serde(default)]
-        debuff: Option<bool>,
-        #[serde(default)]
-        stat: Option<Box<StatType>>,
-    },
-    Trigger {
-        #[serde(default)]
-        trigger_id: Option<String>,
-
-        // TODO: This is awful....
-        #[serde(default)]
-        trigger_description: Option<String>,
-    },
-}
-
-impl Matchable for StatStatusType {
-    fn is_match(&self, status_type: &StatStatusType) -> bool {
-        if self == status_type {
-            return true;
-        }
-
-        use StatStatusType::*;
-        match (self, status_type) {
-            (
-                DamageOverTime { damage_type },
-                DamageOverTime {
-                    damage_type: damage_type_2,
-                },
-            ) => compare_options(damage_type, damage_type_2),
-            (
-                StatModifier { debuff, stat },
-                StatModifier {
-                    debuff: debuff_2,
-                    stat: stat2,
-                },
-            ) => {
-                compare_options(debuff, debuff_2)
-                    && compare_options(&stat.as_deref(), &stat2.as_deref())
-            }
-            (
-                Trigger {
-                    trigger_id,
-                    trigger_description: _,
-                },
-                Trigger {
-                    trigger_id: trigger_id_2,
-                    trigger_description: _,
-                },
-            ) => compare_options(trigger_id, trigger_id_2),
-            _ => false,
-        }
-    }
-}
-
-impl From<&StatusSpecs> for StatStatusType {
-    fn from(value: &StatusSpecs) -> Self {
-        match value {
-            StatusSpecs::Stun => StatStatusType::Stun,
-            StatusSpecs::DamageOverTime { damage_type, .. } => StatStatusType::DamageOverTime {
-                damage_type: Some(*damage_type),
-            },
-            StatusSpecs::StatModifier { debuff, stat, .. } => StatStatusType::StatModifier {
-                debuff: Some(*debuff),
-                stat: Some(stat.clone().into()),
-            },
-            StatusSpecs::Trigger(trigger_specs) => StatStatusType::Trigger {
-                trigger_id: Some(trigger_specs.triggered_effect.trigger_id.clone()),
-                trigger_description: None,
-            },
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatSkillEffectType {
+    WeaponEffect,
     FlatDamage {
         // damage_type: Option<DamageType>,
     },
     ApplyStatus {
-        status_type: Option<StatStatusType>,
+        #[serde(default)]
+        status_id: Option<StatusId>,
+        #[serde(default)]
+        debuff: Option<bool>,
     },
+    RefreshStatus,
     Restore {
         #[serde(default)]
         restore_type: Option<RestoreType>,
     },
     Resurrect,
+    Kill,
     RefreshCooldown,
 }
 
@@ -546,33 +545,38 @@ impl Matchable for StatSkillEffectType {
                 },
             ) => compare_options(restore_type, restore_type_2),
             (
-                ApplyStatus { status_type },
+                ApplyStatus { status_id, debuff },
                 ApplyStatus {
-                    status_type: status_type_2,
+                    status_id: status_id_2,
+                    debuff: debuff_2,
                 },
-            ) => compare_options(status_type, status_type_2),
+            ) => compare_options(status_id, status_id_2) && compare_options(debuff, debuff_2),
             _ => self == skill_effect_type,
         }
     }
 }
 
-impl From<&SkillEffectType> for Option<StatSkillEffectType> {
-    fn from(value: &SkillEffectType) -> Self {
-        match value {
-            SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
-            SkillEffectType::ApplyStatus { statuses, .. } => {
-                Some(StatSkillEffectType::ApplyStatus {
-                    status_type: statuses.first().map(|status| (&status.status_type).into()),
-                })
-            }
-            SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
-                restore_type: Some(*restore_type),
-            }),
-            SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
-            SkillEffectType::RefreshCooldown { .. } => Some(StatSkillEffectType::RefreshCooldown),
-        }
-    }
-}
+// impl From<&SkillEffectType> for Option<StatSkillEffectType> {
+//     fn from(value: &SkillEffectType) -> Self {
+//         match value {
+//             SkillEffectType::WeaponEffect { .. } => Some(StatSkillEffectType::WeaponEffect),
+//             SkillEffectType::FlatDamage { .. } => Some(StatSkillEffectType::FlatDamage {}),
+//             SkillEffectType::ApplyStatus { status_id, .. } => {
+//                 Some(StatSkillEffectType::ApplyStatus {
+//                     status_id: Some(status_id.clone()),
+//                     debuff:
+//                 })
+//             }
+//             SkillEffectType::RefreshStatus { .. } => Some(StatSkillEffectType::RefreshStatus),
+//             SkillEffectType::Restore { restore_type, .. } => Some(StatSkillEffectType::Restore {
+//                 restore_type: Some(*restore_type),
+//             }),
+//             SkillEffectType::Resurrect => Some(StatSkillEffectType::Resurrect),
+//             SkillEffectType::Kill => Some(StatSkillEffectType::Kill),
+//             SkillEffectType::RefreshCooldown { .. } => Some(StatSkillEffectType::RefreshCooldown),
+//         }
+//     }
+// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum LuckyRollType {
@@ -667,37 +671,53 @@ pub struct EffectsMap(pub HashMap<(StatType, Modifier, bool), f64>);
 
 impl From<&EffectsMap> for Vec<StatEffect> {
     fn from(val: &EffectsMap) -> Self {
-        val.0
-            .iter()
-            .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {
-                stat: stat.clone(),
-                modifier: *effect_type,
-                value: *value,
-                bypass_ignore: *bypass_ignore,
-            })
-            .collect()
+        val.iter().collect()
+    }
+}
+impl From<EffectsMap> for Vec<StatEffect> {
+    fn from(val: EffectsMap) -> Self {
+        val.into_iter().collect()
     }
 }
 
 impl From<Vec<StatEffect>> for EffectsMap {
     fn from(value: Vec<StatEffect>) -> Self {
-        EffectsMap::combine_all(value.into_iter().map(|x| {
-            EffectsMap(HashMap::from([(
-                (x.stat, x.modifier, x.bypass_ignore),
-                x.value,
-            )]))
-        }))
+        value
+            .into_iter()
+            .fold(EffectsMap::default(), |mut effects_map, stat_effect| {
+                effects_map.add_effect(stat_effect);
+                effects_map
+            })
     }
 }
 
 impl From<Vec<&StatEffect>> for EffectsMap {
     fn from(value: Vec<&StatEffect>) -> Self {
-        EffectsMap::combine_all(value.iter().map(|x| {
-            EffectsMap(HashMap::from([(
-                (x.stat.clone(), x.modifier, x.bypass_ignore),
-                x.value,
-            )]))
-        }))
+        value
+            .iter()
+            .fold(EffectsMap::default(), |mut effects_map, stat_effect| {
+                effects_map.add_effect((*stat_effect).clone());
+                effects_map
+            })
+    }
+}
+
+impl IntoIterator for EffectsMap {
+    type Item = StatEffect;
+    type IntoIter = std::iter::Map<
+        hash_map::IntoIter<(StatType, Modifier, bool), f64>,
+        fn(((StatType, Modifier, bool), f64)) -> StatEffect,
+    >;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0
+            .into_iter()
+            .map(|((stat, modifier, bypass_ignore), value)| StatEffect {
+                stat,
+                modifier,
+                value,
+                bypass_ignore,
+            })
     }
 }
 
@@ -706,45 +726,70 @@ impl EffectsMap {
         self.0.is_empty()
     }
 
-    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
-        EffectsMap(maps.flat_map(|m| m.0.into_iter()).fold(
-            HashMap::new(),
-            |mut result, ((target, modifier, bypass_ignore), value)| {
-                result
-                    .entry((target.clone(), modifier, bypass_ignore))
-                    .and_modify(|entry| match modifier {
-                        Modifier::More => {
-                            if *entry == 0.0 {
-                                *entry = value;
-                                return;
-                            }
+    pub fn add_effect(&mut self, stat_effect: StatEffect) {
+        let StatEffect {
+            stat,
+            modifier,
+            value,
+            bypass_ignore,
+        } = stat_effect;
 
-                            let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+        self.0
+            .entry((stat, modifier, bypass_ignore))
+            .and_modify(|entry| match modifier {
+                Modifier::More => {
+                    if *entry == 0.0 {
+                        *entry = value;
+                        return;
+                    }
 
-                            let factor = compute_more_factor(sign * value);
-                            *entry = sign
-                                * compute_more_factor(
-                                    entry.abs() + factor + entry.abs() * factor * 0.01,
-                                );
-                        }
-                        _ => *entry += value,
-                    })
-                    .or_insert(value);
-                result
-            },
-        ))
+                    let sign = if *entry < 0.0 { -1.0 } else { 1.0 };
+
+                    let factor = compute_more_factor(sign * value);
+                    *entry = sign
+                        * compute_more_factor(entry.abs() + factor + entry.abs() * factor * 0.01);
+                }
+                _ => *entry += value,
+            })
+            .or_insert(value);
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = StatEffect> {
+    pub fn combine_all(maps: impl Iterator<Item = EffectsMap>) -> Self {
+        maps.flat_map(|m| m.0.into_iter()).fold(
+            EffectsMap::default(),
+            |mut result, ((stat, modifier, bypass_ignore), value)| {
+                result.add_effect(StatEffect {
+                    stat,
+                    modifier,
+                    value,
+                    bypass_ignore,
+                });
+                result
+            },
+        )
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = StatEffect> + Clone {
         self.0
             .iter()
-            .map(|((stat, effect_type, bypass_ignore), value)| StatEffect {
+            .map(|((stat, modifier, bypass_ignore), value)| StatEffect {
                 stat: stat.clone(),
-                modifier: *effect_type,
+                modifier: *modifier,
                 value: *value,
                 bypass_ignore: *bypass_ignore,
             })
     }
+
+    // pub fn into_iter(self) -> impl IntoIterator<Item = StatEffect> + Clone {
+    //     self.0
+    //         .into_iter()
+    //         .map(|((stat, modifier, bypass_ignore), value)| StatEffect {
+    //             stat: stat.clone(),
+    //             modifier,
+    //             value,
+    //             bypass_ignore,
+    //         })
+    // }
 }
 
 pub trait Matchable {
@@ -769,9 +814,48 @@ impl Matchable for String {
     }
 }
 
+impl Matchable for StatusId {
+    fn is_match(&self, other: &Self) -> bool {
+        self == other
+    }
+}
+
 pub fn compare_options<T: Matchable>(first: &Option<T>, second: &Option<T>) -> bool {
     match (first, second) {
         (None, _) | (_, None) => true,
         (Some(a), Some(b)) => a.is_match(b),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_more_multipliers() {
+        let stats_effects: Vec<_> = [
+            StatEffect {
+                stat: StatType::GoldFind,
+                modifier: Modifier::More,
+                value: 170.0,
+                bypass_ignore: false,
+            },
+            StatEffect {
+                stat: StatType::GoldFind,
+                modifier: Modifier::More,
+                value: 180.0,
+                bypass_ignore: false,
+            },
+        ]
+        .into();
+        let effects_map: EffectsMap = stats_effects.into();
+        assert_eq!(
+            effects_map
+                .0
+                .get(&(StatType::GoldFind, Modifier::More, false))
+                .copied()
+                .map(f64::round),
+            Some(((1.0f64 * (1.0 + 1.7) * (1.0 + 1.8) - 1.0) * 100.0).round())
+        );
     }
 }

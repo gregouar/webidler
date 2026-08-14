@@ -86,7 +86,6 @@
           "Damage": {
             "skill_type": "Attack",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -182,7 +181,6 @@
             "Damage": {
               "skill_type": "Attack",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
@@ -247,10 +245,11 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_type": null,
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null
+            "skill_id": null
           }
         },
         "modifier": "Increased",
@@ -284,10 +283,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "witch_hat",
         "OnTakeHit": {
           "skill_type": null,
           "range": null,
@@ -295,12 +290,24 @@
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "witch_hat",
         "target": "Source",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Any",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -308,37 +315,22 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "SuccessChance": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "effect_type": null
-                        }
-                      },
-                      "modifier": "Increased",
-                      "debuff": true
-                    }
-                  },
-                  "value": 25.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 5.0
+              "status_id": "witch_curse",
+              "value": 33.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -447,6 +439,170 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "blind_bastion": {
+    "name": "Blind Bastion",
+    "icon": "items/helmets/blind_bastion.webp",
+    "description": "I may feel the blow, but thou shalt feel the pain.",
+    "slot": "Helmet",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "BlockDamageTaken",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 40.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "EvadeDamageTaken",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 40.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": "Attack"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Elemental"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Lucky": {
+            "skill_type": null,
+            "skill_id": null,
+            "roll_type": "Block"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "legionnaire_stance",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "retaliate_vulnerability",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 75.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 15.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Elemental"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      }
+    ]
+  },
   "bascinet": {
     "name": "Bascinet",
     "icon": "items/helmets/bascinet.webp",
@@ -502,7 +658,6 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
@@ -521,10 +676,10 @@
           "SuccessChance": {
             "skill_type": null,
             "skill_id": null,
-            "skill_description": null,
             "effect_type": {
               "ApplyStatus": {
-                "status_type": "Stun"
+                "status_id": "stun",
+                "debuff": null
               }
             }
           }
@@ -550,7 +705,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": "Storm",
                 "min_max": "Max",
                 "is_hit": null
@@ -562,7 +716,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 25.0,
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
@@ -610,7 +764,6 @@
             "Damage": {
               "skill_type": null,
               "skill_id": null,
-              "skill_description": null,
               "damage_type": "Storm",
               "min_max": null,
               "is_hit": null
@@ -648,7 +801,7 @@
     "upgrade_effects": []
   },
   "oni_mask": {
-    "name": "Grin of the Oni",
+    "name": "Oni Grinny",
     "icon": "items/helmets/oni_mask.webp",
     "description": "It grins as the world around you melts in fire.",
     "slot": "Helmet",
@@ -686,41 +839,32 @@
       },
       {
         "stat": {
-          "SkillConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "skill_description": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
+          "StatusDuration": {
+            "status_id": "pyromaniac",
+            "damage_type": null,
+            "debuff": null,
             "skill_type": null,
-            "skill_id": null,
-            "skill_description": null,
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_type": {
-                    "DamageOverTime": {
-                      "damage_type": "Fire"
-                    }
-                  },
-                  "skill_type": null,
-                  "not": false
-                }
-              }
-            ]
+            "skill_id": null
           }
         },
-        "modifier": "More",
+        "modifier": "Increased",
         "scope": "Global",
-        "value": [
-          100.0,
-          140.0
-        ],
+        "value": 50.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "pyromaniac",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 30.0,
         "ignore_quality": true
       }
     ],
@@ -758,43 +902,6 @@
           "modifier": "Flat",
           "value": 25.0
         }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "SkillConditionalModifier": {
-              "stat": {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              "skill_type": null,
-              "skill_id": null,
-              "skill_description": null,
-              "conditions": [
-                {
-                  "HasStatus": {
-                    "status_type": {
-                      "DamageOverTime": {
-                        "damage_type": "Fire"
-                      }
-                    },
-                    "skill_type": null,
-                    "not": false
-                  }
-                }
-              ]
-            }
-          },
-          "modifier": "More",
-          "value": 20.0
-        }
       }
     ]
   },
@@ -815,6 +922,165 @@
     "weapon_specs": null,
     "armor_specs": {
       "armor": 120.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "scarab_circlet": {
+    "name": "Eye of the Dunes",
+    "icon": "items/helmets/scarab_circlet.webp",
+    "description": null,
+    "slot": "Helmet",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "focus",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "ManaRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          250.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 120.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 15.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "LifeRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "ManaRegen",
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 25.0
+        }
+      }
+    ]
+  },
+  "helmet_9": {
+    "name": "Mithril Armet",
+    "icon": "items/helmets/mithril_armet.webp",
+    "description": null,
+    "slot": "Helmet",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 135.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "helmet_10": {
+    "name": "Royal Burgonet",
+    "icon": "items/helmets/royal_burgonet.webp",
+    "description": null,
+    "slot": "Helmet",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 150.0,
       "block": 0.0
     },
     "rune_specs": null,

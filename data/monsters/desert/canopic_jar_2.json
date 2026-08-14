@@ -1,0 +1,25 @@
+{
+  "name"    : "Canopic Jar",
+  "portrait": "monsters/desert/canopic_jar_2.webp",
+  "rarity"  : "Boss",
+  "max_life": 150,
+  "armor"   : {"Fire": 200},
+  "skills"  : [
+    {
+      "name"      : "Anubis' Cremation",
+      "icon"      : "skills/burning_ray.svg",
+      "cooldown"  : 1.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "effects": [
+            {
+              "ApplyStatus": { "status_id": "burn", "value": [3, 6], "duration": 4 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

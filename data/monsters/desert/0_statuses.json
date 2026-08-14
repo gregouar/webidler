@@ -1,0 +1,130 @@
+{
+    "obelisk_vulnerability" : {
+        "name"      : "Sekhmet Condemnation",
+        "icon"      : "skills/tiger_head.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"skill_type": "Attack"} },
+                    "modifier": "Increased",
+                    "debuff"  : false
+                },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "embalmer_vulnerability": {
+        "name"      : "Embalmed",
+        "icon"      : "skills/bandaged.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"damage_type": "Poison"} },
+                    "modifier": "Increased",
+                    "debuff"  : false
+                },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"Speed": {}}, "modifier": "Increased", "debuff": true },
+                "value"       : 33,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "desert_priest_curse"   : {
+        "name"      : "Anubis Judgment",
+        "icon"      : "skills/anubis.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"damage_type": "Physical"} },
+                    "modifier": "Increased",
+                    "debuff"  : false
+                },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": {"stat": "ManaRegen", "modifier": "Flat", "debuff": true},
+                "value"       : 30,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "ammit_buff"            : {
+        "name"      : "Devour the Dead",
+        "icon"      : "skills/swallow.svg",
+        "debuff"    : false,
+        "duration"  : 60,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "Increased", "debuff": false },
+                "value"       : 50,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "scarabs_dot"           : {
+        "name"       : "Scarabs Infestation",
+        "icon"       : "skills/scarab_beetle.svg",
+        "damage_type": "Physical",
+        "avoidable"  : true,
+        "debuff"     : true,
+        "duration"   : 3,
+        "max_stacks" : 5,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" },
+            {
+                "StatModifier": { "stat": {"Speed": {}}, "modifier": "Increased", "debuff": true },
+                "value"       : 5,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "vizier_jar"            : {
+        "name"      : "Canopic Lost",
+        "icon"      : "skills/egyptian_urns.svg",
+        "debuff"    : true,
+        "duration"  : 1e200,
+        "max_stacks": 4,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "Flat", "debuff": true},
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "vizier_protection"     : {
+        "name"      : "Pharaoh's Protection",
+        "icon"      : "skills/egypt_crown.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Block": null}, "modifier": "Flat", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"Evade": null}, "modifier": "Flat", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    }
+}

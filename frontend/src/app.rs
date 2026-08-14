@@ -8,7 +8,6 @@ use url::Url;
 
 use crate::components::{
     accessibility::provide_accessibility_context,
-    auth::provide_auth_context,
     backend_client::BackendClient,
     chat::chat_context::ChatProvider,
     data_context::provide_data_context,
@@ -38,11 +37,10 @@ pub fn App() -> impl IntoView {
     let base_uri = router_base_from_base_uri(base_uri);
 
     provide_context(BackendClient::new(
-        option_env!("BACKEND_HTTP_URL").unwrap_or("http://localhost:4200"),
-        option_env!("BACKEND_WS_URL").unwrap_or("ws://localhost:4200"),
+        option_env!("BACKEND_HTTP_URL").unwrap_or("http://127.0.0.1:4200"),
+        option_env!("BACKEND_WS_URL").unwrap_or("ws://127.0.0.1:4200"),
     ));
 
-    provide_auth_context();
     provide_accessibility_context();
     provide_settings_context();
     provide_events_context();
@@ -56,7 +54,7 @@ pub fn App() -> impl IntoView {
         <ConfirmationModal state=confirm_state />
         <DynamicTooltip />
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")
-            .unwrap_or("ws://localhost:4242/chatws")
+            .unwrap_or("ws://127.0.0.1:4242/chatws")
             .into()>
             <Router base=base_uri>
                 <Routes fallback=|| "Page not found.">

@@ -2,7 +2,6 @@
   "name": "Possessed Ashigaru",
   "portrait": "monsters/yokai/possessed_ashigaru.webp",
   "max_life": 10,
-  "power_factor": 1.5,
   "armor": { "Physical": 50 },
   "block": {
     "Attack": 30,

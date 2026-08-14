@@ -2,8 +2,6 @@
   "name": "Candle Knight",
   "portrait": "monsters/castle/candle_knight.webp",
   "max_life": 15,
-  "power_factor": 3,
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 50 },
   "block": {
     "Attack": 30,

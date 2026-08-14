@@ -26,12 +26,20 @@ pub fn HeaderMenu() -> impl IntoView {
         }
     };
 
+    let navigate_to_skills = {
+        let navigate = use_navigate();
+        move |_| {
+            navigate("/skills", Default::default());
+        }
+    };
+
     view! {
         <div class="relative z-50 flex justify-between items-center p-1 xl:p-2
         bg-zinc-800 border-b-1 border-zinc-900/50 shadow-md/30 h-auto">
             <div class="flex justify-end space-x-1 xl:space-x-2 w-full">
                 <MenuButton on:click=navigate_to_passives>"Passives"</MenuButton>
                 <MenuButton on:click=navigate_to_items>"Items"</MenuButton>
+                <MenuButton on:click=navigate_to_skills>"Skills"</MenuButton>
                 <MenuButton on:click=navigate_to_ui_tests>"Ui Tests"</MenuButton>
             </div>
         </div>

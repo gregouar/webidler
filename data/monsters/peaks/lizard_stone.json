@@ -3,8 +3,6 @@
   "portrait": "monsters/peaks/lizard_stone.webp",
   "max_life": 15,
   "size": "Large",
-  "power_factor": 3.0,
-  "initiative": [ 1, 2 ],
   "armor": { "Physical": 100 },
   "skills": [
     {

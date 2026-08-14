@@ -136,7 +136,7 @@ pub fn ItemTooltipContent(
             .triggers
             .clone()
             .into_iter()
-            .map(|trigger| format_trigger(trigger, show_affixes, None))
+            .map(|trigger| format_trigger(trigger, show_affixes, None, None))
             .collect::<Vec<_>>();
 
         (
@@ -470,6 +470,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 SkillShape::Square4 => ", 2x2 area",
                 SkillShape::All => ", all",
                 SkillShape::Contact => ", contact",
+                SkillShape::Cross => ", contact area",
             };
 
             let range = match specs.range {
@@ -549,7 +550,7 @@ pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     let data_context: DataContext = expect_context();
 
-    item_specs.base.map_specs.as_ref().map(|specs| {
+    item_specs.map_specs.as_ref().map(|specs| {
         let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
             <li class="text-zinc-400 text-xs xl:text-sm ">{item_rarity}" Edict"</li>
@@ -596,6 +597,26 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         </li>
                     }
                 })}
+
+            {match specs.max_power_shard_level {
+                Some(max_power_shard_level) => {
+                    view! {
+                        <li class="text-zinc-400 text-xs xl:text-sm ">
+                            "Unlocks Power Shards up to Area Level: "
+                            <span class="text-white font-semibold">{max_power_shard_level}</span>
+                        </li>
+                    }
+                        .into_any()
+                }
+                None => {
+                    view! {
+                        <li class="text-zinc-400 text-xs xl:text-sm ">
+                            "Does not unlock Power Shards"
+                        </li>
+                    }
+                        .into_any()
+                }
+            }}
 
             <li class="text-zinc-400 text-xs xl:text-sm  italic">
                 "Apply to a Grind to give all Enemies the following effects:"
@@ -762,5 +783,19 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Ring => "Ring",
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
+    }
+}
+
+pub fn item_slot_str(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Amulet => "Amulet",
+        ItemSlot::Body => "Body Armor",
+        ItemSlot::Boots => "Boots",
+        ItemSlot::Gloves => "Gloves",
+        ItemSlot::Helmet => "Helmet",
+        ItemSlot::Ring => "Ring",
+        ItemSlot::Shield => "Offhand",
+        ItemSlot::Accessory => "Cloak",
+        ItemSlot::Weapon => "Weapon",
     }
 }

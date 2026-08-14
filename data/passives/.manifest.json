@@ -3,6 +3,6 @@
     "enabled": true
   },
   "resources": {
-    "passives": ["passives.json"]
+    "passives": [ "passives.json" ]
   }
 }

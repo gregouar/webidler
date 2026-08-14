@@ -6,12 +6,13 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaLevel, AreaSpecs},
-    game_stats::GrindStats,
+    character_status::{StatusId, StatusSpecs},
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
     player::PlayerInventory,
     realms::Realm,
-    skill::BaseSkillSpecs,
+    skill::{BaseSkillSpecs, SkillSpecs},
+    skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
@@ -123,12 +124,13 @@ pub struct GetCharacterDetailsResponse {
     pub ascension: PassivesTreeAscension,
     pub passives_build: PurchasedNodes,
     pub benedictions: PlayerBenedictions,
+    pub skill_masteries: PlayerSkillMasteries,
+    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
 
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
     pub market_stash: Option<Stash>,
-
-    pub last_grind: Option<GrindStats>,
+    // pub last_grind: Option<GrindStats>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -147,6 +149,12 @@ pub struct GetAreasResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetSkillsResponse {
     pub skills: HashMap<String, BaseSkillSpecs>,
+    pub skill_masteries: IndexMap<String, SkillMasterySpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetStatusesResponse {
+    pub statuses: HashMap<StatusId, StatusSpecs>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -178,6 +186,17 @@ pub struct SavePassivesResponse {}
 pub struct BuyBenedictionsResponse {
     pub character: UserCharacter,
     pub player_benedictions: PlayerBenedictions,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveFavoriteSkillsResponse {
+    pub favorite_skills: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SaveSkillMasteryUpgradesResponse {
+    pub skill_mastery: SkillMasteryState,
+    pub skill_specs: SkillSpecs,
 }
 
 // Market
@@ -271,5 +290,14 @@ pub struct InventoryUnequipResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryDeleteResponse {
+    pub inventory: PlayerInventory,
+    pub resource_gold: f64,
+    pub resource_gems: f64,
+    pub gold_reward: f64,
+    pub gems_reward: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventorySortResponse {
     pub inventory: PlayerInventory,
 }

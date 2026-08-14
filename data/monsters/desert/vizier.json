@@ -1,0 +1,64 @@
+{
+  "name"              : "The Grand Vizier",
+  "portrait"          : "monsters/desert/vizier.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 300,
+  "life_regen"        : 300,
+  "size"              : "Tall",
+  "armor"             : {"Physical": 100, "Storm": 100, "Poison": 100, "Fire": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
+    {
+      "name"      : "The Crook and Flail",
+      "icon"      : "skills/crook_flail.svg",
+      "cooldown"  : 2.5,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "crit_chance": 10,
+                "crit_damage": 100,
+                "damage"     : { "Physical": [10, 20], "Storm": [0, 20] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Pharaoh's Protection",
+      "icon"      : "skills/egypt_crown.svg",
+      "cooldown"  : 10,
+      "skill_type": "Blessing",
+      "targets"   : [
+        {
+          "target_type": "Friend",
+          "shape"      : "All",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "vizier_protection", "value": 20} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Canopic Lost",
+      "icon"      : "skills/egyptian_urns.svg",
+      "skill_type": "Curse",
+      "cooldown"  : 0.0,
+      "triggers"  : [
+        {
+          "trigger_id": "vizier_jar",
+          "skill_type": "Curse",
+          "OnDeath"   : "Friend",
+          "target"    : "Me",
+          "effects"   : [
+            { "ApplyStatus": {"status_id": "vizier_jar", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

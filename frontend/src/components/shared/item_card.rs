@@ -62,6 +62,7 @@ pub fn ItemCard(
         };
 
     let icon_asset = img_asset(&item_specs.base.icon);
+    let item_name = item_specs.modifiers.name.clone();
 
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let tooltip_id = RwSignal::new(0);
@@ -250,6 +251,7 @@ pub fn ItemCard(
             <img
                 draggable="false"
                 src=icon_asset
+                alt=item_name
                 class=move || {
                     format!(
                         "relative z-10 object-contain max-w-full max-h-full p-1 transition-transform duration-75 ease-out

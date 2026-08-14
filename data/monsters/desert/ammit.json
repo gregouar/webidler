@@ -1,0 +1,44 @@
+{
+  "name"    : "Ammit Spawn",
+  "portrait": "monsters/desert/ammit.webp",
+  "max_life": 25,
+  "size"    : "Large",
+  "armor"   : {},
+  "skills"  : [
+    {
+      "name"      : "Crocodile Munch",
+      "icon"      : "skills/croc_jaws.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 6], "Fire": [8, 16] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Devour the Dead",
+      "icon"      : "skills/swallow.svg",
+      "skill_type": "Blessing",
+      "cooldown"  : 0.0,
+      "triggers"  : [
+        {
+          "trigger_id": "ammit_swallow",
+          "skill_type": "Spell",
+          "OnDeath"   : "Friend",
+          "target"    : "Me",
+          "effects"   : [
+            { "Restore": {"restore_type": "Life", "modifier": "Percent", "value": 50} },
+            { "ApplyStatus": {"status_id": "ammit_buff", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

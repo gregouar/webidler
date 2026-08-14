@@ -8,6 +8,7 @@ pub enum Realm {
     Standard,
     StandardSSF,
     Legacy,
+    LegacySSF,
 }
 
 impl Realm {
@@ -16,8 +17,17 @@ impl Realm {
             Realm::Standard => "Standard",
             Realm::StandardSSF => "StandardSSF",
             Realm::Legacy => "Legacy",
+            Realm::LegacySSF => "LegacySSF",
         }
         .into()
+    }
+
+    pub fn allow_parallel_characters(&self) -> bool {
+        matches!(self, Realm::LegacySSF)
+    }
+
+    pub fn is_ssf(&self) -> bool {
+        matches!(self, Realm::StandardSSF | Realm::LegacySSF)
     }
 }
 
@@ -25,6 +35,7 @@ impl From<&RealmId> for Realm {
     fn from(value: &RealmId) -> Self {
         match value.as_str() {
             "Legacy" => Realm::Legacy,
+            "LegacySSF" => Realm::LegacySSF,
             "StandardSSF" => Realm::StandardSSF,
             _ => Realm::Standard,
         }

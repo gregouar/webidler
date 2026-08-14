@@ -1,0 +1,34 @@
+{
+  "name"    : "Bloodsucking Mosquito",
+  "portrait": "monsters/forest/blood_mosquito.webp",
+  "max_life": 3,
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
+    {
+      "name"      : "Suck Me Dry",
+      "icon"      : "skills/needle_drill.svg",
+      "cooldown"  : 4.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [1, 2] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "bleed", "value": [2, 5] }
+            }
+          ]
+        },
+        {
+          "target_type": "Me",
+          "effects"    : [
+            { "Restore": {"restore_type": "Life", "value": 100, "modifier": "Percent"} }
+          ]
+        }
+      ]
+    }
+  ]
+}

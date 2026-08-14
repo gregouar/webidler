@@ -2,8 +2,12 @@ use leptos::prelude::*;
 use std::sync::Arc;
 
 use shared::{
+    computations,
     data::{item::ItemSlot, player::EquippedSlot},
-    messages::client::{EquipItemMessage, SellItemsMessage, SheathItemMessage, UnequipItemMessage},
+    messages::client::{
+        EquipItemMessage, SellItemsMessage, SheathItemMessage, SortInventoryMessage,
+        UnequipItemMessage,
+    },
 };
 
 use crate::components::{
@@ -11,6 +15,7 @@ use crate::components::{
     shared::{
         inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
         loot_filter::LootFilterPanel,
+        resources::show_resource_reward,
     },
     ui::confirm::ConfirmContext,
 };
@@ -36,6 +41,7 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     // let open_loot_filter = { move || {} };
     let open_loot_filter = RwSignal::new(false);
+    let sell_reward = RwSignal::new(Default::default());
 
     // Equip
     let try_equip = {
@@ -150,8 +156,33 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     // Sell
     let sell = {
         let conn = conn.clone();
-        move |item_indexes| {
+        move |item_indexes: Vec<u8>| {
+            let (gold_reward, gems_reward) = game_context
+                .player_inventory
+                .read_untracked()
+                .bag
+                .iter()
+                .enumerate()
+                .filter(|(index, _)| item_indexes.contains(&(*index as u8)))
+                .fold((0.0, 0.0), |(gold, gems), (_, item_specs)| {
+                    (
+                        gold + item_specs.gold_price,
+                        gems + computations::item_gems_price(
+                            item_specs.modifiers.level,
+                            item_specs.modifiers.rarity,
+                            game_context.realm.get_untracked().is_ssf(),
+                        ),
+                    )
+                });
+            show_resource_reward(sell_reward, gold_reward, gems_reward);
             conn.send(&SellItemsMessage { item_indexes }.into());
+        }
+    };
+
+    let sort = {
+        let conn = conn.clone();
+        move |sort_type| {
+            conn.send(&SortInventoryMessage { sort_type }.into());
         }
     };
 
@@ -163,7 +194,9 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
         on_sheathe: Some(Arc::new(try_sheathe)),
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
+        on_sort: Some(Arc::new(sort)),
         sell_type: SellType::Sell,
+        sell_reward,
         max_item_level: Signal::derive(move || {
             game_context.player_base_specs.read().max_area_level
         }),

@@ -16,22 +16,35 @@ Sun Priest
 Djinn/Efreet?
 
 
-Wave 1:
+Wave 1 (desert animals):
+Cobra
+Hyena
+Scorpion (2x1)
+
+Wave 2 (protectors):
+Dervish
+Jackal
+Chariot (2x2)
+
+Wave 3 (pyramid entrance):
+Crocodile (1x2)
+ - Sphinx (1x2)
+Obelisk (2x1)
+Serpopard (1x2)
 
 
-Wave 2:
+Wave 4 (temple):
+ - Mummy
+Sarcophagus
+Embalmer
+Ushabti (2x2)
 
 
-Wave 3:
+Wave 5 (pyramid summit):
+Beetles (infest? physical dot?)
+Priest (bless)
+Ammit (1x2): Devour the Deads (on enemy death, get stronger)
 
-
-Wave 4:
-
-
-Wave 5:
-
-
-Boss: 
-The Eternal Vizier?
-Pharaoh?
-Canopic Guardian ?
+Boss:
+Grand Vizier + 4 canopic jars
+Respawn per jar?

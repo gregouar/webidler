@@ -1,0 +1,1260 @@
+{
+  "weapon_skill"        : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"     : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"      : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_chance": {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Increased" }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "life_on_hit": {
+        "title"       : "Life on Hit",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id": "weapon_skill_life_on_hit",
+              "skill_type": "Attack",
+              "OnHit"     : { "skill_ids": ["weapon_skill"], "is_hurt": true },
+              "target"    : "Source",
+              "effects"   : [
+                { "Restore": {"restore_type": "Life", "value": 1, "modifier": "Flat"} }
+              ]
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "Restore": {"restore_type": "Life"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "mana_on_hit": {
+        "title"       : "Mana on Hit",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id": "weapon_skill_mana_on_hit",
+              "skill_type": "Attack",
+              "OnHit"     : { "skill_ids": ["weapon_skill"], "is_hurt": true },
+              "target"    : "Source",
+              "effects"   : [
+                { "Restore": {"restore_type": "Mana", "value": 1, "modifier": "Flat"} }
+              ]
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "Restore": {"restore_type": "Mana"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "gloves_skill"        : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"            : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "two_hands"         : {
+        "title"       : "Flurry of Blows",
+        "base_cost"   : 10,
+        "upgrade_cost": 3,
+        "max_level"   : 11,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConditionalModifier": {
+                  "stat"      : {
+                    "SkillTargetModifier": {
+                      "skill_id": "gloves_skill",
+                      "repeat"  : {"min_value": 3, "max_value": 3, "target": "Any"}
+                    }
+                  },
+                  "conditions": [
+                    { "HasItem": {"item_slot": "Shield", "not": true} }
+                  ]
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 20,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConditionalModifier": {
+                  "stat"      : { "Damage": {"skill_type": "Attack"} },
+                  "conditions": [
+                    { "HasItem": {"item_slot": "Shield", "not": true} }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "crit_chance"       : {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Increased" }
+          }
+        ]
+      },
+      "crit_damage"       : {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "fangbreaker_stacks": {
+        "title"       : "Fangbreaker",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 20,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "fangbreaker"} },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "stun"              : {
+        "title"       : "Way of the Open Hand",
+        "base_cost"   : 5,
+        "upgrade_cost": 1,
+        "max_level"   : 6,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "success_chance": 20, "ApplyStatus": {"status_id": "stun", "value": 1} }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : null,
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "stun"} }
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "poison_coating"      : {
+    "max_level": 100,
+    "upgrades" : {
+      "power"           : {
+        "title"       : "Status Effects",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "poison_coating"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "duration"        : {
+        "title"       : "Poison Duration",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "poison", "skill_type": "Attack"} },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "mana_cost"       : {
+        "title"       : "Sluggish Metabolism",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 5,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "StatusDuration": {"status_id": "poison"} },
+                  "conditions": ["Slowed"]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "sickening_chance": {
+        "title"       : "Sickening Touch",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 14,
+            "upgrade_value": 13,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "sickening_concoction"} }
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "convert_physical": {
+        "title"       : "Venom Doctrine",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 20,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConditionalModifier": {
+                  "stat"      : {
+                    "StatConverter": {
+                      "source"    : { "Damage": {"damage_type": "Physical"} },
+                      "stat"      : { "Damage": {"damage_type": "Poison", "skill_type": "Attack"} },
+                      "skill_type": "Attack"
+                    }
+                  },
+                  "conditions": [
+                    { "HasStatus": {"status_id": "poison_coating"} }
+                  ]
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : -1e+200,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_type": "Attack", "is_hit": true} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "faster_poison"   : {
+        "title"       : "Virulence",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusFaster": {"status_id": "poison", "skill_type": "Attack"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusEscalation": {"status_id": "poison", "skill_type": "Attack"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "pyroclastic_infusion": {
+    "max_level": 100,
+    "upgrades" : {
+      "power": {
+        "title"       : "Status Effects",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_fire"} },
+              "modifier": "Flat"
+            },
+            "hidden"       : true
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_storm"} },
+              "modifier": "Flat"
+            },
+            "hidden"       : true
+          }
+        ]
+      },
+      "status_chance": {
+        "title"       : "Vitrification",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "burn", "debuff": null} }
+                }
+              },
+              "modifier": "Increased",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "stun", "debuff": null} }
+                }
+              },
+              "modifier": "Increased",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "damage_against_burning": {
+        "title"       : "Thermal Updraft",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 20,
+            "upgrade_value": 20,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "Damage": {"damage_type": "Storm", "skill_type": "Attack"} },
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "conditions": [
+                    { "HasStatus": {"status_id": "burn"} }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "damage_against_stunned": {
+        "title"       : "Flashover",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 20,
+            "upgrade_value": 20,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : { "Damage": {"damage_type": "Fire", "skill_type": "Attack"} },
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "conditions": [
+                    { "HasStatus": {"status_id": "stun"} }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "pure_fire": {
+        "title"       : "Magmatic Infusion",
+        "base_cost"   : 10,
+        "upgrade_cost": 10,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"          : 1,
+            "upgrade_value"  : 0,
+            "ReplaceStatusId": {"old_status_id": "pyroclastic_infusion", "new_status_id": "pyroclastic_infusion_fire"}
+          }
+        ]
+      },
+      "pure_storm": {
+        "title"       : "Galvanic Infusion",
+        "base_cost"   : 10,
+        "upgrade_cost": 10,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"          : 1,
+            "upgrade_value"  : 0,
+            "ReplaceStatusId": {"old_status_id": "pyroclastic_infusion", "new_status_id": "pyroclastic_infusion_storm"}
+          }
+        ]
+      }
+    }
+  },
+  "sharpen_weapon"      : {
+    "max_level": 100,
+    "upgrades" : {
+      "power"            : {
+        "title"       : "Status Effects",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "sharpen_weapon"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "bleed_chance"     : {
+        "title"       : "Bleed Chance",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 5,
+            "upgrade_value": 5,
+            "StatEffect"   : {
+              "stat"    : {
+                "SuccessChance": {
+                  "skill_type" : null,
+                  "skill_id"   : null,
+                  "effect_type": { "ApplyStatus": {"status_id": "bleed"} }
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "bleed_duration"   : {
+        "title"       : "Bleed Duration",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 0.2,
+            "upgrade_value": 0.2,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "bleed", "skill_type": null, "skill_id": null} },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "bleed_crit_chance": {
+        "title"       : "Butcher's Technique",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "TriggerEffectModifier": {
+                  "stat"  : {
+                    "SuccessChance": {
+                      "effect_type": { "ApplyStatus": {"status_id": "bleed"} }
+                    }
+                  },
+                  "source": {"HitCrit": null}
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "aggravating_bleed": {
+        "title"       : "Hemorrhagic Cascade",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 5,
+            "upgrade_value": 5,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat"      : {"Damage": {}},
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "bleed"} }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "bleed_faster"     : {
+        "title"       : "Hemophilia",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 20,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusFaster": {"status_id": "bleed", "skill_type": null, "skill_id": null} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "retaliate"           : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"       : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "evade"        : {
+        "title"       : "Strategic Repositioning",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id"       : "retaliate",
+              "skill_type"       : "Attack",
+              "trigger_propagate": true,
+              "OnReceiveStatus"  : {"skill_type": null, "is_triggered": null, "is_evaded": true},
+              "target"           : "Source",
+              "effects"          : [
+                {
+                  "FlatDamage": {
+                    "damage"     : { "Physical": [5, 10] },
+                    "crit_chance": 5,
+                    "crit_damage": 100
+                  }
+                },
+                { "ApplyStatus": {"status_id": "poison", "value": 0}, "optional_application": true }
+              ]
+            }
+          }
+        ]
+      },
+      "unblockable"  : {
+        "title"       : "Implacable Justice",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillEffectModifier": {"skill_id": "retaliate", "unblockable": true} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "vulnerability": {
+        "title"       : "Resentment",
+        "base_cost"   : 10,
+        "upgrade_cost": 2,
+        "max_level"   : 21,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus"            : {"status_id": "retaliate_vulnerability", "value": 100},
+              "independent_application": true,
+              "affect_triggers"        : true
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 15,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "retaliate_vulnerability"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "weapon_crit"  : {
+        "title"       : "Perfect Technique",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"              : 1,
+            "upgrade_value"      : 0,
+            "SkillModifierEffect": {
+              "effects": [
+                { "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
+              ],
+              "source" : { "ItemStats": {"slot": "Weapon", "item_stats": "CritChance"} },
+              "factor" : 0.5
+            }
+          }
+        ]
+      },
+      "collateral"   : {
+        "title"       : "Collateral Damage",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillTargetModifier": {"skill_id": "retaliate", "shape": "Cross"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      }
+    }
+  },
+  "shield_bash"         : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"     : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "shockwave"  : {
+        "title"       : "Shockwave",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillTargetModifier": {"skill_id": "shield_bash", "shape": "Horizontal2"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "weapon_crit": {
+        "title"       : "Perfect Technique",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"              : 1,
+            "upgrade_value"      : 0,
+            "SkillModifierEffect": {
+              "effects": [
+                { "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
+              ],
+              "source" : { "ItemStats": {"slot": "Weapon", "item_stats": "CritChance"} },
+              "factor" : 0.5
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "Flat" }
+          }
+        ]
+      },
+      "block_speed": {
+        "title"       : "Quick Reflexes",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"              : 1,
+            "upgrade_value"      : 0,
+            "SkillModifierEffect": {
+              "effects": [
+                {
+                  "stat"    : { "Speed": {"skill_type": "Attack"} },
+                  "modifier": "More",
+                  "value"   : 1
+                }
+              ],
+              "source" : { "ItemStats": {"category": "Shield", "item_stats": "Block"} },
+              "factor" : 1
+            }
+          }
+        ]
+      },
+      "legionnaire": {
+        "title"       : "Legionnaire",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 2,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "legionnaire_stance"} },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "legionnaire_stance"} },
+              "modifier": "Increased",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "double_strike"       : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"     : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"      : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_chance": {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Increased" }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "repeat"     : {
+        "title"       : "Third Time is a Charm",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_id": "double_strike",
+                  "repeat"  : {"min_value": 2, "max_value": 2, "target": "Same"}
+                }
+              },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "feint"      : {
+        "title"       : "Feint",
+        "base_cost"   : 10,
+        "upgrade_cost": 2,
+        "max_level"   : 31,
+        "effects"     : [
+          {
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus": {"status_id": "double_strike_feint", "value": 100, "independent_application": true}
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 15,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "double_strike_feint"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rain_arrows"         : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"     : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"      : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "barrage"    : {
+        "title"       : "Barrage",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillTargetModifier": {"skill_id": "rain_arrows", "range": "Distance"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "big_arrows" : {
+        "title"       : "Meteor Shower",
+        "base_cost"   : 10,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 65,
+            "upgrade_value": 15,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillTargetModifier": {"skill_id": "rain_arrows", "shape": "Cross"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "more_arrows": {
+        "title"       : "Endless Rain",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 50,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
+              "modifier": "More"
+            }
+          },
+          {
+            "value"        : -33,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      }
+    }
+  },
+  "whirlwind"           : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"     : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"      : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "more_spins" : {
+        "title"       : "Dervish Training",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 3,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "SkillRepeat": {"skill_id": "whirlwind"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -33,
+            "upgrade_value": -33,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "wind"       : {
+        "title"       : "Strong Winds",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "success_chance": 100, "ApplyStatus": {"status_id": "chill", "value": 11} }
+          }
+        ]
+      },
+      "guard"      : {
+        "title"       : "Deflecting Spin",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 11,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillTarget"  : {
+              "target_type": "Me",
+              "repeat"     : { "value": [3, 5], "target": "Any", "repeat_cooldown": 0.3 },
+              "effects"    : [
+                {
+                  "ApplyStatus"        : {"status_id": "whirlwind_guard", "value": 15},
+                  "ignore_stat_effects": [ {"StatusDuration": {}} ]
+                }
+              ]
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "whirlwind_guard"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

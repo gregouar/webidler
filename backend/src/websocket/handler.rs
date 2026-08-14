@@ -9,6 +9,7 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::TypedHeader;
+use chrono::{DateTime, Utc};
 use tokio::time::timeout;
 
 use std::ops::ControlFlow;
@@ -17,9 +18,12 @@ use std::{
     time::{Duration, Instant},
 };
 
-use shared::messages::{
-    client::{ClientConnectMessage, ClientMessage},
-    server::{ErrorMessage, ErrorType},
+use shared::{
+    data::realms::Realm,
+    messages::{
+        client::{ClientConnectMessage, ClientMessage},
+        server::{ErrorMessage, ErrorType, ServerDownMessage},
+    },
 };
 
 use crate::{
@@ -60,12 +64,41 @@ pub async fn handler(
 
 async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState) {
     let mut conn = WebSocketConnection::establish(socket, addr, CLIENT_INACTIVITY_TIMEOUT);
+    let mut pending_connect = None;
+
+    if let Some(start_at) = app_state.app_settings.game_start_at_utc
+        && start_at > Utc::now()
+    {
+        tracing::info!(%addr, %start_at, "waiting for game server start time");
+        if let Err(e) = conn
+            .send(
+                &ServerDownMessage {
+                    expected_launch_time: start_at,
+                }
+                .into(),
+            )
+            .await
+        {
+            tracing::error!(%addr, "failed to send server-down message: {e}");
+            return;
+        }
+
+        pending_connect = match wait_for_game_start(&mut conn, start_at).await {
+            Ok(connect) => connect,
+            Err(e) => {
+                tracing::info!(%addr, "connection ended while waiting for game server: {e}");
+                return;
+            }
+        };
+    }
 
     tracing::debug!("waiting for client to connect...");
-    let mut session = match timeout(
-        Duration::from_secs(30),
-        wait_for_connect(&app_state, &mut conn),
-    )
+    let mut session = match timeout(Duration::from_secs(30), async {
+        match pending_connect {
+            Some(connect) => handle_connect(&app_state, connect).await,
+            None => wait_for_connect(&app_state, &mut conn).await,
+        }
+    })
     .await
     {
         Err(e) => {
@@ -119,6 +152,39 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
     tracing::info!("websocket context '{addr}' destroyed");
 }
 
+async fn wait_for_game_start(
+    conn: &mut WebSocketConnection,
+    start_at: DateTime<Utc>,
+) -> Result<Option<ClientConnectMessage>> {
+    let mut pending_connect = None;
+
+    loop {
+        let Ok(wait_duration) = (start_at - Utc::now()).to_std() else {
+            return Ok(pending_connect);
+        };
+
+        tokio::select! {
+            _ = tokio::time::sleep(wait_duration) => {
+                if conn.is_disconnected() {
+                    return Err(anyhow::format_err!("disconnected"));
+                }
+                return Ok(pending_connect);
+            }
+            message = conn.block_receive() => {
+                match message {
+                    ControlFlow::Continue(ClientMessage::Connect(connect)) => {
+                        pending_connect = Some(*connect);
+                    }
+                    ControlFlow::Break(_) => {
+                        return Err(anyhow::format_err!("disconnected"));
+                    }
+                    _ => {}
+                }
+            }
+        }
+    }
+}
+
 async fn wait_for_connect(app_state: &AppState, conn: &mut WebSocketConnection) -> Result<Session> {
     loop {
         match conn.block_receive().await {
@@ -141,7 +207,7 @@ async fn handle_connect(
 ) -> Result<Session> {
     tracing::info!("connect: {}", msg.character_id);
 
-    let user = auth::authorize_jwt(&app_state.app_settings, &msg.jwt)
+    let user = auth::authorize_access_jwt(&app_state.app_settings, &msg.jwt)
         .ok_or(AppError::Unauthorized("invalid token".to_string()))?;
 
     let user_character = db::characters::read_character(&app_state.db_pool, &msg.character_id)
@@ -151,13 +217,15 @@ async fn handle_connect(
     verify_character_user(&user_character, &user)?;
     verify_character_not_deleted(&user_character)?;
 
-    if db::game_instances::is_user_instance_running(
-        &app_state.db_pool,
-        &user_character.user_id,
-        &user_character.realm_id,
-        &user_character.character_id,
-    )
-    .await?
+    let realm: Realm = (&user_character.realm_id).into();
+    if !realm.allow_parallel_characters()
+        && db::game_instances::is_user_instance_running(
+            &app_state.db_pool,
+            &user_character.user_id,
+            &user_character.realm_id,
+            &user_character.character_id,
+        )
+        .await?
     {
         return Err(AppError::UserError(
             "Another character is already Grinding in this Realm".into(),
@@ -173,6 +241,7 @@ async fn handle_connect(
         &app_state.sessions_store,
         &app_state.master_store,
         user_character,
+        realm.allow_parallel_characters(),
         msg.area_config,
     )
     .await?;

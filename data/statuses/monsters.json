@@ -1,0 +1,46 @@
+{
+    "gold_negative": {
+        "name"      : "Pick Pocket",
+        "icon"      : "passives/gold_negative.svg",
+        "debuff"    : true,
+        "duration"  : 30,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "GoldFind", "modifier": "More", "debuff": true},
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "life_regen"   : {
+        "name"      : "Life Regen",
+        "icon"      : "passives/life_regen.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 1,
+        "effects"   : [
+            { "StatModifier": {"stat": "LifeRegen", "modifier": "Flat"}, "value": 100, "modifier": "Percent" }
+        ]
+    },
+    "rage"         : {
+        "name"      : "Rage",
+        "adjective" : "Enraged",
+        "icon"      : "statuses/enrage.svg",
+        "debuff"    : false,
+        "duration"  : [5, 10],
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More" },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
+    }
+}

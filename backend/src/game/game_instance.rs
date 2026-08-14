@@ -56,13 +56,6 @@ impl<'a> GameInstance<'a> {
     }
 
     pub async fn run(mut self) -> Result<()> {
-        let last_skills_bought =
-            db::game_stats::load_last_game_stats(&self.db_pool, self.character_id)
-                .await
-                .ok()
-                .flatten()
-                .and_then(|last_game| last_game.1)
-                .unwrap_or_default();
         let passives_tree_build =
             db::characters_builds::load_character_build(&self.db_pool, self.character_id)
                 .await
@@ -75,7 +68,6 @@ impl<'a> GameInstance<'a> {
             self.character_id,
             self.game_data,
             passives_tree_build,
-            last_skills_bought.into_keys().collect(),
         )
         .await?;
 
@@ -196,6 +188,32 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
+            let mut player_skill_masteries = self
+                .game_data
+                .player_base_specs
+                .read()
+                .skill_masteries
+                .clone();
+            for (skill_id, experience) in self
+                .game_data
+                .player_resources
+                .read()
+                .skill_masteries_experience
+                .iter()
+            {
+                player_skill_masteries
+                    .masteries
+                    .entry(skill_id.clone())
+                    .or_default()
+                    .experience += experience;
+            }
+            db::characters_data::save_character_skill_masteries(
+                &mut *tx,
+                self.character_id,
+                &player_skill_masteries,
+            )
+            .await?;
+
             db::characters::update_character_resources(
                 &mut *tx,
                 self.character_id,
@@ -211,6 +229,13 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
+            db::characters::set_character_stamina(
+                &mut *tx,
+                self.character_id,
+                computations::stamina_spill(self.game_data.player_stamina).as_secs_f64(),
+            )
+            .await?;
+
             db::characters::update_character_max_area_level(
                 &mut tx,
                 self.character_id,
@@ -218,23 +243,26 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
-            let delta_area_level = self.game_data.area_state.read().max_area_level_ever as i32;
-            if delta_area_level > 0 {
+            let max_area_level_ever = self.game_data.area_state.read().max_area_level_ever as i32;
+            let max_power_shard_level_ever =
+                self.game_data.area_state.read().max_power_shard_level_ever as i32;
+            if max_area_level_ever > 0 {
                 db::characters::update_character_area_progress(
                     &mut tx,
                     self.character_id,
                     &self.game_data.area_id,
-                    // I don't like this
-                    delta_area_level,
+                    max_area_level_ever,
+                    max_power_shard_level_ever,
                 )
                 .await?;
             }
 
             if self.game_data.area_state.read().max_area_level > 0 {
+                let realm_id = self.game_data.realm.realm_id();
                 if let Err(err) = db::game_stats::save_game_stats(
                     &mut *tx,
                     self.character_id,
-                    &self.game_data.realm_id.clone(),
+                    &realm_id,
                     self.game_data,
                 )
                 .await
@@ -245,7 +273,7 @@ impl<'a> GameInstance<'a> {
                 match db::leaderboard::update_leaderboard(
                     &mut tx,
                     self.character_id,
-                    &self.game_data.realm_id.clone(),
+                    &realm_id,
                     &self.game_data.area_id,
                     self.game_data.area_state.read().max_area_level as i32,
                     self.game_data
@@ -256,11 +284,11 @@ impl<'a> GameInstance<'a> {
                 .await
                 {
                     Ok(true) => {
-                        let realm: Realm = (&self.game_data.realm_id).into();
-                        let realm_label = match realm {
+                        let realm_label = match self.game_data.realm {
                             Realm::Standard => "",
                             Realm::StandardSSF => " [SSF]",
                             Realm::Legacy => " [Legacy]",
+                            Realm::LegacySSF => " [Legacy SSF]",
                         };
                         if let Err(err) = self
                             .chat_integration

@@ -1,5 +1,40 @@
 # Changelog
 
+## Major Game Update: «Skill Masteries»
+
+Features:
+
+- Skill persistently gain experience and level up. This reward Skill Mastery points which can be used to buy various upgrades and modifiers for the Skills.
+- Power Shards now unlock only up to Area Level 100 (10 Power Shards) by default. Unlocking more requires to use an Edict, with maximum level computed from Edict Affixes level.
+- Rework of the Passives Tree to be more rewarding, with More modifiers being multiplicative with each others within the tree.
+- Rework of the Statuses system, so that various statuses can be multiplicative with each other and introduce new synergies.
+- Damage Taken modifier can now be More and become multiplicative with each others.
+- 10% of accumulated Stamina can be brought back in Town for next Grind.
+
+Content:
+
+- New Area: Eternal Sands.
+- New Skill: Blessing of Greed.
+- Tier 9 and 10 Base Items and new bases for Runes & Edicts.
+- 22 new Unique Items + 2 new Unique Runes + 3 new Unique Edicts.
+
+Balance Changes:
+
+- Buffed high tier Item affixes granting damage.
+- Removed flat Critical Hit Chance affixes from Weapon Items.
+- Almost all "More Critical Hit Damage" have been transformed to "Increased Critical Hit Damage".
+- Focus Suffix "Status Duration" now only apply to Debuffs.
+- Gloves Suffix "Status Chance" now only apply to Debuffs.
+- Introduced new Body Armor Suffix "Buffs Status Duration".
+- Rebalanced Passives Nodes, with usually minor nodes giving Increased modifiers, while major node give More modifiers, and many other tweaks and changes.
+- Spread Destruction now only targets a single other enemy and do less damage and duration.
+- Added new Passives Nodes on the outer ring, and buffed several utility nodes to also have a Damage modifier.
+- Rebalanced Blessing of Haste and Meditate effects to leverage Skill Masteries for increased effects instead of using Gold.
+- Merged Curse of Clumsiness into Curse of Weakness as a Skill Mastery.
+- Curse of Vampirism now applies to Self instead of Enemies.
+- Runes can now only drop once per Area Level during a Grind (similar to Unique Items). Anchor Nodes have more chance to drop.
+- Selling Unique Items in SSF now rewards with some Gems.
+
 ## Major Game Update: «Awakening of the Spider Witch»
 
 Features:

@@ -1,10 +1,14 @@
 use shared::data::{
     conditional_modifier::Condition,
-    skill::{DamageType, SkillType},
-    stat_effect::{StatSkillFilter, StatStatusType, StatType},
+    item::{ItemCategory, ItemSlot},
+    skill::SkillType,
+    stat_effect::{StatSkillFilter, StatStatusFilter, StatusDamageType},
 };
 
-use crate::components::shared::tooltips::effects_tooltip;
+use crate::components::{
+    data_context::DataContext,
+    shared::tooltips::{effects_tooltip, item_tooltip},
+};
 
 pub fn format_skill_modifier_conditions_pre(
     conditions: &[Condition],
@@ -15,21 +19,39 @@ pub fn format_skill_modifier_conditions_pre(
         .iter()
         .map(|condition| match condition {
             Condition::HasStatus {
-                status_type,
+                status_filter,
                 skill_type,
                 not,
-            } => format!(
-                " {}{}{} ",
-                prefix,
-                if *not { "Non-" } else { "" },
-                format_under_status_type_condition(status_type.as_ref(), *skill_type),
-            ),
+            } => format_adjective_status_condition(status_filter, *skill_type)
+                .map(|status_str| {
+                    format!(
+                        " {}{}{} ",
+                        prefix,
+                        if *not { "Non-" } else { "" },
+                        status_str,
+                    )
+                })
+                .unwrap_or("".into()),
             Condition::StatusStacks { .. } => "".into(),
+            Condition::StatusDuration { .. } => "".into(),
+            Condition::Slowed => "Slowed ".into(),
             Condition::MaximumLife => "".into(),
             Condition::MaximumMana => "".into(),
             Condition::LowLife => "".into(),
             Condition::LowMana => "".into(),
             Condition::ThreatLevel => "".into(),
+            Condition::HasItem { .. } => "".into(),
+            // Condition::HasItem {
+            //     item_slot,
+            //     item_category,
+            //     not,
+            // } => {
+            //     format!(
+            //         " while {}equipped with {}",
+            //         if *not { "not " } else { "" },
+            //         format_has_item_condition(*item_slot, *item_category),
+            //     )
+            // }
         })
         .collect::<Vec<_>>()
         .join("")
@@ -43,13 +65,37 @@ pub fn format_skill_modifier_conditions_post(
     let on_conditions_str = conditions
         .iter()
         .filter_map(|condition| match condition {
-            Condition::HasStatus { .. } => None,
+            Condition::HasStatus {
+                status_filter,
+                skill_type: _,
+                not,
+            } => format_affected_by_status_condition(status_filter).map(|status_str| format!(
+                " {}{}",
+                if *not { "not " } else { "" },
+                status_str,
+            ))
+            ,
+            // Condition::HasStatus { .. } => None,
             Condition::StatusStacks { .. } => None,
-            Condition::MaximumLife => Some(" on Maximum Life"),
-            Condition::MaximumMana => Some(" on Maximum Mana"),
-            Condition::LowLife => Some(" on Low Life"),
-            Condition::LowMana => Some(" on Low Mana"),
+            Condition::StatusDuration { .. } => None,
+            Condition::Slowed => None,
+            Condition::MaximumLife => Some(" on Maximum Life".to_string()),
+            Condition::MaximumMana => Some(" on Maximum Mana".to_string()),
+            Condition::LowLife => Some(" on Low Life".to_string()),
+            Condition::LowMana => Some(" on Low Mana".to_string()),
             Condition::ThreatLevel => None,
+            // Condition::HasItem { .. } => None,    
+             Condition::HasItem {
+                item_slot,
+                item_category,
+                not,
+            } => {
+               Some(format!(
+                    " {}equipped with {}",
+                    if *not { "not " } else { "" },
+                    format_has_item_condition(*item_slot, *item_category),
+                ))
+            }
         })
         .collect::<Vec<_>>();
 
@@ -58,23 +104,39 @@ pub fn format_skill_modifier_conditions_post(
         .filter_map(|condition| match condition {
             Condition::HasStatus { .. } => None,
             Condition::StatusStacks {
-                status_type,
+                status_filter,
                 skill_type,
             } => Some(format!(
-                " per {}",
-                effects_tooltip::skill_status_type_str(
+                " per Stack of {}", // on them for SkillConditionalModifier ?
+                effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
                         ..Default::default()
                     },
-                    status_type.as_ref(),
+                    status_filter,
                     false
                 ),
             )),
-            Condition::MaximumLife
+            Condition::StatusDuration {
+                status_filter,
+                skill_type,
+            } => Some(format!(
+                " per second of Duration of {}", // on them for SkillConditionalModifier ?
+                effects_tooltip::skill_status_filter_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_filter,
+                    false
+                ),
+            )),
+            Condition::Slowed
+            | Condition::MaximumLife
             | Condition::MaximumMana
             | Condition::LowLife
-            | Condition::LowMana => None,
+            | Condition::LowMana
+            | Condition::HasItem { .. } => None,
             Condition::ThreatLevel => Some(" per Threat Level".into()),
         })
         .collect::<Vec<_>>();
@@ -85,7 +147,7 @@ pub fn format_skill_modifier_conditions_post(
         per_conditions_str.join(" and ")
     } else {
         format!(
-            "{}{}{}",
+            "{} {}{}",
             per_conditions_str.join(" and "),
             prefix,
             on_conditions_str.join(" and ")
@@ -93,35 +155,75 @@ pub fn format_skill_modifier_conditions_post(
     }
 }
 
-pub fn format_under_status_type_condition(
-    status_type: Option<&StatStatusType>,
-    skill_type: Option<SkillType>,
+fn format_has_item_condition(
+    item_slot: Option<ItemSlot>,
+    item_category: Option<ItemCategory>,
 ) -> String {
-    let status_type_str = match status_type {
-        Some(status_type) => match status_type {
-            StatStatusType::Stun => stunned_str(Some(true)).to_string(),
-            StatStatusType::DamageOverTime { damage_type } => {
-                damaged_over_time_str(*damage_type).to_string()
-            }
-            StatStatusType::StatModifier { debuff, stat } => match (stat.as_deref(), debuff) {
-                (Some(StatType::Speed(_)), Some(true)) => "Slowed".into(),
-                (_, Some(true)) => debuffed_str(Some(true)).to_string(),
-                (_, Some(false)) => buffed_str(Some(true)).to_string(),
-                _ => "Under Stats Effects".to_string(),
-            },
-            StatStatusType::Trigger {
-                trigger_id: Some(trigger_id),
-                trigger_description,
-            } => trigger_description.clone().unwrap_or(trigger_id.clone()),
-            StatStatusType::Trigger {
-                trigger_id: _,
-                trigger_description: _,
-            } => "Under Trigger Effects".to_string(),
-        },
-        None => "".to_string(),
+    match (item_slot, item_category) {
+        (Some(item_slot), Some(item_category)) => format!(
+            "{} in {} slot",
+            item_tooltip::item_category_str(item_category),
+            item_tooltip::item_slot_str(item_slot),
+        ),
+        (Some(item_slot), None) => item_tooltip::item_slot_str(item_slot).into(),
+        (None, Some(item_category)) => item_tooltip::item_category_str(item_category).into(),
+        (None, None) => "Item".into(),
+    }
+}
+pub fn format_adjective_status_condition(
+    status_filter: &StatStatusFilter,
+    skill_type: Option<SkillType>,
+) -> Option<String> {
+    let status_type_str = if let Some(status_id) = &status_filter.status_id {
+        let data_context: DataContext = leptos::prelude::expect_context();
+        data_context.status_adjective(status_id)
+    } else {
+        None
+        // status_filter.damage_type.map(|damage_type| {
+        //     match damage_type {
+        //         StatusDamageType::Any => "affected by Damage over Time ",
+        //         StatusDamageType::Physical => "affected by Physical Damage over Time",
+        //         StatusDamageType::Fire => "affected by Fire Damage over Time",
+        //         StatusDamageType::Poison => "affected by Poison Damage over Time",
+        //         StatusDamageType::Storm => "affected by Storm Damage over Time",
+        //     }
+        //     .to_string()
+        // })
     };
 
-    format!("{}{}", skilled_type_str(skill_type), status_type_str)
+    if status_type_str.is_some() || skill_type.is_some() {
+        Some(format!(
+            "{}{}",
+            skilled_type_str(skill_type),
+            status_type_str.unwrap_or("".into())
+        ))
+    } else {
+        None
+    }
+}
+
+pub fn format_affected_by_status_condition(status_filter: &StatStatusFilter) -> Option<String> {
+    let status_type_str = if let Some(status_id) = &status_filter.status_id {
+        let data_context: DataContext = leptos::prelude::expect_context();
+        if data_context.status_adjective(status_id).is_none() {
+            Some(data_context.status_name(status_id))
+        } else {
+            None
+        }
+    } else {
+        status_filter.damage_type.map(|damage_type| {
+            match damage_type {
+                StatusDamageType::Any => "Damage over Time",
+                StatusDamageType::Physical => "Physical Damage over Time",
+                StatusDamageType::Fire => "Fire Damage over Time",
+                StatusDamageType::Poison => "Poison Damage over Time",
+                StatusDamageType::Storm => "Storm Damage over Time",
+            }
+            .to_string()
+        })
+    };
+
+    status_type_str.map(|status_type_str| format!("affected by {}", status_type_str))
 }
 
 pub fn skilled_type_str(skill_type: Option<SkillType>) -> &'static str {
@@ -160,18 +262,6 @@ pub fn debuffed_str(value: Option<bool>) -> &'static str {
         Some(value) => match value {
             true => "Debuffed ",
             false => "Non-Debuffed ",
-        },
-        None => "",
-    }
-}
-
-pub fn damaged_over_time_str(value: Option<DamageType>) -> &'static str {
-    match value {
-        Some(value) => match value {
-            DamageType::Physical => "Bleeding ",
-            DamageType::Fire => "Burning ",
-            DamageType::Poison => "Poisoned ",
-            DamageType::Storm => "Chilled ",
         },
         None => "",
     }

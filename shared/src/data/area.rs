@@ -5,7 +5,7 @@ use crate::{
     data::{
         modifier::ModifiableValue,
         stat_effect::EffectsMap,
-        trigger::TriggeredEffect,
+        trigger::TriggersMap,
         values::{Cooldown, NonNegative},
     },
 };
@@ -45,11 +45,15 @@ pub struct AreaSpecs {
     pub loot_rarity: ModifiableValue<f64>,
     #[serde(default = "default_item_rarity")]
     pub gems_find: ModifiableValue<f64>,
+    #[serde(default = "default_item_rarity")]
+    pub gold_find: ModifiableValue<f64>,
+    #[serde(default)]
+    pub max_power_shard_level: AreaLevel,
 
     #[serde(default)]
     pub effects: EffectsMap,
     #[serde(default)]
-    pub triggers: Vec<TriggeredEffect>,
+    pub triggers: TriggersMap,
 }
 
 impl AreaSpecs {
@@ -84,8 +88,9 @@ pub struct AreaState {
     pub is_boss: bool,
     pub waves_done: u8, // TODO: could rename to current wave
 
-    pub max_area_level: AreaLevel,      // Max for this grind
-    pub max_area_level_ever: AreaLevel, // Max for all grind of this area
+    pub max_area_level: AreaLevel,             // Max for this grind
+    pub max_area_level_ever: AreaLevel,        // Max for all grind of this area
+    pub max_power_shard_level_ever: AreaLevel, // Max for all grind of this area
     pub last_champion_spawn: AreaLevel,
 
     pub auto_progress: bool,

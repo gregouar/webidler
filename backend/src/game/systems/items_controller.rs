@@ -1,26 +1,27 @@
-use std::vec;
 use strum::IntoEnumIterator;
 
-use shared::data::{
-    chance::{Chance, ChanceRange},
-    character_status::StatusSpecs,
-    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
-    modifier::Modifier,
-    skill::{
-        ApplyStatusEffect, BaseSkillSpecs, DamageType, SkillEffect, SkillEffectType,
-        SkillTargetsGroup, SkillType, TargetType,
+use shared::{
+    constants::{MAX_POWER_SHARD_LEVEL_BASE, POWER_SHARD_LEVELS_NEEDED},
+    data::{
+        area::AreaLevel,
+        item::{
+            ArmorSpecs, ItemBase, ItemModifiers, ItemRarity, ItemSlot, ItemSpecs, MapSpecs,
+            WeaponSpecs,
+        },
+        item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
+        modifier::Modifier,
+        skill::{BaseSkillSpecs, DamageType, SkillType},
+        stat_effect::{
+            ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+            compare_options,
+        },
     },
-    stat_effect::{
-        ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
-        compare_options,
-    },
-    values::NonNegative,
 };
 
-use crate::{game::data::items_store::ItemsStore, rest::AppError};
-
-const WEAPON_POISON_DAMAGE_DURATION: f64 = 3.0;
+use crate::{
+    game::data::{items_store::ItemsStore, master_store::SkillsStore},
+    rest::AppError,
+};
 
 pub fn init_item_specs_from_store(
     items_store: &ItemsStore,
@@ -62,12 +63,18 @@ pub fn create_item_specs(
                 .unwrap_or_default(),
         ),
         // .max(1),
-        weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
-            compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
-        }),
-        armor_specs: base.armor_specs.as_ref().map(|armor_specs| {
-            compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
-        }),
+        weapon_specs: base
+            .weapon_specs
+            .clone()
+            .map(|weapon_specs| compute_weapon_specs(weapon_specs, modifiers.quality, &effects)),
+        armor_specs: base
+            .armor_specs
+            .clone()
+            .map(|armor_specs| compute_armor_specs(armor_specs, modifiers.quality, &effects)),
+        map_specs: base
+            .map_specs
+            .clone()
+            .map(|map_specs| compute_map_specs(map_specs, &modifiers)),
         base,
         modifiers,
         old_game: true,
@@ -110,20 +117,32 @@ fn compute_weapon_specs(
             } if skill_filter.is_match(&StatSkillFilter {
                 skill_type: Some(SkillType::Attack),
                 ..Default::default()
-            }) && compare_options(is_hit, &Some(true)) =>
+            }) =>
             {
                 match damage_type {
                     Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(*damage_type).or_default();
-                        if let Some(MinMax::Min) | None = min_max {
-                            value.min.apply_effect(effect);
-                        }
-                        if let Some(MinMax::Max) | None = min_max {
-                            value.max.apply_effect(effect);
+                        if compare_options(
+                            is_hit,
+                            &Some(!matches!(damage_type, DamageType::Poison)),
+                        ) {
+                            let value = weapon_specs.damage.entry(*damage_type).or_default();
+                            if let Some(MinMax::Min) | None = min_max {
+                                value.min.apply_effect(effect);
+                            }
+                            if let Some(MinMax::Max) | None = min_max {
+                                value.max.apply_effect(effect);
+                            }
                         }
                     }
                     None => {
                         for damage_type in DamageType::iter() {
+                            if !compare_options(
+                                is_hit,
+                                &Some(!matches!(damage_type, DamageType::Poison)),
+                            ) {
+                                continue;
+                            }
+
                             let value = weapon_specs.damage.entry(damage_type).or_default();
                             if let Some(MinMax::Min) | None = min_max {
                                 value.min.apply_effect(effect);
@@ -200,6 +219,22 @@ fn compute_armor_specs(
     }
 
     armor_specs
+}
+
+fn compute_map_specs(mut map_specs: MapSpecs, modifiers: &ItemModifiers) -> MapSpecs {
+    map_specs.max_power_shard_level = (modifiers.rarity != ItemRarity::Unique).then(|| {
+        let max_power_shard_level = MAX_POWER_SHARD_LEVEL_BASE
+            + map_specs.max_power_shard_level.unwrap_or_default()
+            + modifiers
+                .affixes
+                .iter()
+                .map(|affix| affix.item_level)
+                .sum::<AreaLevel>()
+                / 4;
+
+        max_power_shard_level - max_power_shard_level % POWER_SHARD_LEVELS_NEEDED
+    });
+    map_specs
 }
 
 fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
@@ -280,99 +315,33 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     Ok(create_item_specs(item.base.clone(), item_modifiers, 0.0))
 }
 
-pub fn make_weapon_skill(item_level: u16, weapon_specs: &WeaponSpecs) -> BaseSkillSpecs {
-    let effects = vec![
-        SkillEffect {
-            effect_type: SkillEffectType::FlatDamage {
-                damage: weapon_specs
-                    .damage
-                    .iter()
-                    .filter(|(k, _)| **k != DamageType::Poison)
-                    .map(|(&k, &v)| {
-                        (
-                            k,
-                            ChanceRange {
-                                min: v.min.as_new_base(),
-                                max: v.max.as_new_base(),
-                                lucky_chance: v.lucky_chance.as_new_base(),
-                            },
-                        )
-                    })
-                    .collect(),
-                crit_chance: Chance {
-                    value: weapon_specs.crit_chance.value.as_new_base(),
-                    lucky_chance: weapon_specs.crit_chance.lucky_chance.as_new_base(),
-                },
-                crit_damage: weapon_specs.crit_damage.as_new_base(),
-                unblockable: false,
-            },
-            success_chance: Chance::new_sure(),
-            ignore_stat_effects: Default::default(),
-            conditional_modifiers: Vec::new(),
-        },
-        SkillEffect {
-            effect_type: SkillEffectType::ApplyStatus {
-                duration: ChanceRange {
-                    min: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
-                    max: NonNegative::new(WEAPON_POISON_DAMAGE_DURATION).into(),
-                    lucky_chance: Default::default(),
-                },
-                statuses: vec![ApplyStatusEffect {
-                    status_type: StatusSpecs::DamageOverTime {
-                        damage_type: DamageType::Poison,
-                    },
-                    value: weapon_specs
-                        .damage
-                        .get(&DamageType::Poison)
-                        .map(|v| ChanceRange {
-                            min: v.min.as_new_base(),
-                            max: v.max.as_new_base(),
-                            lucky_chance: v.lucky_chance.as_new_base(),
-                        })
-                        .unwrap_or_default(),
-                    cumulate: false,
-                    unavoidable: false,
-                    replace_on_value_only: false,
-                    escalation: Default::default(),
-                }],
-            },
-            success_chance: Chance::new_sure(),
-            ignore_stat_effects: Default::default(),
-            conditional_modifiers: Vec::new(),
-        },
-    ];
+pub fn make_weapon_skill(
+    skills_store: &SkillsStore,
+    item_slot: ItemSlot,
+    item_level: u16,
+) -> Option<(String, BaseSkillSpecs)> {
+    let skill_id = item_slot_to_skill_id(item_slot);
+    let base_skill_specs = skills_store.get(skill_id).cloned()?;
 
-    BaseSkillSpecs {
-        // skill_id: "weapon_attack".to_string(),
-        name: "Weapon Attack".to_string(),
-        icon: "skills/attack.svg".to_string(),
-        description: "A simple attack with your weapon.".to_string(),
-        skill_type: SkillType::Attack,
-        cooldown: *weapon_specs.cooldown,
-        mana_cost: Default::default(),
-        upgrade_cost: 10.0 + 0.5 * item_level as f64,
-        upgrade_effects: vec![StatEffect {
-            stat: StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
-            },
-            modifier: Modifier::More,
-            value: 30.0,
-            bypass_ignore: true,
-        }],
-        modifier_effects: Default::default(),
-        targets: vec![SkillTargetsGroup {
-            range: weapon_specs.range,
-            target_type: TargetType::Enemy,
-            shape: weapon_specs.shape,
-            target_dead: false,
-            repeat: Default::default(),
-            effects,
-        }],
-        triggers: Default::default(),
-        auto_use_conditions: Default::default(),
-        ignore_stat_effects: Default::default(),
+    Some((
+        skill_id.to_string(),
+        BaseSkillSpecs {
+            upgrade_cost: 10.0 + 0.5 * item_level as f64,
+            ..base_skill_specs
+        },
+    ))
+}
+
+fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {
+    match item_slot {
+        ItemSlot::Accessory => "accessory_skill",
+        ItemSlot::Helmet => "helmet_skill",
+        ItemSlot::Amulet => "amulet_skill",
+        ItemSlot::Weapon => "weapon_skill",
+        ItemSlot::Body => "body_skill",
+        ItemSlot::Shield => "shield_skill",
+        ItemSlot::Gloves => "gloves_skill",
+        ItemSlot::Boots => "boots_skill",
+        ItemSlot::Ring => "ring_skill",
     }
 }

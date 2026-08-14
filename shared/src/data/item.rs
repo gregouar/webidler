@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap, HashSet};
+use std::collections::{BTreeSet, HashSet};
 
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
@@ -44,6 +44,14 @@ pub enum ItemRarity {
     Rare,
     Masterwork,
     Unique,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum InventorySortType {
+    #[default]
+    Rarity,
+    ItemType,
+    ItemLevel,
 }
 
 #[derive(
@@ -193,6 +201,7 @@ pub struct ItemSpecs {
 
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
+    pub map_specs: Option<MapSpecs>,
 
     // Deprecated, to be removed later
     pub old_game: bool,
@@ -259,6 +268,9 @@ pub struct MapSpecs {
     #[serde(default)]
     pub reward_slots: u8,
     #[serde(default)]
+    pub max_power_shard_level: Option<AreaLevel>,
+
+    #[serde(default)]
     pub loot_tables: Vec<String>,
     #[serde(default)]
     pub replace_area_id: Option<String>,
@@ -272,7 +284,7 @@ impl ItemModifiers {
             .iter()
             .flat_map(|affix| affix.effects.iter())
             .filter(|e| e.scope == scope)
-            .fold(EffectsMap(HashMap::new()), |mut effects_map, effect| {
+            .fold(EffectsMap::default(), |mut effects_map, effect| {
                 if split_elements
                     && matches!(
                         &effect.stat_effect.stat,
@@ -304,29 +316,6 @@ impl ItemModifiers {
                         .or_default() += effect.stat_effect.value;
                 }
 
-                // let stats = if split_elements {
-                //     match &effect.stat_effect.stat {
-                //         StatType::Armor(Some(ArmorStatType::Elemental)) => vec![
-                //             StatType::Armor(Some(ArmorStatType::Fire)),
-                //             StatType::Armor(Some(ArmorStatType::Poison)),
-                //             StatType::Armor(Some(ArmorStatType::Storm)),
-                //         ],
-                //         _ => vec![effect.stat_effect.stat.clone()],
-                //     }
-                // } else {
-                //     vec![effect.stat_effect.stat.clone()]
-                // };
-
-                // for stat in stats {
-                //     *effects_map
-                //         .0
-                //         .entry((
-                //             stat,
-                //             effect.stat_effect.modifier,
-                //             effect.stat_effect.bypass_ignore,
-                //         ))
-                //         .or_default() += effect.stat_effect.value;
-                // }
                 effects_map
             })
     }

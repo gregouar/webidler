@@ -4,11 +4,12 @@ use shared::data::{
     player::{PlayerSpecs, PlayerState},
 };
 
-use crate::game::data::event::EventsQueue;
+use crate::game::data::{event::EventsQueue, master_store::StatusesStore};
 
 use super::skills_controller;
 
 pub fn control_monsters(
+    statuses_store: &StatusesStore,
     events_queue: &mut EventsQueue,
     monster_specs: &[MonsterSpecs],
     monster_states: &mut [MonsterState],
@@ -41,6 +42,11 @@ pub fn control_monsters(
             .skills_states
             .iter()
             .any(|skill_state| skill_state.is_ready)
+            && !this_monster_state
+                .character_state
+                .repeated_skills
+                .iter()
+                .any(|repeated_skill| repeated_skill.elapsed_cooldown.get() >= 1.0)
         {
             continue;
         }
@@ -94,10 +100,17 @@ pub fn control_monsters(
             ),
         )];
 
-        skills_controller::repeat_skills(events_queue, &mut me, &mut friends, &mut player);
+        skills_controller::repeat_skills(
+            statuses_store,
+            events_queue,
+            &mut me,
+            &mut friends,
+            &mut player,
+        );
 
         for skill_index in skills_ready {
             skills_controller::use_skill(
+                statuses_store,
                 events_queue,
                 skill_index,
                 &mut me,

@@ -1,9 +1,10 @@
 use shared::{
-    constants::MAX_AREA_LEVEL,
+    constants::{MAX_AREA_LEVEL, MAX_POWER_SHARD_LEVEL_BASE},
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
         item::ItemSpecs,
         item_affix::AffixEffectScope,
+        modifier::ModifiableValue,
         stat_effect::{EffectsMap, StatType},
     },
 };
@@ -31,10 +32,17 @@ pub fn init_area_specs(
 
             for loot_table_id in map_specs.loot_tables.iter() {
                 if let Some(loot_table) = loot_tables_store.get(loot_table_id) {
-                    area_blueprint
-                        .loot_table
-                        .entries
-                        .extend(loot_table.entries.iter().cloned());
+                    if loot_table.area_specific {
+                        area_blueprint
+                            .loot_table_area
+                            .entries
+                            .extend(loot_table.entries.iter().cloned());
+                    } else {
+                        area_blueprint
+                            .loot_table
+                            .entries
+                            .extend(loot_table.entries.iter().cloned());
+                    }
                 }
             }
 
@@ -45,13 +53,13 @@ pub fn init_area_specs(
                 .cloned();
         }
 
-        area_specs.triggers.extend(
-            map_item
-                .base
-                .triggers
-                .iter()
-                .map(|trigger_specs| trigger_specs.triggered_effect.clone()),
-        );
+        for trigger_specs in map_item.base.triggers.iter() {
+            area_specs.triggers.push(
+                trigger_specs.trigger.clone(),
+                trigger_specs.trigger_effect.clone(),
+                None,
+            );
+        }
 
         EffectsMap::combine_all(
             std::iter::once(
@@ -73,19 +81,41 @@ pub fn init_area_specs(
         std::iter::once(map_effects).chain(std::iter::once(area_specs.effects)),
     );
 
-    compute_area_specs(&mut area_specs);
+    area_specs.max_power_shard_level = map_item
+        .as_ref()
+        .and_then(|map_item| map_item.map_specs.as_ref())
+        .and_then(|map_specs| map_specs.max_power_shard_level)
+        .unwrap_or(MAX_POWER_SHARD_LEVEL_BASE);
+
+    let item_area_chance = compute_area_specs(&mut area_specs);
+
+    for entry in area_blueprint.loot_table_area.entries.iter_mut() {
+        entry.weight = (entry.weight as f64 * item_area_chance * 0.01)
+            .round()
+            .max(0.0) as u64;
+    }
+    area_blueprint
+        .loot_table
+        .entries
+        .append(&mut area_blueprint.loot_table_area.entries);
 
     area_specs
 }
 
-fn compute_area_specs(area_specs: &mut AreaSpecs) {
+fn compute_area_specs(area_specs: &mut AreaSpecs) -> f64 {
+    let mut item_area_chance: ModifiableValue<f64> = 100.0.into();
+
     for effect in area_specs.effects.iter() {
         match effect.stat {
             StatType::ItemRarity => area_specs.loot_rarity.apply_effect(&effect),
+            StatType::ItemAreaChance => item_area_chance.apply_effect(&effect),
             StatType::ItemLevel => area_specs.item_level_modifier.apply_effect(&effect),
             StatType::GemsFind => area_specs.gems_find.apply_effect(&effect),
+            StatType::GoldFind => area_specs.gold_find.apply_effect(&effect),
             StatType::PowerLevel => area_specs.power_level.apply_effect(&effect),
             _ => {}
         }
     }
+
+    *item_area_chance
 }

@@ -1,30 +1,36 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::time::Duration;
+use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
     area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
+    character::CharacterId,
     game_stats::GameStats,
     item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState},
-    player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
+    player::{
+        CharacterSpecs, CharacterState, PlayerBaseSpecs, PlayerInventory, PlayerResources,
+        PlayerSpecs, PlayerState,
+    },
     quest::QuestRewards,
-    realms::RealmId,
+    realms::{Realm, RealmId},
+    skill::SkillSpecs,
 };
 
 use crate::game::{
     data::{DataInit, area::AreaBlueprint, master_store},
     systems::{
         area_controller, passives_controller, player_controller::PlayerController, player_updater,
+        skills_updater,
     },
     utils::LazySyncer,
 };
 
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
-    pub realm_id: RealmId,
+    pub realm: Realm,
     pub area_id: String,
     pub map_item: Option<ItemSpecs>,
 
@@ -38,6 +44,7 @@ pub struct GameInstanceData {
     pub passives_tree_state: LazySyncer<PassivesTreeState>,
 
     pub player_base_specs: LazySyncer<PlayerBaseSpecs>,
+    pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
     pub player_specs: LazySyncer<PlayerSpecs>,
     pub player_inventory: LazySyncer<PlayerInventory>,
     pub player_state: PlayerState,
@@ -71,7 +78,8 @@ pub struct SavedGameData {
     area_id: String,
     map_item: Option<ItemSpecs>,
     area_level: AreaLevel,
-    max_area_level_completed: AreaLevel,
+    max_area_level_ever: AreaLevel,
+    max_power_shard_level_ever: AreaLevel,
     passives_tree_id: String,
     passives_tree_state: PassivesTreeState,
     player_resources: PlayerResources,
@@ -101,16 +109,17 @@ impl GameInstanceData {
     #[allow(clippy::too_many_arguments)]
     pub fn init_from_store(
         master_store: &master_store::MasterStore,
-        realm_id: RealmId,
+        realm: Realm,
         area_id: String,
         map_item: Option<ItemSpecs>,
-        max_area_level_completed: AreaLevel,
+        max_area_level_ever: AreaLevel,
+        max_power_shard_level_ever: AreaLevel,
         passives_tree_id: &str,
         mut passives_tree_state: PassivesTreeState,
         mut player_resources: PlayerResources,
         player_base_specs: PlayerBaseSpecs,
         player_inventory: PlayerInventory,
-        player_stamina: Duration,
+        mut player_stamina: Duration,
         player_controller: PlayerController,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
@@ -139,10 +148,12 @@ impl GameInstanceData {
         if area_specs.training {
             player_resources.experience = 1e70;
             player_resources.gold = 1e160;
+            player_stamina = Duration::from_hours(24);
         }
 
         let mut area_state = AreaState::init(&area_specs);
-        area_state.max_area_level_ever = max_area_level_completed;
+        area_state.max_area_level_ever = max_area_level_ever;
+        area_state.max_power_shard_level_ever = max_power_shard_level_ever;
 
         let mut passives_tree_specs = master_store
             .passives_store
@@ -162,15 +173,24 @@ impl GameInstanceData {
 
         let area_threat = AreaThreat::default();
         let player_specs = PlayerSpecs::init(&player_base_specs);
+        let skill_mastery_skill_specs = skills_updater::compute_skill_mastery_skill_specs(
+            &master_store.statuses_store,
+            &master_store.skills_store,
+            &master_store.skill_masteries_store,
+            &player_base_specs.skill_masteries,
+        );
         let player_state = PlayerState::init(&player_specs);
         // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
+            &master_store.skill_masteries_store,
+            &master_store.statuses_store,
             &player_base_specs,
-            &player_specs,
+            // &player_specs,
             &player_state,
             &player_inventory,
             &passives_tree_specs,
             &passives_tree_state,
+            &area_specs,
             &area_threat,
         );
 
@@ -180,7 +200,7 @@ impl GameInstanceData {
         }
 
         Ok(Self {
-            realm_id,
+            realm,
             area_id,
             map_item,
             area_specs,
@@ -197,6 +217,7 @@ impl GameInstanceData {
             player_controller,
             player_specs: LazySyncer::new(player_specs),
             player_base_specs: LazySyncer::new(player_base_specs),
+            skill_mastery_skill_specs,
             player_inventory: LazySyncer::new(player_inventory),
             player_respawn_delay: Default::default(),
             player_stamina,
@@ -220,12 +241,13 @@ impl GameInstanceData {
 
     pub fn to_bytes(self) -> Result<Vec<u8>> {
         Ok(rmp_serde::to_vec(&SavedGameData {
-            realm_id: self.realm_id,
+            realm_id: self.realm.realm_id(),
             area_id: self.area_id,
             map_item: self.map_item,
             area_level: self.area_state.read().area_level,
             max_area_level: self.area_state.read().max_area_level,
-            max_area_level_completed: self.area_state.read().max_area_level_ever,
+            max_area_level_ever: self.area_state.read().max_area_level_ever,
+            max_power_shard_level_ever: self.area_state.read().max_power_shard_level_ever,
             passives_tree_id: self.passives_tree_id,
             passives_tree_state: self.passives_tree_state.unwrap(),
             player_resources: self.player_resources.unwrap(),
@@ -249,7 +271,8 @@ impl GameInstanceData {
             map_item,
             area_level,
             max_area_level,
-            max_area_level_completed,
+            max_area_level_ever,
+            max_power_shard_level_ever,
             passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -267,10 +290,11 @@ impl GameInstanceData {
 
         let mut s = Self::init_from_store(
             master_store,
-            realm_id,
+            Realm::from(&realm_id),
             area_id,
             map_item,
-            max_area_level_completed,
+            max_area_level_ever,
+            max_power_shard_level_ever,
             &passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -301,5 +325,25 @@ impl GameInstanceData {
         self.monster_base_specs.mutate();
         self.queued_loot.mutate();
         self.quest_rewards.mutate();
+    }
+
+    pub fn character_state(&self, character_id: CharacterId) -> Option<&CharacterState> {
+        match character_id {
+            CharacterId::Player => Some(&self.player_state.character_state),
+            CharacterId::Monster(index) => self
+                .monster_states
+                .get(index)
+                .map(|monster_state| &monster_state.character_state),
+        }
+    }
+
+    pub fn character_specs(&self, character_id: CharacterId) -> Option<&CharacterSpecs> {
+        match character_id {
+            CharacterId::Player => Some(&self.player_specs.read().character_specs),
+            CharacterId::Monster(index) => self
+                .monster_specs
+                .get(index)
+                .map(|monster_specs| &monster_specs.character_specs),
+        }
     }
 }

@@ -2,7 +2,7 @@ use std::collections::{BTreeSet, HashSet};
 
 use shared::{
     computations,
-    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL, MONSTER_REWARD_INCREASE_FACTOR},
+    constants::{MAX_ITEM_QUALITY, MAX_ITEM_QUALITY_PER_LEVEL},
     data::{
         area::AreaLevel,
         chance::ChanceRange,
@@ -23,6 +23,38 @@ use crate::game::{
 
 use super::items_controller;
 
+pub struct GenerateLootTemplate {
+    pub allow_unique: bool,
+    pub max_base: bool,
+    pub max_affixes: bool,
+    pub filter_category: Option<ItemCategory>,
+    pub prevent_categories: &'static [ItemCategory],
+}
+
+pub const DEFAULT_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
+    allow_unique: true,
+    max_base: false,
+    max_affixes: false,
+    filter_category: None,
+    prevent_categories: &[],
+};
+
+pub const REPEATED_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
+    allow_unique: false,
+    max_base: false,
+    max_affixes: false,
+    filter_category: None,
+    prevent_categories: &[ItemCategory::Rune],
+};
+
+pub const MAP_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
+    allow_unique: true,
+    max_base: false,
+    max_affixes: false,
+    filter_category: Some(ItemCategory::Map),
+    prevent_categories: &[],
+};
+
 #[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
     loot_table: &LootTable,
@@ -30,18 +62,15 @@ pub fn generate_loot(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    loot_template: &GenerateLootTemplate,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
     is_boss_level: bool,
-    allow_unique: bool,
-    max_base: bool,
-    max_affixes: bool,
-    filter_category: Option<ItemCategory>,
     loot_rarity: f64,
     gold_find: f64,
 ) -> Option<ItemSpecs> {
     let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
-    if !allow_unique {
+    if !loot_template.allow_unique {
         rarity = rarity.min(ItemRarity::Rare);
     }
     roll_item(
@@ -50,12 +79,10 @@ pub fn generate_loot(
         affixes_table,
         adjectives_table,
         nouns_table,
+        loot_template,
         level,
         power_level_modifier,
         is_boss_level,
-        max_base && rarity != ItemRarity::Unique,
-        max_affixes,
-        filter_category,
         rarity,
         gold_find,
     )
@@ -81,23 +108,20 @@ pub fn roll_item(
     affixes_table: &ItemAffixesTable,
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
+    loot_template: &GenerateLootTemplate,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
     is_boss_level: bool,
-    max_base: bool,
-    max_affixes: bool,
-    filter_category: Option<ItemCategory>,
     rarity: ItemRarity,
     gold_find: f64,
 ) -> Option<ItemSpecs> {
     roll_base_item(
         loot_table,
         items_store,
+        loot_template,
         level,
         is_boss_level,
         rarity == ItemRarity::Unique,
-        max_base,
-        filter_category,
     )
     .map(|(base_item_id, base)| {
         let rarity = if base.rarity != ItemRarity::Unique {
@@ -114,7 +138,7 @@ pub fn roll_item(
             affixes_table,
             adjectives_table,
             nouns_table,
-            max_affixes,
+            loot_template.max_affixes,
             gold_find,
             // &items_store.signature_key,
         )
@@ -189,7 +213,11 @@ pub fn roll_item_stats(
         );
     }
 
-    let gold_price = item_gold_price(&modifiers, power_level_modifier, gold_find);
+    let gold_price = computations::item_gold_price(
+        modifiers.level.saturating_sub(power_level_modifier),
+        modifiers.rarity,
+    ) * gold_find
+        * 0.01;
 
     items_controller::create_item_specs(base, modifiers, gold_price)
 }
@@ -204,32 +232,29 @@ fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
 fn roll_base_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,
+    loot_template: &GenerateLootTemplate,
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
-    max_base: bool,
-    filter_category: Option<ItemCategory>,
 ) -> Option<(String, ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()
         .filter(|l| {
-            let item_specs = items_store.content.get(&l.item_id);
-            area_level
-                >= l.min_area_level.unwrap_or(
-                    item_specs
-                        .map(|i| i.min_area_level)
-                        .unwrap_or(AreaLevel::MIN),
-                )
+            let Some(item_specs) = items_store.content.get(&l.item_id) else {
+                return false;
+            };
+            area_level >= l.min_area_level.unwrap_or(item_specs.min_area_level)
                 && area_level <= l.max_area_level.unwrap_or(AreaLevel::MAX)
                 && (!l.boss_only || is_boss_level)
-                && (filter_category
-                    .map(|category| {
-                        item_specs
-                            .map(|base| base.categories.contains(&category))
-                            .unwrap_or_default()
-                    })
+                && (loot_template
+                    .filter_category
+                    .map(|category| item_specs.categories.contains(&category))
                     .unwrap_or(true))
+                && loot_template
+                    .prevent_categories
+                    .iter()
+                    .all(|category| !item_specs.categories.contains(category))
         })
         .collect();
 
@@ -263,7 +288,7 @@ fn roll_base_item(
             .collect()
     };
 
-    let items_available = if max_base {
+    let items_available = if loot_template.max_base && !is_unique {
         let max_level = items_available
             .iter()
             .map(|l| {
@@ -549,7 +574,7 @@ fn roll_affix(
 
 fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaLevel) -> u64 {
     let delta = area_level.saturating_sub(tier_level) as f64;
-    let factor = 1.0 + delta * tier_level as f64 / 10_000.0;
+    let factor = 1.0 + delta * (tier_level as f64).powf(1.5) / 10_000.0;
     (base_weight as f64 * factor) as u64
 }
 
@@ -662,23 +687,4 @@ impl RandomWeighted for &LootTableEntry {
     fn random_weight(&self) -> u64 {
         self.weight
     }
-}
-
-fn item_gold_price(
-    item_modifiers: &ItemModifiers,
-    power_level_modifier: AreaLevel,
-    gold_find: f64,
-) -> f64 {
-    10.0 * match item_modifiers.rarity {
-        ItemRarity::Normal => 1.0,
-        ItemRarity::Magic => 2.0,
-        ItemRarity::Rare => 4.0,
-        ItemRarity::Unique => 8.0,
-        ItemRarity::Masterwork => 8.0,
-    } * gold_find
-        * 0.01
-        * computations::exponential(
-            item_modifiers.level.saturating_sub(power_level_modifier),
-            MONSTER_REWARD_INCREASE_FACTOR,
-        )
 }

@@ -3,7 +3,6 @@
   "portrait": "monsters/inn/adventurer_druid.webp",
   "rarity": "Boss",
   "max_life": 150,
-  "power_factor": 8,
   "stun_lockout": 5,
   "armor": {
     "Storm": 200,
@@ -11,7 +10,7 @@
   },
   "status_resistances": [
     {
-      "status_type": "Stun",
+      "status_id": "stun",
       "value": 30
     }
   ],

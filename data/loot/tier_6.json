@@ -1,100 +1,31 @@
 {
-  "entries": [
-    {
-      "item_id": "padded_tunic_unique",
-      "weight": 3,
-      "min_area_level": 260
-    },
-    {
-      "item_id": "sabre",
-      "weight": 32000
-    },
-    {
-      "item_id": "bascinet",
-      "weight": 32000
-    },
-    {
-      "item_id": "breastplate",
-      "weight": 32000
-    },
-    {
-      "item_id": "lamellar_gauntlets",
-      "weight": 32000
-    },
-    {
-      "item_id": "sabatons",
-      "weight": 32000
-    },
-    {
-      "item_id": "flamberge",
-      "weight": 32000
-    },
-    {
-      "item_id": "kerden_dance",
-      "weight": 4999
-    },
-    {
-      "item_id": "compound_bow",
-      "weight": 32000
-    },
-    {
-      "item_id": "crystal_wand",
-      "weight": 32000
-    },
-    {
-      "item_id": "wand_prism",
-      "weight": 4999
-    },
-    {
-      "item_id": "kite_shield",
-      "weight": 32000
-    },
-    {
-      "item_id": "kite_shield_unique",
-      "weight": 4999
-    },
-    {
-      "item_id": "ritual_orb",
-      "weight": 32000
-    },
-    {
-      "item_id": "great_cloak",
-      "weight": 32000
-    },
-    {
-      "item_id": "jewelled_ring",
-      "weight": 32000
-    },
-    {
-      "item_id": "amulet",
-      "weight": 32000
-    },
-    {
-      "item_id": "edict",
-      "weight": 400,
-      "min_area_level": 250
-    },
-    {
-      "item_id": "edict_2",
-      "weight": 400
-    },
-    {
-      "item_id": "edict_treasure_map",
-      "weight": 1999
-    },
-    {
-      "item_id": "rune",
-      "weight": 3200,
-      "min_area_level": 250
-    },
-    {
-      "item_id": "rune_root",
-      "weight": 320,
-      "min_area_level": 250
-    },
-    {
-      "item_id": "rune_mana_damage",
-      "weight": 99
-    }
+  "area_specific": false,
+  "entries"      : [
+    {"item_id": "padded_tunic_unique", "weight":     3, "min_area_level": 260},
+    {"item_id": "sabre",               "weight": 32000                       },
+    {"item_id": "bascinet",            "weight": 32000                       },
+    {"item_id": "breastplate",         "weight": 32000                       },
+    {"item_id": "lamellar_gauntlets",  "weight": 32000                       },
+    {"item_id": "sabatons",            "weight": 32000                       },
+    {"item_id": "yeti_boots",          "weight":  4999                       },
+    {"item_id": "flamberge",           "weight": 32000                       },
+    {"item_id": "kerden_dance",        "weight":  4999                       },
+    {"item_id": "compound_bow",        "weight": 32000                       },
+    {"item_id": "crystal_wand",        "weight": 32000                       },
+    {"item_id": "wand_prism",          "weight":  4999                       },
+    {"item_id": "kite_shield",         "weight": 32000                       },
+    {"item_id": "kite_shield_unique",  "weight":  4999                       },
+    {"item_id": "ritual_orb",          "weight": 32000                       },
+    {"item_id": "great_cloak",         "weight": 32000                       },
+    {"item_id": "jewelled_ring",       "weight": 32000                       },
+    {"item_id": "focus_ring",          "weight":   499                       },
+    {"item_id": "amulet",              "weight": 32000                       },
+    {"item_id": "evil_eye",            "weight":  4999                       },
+    {"item_id": "edict",               "weight":   400, "min_area_level": 250},
+    {"item_id": "edict_2",             "weight":   400                       },
+    {"item_id": "edict_treasure_map",  "weight":  1999                       },
+    {"item_id": "rune",                "weight":  3200, "min_area_level": 250},
+    {"item_id": "rune_root",           "weight":   640, "min_area_level": 250},
+    {"item_id": "rune_mana_damage",    "weight":   499                       }
   ]
 }

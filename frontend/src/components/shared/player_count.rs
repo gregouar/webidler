@@ -10,7 +10,9 @@ use shared::{
     http::server::PlayersCountResponse,
 };
 
-use crate::components::{accessibility::AccessibilityContext, backend_client::BackendClient};
+use crate::components::{
+    accessibility::AccessibilityContext, backend_client::BackendClient, ui::buttons::CloseButton,
+};
 
 #[derive(Clone, PartialEq)]
 struct PlayerGlimpseEntry {
@@ -33,6 +35,7 @@ fn realm_label(realm: Realm) -> &'static str {
         Realm::Standard => "Standard",
         Realm::StandardSSF => "Standard SSF",
         Realm::Legacy => "Legacy",
+        Realm::LegacySSF => "Legacy SSF",
     }
 }
 
@@ -45,6 +48,7 @@ pub fn PlayerCount() -> impl IntoView {
     let areas_and_players_data: RwSignal<
         Option<(HashMap<String, AreaSpecs>, PlayersCountResponse)>,
     > = RwSignal::new(None);
+    let show_widget = RwSignal::new(true);
     let show_glimpse = RwSignal::new(false);
     let status = RwSignal::new(PlayerCountStatus::Loading);
     let player_count = Memo::new(move |_| {
@@ -104,6 +108,7 @@ pub fn PlayerCount() -> impl IntoView {
                 rounded-md border border-zinc-700/70 bg-black/45 px-2.5 py-1.5
                 text-xs text-zinc-300 shadow-md backdrop-blur-sm transition-colors
                 hover:border-zinc-500/80 hover:bg-black/60"
+                class:hidden=move || !show_widget.get()
                 on:click=move |_| {
                     show_glimpse.update(|s| *s = !*s);
                 }
@@ -135,6 +140,11 @@ pub fn PlayerCount() -> impl IntoView {
                                 .into_any()
                         }
                     }}
+                    <CloseButton on:click=move |ev| {
+                        ev.stop_propagation();
+                        show_glimpse.set(false);
+                        show_widget.set(false);
+                    } />
                 </div>
 
                 {move || {
@@ -160,7 +170,7 @@ pub fn PlayerCount() -> impl IntoView {
                                         <div class="absolute bottom-full right-0 z-50 mb-2 min-w-48
                                         rounded-md border border-zinc-700/80 bg-zinc-900/95 p-3
                                         text-xs text-zinc-300 shadow-lg backdrop-blur-sm">
-                                            <div class="text-center text-zinc-500">
+                                            <div class="text-center text-zinc-400">
                                                 "No players grinding"
                                             </div>
                                         </div>
@@ -176,7 +186,7 @@ pub fn PlayerCount() -> impl IntoView {
                                                 .map(|entry| {
                                                     let href = format!(
                                                         "/view-character/{}",
-                                                        &entry.character_name,
+                                                        entry.character_name,
                                                     );
                                                     let navigate = navigate.clone();
                                                     view! {
@@ -192,7 +202,7 @@ pub fn PlayerCount() -> impl IntoView {
                                                                 <span class="block truncate font-semibold text-zinc-100">
                                                                     {entry.character_name.clone()}
                                                                 </span>
-                                                                <span class="block truncate text-zinc-500">
+                                                                <span class="block truncate text-zinc-400">
                                                                     {entry.username.clone()}
                                                                 </span>
                                                             </div>
@@ -203,7 +213,7 @@ pub fn PlayerCount() -> impl IntoView {
                                                                         " "{entry.area_level}
                                                                     </span>
                                                                 </div>
-                                                                <div class="text-zinc-500">{entry.realm_label}</div>
+                                                                <div class="text-zinc-400">{entry.realm_label}</div>
                                                             </div>
                                                         </button>
                                                     }

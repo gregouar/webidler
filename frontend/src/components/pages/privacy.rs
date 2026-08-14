@@ -28,7 +28,7 @@ pub fn PrivacyContent() -> impl IntoView {
             <h1 class="text-2xl font-bold mb-4">"Privacy Notice"</h1>
             <p>
                 <strong>"Last Updated:"</strong>
-                " 18 August 2025"
+                " 17 June 2026"
             </p>
 
             <h2 class="text-xl font-semibold mt-4 mb-2">"1. Introduction"</h2>
@@ -56,6 +56,7 @@ pub fn PrivacyContent() -> impl IntoView {
             <h2 class="text-xl font-semibold mt-4 mb-2">"4. Cookies and Tracking"</h2>
             <ul>
                 <li>"This Service does not use cookies for tracking or analytics."</li>
+                <li>"This Service uses cookies for authentication purposes."</li>
                 <li>
                     "Third-party CAPTCHA (Turnstile) may temporarily process your IP for verification purposes, but no personal data is stored by me."
                 </li>

@@ -5,6 +5,8 @@ use indexmap::IndexMap;
 use leptos::{html::*, prelude::*};
 
 use frontend::components::{
+    backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::{item_card::ItemCard, tooltips::item_tooltip::name_color_rarity},
     ui::{
@@ -35,6 +37,15 @@ type ItemsStore = IndexMap<String, ItemBase>;
 #[component]
 pub fn ItemsPage() -> impl IntoView {
     let events_context: EventsContext = expect_context();
+
+    let backend: BackendClient = expect_context();
+    let data_context: DataContext = expect_context();
+
+    let _data_load = LocalResource::new({
+        move || async move {
+            let _ = data_context.load_data(backend).await;
+        }
+    });
 
     let items_store = RwSignal::new(Default::default());
     let selected_item = RwSignal::new(None);
@@ -297,6 +308,7 @@ pub fn create_item_specs(
         armor_specs: base.armor_specs.as_ref().map(|armor_specs| {
             compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
         }),
+        map_specs: base.map_specs.clone(),
         base,
         modifiers,
         old_game,
@@ -336,16 +348,28 @@ fn compute_weapon_specs(
             {
                 match damage_type {
                     Some(damage_type) => {
-                        let value = weapon_specs.damage.entry(*damage_type).or_default();
-                        if let Some(MinMax::Min) | None = min_max {
-                            value.min.apply_effect(effect);
-                        }
-                        if let Some(MinMax::Max) | None = min_max {
-                            value.max.apply_effect(effect);
+                        if compare_options(
+                            is_hit,
+                            &Some(!matches!(damage_type, DamageType::Poison)),
+                        ) {
+                            let value = weapon_specs.damage.entry(*damage_type).or_default();
+                            if let Some(MinMax::Min) | None = min_max {
+                                value.min.apply_effect(effect);
+                            }
+                            if let Some(MinMax::Max) | None = min_max {
+                                value.max.apply_effect(effect);
+                            }
                         }
                     }
                     None => {
                         for damage_type in DamageType::iter() {
+                            if !compare_options(
+                                is_hit,
+                                &Some(!matches!(damage_type, DamageType::Poison)),
+                            ) {
+                                continue;
+                            }
+
                             let value = weapon_specs.damage.entry(damage_type).or_default();
                             if let Some(MinMax::Min) | None = min_max {
                                 value.min.apply_effect(effect);

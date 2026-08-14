@@ -41,6 +41,7 @@ services:
       FRONTEND_URL: https://gregouar.github.io/webidler
       CHAT_URL: http://backend_chat:4242
       DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      GAME_START_AT_UTC: ${GAME_START_AT_UTC:-}
       RUST_LOG: INFO
     networks:
       - backend_net

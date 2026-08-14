@@ -1,11 +1,14 @@
+use std::time::Duration;
+
 use crate::{
     constants::{
         self, CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
+        SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST, UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR,
         XP_INCREASE_FACTOR,
     },
     data::{
         area::{AreaLevel, AreaState},
-        item::ItemSpecs,
+        item::{ItemRarity, ItemSpecs},
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
@@ -13,6 +16,11 @@ use crate::{
 
 pub fn exponential(level: AreaLevel, factor: f64) -> f64 {
     10f64.powf(level.saturating_sub(1) as f64 * factor)
+}
+
+pub fn stamina_spill(stamina: Duration) -> Duration {
+    let spill_seconds = stamina.as_secs_f64() * constants::STAMINA_SPILL_PERCENT;
+    Duration::from_secs((spill_seconds / 60.0).floor() as u64 * 60)
 }
 
 // for armor physical damage decrease
@@ -30,6 +38,52 @@ pub fn skill_cost_increase(player_base_skill: &PlayerBaseSkill) -> f64 {
 
 pub fn player_level_up_cost(player_specs: &PlayerBaseSpecs) -> f64 {
     (20.0 * exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR)).round()
+}
+
+pub fn skill_mastery_next_level_cost(level: u16) -> f64 {
+    if level == u16::MAX {
+        return f64::INFINITY;
+    }
+
+    skill_mastery_level_cost(level.saturating_add(1)) - skill_mastery_level_cost(level)
+}
+
+pub fn skill_mastery_level_cost(level: u16) -> f64 {
+    if level == 0 {
+        return 0.0;
+    }
+
+    let factor = 10f64.powf(SKILL_MASTERY_INCREASE_COST);
+    let level_cost = SKILL_MASTERY_BASE_COST
+        * (1.0 + (factor.powi(level.saturating_sub(1) as i32) - 1.0) / (factor - 1.0));
+
+    level_cost.round()
+}
+
+pub fn skill_mastery_level(experience: f64) -> u16 {
+    if experience < skill_mastery_next_level_cost(0) {
+        return 0;
+    }
+
+    if !experience.is_finite() {
+        return u16::MAX;
+    }
+
+    let factor = 10f64.powf(SKILL_MASTERY_INCREASE_COST);
+    let inverse_series =
+        1.0 + ((experience + 0.5) / SKILL_MASTERY_BASE_COST - 1.0) * (factor - 1.0);
+    let estimated_level =
+        (inverse_series.log(factor).floor() + 1.0).clamp(0.0, u16::MAX as f64) as u16;
+
+    if skill_mastery_level_cost(estimated_level) > experience {
+        estimated_level.saturating_sub(1)
+    } else if estimated_level < u16::MAX
+        && skill_mastery_level_cost(estimated_level.saturating_add(1)) <= experience
+    {
+        estimated_level.saturating_add(1)
+    } else {
+        estimated_level
+    }
 }
 
 pub fn gem_chance(area_state: &AreaState) -> f64 {
@@ -72,6 +126,25 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
 
 pub fn gamble_price(item_level: AreaLevel) -> f64 {
     (item_level as f64 / 20.0).floor() + 10.0
+}
+
+pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
+    if is_ssf && item_rarity == ItemRarity::Unique {
+        (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
+    } else {
+        0.0
+    }
+}
+
+pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
+    let rarity_multiplier = match item_rarity {
+        ItemRarity::Normal => 1.0,
+        ItemRarity::Magic => 2.0,
+        ItemRarity::Rare => 4.0,
+        ItemRarity::Masterwork | ItemRarity::Unique => 8.0,
+    };
+
+    10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
 }
 
 pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {

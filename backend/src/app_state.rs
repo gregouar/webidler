@@ -1,6 +1,7 @@
 use aes_gcm::{Aes256Gcm, KeyInit};
 use axum::extract::FromRef;
 use base64::prelude::*;
+use chrono::{DateTime, Utc};
 use jsonwebtoken::{DecodingKey, EncodingKey};
 use std::{env, sync::Arc};
 
@@ -33,6 +34,7 @@ pub struct AppSettings {
     pub aes_key: Aes256Gcm,
     pub hash_key: String,
     pub frontend_url: String,
+    pub game_start_at_utc: Option<DateTime<Utc>>,
 }
 
 impl AppSettings {
@@ -54,6 +56,14 @@ impl AppSettings {
             aes_key: Aes256Gcm::new_from_slice(&aes_key_str).expect("failed to create AES key"),
             hash_key: env::var("HASH_KEY").expect("HASH_KEY must be set"),
             frontend_url: env::var("FRONTEND_URL").expect("FRONTEND_URL must be set"),
+            game_start_at_utc: env::var("GAME_START_AT_UTC")
+                .ok()
+                .filter(|value| !value.trim().is_empty())
+                .map(|value| {
+                    DateTime::parse_from_rfc3339(&value)
+                        .expect("GAME_START_AT_UTC must be a valid RFC 3339 timestamp")
+                        .with_timezone(&Utc)
+                }),
         }
     }
 }

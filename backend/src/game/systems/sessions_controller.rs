@@ -10,6 +10,8 @@ use shared::{
         item::ItemRarity,
         passive::PassivesTreeState,
         player::{PlayerInventory, PlayerResources},
+        realms::Realm,
+        skill_mastery::PlayerSkillMasteries,
         temple::{BenedictionEffect, PlayerBenedictions},
         user::UserCharacterId,
     },
@@ -39,6 +41,7 @@ pub async fn create_session(
     sessions_store: &SessionsStore,
     master_store: &MasterStore,
     character: CharacterEntry,
+    allow_parallel_characters: bool,
     area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
@@ -47,7 +50,9 @@ pub async fn create_session(
     let mut first_try = true;
     let mut session_id = None;
     for _ in 0..50 {
-        session_id = db::game_sessions::create_session(db_pool, &character_id).await?;
+        session_id =
+            db::game_sessions::create_session(db_pool, &character_id, allow_parallel_characters)
+                .await?;
         match session_id {
             Some(_) => break,
             None => {
@@ -130,61 +135,72 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let area_level_completed = db::characters::read_character_area_completed(
-        db_pool,
-        &character.character_id,
-        &area_config.area_id,
-    )
-    .await?
-    .map(|area_completed| area_completed.max_area_level)
-    .unwrap_or_default();
-
-    let (mut player_inventory, passives_tree_state, player_benedictions) = match character_data {
-        Some((inventory_data, ascension_data, player_benedictions)) => (
-            inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
-            PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
-                &master_store.items_store,
-                ascension_data,
-            )),
-            player_benedictions,
-        ),
-        None => {
-            let mut player_inventory = PlayerInventory {
-                max_bag_size: 40,
-                ..Default::default()
-            };
-
-            let base_weapon_id = "dagger".to_string();
-            if let Some(base_weapon) = master_store
-                .items_store
-                .content
-                .get(&base_weapon_id)
-                .cloned()
-            {
-                let _ = inventory_controller::equip_item(
-                    &mut player_inventory,
-                    loot_generator::roll_item_stats(
-                        base_weapon_id,
-                        base_weapon,
-                        ItemRarity::Normal,
-                        0,
-                        0,
-                        &master_store.item_affixes_table,
-                        &master_store.item_adjectives_table,
-                        &master_store.item_nouns_table,
-                        false,
-                        0.0, // &master_store.items_store.signature_key,
-                    ),
-                );
-            }
-
+    let (max_area_level_ever, max_power_shard_level_ever) =
+        db::characters::read_character_area_completed(
+            db_pool,
+            &character.character_id,
+            &area_config.area_id,
+        )
+        .await?
+        .map(|area_completed| {
             (
-                player_inventory,
-                PassivesTreeState::default(),
-                PlayerBenedictions::default(),
+                area_completed.max_area_level,
+                area_completed.max_power_shard_level,
             )
-        }
-    };
+        })
+        .unwrap_or_default();
+
+    let (mut player_inventory, passives_tree_state, player_benedictions, player_skill_masteries) =
+        match character_data {
+            Some((inventory_data, ascension_data, player_benedictions, player_skill_masteries)) => {
+                (
+                    inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
+                    PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
+                        &master_store.items_store,
+                        ascension_data,
+                    )),
+                    player_benedictions,
+                    player_skill_masteries,
+                )
+            }
+            None => {
+                let mut player_inventory = PlayerInventory {
+                    max_bag_size: 40,
+                    ..Default::default()
+                };
+
+                let base_weapon_id = "dagger".to_string();
+                if let Some(base_weapon) = master_store
+                    .items_store
+                    .content
+                    .get(&base_weapon_id)
+                    .cloned()
+                {
+                    let _ = inventory_controller::equip_item(
+                        &mut player_inventory,
+                        loot_generator::roll_item_stats(
+                            base_weapon_id,
+                            base_weapon,
+                            ItemRarity::Normal,
+                            0,
+                            0,
+                            &master_store.item_affixes_table,
+                            &master_store.item_adjectives_table,
+                            &master_store.item_nouns_table,
+                            false,
+                            0.0, // &master_store.items_store.signature_key,
+                        ),
+                    );
+                }
+
+                (
+                    player_inventory,
+                    PassivesTreeState::default(),
+                    PlayerBenedictions::default(),
+                    PlayerSkillMasteries::default(),
+                )
+            }
+        };
 
     let mut player_resources = PlayerResources::default();
     player_resources.gold += benedictions_controller::find_benediction_value(
@@ -205,7 +221,9 @@ async fn new_game_instance(
         benedictions_controller::generate_effects_map_from_benedictions(
             &master_store.benedictions_store,
             &player_benedictions,
-        ),
+        )
+        .into(),
+        player_skill_masteries,
     );
 
     let map_item = match area_config.map_item_index {
@@ -244,16 +262,17 @@ async fn new_game_instance(
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
-        character.realm_id,
+        Realm::from(&character.realm_id),
         area_id,
         map_item,
-        area_level_completed as AreaLevel,
+        max_area_level_ever as AreaLevel,
+        max_power_shard_level_ever as AreaLevel,
         "default",
         passives_tree_state,
         player_resources,
         player_base_specs,
         player_inventory,
-        Default::default(),
+        Duration::from_secs_f64(character.resource_stamina),
         player_controller,
     )?;
 
@@ -270,6 +289,7 @@ async fn new_game_instance(
     }
 
     player_controller::init_skills_from_inventory(
+        &master_store.skills_store,
         game_data.player_base_specs.mutate(),
         game_data.player_inventory.mutate(),
         &mut game_data.player_state,

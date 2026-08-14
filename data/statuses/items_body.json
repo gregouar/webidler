@@ -1,0 +1,16 @@
+{
+    "solar_armor": {
+        "name"      : "Blinded by the Sun",
+        "icon"      : "statuses/sun.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    }
+}

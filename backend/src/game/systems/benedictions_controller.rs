@@ -79,7 +79,7 @@ pub async fn update_benedictions(
     resource_gold: f64,
     player_benedictions: &PlayerBenedictions,
 ) -> Result<(), AppError> {
-    let (_, _, prev_benedictions) =
+    let (_, _, prev_benedictions, _) =
         db::characters_data::load_character_data(&mut **tx, character_id)
             .await?
             .unwrap_or_default();

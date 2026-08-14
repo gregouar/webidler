@@ -48,7 +48,7 @@
     "upgrade_effects": []
   },
   "small_round_shield_unique": {
-    "name": "Thunderclap Bulwark",
+    "name": "Thunderclap",
     "icon": "items/shields/thunderclap_bulwark.webp",
     "description": "When struck, it roars like the heavens, felling foes as if lightning kissed their skulls.",
     "slot": "Shield",
@@ -98,10 +98,6 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "stunning_block",
         "OnTakeHit": {
           "skill_type": null,
           "range": null,
@@ -109,12 +105,19 @@
           "is_blocked": true,
           "is_hurt": null,
           "is_triggered": null,
-          "damage_type": null
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "stunning_block",
         "target": "Source",
         "modifiers": [],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -122,27 +125,22 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": "Stun",
-                  "value": 0.0,
-                  "cumulate": false,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": [
-                1.0,
-                3.0
-              ]
+              "status_id": "stun",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -178,7 +176,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -192,6 +190,16 @@
           },
           "modifier": "Increased",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 20.0
         }
       },
       {
@@ -273,7 +281,6 @@
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "skill_description": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
@@ -367,7 +374,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -400,7 +407,6 @@
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
@@ -483,7 +489,6 @@
           "Damage": {
             "skill_type": "Attack",
             "skill_id": null,
-            "skill_description": null,
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -499,26 +504,9 @@
       },
       {
         "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": "shield_bash",
-            "skill_description": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": -33.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id": "shield_bash",
-            "skill_description": null,
             "range": "Any",
             "shape": null,
             "repeat": {
@@ -575,7 +563,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -588,14 +576,13 @@
             "Damage": {
               "skill_type": "Attack",
               "skill_id": null,
-              "skill_description": null,
               "damage_type": null,
               "min_max": null,
               "is_hit": null
             }
           },
           "modifier": "More",
-          "value": 25.0
+          "value": 40.0
         }
       }
     ]
@@ -678,39 +665,46 @@
     ],
     "triggers": [
       {
-        "name": null,
-        "icon": null,
-        "description": null,
-        "trigger_id": "kite_shield_unique",
         "OnApplyStatus": {
           "skill_type": "Curse",
-          "status_type": null,
+          "status_id": null,
+          "damage_type": null,
+          "debuff": null,
           "is_triggered": false,
-          "is_evaded": false
+          "is_evaded": false,
+          "conditions": []
         },
+        "description": null,
+        "trigger_id": "kite_shield_unique",
         "target": "Me",
         "modifiers": [
           {
             "stat": {
               "StatusDuration": {
-                "status_type": null,
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "skill_description": null
+                "skill_id": null
               }
             },
             "modifier": "Flat",
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_type": null,
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": "Curse"
               }
             }
           }
         ],
-        "skill_range": "Melee",
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
         "skill_type": "Curse",
+        "skill_range": "Any",
+        "skill_shape": "Single",
         "effects": [
           {
             "success_chance": {
@@ -718,70 +712,42 @@
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
-              "statuses": [
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": {
-                        "Damage": {
-                          "skill_type": null,
-                          "skill_id": null,
-                          "skill_description": null,
-                          "damage_type": null,
-                          "min_max": null,
-                          "is_hit": null
-                        }
-                      },
-                      "modifier": "More",
-                      "debuff": false
-                    }
-                  },
-                  "value": 50.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                },
-                {
-                  "status_type": {
-                    "StatModifier": {
-                      "stat": "LifeRegen",
-                      "modifier": "Flat",
-                      "debuff": true
-                    }
-                  },
-                  "value": 1.0,
-                  "cumulate": true,
-                  "replace_on_value_only": false,
-                  "unavoidable": false
-                }
-              ],
-              "duration": 0.0
+              "status_id": "king_oath",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [
               {
                 "StatusPower": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
                   "skill_type": null,
                   "skill_id": null,
-                  "skill_description": null,
                   "min_max": null
                 }
               },
               {
                 "StatusDuration": {
-                  "status_type": null,
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "skill_description": null
+                  "skill_id": null
                 }
               }
             ],
-            "conditional_modifiers": []
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
-        ],
-        "skill_shape": "Single",
-        "owner": null,
-        "is_debuff": false
+        ]
       }
     ],
     "weapon_specs": null,
@@ -813,7 +779,7 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Block": "Attack"
+            "Block": null
           },
           "modifier": "Flat",
           "value": 2.0
@@ -888,6 +854,185 @@
     "armor_specs": {
       "armor": 200.0,
       "block": 29.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "energy_shield": {
+    "name": "Aegis of the First Dawn",
+    "icon": "items/shields/energy_shield.webp",
+    "description": "The disc gathered daylight for centuries before releasing it in an instant.",
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Shield"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "More",
+        "scope": "Local",
+        "value": -1e200,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": null
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": null
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "shield_bash",
+            "damage_type": "Storm",
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 400.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "retaliate",
+            "damage_type": "Storm",
+            "min_max": "Max",
+            "is_hit": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 240.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 200.0,
+      "block": 29.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Block": null
+          },
+          "modifier": "Flat",
+          "value": 2.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": "shield_bash",
+              "damage_type": "Storm",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 100.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": "retaliate",
+              "damage_type": "Storm",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 60.0
+        }
+      }
+    ]
+  },
+  "shield_9": {
+    "name": "Mithril Protector",
+    "icon": "items/shields/mithril_protector.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Shield"
+    ],
+    "min_area_level": 490,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 225.0,
+      "block": 31.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "shield_10": {
+    "name": "Adamantium Tower",
+    "icon": "items/shields/adamentium_tower.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Shield"
+    ],
+    "min_area_level": 590,
+    "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 250.0,
+      "block": 33.0
     },
     "rune_specs": null,
     "map_specs": null,

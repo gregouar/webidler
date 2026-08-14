@@ -1,23 +1,19 @@
 {
-  "name": "Bone Cat",
+  "name"    : "Bone Cat",
   "portrait": "monsters/inn/cat_skeleton.webp",
   "max_life": 8,
-  "power_factor": 2.0,
-  "initiative": [ 0.0, 1.0 ],
-  "skills": [
+  "skills"  : [
     {
-      "name": "Vicious Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 5.0,
+      "name"      : "Vicious Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 5.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 6 ]
-                }
+                "damage": { "Physical": [2, 6] }
               }
             }
           ]
@@ -25,18 +21,16 @@
       ]
     },
     {
-      "name": "Scratch",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Scratch",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 3.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 1, 3 ]
-                }
+                "damage": { "Physical": [1, 3] }
               }
             }
           ]

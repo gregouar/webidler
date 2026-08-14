@@ -8,6 +8,7 @@ pub mod header;
 pub mod input;
 mod link;
 pub mod list_row;
+pub mod loading_screen;
 pub mod menu_panel;
 pub mod number;
 pub mod pannable;

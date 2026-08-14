@@ -1,0 +1,108 @@
+{
+    "cheese"            : {
+        "name"      : "Melted Cheese",
+        "icon"      : "statuses/cheese.svg",
+        "debuff"    : true,
+        "duration"  : 5.0,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Physical"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Poison"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"skill_type": null, "damage_type": "Storm"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "Speed": {"skill_type": null, "skill_id": null, "skill_description": null} },
+                    "modifier": "Increased",
+                    "debuff"  : true
+                },
+                "value"       : 11.0,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "greed"             : {
+        "name"      : "Greed",
+        "icon"      : "statuses/snatch.svg",
+        "debuff"    : false,
+        "duration"  : 60,
+        "max_stacks": 20,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "GoldFind", "modifier": "More", "debuff": false},
+                "value"       : 50.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "DamageTaken": {"skill_type": null} },
+                    "modifier": "Increased",
+                    "debuff"  : false
+                },
+                "value"       : 10.0,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "spider_hammer_uber": {
+        "name"       : "Infested",
+        "icon"       : "statuses/spider.svg",
+        "debuff"     : true,
+        "damage_type": "Physical",
+        "duration"   : 5,
+        "max_stacks" : 10,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
+        ]
+    },
+    "desert_whip"       : {
+        "name"      : "Punishment",
+        "icon"      : "statuses/whip.svg",
+        "debuff"    : false,
+        "duration"  : 5,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : { "CritDamage": {"skill_id": "weapon_skill"} },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 200.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "CritChance": {"skill_id": "weapon_skill"} },
+                    "modifier": "Flat",
+                    "debuff"  : false
+                },
+                "value"       : 10.0,
+                "modifier"    : "Flat"
+            }
+        ]
+    }
+}

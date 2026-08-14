@@ -1,5 +1,6 @@
+use chrono::{DateTime, Utc};
 use codee::string::JsonSerdeCodec;
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_use::storage;
 
 use shared::{
@@ -10,8 +11,9 @@ use shared::{
     },
 };
 
+use crate::components::ui::number::format_local_time;
 use crate::components::{
-    auth::AuthContext,
+    backend_client::BackendClient,
     chat::chat_panel::ChatPanel,
     game::{
         GameContext,
@@ -21,7 +23,7 @@ use crate::components::{
         websocket::WebsocketContext,
     },
     shared::settings::SettingsModal,
-    ui::{progress_bars::provide_cooldown_clock, toast::*},
+    ui::{loading_screen::LoadingScreen, progress_bars::provide_cooldown_clock, toast::*},
 };
 
 #[component]
@@ -30,7 +32,7 @@ pub fn GameInstance() -> impl IntoView {
     provide_context(game_context);
     provide_cooldown_clock();
 
-    let auth_context = expect_context::<AuthContext>();
+    let backend = expect_context::<BackendClient>();
 
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
@@ -38,27 +40,35 @@ pub fn GameInstance() -> impl IntoView {
     let (get_area_config_storage, _, _) =
         storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
+    let conn = expect_context::<WebsocketContext>();
+    let server_down_until = RwSignal::new(None::<DateTime<Utc>>);
+
     Effect::new({
-        let conn = expect_context::<WebsocketContext>();
+        let conn = conn.clone();
         move |_| {
             if conn.connected.get() {
-                conn.send(
-                    &ClientConnectMessage {
-                        jwt: auth_context.token(),
-                        character_id: get_character_id_storage.get_untracked(),
-                        area_config: get_area_config_storage.get_untracked(),
+                let conn = conn.clone();
+                spawn_local(async move {
+                    if let Ok(jwt) = backend.get_access_token().await {
+                        conn.send(
+                            &ClientConnectMessage {
+                                jwt,
+                                character_id: get_character_id_storage.get_untracked(),
+                                area_config: get_area_config_storage.get_untracked(),
+                            }
+                            .into(),
+                        );
                     }
-                    .into(),
-                );
+                });
             }
         }
     });
 
     Effect::new({
-        let conn = expect_context::<WebsocketContext>();
+        let conn = conn.clone();
         move |_| {
             if let Some(message) = conn.message.get() {
-                handle_message(&game_context, message);
+                handle_message(&game_context, server_down_until, message);
             }
         }
     });
@@ -67,7 +77,26 @@ pub fn GameInstance() -> impl IntoView {
         <main class="my-0 mx-auto w-full text-center overflow-x-hidden flex flex-col min-h-screen">
             <Show
                 when=move || game_context.started.get()
-                fallback=move || view! { <p>"Connecting..."</p> }
+                fallback=move || {
+                    view! {
+                        <LoadingScreen
+                            title="Connecting..."
+                            detail=Signal::derive(move || {
+                                server_down_until
+                                    .get()
+                                    .map(|launch_time| {
+                                        format!(
+                                            "Game server not available before {}, please wait here...",
+                                            format_local_time(launch_time),
+                                        )
+                                    })
+                                    .unwrap_or_else(|| {
+                                        "Connecting to the game server.".to_owned()
+                                    })
+                            })
+                        />
+                    }
+                }
             >
                 <HeaderMenu />
                 <div class="relative flex-1">
@@ -80,14 +109,21 @@ pub fn GameInstance() -> impl IntoView {
                     <SettingsModal open=game_context.open_settings />
                 </div>
             </Show>
-            <ChatPanel />
+            <ChatPanel character_id=get_character_id_storage.get_untracked() />
         </main>
     }
 }
 
-fn handle_message(game_context: &GameContext, message: ServerMessage) {
+fn handle_message(
+    game_context: &GameContext,
+    server_down_until: RwSignal<Option<DateTime<Utc>>>,
+    message: ServerMessage,
+) {
     match message {
         ServerMessage::Connect(_) => {}
+        ServerMessage::ServerDown(message) => {
+            server_down_until.set(Some(message.expected_launch_time));
+        }
         ServerMessage::InitGame(m) => {
             init_game(game_context, *m);
         }
@@ -119,6 +155,7 @@ fn handle_message(game_context: &GameContext, message: ServerMessage) {
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
         character_id,
+        realm,
         map_item,
         area_specs,
         area_state,
@@ -126,14 +163,15 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         passives_tree_state,
         passives_tree_build,
         player_base_specs,
+        skill_mastery_skill_specs,
         player_specs,
         player_state,
-        last_skills_bought,
         auto_skills,
     } = init_message;
 
     game_context.started.set(true);
     game_context.character_id.set(character_id);
+    game_context.realm.set(realm);
     game_context.map_item.set(map_item);
     game_context.area_specs.set(area_specs);
     game_context.area_state.set(area_state);
@@ -141,10 +179,12 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.passives_tree_build.set(passives_tree_build);
     game_context.player_base_specs.set(player_base_specs);
+    game_context
+        .skill_mastery_skill_specs
+        .set(skill_mastery_skill_specs);
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.player_auto_skills.set(auto_skills);
-    game_context.last_skills_bought.set(last_skills_bought);
 }
 
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {

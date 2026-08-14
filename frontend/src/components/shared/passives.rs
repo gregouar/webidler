@@ -98,6 +98,7 @@ pub fn Node(
     on_click: impl Fn() + Send + Sync + 'static,
     on_right_click: impl Fn() + Send + Sync + 'static,
     #[prop(optional, into)] search_node: Option<Signal<Option<String>>>,
+    #[prop(optional, into)] highlight_override: Option<Signal<Option<bool>>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let fill = match node_specs.node_type {
@@ -122,14 +123,18 @@ pub fn Node(
     let node_text = node_text(&node_specs).to_lowercase();
 
     let highlight = Memo::new(move |_| {
-        search_node
+        let matches_search = search_node
             .map(|search_node| match search_node.read().as_ref() {
                 Some(searched_node) if !searched_node.is_empty() => {
                     node_text.contains(&searched_node.to_lowercase())
                 }
                 _ => false,
             })
-            .unwrap_or_default()
+            .unwrap_or_default();
+
+        highlight_override
+            .and_then(|highlight_override| highlight_override.get())
+            .unwrap_or(matches_search)
     });
 
     let node_status = move || node_status.try_get().unwrap_or_default();
@@ -525,7 +530,7 @@ pub fn NodeTooltipContent(
         .triggers
         .clone()
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false, None))
+        .map(|trigger| format_trigger(trigger, false, None, None))
         .collect();
 
     let is_locked = move || node_specs_locked && node_level() == 0;
@@ -776,7 +781,12 @@ pub fn PassiveSkillStats(
                             view! {
                                 <div class="pb-2 list-none">
                                     <Separator />
-                                    {trigger_tooltip::format_trigger(trigger_specs, false, None)}
+                                    {trigger_tooltip::format_trigger(
+                                        trigger_specs,
+                                        false,
+                                        None,
+                                        None,
+                                    )}
                                 </div>
                             }
                         })

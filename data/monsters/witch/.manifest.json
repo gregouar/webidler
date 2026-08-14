@@ -14,6 +14,9 @@
       "witch_spider.json",
       "witch.json",
       "witch_2.json"
+    ],
+    "statuses": [
+      "0_statuses.json"
     ]
   }
 }

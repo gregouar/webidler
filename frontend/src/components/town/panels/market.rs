@@ -7,13 +7,13 @@ use strum::IntoEnumIterator;
 use shared::{
     data::{
         item::{ItemCategory, ItemRarity},
-        market::{MarketFilters, MarketItem, MarketOrderBy},
+        market::{MarketFilters, MarketItem, MarketOrderBy, MarketStatFilter},
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
         stash::Stash,
         stat_effect::{
-            ArmorStatType, StatEffect, StatSkillEffectType, StatSkillFilter, StatStatusType,
-            StatType,
+            ArmorStatType, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
+            StatusDamageType,
         },
     },
     http::client::{
@@ -24,7 +24,6 @@ use shared::{
 };
 
 use crate::components::{
-    auth::AuthContext,
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
     shared::{
@@ -40,6 +39,7 @@ use crate::components::{
         Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
+        checkbox::Checkbox,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
@@ -69,6 +69,13 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
         selected_item.set(SelectedItem::None);
         active_tab.set(new_tab);
     };
+
+    Effect::new(move || {
+        if open.get() || town_context.open_inventory.get() {
+            selected_item.set(SelectedItem::None);
+            town_context.selected_item_index.set(None);
+        }
+    });
 
     let stash = town_context.market_stash;
 
@@ -277,7 +284,6 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
 pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let value = Signal::derive(move || stash.read().resource_gems);
@@ -292,7 +298,6 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
                 async move {
                     match backend
                         .exchange_gems_stash(
-                            &auth_context.token(),
                             &ExchangeGemsStashRequest {
                                 character_id,
                                 amount,
@@ -372,7 +377,6 @@ fn MarketBrowser(
     Effect::new({
         let backend: BackendClient = expect_context();
         let town_context: TownContext = expect_context();
-        let auth_context: AuthContext = expect_context();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
@@ -384,18 +388,15 @@ fn MarketBrowser(
 
                 spawn_local(async move {
                     let response = backend
-                        .browse_market_items(
-                            &auth_context.token(),
-                            &BrowseMarketItemsRequest {
-                                user_id,
-                                realm,
-                                skip,
-                                limit: items_per_page,
-                                filters,
-                                own_listings,
-                                is_deleted,
-                            },
-                        )
+                        .browse_market_items(&BrowseMarketItemsRequest {
+                            user_id,
+                            realm,
+                            skip,
+                            limit: items_per_page,
+                            filters,
+                            own_listings,
+                            is_deleted,
+                        })
                         .await
                         .unwrap_or_default();
 
@@ -486,7 +487,6 @@ fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let chat_context: ChatContext = expect_context();
     let toaster = expect_context::<Toasts>();
 
@@ -556,13 +556,10 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .buy_market_item(
-                                &auth_context.token(),
-                                &BuyMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .buy_market_item(&BuyMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -589,12 +586,9 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .reject_market_item(
-                                &auth_context.token(),
-                                &RejectMarketItemRequest {
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .reject_market_item(&RejectMarketItemRequest {
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(_) => {
@@ -702,7 +696,6 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let price = RwSignal::new(None::<ItemPrice>);
@@ -721,15 +714,12 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .sell_market_item(
-                                &auth_context.token(),
-                                &SellMarketItemRequest {
-                                    character_id,
-                                    recipient_name,
-                                    item_index: item.index,
-                                    price,
-                                },
-                            )
+                            .sell_market_item(&SellMarketItemRequest {
+                                character_id,
+                                recipient_name,
+                                item_index: item.index,
+                                price,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -798,7 +788,6 @@ pub fn SellDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
-    let auth_context = expect_context::<AuthContext>();
     let toaster = expect_context::<Toasts>();
 
     let disabled = Signal::derive(move || selected_item.read().is_empty());
@@ -856,14 +845,11 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .edit_market_item(
-                                &auth_context.token(),
-                                &EditMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                    price,
-                                },
-                            )
+                            .edit_market_item(&EditMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                                price,
+                            })
                             .await
                         {
                             Ok(_) => {
@@ -889,13 +875,10 @@ pub fn ListingDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                 spawn_local({
                     async move {
                         match backend
-                            .buy_market_item(
-                                &auth_context.token(),
-                                &BuyMarketItemRequest {
-                                    character_id,
-                                    item_index: item.index as u32,
-                                },
-                            )
+                            .buy_market_item(&BuyMarketItemRequest {
+                                character_id,
+                                item_index: item.index as u32,
+                            })
                             .await
                         {
                             Ok(response) => {
@@ -1104,6 +1087,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(max_req_level);
     rule_field!(min_power_level);
     rule_field!(min_upgrade_level);
+    rule_field!(min_max_power_shard_level);
     rule_field!(price);
     rule_field!(item_cooldown);
     rule_field!(item_damages);
@@ -1272,7 +1256,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         id="item_damages"
                         label="Min Damage:"
                         input_type="number"
-                        placeholder="Minimum Damage per Second"
+                        placeholder="Minimum Damage per second"
                         bind=item_damages
                     />
                     <ValidatedInput
@@ -1340,6 +1324,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                         placeholder="Minimum Block Percent Chance"
                         bind=item_block
                     />
+                    <ValidatedInput
+                        id="max_power_shard_level"
+                        label="Min Power Shards Unlock Level:"
+                        input_type="number"
+                        placeholder="Minimum Power Shards Unlock Level"
+                        bind=min_max_power_shard_level
+                    />
                 </div>
             </div>
         </div>
@@ -1348,25 +1339,36 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
 #[component]
 pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
-    let stat_filters = filters.get_untracked().stat_filters.map(|stat_effect| {
+    let stat_filters = filters.get_untracked().stat_filters.map(|stat_filter| {
         (
             RwSignal::new(
-                stat_effect
+                stat_filter
                     .as_ref()
-                    .map(|stat_effect| (stat_effect.stat.clone(), stat_effect.modifier)),
+                    .map(|stat_filter| (stat_filter.stat.clone(), stat_filter.modifier)),
             ),
-            RwSignal::new(stat_effect.as_ref().map(|stat_effect| stat_effect.value)),
+            RwSignal::new(
+                stat_filter
+                    .as_ref()
+                    .and_then(|stat_filter| stat_filter.value),
+            ),
+            RwSignal::new(
+                stat_filter
+                    .as_ref()
+                    .map(|stat_filter| stat_filter.exclude)
+                    .unwrap_or_default(),
+            ),
         )
     });
 
     Effect::new(move || {
-        for (i, (stat_type, stat_value)) in stat_filters.iter().enumerate() {
-            filters.write().stat_filters[i] = stat_type.get().map(|(stat, modifier)| StatEffect {
-                stat,
-                modifier,
-                value: stat_value.get().unwrap_or_default(),
-                bypass_ignore: false,
-            })
+        for (i, (stat_type, stat_value, stat_excluded)) in stat_filters.iter().enumerate() {
+            filters.write().stat_filters[i] =
+                stat_type.get().map(|(stat, modifier)| MarketStatFilter {
+                    stat,
+                    modifier,
+                    value: stat_value.get(),
+                    exclude: stat_excluded.get(),
+                })
         }
     });
 
@@ -1376,7 +1378,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
             <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
                 {stat_filters
-                    .map(|(stat_type, stat_value)| {
+                    .map(|(stat_type, stat_value, stat_excluded)| {
                         view! {
                             <div class="flex gap-2 xl:gap-4 items-center">
                                 {move || {
@@ -1390,6 +1392,7 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                                                     on:click=move |_| {
                                                         stat_type.set(None);
                                                         stat_value.set(None);
+                                                        stat_excluded.set(false);
                                                     }
                                                 >
                                                     "❌"
@@ -1416,10 +1419,22 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                                                     <Input
                                                         id="stat_value_1"
                                                         input_type="number"
-                                                        placeholder="Min"
+                                                        placeholder="Value"
                                                         bind=stat_value
                                                     />
                                                 </div>
+                                                <StaticTooltip
+                                                    position=StaticTooltipPosition::Top
+                                                    tooltip=|| {
+                                                        "Require the stat to be absent or below the given value."
+                                                    }
+                                                >
+                                                    <Checkbox
+                                                        label="Exclude".to_string()
+                                                        checked=stat_excluded
+                                                        on_change=move |checked| { stat_excluded.set(checked) }
+                                                    />
+                                                </StaticTooltip>
                                             }
                                         })
                                 }}
@@ -1444,6 +1459,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Armor(Some(ArmorStatType::Fire)), Modifier::Flat),
         (StatType::Armor(Some(ArmorStatType::Poison)), Modifier::Flat),
         (StatType::Armor(Some(ArmorStatType::Storm)), Modifier::Flat),
+        (
+            StatType::Armor(Some(ArmorStatType::Elemental)),
+            Modifier::Flat,
+        ),
         (StatType::Armor(None), Modifier::Increased),
         (StatType::Evade(None), Modifier::Flat),
         (
@@ -1470,6 +1489,18 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    ..Default::default()
+                },
+                damage_type: None,
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::Damage {
+                skill_filter: StatSkillFilter {
                     skill_type: Some(SkillType::Spell),
                     ..Default::default()
                 },
@@ -1478,6 +1509,18 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
                 is_hit: None,
             },
             Modifier::More,
+        ),
+        (
+            StatType::Damage {
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Spell),
+                    ..Default::default()
+                },
+                damage_type: None,
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1491,11 +1534,29 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
+                damage_type: Some(DamageType::Physical),
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::Damage {
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Fire),
                 min_max: None,
                 is_hit: None,
             },
             Modifier::More,
+        ),
+        (
+            StatType::Damage {
+                skill_filter: Default::default(),
+                damage_type: Some(DamageType::Fire),
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::Increased,
         ),
         (
             StatType::Damage {
@@ -1509,13 +1570,34 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
+                damage_type: Some(DamageType::Poison),
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::Damage {
+                skill_filter: Default::default(),
                 damage_type: Some(DamageType::Storm),
                 min_max: None,
                 is_hit: None,
             },
             Modifier::More,
         ),
-        (StatType::CritDamage(Default::default()), Modifier::More),
+        (
+            StatType::Damage {
+                skill_filter: Default::default(),
+                damage_type: Some(DamageType::Storm),
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::CritDamage(Default::default()),
+            Modifier::Increased,
+        ),
         (
             StatType::CritChance(Default::default()),
             Modifier::Increased,
@@ -1529,7 +1611,11 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: Some(StatStatusType::DamageOverTime { damage_type: None }),
+                status_filter: StatStatusFilter {
+                    status_id: None,
+                    damage_type: Some(StatusDamageType::Any),
+                    debuff: None,
+                },
                 skill_filter: Default::default(),
                 min_max: None,
             },
@@ -1537,7 +1623,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusPower {
-                status_type: None,
+                status_filter: Default::default(),
                 skill_filter: StatSkillFilter {
                     skill_type: Some(SkillType::Curse),
                     ..Default::default()
@@ -1548,7 +1634,20 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::StatusDuration {
-                status_type: None,
+                status_filter: StatStatusFilter {
+                    debuff: Some(true),
+                    ..Default::default()
+                },
+                skill_filter: Default::default(),
+            },
+            Modifier::Increased,
+        ),
+        (
+            StatType::StatusDuration {
+                status_filter: StatStatusFilter {
+                    debuff: Some(false),
+                    ..Default::default()
+                },
                 skill_filter: Default::default(),
             },
             Modifier::Increased,
@@ -1556,7 +1655,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::SuccessChance {
                 skill_filter: Default::default(),
-                effect_type: Some(StatSkillEffectType::ApplyStatus { status_type: None }),
+                effect_type: Some(StatSkillEffectType::ApplyStatus {
+                    status_id: None,
+                    debuff: Some(true),
+                }),
             },
             Modifier::Increased,
         ),
@@ -1582,8 +1684,18 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             }),
             Modifier::Increased,
         ),
+        (
+            StatType::ManaCost {
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Spell),
+                    ..Default::default()
+                },
+            },
+            Modifier::Increased,
+        ),
         (StatType::MovementSpeed, Modifier::Increased),
         (StatType::GoldFind, Modifier::More),
+        (StatType::ThreatGain, Modifier::Increased),
         (
             StatType::RestoreOnHit {
                 restore_type: RestoreType::Life,
@@ -1600,6 +1712,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (StatType::SkillLevel(Default::default()), Modifier::Flat),
         (StatType::ItemRarity, Modifier::Increased),
+        (StatType::ItemAreaChance, Modifier::Increased),
         (StatType::ItemLevel, Modifier::Flat),
         (StatType::GemsFind, Modifier::Increased),
     ];

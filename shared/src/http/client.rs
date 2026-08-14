@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
-        item::{ItemCategory, ItemSlot},
+        item::{InventorySortType, ItemCategory, ItemSlot},
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
@@ -80,6 +80,21 @@ pub struct UpdateCharacterRequest {
 pub struct BuyBenedictionsRequest {
     pub character_id: UserCharacterId,
     pub player_benedictions: PlayerBenedictions,
+}
+
+// Skill Masteries
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveFavoriteSkillsRequest {
+    pub character_id: UserCharacterId,
+    pub favorite_skills: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct SaveSkillMasteryUpgradesRequest {
+    pub character_id: UserCharacterId,
+    pub skill_id: String,
+    pub upgrades_bought: HashMap<String, u16>,
 }
 
 // Ascend
@@ -234,4 +249,10 @@ pub struct InventoryUnequipRequest {
 pub struct InventoryDeleteRequest {
     pub character_id: UserCharacterId,
     pub item_indexes: Vec<u8>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct InventorySortRequest {
+    pub character_id: UserCharacterId,
+    pub sort_type: InventorySortType,
 }

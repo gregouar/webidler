@@ -3,6 +3,7 @@ use nutype::nutype;
 use serde::{Deserialize, Serialize};
 
 pub type UserId = uuid::Uuid;
+pub type CharacterId = uuid::Uuid;
 const MAX_LINKED_ITEM_SIZE: usize = 4096;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, PartialOrd, Eq, Hash)]
@@ -20,6 +21,8 @@ pub struct ChatMessage {
 
     pub user_id: Option<UserId>,
     pub username: Option<String>,
+    pub character_id: Option<CharacterId>,
+    pub character_name: Option<String>,
     pub chat_badge: Option<String>,
 
     pub content: String,

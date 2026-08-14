@@ -1,0 +1,633 @@
+{
+    "curse_frailty"     : {
+        "max_level": 100,
+        "upgrades" : {
+            "power"     : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_frailty"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration"  : {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "curse_frailty"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "destroy"   : {
+                "title"       : "Crushing Blow",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "curse_frailty_destroy",
+                            "skill_type": "Other",
+                            "OnHit"     : {
+                                "skill_type": "Attack",
+                                "is_crit"   : true,
+                                "conditions": [
+                                    { "HasStatus": {"status_id": "curse_frailty"} }
+                                ]
+                            },
+                            "target"    : "SameTarget",
+                            "effects"   : [
+                                { "ApplyStatus": {"status_id": "curse_frailty_destroy", "value": 1} }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "open_wound": {
+                "title"       : "Grievous Injury",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : { "StatusPower": {"status_id": "open_wound"} },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_frailty"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_conductivity": {
+        "max_level": 100,
+        "upgrades" : {
+            "power"      : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_conductivity"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration"   : {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "curse_conductivity"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "contact"    : {
+                "title"       : "Superconductor",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id" : "curse_conductivity_contact",
+                            "OnHit"      : {
+                                "damage_type": "Storm",
+                                "conditions" : [
+                                    { "HasStatus": {"status_id": "curse_conductivity"} }
+                                ]
+                            },
+                            "skill_type" : "Other",
+                            "target"     : "SameTarget",
+                            "skill_range": "Any",
+                            "skill_shape": "Contact",
+                            "effects"    : [
+                                {
+                                    "FlatDamage"         : { "damage": {"Storm": 0} },
+                                    "ignore_stat_effects": [
+                                        { "Damage": {"damage_type": "Storm"}                   },
+                                        {                                     "CritChance": {} }
+                                    ]
+                                }
+                            ],
+                            "modifiers"  : [
+                                {
+                                    "stat"    : { "Damage": {"damage_type": "Storm"} },
+                                    "modifier": "Flat",
+                                    "factor"  : 0.4,
+                                    "source"  : {"HitDamage": "Storm"}
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id" : "curse_conductivity_crit",
+                            "OnHit"      : {
+                                "damage_type": "Storm",
+                                "is_crit"    : true,
+                                "conditions" : [
+                                    { "HasStatus": {"status_id": "curse_conductivity"} }
+                                ]
+                            },
+                            "skill_type" : "Other",
+                            "target"     : "SameTarget",
+                            "skill_range": "Any",
+                            "skill_shape": "All",
+                            "effects"    : [
+                                {
+                                    "FlatDamage"         : { "damage": {"Storm": 0} },
+                                    "ignore_stat_effects": [
+                                        { "Damage": {"damage_type": "Storm"}                   },
+                                        {                                     "CritChance": {} }
+                                    ]
+                                }
+                            ],
+                            "modifiers"  : [
+                                {
+                                    "stat"    : { "Damage": {"damage_type": "Storm"} },
+                                    "modifier": "Flat",
+                                    "factor"  : 0.2,
+                                    "source"  : {"HitDamage": "Storm"}
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "crit_damage": {
+                "title"       : "Instable Current",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : {"CritDamage": {}},
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_conductivity"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_putridity"   : {
+        "max_level": 100,
+        "upgrades" : {
+            "power"          : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_putridity"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration"       : {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "curse_putridity"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "hit"            : {
+                "title"       : "Brittle Bones",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "curse_putridity_hit",
+                            "OnHit"     : {
+                                "damage_type": "Physical",
+                                "is_hurt"    : true,
+                                "conditions" : [
+                                    { "HasStatus": {"status_id": "curse_putridity"                         } },
+                                    { "HasStatus": {                                "damage_type": "Poison"} }
+                                ]
+                            },
+                            "skill_type": "Other",
+                            "target"    : "SameTarget",
+                            "effects"   : [
+                                {
+                                    "FlatDamage"         : { "damage": {"Physical": 0} },
+                                    "ignore_stat_effects": [
+                                        {"CritChance": {}},
+                                        {"CritDamage": {}},
+                                        { "Damage": {"skill_type": null, "damage_type": "Poison", "min_max": null} }
+                                    ]
+                                }
+                            ],
+                            "modifiers" : [
+                                {
+                                    "stat"    : { "Damage": {"damage_type": "Physical"} },
+                                    "modifier": "Flat",
+                                    "factor"  : 0.25,
+                                    "source"  : { "StatusValue": {"damage_type": "Poison"} }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "poison_duration": {
+                "title"       : "Lasting Agony",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : { "StatusDuration": {"status_id": "poison"} },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_putridity"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_flammability": {
+        "max_level": 100,
+        "upgrades" : {
+            "power"      : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 3,
+                        "upgrade_value": 3,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_flammability"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration"   : {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "curse_flammability"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "extra_burn" : {
+                "title"       : "Combustible",
+                "base_cost"   : 10,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id"   : "curse_flammability_extra_burn",
+                            "skill_type"   : "Other",
+                            "OnApplyStatus": {
+                                "status_id"   : "burn",
+                                "is_triggered": false,
+                                "conditions"  : [
+                                    { "HasStatus": {"status_id": "curse_flammability"} }
+                                ]
+                            },
+                            "target"       : "SameTarget",
+                            "effects"      : [
+                                {
+                                    "success_chance"     : 10,
+                                    "ApplyStatus"        : {"status_id": "burn", "value": 0},
+                                    "ignore_stat_effects": [ {"StatusPower": {}}, {"Damage": {}} ],
+                                    "description"        : "Apply an extra Stack of Burn"
+                                }
+                            ],
+                            "modifiers"    : [
+                                {
+                                    "stat"    : {
+                                        "Damage": {
+                                            "skill_type" : null,
+                                            "skill_id"   : null,
+                                            "damage_type": null,
+                                            "min_max"    : null,
+                                            "is_hit"     : null
+                                        }
+                                    },
+                                    "modifier": "Flat",
+                                    "factor"  : 1,
+                                    "source"  : {
+                                        "StatusValue": {
+                                            "status_id"  : "burn",
+                                            "damage_type": null,
+                                            "debuff"     : null,
+                                            "skill_type" : null
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "burn_stacks": {
+                "title"       : "Kindle",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : { "StatusStacks": {"status_id": "burn"} },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_flammability"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Flat",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_weakness"    : {
+        "max_level": 100,
+        "upgrades" : {
+            "power"   : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_weakness"} },
+                            "modifier": "Flat"
+                        }
+                    }
+                ]
+            },
+            "duration": {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "curse_weakness"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "clumsy"  : {
+                "title"       : "Clumsiness",
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "SkillEffect"  : { "ApplyStatus": {"status_id": "curse_clumsy", "value": 100} }
+                    }
+                ]
+            },
+            "debuff"  : {
+                "title"       : "Debilitation",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "SkillConditionalModifier": {
+                                    "stat"      : {
+                                        "SuccessChance": {
+                                            "effect_type": { "ApplyStatus": {"debuff": true} }
+                                        }
+                                    },
+                                    "skill_type": null,
+                                    "skill_id"  : null,
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_weakness"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Increased",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "curse_vampirism"   : {
+        "max_level": 100,
+        "upgrades" : {
+            "power"       : {
+                "title"       : "Curse Effects",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 100,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusPower": {"status_id": "curse_vampirism"} },
+                            "modifier": "Flat"
+                        },
+                        "hidden"       : true
+                    },
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 1,
+                        "StatEffect"   : { "stat": {"Description": "Gain +0.1 additional Life"}, "modifier": "Flat" }
+                    }
+                ]
+            },
+            "duration"    : {
+                "title"       : "Duration",
+                "base_cost"   : 1,
+                "upgrade_cost": 1,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 5,
+                        "upgrade_value": 5,
+                        "StatEffect"   : {
+                            "stat"    : { "StatusDuration": {"status_id": "curse_vampirism"} },
+                            "modifier": "Increased"
+                        }
+                    }
+                ]
+            },
+            "damage"      : {
+                "title"       : "Messy Work",
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
+                "effects"     : [
+                    {
+                        "value"        : 1,
+                        "upgrade_value": 0,
+                        "Trigger"      : {
+                            "trigger_id": "curse_vampirism_damage",
+                            "skill_type": "Other",
+                            "OnHit"     : {"skill_type": "Attack", "is_hurt": true},
+                            "target"    : "Me",
+                            "effects"   : [
+                                { "ApplyStatus": {"status_id": "curse_vampirism_damage", "value": 1} }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "damage_bleed": {
+                "title"       : "Bloodlust",
+                "base_cost"   : 5,
+                "upgrade_cost": 5,
+                "max_level"   : 10,
+                "effects"     : [
+                    {
+                        "value"        : 20,
+                        "upgrade_value": 20,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat"      : {
+                                        "SkillConditionalModifier": {
+                                            "stat"      : {"Damage": {}},
+                                            "skill_type": null,
+                                            "skill_id"  : null,
+                                            "conditions": [
+                                                { "HasStatus": {"status_id": "bleed"} }
+                                            ]
+                                        }
+                                    },
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_vampirism"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

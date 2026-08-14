@@ -1,11 +1,11 @@
 use std::{collections::HashSet, sync::Arc, time::Duration};
 
-use leptos::{portal::Portal, prelude::*, web_sys};
+use leptos::{html::Div, portal::Portal, prelude::*, web_sys};
 use leptos_use::on_click_outside;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
+    item::{InventorySortType, ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -15,7 +15,11 @@ use crate::{
         accessibility::AccessibilityContext,
         chat::chat_context::ChatContext,
         events::{EventsContext, Key},
-        shared::{item_card::ItemCard, tooltips::ItemTooltip},
+        shared::{
+            item_card::ItemCard,
+            resources::{ResourceReward, ResourceRewardOverlay},
+            tooltips::ItemTooltip,
+        },
         ui::{
             buttons::{CloseButton, MenuButton},
             card::{CardInset, CardTitle, MenuCard},
@@ -57,7 +61,9 @@ pub struct InventoryConfig {
     pub on_sheathe: Option<Arc<dyn Fn(ItemSlot) + Send + Sync>>,
     pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
+    pub on_sort: Option<Arc<dyn Fn(InventorySortType) + Send + Sync>>,
     pub sell_type: SellType,
+    pub sell_reward: RwSignal<ResourceReward>,
     pub max_item_level: Signal<AreaLevel>,
     pub equip_filter: Signal<InventoryEquipFilter>,
 }
@@ -363,24 +369,25 @@ pub fn EquippedItemContextMenu(
                 .on_sheathe
                 .clone()
                 .and_then(|on_sheathe| {
-                    is_weapon.then(|| {
-                        view! {
-                            <ActionMenuRow
-                                label_signal=Signal::derive(move || {
-                                    if is_sheathed.get() {
-                                        "Unsheathe".to_string()
-                                    } else {
-                                        "Sheathe".to_string()
+                    is_weapon
+                        .then(|| {
+                            view! {
+                                <ActionMenuRow
+                                    label_signal=Signal::derive(move || {
+                                        if is_sheathed.get() {
+                                            "Unsheathe".to_string()
+                                        } else {
+                                            "Sheathe".to_string()
+                                        }
+                                    })
+                                    tone=ActionMenuTone::Skill
+                                    on_click=move || {
+                                        on_sheathe(item_slot);
+                                        on_close.run(());
                                     }
-                                })
-                                tone=ActionMenuTone::Skill
-                                on_click=move || {
-                                    on_sheathe(item_slot);
-                                    on_close.run(());
-                                }
-                            />
-                        }
-                    })
+                                />
+                            }
+                        })
                 })}
             {inventory
                 .on_unequip
@@ -424,6 +431,9 @@ pub fn EquippedItemContextMenu(
 
 #[component]
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
+    let next_sort_type = RwSignal::new(InventorySortType::Rarity);
+    let sell_queue: SellQueue = expect_context();
+
     view! {
         // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
         <MenuCard class="h-full w-[70%]">
@@ -439,6 +449,33 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                             )
                         }}
                     </span>
+                    {inventory
+                        .on_sort
+                        .clone()
+                        .map(|on_sort| {
+                            view! {
+                                <MenuButton on:click=move |_| {
+                                    let sort_type = next_sort_type.get_untracked();
+                                    sell_queue.write().drain();
+                                    on_sort(sort_type);
+                                    next_sort_type
+                                        .set(
+                                            match sort_type {
+                                                InventorySortType::Rarity => InventorySortType::ItemType,
+                                                InventorySortType::ItemType => InventorySortType::ItemLevel,
+                                                InventorySortType::ItemLevel => InventorySortType::Rarity,
+                                            },
+                                        );
+                                }>"Sort"// {move || {
+                                // match next_sort_type.get() {
+                                // InventorySortType::Rarity => "Sort: Rarity",
+                                // InventorySortType::ItemType => "Sort: Type",
+                                // InventorySortType::ItemLevel => "Sort: Level",
+                                // }
+                                // }}
+                                </MenuButton>
+                            }
+                        })}
                 </div>
 
                 // {inventory
@@ -933,31 +970,58 @@ fn ActionMenuRow(
 #[component]
 fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
     inventory.on_sell.map(|on_sell| {
+        let button_ref = NodeRef::<Div>::new();
         let disabled = Signal::derive({
             let sell_queue = expect_context::<SellQueue>();
             move || sell_queue.read().is_empty()
         });
+        let reward_position = move || {
+            let _ = inventory.sell_reward.get();
+            button_ref
+                .get()
+                .map(|button| {
+                    let rect = button.get_bounding_client_rect();
+                    format!(
+                        "left:{}px; top:{}px; width:{}px; height:{}px;",
+                        rect.left(),
+                        rect.top(),
+                        rect.width(),
+                        rect.height(),
+                    )
+                })
+                .unwrap_or_else(|| "display:none;".to_string())
+        };
         view! {
-            <MenuButton
-                on:click={
-                    let sell_queue = expect_context::<SellQueue>();
-                    move |_| { on_sell(sell_queue.write().drain().map(|x| x as u8).collect()) }
-                }
-                disabled=disabled
-            >
-                <span class="inline xl:hidden">
-                    {match inventory.sell_type {
-                        SellType::Sell => "Sell all",
-                        SellType::Discard => "Discard all",
-                    }}
-                </span>
-                <span class="hidden xl:inline font-variant:small-caps">
-                    {match inventory.sell_type {
-                        SellType::Sell => "Sell all marked items",
-                        SellType::Discard => "Discard all marked items",
-                    }}
-                </span>
-            </MenuButton>
+            <div node_ref=button_ref class="relative overflow-visible">
+                <MenuButton
+                    on:click={
+                        let sell_queue = expect_context::<SellQueue>();
+                        move |_| { on_sell(sell_queue.write().drain().map(|x| x as u8).collect()) }
+                    }
+                    disabled=disabled
+                >
+                    <span class="inline xl:hidden">
+                        {match inventory.sell_type {
+                            SellType::Sell => "Sell all",
+                            SellType::Discard => "Discard all",
+                        }}
+                    </span>
+                    <span class="hidden xl:inline font-variant:small-caps">
+                        {match inventory.sell_type {
+                            SellType::Sell => "Sell all marked items",
+                            SellType::Discard => "Discard all marked items",
+                        }}
+                    </span>
+                </MenuButton>
+                <Portal>
+                    <div
+                        class="fixed z-50 pointer-events-none overflow-visible"
+                        style=reward_position
+                    >
+                        <ResourceRewardOverlay reward=inventory.sell_reward />
+                    </div>
+                </Portal>
+            </div>
         }
     })
 }

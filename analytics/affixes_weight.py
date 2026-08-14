@@ -1,6 +1,6 @@
 import pandas as pd
 
-TIER_WEIGHTS = [1000, 1000, 1000, 1000, 1000, 900, 800, 700, 600, 500]
+TIER_WEIGHTS = [1000, 1000, 1000, 1000, 1000, 900, 800, 400, 200, 100]
 # TIER_WEIGHTS = [1000] * 10
 TIER_LEVELS = [1, 50, 100, 150, 200, 260, 330, 410, 500, 600]
 
@@ -14,6 +14,7 @@ def tweak_weight(area_level: int, tier_level: int, tier_weight: int) -> float:
         return 0.0
     delta = area_level - tier_level
     factor = 1.0 + delta * pow(tier_level, TIER_TWEAK_FACTOR) / 10_000.0
+    # factor = 1.0 + delta * tier_level / 10_000.0
     return tier_weight * factor
 
 
