@@ -470,6 +470,7 @@ fn handle_area_completed_event(
     if game_data.area_specs.can_reward_shards()
         && (area_state.area_level > area_state.max_power_shard_level_ever)
         && (area_state.area_level).is_multiple_of(POWER_SHARD_LEVELS_NEEDED)
+        && area_state.area_level <= game_data.area_specs.max_power_shard_level
     {
         area_state.max_power_shard_level_ever = area_level;
         game_data.player_resources.mutate().shards += 1.0;
