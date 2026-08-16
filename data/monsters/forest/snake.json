@@ -17,7 +17,7 @@
                 "damage": { "Physical": [2, 4] }
               }
             },
-            { "ApplyStatus": {"status_id": "poison", "value": 4, "escalation": 20} }
+            { "ApplyStatus": {"status_id": "poison", "value": 3, "escalation": 20} }
           ]
         }
       ]

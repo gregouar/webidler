@@ -37,7 +37,7 @@
         {
           "range"  : "Distance",
           "effects": [
-            { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 5, "escalation": 20} },
+            { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 3, "escalation": 20} },
             {
               "FlatDamage": {
                 "damage": { "Physical": [2, 6] }
