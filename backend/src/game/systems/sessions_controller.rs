@@ -4,7 +4,7 @@ use anyhow::{Result, anyhow};
 
 use chrono::Utc;
 use shared::{
-    constants::MAX_PLAYER_STAMINA,
+    constants::{DEFAULT_SKILL_SLOTS, MAX_PLAYER_STAMINA, MAX_SKILL_SLOTS},
     data::{
         area::{AreaLevel, StartAreaConfig},
         item::ItemRarity,
@@ -213,6 +213,13 @@ async fn new_game_instance(
         &player_benedictions,
         &BenedictionEffect::StartingLevel,
     ) as usize;
+    let extra_skill_slots = benedictions_controller::find_benediction_value(
+        &master_store.benedictions_store,
+        &player_benedictions,
+        &BenedictionEffect::SkillSlots,
+    )
+    .clamp(0.0, (MAX_SKILL_SLOTS - DEFAULT_SKILL_SLOTS) as f64) as u8;
+    let max_skills = DEFAULT_SKILL_SLOTS + extra_skill_slots;
 
     let player_base_specs = player_updater::init_player_base_specs(
         character.character_name,
@@ -224,6 +231,7 @@ async fn new_game_instance(
         )
         .into(),
         player_skill_masteries,
+        max_skills,
     );
 
     let map_item = match area_config.map_item_index {
@@ -295,10 +303,6 @@ async fn new_game_instance(
         &mut game_data.player_state,
         &mut game_data.player_controller,
     );
-
-    if game_data.player_base_specs.read().skills.is_empty() {
-        game_data.player_base_specs.mutate().buy_skill_cost = 0.0;
-    }
 
     db::game_instances::save_game_instance_data(
         db_pool,

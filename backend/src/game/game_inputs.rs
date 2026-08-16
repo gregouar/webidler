@@ -97,12 +97,11 @@ fn handle_client_message(
             }
         }
         ClientMessage::BuySkill(m) => {
-            player_controller::buy_skill(
+            player_controller::add_skill(
                 &master_store.skills_store,
                 game_data.player_base_specs.mutate(),
                 &mut game_data.player_state,
                 &mut game_data.player_controller,
-                game_data.player_resources.mutate(),
                 &m.skill_id,
             );
         }

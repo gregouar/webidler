@@ -22,6 +22,8 @@ pub struct PlayerBaseSpecs {
     pub character_attrs: CharacterAttrs,
     pub effects: Vec<StatEffect>,
 
+    // Kept for backwards-compatible game-instance deserialization. Skills no longer cost gold.
+    // TODO: Remove in later game data version
     pub buy_skill_cost: f64,
     pub max_skills: u8,
     pub skills: IndexMap<String, PlayerBaseSkill>,

@@ -32,6 +32,7 @@ pub struct BenedictionSpecs {
 pub enum BenedictionEffect {
     StartingGold,
     StartingLevel,
+    SkillSlots,
     StatEffect { stat: StatType, modifier: Modifier },
 }
 

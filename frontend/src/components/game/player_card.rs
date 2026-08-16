@@ -4,7 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::{
     computations::{player_level_up_cost, skill_cost_increase},
-    constants::MAX_SKILL_LEVEL,
+    constants::{MAX_SKILL_LEVEL, MAX_SKILL_SLOTS},
     messages::client::{
         LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
     },
@@ -243,9 +243,13 @@ pub fn PlayerCard() -> impl IntoView {
         let (skill_count, max_skills) = skill_capacity.get();
         skill_count.min(max_skills)
     });
-    let can_buy_skill = Memo::new(move |_| {
+    let empty_skill_slot_count = Memo::new(move |_| {
         let (skill_count, max_skills) = skill_capacity.get();
-        skill_count < max_skills
+        max_skills.saturating_sub(skill_count)
+    });
+    let locked_skill_slot_count = Memo::new(move |_| {
+        let (_, max_skills) = skill_capacity.get();
+        (MAX_SKILL_SLOTS as usize).saturating_sub(max_skills)
     });
 
     let character_triggers = Memo::new(move |_| {
@@ -378,9 +382,12 @@ pub fn PlayerCard() -> impl IntoView {
                 <For each=move || { 0..visible_skill_count.get() } key=|i| *i let(i)>
                     <PlayerSkill index=i is_dead />
                 </For>
-                <Show when=move || can_buy_skill.get()>
-                    <BuySkillButton />
-                </Show>
+                <For each=move || { 0..empty_skill_slot_count.get() } key=|i| *i let(_)>
+                    <EmptySkillSlotButton locked=false />
+                </For>
+                <For each=move || { 0..locked_skill_slot_count.get() } key=|i| *i let(_)>
+                    <EmptySkillSlotButton locked=true />
+                </For>
             </div>
         </Card>
     }
@@ -409,29 +416,34 @@ pub fn PlayerName() -> impl IntoView {
 }
 
 #[component]
-fn BuySkillButton() -> impl IntoView {
+fn EmptySkillSlotButton(locked: bool) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
-    let buy_skill_cost = Memo::new(move |_| game_context.player_base_specs.read().buy_skill_cost);
-
-    let disable_buy_skill =
-        Memo::new(move |_| buy_skill_cost.get() > game_context.player_resources.read().gold);
-
-    let buy_skill_cost_tooltip = move || {
-        view! {
-            <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
-                <span class="font-semibold text-white">{"Buy Cost"}</span>
-                <span class="text-zinc-300">
-                    <Number class:font-semibold value=buy_skill_cost />
-                    " Gold"
-                </span>
-            </div>
+    let skill_slot_tooltip = move || {
+        if locked {
+            view! {
+                <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
+                    <span class="font-semibold text-white">{"Locked Skill Slot"}</span>
+                    <span class="text-zinc-300">
+                        {"Unlock this Skill Slot at the Temple in Town."}
+                    </span>
+                </div>
+            }
+            .into_any()
+        } else {
+            view! {
+                <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
+                    <span class="font-semibold text-white">{"Empty Skill Slot"}</span>
+                    <span class="text-zinc-300">{"Select a Skill for this Slot."}</span>
+                </div>
+            }
+            .into_any()
         }
     };
 
     view! {
         <div class="flex flex-col  xl:gap-1">
-            <StaticTooltip tooltip=buy_skill_cost_tooltip position=StaticTooltipPosition::Top>
+            <StaticTooltip tooltip=skill_slot_tooltip position=StaticTooltipPosition::Top>
                 <button
                     class="btn w-full h-full
                     hover:brightness-125
@@ -439,7 +451,7 @@ fn BuySkillButton() -> impl IntoView {
                     disabled:brightness-75 disabled:saturate-10 disabled:opacity-40
                     "
                     on:click=move |_| game_context.open_skills.set(true)
-                    disabled=disable_buy_skill
+                    disabled=locked
                 >
                     <CircularProgressBar
                         bar_color=SKILL_PROGRESS_RING_COLOR
