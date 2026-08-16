@@ -12,7 +12,8 @@ pub fn BossAreaIcon() -> impl IntoView {
                     <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
                         <div class="font-semibold text-white">"Boss Area"</div>
                         <div class="text-sm text-zinc-300">
-                            "Defeat the Boss Minions, then fight the Boss repeatedly for a chance at unique rewards."
+                            // "Defeat the Boss Minions, then fight the Boss repeatedly for a chance at unique rewards."
+                            "Defeat the Boss Minions, then fight the Boss for a chance at unique rewards."
                         </div>
                     </div>
                 }

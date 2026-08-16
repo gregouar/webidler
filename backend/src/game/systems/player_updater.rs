@@ -1,7 +1,7 @@
 use std::{collections::HashMap, time::Duration};
 
 use shared::{
-    constants::{DEFAULT_MAX_LEVEL, PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST},
+    constants::{DEFAULT_MAX_LEVEL, PLAYER_LIFE_PER_LEVEL},
     data::{
         area::{AreaLevel, AreaSpecs, AreaThreat},
         chance::{Chance, ChanceRange},
@@ -50,6 +50,7 @@ pub fn init_player_base_specs(
     max_area_level: AreaLevel,
     effects: Vec<StatEffect>,
     skill_masteries: PlayerSkillMasteries,
+    max_skills: u8,
 ) -> PlayerBaseSpecs {
     PlayerBaseSpecs {
         max_area_level,
@@ -62,8 +63,8 @@ pub fn init_player_base_specs(
         },
         character_attrs: base_player_character_attrs(1),
         effects,
-        max_skills: 4,
-        buy_skill_cost: SKILL_BASE_COST,
+        max_skills,
+        buy_skill_cost: 0.0,
         skills: Default::default(),
         level: 1,
         experience_needed: 20.0,

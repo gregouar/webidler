@@ -15,10 +15,7 @@ use crate::components::{
     data_context::DataContext,
     game::{game_context::GameContext, websocket::WebsocketContext},
     settings::{GraphicsQuality, SettingsContext},
-    shared::{
-        resources::GoldCounter,
-        skills::{SkillBadge, skill_specs_with_mastery},
-    },
+    shared::skills::{SkillBadge, skill_specs_with_mastery},
     ui::{
         buttons::FancyButton,
         card::{CardHeader, CardInset, MenuCard},
@@ -31,7 +28,7 @@ pub fn SkillsPanel(open: RwSignal<bool>) -> impl IntoView {
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
             <MenuCard class="max-w-6xl mx-auto">
-                <CardHeader title="Buy New Skill" on_close=move || open.set(false) />
+                <CardHeader title="Select New Skill" on_close=move || open.set(false) />
                 // flex-1 overflow-auto max-h-[65vh]
                 <SkillShop open=open />
             </MenuCard>
@@ -54,7 +51,7 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         })
     });
 
-    let buy_skill = {
+    let select_skill = {
         let conn = expect_context::<WebsocketContext>();
         move |_| {
             if let Some(skill_id) = selected_skill.get() {
@@ -244,19 +241,16 @@ pub fn SkillShop(open: RwSignal<bool>) -> impl IntoView {
         </CardInset>
 
         <div class="flex items-center justify-center">
-            <FancyButton disabled=disable_confirm on:click=buy_skill class="py-2 px-4">
+            <FancyButton disabled=disable_confirm on:click=select_skill class="py-2 px-4">
                 <span class="flex items-center gap-2 text-zinc-300">
-                    "Confirm buying "
+                    "Confirm select "
                     {move || {
                         selected_skill_name
                             .get()
                             .map(|skill_name| {
                                 view! { <span class="font-display text-white">{skill_name}</span> }
                             })
-                    }} " for"
-                    <GoldCounter value=Signal::derive(move || {
-                        game_context.player_base_specs.read().buy_skill_cost
-                    }) />
+                    }}
                 </span>
             </FancyButton>
         </div>

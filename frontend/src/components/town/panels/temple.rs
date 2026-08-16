@@ -325,6 +325,7 @@ fn BenedictionCategorySection(
         }
     };
     let benedictions = category_specs.benedictions.clone();
+    let max_upgrade_level = category_specs.max_upgrade_level;
 
     view! {
         <section class="w-full min-w-0">
@@ -398,6 +399,7 @@ fn BenedictionCategorySection(
                         category_id=category_id.clone()
                         benediction_id
                         benediction_specs
+                        max_upgrade_level
                         player_benedictions
                         view_only
                     />
@@ -412,6 +414,7 @@ fn BenedictionRow(
     category_id: String,
     benediction_id: String,
     benediction_specs: BenedictionSpecs,
+    max_upgrade_level: Option<u64>,
     player_benedictions: RwSignal<PlayerBenedictions>,
     view_only: bool,
 ) -> impl IntoView {
@@ -536,6 +539,7 @@ fn BenedictionRow(
                             <EffectDescription
                                 benediction_specs=benediction_specs.clone()
                                 upgrade_level=Signal::derive(move || upgrade_level.get())
+                                max_upgrade_level
                             />
                         </div>
 
@@ -546,6 +550,7 @@ fn BenedictionRow(
                                 upgrade_level=Signal::derive(move || {
                                     upgrade_level.get().saturating_add(1)
                                 })
+                                max_upgrade_level
                             />
                         </div>
                     </div>
@@ -590,6 +595,7 @@ pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> Strin
     match benediction_effect {
         BenedictionEffect::StartingGold => "Starting Gold".to_string(),
         BenedictionEffect::StartingLevel => "Starting Level".to_string(),
+        BenedictionEffect::SkillSlots => "Skill Slots".to_string(),
         BenedictionEffect::StatEffect { stat, .. } => {
             effects_tooltip::format_multiplier_stat_name(stat)
         }
@@ -600,6 +606,7 @@ pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> Strin
 pub fn EffectDescription(
     benediction_specs: BenedictionSpecs,
     upgrade_level: Signal<u64>,
+    max_upgrade_level: Option<u64>,
 ) -> impl IntoView {
     let value = {
         let benediction_specs = benediction_specs.clone();
@@ -609,6 +616,13 @@ pub fn EffectDescription(
     view! {
         <ul class="text-xs xl:text-sm text-amber-100 break-words">
             {move || {
+                if max_upgrade_level
+                    .map(|max_upgrade_level| upgrade_level.get() > max_upgrade_level)
+                    .unwrap_or(false)
+                {
+                    return view! { <li class="text-zinc-400">"Max Level"</li> }.into_any();
+                }
+
                 value()
                     .map(|value| match benediction_specs.effect.clone() {
                         BenedictionEffect::StartingGold => {
@@ -624,6 +638,12 @@ pub fn EffectDescription(
                                 {effects_tooltip::effect_li(
                                     format!("+{:0} Starting Player Level", value),
                                 )}
+                            }
+                                .into_any()
+                        }
+                        BenedictionEffect::SkillSlots => {
+                            view! {
+                                {effects_tooltip::effect_li(format!("+{:0} Skill Slots", value))}
                             }
                                 .into_any()
                         }

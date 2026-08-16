@@ -3,7 +3,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use shared::{
     computations,
-    constants::{PLAYER_LIFE_PER_LEVEL, SKILL_BASE_COST, SKILL_BASE_COST_FACTOR},
+    constants::PLAYER_LIFE_PER_LEVEL,
     data::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
@@ -286,6 +286,7 @@ pub fn equip_item_from_bag(
         equip_weapon(
             &master_store.skills_store,
             player_base_specs,
+            player_inventory,
             player_state,
             player_controller,
             slot,
@@ -340,7 +341,7 @@ pub fn toggle_sheathe_item(
         return Err(AppError::UserError("item is not a weapon".into()));
     };
 
-    if !player_inventory.sheathed.remove(&item_slot) {
+    if !player_inventory.sheathed.contains(&item_slot) {
         player_inventory.sheathed.insert(item_slot);
         unequip_weapon(
             player_base_specs,
@@ -348,15 +349,18 @@ pub fn toggle_sheathe_item(
             player_controller,
             item_slot,
         )
-    } else {
-        equip_weapon(
-            skills_store,
-            player_base_specs,
-            player_state,
-            player_controller,
-            item_slot,
-            item_specs.modifiers.level,
-        );
+    } else if !equip_weapon(
+        skills_store,
+        player_base_specs,
+        player_inventory,
+        player_state,
+        player_controller,
+        item_slot,
+        item_specs.modifiers.level,
+    ) {
+        return Err(AppError::UserError(
+            "No empty Skill Slot is available.".into(),
+        ));
     }
 
     Ok(())
@@ -403,16 +407,25 @@ pub fn init_skills_from_inventory(
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
 ) {
-    for (item_slot, equipped_item) in player_inventory.equipped_items() {
-        if equipped_item.weapon_specs.is_some() && !player_inventory.sheathed.contains(&item_slot) {
-            equip_weapon(
+    let weapons = player_inventory
+        .equipped_items()
+        .filter(|(_, equipped_item)| equipped_item.weapon_specs.is_some())
+        .map(|(item_slot, equipped_item)| (item_slot, equipped_item.modifiers.level))
+        .collect::<Vec<_>>();
+
+    for (item_slot, item_level) in weapons {
+        if !player_inventory.sheathed.contains(&item_slot)
+            && !equip_weapon(
                 skills_store,
                 player_base_specs,
+                player_inventory,
                 player_state,
                 player_controller,
                 item_slot,
-                equipped_item.modifiers.level,
-            );
+                item_level,
+            )
+        {
+            player_inventory.sheathed.insert(item_slot);
         }
     }
 }
@@ -443,15 +456,16 @@ fn unequip_weapon(
 fn equip_weapon(
     skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
+    player_inventory: &mut PlayerInventory,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
     item_slot: ItemSlot,
     item_level: u16,
-) {
+) -> bool {
     if let Some((skill_id, base_skill_specs)) =
         items_controller::make_weapon_skill(skills_store, item_slot, item_level)
     {
-        equip_base_skill(
+        if equip_base_skill(
             player_base_specs,
             player_state,
             player_controller,
@@ -459,7 +473,15 @@ fn equip_weapon(
             base_skill_specs,
             true,
             Some(item_slot),
-        );
+        ) {
+            player_inventory.sheathed.remove(&item_slot);
+            true
+        } else {
+            player_inventory.sheathed.insert(item_slot);
+            false
+        }
+    } else {
+        true
     }
 }
 
@@ -471,7 +493,11 @@ pub fn equip_base_skill(
     base_skill_specs: BaseSkillSpecs,
     auto_use: bool,
     item_slot: Option<ItemSlot>,
-) {
+) -> bool {
+    if player_base_specs.skills.len() >= player_base_specs.max_skills as usize {
+        return false;
+    }
+
     let index = if item_slot.is_some() {
         0
     } else {
@@ -498,6 +524,8 @@ pub fn equip_base_skill(
         .auto_skills
         .mutate()
         .insert(index, auto_use);
+
+    true
 }
 
 pub fn unequip_base_skill(
@@ -522,18 +550,14 @@ pub fn unequip_base_skill(
     }
 }
 
-pub fn buy_skill(
+pub fn add_skill(
     skills_store: &SkillsStore,
     player_base_specs: &mut PlayerBaseSpecs,
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
-    player_resources: &mut PlayerResources,
     skill_id: &str,
 ) -> bool {
-    if player_resources.gold < player_base_specs.buy_skill_cost
-        || player_base_specs.skills.len() >= player_base_specs.max_skills as usize
-        || player_base_specs.skills.contains_key(skill_id)
-    {
+    if player_base_specs.skills.contains_key(skill_id) {
         return false;
     }
 
@@ -548,15 +572,7 @@ pub fn buy_skill(
             base_skill_specs.clone(),
             true,
             None,
-        );
-        player_resources.gold -= player_base_specs.buy_skill_cost;
-        player_base_specs.buy_skill_cost = (if player_base_specs.buy_skill_cost > 0.0 {
-            player_base_specs.buy_skill_cost * SKILL_BASE_COST_FACTOR
-        } else {
-            SKILL_BASE_COST * SKILL_BASE_COST_FACTOR
-        })
-        .round();
-        true
+        )
     } else {
         false
     }

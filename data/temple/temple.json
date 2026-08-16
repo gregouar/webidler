@@ -1,5 +1,14 @@
 {
-  "quickstart": {
+  "skill_slots": {
+    "title"                : "Skill Slots",
+    "price"                : 100,
+    "price_increase_factor": 1e8,
+    "max_upgrade_level"    : 3,
+    "benedictions"         : {
+      "extra_skill_slots": {"value": 1, "effect": "SkillSlots", "upgrade_value": 1, "upgrade_modifier": "Flat"}
+    }
+  },
+  "quickstart" : {
     "title"                : "Quickstart",
     "price"                : 1e5,
     "price_increase_factor": 1e5,
@@ -9,7 +18,7 @@
       "starting_level": {"value":   1, "effect": "StartingLevel", "upgrade_value":   1, "upgrade_modifier": "Flat"}
     }
   },
-  "attributes": {
+  "attributes" : {
     "title"                : "Attributes",
     "price"                : 1e6,
     "price_increase_factor": 6,
@@ -29,7 +38,7 @@
       }
     }
   },
-  "defenses"  : {
+  "defenses"   : {
     "title"                : "Defenses",
     "price"                : 1e7,
     "price_increase_factor": 6,
@@ -69,7 +78,7 @@
       }
     }
   },
-  "damages"   : {
+  "damages"    : {
     "title"                : "Damages",
     "price"                : 1e8,
     "price_increase_factor": 6,
