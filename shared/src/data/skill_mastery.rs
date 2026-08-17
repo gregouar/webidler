@@ -13,6 +13,7 @@ use crate::{
         skill::{ModifierEffect, SkillEffect, SkillTargetsGroup},
         stat_effect::{StatEffect, StatType},
         trigger::TriggerSpecs,
+        values::NonNegative,
     },
 };
 
@@ -75,6 +76,8 @@ pub enum SkillMasteryUpgradeEffectType {
         // TODO: Turn into StatEffect instead?
         old_status_id: StatusId,
         new_status_id: StatusId,
+        #[serde(default)]
+        display_value: Option<NonNegative>,
     },
     Trigger(TriggerSpecs),
 }

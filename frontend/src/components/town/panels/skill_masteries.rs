@@ -971,11 +971,11 @@ fn format_mastery_upgrade_effect(
         SkillMasteryUpgradeEffectType::Trigger(trigger_specs) => Some(
             trigger_tooltip::format_trigger(trigger_specs.clone(), false, None, None).into_any(),
         ),
-        SkillMasteryUpgradeEffectType::ReplaceStatusId { old_status_id, new_status_id } => {
+        SkillMasteryUpgradeEffectType::ReplaceStatusId { old_status_id, new_status_id,display_value } => {
             let old_status_str = data_context.status_name(old_status_id);
             let new_status_str = data_context.status_name(new_status_id);
             let status_specs = data_context.statuses_specs.read().get(new_status_id).cloned()?;
-            let value: ModifiableValue<_> = NonNegative::new(100.0).into();
+            let value: ModifiableValue<_> = display_value.unwrap_or(NonNegative::new(100.0)).into();
             Some(view! {
                 <EffectLi>"Apply "{new_status_str}" instead of "{old_status_str}</EffectLi>
                 {status_tooltip::format_status_effects(

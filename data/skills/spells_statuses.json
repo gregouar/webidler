@@ -8,7 +8,7 @@
         "duration"   : 2,
         "max_stacks" : 1,
         "effects"    : [
-            { "DamageOverTime": {"damage_type": "Fire"}, "value": 5, "modifier": "Percent" }
+            { "DamageOverTime": {"damage_type": "Fire"}, "value": 100, "modifier": "Percent" }
         ]
     },
     "righteous_fire_self"       : {
@@ -31,7 +31,7 @@
         "duration"   : 2,
         "max_stacks" : 1,
         "effects"    : [
-            { "DamageOverTime": {"damage_type": "Poison"}, "value": 5, "modifier": "Percent" }
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
         ]
     },
     "unrighteous_fire_self"     : {

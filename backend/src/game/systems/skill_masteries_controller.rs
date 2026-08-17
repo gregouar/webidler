@@ -176,6 +176,7 @@ pub fn apply_skill_mastery(
             SkillMasteryUpgradeEffectType::ReplaceStatusId {
                 old_status_id,
                 new_status_id,
+                display_value: _,
             } => {
                 for skill_effect in skill_specs.targets.iter_mut().flat_map(|target| target.effects.iter_mut()) {
                     if let SkillEffectType::ApplyStatus{status_id, .. } = &mut skill_effect.effect_type && *status_id == *old_status_id {

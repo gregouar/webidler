@@ -583,7 +583,7 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : {
-              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "stat"    : { "StatusPower": {"status_id": "poison"} },
               "modifier": "More"
             },
             "hidden"       : true
@@ -658,7 +658,7 @@
             "value"        : 15,
             "upgrade_value": 15,
             "StatEffect"   : {
-              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "stat"    : { "StatusPower": {"status_id": "poison"} },
               "modifier": "More"
             },
             "hidden"       : true
@@ -693,7 +693,7 @@
             "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : {
-              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "stat"    : { "StatusPower": {"status_id": "poison"} },
               "modifier": "More"
             },
             "hidden"       : true
@@ -710,7 +710,7 @@
             "value"        : 1,
             "upgrade_value": 0,
             "StatEffect"   : {
-              "stat"    : { "SkillTargetModifier": {"shape": "Square4", "skill_id": "unrighteous_fire"} },
+              "stat"    : { "SkillTargetModifier": {"shape": "Square4", "skill_id": "poison"} },
               "modifier": "Flat"
             },
             "hidden"       : true
@@ -726,7 +726,7 @@
           {
             "value"          : 1,
             "upgrade_value"  : 0,
-            "ReplaceStatusId": {"old_status_id": "righteous_fire", "new_status_id": "unrighteous_fire"}
+            "ReplaceStatusId": {"old_status_id": "righteous_fire", "new_status_id": "poison", "display_value": 5}
           },
           {
             "value"          : 1,
