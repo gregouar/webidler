@@ -439,7 +439,7 @@
         },
         "modifier": "Flat",
         "scope": "Local",
-        "value": -2.0,
+        "value": -1.0,
         "ignore_quality": true
       }
     ],
@@ -1262,6 +1262,12 @@
             },
             "ignore_stat_effects": [
               {
+                "CritDamage": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
@@ -1272,12 +1278,6 @@
               },
               {
                 "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
-                "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
                 }

@@ -369,8 +369,8 @@
       {
         "OnApplyStatus": {
           "skill_type": null,
-          "status_id": "poison",
-          "damage_type": null,
+          "status_id": null,
+          "damage_type": "Poison",
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
@@ -394,8 +394,8 @@
             "factor": 0.2,
             "source": {
               "StatusValue": {
-                "status_id": "poison",
-                "damage_type": null,
+                "status_id": null,
+                "damage_type": "Poison",
                 "debuff": null,
                 "skill_type": null
               }
@@ -415,8 +415,8 @@
             "factor": 1.0,
             "source": {
               "StatusDuration": {
-                "status_id": "poison",
-                "damage_type": null,
+                "status_id": null,
+                "damage_type": "Poison",
                 "debuff": null,
                 "skill_type": null
               }
@@ -451,12 +451,13 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": "Poison",
+                  "debuff": null,
                   "skill_type": null,
                   "skill_id": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
+                  "min_max": null
                 }
               },
               {
@@ -469,13 +470,12 @@
                 }
               },
               {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": "Poison",
-                  "debuff": null,
+                "Damage": {
                   "skill_type": null,
                   "skill_id": null,
-                  "min_max": null
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],

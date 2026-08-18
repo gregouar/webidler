@@ -791,8 +791,8 @@
       {
         "stat": {
           "StatusDuration": {
-            "status_id": "poison",
-            "damage_type": null,
+            "status_id": null,
+            "damage_type": "Poison",
             "debuff": null,
             "skill_type": null,
             "skill_id": null
@@ -860,8 +860,8 @@
       {
         "OnApplyStatus": {
           "skill_type": null,
-          "status_id": "poison",
-          "damage_type": null,
+          "status_id": null,
+          "damage_type": "Poison",
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
@@ -908,12 +908,12 @@
                 }
               },
               {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
+                "Damage": {
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -927,12 +927,12 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
+                "StatusEscalation": {
+                  "status_id": null,
                   "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],

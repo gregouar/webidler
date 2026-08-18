@@ -58,7 +58,7 @@
     "description"    : "Summon a mighty storm that repeatedly hit enemies.",
     "icon"           : "skills/blizzard.svg",
     "skill_type"     : "Spell",
-    "cooldown"       : 8,
+    "cooldown"       : 7,
     "mana_cost"      : 20,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
@@ -204,7 +204,7 @@
     "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
     "icon": "skills/poison_cloud.svg",
     "skill_type": "Spell",
-    "cooldown": 8,
+    "cooldown": 7,
     "mana_cost": 20,
     "upgrade_cost": 50,
     "upgrade_effects": [
