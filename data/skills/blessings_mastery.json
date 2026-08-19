@@ -506,7 +506,13 @@
                             "OnRestored": { "skill_ids": ["meditate"], "restore_type": "Mana" },
                             "target"    : "Me",
                             "effects"   : [
-                                { "ApplyStatus": {"status_id": "meditate_damage", "value": 0} }
+                                {
+                                    "ApplyStatus": {
+                                        "status_id"            : "meditate_damage",
+                                        "value"                : 0,
+                                        "replace_on_value_only": true
+                                    }
+                                }
                             ],
                             "modifiers" : [
                                 {
