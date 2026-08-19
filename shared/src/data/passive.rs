@@ -22,9 +22,9 @@ pub enum PassiveNodeType {
     Mana,
     Gold,
     Physical,
-    Poison,
     Fire,
     Storm,
+    Poison,
     Status,
     #[default]
     Utility,

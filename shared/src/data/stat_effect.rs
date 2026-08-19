@@ -37,8 +37,8 @@ pub enum DamageType {
     #[default]
     Physical,
     Fire,
-    Poison,
     Storm,
+    Poison,
 }
 
 impl Matchable for DamageType {
@@ -88,8 +88,8 @@ pub enum StatusDamageType {
     Any,
     Physical,
     Fire,
-    Poison,
     Storm,
+    Poison,
 }
 
 impl Matchable for StatusDamageType {
@@ -109,8 +109,8 @@ impl From<DamageType> for StatusDamageType {
         match value {
             DamageType::Physical => Physical,
             DamageType::Fire => Fire,
-            DamageType::Poison => Poison,
             DamageType::Storm => Storm,
+            DamageType::Poison => Poison,
         }
     }
 }
@@ -485,10 +485,10 @@ pub struct StatSkillRepeat {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum ArmorStatType {
     Physical,
-    Fire,
-    Poison,
-    Storm,
     Elemental,
+    Fire,
+    Storm,
+    Poison,
 }
 
 impl ArmorStatType {

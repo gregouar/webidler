@@ -39,8 +39,8 @@ pub enum AffixTag {
 
     Physical,
     Fire,
-    Poison,
     Storm,
+    Poison,
 
     Gold,
     // TODO: add others

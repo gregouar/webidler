@@ -74,7 +74,7 @@ pub fn armor_type_str(armor_type: &Option<ArmorStatType>) -> &'static str {
         Some(armor_type) => match armor_type {
             ArmorStatType::Physical => "Physical Defense",
             ArmorStatType::Fire => "Fire Defense",
-            ArmorStatType::Poison => "Chemical Defense",
+            ArmorStatType::Poison => "Toxic Defense",
             ArmorStatType::Storm => "Storm Defense",
             ArmorStatType::Elemental => "Elemental Defenses",
         },
@@ -87,7 +87,7 @@ pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
         Some(damage_type) => match damage_type {
             DamageType::Physical => "Physical ",
             DamageType::Fire => "Fire ",
-            DamageType::Poison => "Chemical ",
+            DamageType::Poison => "Toxic ",
             DamageType::Storm => "Storm ",
         },
         None => "",
@@ -99,7 +99,7 @@ pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static st
         Some(damage_type) => match damage_type {
             DamageType::Physical => "Physical Damage over Time",
             DamageType::Fire => "Fire Damage over Time",
-            DamageType::Poison => "Chemical Damage over Time",
+            DamageType::Poison => "Toxic Damage over Time",
             DamageType::Storm => "Storm Damage over Time",
         },
         None => "Damage over Time",

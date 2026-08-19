@@ -987,7 +987,7 @@
         "socket": false
       },
       "0f99143b-bf60-4ae8-b92d-deb1a4bb7dc8": {
-        "name": "Poison Escalation",
+        "name": "Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 20.0,
         "y": -65.0,
@@ -2099,7 +2099,7 @@
         "socket": false
       },
       "25c4b2a6-e072-4cfd-bb75-402835c60a05": {
-        "name": "Greater Poison Duration",
+        "name": "Greater Toxin Duration",
         "icon": "passives/ouroboros.svg",
         "x": -32.5,
         "y": -45.0,
@@ -2348,7 +2348,7 @@
         "socket": false
       },
       "285d7497-315b-4795-9142-fb3dba24cfbb": {
-        "name": "Greater Poison Duration",
+        "name": "Greater Toxin Duration",
         "icon": "passives/ouroboros.svg",
         "x": 5.0,
         "y": -170.0,
@@ -2531,7 +2531,7 @@
         "socket": false
       },
       "2d2394cc-1605-40fe-923b-3e0fd4502fa3": {
-        "name": "Greater Poison Damage",
+        "name": "Greater Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -47.5,
@@ -3113,7 +3113,7 @@
         "socket": false
       },
       "39b2026c-9b8d-4133-8fd9-1342e2dcd513": {
-        "name": "Poison Escalation",
+        "name": "Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 10.0,
         "y": -120.0,
@@ -3490,7 +3490,7 @@
         "socket": false
       },
       "3d3833aa-643d-495b-847f-ebafafe02acb": {
-        "name": "Poison Duration",
+        "name": "Toxin Duration",
         "icon": "passives/ouroboros.svg",
         "x": -62.5,
         "y": -152.5,
@@ -4457,7 +4457,7 @@
         "socket": false
       },
       "49e86eef-f9c6-4a3c-b16c-7a9d1eb1bf9b": {
-        "name": "Poison Damage",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -72.5,
@@ -4745,7 +4745,7 @@
         "socket": false
       },
       "5112a2b7-6b1f-484d-a2d7-d0e0d2501af4": {
-        "name": "Greater Poison Escalation",
+        "name": "Greater Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 32.5,
         "y": -45.0,
@@ -4949,7 +4949,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 15.0
           }
         ],
         "triggers": [],
@@ -6208,7 +6208,7 @@
         "socket": false
       },
       "6334c8c4-d9a4-4a70-921e-cb755fd034ab": {
-        "name": "Poison Damage",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 15.0,
         "y": -145.0,
@@ -6278,7 +6278,7 @@
         "socket": false
       },
       "641ea2e9-be62-40ad-b81a-e2502dbee41d": {
-        "name": "Greater Poison Escalation",
+        "name": "Greater Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 0.0,
         "y": -127.5,
@@ -6795,7 +6795,7 @@
         "socket": false
       },
       "6a439ad3-cf6b-45c5-815c-269e888b88b8": {
-        "name": "Poison Damage",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": -10.0,
         "y": -60.0,
@@ -7417,7 +7417,7 @@
         "socket": false
       },
       "744ba3d4-2008-44ed-90bc-5e48acde4f9b": {
-        "name": "Poison Damage",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": -5.0,
         "y": -190.0,
@@ -7970,7 +7970,7 @@
         "socket": false
       },
       "76e306d9-46a5-4817-95d5-d143bc507436": {
-        "name": "Greater Poison Escalation",
+        "name": "Greater Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": -5.0,
         "y": -170.0,
@@ -8551,7 +8551,7 @@
         "socket": false
       },
       "7eeea0ac-0958-49a6-a8e3-30966cb42764": {
-        "name": "Poison Duration",
+        "name": "Toxin Duration",
         "icon": "passives/ouroboros.svg",
         "x": -62.5,
         "y": -130.0,
@@ -10381,7 +10381,7 @@
         "socket": false
       },
       "93db4a10-c04f-4343-8f5a-1ecec07314d3": {
-        "name": "Poison Defense",
+        "name": "Toxic Defense",
         "icon": "passives/armor_poison.svg",
         "x": -15.0,
         "y": -90.0,
@@ -10581,7 +10581,7 @@
         "socket": false
       },
       "9b258aaf-2dbc-428c-a844-e50a402520e1": {
-        "name": "Poison Damage",
+        "name": "Poison Toxic ",
         "icon": "passives/scorpion_tail.svg",
         "x": 5.0,
         "y": -190.0,
@@ -11331,7 +11331,7 @@
         "socket": false
       },
       "aa92babf-963d-4bd0-8f7f-e3b44637f289": {
-        "name": "Poison Defense",
+        "name": "Toxic Defense",
         "icon": "passives/armor_poison.svg",
         "x": 15.0,
         "y": -90.0,
@@ -14010,15 +14010,6 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14028,12 +14019,12 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusEscalation": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -14044,6 +14035,15 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14285,15 +14285,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14304,7 +14295,25 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14319,15 +14328,6 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -14918,7 +14918,7 @@
         "socket": false
       },
       "d95d327a-d5ae-4754-be2d-a8afdeb998bc": {
-        "name": "Poison Escalation",
+        "name": "Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": -10.0,
         "y": -120.0,
@@ -15707,7 +15707,7 @@
         "socket": false
       },
       "e169773c-9bf7-479c-9858-79c8ddfe4341": {
-        "name": "Poison Duration",
+        "name": "Toxin Duration",
         "icon": "passives/ouroboros.svg",
         "x": -30.0,
         "y": -57.5,
@@ -16001,7 +16001,7 @@
         "socket": false
       },
       "e4467b34-351f-4fb4-90f1-393664874993": {
-        "name": "Poison Damage",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 10.0,
         "y": -60.0,
@@ -16318,7 +16318,7 @@
         "socket": false
       },
       "ea811764-421a-48f8-a3c7-aa838a77c478": {
-        "name": "Greater Poison Damage",
+        "name": "Greater Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 0.0,
         "y": -162.5,
@@ -16545,7 +16545,7 @@
         "socket": false
       },
       "eb8c6b19-ca8a-4791-be2d-bf649098f40c": {
-        "name": "Poison Duration",
+        "name": "Toxin Duration",
         "icon": "passives/ouroboros.svg",
         "x": -20.0,
         "y": -65.0,
@@ -17213,7 +17213,7 @@
         "socket": false
       },
       "f48403d7-7425-4bc2-8056-4e9fe824be15": {
-        "name": "Poison Damage",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": -15.0,
         "y": -145.0,
@@ -17471,7 +17471,7 @@
         "socket": false
       },
       "fd4f4880-52d3-4d41-aaa4-df291390229c": {
-        "name": "Poison Escalation",
+        "name": "Toxin Escalation",
         "icon": "passives/snake_spiral.svg",
         "x": 30.0,
         "y": -57.5,
