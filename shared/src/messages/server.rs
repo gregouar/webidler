@@ -56,6 +56,7 @@ pub enum ErrorType {
 pub struct InitGameMessage {
     pub character_id: UserCharacterId,
     pub realm: Realm,
+    pub area_id: String,
     pub map_item: Option<ItemSpecs>,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,

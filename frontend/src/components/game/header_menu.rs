@@ -21,10 +21,34 @@ pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
+    let show_power_shard_tip = RwSignal::new(false);
+    let previous_max_power_shard_level = RwSignal::new(
+        game_context
+            .area_state
+            .read_untracked()
+            .max_power_shard_level_ever,
+    );
+
+    Effect::new(move || {
+        let max_power_shard_level = game_context.area_state.read().max_power_shard_level_ever;
+        let previous_level = previous_max_power_shard_level.get_untracked();
+
+        if game_context
+            .area_id
+            .with(|area_id| area_id == "inn_basement.json")
+            && previous_level == 0
+            && max_power_shard_level > 0
+        {
+            show_power_shard_tip.set(true);
+        }
+
+        previous_max_power_shard_level.set(max_power_shard_level);
+    });
 
     let stop_grind = {
         let conn: WebsocketContext = expect_context();
         move |_| {
+            show_power_shard_tip.set(false);
             if game_context.area_specs.read_untracked().training {
                 conn.send(&ClientMessage::EndQuest);
                 conn.send(
@@ -171,7 +195,19 @@ pub fn HeaderMenu() -> impl IntoView {
                     }}
                 </MenuButton>
                 <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
-                <MenuButtonRed on:click=stop_grind>"End"</MenuButtonRed>
+                <div class="relative">
+                    <MenuButtonRed on:click=stop_grind>"End"</MenuButtonRed>
+                    <Show when=move || show_power_shard_tip.get()>
+                        <div
+                            role="status"
+                            class="pointer-events-none absolute right-0 top-full z-50 mt-3 w-72 max-w-[calc(100vw-1rem)] rounded border border-amber-300/80 bg-zinc-900 px-3 py-2 text-left text-xs font-normal normal-case tracking-normal text-zinc-100 shadow-xl xl:text-sm"
+                        >
+                            <span class="font-bold text-amber-300">"Tip: "</span>
+                            "Click here to end the Grind and return to Town, where you can spend your Power Shard by Ascending a Passive and unlock a new Skill Slot in the Temple."
+                            <span class="absolute -top-2 right-4 h-0 w-0 border-x-8 border-b-8 border-x-transparent border-b-amber-300/80" />
+                        </div>
+                    </Show>
+                </div>
                 <MenuButton on:click=quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>

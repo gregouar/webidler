@@ -31,6 +31,7 @@ pub struct GameContext {
 
     pub character_id: RwSignal<UserCharacterId>,
     pub realm: RwSignal<Realm>,
+    pub area_id: RwSignal<String>,
 
     pub map_item: RwSignal<Option<ItemSpecs>>,
     pub area_specs: RwSignal<AreaSpecs>,
@@ -84,6 +85,7 @@ impl GameContext {
             started: RwSignal::new(false),
             character_id: Default::default(),
             realm: Default::default(),
+            area_id: Default::default(),
 
             map_item: RwSignal::new(Default::default()),
             area_specs: RwSignal::new(Default::default()),
