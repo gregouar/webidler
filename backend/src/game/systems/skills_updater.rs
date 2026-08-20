@@ -1333,6 +1333,7 @@ pub fn apply_stat_effect_on_skill_effect(
             if let StatType::Restore {
                 restore_type: stat_restore_type,
                 skill_filter,
+                modifier_description: _,
             } = &effect.stat
                 && compare_options(stat_restore_type, &Some(*restore_type))
                 && skill_filter.is_match_with_skill(skill_type, skill_id)

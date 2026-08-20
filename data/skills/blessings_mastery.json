@@ -436,7 +436,7 @@
                         "value"        : 1,
                         "upgrade_value": 1,
                         "StatEffect"   : {
-                            "stat"    : { "Restore": {"restore_type": "Mana"} },
+                            "stat"    : { "Restore": {"restore_type": "Mana", "modifier_description": "Percent"} },
                             "modifier": "Flat"
                         }
                     },

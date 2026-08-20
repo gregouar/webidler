@@ -1666,6 +1666,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             StatType::Restore {
                 restore_type: Some(RestoreType::Life),
                 skill_filter: Default::default(),
+                modifier_description: Default::default(),
             },
             Modifier::Increased,
         ),

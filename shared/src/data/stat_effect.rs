@@ -10,7 +10,7 @@ use crate::{
         conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
-        skill::{RestoreType, SkillRepeatTarget},
+        skill::{RestoreModifier, RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
         values::NonNegative,
     },
@@ -257,6 +257,8 @@ pub enum StatType {
         restore_type: Option<RestoreType>,
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
+        #[serde(default)]
+        modifier_description: RestoreModifier,
     },
     Life,
     LifeRegen,
@@ -390,10 +392,12 @@ impl Matchable for StatType {
                 Restore {
                     restore_type,
                     skill_filter,
+                    modifier_description: _,
                 },
                 Restore {
                     restore_type: restore_type_2,
                     skill_filter: skill_filter_2,
+                    modifier_description: _,
                 },
             ) => {
                 compare_options(restore_type, restore_type_2)

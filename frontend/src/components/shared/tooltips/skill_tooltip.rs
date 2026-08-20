@@ -733,6 +733,7 @@ pub fn format_skill_effect(
                 StatType::Restore {
                     restore_type: Some(restore_type),
                     skill_filter: Default::default(),
+                    modifier_description: Default::default(),
                 },
                 modifiers,
             );

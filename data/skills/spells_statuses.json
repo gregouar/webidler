@@ -23,7 +23,7 @@
         ]
     },
     "unrighteous_fire"          : {
-        "name"       : "Blasphemous Poison",
+        "name"       : "Unrighteous Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
         "damage_type": "Poison",
@@ -35,7 +35,7 @@
         ]
     },
     "unrighteous_fire_self"     : {
-        "name"       : "Self-Loathing Poison",
+        "name"       : "Self-Loathing Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
         "damage_type": "Poison",

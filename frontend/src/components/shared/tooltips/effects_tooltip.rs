@@ -498,6 +498,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Restore {
             restore_type,
             skill_filter,
+            modifier_description: _,
         } => {
             format!(
                 "Restore{} Effects{}",
@@ -774,10 +775,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::Restore {
             restore_type,
             skill_filter,
+            modifier_description,
         } => {
             format!(
-                "Restore {} additional{}{}",
+                "Restore {}{} additional{}{}",
                 format_flat_number(value, false),
+                match modifier_description {
+                    shared::data::skill::RestoreModifier::Flat => "",
+                    shared::data::skill::RestoreModifier::Percent => "%",
+                },
                 restore_type_str(*restore_type),
                 skill_filter_str(skill_filter, " with ", true)
             )
