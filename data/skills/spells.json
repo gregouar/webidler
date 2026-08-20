@@ -183,8 +183,11 @@
           {
             "ApplyStatus"        : {"status_id": "righteous_fire_self", "value": 100},
             "ignore_stat_effects": [
-              { "Damage": {}                                        },
-              {               "StatusPower": {"damage_type": "Any"} }
+              {"Damage": {}},
+              { "StatusDuration": {"damage_type": "Any"} },
+              { "StatusEscalation": {"damage_type": "Any"} },
+              { "StatusFaster": {"damage_type": "Any"} },
+              { "StatusPower": {"damage_type": "Any"} }
             ]
           }
         ]

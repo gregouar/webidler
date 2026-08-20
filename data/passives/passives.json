@@ -1807,7 +1807,8 @@
               "Restore": {
                 "restore_type": "Life",
                 "skill_type": "Spell",
-                "skill_id": null
+                "skill_id": null,
+                "modifier_description": "Flat"
               }
             },
             "modifier": "Increased",
@@ -1822,7 +1823,8 @@
               "Restore": {
                 "restore_type": "Life",
                 "skill_type": "Spell",
-                "skill_id": null
+                "skill_id": null,
+                "modifier_description": "Flat"
               }
             },
             "modifier": "Increased",
@@ -10663,8 +10665,8 @@
           {
             "OnApplyStatus": {
               "skill_type": null,
-              "status_id": "poison",
-              "damage_type": null,
+              "status_id": null,
+              "damage_type": "Poison",
               "debuff": null,
               "is_triggered": null,
               "is_evaded": false,
@@ -10688,8 +10690,8 @@
                 "factor": 1.0,
                 "source": {
                   "StatusDuration": {
-                    "status_id": "poison",
-                    "damage_type": null,
+                    "status_id": null,
+                    "damage_type": "Poison",
                     "debuff": null,
                     "skill_type": null
                   }
@@ -14451,7 +14453,8 @@
               "Restore": {
                 "restore_type": "Life",
                 "skill_type": "Spell",
-                "skill_id": null
+                "skill_id": null,
+                "modifier_description": "Flat"
               }
             },
             "modifier": "Increased",
@@ -14466,7 +14469,8 @@
               "Restore": {
                 "restore_type": "Life",
                 "skill_type": "Spell",
-                "skill_id": null
+                "skill_id": null,
+                "modifier_description": "Flat"
               }
             },
             "modifier": "Increased",
@@ -15510,7 +15514,8 @@
               "Restore": {
                 "restore_type": "Life",
                 "skill_type": "Spell",
-                "skill_id": null
+                "skill_id": null,
+                "modifier_description": "Flat"
               }
             },
             "modifier": "Increased",
@@ -15538,7 +15543,8 @@
               "Restore": {
                 "restore_type": "Life",
                 "skill_type": "Spell",
-                "skill_id": null
+                "skill_id": null,
+                "modifier_description": "Flat"
               }
             },
             "modifier": "Increased",
