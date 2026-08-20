@@ -444,9 +444,14 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 };
 
                 if specs_value.min.get() > 0.0 || specs_value.max.get() > 0.0 {
+                    let damage_type_name = match damage_type {
+                        DamageType::Poison => "Poison ",
+                        _ => effects_tooltip::damage_type_str(Some(damage_type)),
+                    };
+
                     damage_lines.push(view! {
                         <li class="text-zinc-400 text-xs xl:text-sm ">
-                            {effects_tooltip::damage_type_str(Some(damage_type))} "Damage: "
+                            {damage_type_name} "Damage: "
                             <span class=format!(
                                 "{} font-semibold",
                                 damage_color,

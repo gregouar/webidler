@@ -371,36 +371,44 @@ pub fn formatted_effects_list(
     }
 
     for (k, min_flat) in min_damage.iter() {
+        let damage_type_name = match k.1 {
+            Some(DamageType::Poison) => "Poison ",
+            damage_type => damage_type_str(damage_type),
+        };
         if let Some(max_flat) = max_damage.get(k) {
-            let (skill_filter, damage_type, positive) = k;
+            let (skill_filter, _, positive) = k;
             merged.push(format!(
                 "{} {} - {} {}Damage{}",
                 positive_str(*positive),
                 format_number(*min_flat),
                 format_number(*max_flat),
-                damage_type_str(*damage_type),
+                damage_type_name,
                 skill_filter_str(skill_filter, " to ", true)
             ));
         } else {
-            let (skill_filter, damage_type, positive) = k;
+            let (skill_filter, _, positive) = k;
             merged.push(format!(
                 "{} {} Minimum {}Damage{}",
                 positive_str(*positive),
                 format_number(*min_flat),
-                damage_type_str(*damage_type),
+                damage_type_name,
                 skill_filter_str(skill_filter, " to ", true)
             ));
         }
     }
 
     for (k, max_flat) in max_damage.iter() {
+        let damage_type_name = match k.1 {
+            Some(DamageType::Poison) => "Poison ",
+            damage_type => damage_type_str(damage_type),
+        };
         if !min_damage.contains_key(k) {
-            let (skill_filter, damage_type, positive) = k;
+            let (skill_filter, _, positive) = k;
             merged.push(format!(
                 "{} {} Maximum {}Damage{}",
                 positive_str(*positive),
                 format_number(*max_flat),
-                damage_type_str(*damage_type),
+                damage_type_name,
                 skill_filter_str(skill_filter, " to ", true)
             ));
         }
