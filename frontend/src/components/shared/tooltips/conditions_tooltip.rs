@@ -216,7 +216,7 @@ pub fn format_affected_by_status_condition(status_filter: &StatStatusFilter) -> 
                 StatusDamageType::Any => "Damage over Time",
                 StatusDamageType::Physical => "Physical Damage over Time",
                 StatusDamageType::Fire => "Fire Damage over Time",
-                StatusDamageType::Poison => "Poison Damage over Time",
+                StatusDamageType::Poison => "Toxic Damage over Time",
                 StatusDamageType::Storm => "Storm Damage over Time",
             }
             .to_string()

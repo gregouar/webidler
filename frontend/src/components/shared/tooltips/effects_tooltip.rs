@@ -658,7 +658,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::SkillEffectModifier { .. } => "TODO?".into(),
         StatType::SkillRepeat { skill_filter } => {
-            format!("{}Repeat", skill_filter_str(skill_filter, "", false))
+            format!("{}Repeat/Chain", skill_filter_str(skill_filter, "", false))
         }
         StatType::TriggerEffectModifier {
             stat,
@@ -1071,7 +1071,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         }
         StatType::SkillRepeat { skill_filter } => {
             format!(
-                "{}Repeat {} additional time{}",
+                "{}Repeat/Chain {} additional time{}",
                 skill_filter_str(skill_filter, "", false),
                 format_flat_number(value, false),
                 if value.unwrap_or(2.0) > 1.0 { "s" } else { "" }

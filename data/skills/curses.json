@@ -147,7 +147,8 @@
         "modifier"   : "Flat",
         "value"      : 5,
         "description": "Gain +0.1 additional Life"
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "targets"        : [
       {

@@ -8,15 +8,7 @@
         "effects"   : [
             {
                 "StatModifier": {
-                    "stat"    : { "StatusPower": {"skill_type": "Attack", "status_id": "poison", "min_max": "Min"} },
-                    "modifier": "Flat"
-                },
-                "value"       : 2,
-                "modifier"    : "Percent"
-            },
-            {
-                "StatModifier": {
-                    "stat"    : { "StatusPower": {"skill_type": "Attack", "status_id": "poison", "min_max": "Max"} },
+                    "stat"    : { "StatusPower": {"skill_type": "Attack", "status_id": "poison"} },
                     "modifier": "Flat"
                 },
                 "value"       : 4,
