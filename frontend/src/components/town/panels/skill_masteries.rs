@@ -33,6 +33,7 @@ use crate::components::{
         Separator,
         buttons::MenuButton,
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
+        checkbox::Checkbox,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
         toast::*,
@@ -47,6 +48,7 @@ pub fn SkillMasteriesPanel(
     let town_context = expect_context::<TownContext>();
 
     let skill_masteries = RwSignal::new(PlayerSkillMasteries::default());
+    let show_all_skills = RwSignal::new(false);
 
     let reset = move || {
         skill_masteries.set(town_context.player_skill_masteries.get_untracked());
@@ -60,11 +62,19 @@ pub fn SkillMasteriesPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=true class:items-center>
-            <MenuCard class="max-w-6xl mx-auto h-full">
-                <CardHeader title="Skill Masteries" on_close=move || open.set(false) />
+            <MenuCard class="w-6xl mx-auto h-full">
+                <CardHeader title="Skill Masteries" on_close=move || open.set(false)>
+                    <div class="ml-auto mr-4">
+                        <Checkbox
+                            label="Show all Skills".to_string()
+                            checked=show_all_skills
+                            on_change=move |checked| show_all_skills.set(checked)
+                        />
+                    </div>
+                </CardHeader>
                 <CardInset class:h-full>
                     <FavoriteSkillsPicker skill_masteries view_only />
-                    <MasterySkillShop skill_masteries view_only />
+                    <MasterySkillShop skill_masteries show_all_skills view_only />
                 </CardInset>
             </MenuCard>
         </MenuPanel>
@@ -212,7 +222,11 @@ fn FavoriteSkillsPicker(
                     .favorite_skills
                     .get(index)
                     .and_then(|skill_id| {
-                        let mastery = skill_masteries.masteries.get(skill_id).cloned()?;
+                        let mastery = skill_masteries
+                            .masteries
+                            .get(skill_id)
+                            .cloned()
+                            .unwrap_or_default();
                         let base_skill_specs = skill_specs.get(skill_id)?;
                         let skill_specs = skill_specs_with_mastery(
                             skill_id.clone(),
@@ -288,6 +302,7 @@ fn FavoriteSkillsPicker(
 #[component]
 fn MasterySkillShop(
     skill_masteries: RwSignal<PlayerSkillMasteries>,
+    show_all_skills: RwSignal<bool>,
     view_only: bool,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
@@ -296,23 +311,32 @@ fn MasterySkillShop(
     let available_skills = Memo::new(move |_| {
         let skill_specs = data_context.skill_specs.get();
         let skill_mastery_skill_specs = town_context.skill_mastery_skill_specs.get();
-        let favorite_skills = skill_masteries.get().favorite_skills;
-        let mut sections = skill_masteries
-            .get()
-            .masteries
-            .into_iter()
-            .filter_map(|(skill_id, mastery)| {
-                if mastery.experience <= 0.0 || favorite_skills.contains(&skill_id) {
+        let player_skill_masteries = skill_masteries.get();
+        let mut sections = data_context
+            .skill_mastery_specs
+            .read()
+            .keys()
+            .filter_map(|skill_id| {
+                if player_skill_masteries.favorite_skills.contains(skill_id) {
                     return None;
                 }
 
-                let base_skill_specs = skill_specs.get(&skill_id)?;
+                let mastery = player_skill_masteries
+                    .masteries
+                    .get(skill_id)
+                    .filter(|mastery| mastery.experience > 0.0)
+                    .cloned();
+                if mastery.is_none() && !show_all_skills.get() {
+                    return None;
+                }
+
+                let base_skill_specs = skill_specs.get(skill_id)?;
                 let skill_specs = skill_specs_with_mastery(
                     skill_id.clone(),
                     base_skill_specs,
                     &skill_mastery_skill_specs,
                 );
-                Some((skill_id, mastery, skill_specs))
+                Some((skill_id.clone(), mastery.unwrap_or_default(), skill_specs))
             })
             .fold(
                 std::collections::HashMap::<SkillType, Vec<_>>::new(),
@@ -344,7 +368,6 @@ fn MasterySkillShop(
 
     view! {
         <div class="space-y-3 xl:space-y-4">
-
             {move || {
                 skill_sections
                     .get()

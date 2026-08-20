@@ -265,7 +265,7 @@
                 ]
             },
             "hit"            : {
-                "title"       : "Brittle Bones",
+                "title"       : "Putrefaction",
                 "base_cost"   : 10,
                 "upgrade_cost": 0,
                 "max_level"   : 1,
@@ -319,7 +319,7 @@
                         "StatEffect"   : {
                             "stat"    : {
                                 "SkillConditionalModifier": {
-                                    "stat"      : { "StatusDuration": {"status_id": "poison"} },
+                                    "stat"      : { "StatusDuration": {"damage_type": "Poison"} },
                                     "skill_type": null,
                                     "skill_id"  : null,
                                     "conditions": [

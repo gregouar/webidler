@@ -315,8 +315,11 @@ pub enum SkillEffectType {
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(
+    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default, PartialOrd, Ord,
+)]
 pub enum RestoreModifier {
+    #[default]
     Flat,
     Percent,
 }

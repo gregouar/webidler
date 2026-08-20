@@ -1020,7 +1020,7 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : 1,
+            "value"        : 2,
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : {
@@ -1035,7 +1035,7 @@
             }
           },
           {
-            "value"        : 2,
+            "value"        : 4,
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : {
@@ -1107,7 +1107,7 @@
                 "skill_ids" : ["voodoo_doll"],
                 "is_hurt"   : true,
                 "conditions": [
-                  { "HasStatus": {"status_id": "poison"} }
+                  { "HasStatus": {"damage_type": "Poison"} }
                 ]
               },
               "target"    : "Me",

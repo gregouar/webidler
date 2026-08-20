@@ -236,7 +236,11 @@ fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
         let player_skill_masteries = town_context.player_skill_masteries.get();
         let skill_mastery_skill_specs = town_context.skill_mastery_skill_specs.get();
         let skill_id = player_skill_masteries.favorite_skills.get(index)?.clone();
-        let mastery = player_skill_masteries.masteries.get(&skill_id)?.clone();
+        let mastery = player_skill_masteries
+            .masteries
+            .get(&skill_id)
+            .cloned()
+            .unwrap_or_default();
         let base_skill_specs = data_context.skill_specs.read().get(&skill_id)?.clone();
         let skill_specs = skill_specs_with_mastery(
             skill_id.clone(),

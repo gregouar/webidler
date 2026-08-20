@@ -218,6 +218,7 @@ pub fn compute_stats_effects_restore_value(
         if let StatType::Restore {
             restore_type: effect_restore_type,
             skill_filter,
+            modifier_description: _,
         } = &effect.stat
             && skill_filter.skill_type.is_none()
             && skill_filter.skill_id.is_none()

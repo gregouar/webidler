@@ -77,14 +77,15 @@
     "icon"           : "skills/blessing_renewal.svg",
     "skill_type"     : "Blessing",
     "cooldown"       : 15,
-    "mana_cost"      : 25,
+    "mana_cost"      : 15,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
         "stat"    : { "StatusPower": {"status_id": "blessing_heal"} },
         "modifier": "Flat",
         "value"   : 1
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "targets"        : [
       {
@@ -138,7 +139,7 @@
       {
         "target_type": "Me",
         "effects"    : [
-          { "Restore": {"restore_type": "Mana", "value": 5, "modifier": "Flat"} }
+          { "Restore": {"restore_type": "Mana", "value": 5, "modifier": "Percent"} }
         ]
       }
     ]

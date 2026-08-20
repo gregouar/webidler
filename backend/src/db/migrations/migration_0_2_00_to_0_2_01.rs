@@ -526,6 +526,7 @@ impl From<OldStatType> for StatType {
             } => Restore {
                 restore_type,
                 skill_filter: skill_filter.into(),
+                modifier_description: Default::default(),
             },
             OldStatType::CritChance(skill_filter) => CritChance(skill_filter.into()),
             OldStatType::CritDamage(skill_filter) => CritDamage(skill_filter.into()),

@@ -5,10 +5,11 @@
     "icon"           : "skills/magic_missile.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 2,
-    "mana_cost"      : 2,
+    "mana_cost"      : 1,
     "upgrade_cost"   : 20,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"        : [
       {
@@ -32,15 +33,16 @@
     "icon"           : "skills/chain_lightning.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 4,
-    "mana_cost"      : 10,
+    "mana_cost"      : 6,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"        : [
       {
         "range"  : "Any",
-        "repeat" : {"value": 3, "target": "Different", "repeat_cooldown": 0.5},
+        "repeat" : {"value": 3, "target": "Different", "repeat_cooldown": 0.3},
         "effects": [
           {
             "FlatDamage": {
@@ -58,11 +60,12 @@
     "description"    : "Summon a mighty storm that repeatedly hit enemies.",
     "icon"           : "skills/blizzard.svg",
     "skill_type"     : "Spell",
-    "cooldown"       : 8,
-    "mana_cost"      : 20,
+    "cooldown"       : 7,
+    "mana_cost"      : 10,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"        : [
       {
@@ -85,10 +88,11 @@
     "icon"           : "skills/fireball.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 4,
-    "mana_cost"      : 10,
+    "mana_cost"      : 6,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"        : [
       {
@@ -111,10 +115,11 @@
     "icon"           : "skills/burning_ray.svg",
     "skill_type"     : "Spell",
     "cooldown"       : 3,
-    "mana_cost"      : 10,
+    "mana_cost"      : 5,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"        : [
       {
@@ -134,7 +139,7 @@
     "icon"               : "skills/righteous_fire.svg",
     "skill_type"         : "Spell",
     "cooldown"           : 1.5,
-    "mana_cost"          : 4,
+    "mana_cost"          : 2,
     "upgrade_cost"       : 50,
     "upgrade_effects"    : [
       {
@@ -160,7 +165,8 @@
         "value"        : 20,
         "bypass_ignore": true,
         "hidden"       : true
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "ignore_stat_effects": [],
     "targets"            : [
@@ -177,8 +183,11 @@
           {
             "ApplyStatus"        : {"status_id": "righteous_fire_self", "value": 100},
             "ignore_stat_effects": [
-              { "Damage": {}                                        },
-              {               "StatusPower": {"damage_type": "Any"} }
+              {"Damage": {}},
+              { "StatusDuration": {"damage_type": "Any"} },
+              { "StatusEscalation": {"damage_type": "Any"} },
+              { "StatusFaster": {"damage_type": "Any"} },
+              { "StatusPower": {"damage_type": "Any"} }
             ]
           }
         ]
@@ -204,11 +213,12 @@
     "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
     "icon": "skills/poison_cloud.svg",
     "skill_type": "Spell",
-    "cooldown": 8,
-    "mana_cost": 20,
+    "cooldown": 7,
+    "mana_cost": 10,
     "upgrade_cost": 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets": [
       {
@@ -229,10 +239,11 @@
     "icon": "skills/irradiate.svg",
     "skill_type": "Spell",
     "cooldown": 3,
-    "mana_cost": 8,
+    "mana_cost": 5,
     "upgrade_cost": 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets": [
       {
@@ -260,7 +271,8 @@
     "mana_cost"      : 2,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"        : [
       {
@@ -280,15 +292,16 @@
     "description"    : "Restore a portion of your life with this simple yet effective healing spell.",
     "icon"           : "skills/heal.svg",
     "skill_type"     : "Spell",
-    "cooldown"       : 15,
-    "mana_cost"      : 15,
+    "cooldown"       : 12,
+    "mana_cost"      : 10,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
       {
         "stat"    : { "Restore": {"restore_type": "Life"} },
         "modifier": "Flat",
         "value"   : 5
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "targets"        : [
       {

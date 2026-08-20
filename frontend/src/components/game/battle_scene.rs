@@ -217,21 +217,40 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     {move || {
                         game_context.area_specs.read().boss.then(|| view! { <BossAreaIcon /> })
                     }}
-                    <div class="flex gap-1 items-center text-lg xl:text-2xl font-bold leading-none  text-shadow-lg/100 shadow-gray-950">
-                        <span class="[font-variant:small-caps] font-display">
-                            {move || game_context.area_specs.read().name.clone()}
-                        </span>
-                        " — "
-                        {move || {
-                            game_context
+                    <StaticTooltip
+                        position=StaticTooltipPosition::Bottom
+                        tooltip=move || {
+                            let area_level = game_context
                                 .area_state
                                 .with(|area_state| {
                                     (area_state.area_level as i32)
                                         .saturating_sub(area_state.going_back)
-                                        .clamp(1, MAX_AREA_LEVEL as i32)
-                                })
-                        }}
-                    </div>
+                                        .clamp(1, MAX_AREA_LEVEL as i32) as u16
+                                });
+                            let power_level = area_level
+                                .saturating_add(*game_context.area_specs.read().power_level)
+                                .saturating_add(
+                                    *game_context.area_specs.read().item_level_modifier,
+                                );
+                            format!("Area Power Level: {power_level}")
+                        }
+                    >
+                        <div class="flex gap-1 items-center text-lg xl:text-2xl font-bold leading-none  text-shadow-lg/100 shadow-gray-950">
+                            <span class="[font-variant:small-caps] font-display">
+                                {move || game_context.area_specs.read().name.clone()}
+                            </span>
+                            " — "
+                            {move || {
+                                game_context
+                                    .area_state
+                                    .with(|area_state| {
+                                        (area_state.area_level as i32)
+                                            .saturating_sub(area_state.going_back)
+                                            .clamp(1, MAX_AREA_LEVEL as i32)
+                                    })
+                            }}
+                        </div>
+                    </StaticTooltip>
                     {move || {
                         game_context.map_item.get().map(|map_item| view! { <EdictIcon map_item /> })
                     }}

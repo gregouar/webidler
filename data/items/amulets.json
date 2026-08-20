@@ -570,12 +570,12 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
+                "StatusDuration": {
+                  "status_id": null,
                   "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
@@ -589,12 +589,12 @@
                 }
               },
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
+                "Damage": {
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],
@@ -756,9 +756,9 @@
             "skill_id": null
           }
         },
-        "modifier": "More",
+        "modifier": "Flat",
         "scope": "Global",
-        "value": 50.0,
+        "value": 30.0,
         "ignore_quality": true
       },
       {

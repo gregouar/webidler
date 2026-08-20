@@ -74,7 +74,7 @@ pub fn armor_type_str(armor_type: &Option<ArmorStatType>) -> &'static str {
         Some(armor_type) => match armor_type {
             ArmorStatType::Physical => "Physical Defense",
             ArmorStatType::Fire => "Fire Defense",
-            ArmorStatType::Poison => "Poison Defense",
+            ArmorStatType::Poison => "Toxic Defense",
             ArmorStatType::Storm => "Storm Defense",
             ArmorStatType::Elemental => "Elemental Defenses",
         },
@@ -87,7 +87,7 @@ pub fn damage_type_str(damage_type: Option<DamageType>) -> &'static str {
         Some(damage_type) => match damage_type {
             DamageType::Physical => "Physical ",
             DamageType::Fire => "Fire ",
-            DamageType::Poison => "Poison ",
+            DamageType::Poison => "Toxic ",
             DamageType::Storm => "Storm ",
         },
         None => "",
@@ -99,7 +99,7 @@ pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static st
         Some(damage_type) => match damage_type {
             DamageType::Physical => "Physical Damage over Time",
             DamageType::Fire => "Fire Damage over Time",
-            DamageType::Poison => "Poison Damage over Time",
+            DamageType::Poison => "Toxic Damage over Time",
             DamageType::Storm => "Storm Damage over Time",
         },
         None => "Damage over Time",
@@ -371,36 +371,44 @@ pub fn formatted_effects_list(
     }
 
     for (k, min_flat) in min_damage.iter() {
+        let damage_type_name = match k.1 {
+            Some(DamageType::Poison) => "Poison ",
+            damage_type => damage_type_str(damage_type),
+        };
         if let Some(max_flat) = max_damage.get(k) {
-            let (skill_filter, damage_type, positive) = k;
+            let (skill_filter, _, positive) = k;
             merged.push(format!(
                 "{} {} - {} {}Damage{}",
                 positive_str(*positive),
                 format_number(*min_flat),
                 format_number(*max_flat),
-                damage_type_str(*damage_type),
+                damage_type_name,
                 skill_filter_str(skill_filter, " to ", true)
             ));
         } else {
-            let (skill_filter, damage_type, positive) = k;
+            let (skill_filter, _, positive) = k;
             merged.push(format!(
                 "{} {} Minimum {}Damage{}",
                 positive_str(*positive),
                 format_number(*min_flat),
-                damage_type_str(*damage_type),
+                damage_type_name,
                 skill_filter_str(skill_filter, " to ", true)
             ));
         }
     }
 
     for (k, max_flat) in max_damage.iter() {
+        let damage_type_name = match k.1 {
+            Some(DamageType::Poison) => "Poison ",
+            damage_type => damage_type_str(damage_type),
+        };
         if !min_damage.contains_key(k) {
-            let (skill_filter, damage_type, positive) = k;
+            let (skill_filter, _, positive) = k;
             merged.push(format!(
                 "{} {} Maximum {}Damage{}",
                 positive_str(*positive),
                 format_number(*max_flat),
-                damage_type_str(*damage_type),
+                damage_type_name,
                 skill_filter_str(skill_filter, " to ", true)
             ));
         }
@@ -490,6 +498,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::Restore {
             restore_type,
             skill_filter,
+            modifier_description: _,
         } => {
             format!(
                 "Restore{} Effects{}",
@@ -650,7 +659,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::SkillTargetModifier { .. } => "TODO?".into(),
         StatType::SkillEffectModifier { .. } => "TODO?".into(),
         StatType::SkillRepeat { skill_filter } => {
-            format!("{}Repeat", skill_filter_str(skill_filter, "", false))
+            format!("{}Repeat/Chain", skill_filter_str(skill_filter, "", false))
         }
         StatType::TriggerEffectModifier {
             stat,
@@ -766,10 +775,15 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::Restore {
             restore_type,
             skill_filter,
+            modifier_description,
         } => {
             format!(
-                "Restore {} additional{}{}",
+                "Restore {}{} additional{}{}",
                 format_flat_number(value, false),
+                match modifier_description {
+                    shared::data::skill::RestoreModifier::Flat => "",
+                    shared::data::skill::RestoreModifier::Percent => "%",
+                },
                 restore_type_str(*restore_type),
                 skill_filter_str(skill_filter, " with ", true)
             )
@@ -1063,7 +1077,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         }
         StatType::SkillRepeat { skill_filter } => {
             format!(
-                "{}Repeat {} additional time{}",
+                "{}Repeat/Chain {} additional time{}",
                 skill_filter_str(skill_filter, "", false),
                 format_flat_number(value, false),
                 if value.unwrap_or(2.0) > 1.0 { "s" } else { "" }

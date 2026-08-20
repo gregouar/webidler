@@ -430,13 +430,13 @@
                 "title"       : "Deep Meditation",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
-                "max_level"   : 100,
+                "max_level"   : 20,
                 "effects"     : [
                     {
-                        "value"        : 2,
-                        "upgrade_value": 2,
+                        "value"        : 1,
+                        "upgrade_value": 1,
                         "StatEffect"   : {
-                            "stat"    : { "Restore": {"restore_type": "Mana"} },
+                            "stat"    : { "Restore": {"restore_type": "Mana", "modifier_description": "Percent"} },
                             "modifier": "Flat"
                         }
                     },
@@ -446,8 +446,8 @@
                         "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
                     },
                     {
-                        "value"        : 2,
-                        "upgrade_value": 2,
+                        "value"        : 3,
+                        "upgrade_value": 3,
                         "StatEffect"   : {
                             "stat"    : {
                                 "SuccessChance": {
@@ -456,7 +456,7 @@
                                     "effect_type": { "ApplyStatus": {"status_id": "focus"} }
                                 }
                             },
-                            "modifier": "Increased"
+                            "modifier": "Flat"
                         }
                     }
                 ]
@@ -506,13 +506,19 @@
                             "OnRestored": { "skill_ids": ["meditate"], "restore_type": "Mana" },
                             "target"    : "Me",
                             "effects"   : [
-                                { "ApplyStatus": {"status_id": "meditate_damage", "value": 0} }
+                                {
+                                    "ApplyStatus": {
+                                        "status_id"            : "meditate_damage",
+                                        "value"                : 0,
+                                        "replace_on_value_only": true
+                                    }
+                                }
                             ],
                             "modifiers" : [
                                 {
                                     "stat"    : {"StatusPower": {}},
                                     "modifier": "Flat",
-                                    "factor"  : 2,
+                                    "factor"  : 5,
                                     "source"  : "RestoreValue"
                                 }
                             ]

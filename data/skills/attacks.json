@@ -7,7 +7,8 @@
     "cooldown"        : 0,
     "upgrade_cost"    : 10,
     "upgrade_effects" : [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"         : [
       {
@@ -50,7 +51,8 @@
     "cooldown"        : 0,
     "upgrade_cost"    : 10,
     "upgrade_effects" : [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"         : [
       {
@@ -98,7 +100,8 @@
         "stat"    : { "StatusPower": {"status_id": "poison_coating"} },
         "modifier": "Increased",
         "value"   : 10
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "ignore_stat_effects": [ {"Speed": {}} ],
     "targets"            : [
@@ -136,7 +139,8 @@
         "modifier": "Flat",
         "value"   : 10,
         "hidden"  : true
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "ignore_stat_effects": [ {"Speed": {}} ],
     "targets"            : [
@@ -161,7 +165,8 @@
         "stat"    : { "StatusPower": {"status_id": "sharpen_weapon"} },
         "modifier": "Flat",
         "value"   : 10
-      }
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "ignore_stat_effects": [ {"Speed": {}} ],
     "targets"            : [
@@ -228,10 +233,11 @@
     "icon"            : "skills/shield_bash.svg",
     "skill_type"      : "Attack",
     "cooldown"        : 3,
-    "mana_cost"       : 3,
+    "mana_cost"       : 2,
     "upgrade_cost"    : 50,
     "upgrade_effects" : [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "required_item"   : {"category": "Shield"},
     "modifier_effects": [
@@ -272,7 +278,8 @@
     "mana_cost"       : 2,
     "upgrade_cost"    : 50,
     "upgrade_effects" : [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets"         : [
       {
@@ -315,7 +322,8 @@
     "mana_cost"       : 5,
     "upgrade_cost"    : 50,
     "upgrade_effects" : [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "required_item"   : {"category": "MeleeWeapon2H"},
     "targets"         : [
@@ -352,7 +360,8 @@
     "mana_cost"       : 5,
     "upgrade_cost"    : 50,
     "upgrade_effects" : [
-      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
+      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "required_item"   : {"category": "RangedWeapon"},
     "targets"         : [

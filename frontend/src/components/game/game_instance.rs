@@ -156,6 +156,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
         character_id,
         realm,
+        area_id,
         map_item,
         area_specs,
         area_state,
@@ -171,6 +172,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
 
     game_context.started.set(true);
     game_context.character_id.set(character_id);
+    game_context.area_id.set(area_id);
     game_context.realm.set(realm);
     game_context.map_item.set(map_item);
     game_context.area_specs.set(area_specs);
