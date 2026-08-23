@@ -73,7 +73,7 @@
                         "StatEffect"   : {
                             "stat"    : {
                                 "SkillConditionalModifier": {
-                                    "stat"      : { "StatusPower": {"status_id": "open_wound"} },
+                                    "stat"      : { "StatusDuration": {"status_id": "open_wound"} },
                                     "skill_type": null,
                                     "skill_id"  : null,
                                     "conditions": [

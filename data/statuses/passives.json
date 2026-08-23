@@ -171,7 +171,8 @@
         },
         "value"       : 33,
         "modifier"    : "Flat"
-      }
+      },
+      { "StatModifier": {"stat": "LifeRegen", "modifier": "More", "debuff": true}, "value": 100, "modifier": "Flat" }
     ]
   },
   "focus"               : {

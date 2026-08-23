@@ -1964,6 +1964,16 @@
             },
             "modifier": "Flat",
             "value": 100.0
+          },
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "value": -100.0
           }
         ],
         "triggers": [],
@@ -14037,25 +14047,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14080,6 +14081,15 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -14179,15 +14189,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -14206,6 +14207,16 @@
                     }
                   },
                   {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14215,13 +14226,12 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
                       "skill_id": null,
-                      "min_max": null
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14321,25 +14331,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14355,6 +14346,25 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
                     }
                   },
                   {

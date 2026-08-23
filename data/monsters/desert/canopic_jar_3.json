@@ -2,7 +2,7 @@
   "name"    : "Canopic Jar",
   "portrait": "monsters/desert/canopic_jar_3.webp",
   "rarity"  : "Boss",
-  "max_life": 150,
+  "max_life": 250,
   "armor"   : {"Storm": 200},
   "skills"  : [
     {

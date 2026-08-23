@@ -3,7 +3,7 @@
   "portrait"          : "monsters/desert/vizier.webp",
   "rarity"            : "Boss",
   "max_life"          : 300,
-  "life_regen"        : 300,
+  "life_regen"        : 250,
   "size"              : "Tall",
   "armor"             : {"Physical": 100, "Storm": 100, "Poison": 100, "Fire": 100},
   "stun_lockout"      : 3.0,

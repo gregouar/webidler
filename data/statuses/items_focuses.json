@@ -35,7 +35,7 @@
         "effects"   : [
             {
                 "DamageOverTime": {"damage_type": "Poison", "armor_penetration": 100},
-                "value"         : 5.0,
+                "value"         : 1.0,
                 "modifier"      : "Flat"
             },
             {

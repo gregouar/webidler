@@ -10,7 +10,9 @@ use shared::{
         conditional_modifier::ConditionalModifier,
         player::{CharacterSpecs, PlayerInventory},
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
-        stat_effect::{EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType},
+        stat_effect::{
+            EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType, compare_options,
+        },
         trigger::TriggerEffectModifierSource,
     },
 };
@@ -509,6 +511,14 @@ fn compute_character_specs(
                         0.0
                     }
                 }
+        StatConverterSource::Armor { damage_type } => {
+            character_attrs.armor.iter_mut().map(|(armor_type, value)| 
+                if compare_options(&Some(*armor_type), &damage_type) {
+                    value.convert_value(factor, specs.is_extra, false)
+                } else {
+                    0.0
+                }).sum()
+        }
 
                 StatConverterSource::CritDamage
                 | StatConverterSource::Damage { .. }
@@ -547,6 +557,15 @@ pub fn compute_stat_converter(
             } else {
                 0.0
             }
+        }
+        StatConverterSource::Armor { damage_type } => {
+            character_attrs.armor.iter().map(|(armor_type, value)| 
+                if compare_options(&Some(*armor_type), damage_type) {
+                    **value
+                } else {
+                    0.0
+                }
+            ).sum()
         }
 
         StatConverterSource::CritDamage

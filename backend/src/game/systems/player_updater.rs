@@ -378,6 +378,7 @@ fn modify_player_specs(
                     StatConverterSource::MaxLife
                     | StatConverterSource::LifeRegen
                     | StatConverterSource::MaxMana
+                    | StatConverterSource::Armor { .. }
                     | StatConverterSource::ManaRegen
                     | StatConverterSource::Block(_),
                 ..

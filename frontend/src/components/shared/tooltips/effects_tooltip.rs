@@ -164,6 +164,9 @@ pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> 
         StatConverterSource::Block(skill_type) => {
             format!("{}Block Chance", skill_type_str(Some(skill_type)))
         }
+        StatConverterSource::Armor { damage_type } => {
+            format!("Global {}Defense", damage_type_str(damage_type))
+        }
     }
 }
 

@@ -8,7 +8,7 @@
         "duration"   : 2,
         "max_stacks" : 3,
         "effects"    : [
-            { "DamageOverTime": {"damage_type": "Physical", "armor_penetration": 100}, "value": 10, "modifier": "Flat" }
+            { "DamageOverTime": {"damage_type": "Physical", "armor_penetration": 100}, "value": 2, "modifier": "Flat" }
         ]
     }
 }

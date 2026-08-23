@@ -658,7 +658,10 @@ pub enum StatConverterSource {
     ManaRegen,
     LifeRegen,
     Block(SkillType),
-    // TODO: Add others, like armor, ...
+    Armor {
+        #[serde(default)]
+        damage_type: Option<DamageType>,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

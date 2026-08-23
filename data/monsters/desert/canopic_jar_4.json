@@ -2,7 +2,7 @@
   "name"    : "Canopic Jar",
   "portrait": "monsters/desert/canopic_jar_4.webp",
   "rarity"  : "Boss",
-  "max_life": 150,
+  "max_life": 250,
   "armor"   : {"Poison": 200},
   "skills"  : [
     {

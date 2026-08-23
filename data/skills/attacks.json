@@ -87,6 +87,56 @@
     ],
     "hidden"          : true
   },
+  "helmet_skill"        : {
+    "name"            : "Cactus Thorn",
+    "icon"            : "skills/cactus.svg",
+    "description"     : "Don't touch it!",
+    "skill_type"      : "Attack",
+    "cooldown"        : 0,
+    "upgrade_cost"    : 50,
+    "upgrade_effects" : [
+      { "stat": {"Damage": {}}, "modifier": "More", "value": 30 }
+    ],
+    "targets"         : [],
+    "modifier_effects": [],
+    "triggers"        : [
+      {
+        "trigger_id"       : "cactus_hat",
+        "skill_type"       : "Attack",
+        "trigger_propagate": true,
+        "OnTakeHit"        : {"is_blocked": false},
+        "target"           : "Source",
+        "effects"          : [
+          {
+            "FlatDamage": {
+              "damage"     : { "Physical": [1, 1] },
+              "crit_chance": 5,
+              "crit_damage": 100
+            }
+          },
+          { "ApplyStatus": {"status_id": "poison", "value": 1}, "optional_application": true }
+        ]
+      },
+      {
+        "trigger_id"       : "cactus_hat",
+        "skill_type"       : "Attack",
+        "trigger_propagate": true,
+        "OnReceiveStatus"  : {"damage_type": "Any", "is_evaded": false},
+        "target"           : "Source",
+        "effects"          : [
+          {
+            "FlatDamage": {
+              "damage"     : { "Physical": [1, 1] },
+              "crit_chance": 5,
+              "crit_damage": 100
+            }
+          },
+          { "ApplyStatus": {"status_id": "poison", "value": 1}, "optional_application": true }
+        ]
+      }
+    ],
+    "hidden"          : true
+  },
   "poison_coating"      : {
     "name"               : "Poison Coating",
     "description"        : "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
