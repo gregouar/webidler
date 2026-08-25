@@ -466,7 +466,9 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                                                 InventorySortType::ItemLevel => InventorySortType::Rarity,
                                             },
                                         );
-                                }>"Sort"// {move || {
+                                }>
+                                    // {move || {
+                                    "Sort"
                                 // match next_sort_type.get() {
                                 // InventorySortType::Rarity => "Sort: Rarity",
                                 // InventorySortType::ItemType => "Sort: Type",
@@ -534,9 +536,9 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
 
     let is_being_equipped = RwSignal::new(false);
 
-    let maybe_item = Signal::derive({
+    let maybe_item = Memo::new({
         let inventory = inventory.clone();
-        move || {
+        move |_| {
             inventory
                 .player_inventory
                 .read()
@@ -544,6 +546,27 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 .get(item_index)
                 .cloned()
                 .map(Arc::new)
+        }
+    });
+
+    let comparable_item_specs = Memo::new({
+        let inventory = inventory.clone();
+        move |_| {
+            maybe_item.read().as_ref().and_then(|item_specs| {
+                item_specs.base.slot.and_then(|slot| {
+                    inventory
+                        .player_inventory
+                        .read()
+                        .equipped
+                        .get(&slot)
+                        .and_then(|equipped_slot| match equipped_slot {
+                            EquippedSlot::MainSlot(item_specs) => {
+                                Some(Arc::from(item_specs.clone()))
+                            }
+                            EquippedSlot::ExtraSlot(_) => None,
+                        })
+                })
+            })
         }
     });
 
@@ -595,22 +618,7 @@ fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
                 match maybe_item.get() {
                     Some(item_specs) => {
                         let inventory = inventory.clone();
-                        let comparable_item_specs = item_specs
-                            .base
-                            .slot
-                            .and_then(|slot| {
-                                inventory
-                                    .player_inventory
-                                    .read()
-                                    .equipped
-                                    .get(&slot)
-                                    .and_then(|equipped_slot| match equipped_slot {
-                                        EquippedSlot::MainSlot(item_specs) => {
-                                            Some(Arc::from(item_specs.clone()))
-                                        }
-                                        EquippedSlot::ExtraSlot(_) => None,
-                                    })
-                            });
+                        let comparable_item_specs = comparable_item_specs.get();
 
                         view! {
                             <div
