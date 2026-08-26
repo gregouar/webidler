@@ -31,7 +31,7 @@ use shared::{
 pub fn EndQuestPanel() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
-    let open = game_context.open_end_quest;
+    let open = game_context.open_end_grind;
 
     Effect::new(move || {
         if game_context.quest_rewards.read().is_some() {
@@ -41,13 +41,13 @@ pub fn EndQuestPanel() -> impl IntoView {
 
     view! {
         <MenuPanel open w_full=false h_full=false class:items-center>
-            <EndQuest open />
+            <EndGrind open />
         </MenuPanel>
     }
 }
 
 #[component]
-fn EndQuest(open: RwSignal<bool>) -> impl IntoView {
+fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let stats = move || game_context.game_stats.read();

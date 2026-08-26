@@ -205,7 +205,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         monster_states,
         queued_loot,
         game_stats,
-        quest_rewards,
+        grind_rewards: quest_rewards,
     } = sync_message;
 
     game_context.area_state.sync(area_state);

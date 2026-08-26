@@ -54,6 +54,8 @@ pub struct AreaSpecs {
     pub effects: EffectsMap,
     #[serde(default)]
     pub triggers: TriggersMap,
+    // #[serde(default)]
+    // pub quest
 }
 
 impl AreaSpecs {
@@ -96,7 +98,6 @@ pub struct AreaState {
     pub auto_progress: bool,
     pub going_back: i32,
     pub rush_mode: bool,
-    // pub end_quest: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -15,7 +15,7 @@ pub mod modifier;
 pub mod monster;
 pub mod passive;
 pub mod player;
-pub mod quest;
+pub mod grind;
 pub mod realms;
 pub mod skill;
 pub mod skill_mastery;

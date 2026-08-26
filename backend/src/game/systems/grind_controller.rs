@@ -1,6 +1,6 @@
 use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
-    data::{item::ItemRarity, quest::QuestRewards},
+    data::{grind::GrindRewards, item::ItemRarity},
 };
 
 use crate::{
@@ -15,23 +15,23 @@ use crate::{
     rest::AppError,
 };
 
-pub fn end_quest(master_store: &MasterStore, game_data: &mut GameInstanceData) {
-    if !game_data.end_quest {
-        game_data.end_quest = true;
-        *game_data.quest_rewards.mutate() =
-            Some(generate_end_quest_rewards(master_store, game_data));
+pub fn end_grind(master_store: &MasterStore, game_data: &mut GameInstanceData) {
+    if !game_data.end_grind {
+        game_data.end_grind = true;
+        *game_data.grind_rewards.mutate() =
+            Some(generate_end_grind_rewards(master_store, game_data));
     }
 }
 
-pub fn terminate_quest(
+pub fn terminate_grind(
     game_data: &mut GameInstanceData,
     reward_picks: Vec<u8>,
 ) -> Result<(), AppError> {
-    if !game_data.end_quest {
+    if !game_data.end_grind {
         return Err(AppError::UserError("grind not yet ended".into()));
     }
 
-    if game_data.terminate_quest {
+    if game_data.terminate_grind {
         return Err(AppError::UserError("grind already terminated".into()));
     }
 
@@ -45,9 +45,9 @@ pub fn terminate_quest(
         return Err(AppError::UserError("not enough space".into()));
     }
 
-    if let Some(quest_rewards) = game_data.quest_rewards.read() {
+    if let Some(grind_rewards) = game_data.grind_rewards.read() {
         for reward_pick in reward_picks.into_iter() {
-            if let Some(item_specs) = quest_rewards.item_rewards.get(reward_pick as usize) {
+            if let Some(item_specs) = grind_rewards.item_rewards.get(reward_pick as usize) {
                 inventory_controller::store_item_to_bag(
                     game_data.player_inventory.mutate(),
                     item_specs.clone(),
@@ -56,15 +56,15 @@ pub fn terminate_quest(
         }
     }
 
-    game_data.terminate_quest = true;
+    game_data.terminate_grind = true;
 
     Ok(())
 }
 
-fn generate_end_quest_rewards(
+fn generate_end_grind_rewards(
     master_store: &MasterStore,
     game_data: &GameInstanceData,
-) -> QuestRewards {
+) -> GrindRewards {
     let area_level = game_data.area_state.read().max_area_level;
 
     // Up to 2 rewards are edict, only 1 if only 2 rewards available.
@@ -151,5 +151,5 @@ fn generate_end_quest_rewards(
         }))
         .collect();
 
-    QuestRewards { item_rewards }
+    GrindRewards { item_rewards }
 }

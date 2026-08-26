@@ -73,7 +73,7 @@ impl<'a> GameInstance<'a> {
 
         let mut game_timer = GameTimer::new();
         loop {
-            if !self.game_data.end_quest {
+            if !self.game_data.end_grind {
                 game_orchestrator::reset_entities(self.game_data).await;
             }
 
@@ -88,7 +88,7 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
-            if self.game_data.terminate_quest {
+            if self.game_data.terminate_grind {
                 break;
             }
 
@@ -145,8 +145,8 @@ impl<'a> GameInstance<'a> {
             game_timer.wait_tick().await;
         }
 
-        if self.game_data.terminate_quest {
-            self.terminate_quest().await?;
+        if self.game_data.terminate_grind {
+            self.terminate_grind().await?;
         }
 
         self.client_conn
@@ -177,7 +177,7 @@ impl<'a> GameInstance<'a> {
         });
     }
 
-    async fn terminate_quest(&self) -> Result<()> {
+    async fn terminate_grind(&self) -> Result<()> {
         let mut tx = self.db_pool.begin().await?;
 
         if !self.game_data.area_specs.training {

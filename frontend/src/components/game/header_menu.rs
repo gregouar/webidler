@@ -58,7 +58,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     .into(),
                 );
             } else {
-                game_context.open_end_quest.set(true);
+                game_context.open_end_grind.set(true);
             }
         }
     };
