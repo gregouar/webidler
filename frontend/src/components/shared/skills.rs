@@ -72,7 +72,7 @@ pub fn SkillMasteryCard(
     let mastery_specs = skill_specs.as_ref().and_then(|skill_specs| {
         data_context
             .skill_mastery_specs
-            .read()
+            .read_untracked()
             .get(&skill_specs.skill_id)
             .cloned()
     });
@@ -347,7 +347,7 @@ pub fn SkillBadge(
     let player_base_skill = skill_specs.clone().and_then(|skill_specs| {
         data_context
             .skill_specs
-            .read()
+            .read_untracked()
             .get(&skill_specs.skill_id)
             .cloned()
             .map(|base_skill_specs| {

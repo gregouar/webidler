@@ -56,11 +56,18 @@ pub const ITEM_REWARDS_BOSS_FACTOR: f64 = 10.0;
 pub const ITEM_REWARDS_RARE_FACTOR: f64 = 69.0;
 pub const UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR: f64 = 20.0;
 
-pub const STASH_USER_PRICE: StashPrice = StashPrice {
+pub const STASH_CHARACTER_PRICE: StashPrice = StashPrice {
     start_price: 1e5,
     start_size: 40,
     upgrade_price: 1e5,
     upgrade_size: 10,
+};
+
+pub const STASH_USER_PRICE: StashPrice = StashPrice {
+    start_price: 1e9,
+    start_size: 10,
+    upgrade_price: 1e5,
+    upgrade_size: 5,
 };
 
 pub const STASH_MARKET_PRICE: StashPrice = StashPrice {

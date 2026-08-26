@@ -23,7 +23,8 @@ impl Realm {
     }
 
     pub fn allow_parallel_characters(&self) -> bool {
-        matches!(self, Realm::LegacySSF)
+        false
+        // matches!(self, Realm::LegacySSF)
     }
 
     pub fn is_ssf(&self) -> bool {

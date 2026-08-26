@@ -1,4 +1,5 @@
 use chrono::Utc;
+use indexmap::IndexMap;
 use leptos::{prelude::*, task::spawn_local};
 use std::sync::Arc;
 
@@ -30,6 +31,7 @@ use crate::components::{
         Separator,
         buttons::{MenuButton, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
+        dropdown::DropdownMenu,
         input::ValidatedInput,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
@@ -49,21 +51,21 @@ enum StashTab {
 #[component]
 pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
     let town_context: TownContext = expect_context();
-    let stash = if town_context.character.read_untracked().is_ssf {
-        town_context.character_stash
-    } else {
-        town_context.user_stash
-    };
+    let stash_type = RwSignal::new(StashType::Character);
 
     let selected_item = RwSignal::new(SelectedItem::None);
-    let selected_stash = RwSignal::new(None);
+    let selected_stash = RwSignal::new(Some(town_context.character_stash.get()));
 
     let filters = RwSignal::new(MarketFilters {
         // item_level: Some(town_context.character.read_untracked().max_area_level),
         ..Default::default()
     });
 
-    let disable_stash = Signal::derive(move || stash.read().max_items == 0);
+    let disable_stash = Signal::derive(move || match stash_type.get() {
+        StashType::Character => town_context.character_stash.read().max_items == 0,
+        StashType::User => town_context.user_stash.read().max_items == 0,
+        StashType::Market => true,
+    });
 
     let active_tab = RwSignal::new(if disable_stash.get_untracked() {
         StashTab::BuyStash
@@ -77,6 +79,21 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
     };
 
     Effect::new(move || {
+        let selected_type = stash_type.get();
+        selected_item.set(SelectedItem::None);
+        let max_items = match selected_type {
+            StashType::Character => town_context.character_stash.read_untracked().max_items,
+            StashType::User => town_context.user_stash.read_untracked().max_items,
+            StashType::Market => 0,
+        };
+        if max_items == 0 {
+            active_tab.set(StashTab::BuyStash);
+        } else if active_tab.get_untracked() == StashTab::BuyStash {
+            active_tab.set(StashTab::Store);
+        }
+    });
+
+    Effect::new(move || {
         if open.get() || town_context.open_inventory.get() {
             selected_item.set(SelectedItem::None);
             town_context.selected_item_index.set(None);
@@ -87,7 +104,8 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         <MenuPanel open=open>
             <MenuCard class="h-full" gap=false>
                 <CardHeader title="Stash" on_close=move || open.set(false)>
-                    <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-clip">
+
+                    <div class="flex self-end h-full ml-2 xl:ml-4 gap-2 xl:gap-4 w-full max-w-md mx-auto overflow-clip">
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == StashTab::Filters
@@ -112,6 +130,46 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                         >
                             "Take"
                         </TabButton>
+
+                    </div>
+
+                    <div class="flex-1"></div>
+
+                    <div class="flex items-center gap-2 mb-2">
+                        {move || {
+                            match stash_type.get() {
+                                StashType::Character => {
+                                    view! { <Gems stash=town_context.character_stash /> }.into_any()
+                                }
+                                StashType::User => {
+                                    view! { <Gems stash=town_context.user_stash /> }.into_any()
+                                }
+                                StashType::Market => ().into_any(),
+                            }
+                        }}
+                    </div>
+                    <div class="flex-1"></div>
+
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium whitespace-nowrap">
+                            {move || {
+                                let stash = match stash_type.get() {
+                                    StashType::Character => town_context.character_stash.get(),
+                                    StashType::User => town_context.user_stash.get(),
+                                    StashType::Market => Stash::default(),
+                                };
+                                format!("({} / {})", stash.items_amount, stash.max_items)
+                            }}
+                        </span>
+                        <DropdownMenu
+                            options=IndexMap::from([
+                                (StashType::Character, "Character Stash".to_string()),
+                                (StashType::User, "User Stash".to_string()),
+                            ])
+                            chosen_option=stash_type
+                        />
+                    </div>
+                    <div class="flex shrink-0 items-center gap-2 pl-2">
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == StashTab::BuyStash
@@ -121,17 +179,6 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             "Upgrade"
                         </TabButton>
                     </div>
-
-                    <div class="flex-1"></div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <Gems stash />
-                    </div>
-                    <div class="flex-1"></div>
-                    <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
-                        {move || {
-                            format!("({} / {})", stash.read().items_amount, stash.read().max_items)
-                        }}
-                    </span>
                 </CardHeader>
 
                 <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
@@ -140,8 +187,29 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             match active_tab.get() {
                                 StashTab::Filters => view! { <MainFilters filters /> }.into_any(),
                                 StashTab::Take => {
-                                    view! { <StashBrowser stash selected_item filters /> }
-                                        .into_any()
+                                    match stash_type.get() {
+                                        StashType::Character => {
+                                            view! {
+                                                <StashBrowser
+                                                    stash=town_context.character_stash
+                                                    selected_item
+                                                    filters
+                                                />
+                                            }
+                                                .into_any()
+                                        }
+                                        StashType::User => {
+                                            view! {
+                                                <StashBrowser
+                                                    stash=town_context.user_stash
+                                                    selected_item
+                                                    filters
+                                                />
+                                            }
+                                                .into_any()
+                                        }
+                                        StashType::Market => ().into_any(),
+                                    }
                                 }
                                 StashTab::Store => {
                                     view! { <InventoryBrowser selected_item /> }.into_any()
@@ -158,10 +226,44 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             match active_tab.get() {
                                 StashTab::Filters => view! { <StatsFilters filters /> }.into_any(),
                                 StashTab::Take => {
-                                    view! { <TakeDetails stash selected_item /> }.into_any()
+                                    match stash_type.get() {
+                                        StashType::Character => {
+                                            view! {
+                                                <TakeDetails
+                                                    stash=town_context.character_stash
+                                                    selected_item
+                                                />
+                                            }
+                                                .into_any()
+                                        }
+                                        StashType::User => {
+                                            view! {
+                                                <TakeDetails stash=town_context.user_stash selected_item />
+                                            }
+                                                .into_any()
+                                        }
+                                        StashType::Market => ().into_any(),
+                                    }
                                 }
                                 StashTab::Store => {
-                                    view! { <StoreDetails stash selected_item /> }.into_any()
+                                    match stash_type.get() {
+                                        StashType::Character => {
+                                            view! {
+                                                <StoreDetails
+                                                    stash=town_context.character_stash
+                                                    selected_item
+                                                />
+                                            }
+                                                .into_any()
+                                        }
+                                        StashType::User => {
+                                            view! {
+                                                <StoreDetails stash=town_context.user_stash selected_item />
+                                            }
+                                                .into_any()
+                                        }
+                                        StashType::Market => ().into_any(),
+                                    }
                                 }
                                 StashTab::BuyStash => {
                                     view! { <UpgradeStashDetails selected_stash /> }.into_any()
@@ -196,21 +298,14 @@ impl From<StashItem> for SelectedMarketItem {
 fn SelectBuyStash(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView {
     let town_context: TownContext = expect_context();
 
-    if town_context.character.read().is_ssf {
-        view! {
-            <div class="gap-2 p-1 xl:p-2 flex flex-col">
-                <StashTypeRow stash=town_context.character_stash selected_stash />
-            </div>
-        }
-        .into_any()
-    } else {
-        view! {
-            <div class="gap-2 p-1 xl:p-2 flex flex-col">
-                <StashTypeRow stash=town_context.user_stash selected_stash />
+    view! {
+        <div class="gap-2 p-1 xl:p-2 flex flex-col">
+            <StashTypeRow stash=town_context.character_stash selected_stash />
+            <StashTypeRow stash=town_context.user_stash selected_stash />
+            <Show when=move || !town_context.character.read().is_ssf>
                 <StashTypeRow stash=town_context.market_stash selected_stash />
-            </div>
-        }
-        .into_any()
+            </Show>
+        </div>
     }
 }
 
@@ -285,8 +380,10 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
         })
     });
 
-    let disabled =
-        Signal::derive(move || upgrade.get().1 > town_context.character.read().resource_gold);
+    let disabled = Signal::derive(move || {
+        selected_stash.read().is_none()
+            || upgrade.get().1 > town_context.character.read().resource_gold
+    });
 
     let do_upgrade = {
         let character_id = town_context.character.read_untracked().character_id;
@@ -349,21 +446,25 @@ fn UpgradeStashDetails(selected_stash: RwSignal<Option<Stash>>) -> impl IntoView
                     <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/35 to-transparent"></div>
                     <div class="relative z-10">
                         <div class="text-xs text-zinc-400 mb-1">"Current"</div>
-                        <div class="text-blue-400 font-medium">
-                            {move || {
-                                selected_stash
-                                    .read()
-                                    .as_ref()
-                                    .map(|selected_stash| {
-                                        if selected_stash.max_items > 0 {
-                                            format!("Storage Space: {}", selected_stash.max_items)
-                                        } else {
-                                            "".into()
+
+                        {move || {
+                            selected_stash
+                                .read()
+                                .as_ref()
+                                .map(|selected_stash| {
+                                    if selected_stash.max_items > 0 {
+                                        view! {
+                                            <div class="text-blue-400 font-medium">
+                                                "Storage Space: "{selected_stash.max_items}
+                                            </div>
                                         }
-                                    })
-                                    .unwrap_or_default()
-                            }}
-                        </div>
+                                            .into_any()
+                                    } else {
+                                        view! { <div class="text-zinc-400">"No Stash"</div> }
+                                            .into_any()
+                                    }
+                                })
+                        }}
                     </div>
                 </div>
 
@@ -444,13 +545,11 @@ fn StashBrowser(
 
     Effect::new({
         let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
         move || {
             if reached_end_of_list.get() && has_more.get_untracked() {
                 let skip = extend_list.get_untracked();
                 (*extend_list.write()) += items_per_page.into_inner() as u32;
 
-                let realm = town_context.character.read_untracked().realm;
                 let stash_id = stash.read_untracked().stash_id;
                 let filters = filters.get_untracked();
 
@@ -458,7 +557,6 @@ fn StashBrowser(
                     let response = backend
                         .browse_stash_items(
                             &BrowseStashItemsRequest {
-                                realm,
                                 skip,
                                 limit: items_per_page,
                                 filters,
@@ -793,7 +891,7 @@ pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
     let disable_store = Signal::derive(move || stash.read().max_items == 0);
 
     view! {
-        <div class="flex gap-2 items-center">
+        <div class="flex min-w-0 items-center gap-2">
             <GemsCounter value w_full=true />
             <MenuButton on:click=do_store disabled=disable_store>
                 "Store"
@@ -801,7 +899,14 @@ pub fn Gems(stash: RwSignal<Stash>) -> impl IntoView {
             <MenuButton on:click=do_take disabled=disable_take>
                 "Take"
             </MenuButton>
-            <ValidatedInput id="gems_amount" input_type="number" placeholder="All" bind=amount />
+            <div class="w-20 shrink-0 xl:w-28">
+                <ValidatedInput
+                    id="gems_amount"
+                    input_type="number"
+                    placeholder="All"
+                    bind=amount
+                />
+            </div>
         </div>
     }
 }

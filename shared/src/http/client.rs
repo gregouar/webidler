@@ -184,8 +184,6 @@ pub struct ExchangeGemsStashRequest {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct BrowseStashItemsRequest {
-    pub realm: Realm,
-
     pub filters: MarketFilters,
 
     pub skip: u32,
