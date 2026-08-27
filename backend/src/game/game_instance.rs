@@ -246,16 +246,25 @@ impl<'a> GameInstance<'a> {
             let max_area_level_ever = self.game_data.area_state.read().max_area_level_ever as i32;
             let max_power_shard_level_ever =
                 self.game_data.area_state.read().max_power_shard_level_ever as i32;
-            if max_area_level_ever > 0 {
-                db::characters::update_character_area_progress(
-                    &mut tx,
-                    self.character_id,
-                    &self.game_data.area_id,
-                    max_area_level_ever,
-                    max_power_shard_level_ever,
-                )
-                .await?;
-            }
+            let quest_completed = self.game_data.quest_completed
+                || self
+                    .game_data
+                    .area_specs
+                    .quest
+                    .as_ref()
+                    .map(|quest| {
+                        self.game_data.area_state.read().max_area_level >= quest.area_level
+                    })
+                    .unwrap_or_default();
+            db::characters::update_character_area_progress(
+                &mut tx,
+                self.character_id,
+                &self.game_data.area_id,
+                max_area_level_ever,
+                max_power_shard_level_ever,
+                quest_completed,
+            )
+            .await?;
 
             if self.game_data.area_state.read().max_area_level > 0 {
                 let realm_id = self.game_data.realm.realm_id();

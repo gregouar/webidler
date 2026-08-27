@@ -53,10 +53,10 @@ fn handle_client_message(
 ) -> Option<ErrorMessage> {
     match msg {
         ClientMessage::Heartbeat => {}
-        ClientMessage::EndQuest => {
+        ClientMessage::EndGrind => {
             grind_controller::end_grind(master_store, game_data);
         }
-        ClientMessage::TerminateQuest(m) => {
+        ClientMessage::TerminateGrind(m) => {
             if let Err(err) = grind_controller::terminate_grind(game_data, m.reward_picks) {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,

@@ -24,17 +24,17 @@ use crate::components::{
 use shared::{
     computations,
     constants::{self, ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL},
-    messages::client::{ClientMessage, TerminateQuestMessage},
+    messages::client::{ClientMessage, TerminateGrindMessage},
 };
 
 #[component]
-pub fn EndQuestPanel() -> impl IntoView {
+pub fn EndGrindPanel() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let open = game_context.open_end_grind;
 
     Effect::new(move || {
-        if game_context.quest_rewards.read().is_some() {
+        if game_context.grind_rewards.read().is_some() {
             open.set(true);
         }
     });
@@ -77,7 +77,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
         move || {
             return_to_town_requested.set(true);
             conn.send(
-                &TerminateQuestMessage {
+                &TerminateGrindMessage {
                     reward_picks: item_rewards_picked
                         .get_untracked()
                         .into_iter()
@@ -95,7 +95,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
             if item_rewards_picked.read_untracked().len()
                 == game_context.area_specs.read_untracked().reward_picks as usize
                 || game_context
-                    .quest_rewards
+                    .grind_rewards
                     .read_untracked()
                     .as_ref()
                     .map(|quest_rewards| quest_rewards.item_rewards.is_empty())
@@ -114,20 +114,15 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let primary_action = {
         let conn: WebsocketContext = expect_context();
         move |_| {
-            if game_context.quest_rewards.read_untracked().is_none() {
+            if game_context.grind_rewards.read_untracked().is_none() {
                 end_quest_requested.set(true);
-                conn.send(&ClientMessage::EndQuest);
+                conn.send(&ClientMessage::EndGrind);
             }
 
-            if predicted_item_rewards_amount(
-                game_context.area_state.read_untracked().max_area_level,
-                game_context.area_specs.read_untracked().training,
-                game_context.area_specs.read_untracked().reward_slots,
-            ) == 0
-            {
+            if !rewards_expected(&game_context) {
                 return_to_town_requested.set(true);
                 conn.send(
-                    &TerminateQuestMessage {
+                    &TerminateGrindMessage {
                         reward_picks: Default::default(),
                     }
                     .into(),
@@ -139,7 +134,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let secondary_action = {
         let try_confirm_end = try_confirm_end.clone();
         move |_| {
-            if game_context.quest_rewards.read_untracked().is_some() {
+            if game_context.grind_rewards.read_untracked().is_some() {
                 try_confirm_end();
             }
         }
@@ -148,7 +143,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     Effect::new(move || {
         if open.get() && !return_to_town_requested.get_untracked() {
             item_rewards_picked.set(Default::default());
-            if game_context.quest_rewards.read_untracked().is_none() {
+            if game_context.grind_rewards.read_untracked().is_none() {
                 end_quest_requested.set(false);
             }
         }
@@ -220,6 +215,24 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                                 {area_completed}
                             </span>
                         </div>
+                        <Show when=move || {
+                            !game_context.quest_completed.get()
+                                && game_context.area_specs.read().quest.is_some()
+                        }>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-zinc-400">"Quest Level Goal"</span>
+                                <span class="text-amber-100 font-medium font-number">
+                                    {move || {
+                                        game_context
+                                            .area_specs
+                                            .read()
+                                            .quest
+                                            .as_ref()
+                                            .map(|quest| quest.area_level)
+                                    }}
+                                </span>
+                            </div>
+                        </Show>
                     </div>
                     <div class="flex flex-col gap-1">
                         <div class="flex justify-between gap-4">
@@ -234,6 +247,45 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                                 {move || stats().player_deaths}
                             </span>
                         </div>
+                        <Show when=move || {
+                            !game_context.quest_completed.get()
+                                && game_context.area_specs.read().quest.is_some()
+                        }>
+                            <div class="flex justify-between gap-4">
+                                <span class="text-zinc-400">"Quest Completion"</span>
+                                <span class=move || {
+                                    let completed = game_context
+                                        .area_specs
+                                        .read()
+                                        .quest
+                                        .as_ref()
+                                        .map(|quest| {
+                                            game_context.area_state.read().max_area_level
+                                                >= quest.area_level
+                                        })
+                                        .unwrap_or_default();
+                                    if completed {
+                                        "font-semibold text-emerald-400"
+                                    } else {
+                                        "font-semibold text-red-400"
+                                    }
+                                }>
+                                    {move || {
+                                        let completed = game_context
+                                            .area_specs
+                                            .read()
+                                            .quest
+                                            .as_ref()
+                                            .map(|quest| {
+                                                game_context.area_state.read().max_area_level
+                                                    >= quest.area_level
+                                            })
+                                            .unwrap_or_default();
+                                        if completed { "✓" } else { "✕" }
+                                    }}
+                                </span>
+                            </div>
+                        </Show>
                     </div>
                 </div>
 
@@ -252,7 +304,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                 {move || {
                     let primary_action = primary_action.clone();
                     let secondary_action = secondary_action.clone();
-                    if game_context.quest_rewards.read().is_none() {
+                    if game_context.grind_rewards.read().is_none() {
                         view! {
                             <MenuButtonRed
                                 on:click=primary_action
@@ -263,12 +315,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                                 {move || {
                                     if return_to_town_requested.get() {
                                         "Returning to Town..."
-                                    } else if predicted_item_rewards_amount(
-                                        game_context.area_state.read().max_area_level,
-                                        game_context.area_specs.read().training,
-                                        game_context.area_specs.read().reward_slots,
-                                    ) == 0
-                                    {
+                                    } else if !rewards_expected(&game_context) {
                                         "Confirm End Grind & Return to Town"
                                     } else if end_quest_requested.get() {
                                         "Revealing Rewards..."
@@ -412,7 +459,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                 <span class="text-center text-sm xl:text-base font-semibold text-amber-300 tracking-wide">
                     {move || {
                         if game_context
-                            .quest_rewards
+                            .grind_rewards
                             .read()
                             .as_ref()
                             .map(|quest_rewards| !quest_rewards.item_rewards.is_empty())
@@ -428,7 +475,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                 <span class="text-center text-sm xl:text-base text-zinc-400 ">
                     {move || {
                         game_context
-                            .quest_rewards
+                            .grind_rewards
                             .read()
                             .as_ref()
                             .map(|quest_rewards| {
@@ -451,11 +498,12 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                 <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
                 <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
                 <div class="relative z-10 flex w-full flex-row gap-4 items-center justify-center p-4">
+                    <QuestItemReward />
 
                     <Show
                         when=move || {
                             game_context
-                                .quest_rewards
+                                .grind_rewards
                                 .read()
                                 .as_ref()
                                 .map(|quest_rewards| !quest_rewards.item_rewards.is_empty())
@@ -465,7 +513,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                     >
                         {move || {
                             game_context
-                                .quest_rewards
+                                .grind_rewards
                                 .get()
                                 .map(|quest_rewards| {
                                     view! {
@@ -503,7 +551,12 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                                                             reward-flip
                                                             "
                                                             style=move || {
-                                                                format!("animation-delay: {}ms", 500 + index * 350)
+                                                                let quest_offset = quest_reward_expected(&game_context)
+                                                                    as usize;
+                                                                format!(
+                                                                    "animation-delay: {}ms",
+                                                                    500 + (index + quest_offset) * 350,
+                                                                )
                                                             }
                                                         >
                                                             <div class=move || {
@@ -546,7 +599,71 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
 }
 
 #[component]
-fn ItemRewardBackface(#[prop(default = false)] rotate: bool) -> impl IntoView {
+fn QuestItemReward() -> impl IntoView {
+    let game_context: GameContext = expect_context();
+
+    view! {
+        {move || {
+            let quest_reached = !game_context.quest_completed.get()
+                && game_context
+                    .area_specs
+                    .read()
+                    .quest
+                    .as_ref()
+                    .map(|quest| game_context.area_state.read().max_area_level >= quest.area_level)
+                    .unwrap_or_default();
+            if !quest_reached {
+                return None;
+            }
+            let revealed_reward = game_context
+                .grind_rewards
+                .read()
+                .as_ref()
+                .and_then(|rewards| rewards.quest_reward.clone());
+            Some(
+                if let Some(item_reward) = revealed_reward {
+
+                    view! {
+                        <div
+                            class="perspective rounded-[8px]"
+                            title="Quest reward — automatically collected"
+                        >
+                            <div class="relative w-40 xl:w-48 transform-style-3d reward-flip">
+                                <div class="relative isolate overflow-clip rounded-[8px] border border-emerald-600/90 bg-zinc-900 shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(52,211,153,0.14)] backface-hidden">
+                                    <ItemCard
+                                        item_specs=Arc::new(item_reward)
+                                        class:backface-hidden
+                                    />
+                                </div>
+                                <ItemRewardBackface rotate=true green=true />
+                            </div>
+                        </div>
+                    }
+                        .into_any()
+                } else {
+                    view! {
+                        <div
+                            class="perspective rounded-[8px] opacity-95"
+                            title="Quest reward — automatically collected"
+                        >
+                            <div class="relative w-40 xl:w-48 transform-style-3d">
+                                <div class="invisible relative aspect-[2/3] rounded-[8px] border border-transparent"></div>
+                                <ItemRewardBackface green=true />
+                            </div>
+                        </div>
+                    }
+                        .into_any()
+                },
+            )
+        }}
+    }
+}
+
+#[component]
+fn ItemRewardBackface(
+    #[prop(default = false)] rotate: bool,
+    #[prop(default = false)] green: bool,
+) -> impl IntoView {
     view! {
         <div class=move || {
             format!(
@@ -554,21 +671,32 @@ fn ItemRewardBackface(#[prop(default = false)] rotate: bool) -> impl IntoView {
                 absolute inset-0
                 backface-hidden
                 isolate overflow-clip rounded-[8px]
-                border border-[#6c5329]/85
+                border {}
                 bg-zinc-900
                 shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
                 {}
                 ",
+                if green { "border-emerald-600/90" } else { "border-[#6c5329]/85" },
                 if rotate { "rotate-y-180" } else { Default::default() },
             )
         }>
-            <div class="
+            <div class=move || {
+                format!(
+                    "
             absolute inset-0
-            bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]
+            {}
             shadow-[0_5px_14px_rgba(0,0,0,0.28),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.18),inset_0_-1px_0_rgba(0,0,0,0.42)]
             flex items-center justify-center
-            text-amber-200 text-8xl font-display
-            ">
+            {} text-8xl font-display
+            ",
+                    if green {
+                        "bg-[linear-gradient(180deg,rgba(52,211,153,0.12),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(35,48,44,0.96),rgba(18,24,22,1))]"
+                    } else {
+                        "bg-[linear-gradient(180deg,rgba(214,177,102,0.08),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(43,40,46,0.96),rgba(20,19,23,1))]"
+                    },
+                    if green { "text-emerald-400" } else { "text-amber-200" },
+                )
+            }>
                 <span class="relative z-10 drop-shadow-[0_2px_0_rgba(0,0,0,0.55)]">"?"</span>
             </div>
         </div>
@@ -583,28 +711,69 @@ fn predicted_item_rewards_amount(area_level: u16, training: bool, reward_slots: 
     }
 }
 
+fn quest_reward_expected(game_context: &GameContext) -> bool {
+    !game_context.quest_completed.get_untracked()
+        && game_context
+            .area_specs
+            .read_untracked()
+            .quest
+            .as_ref()
+            .map(|quest| {
+                game_context.area_state.read_untracked().max_area_level >= quest.area_level
+            })
+            .unwrap_or_default()
+}
+
+fn rewards_expected(game_context: &GameContext) -> bool {
+    let area_state = game_context.area_state.read();
+    let area_specs = game_context.area_specs.read();
+    predicted_item_rewards_amount(
+        area_state.max_area_level,
+        area_specs.training,
+        area_specs.reward_slots,
+    ) > 0
+        || (!game_context.quest_completed.get()
+            && area_specs
+                .quest
+                .as_ref()
+                .map(|quest| area_state.max_area_level >= quest.area_level)
+                .unwrap_or_default())
+}
+
 #[component]
 fn HiddenItemRewards() -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     view! {
         {move || {
+            let area_state = game_context.area_state.read();
+            let area_specs = game_context.area_specs.read();
             let amount = predicted_item_rewards_amount(
-                game_context.area_state.read().max_area_level,
-                game_context.area_specs.read().training,
-                game_context.area_specs.read().reward_slots,
+                area_state.max_area_level,
+                area_specs.training,
+                area_specs.reward_slots,
             );
+            let quest_reward_unlocked = !game_context.quest_completed.get()
+                && area_specs
+                    .quest
+                    .as_ref()
+                    .map(|quest| area_state.max_area_level >= quest.area_level)
+                    .unwrap_or_default();
             if amount == 0 {
-                view! {
-                    <div class="flex-1 text-zinc-400">
-                        {format!(
-                            "Complete at least {} Areas to get an Item Reward, and at least {} to get a guaranteed Edict Item drop.",
-                            ITEM_REWARDS_MIN_LEVEL,
-                            ITEM_REWARDS_MAP_MIN_LEVEL,
-                        )}
-                    </div>
+                if quest_reward_unlocked {
+                    ().into_any()
+                } else {
+                    view! {
+                        <div class="flex-1 text-zinc-400">
+                            {format!(
+                                "Complete at least {} Areas to get an Item Reward, and at least {} to get a guaranteed Edict Item drop.",
+                                ITEM_REWARDS_MIN_LEVEL,
+                                ITEM_REWARDS_MAP_MIN_LEVEL,
+                            )}
+                        </div>
+                    }
+                        .into_any()
                 }
-                    .into_any()
             } else {
                 view! {
                     <div class="flex w-full flex-row gap-4 items-center justify-center">

@@ -69,7 +69,8 @@ pub struct GameInstanceData {
 
     pub end_grind: bool, // Initiate end, generate rewards
     pub grind_rewards: LazySyncer<Option<GrindRewards>>,
-    pub terminate_grind: bool, // Actually close the quest
+    pub terminate_grind: bool, // Actually close the grind
+    pub quest_completed: bool, // Was the quest already completed in a PREVIOUS grind
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -96,6 +97,8 @@ pub struct SavedGameData {
     // TODO: Rename to grind
     end_quest: bool,
     quest_rewards: Option<GrindRewards>,
+    #[serde(default)]
+    quest_completed: bool,
 }
 
 impl std::ops::Deref for SavedGameData {
@@ -115,6 +118,7 @@ impl GameInstanceData {
         map_item: Option<ItemSpecs>,
         max_area_level_ever: AreaLevel,
         max_power_shard_level_ever: AreaLevel,
+        quest_completed: bool,
         passives_tree_id: &str,
         mut passives_tree_state: PassivesTreeState,
         mut player_resources: PlayerResources,
@@ -237,6 +241,7 @@ impl GameInstanceData {
             end_grind: false,
             grind_rewards: LazySyncer::new(None),
             terminate_grind: false,
+            quest_completed,
         })
     }
 
@@ -262,6 +267,7 @@ impl GameInstanceData {
             auto_progress: self.area_state.read().auto_progress,
             end_quest: self.end_grind,
             quest_rewards: self.grind_rewards.read().clone(),
+            quest_completed: self.quest_completed,
         })?)
     }
 
@@ -287,6 +293,7 @@ impl GameInstanceData {
             auto_progress,
             end_quest,
             quest_rewards,
+            quest_completed,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
         let mut s = Self::init_from_store(
@@ -296,6 +303,7 @@ impl GameInstanceData {
             map_item,
             max_area_level_ever,
             max_power_shard_level_ever,
+            quest_completed,
             &passives_tree_id,
             passives_tree_state,
             player_resources,

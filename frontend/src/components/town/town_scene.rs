@@ -7,6 +7,7 @@ use leptos_use::storage;
 
 use shared::data::{
     area::StartAreaConfig,
+    grind::QuestSpecs,
     item::{ItemCategory, ItemSpecs},
     user::UserGrindArea,
 };
@@ -411,6 +412,16 @@ fn GrindingAreaCard(
                         <div class="p-2 xl:p-3 xl:space-y-1 flex-1 flex flex-col justify-around">
                             <div class="text-base xl:text-lg font-semibold text-amber-200 text-shadow-lg/100 shadow-gray-950 font-display">
                                 {move || area_specs.read().name.clone()}
+                            // {move || {
+                            // (area.quest_completed && area_specs.read().quest.is_some())
+                            // .then(|| {
+                            // view! {
+                            // <span class="ml-2 text-emerald-400" title="Quest completed">
+                            // "✓"
+                            // </span>
+                            // }
+                            // })
+                            // }}
                             </div>
 
                             <div class="text-xs xl:text-sm text-zinc-400">
@@ -589,6 +600,21 @@ pub fn StartGrindPanel(
 
                                     <Separator />
 
+                                    {area_specs
+                                        .quest
+                                        .clone()
+                                        .map(|quest| {
+                                            let completed = selected_area
+                                                .read()
+                                                .as_ref()
+                                                .map(|area| area.quest_completed)
+                                                .unwrap_or_default();
+                                            view! {
+                                                <QuestDescription quest completed />
+                                                <Separator />
+                                            }
+                                        })}
+
                                     <ul class="text-xs xl:text-sm text-zinc-400 list-none xl:space-y-1">
                                         <li class=" ">
                                             "Power Level Modifier: "
@@ -688,5 +714,30 @@ pub fn StartGrindPanel(
                     })
             }}
         </MenuPanel>
+    }
+}
+
+#[component]
+fn QuestDescription(quest: QuestSpecs, completed: bool) -> impl IntoView {
+    view! {
+        <div class="px-1 xl:px-3 text-xs xl:text-sm">
+            <div class="flex items-baseline justify-around gap-4">
+                <span>
+                    <span class="font-semibold text-amber-200">"Quest Completed: "</span>
+                    <span class=if completed {
+                        "font-semibold text-emerald-400"
+                    } else {
+                        "font-semibold text-red-400"
+                    }>{if completed { "✓" } else { "✕" }}</span>
+                </span>
+                <span>
+                    <span class="font-semibold text-amber-200">"Goal: "</span>
+                    <span class="font-medium text-zinc-400">
+                        {format!("Area Level {}", quest.area_level)}
+                    </span>
+                </span>
+            </div>
+            <p class="mt-1 leading-relaxed text-zinc-400">{quest.description}</p>
+        </div>
     }
 }

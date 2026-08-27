@@ -12,7 +12,7 @@ use crate::components::{
         wiki::WikiButton,
     },
 };
-use shared::messages::client::{ClientMessage, TerminateQuestMessage};
+use shared::messages::client::{ClientMessage, TerminateGrindMessage};
 
 use super::GameContext;
 
@@ -50,9 +50,9 @@ pub fn HeaderMenu() -> impl IntoView {
         move |_| {
             show_power_shard_tip.set(false);
             if game_context.area_specs.read_untracked().training {
-                conn.send(&ClientMessage::EndQuest);
+                conn.send(&ClientMessage::EndGrind);
                 conn.send(
-                    &TerminateQuestMessage {
+                    &TerminateGrindMessage {
                         reward_picks: Default::default(),
                     }
                     .into(),

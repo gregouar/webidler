@@ -51,6 +51,7 @@ pub struct CharacterAreaEntry {
     pub area_id: String,
     pub max_area_level: i32,
     pub max_power_shard_level: i32,
+    pub quest_completed: bool,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -156,6 +157,7 @@ pub async fn read_character_area_completed<'c>(
             area_id,
             max_area_level as "max_area_level!: i32",
             max_power_shard_level as "max_power_shard_level!: i32",
+            quest_completed as "quest_completed!: bool",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -180,6 +182,7 @@ pub async fn read_character_areas_completed<'c>(
             area_id,
             max_area_level as "max_area_level!: i32",
             max_power_shard_level as "max_power_shard_level!: i32",
+            quest_completed as "quest_completed!: bool",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -354,10 +357,11 @@ pub async fn update_character_area_progress<'c>(
     area_id: &str,
     max_area_level_ever: i32,
     max_power_shard_level_ever: i32,
+    quest_completed: bool,
 ) -> Result<(), sqlx::Error> {
-    if max_area_level_ever > 0 {
+    if max_area_level_ever > 0 || quest_completed {
         sqlx::query!(
-        "INSERT INTO character_area_completed (character_id, area_id, max_area_level,max_power_shard_level) VALUES ($1, $2, $3, $4)
+        "INSERT INTO character_area_completed (character_id, area_id, max_area_level,max_power_shard_level,quest_completed) VALUES ($1, $2, $3, $4, $5)
          ON CONFLICT(character_id, area_id) DO UPDATE 
          SET max_area_level = CASE
             WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
@@ -369,10 +373,16 @@ pub async fn update_character_area_progress<'c>(
             THEN EXCLUDED.max_power_shard_level
             ELSE character_area_completed.max_power_shard_level
          END,
+         quest_completed = CASE
+            WHEN EXCLUDED.quest_completed THEN TRUE
+            ELSE character_area_completed.quest_completed
+         END,
          updated_at = CURRENT_TIMESTAMP;",
         character_id,
         area_id,
-        max_area_level_ever,max_power_shard_level_ever
+        max_area_level_ever,
+        max_power_shard_level_ever,
+        quest_completed
     )
     .execute(&mut **executor)
     .await?;

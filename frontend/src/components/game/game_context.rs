@@ -56,7 +56,8 @@ pub struct GameContext {
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
     pub queued_loot: Syncable<Vec<QueuedLoot>>,
-    pub quest_rewards: RwSignal<Option<GrindRewards>>,
+    pub grind_rewards: RwSignal<Option<GrindRewards>>,
+    pub quest_completed: RwSignal<bool>,
 
     pub game_stats: RwSignal<GameStats>,
     pub game_local_stats: GameLocalStats,
@@ -110,7 +111,8 @@ impl GameContext {
             monster_states: RwSignal::new(Vec::new()),
 
             queued_loot: Default::default(),
-            quest_rewards: RwSignal::new(None),
+            grind_rewards: RwSignal::new(None),
+            quest_completed: RwSignal::new(false),
 
             game_stats: RwSignal::new(Default::default()),
             game_local_stats: Default::default(),

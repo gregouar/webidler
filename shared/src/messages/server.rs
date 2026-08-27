@@ -60,6 +60,7 @@ pub struct InitGameMessage {
     pub map_item: Option<ItemSpecs>,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,
+    pub quest_completed: bool,
     pub passives_tree_specs: PassivesTreeSpecs,
     pub passives_tree_state: PassivesTreeState,
     pub passives_tree_build: PurchasedNodes,

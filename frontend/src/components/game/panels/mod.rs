@@ -4,7 +4,7 @@ pub mod passives;
 mod skills;
 mod statistics;
 
-pub use end_grind::EndQuestPanel;
+pub use end_grind::EndGrindPanel;
 pub use inventory::GameInventoryPanel;
 pub use passives::PassivesPanel;
 pub use skills::SkillsPanel;
