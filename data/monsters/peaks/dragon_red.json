@@ -1,32 +1,25 @@
 {
-  "name": "Abal, the Mother Wyrm",
-  "portrait": "monsters/peaks/dragon_red.webp",
-  "rarity": "Boss",
-  "max_life": 1200,
-  "size": "Gargantuan",
-  "armor": { "Physical": 100, "Fire": 100 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Abal, the Mother Wyrm",
+  "portrait"          : "monsters/peaks/dragon_red.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 1200,
+  "size"              : "Gargantuan",
+  "armor"             : {"Physical": 100, "Fire": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Crushing Tail",
-      "icon": "skills/attack.svg",
+      "name"      : "Crushing Tail",
+      "icon"      : "skills/attack.svg",
       "skill_type": "Attack",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 3.0,
+      "targets"   : [
         {
-          "range": "Melee",
+          "range"  : "Melee",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 20, 40 ]
-                }
+                "damage": { "Physical": [20, 40] }
               }
             }
           ]
@@ -34,47 +27,34 @@
       ]
     },
     {
-      "name": "Incinerating Breath",
-      "icon": "skills/burning_ray.svg",
+      "name"      : "Incinerating Breath",
+      "icon"      : "skills/burning_ray.svg",
       "skill_type": "Attack",
-      "cooldown": 10.0,
-      "targets": [
+      "cooldown"  : 10.0,
+      "targets"   : [
         {
-          "range": "Distance",
+          "range"  : "Distance",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Fire": [ 10, 20 ]
-                }
+                "damage": { "Fire": [10, 20] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "duration": 10,
-                "value": 25
-              }
-            }
+            { "ApplyStatus": {"status_id": "burn", "duration": 10, "value": 15} }
           ]
         }
       ]
     },
     {
-      "name": "Abal's Fury",
-      "icon": "skills/dragon_head.svg",
+      "name"      : "Abal's Fury",
+      "icon"      : "skills/dragon_head.svg",
       "skill_type": "Blessing",
-      "cooldown": 20.0,
-      "targets": [
+      "cooldown"  : 20.0,
+      "targets"   : [
         {
           "target_type": "Me",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "dragon_rage",
-                "value": 100
-              }
-            }
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "dragon_rage", "value": 100} }
           ]
         }
       ]

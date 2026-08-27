@@ -54,6 +54,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 conn.send(
                     &TerminateGrindMessage {
                         reward_picks: Default::default(),
+                        quest_reward_picked: Default::default(),
                     }
                     .into(),
                 );

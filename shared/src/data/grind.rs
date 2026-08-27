@@ -25,7 +25,7 @@ pub enum QuestReward {
         item_id: String,
         level: AreaLevel,
         #[serde(default)]
-        rarity: Option<ItemRarity>,
+        item_rarity: Option<ItemRarity>,
         #[serde(default)]
         max_affixes: bool,
     },

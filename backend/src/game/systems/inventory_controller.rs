@@ -13,7 +13,7 @@ pub fn store_item_to_bag(
     item_specs: ItemSpecs,
 ) -> Result<(), AppError> {
     if player_inventory.bag.len() >= player_inventory.max_bag_size as usize {
-        return Err(AppError::UserError("not enough space".into()));
+        return Err(AppError::UserError("Not enough space!".into()));
     }
 
     player_inventory.bag.push(item_specs);

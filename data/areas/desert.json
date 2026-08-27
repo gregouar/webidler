@@ -7,7 +7,11 @@
         "item_level_modifier": 140,
         "header_background": "areas/desert_header.webp",
         "footer_background": "areas/desert_footer.webp",
-        "coming_soon": false
+        "quest": {
+            "description": "Stop the Grand Vizier before his unholy army rises from the sands and marches upon the living.",
+            "area_level": 150,
+            "reward": { "Loot": {"item_rarity": "Unique", "level": 410} }
+        }
     },
     "loot_tables": [
         "tier_1.json",      "tier_2.json",      "tier_3.json",      "tier_4.json",      "tier_5.json",

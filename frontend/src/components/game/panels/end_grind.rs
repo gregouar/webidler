@@ -69,8 +69,22 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let area_completed = move || game_context.area_state.read().max_area_level;
 
     let item_rewards_picked = RwSignal::new(IndexSet::new());
+    let quest_reward_picked = RwSignal::new(true);
     let end_quest_requested = RwSignal::new(false);
     let return_to_town_requested = RwSignal::new(false);
+    let inventory_slots_missing = Signal::derive(move || {
+        let inventory = game_context.player_inventory.read();
+        let free_slots = (inventory.max_bag_size as usize).saturating_sub(inventory.bag.len());
+        let quest_rewards_picked = (quest_reward_picked.get()
+            && game_context
+                .grind_rewards
+                .read()
+                .as_ref()
+                .and_then(|rewards| rewards.quest_reward.as_ref())
+                .is_some()) as usize;
+        let required_slots = item_rewards_picked.read().len() + quest_rewards_picked;
+        required_slots.saturating_sub(free_slots)
+    });
 
     let do_confirm_end = Arc::new({
         let conn: WebsocketContext = expect_context();
@@ -83,6 +97,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                         .into_iter()
                         .map(|x| x as u8)
                         .collect(),
+                    quest_reward_picked: quest_reward_picked.get_untracked(),
                 }
                 .into(),
             );
@@ -92,21 +107,40 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let try_confirm_end = Arc::new({
         let confirm_context: ConfirmContext = expect_context();
         move || {
-            if item_rewards_picked.read_untracked().len()
+            if inventory_slots_missing.get_untracked() > 0 {
+                return;
+            }
+
+            let all_normal_rewards_picked = item_rewards_picked.read_untracked().len()
                 == game_context.area_specs.read_untracked().reward_picks as usize
                 || game_context
                     .grind_rewards
                     .read_untracked()
                     .as_ref()
                     .map(|quest_rewards| quest_rewards.item_rewards.is_empty())
-                    .unwrap_or_default()
-            {
+                    .unwrap_or_default();
+            let normal_rewards_missing = !all_normal_rewards_picked;
+            let quest_reward_missing = game_context
+                .grind_rewards
+                .read_untracked()
+                .as_ref()
+                .and_then(|rewards| rewards.quest_reward.as_ref())
+                .is_some()
+                && !quest_reward_picked.get_untracked();
+
+            if !normal_rewards_missing && !quest_reward_missing {
                 do_confirm_end.clone()();
             } else {
-                (confirm_context.confirm)(
-                    "Are you sure you want to quit without picking all your Item Rewards?".into(),
-                    do_confirm_end.clone(),
-                );
+                let message = match (normal_rewards_missing, quest_reward_missing) {
+                    (true, true) => {
+                        "Are you sure you want to return to Town without picking all your Item Rewards, including your Quest Reward?"
+                    }
+                    (false, true) => {
+                        "Are you sure you want to return to Town without taking your Quest Reward?"
+                    }
+                    _ => "Are you sure you want to quit without picking all your Item Rewards?",
+                };
+                (confirm_context.confirm)(message.into(), do_confirm_end.clone());
             }
         }
     });
@@ -124,6 +158,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                 conn.send(
                     &TerminateGrindMessage {
                         reward_picks: Default::default(),
+                        quest_reward_picked: true,
                     }
                     .into(),
                 );
@@ -143,6 +178,7 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     Effect::new(move || {
         if open.get() && !return_to_town_requested.get_untracked() {
             item_rewards_picked.set(Default::default());
+            quest_reward_picked.set(true);
             if game_context.grind_rewards.read_untracked().is_none() {
                 end_quest_requested.set(false);
             }
@@ -291,7 +327,12 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
 
                 <SkillMasteryRewards />
 
-                <ItemRewards item_rewards_picked class:mt-2 />
+                <ItemRewards
+                    item_rewards_picked
+                    quest_reward_picked
+                    inventory_slots_missing
+                    class:mt-2
+                />
 
                 // <Show when=move || game_context.quest_rewards.read().is_none()>
                 <div class="px-4 py-2 text-xs xl:text-sm text-zinc-400">
@@ -330,7 +371,10 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                         view! {
                             <MenuButton
                                 on:click=secondary_action
-                                disabled=Signal::derive(move || { return_to_town_requested.get() })
+                                disabled=Signal::derive(move || {
+                                    return_to_town_requested.get()
+                                        || inventory_slots_missing.get() > 0
+                                })
                             >
                                 {move || {
                                     if return_to_town_requested.get() {
@@ -434,7 +478,11 @@ fn SkillMasteryRewards() -> impl IntoView {
 }
 
 #[component]
-fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView {
+fn ItemRewards(
+    item_rewards_picked: RwSignal<IndexSet<usize>>,
+    quest_reward_picked: RwSignal<bool>,
+    inventory_slots_missing: Signal<usize>,
+) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     let pick_reward = move |index| {
@@ -472,24 +520,38 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                     }}
                 </span>
 
-                <span class="text-center text-sm xl:text-base text-zinc-400 ">
-                    {move || {
-                        game_context
-                            .grind_rewards
-                            .read()
-                            .as_ref()
-                            .map(|quest_rewards| {
-                                (!quest_rewards.item_rewards.is_empty())
-                                    .then(|| {
-                                        format!(
-                                            "({:0}/{:0})",
-                                            item_rewards_picked.read().len(),
-                                            game_context.area_specs.read_untracked().reward_picks,
-                                        )
-                                    })
-                            })
-                    }}
-                </span>
+                <Show
+                    when=move || { inventory_slots_missing.get() > 0 }
+                    fallback=move || {
+                        view! {
+                            <span class="text-center text-sm text-zinc-400 xl:text-base">
+                                {move || {
+                                    game_context
+                                        .grind_rewards
+                                        .read()
+                                        .as_ref()
+                                        .map(|quest_rewards| {
+                                            (!quest_rewards.item_rewards.is_empty())
+                                                .then(|| {
+                                                    format!(
+                                                        "({:0}/{:0})",
+                                                        item_rewards_picked.read().len(),
+                                                        game_context.area_specs.read_untracked().reward_picks,
+                                                    )
+                                                })
+                                        })
+                                }}
+                            </span>
+                        }
+                    }
+                >
+                    <span
+                        class="text-right text-xs font-medium text-red-400 xl:text-sm"
+                        role="alert"
+                    >
+                        "Not enough inventory space"
+                    </span>
+                </Show>
             </div>
 
             <div class="relative isolate w-full overflow-clip rounded-[10px] border border-[#3b3428]
@@ -498,7 +560,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                 <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
                 <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
                 <div class="relative z-10 flex w-full flex-row gap-4 items-center justify-center p-4">
-                    <QuestItemReward />
+                    <QuestItemReward quest_reward_picked />
 
                     <Show
                         when=move || {
@@ -515,9 +577,9 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
                             game_context
                                 .grind_rewards
                                 .get()
-                                .map(|quest_rewards| {
+                                .map(|grind_rewards| {
                                     view! {
-                                        {quest_rewards
+                                        {grind_rewards
                                             .item_rewards
                                             .into_iter()
                                             .enumerate()
@@ -599,7 +661,7 @@ fn ItemRewards(item_rewards_picked: RwSignal<IndexSet<usize>>) -> impl IntoView 
 }
 
 #[component]
-fn QuestItemReward() -> impl IntoView {
+fn QuestItemReward(quest_reward_picked: RwSignal<bool>) -> impl IntoView {
     let game_context: GameContext = expect_context();
 
     view! {
@@ -622,14 +684,36 @@ fn QuestItemReward() -> impl IntoView {
                 .and_then(|rewards| rewards.quest_reward.clone());
             Some(
                 if let Some(item_reward) = revealed_reward {
+                    let is_selected = move || quest_reward_picked.get();
 
                     view! {
                         <div
-                            class="perspective rounded-[8px]"
-                            title="Quest reward — automatically collected"
+                            class=move || {
+                                format!(
+                                    "perspective rounded-[8px] cursor-pointer transition-all duration-150 {}",
+                                    if is_selected() {
+                                        "brightness-110 -translate-y-[1px]"
+                                    } else {
+                                        "opacity-90 hover:opacity-100"
+                                    },
+                                )
+                            }
+                            title="Quest reward"
+                            on:click=move |_| {
+                                quest_reward_picked.update(|selected| *selected = !*selected)
+                            }
                         >
                             <div class="relative w-40 xl:w-48 transform-style-3d reward-flip">
-                                <div class="relative isolate overflow-clip rounded-[8px] border border-emerald-600/90 bg-zinc-900 shadow-[0_5px_14px_rgba(0,0,0,0.28),inset_0_0_0_1px_rgba(52,211,153,0.14)] backface-hidden">
+                                <div class=move || {
+                                    format!(
+                                        "relative isolate overflow-clip rounded-[8px] border bg-zinc-900 backface-hidden {}",
+                                        if is_selected() {
+                                            "border-emerald-500 shadow-[0_8px_18px_rgba(0,0,0,0.34),inset_0_1px_0_rgba(167,243,208,0.08),inset_0_0_0_1px_rgba(52,211,153,0.22)]"
+                                        } else {
+                                            "border-[#3b3428] shadow-[0_5px_14px_rgba(0,0,0,0.28)]"
+                                        },
+                                    )
+                                }>
                                     <ItemCard
                                         item_specs=Arc::new(item_reward)
                                         class:backface-hidden
@@ -642,10 +726,7 @@ fn QuestItemReward() -> impl IntoView {
                         .into_any()
                 } else {
                     view! {
-                        <div
-                            class="perspective rounded-[8px] opacity-95"
-                            title="Quest reward — automatically collected"
-                        >
+                        <div class="perspective rounded-[8px] opacity-95" title="Quest reward">
                             <div class="relative w-40 xl:w-48 transform-style-3d">
                                 <div class="invisible relative aspect-[2/3] rounded-[8px] border border-transparent"></div>
                                 <ItemRewardBackface green=true />
@@ -776,7 +857,7 @@ fn HiddenItemRewards() -> impl IntoView {
                 }
             } else {
                 view! {
-                    <div class="flex w-full flex-row gap-4 items-center justify-center">
+                    <div class="contents">
                         {(0..amount)
                             .map(|_| {
                                 view! {

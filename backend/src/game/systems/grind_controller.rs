@@ -32,6 +32,7 @@ pub fn end_grind(master_store: &MasterStore, game_data: &mut GameInstanceData) {
 pub fn terminate_grind(
     game_data: &mut GameInstanceData,
     reward_picks: Vec<u8>,
+    quest_reward_picked: bool,
 ) -> Result<(), AppError> {
     if !game_data.end_grind {
         return Err(AppError::UserError("grind not yet ended".into()));
@@ -45,21 +46,22 @@ pub fn terminate_grind(
         return Err(AppError::UserError("too many reward picks".into()));
     }
 
-    let quest_rewards_amount = game_data
-        .grind_rewards
-        .read()
-        .as_ref()
-        .and_then(|rewards| rewards.quest_reward.as_ref())
-        .is_some() as usize;
+    let quest_rewards_amount = (quest_reward_picked
+        && game_data
+            .grind_rewards
+            .read()
+            .as_ref()
+            .and_then(|rewards| rewards.quest_reward.as_ref())
+            .is_some()) as usize;
 
     if game_data.player_inventory.read().bag.len() + reward_picks.len() + quest_rewards_amount
         > game_data.player_inventory.read().max_bag_size as usize
     {
-        return Err(AppError::UserError("not enough space".into()));
+        return Err(AppError::UserError("Not enough space".into()));
     }
 
     if let Some(grind_rewards) = game_data.grind_rewards.read() {
-        if let Some(quest_reward) = &grind_rewards.quest_reward {
+        if quest_reward_picked && let Some(quest_reward) = &grind_rewards.quest_reward {
             inventory_controller::store_item_to_bag(
                 game_data.player_inventory.mutate(),
                 quest_reward.clone(),
@@ -191,14 +193,14 @@ fn generate_quest_reward(
         QuestReward::Item {
             item_id,
             level,
-            rarity,
+            item_rarity,
             max_affixes,
         } => {
             let base = master_store.items_store.content.get(item_id)?.clone();
             let rarity = if base.rarity == ItemRarity::Unique {
                 ItemRarity::Unique
             } else {
-                rarity.unwrap_or(base.rarity)
+                item_rarity.unwrap_or(base.rarity)
             };
             Some(loot_generator::roll_item_stats(
                 item_id.clone(),

@@ -717,13 +717,36 @@ pub fn StartGrindPanel(
     }
 }
 
+// #[component]
+// fn QuestDescription(quest: QuestSpecs, completed: bool) -> impl IntoView {
+//     view! {
+//         <div class="px-1 xl:px-3 text-xs xl:text-sm">
+//             <div class="flex items-baseline gap-1">
+//                 <span class="font-semibold text-amber-200">"Quest: "</span>
+//                 <span class="mt-1 leading-relaxed text-zinc-400">{quest.description}</span>
+//             </div>
+//             <div class="flex items-baseline gap-1">
+//                 <span class="font-semibold text-amber-200">"Goal: "</span>
+//                 <span class=if completed {
+//                     "font-semibold text-emerald-400"
+//                 } else {
+//                     "font-semibold text-red-400"
+//                 }>{if completed { "✓" } else { "✕" }}</span>
+//                 <span class="font-medium text-zinc-400">
+//                     {format!("Area Level {}", quest.area_level)}
+//                 </span>
+//             </div>
+//         </div>
+//     }
+// }
+
 #[component]
 fn QuestDescription(quest: QuestSpecs, completed: bool) -> impl IntoView {
     view! {
         <div class="px-1 xl:px-3 text-xs xl:text-sm">
             <div class="flex items-baseline justify-around gap-4">
                 <span>
-                    <span class="font-semibold text-amber-200">"Quest Completed: "</span>
+                    <span class="font-semibold text-amber-200">"Quest: "</span>
                     <span class=if completed {
                         "font-semibold text-emerald-400"
                     } else {
@@ -733,7 +756,7 @@ fn QuestDescription(quest: QuestSpecs, completed: bool) -> impl IntoView {
                 <span>
                     <span class="font-semibold text-amber-200">"Goal: "</span>
                     <span class="font-medium text-zinc-400">
-                        {format!("Area Level {}", quest.area_level)}
+                        {format!("Beat Area Level {}", quest.area_level)}
                     </span>
                 </span>
             </div>

@@ -57,7 +57,9 @@ fn handle_client_message(
             grind_controller::end_grind(master_store, game_data);
         }
         ClientMessage::TerminateGrind(m) => {
-            if let Err(err) = grind_controller::terminate_grind(game_data, m.reward_picks) {
+            if let Err(err) =
+                grind_controller::terminate_grind(game_data, m.reward_picks, m.quest_reward_picked)
+            {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: err.to_string(),

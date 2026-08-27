@@ -60,6 +60,7 @@ pub struct ClientConnectMessage {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TerminateGrindMessage {
     pub reward_picks: Vec<u8>,
+    pub quest_reward_picked: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
