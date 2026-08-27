@@ -10,7 +10,7 @@
     "quest": {
       "description": "Reunite the shattered fragments of the Princess by defeating her tormented reflections.",
       "area_level" : 100,
-      "reward"     : { "Loot": {"item_rarity": "Unique", "item_category": "Map", "level": 260} }
+      "reward"     : { "Item": {"item_id": "rune_root", "item_rarity": "Normal", "level": 150} }
     }
   },
   "loot_tables": [
