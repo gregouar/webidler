@@ -1,28 +1,21 @@
 {
-  "name": "Raiju Whelp",
-  "portrait": "monsters/yokai/raiju_whelp.webp",
+  "name"    : "Raiju Whelp",
+  "portrait": "monsters/yokai/raiju_whelp_llod.webp",
   "max_life": 5,
-  "armor": { "Storm": 100 },
-  "evade": {
-    "Physical": 20,
-    "Fire": 20,
-    "Storm": 20,
-    "Poison": 20
-  },
-  "skills": [
+  "armor"   : {"Storm": 100},
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
     {
-      "name": "Lightning Strike",
-      "icon": "skills/magic_missile.svg",
+      "name"      : "Lightning Strike",
+      "icon"      : "skills/magic_missile.svg",
       "skill_type": "Attack",
-      "cooldown": 1.0,
-      "targets": [
+      "cooldown"  : 1.0,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 10 ]
-                }
+                "damage": { "Storm": [0, 10] }
               }
             }
           ]
