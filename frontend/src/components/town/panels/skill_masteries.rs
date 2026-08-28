@@ -837,22 +837,26 @@ fn MasteryUpgradeRow(
                                     .into_any()
                             } else {
                                 view! {
-                                    {(next_cost.get() > 0
-                                        && upgrade_level.get() < upgrade_specs.max_level)
-                                        .then(|| {
-                                            view! {
-                                                <div>
-                                                    "Cost: "
-                                                    <span class=move || {
-                                                        if available_points.get() < next_cost.get() {
-                                                            "font-bold text-red-400"
-                                                        } else {
-                                                            "font-bold text-zinc-100"
-                                                        }
-                                                    }>{move || next_cost.get()}</span>
-                                                </div>
-                                            }
-                                        })}
+                                    {
+                                        let max_level = upgrade_specs.max_level;
+                                        move || {
+                                            (next_cost.get() > 0 && upgrade_level.get() < max_level)
+                                                .then(|| {
+                                                    view! {
+                                                        <div>
+                                                            "Cost: "
+                                                            <span class=move || {
+                                                                if available_points.get() < next_cost.get() {
+                                                                    "font-bold text-red-400"
+                                                                } else {
+                                                                    "font-bold text-zinc-100"
+                                                                }
+                                                            }>{move || next_cost.get()}</span>
+                                                        </div>
+                                                    }
+                                                })
+                                        }
+                                    }
                                     <div>"Max Level: " {upgrade_specs.max_level}</div>
                                 }
                                     .into_any()

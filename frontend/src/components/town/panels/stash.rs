@@ -54,7 +54,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
     let stash_type = RwSignal::new(StashType::Character);
 
     let selected_item = RwSignal::new(SelectedItem::None);
-    let selected_stash = RwSignal::new(Some(town_context.character_stash.get()));
+    let selected_stash = RwSignal::new(Some(town_context.character_stash.get_untracked()));
 
     let filters = RwSignal::new(MarketFilters {
         // item_level: Some(town_context.character.read_untracked().max_area_level),

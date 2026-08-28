@@ -2,8 +2,8 @@
   "default": {
     "nodes": {
       "0088c436-0b23-4993-a966-b57d2444e996": {
-        "name": "Greater Evade Chance",
-        "icon": "passives/curled_leaf.svg",
+        "name": "Monkey Agility",
+        "icon": "passives/monkey.svg",
         "x": 90.0,
         "y": -130.0,
         "size": 1,
@@ -15,7 +15,12 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 5.0
+            "value": 4.0
+          },
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "value": 10.0
           }
         ],
         "triggers": [],
@@ -27,6 +32,11 @@
             },
             "modifier": "Flat",
             "value": 2.0
+          },
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "value": 5.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1912,7 +1922,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -1923,7 +1933,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -7251,7 +7261,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -7262,7 +7272,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10094,7 +10104,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -10105,7 +10115,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13044,7 +13054,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -13055,7 +13065,7 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13463,8 +13473,8 @@
         "socket": false
       },
       "cc2ee934-c6ab-462a-9dd2-74b00a3720af": {
-        "name": "Greater Evade Chance",
-        "icon": "passives/curled_leaf.svg",
+        "name": "Slippery Buckler",
+        "icon": "passives/zebra_shield.svg",
         "x": -172.0,
         "y": 53.0,
         "size": 1,
@@ -13476,7 +13486,34 @@
               "Evade": null
             },
             "modifier": "Flat",
-            "value": 5.0
+            "value": 4.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "Shield",
+                      "not": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -13488,6 +13525,33 @@
             },
             "modifier": "Flat",
             "value": 2.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "Shield",
+                      "not": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,

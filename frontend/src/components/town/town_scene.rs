@@ -605,7 +605,7 @@ pub fn StartGrindPanel(
                                         .clone()
                                         .map(|quest| {
                                             let completed = selected_area
-                                                .read()
+                                                .read_untracked()
                                                 .as_ref()
                                                 .map(|area| area.quest_completed)
                                                 .unwrap_or_default();
@@ -631,7 +631,7 @@ pub fn StartGrindPanel(
                                                     "Power Shards unlocked up to Area Level: "
                                                     <span class="font-semibold text-white">
                                                         {selected_area
-                                                            .read()
+                                                            .read_untracked()
                                                             .as_ref()
                                                             .map(|area| area.max_power_shard_level)
                                                             .unwrap_or_default()}

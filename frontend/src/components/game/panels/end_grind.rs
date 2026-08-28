@@ -456,22 +456,24 @@ fn SkillMasteryRewards() -> impl IntoView {
             // </span>
             // </div>
             <div class="grid grid-cols-1 gap-2 grid-cols-4">
-                {skill_mastery_rewards
-                    .get()
-                    .into_iter()
-                    .take(4)
-                    .map(|(skill_specs, skill_mastery_state, gained_levels, delta_experience)| {
-                        view! {
-                            <SkillMasteryCard
-                                skill_specs
-                                skill_mastery_state
-                                level_delta=gained_levels
-                                experience_gained=delta_experience
-                                compact=true
-                            />
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+                {move || {
+                    skill_mastery_rewards
+                        .get()
+                        .into_iter()
+                        .take(4)
+                        .map(|(skill_specs, skill_mastery_state, gained_levels, delta_experience)| {
+                            view! {
+                                <SkillMasteryCard
+                                    skill_specs
+                                    skill_mastery_state
+                                    level_delta=gained_levels
+                                    experience_gained=delta_experience
+                                    compact=true
+                                />
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                }}
             </div>
         </div>
     }

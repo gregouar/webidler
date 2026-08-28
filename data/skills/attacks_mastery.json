@@ -716,8 +716,8 @@
       "evade"        : {
         "title"       : "Strategic Repositioning",
         "base_cost"   : 5,
-        "upgrade_cost": 0,
-        "max_level"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 5,
         "effects"     : [
           {
             "value"        : 1,
@@ -738,6 +738,22 @@
                 },
                 { "ApplyStatus": {"status_id": "poison", "value": 0}, "optional_application": true }
               ]
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 5,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConverter": {
+                  "source"  : {"Block": "Attack"},
+                  "stat"    : {"Evade": null},
+                  "factor"  : 1,
+                  "is_extra": true
+                }
+              },
+              "scope"   : "Global",
+              "modifier": "Flat"
             }
           }
         ]
