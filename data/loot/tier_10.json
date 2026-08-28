@@ -21,6 +21,7 @@
         {"item_id": "edict_gold",       "weight":    499                       },
         {"item_id": "rune_power",       "weight":  51200, "min_area_level": 590},
         {"item_id": "rune_root",        "weight":  10240, "min_area_level": 590},
+        {"item_id": "rune_armor",       "weight":   5120                       },
         {"item_id": "rune_divine",      "weight":   5120                       }
     ]
 }

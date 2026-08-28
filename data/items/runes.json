@@ -70,7 +70,7 @@
         "modifier": "More",
         "scope": "Global",
         "value": 20.0,
-        "ignore_quality": false
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -109,7 +109,40 @@
         "modifier": "More",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": false
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": {
+      "root_node": false
+    },
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_armor": {
+    "name": "Ward Rune",
+    "icon": "items/runes/rune_armor.webp",
+    "description": null,
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune"
+    ],
+    "min_area_level": 600,
+    "rarity": "Normal",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],
@@ -451,6 +484,15 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Poison",
@@ -458,15 +500,6 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
                 }
               },
               {
