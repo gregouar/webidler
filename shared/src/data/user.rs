@@ -58,4 +58,6 @@ pub struct UserGrindArea {
     pub area_id: String,
     pub max_level_reached: AreaLevel,
     pub max_power_shard_level: AreaLevel,
+    #[serde(default)]
+    pub quest_completed: bool,
 }

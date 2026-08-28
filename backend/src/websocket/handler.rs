@@ -252,7 +252,7 @@ async fn handle_connect(
 async fn handle_disconnect(sessions_store: &SessionsStore, mut session: Session) -> Result<()> {
     session.last_active = Instant::now();
 
-    if !session.game_data.terminate_quest {
+    if !session.game_data.terminate_grind {
         sessions_store
             .sessions
             .insert(session.character_id, session);

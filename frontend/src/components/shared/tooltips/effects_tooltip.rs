@@ -134,7 +134,11 @@ pub fn lucky_roll_str(roll_type: &LuckyRollType) -> String {
     }
 }
 
-pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> String {
+pub fn stat_converter_source_str(
+    stat_converter_source: StatConverterSource,
+    uncapped: bool,
+) -> String {
+    let uncapped_str = if uncapped { "Uncapped " } else { "" };
     match stat_converter_source {
         StatConverterSource::CritDamage => "Critical Hit Damage".into(),
         StatConverterSource::Damage {
@@ -162,7 +166,18 @@ pub fn stat_converter_source_str(stat_converter_source: StatConverterSource) -> 
         StatConverterSource::ManaRegen => "Mana Regeneration".into(),
         StatConverterSource::LifeRegen => "Life Regeneration".into(),
         StatConverterSource::Block(skill_type) => {
-            format!("{}Block Chance", skill_type_str(Some(skill_type)))
+            format!(
+                "{}{}Block Chance",
+                uncapped_str,
+                skill_type_str(Some(skill_type))
+            )
+        }
+        StatConverterSource::Evade(damage_type) => {
+            format!(
+                "{}{} Evade Chance",
+                uncapped_str,
+                damage_over_time_type_str(damage_type)
+            )
         }
         StatConverterSource::Armor { damage_type } => {
             format!("Global {}Defense", damage_type_str(damage_type))
@@ -436,7 +451,7 @@ pub fn format_stat(effect: &StatEffect) -> String {
         format!(
             "{}% of {} {extra_str} {}{}",
             format_flat_number(Some(effect.value), false),
-            stat_converter_source_str(stat_converter_specs.source),
+            stat_converter_source_str(stat_converter_specs.source, stat_converter_specs.uncapped),
             modifier_str(effect.modifier),
             format_multiplier_stat_name(&stat_converter_specs.stat)
         )
@@ -689,13 +704,19 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             if stat_converter_specs.is_extra {
                 format!(
                     "Gain {} as {}",
-                    stat_converter_source_str(stat_converter_specs.source),
+                    stat_converter_source_str(
+                        stat_converter_specs.source,
+                        stat_converter_specs.uncapped
+                    ),
                     format_multiplier_stat_name(&stat_converter_specs.stat)
                 )
             } else {
                 format!(
                     "Convert {} to {}",
-                    stat_converter_source_str(stat_converter_specs.source),
+                    stat_converter_source_str(
+                        stat_converter_specs.source,
+                        stat_converter_specs.uncapped
+                    ),
                     format_multiplier_stat_name(&stat_converter_specs.stat)
                 )
             }
@@ -990,7 +1011,10 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             format!(
                 "{}% of {} {extra_str} {}",
                 format_flat_number(value, false),
-                stat_converter_source_str(stat_converter_specs.source),
+                stat_converter_source_str(
+                    stat_converter_specs.source,
+                    stat_converter_specs.uncapped
+                ),
                 format_multiplier_stat_name(&stat_converter_specs.stat)
             )
         }

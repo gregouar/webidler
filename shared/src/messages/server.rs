@@ -6,12 +6,12 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
+    grind::GrindRewards,
     item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    quest::QuestRewards,
     realms::Realm,
     skill::SkillSpecs,
     user::UserCharacterId,
@@ -60,6 +60,7 @@ pub struct InitGameMessage {
     pub map_item: Option<ItemSpecs>,
     pub area_specs: AreaSpecs,
     pub area_state: AreaState,
+    pub quest_completed: bool,
     pub passives_tree_specs: PassivesTreeSpecs,
     pub passives_tree_state: PassivesTreeState,
     pub passives_tree_build: PurchasedNodes,
@@ -87,10 +88,5 @@ pub struct SyncGameStateMessage {
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,
     pub game_stats: GameStats,
-    pub quest_rewards: Option<Option<QuestRewards>>,
+    pub grind_rewards: Option<Option<GrindRewards>>,
 }
-
-// #[derive(Serialize, Deserialize, Debug, Clone)]
-// pub struct DisconnectMessage {
-//     // pub end_quest: bool,
-// }

@@ -1,7 +1,7 @@
 {
-  "name"    : "Bloodsucking Mosquito",
+  "name"    : "Blood Mosquito",
   "portrait": "monsters/forest/blood_mosquito.webp",
-  "max_life": 3,
+  "max_life": 1,
   "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
   "skills"  : [
     {

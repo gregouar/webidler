@@ -25,6 +25,7 @@ pub async fn sync_init_game(
                 map_item: game_data.map_item.clone(),
                 area_specs: game_data.area_specs.clone(),
                 area_state: game_data.area_state.read().clone(),
+                quest_completed: game_data.quest_completed,
                 passives_tree_specs: game_data.passives_tree_specs.clone(),
                 passives_tree_state: game_data.passives_tree_state.read().clone(),
                 passives_tree_build,
@@ -64,7 +65,7 @@ pub async fn sync_update_game(
         monster_states: game_data.monster_states.clone(),
         queued_loot: game_data.queued_loot.sync(),
         game_stats: game_data.game_stats.clone(),
-        quest_rewards: game_data.quest_rewards.sync(),
+        grind_rewards: game_data.grind_rewards.sync(),
     };
 
     client_conn.start_background_send(&message.into())?;

@@ -7,7 +7,12 @@
     "item_level_modifier": 40,
     "boss": true,
     "header_background": "areas/witch_header.webp",
-    "footer_background": "areas/witch_footer.webp"
+    "footer_background": "areas/witch_footer.webp",
+    "quest": {
+      "description": "Stop the sinister plans of Amelia, the Spider Witch, before her web spreads beyond the lair.",
+      "area_level" : 30,
+      "reward"     : { "Item": {"item_id": "edict", "item_rarity": "Rare", "max_affixes": true, "level": 100} }
+    }
   },
   "loot_tables": [
     "tier_1.json",     "tier_2.json",     "tier_3.json",     "tier_4.json",     "tier_5.json",     "tier_6.json",

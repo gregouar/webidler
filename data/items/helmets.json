@@ -1082,8 +1082,42 @@
           "Description": "Grant Cactus Thorn Skill"
         },
         "modifier": "Flat",
+        "scope": "Local",
+        "value": 10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Physical"
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
         "scope": "Global",
-        "value": 1.0,
+        "value": [
+          250.0,
+          300.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "LifeRegen",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          20.0,
+          30.0
+        ],
         "ignore_quality": true
       },
       {
@@ -1109,7 +1143,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": 10.0,
         "ignore_quality": true
       }
     ],
@@ -1118,15 +1152,12 @@
       "range": "Melee",
       "shape": "Single",
       "cooldown": 0.0,
-      "damage": {
-        "Physical": 1.0,
-        "Poison": 1.0
-      },
+      "damage": {},
       "crit_chance": {
-        "value": 5.0,
+        "value": 0.0,
         "lucky_chance": 0.0
       },
-      "crit_damage": 100.0
+      "crit_damage": 0.0
     },
     "armor_specs": {
       "armor": 135.0,
@@ -1147,6 +1178,26 @@
           },
           "modifier": "Flat",
           "value": 15.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Increased",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 50.0
         }
       }
     ]

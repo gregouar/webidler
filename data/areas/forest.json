@@ -6,7 +6,12 @@
     "item_level_modifier": 20,
     "required_level": 50,
     "header_background": "areas/forest_header.webp",
-    "footer_background": "areas/forest_footer.webp"
+    "footer_background": "areas/forest_footer.webp",
+    "quest": {
+      "description": "Reclaim the forest from Morvain the Huntsman and his two faithful hounds.",
+      "area_level" : 50,
+      "reward"     : { "Loot": {"item_rarity": "Unique", "level": 50} }
+    }
   },
   "loot_tables": [
     "tier_1.json",      "tier_2.json",      "tier_3.json",      "tier_4.json",      "tier_5.json",

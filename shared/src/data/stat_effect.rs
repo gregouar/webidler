@@ -635,6 +635,8 @@ pub struct StatConverterSpecs {
     pub is_extra: bool,
     #[serde(default)]
     pub skill_type: Option<SkillType>,
+    #[serde(default)]
+    pub uncapped: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -658,6 +660,7 @@ pub enum StatConverterSource {
     ManaRegen,
     LifeRegen,
     Block(SkillType),
+    Evade(Option<DamageType>),
     Armor {
         #[serde(default)]
         damage_type: Option<DamageType>,

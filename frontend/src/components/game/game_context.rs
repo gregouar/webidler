@@ -8,12 +8,12 @@ use leptos::prelude::{
 use shared::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
     game_stats::GameStats,
+    grind::GrindRewards,
     item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
-    quest::QuestRewards,
     realms::Realm,
     skill::SkillSpecs,
     user::UserCharacterId,
@@ -56,7 +56,8 @@ pub struct GameContext {
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
     pub queued_loot: Syncable<Vec<QueuedLoot>>,
-    pub quest_rewards: RwSignal<Option<QuestRewards>>,
+    pub grind_rewards: RwSignal<Option<GrindRewards>>,
+    pub quest_completed: RwSignal<bool>,
 
     pub game_stats: RwSignal<GameStats>,
     pub game_local_stats: GameLocalStats,
@@ -67,7 +68,7 @@ pub struct GameContext {
     pub open_passives: RwSignal<bool>,
     pub open_statistics: RwSignal<bool>,
     pub open_skills: RwSignal<bool>,
-    pub open_end_quest: RwSignal<bool>,
+    pub open_end_grind: RwSignal<bool>,
     pub open_settings: RwSignal<bool>,
 
     pub loot_filter: RwSignal<LootFilter>,
@@ -110,7 +111,8 @@ impl GameContext {
             monster_states: RwSignal::new(Vec::new()),
 
             queued_loot: Default::default(),
-            quest_rewards: RwSignal::new(None),
+            grind_rewards: RwSignal::new(None),
+            quest_completed: RwSignal::new(false),
 
             game_stats: RwSignal::new(Default::default()),
             game_local_stats: Default::default(),
@@ -119,7 +121,7 @@ impl GameContext {
             open_passives: RwSignal::new(false),
             open_statistics: RwSignal::new(false),
             open_skills: RwSignal::new(false),
-            open_end_quest: RwSignal::new(false),
+            open_end_grind: RwSignal::new(false),
             open_settings: RwSignal::new(false),
 
             loot_filter: Default::default(),

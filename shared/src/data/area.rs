@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     constants::{ITEM_REWARD_MIN_PICKS, ITEM_REWARD_MIN_SLOTS},
     data::{
+        grind::QuestSpecs,
         modifier::ModifiableValue,
         stat_effect::EffectsMap,
         trigger::TriggersMap,
@@ -54,6 +55,9 @@ pub struct AreaSpecs {
     pub effects: EffectsMap,
     #[serde(default)]
     pub triggers: TriggersMap,
+
+    #[serde(default)]
+    pub quest: Option<QuestSpecs>,
 }
 
 impl AreaSpecs {
@@ -96,7 +100,6 @@ pub struct AreaState {
     pub auto_progress: bool,
     pub going_back: i32,
     pub rush_mode: bool,
-    // pub end_quest: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

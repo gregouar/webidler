@@ -34,9 +34,33 @@ pub fn format_trigger(
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
+    format_triggers(
+        vec![trigger],
+        show_details,
+        trigger_status_name,
+        trigger_status_value,
+    )
+}
+
+pub fn format_triggers(
+    triggers: Vec<TriggerSpecs>,
+    show_details: bool,
+    trigger_status_name: Option<&str>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+) -> impl IntoView + use<> {
     // let trigger_status_name = trigger_status_name.unwrap_or(default)
 
     let data_context: DataContext = expect_context();
+
+    let trigger_events = triggers
+        .iter()
+        .map(|trigger| format_trigger_event(&trigger.trigger))
+        .unique()
+        .join(" or ");
+    let trigger = triggers
+        .into_iter()
+        .next()
+        .expect("format_triggers requires at least one trigger");
 
     let trigger_event_status_name = if let EventTrigger::OnApplyStatus(StatusTrigger {
         ref status_filter,
@@ -111,7 +135,7 @@ pub fn format_trigger(
             <ul class="list-none">
                 <EffectLi>
                     // {name_str}
-                    {format_trigger_event(&trigger.trigger)} {shape_infos} {repeat_infos} {details_infos}":"
+                    {trigger_events} {shape_infos} {repeat_infos} {details_infos}":"
                 </EffectLi>
                 <EffectLi>
                     <ul class="list-none xl:space-y-1">

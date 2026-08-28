@@ -6,7 +6,12 @@
     "required_level": 330,
     "item_level_modifier": 120,
     "header_background": "areas/yokai_header.webp",
-    "footer_background": "areas/yokai_footer.webp"
+    "footer_background": "areas/yokai_footer.webp",
+    "quest": {
+      "description": "Unmask the ancient spirit lurking among the dead, and put an end to its reign over the garden.",
+      "area_level" : 150,
+      "reward"     : { "Item": {"item_id": "rune_power", "item_rarity": "Rare", "max_affixes": true, "level": 330} }
+    }
   },
   "loot_tables": [
     "tier_1.json",     "tier_2.json",     "tier_3.json",     "tier_4.json",     "tier_5.json",     "tier_6.json",

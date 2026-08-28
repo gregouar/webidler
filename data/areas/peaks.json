@@ -7,7 +7,12 @@
     "item_level_modifier": 100,
     "boss"               : true,
     "header_background"  : "areas/peaks_header.webp",
-    "footer_background"  : "areas/peaks_footer.webp"
+    "footer_background"  : "areas/peaks_footer.webp",
+    "quest"              : {
+      "description": "Confront the ancient dragon lords who rule these peaks with cunning and fury.",
+      "area_level" : 30,
+      "reward"     : { "Item": {"item_id": "edict_2", "item_rarity": "Rare", "max_affixes": true, "level": 300} }
+    }
   },
   "loot_tables": [
     "tier_1.json",    "tier_2.json",    "tier_3.json",    "tier_4.json",    "tier_5.json",    "tier_6.json",

@@ -19,7 +19,7 @@ use crate::components::{
         GameContext,
         battle_scene::BattleScene,
         header_menu::HeaderMenu,
-        panels::{EndQuestPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
+        panels::{EndGrindPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
     shared::settings::SettingsModal,
@@ -105,7 +105,7 @@ pub fn GameInstance() -> impl IntoView {
                     <PassivesPanel open=game_context.open_passives />
                     <StatisticsPanel open=game_context.open_statistics />
                     <GameInventoryPanel open=game_context.open_inventory />
-                    <EndQuestPanel />
+                    <EndGrindPanel />
                     <SettingsModal open=game_context.open_settings />
                 </div>
             </Show>
@@ -160,6 +160,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         map_item,
         area_specs,
         area_state,
+        quest_completed,
         passives_tree_specs,
         passives_tree_state,
         passives_tree_build,
@@ -177,6 +178,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.map_item.set(map_item);
     game_context.area_specs.set(area_specs);
     game_context.area_state.set(area_state);
+    game_context.quest_completed.set(quest_completed);
     game_context.passives_tree_specs.set(passives_tree_specs);
     game_context.passives_tree_state.set(passives_tree_state);
     game_context.passives_tree_build.set(passives_tree_build);
@@ -205,7 +207,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         monster_states,
         queued_loot,
         game_stats,
-        quest_rewards,
+        grind_rewards,
     } = sync_message;
 
     game_context.area_state.sync(area_state);
@@ -229,7 +231,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.monster_states.set(monster_states);
     game_context.queued_loot.sync(queued_loot);
     game_context.game_stats.set(game_stats);
-    if let Some(quest_rewards) = quest_rewards {
-        game_context.quest_rewards.set(quest_rewards);
+    if let Some(grind_rewards) = grind_rewards {
+        game_context.grind_rewards.set(grind_rewards);
     }
 }

@@ -135,21 +135,6 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let (max_area_level_ever, max_power_shard_level_ever) =
-        db::characters::read_character_area_completed(
-            db_pool,
-            &character.character_id,
-            &area_config.area_id,
-        )
-        .await?
-        .map(|area_completed| {
-            (
-                area_completed.max_area_level,
-                area_completed.max_power_shard_level,
-            )
-        })
-        .unwrap_or_default();
-
     let (mut player_inventory, passives_tree_state, player_benedictions, player_skill_masteries) =
         match character_data {
             Some((inventory_data, ascension_data, player_benedictions, player_skill_masteries)) => {
@@ -267,6 +252,18 @@ async fn new_game_instance(
         .and_then(|map_specs| map_specs.replace_area_id.clone())
         .unwrap_or(area_config.area_id);
 
+    let (max_area_level_ever, max_power_shard_level_ever, quest_completed) =
+        db::characters::read_character_area_completed(db_pool, &character.character_id, &area_id)
+            .await?
+            .map(|area_completed| {
+                (
+                    area_completed.max_area_level,
+                    area_completed.max_power_shard_level,
+                    area_completed.quest_completed,
+                )
+            })
+            .unwrap_or_default();
+
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
@@ -275,6 +272,7 @@ async fn new_game_instance(
         map_item,
         max_area_level_ever as AreaLevel,
         max_power_shard_level_ever as AreaLevel,
+        quest_completed,
         "default",
         passives_tree_state,
         player_resources,

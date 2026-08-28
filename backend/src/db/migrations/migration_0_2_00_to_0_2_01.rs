@@ -759,6 +759,7 @@ impl From<OldStatConverterSpecs> for StatConverterSpecs {
             stat: Box::new((*value.stat).into()),
             is_extra: value.is_extra,
             skill_type: value.skill_type,
+            uncapped: false,
         }
     }
 }

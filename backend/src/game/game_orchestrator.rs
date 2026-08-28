@@ -23,7 +23,7 @@ use super::{
 const PLAYER_RESPAWN_PERIOD: Duration = Duration::from_secs(5);
 
 pub async fn reset_entities(game_data: &mut GameInstanceData) {
-    if game_data.end_quest {
+    if game_data.end_grind {
         return;
     }
 
@@ -37,7 +37,7 @@ pub async fn tick(
     master_store: &MasterStore,
     elapsed_time: Duration,
 ) -> Result<()> {
-    if game_data.end_quest {
+    if game_data.end_grind {
         return Ok(());
     }
 

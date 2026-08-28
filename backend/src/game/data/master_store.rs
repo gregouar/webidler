@@ -10,6 +10,7 @@ use std::{
 
 use shared::data::{
     character_status::{StatusEffectType, StatusSpecs},
+    grind::QuestReward,
     monster::MonsterSpecs,
     passive::PassivesTreeSpecs,
     skill::{BaseSkillSpecs, SkillEffectType},
@@ -233,6 +234,46 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
                     item_id
                 ));
             }
+        }
+    }
+
+    for (area_id, area) in master_store.area_blueprints_store.iter() {
+        let Some(quest) = &area.specs.quest else {
+            continue;
+        };
+        match &quest.reward {
+            QuestReward::Item { item_id, .. } => {
+                if !master_store.items_store.content.contains_key(item_id) {
+                    errors.push(anyhow!(
+                        "Missing quest reward item '{}' referenced by area '{}'",
+                        item_id,
+                        area_id
+                    ));
+                }
+            }
+            QuestReward::Loot {
+                loot_tables: Some(loot_table_ids),
+                ..
+            } => {
+                if loot_table_ids.is_empty() {
+                    errors.push(anyhow!(
+                        "Quest reward in area '{}' has an empty loot table list",
+                        area_id
+                    ));
+                }
+                for loot_table_id in loot_table_ids {
+                    if !master_store.loot_tables_store.contains_key(loot_table_id) {
+                        errors.push(anyhow!(
+                            "Missing loot table '{}' referenced by quest in area '{}'",
+                            loot_table_id,
+                            area_id
+                        ));
+                    }
+                }
+            }
+            QuestReward::Loot {
+                loot_tables: None, ..
+            } => {}
         }
     }
 

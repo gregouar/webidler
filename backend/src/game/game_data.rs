@@ -6,6 +6,7 @@ use shared::data::{
     area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
     character::CharacterId,
     game_stats::GameStats,
+    grind::GrindRewards,
     item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
@@ -14,7 +15,6 @@ use shared::data::{
         CharacterSpecs, CharacterState, PlayerBaseSpecs, PlayerInventory, PlayerResources,
         PlayerSpecs, PlayerState,
     },
-    quest::QuestRewards,
     realms::{Realm, RealmId},
     skill::SkillSpecs,
 };
@@ -67,9 +67,10 @@ pub struct GameInstanceData {
 
     pub game_stats: GameStats,
 
-    pub end_quest: bool, // Initiate end, generate rewards
-    pub quest_rewards: LazySyncer<Option<QuestRewards>>,
-    pub terminate_quest: bool, // Actually close the quest
+    pub end_grind: bool, // Initiate end, generate rewards
+    pub grind_rewards: LazySyncer<Option<GrindRewards>>,
+    pub terminate_grind: bool, // Actually close the grind
+    pub quest_completed: bool, // Was the quest already completed in a PREVIOUS grind
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -93,8 +94,11 @@ pub struct SavedGameData {
     max_area_level: AreaLevel,
     player_stamina: Duration,
 
+    // TODO: Rename to grind
     end_quest: bool,
-    quest_rewards: Option<QuestRewards>,
+    quest_rewards: Option<GrindRewards>,
+    #[serde(default)]
+    quest_completed: bool,
 }
 
 impl std::ops::Deref for SavedGameData {
@@ -114,6 +118,7 @@ impl GameInstanceData {
         map_item: Option<ItemSpecs>,
         max_area_level_ever: AreaLevel,
         max_power_shard_level_ever: AreaLevel,
+        quest_completed: bool,
         passives_tree_id: &str,
         mut passives_tree_state: PassivesTreeState,
         mut player_resources: PlayerResources,
@@ -233,9 +238,10 @@ impl GameInstanceData {
 
             game_stats: Default::default(),
 
-            end_quest: false,
-            quest_rewards: LazySyncer::new(None),
-            terminate_quest: false,
+            end_grind: false,
+            grind_rewards: LazySyncer::new(None),
+            terminate_grind: false,
+            quest_completed,
         })
     }
 
@@ -259,8 +265,9 @@ impl GameInstanceData {
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
             auto_progress: self.area_state.read().auto_progress,
-            end_quest: self.end_quest,
-            quest_rewards: self.quest_rewards.read().clone(),
+            end_quest: self.end_grind,
+            quest_rewards: self.grind_rewards.read().clone(),
+            quest_completed: self.quest_completed,
         })?)
     }
 
@@ -286,6 +293,7 @@ impl GameInstanceData {
             auto_progress,
             end_quest,
             quest_rewards,
+            quest_completed,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
         let mut s = Self::init_from_store(
@@ -295,6 +303,7 @@ impl GameInstanceData {
             map_item,
             max_area_level_ever,
             max_power_shard_level_ever,
+            quest_completed,
             &passives_tree_id,
             passives_tree_state,
             player_resources,
@@ -310,8 +319,8 @@ impl GameInstanceData {
         s.area_state.mutate().auto_progress = auto_progress;
         s.queued_loot.mutate().extend(queued_loot);
         s.game_stats = game_stats;
-        s.end_quest = end_quest;
-        *s.quest_rewards.mutate() = quest_rewards;
+        s.end_grind = end_quest;
+        *s.grind_rewards.mutate() = quest_rewards;
 
         Ok(s)
     }
@@ -324,7 +333,7 @@ impl GameInstanceData {
         self.player_inventory.mutate();
         self.monster_base_specs.mutate();
         self.queued_loot.mutate();
-        self.quest_rewards.mutate();
+        self.grind_rewards.mutate();
     }
 
     pub fn character_state(&self, character_id: CharacterId) -> Option<&CharacterState> {

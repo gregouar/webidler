@@ -101,7 +101,7 @@
     "modifier_effects": [],
     "triggers"        : [
       {
-        "trigger_id"       : "cactus_hat",
+        "trigger_id"       : "helmet_skill",
         "skill_type"       : "Attack",
         "trigger_propagate": true,
         "OnTakeHit"        : {"is_blocked": false},
@@ -109,16 +109,15 @@
         "effects"          : [
           {
             "FlatDamage": {
-              "damage"     : { "Physical": [1, 1] },
+              "damage"     : { "Physical": [10, 10] },
               "crit_chance": 5,
               "crit_damage": 100
             }
-          },
-          { "ApplyStatus": {"status_id": "poison", "value": 1}, "optional_application": true }
+          }
         ]
       },
       {
-        "trigger_id"       : "cactus_hat",
+        "trigger_id"       : "helmet_skill",
         "skill_type"       : "Attack",
         "trigger_propagate": true,
         "OnReceiveStatus"  : {"damage_type": "Any", "is_evaded": false},
@@ -126,12 +125,11 @@
         "effects"          : [
           {
             "FlatDamage": {
-              "damage"     : { "Physical": [1, 1] },
+              "damage"     : { "Physical": [10, 10] },
               "crit_chance": 5,
               "crit_damage": 100
             }
-          },
-          { "ApplyStatus": {"status_id": "poison", "value": 1}, "optional_application": true }
+          }
         ]
       }
     ],

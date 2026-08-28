@@ -16,8 +16,8 @@ impl_into_message! {
 
         Connect(ClientConnectMessage),
 
-        EndQuest,
-        TerminateQuest(TerminateQuestMessage),
+        EndGrind,
+        TerminateGrind(TerminateGrindMessage),
 
         UseSkill(UseSkillMessage),
         SetAutoSkill(SetAutoSkillMessage),
@@ -58,8 +58,9 @@ pub struct ClientConnectMessage {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct TerminateQuestMessage {
+pub struct TerminateGrindMessage {
     pub reward_picks: Vec<u8>,
+    pub quest_reward_picked: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

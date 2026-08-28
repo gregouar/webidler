@@ -639,7 +639,11 @@ fn compute_skill_modifier_effects(
             ModifierEffectSource::CharacterStats(stat_converter) => Some((
                 me.clone(),
                 me.factor
-                    * characters_updater::compute_stat_converter(character_attrs, stat_converter),
+                    * characters_updater::compute_stat_converter(
+                        character_attrs,
+                        stat_converter,
+                        false,
+                    ),
             )),
         })
         .collect();

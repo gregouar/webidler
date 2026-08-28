@@ -176,18 +176,25 @@ async fn read_character_details(
     let areas: Vec<UserGrindArea> = master_store
         .area_blueprints_store
         .keys()
-        .map(|area_id| UserGrindArea {
-            area_id: area_id.clone(),
-            max_level_reached: areas_completed
+        .map(|area_id| {
+            let (max_level_reached, max_power_shard_level, quest_completed) = areas_completed
                 .iter()
                 .find(|area_completed| area_completed.area_id.eq(area_id))
-                .map(|area_completed| area_completed.max_area_level as AreaLevel)
-                .unwrap_or_default(),
-            max_power_shard_level: areas_completed
-                .iter()
-                .find(|area_completed| area_completed.area_id.eq(area_id))
-                .map(|area_completed| area_completed.max_power_shard_level as AreaLevel)
-                .unwrap_or_default(),
+                .map(|area_completed| {
+                    (
+                        area_completed.max_area_level as AreaLevel,
+                        area_completed.max_power_shard_level as AreaLevel,
+                        area_completed.quest_completed,
+                    )
+                })
+                .unwrap_or_default();
+
+            UserGrindArea {
+                area_id: area_id.clone(),
+                max_level_reached,
+                max_power_shard_level,
+                quest_completed,
+            }
         })
         .collect();
 

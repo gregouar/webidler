@@ -6,7 +6,12 @@
     "required_level": 150,
     "item_level_modifier": 60,
     "header_background": "areas/castle_header.webp",
-    "footer_background": "areas/castle_footer.webp"
+    "footer_background": "areas/castle_footer.webp",
+    "quest": {
+      "description": "Reunite the shattered fragments of the Princess by defeating her tormented reflections.",
+      "area_level" : 100,
+      "reward"     : { "Item": {"item_id": "rune_root", "item_rarity": "Normal", "level": 150} }
+    }
   },
   "loot_tables": [
     "tier_1.json",      "tier_2.json",      "tier_3.json",      "tier_4.json",      "tier_5.json",

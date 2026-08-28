@@ -10,7 +10,7 @@ use shared::{
 };
 
 use crate::{
-    game::{data::master_store::MasterStore, systems::quests_controller},
+    game::{data::master_store::MasterStore, systems::grind_controller},
     websocket::WebSocketConnection,
 };
 
@@ -53,11 +53,13 @@ fn handle_client_message(
 ) -> Option<ErrorMessage> {
     match msg {
         ClientMessage::Heartbeat => {}
-        ClientMessage::EndQuest => {
-            quests_controller::end_quest(master_store, game_data);
+        ClientMessage::EndGrind => {
+            grind_controller::end_grind(master_store, game_data);
         }
-        ClientMessage::TerminateQuest(m) => {
-            if let Err(err) = quests_controller::terminate_quest(game_data, m.reward_picks) {
+        ClientMessage::TerminateGrind(m) => {
+            if let Err(err) =
+                grind_controller::terminate_grind(game_data, m.reward_picks, m.quest_reward_picked)
+            {
                 return Some(ErrorMessage {
                     error_type: ErrorType::Game,
                     message: err.to_string(),

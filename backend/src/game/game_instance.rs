@@ -73,7 +73,7 @@ impl<'a> GameInstance<'a> {
 
         let mut game_timer = GameTimer::new();
         loop {
-            if !self.game_data.end_quest {
+            if !self.game_data.end_grind {
                 game_orchestrator::reset_entities(self.game_data).await;
             }
 
@@ -88,7 +88,7 @@ impl<'a> GameInstance<'a> {
                 break;
             }
 
-            if self.game_data.terminate_quest {
+            if self.game_data.terminate_grind {
                 break;
             }
 
@@ -145,8 +145,8 @@ impl<'a> GameInstance<'a> {
             game_timer.wait_tick().await;
         }
 
-        if self.game_data.terminate_quest {
-            self.terminate_quest().await?;
+        if self.game_data.terminate_grind {
+            self.terminate_grind().await?;
         }
 
         self.client_conn
@@ -177,7 +177,7 @@ impl<'a> GameInstance<'a> {
         });
     }
 
-    async fn terminate_quest(&self) -> Result<()> {
+    async fn terminate_grind(&self) -> Result<()> {
         let mut tx = self.db_pool.begin().await?;
 
         if !self.game_data.area_specs.training {
@@ -246,16 +246,25 @@ impl<'a> GameInstance<'a> {
             let max_area_level_ever = self.game_data.area_state.read().max_area_level_ever as i32;
             let max_power_shard_level_ever =
                 self.game_data.area_state.read().max_power_shard_level_ever as i32;
-            if max_area_level_ever > 0 {
-                db::characters::update_character_area_progress(
-                    &mut tx,
-                    self.character_id,
-                    &self.game_data.area_id,
-                    max_area_level_ever,
-                    max_power_shard_level_ever,
-                )
-                .await?;
-            }
+            let quest_completed = self.game_data.quest_completed
+                || self
+                    .game_data
+                    .area_specs
+                    .quest
+                    .as_ref()
+                    .map(|quest| {
+                        self.game_data.area_state.read().max_area_level >= quest.area_level
+                    })
+                    .unwrap_or_default();
+            db::characters::update_character_area_progress(
+                &mut tx,
+                self.character_id,
+                &self.game_data.area_id,
+                max_area_level_ever,
+                max_power_shard_level_ever,
+                quest_completed,
+            )
+            .await?;
 
             if self.game_data.area_state.read().max_area_level > 0 {
                 let realm_id = self.game_data.realm.realm_id();

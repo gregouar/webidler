@@ -566,32 +566,41 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         })
                                 }}
                                 {move || {
-                                    DamageType::iter()
-                                        .filter_map(|damage_type| {
-                                            let evade = game_context
-                                                .player_specs
-                                                .read()
-                                                .character_specs
-                                                .character_attrs
-                                                .evade
-                                                .get(&damage_type)
+                                    let player_specs = game_context.player_specs.read();
+                                    let evades = &player_specs
+                                        .character_specs
+                                        .character_attrs
+                                        .evade;
+                                    let evade_stats = collapse_equal_evade_stats([
+                                        (
+                                            DamageType::Physical,
+                                            evades
+                                                .get(&DamageType::Physical)
                                                 .copied()
-                                                .unwrap_or_default();
-                                            (evade.value.get() != 0.0
-                                                && damage_type != DamageType::Storm)
-                                                .then(|| {
-                                                    view! {
-                                                        <Stat
-                                                            label=format!(
-                                                                "{} Evade Chance (max 80%)",
-                                                                effects_tooltip::damage_over_time_type_str(
-                                                                    Some(damage_type),
-                                                                ),
-                                                            )
-                                                            value=move || { format_chance(&evade) }
-                                                        />
-                                                    }
-                                                })
+                                                .unwrap_or_default(),
+                                        ),
+                                        (
+                                            DamageType::Fire,
+                                            evades.get(&DamageType::Fire).copied().unwrap_or_default(),
+                                        ),
+                                        (
+                                            DamageType::Poison,
+                                            evades.get(&DamageType::Poison).copied().unwrap_or_default(),
+                                        ),
+                                    ]);
+                                    evade_stats
+                                        .into_iter()
+                                        .map(|(damage_type, evade)| {
+
+                                            view! {
+                                                <Stat
+                                                    label=format!(
+                                                        "{} Evade Chance (max 80%)",
+                                                        effects_tooltip::damage_over_time_type_str(damage_type),
+                                                    )
+                                                    value=move || { format_chance(&evade) }
+                                                />
+                                            }
                                         })
                                         .collect::<Vec<_>>()
                                 }}
@@ -896,6 +905,22 @@ fn format_hit_damage_kind(kind: HitDamageKind) -> String {
     let damage_type = effects_tooltip::damage_type_str(Some(kind.damage_type));
     let skill_type = skill_type_str(Some(kind.skill_type));
     format!("{damage_type}{skill_type}Hit Damage")
+}
+
+fn collapse_equal_evade_stats(
+    evades: [(DamageType, BoundedChance); 3],
+) -> Vec<(Option<DamageType>, BoundedChance)> {
+    let first_evade = evades[0].1;
+
+    if first_evade.value.get() != 0.0 && evades.iter().all(|(_, evade)| *evade == first_evade) {
+        vec![(None, first_evade)]
+    } else {
+        evades
+            .into_iter()
+            .filter(|(_, evade)| evade.value.get() != 0.0)
+            .map(|(damage_type, evade)| (Some(damage_type), evade))
+            .collect()
+    }
 }
 
 #[component]
