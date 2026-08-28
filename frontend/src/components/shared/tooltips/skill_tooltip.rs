@@ -15,7 +15,7 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{Matchable, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
-    trigger::TriggerEffectModifier,
+    trigger::{TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
 use strum::IntoEnumIterator;
@@ -30,8 +30,8 @@ use crate::components::{
         frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip, status_tooltip,
         trigger_tooltip::{
-            format_extra_trigger_modifiers, format_trigger, format_trigger_modifier,
-            format_trigger_modifier_per, get_trigger_modifier_value,
+            format_extra_trigger_modifiers, format_trigger_modifier, format_trigger_modifier_per,
+            format_triggers, get_trigger_modifier_value,
         },
     },
     ui::{
@@ -122,11 +122,9 @@ pub fn SkillTooltip(
         })
         .collect::<Vec<_>>();
 
-    let trigger_lines = skill_specs
-        .triggers
-        .clone()
+    let trigger_lines = group_triggers_by_id(skill_specs.triggers.clone())
         .into_iter()
-        .map(|trigger| format_trigger(trigger, false, None, None))
+        .map(|triggers| format_triggers(triggers, false, None, None))
         .collect::<Vec<_>>();
 
     // let auto_use_conditions = player_base_skill
@@ -318,6 +316,24 @@ pub fn SkillTooltip(
                 })}
         </TooltipFrame>
     }
+}
+
+fn group_triggers_by_id(triggers: Vec<TriggerSpecs>) -> Vec<Vec<TriggerSpecs>> {
+    let mut groups: Vec<Vec<TriggerSpecs>> = Vec::new();
+
+    for trigger in triggers {
+        if let Some(group) = groups.iter_mut().find(|group| {
+            group.first().is_some_and(|grouped_trigger| {
+                grouped_trigger.trigger_effect.trigger_id == trigger.trigger_effect.trigger_id
+            })
+        }) {
+            group.push(trigger);
+        } else {
+            groups.push(vec![trigger]);
+        }
+    }
+
+    groups
 }
 
 pub fn format_target(
