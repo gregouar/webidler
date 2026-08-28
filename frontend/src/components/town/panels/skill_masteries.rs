@@ -326,11 +326,11 @@ fn MasterySkillShop(
                     .get(skill_id)
                     .filter(|mastery| mastery.experience > 0.0)
                     .cloned();
-                if mastery.is_none() && !show_all_skills.get() {
+                let base_skill_specs = skill_specs.get(skill_id)?;
+                if mastery.is_none() && (!show_all_skills.get() || base_skill_specs.hidden) {
                     return None;
                 }
 
-                let base_skill_specs = skill_specs.get(skill_id)?;
                 let skill_specs = skill_specs_with_mastery(
                     skill_id.clone(),
                     base_skill_specs,
