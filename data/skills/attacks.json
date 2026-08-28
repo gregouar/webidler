@@ -125,12 +125,11 @@
         "effects"          : [
           {
             "FlatDamage": {
-              "damage"     : { "Physical": [1, 1] },
+              "damage"     : { "Physical": [10, 10] },
               "crit_chance": 5,
               "crit_damage": 100
             }
-          },
-          { "ApplyStatus": {"status_id": "poison", "value": 0}, "optional_application": true }
+          }
         ]
       }
     ],
