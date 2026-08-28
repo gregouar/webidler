@@ -414,26 +414,8 @@ fn compute_character_specs(
             StatType::StatConverter(specs) => {
                 stats_converters.push((specs.clone(), effect.modifier, effect.value));
             }
-            StatType::StatConditionalModifier {..
-                // stat,
-                // conditions,
-                // conditions_duration,
-            } => {}
-            // {
-            //     character_specs
-            //         .conditional_modifiers
-            //         .push(ConditionalModifier {
-            //             conditions: conditions.clone(),
-            //             conditions_duration: *conditions_duration,
-            //             effects: [StatEffect {
-            //                 stat: *(*stat).clone(),
-            //                 modifier: effect.modifier,
-            //                 value: effect.value,
-            //                 bypass_ignore: effect.bypass_ignore,
-            //             }]
-            //             .into(),
-            //         });
-            // }
+            StatType::StatConditionalModifier { .. } => {}
+
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
             StatType::RestoreOnHit { .. } => {}
@@ -503,27 +485,54 @@ fn compute_character_specs(
                 }
                 StatConverterSource::Block(skill_type) => {
                     if let Some(block) = character_attrs.block.get_mut(&skill_type) {
-                        block
-                            .value
-                            .convert_value(factor, specs.is_extra, false)
-                            .get() as f64
+                        let bounded_value =
+                            block.value.convert_value(factor, specs.is_extra, false);
+
+                        if specs.uncapped {
+                            bounded_value.get_uncapped() as f64
+                        } else {
+                            bounded_value.get() as f64
+                        }
                     } else {
                         0.0
                     }
                 }
-        StatConverterSource::Armor { damage_type } => {
-            character_attrs.armor.iter_mut().map(|(armor_type, value)| 
-                if compare_options(&Some(*armor_type), &damage_type) {
-                    value.convert_value(factor, specs.is_extra, false)
-                } else {
-                    0.0
-                }).sum()
-        }
+                StatConverterSource::Evade(damage_type) => {
+                    let bounded_value = match damage_type {
+                        Some(damage_type) => character_attrs
+                            .evade
+                            .get_mut(&damage_type)
+                            .map(|evade| evade.value.convert_value(factor, specs.is_extra, false)),
+                        None => character_attrs
+                            .evade
+                            .values_mut()
+                            .map(|evade| evade.value.convert_value(factor, specs.is_extra, false))
+                            .min_by_key(|f| f.get_uncapped() as usize),
+                    };
 
-                StatConverterSource::CritDamage
-                | StatConverterSource::Damage { .. }
-                // | StatConverterSource::DamageOverTime { .. }
-                 => {
+                    if let Some(bounded_value) = bounded_value {
+                        if specs.uncapped {
+                            bounded_value.get_uncapped() as f64
+                        } else {
+                            bounded_value.get() as f64
+                        }
+                    } else {
+                        0.0
+                    }
+                }
+                StatConverterSource::Armor { damage_type } => character_attrs
+                    .armor
+                    .iter_mut()
+                    .map(|(armor_type, value)| {
+                        if compare_options(&Some(*armor_type), &damage_type) {
+                            value.convert_value(factor, specs.is_extra, false)
+                        } else {
+                            0.0
+                        }
+                    })
+                    .sum(),
+
+                StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => {
                     continue;
                 }
             };
@@ -545,6 +554,7 @@ fn compute_character_specs(
 pub fn compute_stat_converter(
     character_attrs: &CharacterAttrs,
     source: &StatConverterSource,
+    uncapped: bool,
 ) -> f64 {
     match source {
         StatConverterSource::MaxLife => character_attrs.max_life.get(),
@@ -553,25 +563,51 @@ pub fn compute_stat_converter(
         StatConverterSource::LifeRegen => *character_attrs.life_regen,
         StatConverterSource::Block(skill_type) => {
             if let Some(block) = character_attrs.block.get(skill_type) {
-                block.value.get() as f64
+                if uncapped {
+                    block.value.get_uncapped() as f64
+                } else {
+                    block.value.get() as f64
+                }
             } else {
                 0.0
             }
         }
-        StatConverterSource::Armor { damage_type } => {
-            character_attrs.armor.iter().map(|(armor_type, value)| 
+        StatConverterSource::Evade(damage_type) => {
+            let bounded_value = match damage_type {
+                Some(damage_type) => character_attrs
+                    .evade
+                    .get(&damage_type)
+                    .map(|evade| evade.value),
+                None => character_attrs
+                    .evade
+                    .values()
+                    .map(|evade| evade.value)
+                    .min_by_key(|f| f.get_uncapped() as usize),
+            };
+
+            if let Some(bounded_value) = bounded_value {
+                if uncapped {
+                    bounded_value.get_uncapped() as f64
+                } else {
+                    bounded_value.get() as f64
+                }
+            } else {
+                0.0
+            }
+        }
+        StatConverterSource::Armor { damage_type } => character_attrs
+            .armor
+            .iter()
+            .map(|(armor_type, value)| {
                 if compare_options(&Some(*armor_type), damage_type) {
                     **value
                 } else {
                     0.0
                 }
-            ).sum()
-        }
+            })
+            .sum(),
 
-        StatConverterSource::CritDamage
-        | StatConverterSource::Damage { .. }
-        // | StatConverterSource::DamageOverTime { .. } 
-        => 0.0,
+        StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => 0.0,
     }
 }
 

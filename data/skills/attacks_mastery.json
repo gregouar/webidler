@@ -266,6 +266,121 @@
       }
     }
   },
+  "helmet_skill"        : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"         : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "poison"         : {
+        "title"       : "Poisoned Spines",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus"            : {"status_id": "poison", "value": 10, "avoidable": false},
+              "independent_application": false,
+              "affect_triggers"        : true
+            }
+          }
+        ]
+      },
+      "block_damage"   : {
+        "title"       : "Barbed Guard",
+        "base_cost"   : 5,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConverter": {
+                  "source"  : {"Block": "Attack"},
+                  "stat"    : { "CritDamage": {"skill_id": "helmet_skill"} },
+                  "uncapped": true
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 100,
+            "StatEffect"   : { "stat": {"Block": "Attack"}, "modifier": "More", "scope": "Global" }
+          }
+        ]
+      },
+      "evade_damage"   : {
+        "title"       : "Venus Trap",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConverter": {
+                  "source"  : {"Evade": null},
+                  "stat"    : { "StatusEscalation": {"status_id": "poison", "skill_id": "helmet_skill"} },
+                  "uncapped": true
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "crit_chance"    : {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"CritChance": {}}, "modifier": "Flat" }
+          }
+        ]
+      },
+      "poison_duration": {
+        "title"       : "Poison Duration",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 20,
+        "effects"     : [
+          {
+            "value"        : 0.1,
+            "upgrade_value": 0.1,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "poison"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  },
   "poison_coating"      : {
     "max_level": 100,
     "upgrades" : {

@@ -981,7 +981,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
         ModifierEffectSource::CharacterStats(stat_converter) => format!(
             "Per {} {}:",
             format_number(1.0 / skill_modifier.factor),
-            effects_tooltip::stat_converter_source_str(stat_converter),
+            effects_tooltip::stat_converter_source_str(stat_converter, false),
         ),
     };
     let effects = formatted_effects_list(skill_modifier.effects);

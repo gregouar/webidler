@@ -380,7 +380,8 @@ fn modify_player_specs(
                     | StatConverterSource::MaxMana
                     | StatConverterSource::Armor { .. }
                     | StatConverterSource::ManaRegen
-                    | StatConverterSource::Block(_),
+                    | StatConverterSource::Block(_)
+                    | StatConverterSource::Evade(_),
                 ..
             })
             | StatType::StatConditionalModifier { .. } => {}

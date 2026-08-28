@@ -503,29 +503,44 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             };
 
             view! {
-                <li class="text-zinc-400 text-xs xl:text-sm ">{range} {shape}</li>
+                {(!damage_lines.is_empty())
+                    .then(|| {
+                        view! { <li class="text-zinc-400 text-xs xl:text-sm ">{range} {shape}</li> }
+                    })}
                 {damage_lines}
-                <li class="text-zinc-400 text-xs xl:text-sm ">
-                    "Critical Hit Chance: "
-                    <span class=format!(
-                        "{} font-semibold",
-                        crit_chance_color,
-                    )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
-                </li>
-                <li class="text-zinc-400 text-xs xl:text-sm ">
-                    "Critical Hit Damage: "
-                    <span class=format!(
-                        "{} font-semibold",
-                        crit_damage_color,
-                    )>{format!("+{}%", number::format_number(*specs.crit_damage))}</span>
-                </li>
-                <li class="text-zinc-400 text-xs xl:text-sm ">
-                    "Cooldown: "
-                    <span class=format!(
-                        "{} font-semibold",
-                        cooldown_color,
-                    )>{format!("{:.2}s", specs.cooldown.get())}</span>
-                </li>
+                {(specs.crit_chance.value.get() > 0.0 && *specs.crit_damage > 0.0)
+                    .then(|| {
+                        view! {
+                            <li class="text-zinc-400 text-xs xl:text-sm ">
+                                "Critical Hit Chance: "
+                                <span class=format!(
+                                    "{} font-semibold",
+                                    crit_chance_color,
+                                )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
+                            </li>
+                            <li class="text-zinc-400 text-xs xl:text-sm ">
+                                "Critical Hit Damage: "
+                                <span class=format!(
+                                    "{} font-semibold",
+                                    crit_damage_color,
+                                )>
+                                    {format!("+{}%", number::format_number(*specs.crit_damage))}
+                                </span>
+                            </li>
+                        }
+                    })}
+                {(specs.cooldown.get() > 0.0)
+                    .then(|| {
+                        view! {
+                            <li class="text-zinc-400 text-xs xl:text-sm ">
+                                "Cooldown: "
+                                <span class=format!(
+                                    "{} font-semibold",
+                                    cooldown_color,
+                                )>{format!("{:.2}s", specs.cooldown.get())}</span>
+                            </li>
+                        }
+                    })}
             }
         })
 }

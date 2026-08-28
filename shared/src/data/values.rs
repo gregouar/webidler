@@ -175,6 +175,10 @@ where
         v
     }
 
+    pub fn get_uncapped(&self) -> T {
+        self.value
+    }
+
     pub fn set(&mut self, value: T) {
         self.value = value;
     }
