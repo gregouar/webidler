@@ -576,7 +576,7 @@ pub fn compute_stat_converter(
             let bounded_value = match damage_type {
                 Some(damage_type) => character_attrs
                     .evade
-                    .get(&damage_type)
+                    .get(damage_type)
                     .map(|evade| evade.value),
                 None => character_attrs
                     .evade
