@@ -196,6 +196,7 @@
             "upgrade_value": 1,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "chain_lightning"} },
+              "scope"   : "Global",
               "modifier": "Flat"
             }
           }
@@ -281,6 +282,7 @@
             "upgrade_value": 1,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "blizzard"} },
+              "scope"   : "Global",
               "modifier": "Flat"
             }
           }
@@ -828,6 +830,7 @@
             "upgrade_value": 2,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "poison_cloud"} },
+              "scope"   : "Global",
               "modifier": "Flat"
             }
           }

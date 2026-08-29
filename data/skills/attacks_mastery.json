@@ -1265,6 +1265,7 @@
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
+              "scope"   : "Global",
               "modifier": "More"
             }
           }
@@ -1281,6 +1282,7 @@
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
+              "scope"   : "Global",
               "modifier": "More"
             }
           },
@@ -1340,8 +1342,8 @@
       },
       "more_spins" : {
         "title"       : "Dervish Training",
-        "base_cost"   : 3,
-        "upgrade_cost": 3,
+        "base_cost"   : 0,
+        "upgrade_cost": 0,
         "max_level"   : 3,
         "effects"     : [
           {
@@ -1349,6 +1351,7 @@
             "upgrade_value": 1,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "whirlwind"} },
+              "scope"   : "Global",
               "modifier": "Flat"
             }
           },
