@@ -1,6 +1,6 @@
 {
   "name"    : "Creepy Centipede",
-  "portrait": "monsters/inn/centipede.webp",
+  "portrait": "monsters/inn/centipede_gdca.webp",
   "max_life": 10,
   "size"    : "Large",
   "armor"   : {"Physical": 20, "Storm": 20},

@@ -1,23 +1,20 @@
 {
-  "name": "Soot Imp",
-  "portrait": "monsters/inn/soot_imp.webp",
+  "name"    : "Soot Imp",
+  "portrait": "monsters/inn/soot_imp_gdca.webp",
   "max_life": 5,
-  "armor": { "Fire": 50 },
-  "skills": [
+  "armor"   : {"Fire": 50},
+  "skills"  : [
     {
-      "name": "Burning Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 2.0,
+      "name"      : "Burning Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 2.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 1, 3 ],
-                  "Fire": [ 2, 4 ]
-                }
+                "damage": { "Physical": [1, 3], "Fire": [2, 4] }
               }
             }
           ]

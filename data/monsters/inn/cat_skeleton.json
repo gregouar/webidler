@@ -1,6 +1,6 @@
 {
   "name"    : "Bone Cat",
-  "portrait": "monsters/inn/cat_skeleton.webp",
+  "portrait": "monsters/inn/cat_skeleton_gdca.webp",
   "max_life": 8,
   "skills"  : [
     {
