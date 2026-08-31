@@ -412,7 +412,7 @@ fn compute_character_specs(
             },
 
             StatType::StatConverter(specs) => {
-                stats_converters.push((specs.clone(), effect.modifier, effect.value));
+                stats_converters.push((specs.clone(), effect.modifier, effect.value, effect.bypass_ignore));
             }
             StatType::StatConditionalModifier { .. } => {}
 
@@ -454,7 +454,7 @@ fn compute_character_specs(
 
     let mut stats_converted = Vec::with_capacity(stats_converters.len());
     if !stats_converters.is_empty() {
-        stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
+        stats_converters.sort_by_key(|(stat_converter, modifier, _, _)| {
             (
                 stat_converter.source,
                 stat_converter.stat.clone(),
@@ -462,7 +462,7 @@ fn compute_character_specs(
             )
         });
 
-        for (specs, modifier, factor) in stats_converters {
+        for (specs, modifier, factor, bypass_ignore) in stats_converters {
             // let factor = factor * 0.01;
             let amount = match specs.source {
                 StatConverterSource::MaxLife => character_attrs
@@ -541,7 +541,7 @@ fn compute_character_specs(
                 stat: (*specs.stat).clone(),
                 modifier,
                 value: amount,
-                bypass_ignore: true,
+                bypass_ignore,
             });
         }
 
