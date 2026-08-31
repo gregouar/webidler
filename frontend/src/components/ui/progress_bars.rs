@@ -327,22 +327,22 @@ pub fn CircularProgressBar(
             }
 
             if active_buffer.get_untracked() {
+                front_progress.set(0.0);
                 active_buffer.set(false);
 
                 set_timeout(
                     move || {
                         reset_icon_animation.set("");
-                        back_progress.set(0.0);
                     },
                     std::time::Duration::from_millis(500),
                 );
             } else {
+                back_progress.set(0.0);
                 active_buffer.set(true);
 
                 set_timeout(
                     move || {
                         reset_icon_animation.set("");
-                        front_progress.set(0.0);
                     },
                     std::time::Duration::from_millis(500),
                 );
@@ -614,32 +614,49 @@ pub fn predictive_cooldown(
 
     Effect::new(move || {
         let remaining_time = remaining_time.get();
-        if progress_value.get_untracked() < 1.0 {
-            let remaining: f64 = (1.0f64 - progress_value.get_untracked()).clamp(0.0, 1.0);
-            rate.set(remaining / remaining_time);
-        }
+        rate.set(cooldown_rate(
+            progress_value.get_untracked(),
+            remaining_time,
+        ));
     });
 
     Effect::new(move || {
         if reset.get() {
             progress_value.set(0.0);
+            rate.set(0.0);
         }
     });
 
     Effect::new(move |_| {
         cooldown_clock.0.get();
+        if reset.get_untracked() || disabled.get_untracked() {
+            return;
+        }
+
+        let remaining_time = remaining_time.get_untracked();
+        if remaining_time <= 0.0 {
+            progress_value.set(1.0);
+            rate.set(0.0);
+            return;
+        }
+
         let rate = rate.get_untracked();
-        if !disabled.get_untracked() && rate > 0.0 {
+        if rate.is_finite() && rate > 0.0 {
             progress_value.update(|progress_value| {
                 if *progress_value < 1.2 {
                     *progress_value += rate * 0.2;
-                }
-                if remaining_time.get_untracked() == 0.0 && rate == 0.0 {
-                    *progress_value = 1.0;
                 }
             });
         }
     });
 
     progress_value
+}
+
+fn cooldown_rate(progress: f64, remaining_time: f64) -> f64 {
+    if !remaining_time.is_finite() || remaining_time <= 0.0 || progress >= 1.0 {
+        return 0.0;
+    }
+
+    (1.0 - progress).clamp(0.0, 1.0) / remaining_time
 }
