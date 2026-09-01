@@ -1,38 +1,37 @@
 {
-    "witch_curse": {
-        "name": "Witch's Curse",
-        "icon": "skills/pointy_hat.svg",
-        "debuff": true,
-        "duration": 5,
+    "spider_infested": {
+        "name"       : "Infested",
+        "icon"       : "statuses/spider.svg",
+        "debuff"     : true,
+        "damage_type": "Physical",
+        "duration"   : 2,
+        "max_stacks" : 10,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
+        ]
+    },
+    "witch_curse"    : {
+        "name"      : "Witch's Curse",
+        "icon"      : "skills/pointy_hat.svg",
+        "debuff"    : true,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
-                "StatModifier": {
-                    "stat": {
-                        "SuccessChance": { }
-                    },
-                    "debuff": true
-                },
-                "value": 100,
-                "modifier": "Percent"
+                "StatModifier": { "stat": {"SuccessChance": {}}, "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     },
-    "child_play": {
-        "name": "Child's Play",
-        "icon": "skills/carousel.svg",
-        "debuff": true,
-        "duration": 3,
+    "child_play"     : {
+        "name"      : "Child's Play",
+        "icon"      : "skills/carousel.svg",
+        "debuff"    : true,
+        "duration"  : 3,
         "max_stacks": 1,
-        "effects": [
-            {
-                "StatModifier": {
-                    "stat": "ManaRegen",
-                    "debuff": true
-                },
-                "value": 100,
-                "modifier": "Percent"
-            }
+        "effects"   : [
+            { "StatModifier": {"stat": "ManaRegen", "debuff": true}, "value": 100, "modifier": "Percent" }
         ]
     }
 }

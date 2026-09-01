@@ -1,23 +1,17 @@
 {
-  "name": "Spiderlings",
+  "name"    : "Spiderlings",
   "portrait": "monsters/witch/spiderlings.webp",
   "max_life": 3,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Itchy Bity",
-      "icon": "skills/bite.svg",
-      "cooldown": 2.0,
+      "name"      : "Itchy Bity",
+      "icon"      : "statuses/spider.svg",
+      "cooldown"  : 1.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "FlatDamage": {
-                "damage": {
-                  "Physical": [ 1, 3 ]
-                }
-              }
-            }
+            { "ApplyStatus": {"status_id": "spider_infested", "value": 1} }
           ]
         }
       ]

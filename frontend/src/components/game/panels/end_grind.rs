@@ -458,7 +458,7 @@ fn SkillMasteryRewards() -> impl IntoView {
             <div class="grid grid-cols-1 gap-2 grid-cols-4">
                 {move || {
                     skill_mastery_rewards
-                        .get()
+                        .get_untracked()
                         .into_iter()
                         .take(4)
                         .map(|(skill_specs, skill_mastery_state, gained_levels, delta_experience)| {
