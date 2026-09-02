@@ -104,7 +104,8 @@
               }
             },
             "is_extra": false,
-            "skill_type": null
+            "skill_type": null,
+            "uncapped": false
           }
         },
         "modifier": "Flat",
@@ -401,7 +402,7 @@
             },
             "ApplyStatus": {
               "status_id": "backstab_cloak",
-              "value": 1.0,
+              "value": 200.0,
               "value_factor": 1.0,
               "duration": null,
               "escalation": null,
@@ -472,6 +473,23 @@
           "stat": "GoldFind",
           "modifier": "More",
           "value": 40.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_id": "backstab_cloak",
+              "damage_type": null,
+              "debuff": null,
+              "skill_type": null,
+              "skill_id": null,
+              "min_max": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 50.0
         }
       }
     ]

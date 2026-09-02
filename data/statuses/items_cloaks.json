@@ -1,59 +1,42 @@
 {
-    "drink_storm": {
-        "name": "Stormfeast",
-        "icon": "statuses/lightning_flame.svg",
-        "debuff": false,
-        "duration": 5,
+    "drink_storm"   : {
+        "name"      : "Stormfeast",
+        "icon"      : "statuses/lightning_flame.svg",
+        "debuff"    : false,
+        "duration"  : 5,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                            "damage_type": "Fire"
-                        }
-                    },
+                    "stat"    : { "Damage": {"damage_type": "Fire"} },
                     "modifier": "More",
-                    "debuff": false
+                    "debuff"  : false
                 },
-                "value": 100,
-                "modifier": "Percent"
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     },
     "backstab_cloak": {
-        "name": "Backstabbing",
-        "icon": "statuses/cowled.svg",
-        "debuff": false,
-        "duration": 10.0,
+        "name"      : "Backstabbing",
+        "icon"      : "statuses/cowled.svg",
+        "debuff"    : false,
+        "duration"  : 6.0,
         "max_stacks": 1,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
-                        "CritChance": {
-                            "skill_type": null,
-                            "skill_id": null,
-                            "skill_description": null
-                        }
-                    },
+                    "stat"    : { "CritChance": {"skill_type": null, "skill_id": null, "skill_description": null} },
                     "modifier": "More",
-                    "debuff": false
+                    "debuff"  : false
                 },
-                "value": 100,
-                "modifier": "Flat"
+                "value"       : 100,
+                "modifier"    : "Flat"
             },
             {
-                "StatModifier": {
-                    "stat": {
-                        "Damage": {
-                        }
-                    },
-                    "modifier": "More",
-                    "debuff": false
-                },
-                "value": 200,
-                "modifier": "Flat"
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
             }
         ]
     }

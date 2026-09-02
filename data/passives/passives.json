@@ -583,7 +583,8 @@
                   }
                 },
                 "is_extra": true,
-                "skill_type": null
+                "skill_type": null,
+                "uncapped": false
               }
             },
             "modifier": "More",
@@ -10932,7 +10933,8 @@
                   "Block": "Spell"
                 },
                 "is_extra": false,
-                "skill_type": null
+                "skill_type": null,
+                "uncapped": false
               }
             },
             "modifier": "Flat",
@@ -13874,7 +13876,8 @@
                 "source": "LifeRegen",
                 "stat": "ManaRegen",
                 "is_extra": false,
-                "skill_type": null
+                "skill_type": null,
+                "uncapped": false
               }
             },
             "modifier": "Flat",
@@ -14051,7 +14054,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.5,
                 "source": {
                   "StatusValue": {
                     "status_id": "bleed",
@@ -14072,7 +14075,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.5,
                 "source": {
                   "StatusDuration": {
                     "status_id": "bleed",
@@ -14129,6 +14132,15 @@
                     }
                   },
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14136,15 +14148,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   },
                   {
@@ -14193,7 +14196,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.5,
                 "source": {
                   "StatusValue": {
                     "status_id": "burn",
@@ -14214,7 +14217,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.5,
                 "source": {
                   "StatusDuration": {
                     "status_id": "burn",
@@ -14253,16 +14256,16 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14290,12 +14293,12 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusFaster": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -14335,7 +14338,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.5,
                 "source": {
                   "StatusValue": {
                     "status_id": "poison",
@@ -14356,7 +14359,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.3,
+                "factor": 0.5,
                 "source": {
                   "StatusDuration": {
                     "status_id": "poison",
@@ -14395,15 +14398,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -14413,12 +14407,12 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
-                      "skill_id": null
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
@@ -14432,12 +14426,21 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusEscalation": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
