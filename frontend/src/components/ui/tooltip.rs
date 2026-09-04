@@ -240,6 +240,30 @@ pub enum StaticTooltipPosition {
     Right,
 }
 
+#[component]
+pub fn HelpTooltip(
+    text: &'static str,
+    #[prop(default = StaticTooltipPosition::Top)] position: StaticTooltipPosition,
+    #[prop(optional)] class: Option<&'static str>,
+) -> impl IntoView {
+    view! {
+        <StaticTooltip
+            position
+            class="inline-flex"
+            tooltip=move || {
+                view! { <div class="max-w-xs whitespace-normal">{text}</div> }
+            }
+        >
+            <span class=format!(
+                "inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help {}",
+                class.unwrap_or_default(),
+            )>
+                "?"
+            </span>
+        </StaticTooltip>
+    }
+}
+
 // #[component]
 // pub fn StaticTooltip(
 //     tooltip: Signal<String>,

@@ -28,6 +28,7 @@ use crate::components::{
         tooltip::{
             DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
         },
+        tutorial_popup::{TutorialPopup, TutorialPopupPosition},
     },
 };
 
@@ -223,11 +224,19 @@ pub fn PlayerCard() -> impl IntoView {
         });
 
         just_leveled_up.set(true);
-
         conn.send(&LevelUpPlayerMessage { amount }.into());
     };
     let disable_level_up = Memo::new(move |_| {
         max_xp.get() > game_context.player_resources.read().experience || max_level.get()
+    });
+
+    let show_level_up_tutorial = Signal::derive(move || {
+        game_context
+            .area_id
+            .with(|area_id| area_id == "inn_basement.json")
+            && game_context.area_state.read().max_area_level_ever < 10
+            && game_context.player_base_specs.read().level == 1
+            && !disable_level_up.get()
     });
 
     let skill_capacity = Memo::new(move |_| {
@@ -322,11 +331,17 @@ pub fn PlayerCard() -> impl IntoView {
                         />
                     // enable_blink=false
                     </div>
-                    <FancyButton disabled=disable_level_up on:click=level_up>
-                        <span class="text-base xl:text-lg">
-                            {move || if max_level.get() { "Max Level" } else { "Level Up" }}
-                        </span>
-                    </FancyButton>
+                    <TutorialPopup
+                        show=show_level_up_tutorial
+                        position=TutorialPopupPosition::Above
+                        message="Click here to Level Up and gain a Passive Point."
+                    >
+                        <FancyButton class="w-full" disabled=disable_level_up on:click=level_up>
+                            <span class="text-base xl:text-lg">
+                                {move || if max_level.get() { "Max Level" } else { "Level Up" }}
+                            </span>
+                        </FancyButton>
+                    </TutorialPopup>
                 </div>
 
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
@@ -694,6 +709,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 .map(|player_base_skill| player_base_skill.upgrade_level >= MAX_SKILL_LEVEL)
                 .unwrap_or(true)
     });
+    let show_skill_upgrade_tutorial = Signal::derive(move || {
+        game_context.area_state.read().max_area_level_ever < 10
+            && player_base_skill
+                .read()
+                .as_ref()
+                .is_some_and(|player_base_skill| player_base_skill.upgrade_level == 1)
+            && !disable_level_up.get()
+    });
 
     let disabled_auto = Memo::new(move |_| {
         skill_specs.with(|skill_specs| {
@@ -833,37 +856,44 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                     </Toggle>
                 </StaticTooltip>
                 <div class="flex-1 h-full">
-                    <StaticTooltip
-                        tooltip=cost_tooltip
-                        position=StaticTooltipPosition::Top
-                        class="flex h-full w-full"
+                    <TutorialPopup
+                        show=show_skill_upgrade_tutorial
+                        position=TutorialPopupPosition::AboveLeft
+                        class="h-full w-full"
+                        message="Click here to Upgrade your Skill."
                     >
-                        <FancyButton
-                            disabled=disable_level_up
-                            on:click=level_up
-                            class="w-full h-full max-h-full leading-none py-1"
+                        <StaticTooltip
+                            tooltip=cost_tooltip
+                            position=StaticTooltipPosition::Top
+                            class="flex h-full w-full"
                         >
-                            // <span class="text-base font-bold xl:text-2xl">"+"</span>
+                            <FancyButton
+                                disabled=disable_level_up
+                                on:click=level_up
+                                class="w-full h-full max-h-full leading-none py-1"
+                            >
+                                // <span class="text-base font-bold xl:text-2xl">"+"</span>
 
-                            <span class="inline 2xl:hidden text-base">"+"</span>
-                            <span class="hidden 2xl:inline text-lg">"Upg."</span>
+                                <span class="inline 2xl:hidden text-base">"+"</span>
+                                <span class="hidden 2xl:inline text-lg">"Upg."</span>
 
-                        // <svg
-                        // xmlns="http://www.w3.org/2000/svg"
-                        // class="block h-full max-h-full aspect-square"
-                        // fill="none"
-                        // viewBox="0 0 24 24"
-                        // stroke="currentColor"
-                        // stroke-width="2"
-                        // >
-                        // <path
-                        // stroke-linecap="round"
-                        // stroke-linejoin="round"
-                        // d="M12 4v16m8-8H4"
-                        // />
-                        // </svg>
-                        </FancyButton>
-                    </StaticTooltip>
+                            // <svg
+                            // xmlns="http://www.w3.org/2000/svg"
+                            // class="block h-full max-h-full aspect-square"
+                            // fill="none"
+                            // viewBox="0 0 24 24"
+                            // stroke="currentColor"
+                            // stroke-width="2"
+                            // >
+                            // <path
+                            // stroke-linecap="round"
+                            // stroke-linejoin="round"
+                            // d="M12 4v16m8-8H4"
+                            // />
+                            // </svg>
+                            </FancyButton>
+                        </StaticTooltip>
+                    </TutorialPopup>
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@ pub enum CharacterId {
     Monster(usize),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]
 pub enum CharacterSize {
     #[default]
     Small, // 1x1

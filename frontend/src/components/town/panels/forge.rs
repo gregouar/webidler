@@ -34,6 +34,7 @@ use crate::components::{
         dropdown::SearchableDropdownMenu,
         menu_panel::MenuPanel,
         toast::*,
+        tooltip::HelpTooltip,
     },
 };
 
@@ -616,7 +617,12 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardInsetTitle>"Empower Unique Item"</CardInsetTitle>
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Empower Unique Item"
+                    <HelpTooltip text="Empower upgrades a low-level Unique Item into a stronger version of itself. The maximum Empower level is determined by the Item Level." />
+                </span>
+            </CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">

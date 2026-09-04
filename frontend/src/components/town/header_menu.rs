@@ -1,7 +1,9 @@
 use leptos::{html::*, prelude::*};
+use shared::data::temple::BenedictionEffect;
 
 use crate::components::{
     chat::chat_context::ChatContext,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::{
         inventory::InventoryEquipFilter,
@@ -9,15 +11,46 @@ use crate::components::{
     },
     town::TownContext,
     ui::{
-        buttons::MenuButton, fullscreen::FullscreenButton, header::BaseHeaderMenu, wiki::WikiButton,
+        buttons::MenuButton,
+        fullscreen::FullscreenButton,
+        header::BaseHeaderMenu,
+        tutorial_popup::{TutorialPopup, TutorialPopupPosition},
+        wiki::WikiButton,
     },
 };
 
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
     let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
+
+    let show_ascension_tutorial = Signal::derive(move || {
+        town_context.character.read().resource_shards >= 1.0
+            && town_context
+                .passives_tree_ascension
+                .read()
+                .ascended_nodes
+                .values()
+                .all(|level| *level == 0)
+            && !town_context.open_ascend.get()
+    });
+    let show_temple_tutorial = Signal::derive(move || {
+        town_context.character.read().resource_gold >= 100.0
+            && !has_bought_extra_skill_slot(town_context)
+            && !town_context.open_temple.get()
+            && !town_context.open_ascend.get()
+            && !show_ascension_tutorial.get()
+    });
+    let show_skill_mastery_tutorial = Signal::derive(move || {
+        has_first_unspent_mastery_point(town_context, data_context)
+            && !town_context.open_skill_masteries.get()
+            && !town_context.open_temple.get()
+            && !town_context.open_ascend.get()
+            && !show_ascension_tutorial.get()
+            && !show_temple_tutorial.get()
+    });
 
     let gold = Signal::derive(move || town_context.character.read().resource_gold);
     let gems = Signal::derive(move || town_context.character.read().resource_gems);
@@ -207,24 +240,84 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=move |_| open_forge() disabled=disable_panels>
                     "Forge"
                 </MenuButton>
-                <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                    <span class="inline xl:hidden">"Pas"</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
-                </MenuButton>
-                <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
-                    "Temple"
-                </MenuButton>
-                <MenuButton
-                    on:click=move |_| open_skill_masteries()
-                    disabled=move || {
-                        disable_panels.get()
-                            || town_context.player_skill_masteries.read().masteries.is_empty()
-                    }
+                <TutorialPopup
+                    show=show_ascension_tutorial
+                    position=TutorialPopupPosition::BelowRight
+                    message="Spend a Power Shard to permanently Ascend a passive node."
                 >
-                    "Skills"
-                </MenuButton>
+                    <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
+                        <span class="inline xl:hidden">"Pas"</span>
+                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
+                    </MenuButton>
+                </TutorialPopup>
+                <TutorialPopup
+                    show=show_temple_tutorial
+                    position=TutorialPopupPosition::BelowRight
+                    message="Buy a Skill Slot to use another skill during Grinds."
+                >
+                    <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
+                        "Temple"
+                    </MenuButton>
+                </TutorialPopup>
+                <TutorialPopup
+                    show=show_skill_mastery_tutorial
+                    position=TutorialPopupPosition::BelowRight
+                    message="Open Skills to spend your Skill Mastery Point on an upgrade."
+                >
+                    <MenuButton
+                        on:click=move |_| open_skill_masteries()
+                        disabled=move || {
+                            disable_panels.get()
+                                || town_context.player_skill_masteries.read().masteries.is_empty()
+                        }
+                    >
+                        "Skills"
+                    </MenuButton>
+                </TutorialPopup>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>
     }
+}
+
+fn has_bought_extra_skill_slot(town_context: TownContext) -> bool {
+    let benedictions_specs = town_context.benedictions_specs.read();
+    town_context
+        .player_benedictions
+        .read()
+        .categories
+        .iter()
+        .any(|(category_id, player_category)| {
+            let Some(category_specs) = benedictions_specs.get(category_id) else {
+                return false;
+            };
+
+            player_category
+                .purchased_benedictions
+                .iter()
+                .any(|(benediction_id, level)| {
+                    *level > 0
+                        && category_specs.benedictions.get(benediction_id).is_some_and(
+                            |benediction| benediction.effect == BenedictionEffect::SkillSlots,
+                        )
+                })
+        })
+}
+
+fn has_first_unspent_mastery_point(town_context: TownContext, data_context: DataContext) -> bool {
+    let mastery_specs = data_context.skill_mastery_specs.read();
+    let skill_masteries = town_context.player_skill_masteries.read();
+    let no_points_spent = skill_masteries.masteries.values().all(|mastery| {
+        mastery
+            .upgrades_bought
+            .values()
+            .all(|upgrade_level| *upgrade_level == 0)
+    });
+
+    no_points_spent
+        && skill_masteries.masteries.iter().any(|(skill_id, mastery)| {
+            mastery_specs
+                .get(skill_id)
+                .is_some_and(|specs| mastery.level(specs.max_level) >= 1)
+        })
 }
