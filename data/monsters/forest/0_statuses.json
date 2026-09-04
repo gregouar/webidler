@@ -64,5 +64,23 @@
                 "modifier"    : "Percent"
             }
         ]
+    },
+    "mosquito_disease"        : {
+        "name"      : "Exotic Disease",
+        "icon"      : "skills/virus.svg",
+        "debuff"    : true,
+        "damage_type": "Poison",
+        "avoidable": true,
+        "duration"  : 60,
+        "max_stacks": 1,
+        "effects": [
+            {
+                "DamageOverTime": {
+                    "damage_type": "Poison"
+                },
+                "value": 100,
+                "modifier": "Percent"
+            }
+        ]
     }
 }

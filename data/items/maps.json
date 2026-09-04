@@ -200,6 +200,96 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "edict_mosquito": {
+    "name": "Pest Control Order",
+    "icon": "items/maps/edict_mosquito.webp",
+    "description": "It's mosquito season again!",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Description": "No Item Drop"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "mosquito_disease",
+        "target": "SameTarget",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 5.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "mosquito_disease",
+              "value": 50.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "forest.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "forest_mosquito.json",
+      "reward_loot_table": "edict_mosquito.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "edict_treasure_map": {
     "name": "Cursed Treasure Map",
     "icon": "items/maps/edict_treasure_map.webp",
