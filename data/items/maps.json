@@ -203,13 +203,13 @@
   "edict_mosquito": {
     "name": "Pest Control Order",
     "icon": "items/maps/edict_mosquito.webp",
-    "description": "It's mosquito season again!",
+    "description": "It's mosquito season again. The Kingdom will pay for each head.",
     "slot": null,
     "extra_slots": [],
     "categories": [
       "Map"
     ],
-    "min_area_level": 100,
+    "min_area_level": 150,
     "rarity": "Unique",
     "affixes": [
       {
@@ -219,6 +219,13 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 500.0,
         "ignore_quality": true
       }
     ],
@@ -238,7 +245,24 @@
         "description": null,
         "trigger_id": "mosquito_disease",
         "target": "SameTarget",
-        "modifiers": [],
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 5.0,
+            "source": {
+              "HitDamage": null
+            }
+          }
+        ],
         "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
@@ -257,7 +281,7 @@
             },
             "ApplyStatus": {
               "status_id": "mosquito_disease",
-              "value": 50.0,
+              "value": 0.0,
               "value_factor": 1.0,
               "duration": null,
               "escalation": null,

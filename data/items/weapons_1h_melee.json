@@ -1037,6 +1037,44 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "mosquito_sword": {
+    "name": "Bloody Proboscis",
+    "icon": "items/weapons_1h/mosquito_sword.webp",
+    "description": "Will suck you dry.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "AttackWeapon",
+      "MeleeWeapon",
+      "MeleeWeapon1H"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Melee",
+      "shape": "Single",
+      "cooldown": 2.0,
+      "damage": {
+        "Physical": [
+          8.0,
+          13.0
+        ]
+      },
+      "crit_chance": {
+        "value": 5.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "spiked_mace": {
     "name": "Spiked Mace",
     "icon": "items/weapons_1h/spiked_mace.webp",

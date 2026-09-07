@@ -421,14 +421,23 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         MonsterRarity::Boss => "boss-title xl:text-base font-display",
     };
 
-    let x_size = specs.character_specs.character_static.size.get_xy_size().0;
-    let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
+    let skill_size = match specs.character_specs.character_static.size {
+        CharacterSize::Small | CharacterSize::Tall => "w-full",
+        CharacterSize::Huge => "w-2/3",
+        CharacterSize::Large | CharacterSize::Gargantuan => "w-1/2",
+    };
+    // let x_size = spe000000000cs.character_specs.character_static.size.get_xy_size().0;
+    // if x_size == 1 { "w-full" } else { "w-1/2" };
 
     view! {
         <div
             class=move || {
                 format!(
-                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
+                    "grid {} h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
+                    match specs.character_specs.character_static.size {
+                        CharacterSize::Huge => "grid-cols-5",
+                        _ => "grid-cols-4",
+                    },
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
@@ -462,7 +471,13 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             }
         >
             <div
-                class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0"
+                class=format!(
+                    "relative flex flex-col gap-1 xl:gap-2 {} h-full min-h-0",
+                    match specs.character_specs.character_static.size {
+                        CharacterSize::Huge => "col-span-4",
+                        _ => "col-span-3",
+                    },
+                )
                 style="contain: layout paint;"
             >
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>

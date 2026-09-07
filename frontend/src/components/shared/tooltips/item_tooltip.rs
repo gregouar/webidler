@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange, SkillShape},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
     skill::DamageType,
 };
@@ -15,6 +15,7 @@ use crate::components::{
     shared::tooltips::{
         effects_tooltip::scope_str,
         frame::{TooltipFrame, TooltipFramePalette},
+        skill_tooltip,
         trigger_tooltip::format_trigger,
     },
     town::panels::market::item_rarity_str,
@@ -467,16 +468,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 }
             }
 
-            let shape = match specs.shape {
-                SkillShape::Single => "",
-                SkillShape::Vertical2 => ", 2x1 area",
-                SkillShape::Horizontal2 => ", 1x2 area",
-                SkillShape::Horizontal3 => ", 1x3 area",
-                SkillShape::Square4 => ", 2x2 area",
-                SkillShape::All => ", all",
-                SkillShape::Contact => ", contact",
-                SkillShape::Cross => ", contact area",
-            };
+            let shape = format!(", {}", skill_tooltip::shape_str(specs.shape));
 
             let range = match specs.range {
                 SkillRange::Melee => "Melee",
