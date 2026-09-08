@@ -1,6 +1,6 @@
 {
   "area_specific": false,
-  "entries": [
+  "entries"      : [
     {"item_id": "padded_tunic_unique",       "weight":    3, "min_area_level": 50},
     {"item_id": "shortsword",                "weight": 2000                      },
     {"item_id": "shortsword_unique",         "weight": 4999                      },

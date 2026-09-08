@@ -1,0 +1,22 @@
+{
+  "name"    : "Mosquito Larva",
+  "portrait": "monsters/forest/mosquito_larva.webp",
+  "max_life": 5,
+  "skills"  : [
+    {
+      "name"      : "Decomposing Injection",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 4.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "ApplyStatus": { "status_id": "poison", "value": [2, 5], "escalate": 20 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

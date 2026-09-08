@@ -429,6 +429,11 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
     // let x_size = spe000000000cs.character_specs.character_static.size.get_xy_size().0;
     // if x_size == 1 { "w-full" } else { "w-1/2" };
 
+    let skill_bar_width = match specs.character_specs.character_static.size {
+        CharacterSize::Gargantuan => 4,
+        _ => 2,
+    };
+
     view! {
         <div
             class=move || {
@@ -520,7 +525,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         .into_iter()
                         .enumerate()
                         .map(|(i, p)| {
-                            view! { <MonsterSkill skill_specs=p index=i monster_index=index /> }
+                            view! { <MonsterSkill skill_specs=p index=i monster_index=index bar_width=skill_bar_width /> }
                         })
                         .collect::<Vec<_>>()}
                 </div>
@@ -805,7 +810,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
+fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize,bar_width: u8) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let skill_type = skill_specs.skill_type;
     let skill_icon = skill_specs.icon.clone();
@@ -904,7 +909,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             value=progress_value
             reset=just_triggered
             disabled=is_dead
-            bar_width=2
+            bar_width
             icon_class="w-full h-full flex-no-shrink fill-current invert"
 
             on:touchstart={

@@ -1,0 +1,25 @@
+{
+  "name"      : "Mosquito Pupa",
+  "portrait"  : "monsters/forest/mosquito_pupa.webp",
+  "max_life"  : 10,
+  "life_regen": 5,
+  "skills"    : [
+    {
+      "name"      : "Pupa Hug",
+      "icon"      : "skills/claw_insect.svg",
+      "cooldown"  : 6.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [1, 2], "Storm": [0, 2] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,8 @@
     "item_level_modifier": 20,
     "required_level": 50,
     "header_background": "areas/forest_header.webp",
-    "footer_background": "areas/forest_footer.webp"
+    "footer_background": "areas/forest_footer.webp",
+    "hidden": true
   },
   "loot_tables": [],
   "bosses"     : [
@@ -14,9 +15,9 @@
       "level"   : 50,
       "interval": 50,
       "spawns"  : [
-        {"monster": "hound_fire.json",  "quantity": 1},
-        {"monster": "hound_storm.json", "quantity": 1},
-        {"monster": "hunter.json",      "quantity": 1}
+        {"monster": "mosquito_boss.json",  "quantity": 1},
+        {"monster": "mosquito_larva.json", "quantity": 1},
+        {"monster": "mosquito_larva.json", "quantity": 1}
       ]
     }
   ],
@@ -25,7 +26,22 @@
       "min_level": 1,
       "max_level": null,
       "weight"   : 1000,
-      "spawns"   : [ {"monster": "blood_mosquito.json", "quantity": 6} ]
+      "spawns"   : [ {"monster": "mosquito_adult.json", "quantity": 6} ]
+    },
+    {
+      "min_level": 1,
+      "max_level": null,
+      "weight"   : 1000,
+      "spawns"   : [
+        { "monster": "mosquito_adult.json", "quantity": [1, 2] },
+        { "monster": "mosquito_pupa.json",  "quantity": [0, 1] },
+        { "monster": "mosquito_larva.json", "quantity": [1, 2] },
+        { "monster": "mosquito_pupa.json",  "quantity": [0, 1] },
+        { "monster": "mosquito_adult.json", "quantity": [1, 2] },
+        { "monster": "mosquito_larva.json", "quantity": [1, 2] },
+        { "monster": "mosquito_pupa.json",  "quantity": 1      },
+        { "monster": "mosquito_adult.json", "quantity": 1      }
+      ]
     }
   ]
 }

@@ -267,6 +267,23 @@
           "modifier": "More",
           "value": 35.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_id": "drink_storm",
+              "damage_type": null,
+              "debuff": null,
+              "skill_type": null,
+              "skill_id": null,
+              "min_max": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
       }
     ]
   },

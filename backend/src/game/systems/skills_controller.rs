@@ -561,6 +561,10 @@ fn apply_skill_effect_on_target(
             let value = value.roll_with_seed(seed);
             let duration = duration.unwrap_or_default().roll_with_seed(seed);
 
+            if value.get() <= 0.0 {
+                return false;
+            }
+
             characters_controller::apply_status(
                 statuses_store,
                 events_queue,

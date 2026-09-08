@@ -711,6 +711,9 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     });
     let show_skill_upgrade_tutorial = Signal::derive(move || {
         game_context.area_state.read().max_area_level_ever < 10
+            && game_context
+                .area_id
+                .with(|area_id| area_id == "inn_basement.json")
             && player_base_skill
                 .read()
                 .as_ref()

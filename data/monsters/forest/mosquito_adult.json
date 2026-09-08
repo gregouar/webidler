@@ -14,7 +14,7 @@
           "effects": [
             {
               "FlatDamage": {
-                "damage": { "Physical": [1, 2] }
+                "damage": { "Physical": [2, 4] }
               }
             },
             {
