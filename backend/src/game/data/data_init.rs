@@ -53,6 +53,8 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             monitored_conditions: Default::default(),
             repeated_skills: Default::default(),
             resurrected: false,
+            marble_bags_skills: Default::default(),
+            marble_bags_defensive: Default::default(),
         }
     }
 }

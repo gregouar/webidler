@@ -260,73 +260,99 @@ pub fn apply_trigger_effects(
                     .collect()
             };
 
-        let mut player_target = (
-            CharacterId::Player,
-            (
-                &game_data.player_specs.read().character_specs,
-                &mut game_data.player_state.character_state,
-            ),
-        );
-
-        let mut monsters_still_alive: Vec<_> = game_data
-            .monster_specs
-            .iter()
-            .zip(game_data.monster_states.iter_mut())
-            .enumerate()
-            .filter(|(_, (_, m))| m.character_state.is_alive)
-            .map(|(i, (x, y))| {
-                (
-                    CharacterId::Monster(i),
-                    (&x.character_specs, &mut y.character_state),
-                )
-            })
-            .collect();
-
-        let mut targets = match target_id {
+        let max_repeat = trigger_effect.skill_repeat.value.roll();
+        let mut attacker_marble_bags = match attacker {
             CharacterId::Player => {
-                vec![&mut player_target]
+                std::mem::take(&mut game_data.player_state.character_state.marble_bags_skills)
             }
-            CharacterId::Monster(i) => {
-                let (target_position, target_size) = game_data
-                    .monster_specs
-                    .get(i)
-                    .map(|m| {
-                        (
-                            (
-                                m.character_specs.character_static.position_x,
-                                m.character_specs.character_static.position_y,
-                            ),
-                            m.character_specs.character_static.size.get_xy_size(),
-                        )
-                    })
-                    .unwrap_or_default();
-                skills_controller::find_sub_targets(
-                    trigger_effect.skill_range,
-                    trigger_effect.skill_shape,
-                    target_position,
-                    target_size,
-                    &mut monsters_still_alive,
-                )
-            }
+            CharacterId::Monster(index) => game_data
+                .monster_states
+                .get_mut(index)
+                .map(|state| std::mem::take(&mut state.character_state.marble_bags_skills))
+                .unwrap_or_default(),
         };
 
-        let max_repeat = trigger_effect.skill_repeat.value.roll();
-        if skills_controller::apply_skill_effects(
-            statuses_store,
-            events_queue,
-            attacker,
-            &trigger_effect.trigger_id,
-            trigger_effect.skill_type,
-            trigger_effect.skill_range,
-            &trigger_effects,
-            &mut targets,
-            if trigger_effect.trigger_propagate {
-                0
-            } else {
-                trigger_context.trigger_depth.saturating_add(1)
-            },
-        ) && max_repeat > 1
-        {
+        let applied = {
+            let mut player_target = (
+                CharacterId::Player,
+                (
+                    &game_data.player_specs.read().character_specs,
+                    &mut game_data.player_state.character_state,
+                ),
+            );
+
+            let mut monsters_still_alive: Vec<_> = game_data
+                .monster_specs
+                .iter()
+                .zip(game_data.monster_states.iter_mut())
+                .enumerate()
+                .filter(|(_, (_, m))| m.character_state.is_alive)
+                .map(|(i, (x, y))| {
+                    (
+                        CharacterId::Monster(i),
+                        (&x.character_specs, &mut y.character_state),
+                    )
+                })
+                .collect();
+
+            let mut targets = match target_id {
+                CharacterId::Player => {
+                    vec![&mut player_target]
+                }
+                CharacterId::Monster(i) => {
+                    let (target_position, target_size) = game_data
+                        .monster_specs
+                        .get(i)
+                        .map(|m| {
+                            (
+                                (
+                                    m.character_specs.character_static.position_x,
+                                    m.character_specs.character_static.position_y,
+                                ),
+                                m.character_specs.character_static.size.get_xy_size(),
+                            )
+                        })
+                        .unwrap_or_default();
+                    skills_controller::find_sub_targets(
+                        trigger_effect.skill_range,
+                        trigger_effect.skill_shape,
+                        target_position,
+                        target_size,
+                        &mut monsters_still_alive,
+                    )
+                }
+            };
+
+            skills_controller::apply_skill_effects(
+                statuses_store,
+                events_queue,
+                attacker,
+                &trigger_effect.trigger_id,
+                trigger_effect.skill_type,
+                trigger_effect.skill_range,
+                &trigger_effects,
+                &mut targets,
+                if trigger_effect.trigger_propagate {
+                    0
+                } else {
+                    trigger_context.trigger_depth.saturating_add(1)
+                },
+                &mut attacker_marble_bags,
+            )
+        };
+
+        match attacker {
+            CharacterId::Player => {
+                game_data.player_state.character_state.marble_bags_skills = attacker_marble_bags
+            }
+            CharacterId::Monster(index) => {
+                if let Some(state) = game_data.monster_states.get_mut(index) {
+                    state.character_state.marble_bags_skills = attacker_marble_bags;
+                }
+            }
+        }
+
+        if applied && max_repeat > 1 {
             let owner = match owner_id {
                 CharacterId::Player => &mut game_data.player_state.character_state,
                 CharacterId::Monster(_) => todo!(),

@@ -8,6 +8,7 @@ use shared::{
         character_status::{StatusEffectType, StatusId},
         item::SkillRange,
         player::CharacterSpecs,
+        rng::MarbleRollType,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{StatSkillFilter, StatStatusFilter, compare_options},
         values::{Cooldown, NonNegative, Percent},
@@ -20,7 +21,7 @@ use crate::game::{
         master_store::StatusesStore,
     },
     systems::statuses_controller,
-    utils::rng::Rollable,
+    utils::rng::MarbleRollable,
 };
 
 pub type Target<'a> = (CharacterId, (&'a CharacterSpecs, &'a mut CharacterState));
@@ -49,7 +50,14 @@ pub fn attack_character(
             .character_attrs
             .block
             .get(&skill_type)
-            .map(|block| block.roll())
+            .map(|block| {
+                block.roll_with_marble_bag(
+                    target_state
+                        .marble_bags_defensive
+                        .entry(MarbleRollType::Block)
+                        .or_default(),
+                )
+            })
             .unwrap_or_default()
     };
 
@@ -409,7 +417,14 @@ pub fn apply_status(
             .character_attrs
             .evade
             .get(&damage_type)
-            .map(|evade| evade.roll())
+            .map(|evade| {
+                evade.roll_with_marble_bag(
+                    target_state
+                        .marble_bags_defensive
+                        .entry(MarbleRollType::Evade)
+                        .or_default(),
+                )
+            })
             .unwrap_or_default()
     } else {
         false

@@ -1358,7 +1358,7 @@ pub fn apply_stat_effect_on_skill_effect(
     None
 }
 
-fn into_stat_skill_effect_type(
+pub(super) fn into_stat_skill_effect_type(
     statuses_store: &StatusesStore,
     value: &SkillEffectType,
 ) -> Option<StatSkillEffectType> {

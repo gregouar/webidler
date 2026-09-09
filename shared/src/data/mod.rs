@@ -17,6 +17,7 @@ pub mod monster;
 pub mod passive;
 pub mod player;
 pub mod realms;
+pub mod rng;
 pub mod skill;
 pub mod skill_mastery;
 pub mod stash;
