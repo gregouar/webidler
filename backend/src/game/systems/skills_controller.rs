@@ -373,7 +373,7 @@ pub fn apply_skill_effects(
         let mut succeed = true;
 
         // Only clone if more than one target
-        let mut cloned_marble_bags = (target_index == 0).then(|| attacker_marble_bags.clone());
+        let mut cloned_marble_bags = (target_index > 0).then(|| attacker_marble_bags.clone());
         let per_target_marble_bags = match cloned_marble_bags.as_mut() {
             Some(cloned_marble_bags) => cloned_marble_bags,
             None => &mut *attacker_marble_bags,
