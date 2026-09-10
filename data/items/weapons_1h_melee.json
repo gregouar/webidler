@@ -1053,6 +1053,39 @@
     "affixes": [
       {
         "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          10.0,
+          20.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "StatusPower": {
             "status_id": null,
             "damage_type": "Any",
@@ -1067,6 +1100,21 @@
         "value": [
           100.0,
           150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Mana",
+            "skill_type": "Attack"
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          4.0,
+          7.0
         ],
         "ignore_quality": true
       }
@@ -1237,6 +1285,35 @@
             }
           },
           "modifier": "Flat",
+          "value": 3.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "Increased",
+          "value": 30.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Speed": {
+              "skill_type": "Attack",
+              "skill_id": null
+            }
+          },
+          "modifier": "Increased",
           "value": 3.0
         }
       },

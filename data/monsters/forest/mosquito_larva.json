@@ -12,7 +12,7 @@
         {
           "effects": [
             {
-              "ApplyStatus": { "status_id": "poison", "value": [2, 5], "escalate": 20 }
+              "ApplyStatus": { "status_id": "poison", "value": [4, 8], "escalation": 30 }
             }
           ]
         }

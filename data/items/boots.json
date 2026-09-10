@@ -224,6 +224,159 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "leech_boots": {
+    "name": "Groundleeches",
+    "icon": "items/boots/leech_boots.webp",
+    "description": "They cling to the earth, drinking whatever blood spills upon it.",
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Armor": "Poison"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "RestoreOnHit": {
+            "restore_type": "Life",
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "Life",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          40.0,
+          60.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": "MovementSpeed",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 25.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnApplyStatus": {
+          "skill_type": null,
+          "status_id": "bleed",
+          "damage_type": null,
+          "debuff": null,
+          "is_triggered": null,
+          "is_evaded": false,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "leech_boots",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "mosquito_sword_buff",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 30.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      150,
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Poison"
+          },
+          "modifier": "Flat",
+          "value": 25.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
+  },
   "mail_boots": {
     "name": "Mail Boots",
     "icon": "items/boots/mail_boots.webp",
@@ -236,6 +389,31 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 40.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "storm_claquettes": {
+    "name": "Triboelectric Claquettes",
+    "icon": "items/boots/storm_claquettes.webp",
+    "description": "Tap your feet. Strike a spark. Keep the rhythm.",
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
     "affixes": [],
     "triggers": [],
     "weapon_specs": null,

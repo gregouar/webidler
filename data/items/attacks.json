@@ -585,7 +585,7 @@
             "category": null
           }
         },
-        "factor": -1.1,
+        "factor": -1.17,
         "hidden": true
       }
     ],
@@ -930,7 +930,7 @@
             "category": "MeleeWeapon2H"
           }
         },
-        "factor": -1.3,
+        "factor": -1.5,
         "hidden": true
       }
     ],
@@ -953,7 +953,7 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 2.0
+              "factor": 2.5
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],

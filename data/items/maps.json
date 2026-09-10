@@ -203,7 +203,7 @@
   "edict_mosquito": {
     "name": "Pest Control Order",
     "icon": "items/maps/edict_mosquito.webp",
-    "description": "It's mosquito season again. The Kingdom will pay for each head.",
+    "description": "It’s mosquito season again. The Teerick Kingdom will pay for every head.",
     "slot": null,
     "extra_slots": [],
     "categories": [

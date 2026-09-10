@@ -33,6 +33,19 @@
           ]
         }
       ]
+    },
+    {
+      "name"      : "Gross Birth",
+      "icon"      : "skills/dinosaur_egg.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "target_type": "Friend",
+          "target_dead": true,
+          "effects"    : [ {"Resurrect": null} ]
+        }
+      ]
     }
   ]
 }

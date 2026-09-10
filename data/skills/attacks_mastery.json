@@ -1406,5 +1406,81 @@
         ]
       }
     }
+  },
+  "ground_slam"         : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"     : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "speed"      : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "crit_damage": {
+        "title"       : "Critical Hit Damage",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"CritDamage": {}}, "modifier": "More" }
+          }
+        ]
+      },
+      "area"       : {
+        "title"       : "Seismic Force",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_type": null,
+                  "skill_id"  : "ground_slam",
+                  "range"     : null,
+                  "shape"     : "All",
+                  "repeat"    : null
+                }
+              },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -25,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "More" }
+          }
+        ]
+      }
+    }
   }
 }
