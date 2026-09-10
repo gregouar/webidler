@@ -214,7 +214,7 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
-            db::characters::update_character_resources(
+            let character_resources = db::characters::update_character_resources(
                 &mut *tx,
                 self.character_id,
                 self.game_data.player_resources.read().gems,
@@ -268,6 +268,12 @@ impl<'a> GameInstance<'a> {
 
             if self.game_data.area_state.read().max_area_level > 0 {
                 let realm_id = self.game_data.realm.realm_id();
+                let realm_label = match self.game_data.realm {
+                    Realm::Standard => "",
+                    Realm::StandardSSF => " [SSF]",
+                    Realm::Legacy => " [Legacy]",
+                    Realm::LegacySSF => " [Legacy SSF]",
+                };
                 if let Err(err) = db::game_stats::save_game_stats(
                     &mut *tx,
                     self.character_id,
@@ -277,6 +283,48 @@ impl<'a> GameInstance<'a> {
                 .await
                 {
                     tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
+                }
+
+                let power_level = self.game_data.player_base_specs.read().max_area_level;
+                match db::leaderboard::update_leaderboard(
+                    &mut tx,
+                    self.character_id,
+                    &realm_id,
+                    constants::POWER_LEVEL_LEADERBOARD_AREA_ID,
+                    power_level as i32,
+                    character_resources.played_time_seconds,
+                )
+                .await
+                {
+                    Ok(true) => {
+                        if let Err(err) = self
+                            .chat_integration
+                            .broadcast_message(
+                                format!(
+                                    "'{}'{} is the first to reach Power Level {}!",
+                                    self.game_data
+                                        .player_base_specs
+                                        .read()
+                                        .character_static
+                                        .name,
+                                    realm_label,
+                                    power_level,
+                                ),
+                                None,
+                            )
+                            .await
+                        {
+                            tracing::error!("failed to broadcast power level highscore: {}", err);
+                        }
+                    }
+                    Err(err) => {
+                        tracing::error!(
+                            "failed to update power level leaderboard '{}': {}",
+                            self.character_id,
+                            err
+                        );
+                    }
+                    _ => {}
                 }
 
                 match db::leaderboard::update_leaderboard(
@@ -293,12 +341,6 @@ impl<'a> GameInstance<'a> {
                 .await
                 {
                     Ok(true) => {
-                        let realm_label = match self.game_data.realm {
-                            Realm::Standard => "",
-                            Realm::StandardSSF => " [SSF]",
-                            Realm::Legacy => " [Legacy]",
-                            Realm::LegacySSF => " [Legacy SSF]",
-                        };
                         if let Err(err) = self
                             .chat_integration
                             .broadcast_message(

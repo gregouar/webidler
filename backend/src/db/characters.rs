@@ -43,6 +43,7 @@ pub struct CharacterResources {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
+    pub played_time_seconds: f64,
 }
 
 #[derive(Debug, FromRow)]
@@ -295,7 +296,7 @@ pub async fn update_character_resources<'c>(
             played_time_seconds = played_time_seconds + $5,
             updated_at = CURRENT_TIMESTAMP
         WHERE character_id = $1
-        RETURNING resource_gems, resource_shards, resource_gold
+        RETURNING resource_gems, resource_shards, resource_gold, played_time_seconds
         "#,
         character_id,
         resource_gems,

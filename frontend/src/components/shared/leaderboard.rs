@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
-use shared::data::realms::Realm;
+use shared::{constants::POWER_LEVEL_LEADERBOARD_AREA_ID, data::realms::Realm};
 
 use crate::components::{
     backend_client::BackendClient,
@@ -100,10 +100,14 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                         .collect::<Vec<_>>();
                     leaderboard_per_area
                         .sort_by_key(|(area_id, _)| {
-                            areas
-                                .get(area_id)
-                                .map(|area_specs| area_specs.required_level)
-                                .unwrap_or_default()
+                            if area_id == POWER_LEVEL_LEADERBOARD_AREA_ID {
+                                u16::MAX
+                            } else {
+                                areas
+                                    .get(area_id)
+                                    .map(|area_specs| area_specs.required_level)
+                                    .unwrap_or_default()
+                            }
                         });
                     view! {
                         <div class="mt-2 min-h-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -111,11 +115,19 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                                 .into_iter()
                                 .rev()
                                 .map(|(area_id, leaderboard)| {
-                                    let area_name = {
+                                    let power_level = area_id == POWER_LEVEL_LEADERBOARD_AREA_ID;
+                                    let area_name = if power_level {
+                                        "Power Level".to_string()
+                                    } else {
                                         areas
                                             .get(&area_id)
                                             .map(|area_specs| area_specs.name.clone())
                                             .unwrap_or(area_id.clone())
+                                    };
+                                    let level_label = if power_level {
+                                        "Power Level "
+                                    } else {
+                                        "Level "
                                     };
                                     view! {
                                         <CardInset pad=false>
@@ -154,7 +166,7 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
 
                                                                     <div class="flex justify-between items-center">
                                                                         <div class="text-sm text-zinc-300">
-                                                                            "Level "
+                                                                            {level_label}
                                                                             <span class="font-semibold text-white">
                                                                                 {entry.area_level}
                                                                             </span>

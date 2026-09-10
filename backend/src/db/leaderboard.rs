@@ -64,7 +64,9 @@ pub async fn get_leaderboard(
         JOIN characters c ON r.character_id = c.character_id
         JOIN users u      ON c.user_id = u.user_id
         WHERE r.area_rank <= $1
-        ORDER BY r.area_id, r.area_rank;
+        ORDER BY
+            r.area_id,
+            r.area_rank;
         "#,
         top_n,
         realm_id
