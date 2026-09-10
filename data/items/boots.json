@@ -227,7 +227,7 @@
   "leech_boots": {
     "name": "Groundleeches",
     "icon": "items/boots/leech_boots.webp",
-    "description": "They cling to the earth, drinking whatever blood spills upon it.",
+    "description": "They cling to the earth, drinking whatever magic-tainted blood spills upon it.",
     "slot": "Boots",
     "extra_slots": [],
     "categories": [
@@ -253,7 +253,7 @@
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Life",
-            "skill_type": null
+            "skill_type": "Spell"
           }
         },
         "modifier": "Flat",
@@ -282,7 +282,7 @@
     "triggers": [
       {
         "OnApplyStatus": {
-          "skill_type": null,
+          "skill_type": "Spell",
           "status_id": "bleed",
           "damage_type": null,
           "debuff": null,
@@ -374,6 +374,19 @@
           "modifier": "Flat",
           "value": 10.0
         }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "RestoreOnHit": {
+              "restore_type": "Life",
+              "skill_type": "Spell"
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
       }
     ]
   },
@@ -415,7 +428,103 @@
     "min_area_level": 150,
     "rarity": "Unique",
     "affixes": [],
-    "triggers": [],
+    "triggers": [
+      {
+        "OnWaveCompleted": null,
+        "description": null,
+        "trigger_id": "storm_claquettes",
+        "target": "Me",
+        "modifiers": [],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  50.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": true,
+              "armor_penetration": 100.0
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "storm_claquettes",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false,
+            "description": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "storm_claquettes",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 40.0,
@@ -424,8 +533,26 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      200,
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Physical"
+          },
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
   },
   "iron_shod_boots": {
     "name": "Iron-Shod Boots",

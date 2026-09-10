@@ -417,7 +417,9 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
+      "loot_tables": [
+        "edict_music.json"
+      ],
       "replace_area_id": null,
       "reward_loot_table": "edict_music.json"
     },

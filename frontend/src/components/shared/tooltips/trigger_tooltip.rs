@@ -436,7 +436,7 @@ fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
                 ..Default::default()
             },
             &status_trigger.status_filter,
-            false,
+            true,
         )
     )
 }

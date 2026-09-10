@@ -726,8 +726,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          150.0,
-          250.0
+          100.0,
+          200.0
         ],
         "ignore_quality": true
       },
@@ -738,75 +738,9 @@
             "skill_id": null
           }
         },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          25.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": "Spell",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "conditions": [
-              "MaximumMana"
-            ],
-            "conditions_duration": 0
-          }
-        },
         "modifier": "More",
         "scope": "Global",
-        "value": -300.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": "Spell",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "conditions": [
-              "LowMana"
-            ],
-            "conditions_duration": 0
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 300.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": "Mana",
-        "modifier": "More",
-        "scope": "Global",
-        "value": -300.0,
+        "value": 50.0,
         "ignore_quality": true
       }
     ],

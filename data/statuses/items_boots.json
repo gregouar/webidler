@@ -1,4 +1,27 @@
 {
+    "storm_claquettes"  : {
+        "name"      : "Tempo",
+        "icon"      : "statuses/musical_notes.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "MovementSpeed", "modifier": "Increased", "debuff": false},
+                "value"       : 10,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "Damage": {"damage_type": "Storm", "min_max": "Max", "skill_type": "Attack"} },
+                    "modifier": "Flat",
+                    "debuff"  : false
+                },
+                "value"       : 1,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
     "compass_speed"     : {
         "name"      : "Northwest",
         "icon"      : "statuses/compass.svg",
