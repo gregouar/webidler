@@ -525,14 +525,25 @@ pub fn format_skill_effect(
         view! { <EffectLi>{success_chance}{description}</EffectLi> }.into_any()
     } else {
         match skill_effect.effect_type {
-        SkillEffectType::WeaponEffect { item_slot, factor } => {
+        SkillEffectType::WeaponEffect {
+            item_slot,
+            factor,
+            damage_type,
+        } => {
             let item_slot_str = item_tooltip::item_slot_str(item_slot);
+            let converted_damage = damage_type.map(|damage_type| {
+                view! {
+                    " as "
+                    {damage_type_str(Some(damage_type))}
+                    "Damage"
+                }
+            });
 
             view! {
                 <EffectLi>
                     "Deal "
                     <span class="font-semibold">{number::format_number(*factor * 100.0)}%</span>
-                    " of " {item_slot_str}" Damage"
+                    " of " {item_slot_str}" Damage" {converted_damage}
                 </EffectLi>
             }
             .into_any()
@@ -1063,8 +1074,18 @@ pub fn skill_effect_text(
 ) -> String {
     let _ = modifiers;
     match effect.effect_type {
-        SkillEffectType::WeaponEffect { item_slot, .. } => {
-            format!("Deal {} Damage", item_tooltip::item_slot_str(item_slot))
+        SkillEffectType::WeaponEffect {
+            item_slot,
+            damage_type,
+            ..
+        } => {
+            let converted_damage = damage_type
+                .map(|damage_type| format!(" as {}Damage", damage_type_str(Some(damage_type))))
+                .unwrap_or_default();
+            format!(
+                "Deal {} Damage{converted_damage}",
+                item_tooltip::item_slot_str(item_slot)
+            )
         }
         SkillEffectType::FlatDamage { damage, .. } => {
             format!(

@@ -125,7 +125,8 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     Effect::new({
         let send = send.clone();
         move || {
-            if backend.track_authenticated() && ready_state.get() == ConnectionReadyState::Open {
+            let state = ready_state.get();
+            if backend.is_authenticated() && state == ConnectionReadyState::Open {
                 let send = send.clone();
                 spawn_local(async move {
                     if let Ok(jwt) = backend.get_access_token().await {
