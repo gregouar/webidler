@@ -1,4 +1,7 @@
 {
     "area_specific": true,
-    "entries"      : [ {"item_id": "maestro_baton", "weight": 9999}, {"item_id": "storm_claquettes", "weight": 9999} ]
+    "entries"      : [
+        {"item_id": "maestro_baton",    "weight": 9999, "min_area_level": 160},
+        {"item_id": "storm_claquettes", "weight": 9999, "min_area_level": 160}
+    ]
 }

@@ -1,4 +1,7 @@
 {
     "area_specific": true,
-    "entries"      : [ {"item_id": "mosquito_sword", "weight": 9999}, {"item_id": "leech_boots", "weight": 9999} ]
+    "entries"      : [
+        {"item_id": "mosquito_sword", "weight": 9999, "min_area_level": 100},
+        {"item_id": "leech_boots",    "weight": 9999, "min_area_level": 100}
+    ]
 }
