@@ -86,6 +86,35 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "edict_gems": {
+    "name": "Geological Survey",
+    "icon": "items/maps/edict_gems.webp",
+    "description": "According to our findings, there is considerably more gems underground than previously reported.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": null,
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": null,
+      "reward_loot_table": null
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "edict_menu": {
     "name": "Regulars' Menu",
     "icon": "items/maps/edict_menu.webp",
@@ -203,7 +232,7 @@
   "edict_mosquito": {
     "name": "Pest Control Order",
     "icon": "items/maps/edict_mosquito.webp",
-    "description": "It’s mosquito season again. The Teerick Kingdom will pay for every head.",
+    "description": "It's mosquito season again. The Teerick Kingdom will pay for every head.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -309,6 +338,35 @@
       "loot_tables": [],
       "replace_area_id": "forest_mosquito.json",
       "reward_loot_table": "edict_mosquito.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_music": {
+    "name": "The Devil's Tempo",
+    "icon": "items/maps/edict_music.webp",
+    "description": "Faster. Faster. The Devil is waiting.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "castle.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": null,
+      "reward_loot_table": "edict_music.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [],

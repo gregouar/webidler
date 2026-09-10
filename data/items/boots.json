@@ -746,6 +746,18 @@
         "scope": "Global",
         "value": 5.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusResistance": {
+            "status_id": "chill",
+            "skill_type": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [
