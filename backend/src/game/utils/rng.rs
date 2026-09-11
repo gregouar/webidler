@@ -7,6 +7,7 @@ use rand_chacha::ChaCha8Rng;
 use shared::data::{
     chance::{BoundedChance, Chance, ChanceRange},
     modifier::ModifiableValue,
+    rng::{MARBLE_COUNT, MarbleBag},
     values::Luck,
 };
 
@@ -61,15 +62,34 @@ where
     })
 }
 
-pub trait Rollable<T> {
-    fn roll_with_seed(&self, seed: &mut RngSeed) -> T;
-    fn roll(&self) -> T {
+pub trait Rollable<T>
+where
+    Self: Sized,
+{
+    fn roll_with_seed(self, seed: &mut RngSeed) -> T;
+    fn roll(self) -> T {
         self.roll_with_seed(&mut roll_seed())
     }
 }
 
-impl Rollable<bool> for Chance {
-    fn roll_with_seed(&self, seed: &mut RngSeed) -> bool {
+/// Rolls a value using percentages supplied by a marble bag.
+///
+/// Luck checks and their additional values use the regular RNG and never
+/// consume marbles.
+pub trait MarbleRollable<T>
+where
+    Self: Sized,
+{
+    fn roll_with_marble_rolls(self, seed: &mut RngSeed, marble_bag: &mut MarbleBag) -> T;
+
+    fn roll_with_marble_bag(self, marble_bag: &mut MarbleBag) -> T {
+        let mut seed = roll_seed();
+        self.roll_with_marble_rolls(&mut seed, marble_bag)
+    }
+}
+
+impl Rollable<bool> for &Chance {
+    fn roll_with_seed(self, seed: &mut RngSeed) -> bool {
         let first_result =
             random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get();
         let second_result =
@@ -83,8 +103,24 @@ impl Rollable<bool> for Chance {
     }
 }
 
-impl Rollable<bool> for BoundedChance {
-    fn roll_with_seed(&self, seed: &mut RngSeed) -> bool {
+impl MarbleRollable<bool> for &Chance {
+    fn roll_with_marble_rolls(self, seed: &mut RngSeed, marble_bag: &mut MarbleBag) -> bool {
+        let first_result = marble_bag.roll_with_seed(seed) <= self.value.get();
+
+        match roll_luck(*self.lucky_chance, seed) {
+            LuckResult::Unlucky => first_result.min(
+                random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get(),
+            ),
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => first_result.max(
+                random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get(),
+            ),
+        }
+    }
+}
+
+impl Rollable<bool> for &BoundedChance {
+    fn roll_with_seed(self, seed: &mut RngSeed) -> bool {
         let first_result =
             random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get();
         let second_result =
@@ -98,11 +134,27 @@ impl Rollable<bool> for BoundedChance {
     }
 }
 
-impl<T> Rollable<T> for ChanceRange<T>
+impl MarbleRollable<bool> for &BoundedChance {
+    fn roll_with_marble_rolls(self, seed: &mut RngSeed, marble_bag: &mut MarbleBag) -> bool {
+        let first_result = marble_bag.roll_with_seed(seed) <= self.value.get();
+
+        match roll_luck(*self.lucky_chance, seed) {
+            LuckResult::Unlucky => first_result.min(
+                random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get(),
+            ),
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => first_result.max(
+                random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0) <= self.value.get(),
+            ),
+        }
+    }
+}
+
+impl<T> Rollable<T> for &ChanceRange<T>
 where
     T: rand::distr::uniform::SampleUniform + PartialOrd + Copy,
 {
-    fn roll_with_seed(&self, seed: &mut RngSeed) -> T {
+    fn roll_with_seed(self, seed: &mut RngSeed) -> T {
         let min = if let Some(ordering) = self.min.partial_cmp(&self.max)
             && ordering == std::cmp::Ordering::Greater
         {
@@ -147,7 +199,7 @@ impl<T> Rollable<T> for ChanceRange<ModifiableValue<T>>
 where
     T: Into<f64> + From<f64> + Copy,
 {
-    fn roll_with_seed(&self, seed: &mut RngSeed) -> T {
+    fn roll_with_seed(self, seed: &mut RngSeed) -> T {
         ChanceRange::<f64> {
             min: (*self.min).into(),
             max: (*self.max).into(),
@@ -155,6 +207,41 @@ where
         }
         .roll_with_seed(seed)
         .into()
+    }
+}
+
+impl<T> MarbleRollable<T> for ChanceRange<ModifiableValue<T>>
+where
+    T: Into<f64> + From<f64> + Copy,
+{
+    fn roll_with_marble_rolls(self, seed: &mut RngSeed, marble_bag: &mut MarbleBag) -> T {
+        let max: f64 = (*self.max).into();
+        let min: f64 = (*self.min).into();
+        let min = min.min(max);
+        let roll_value = |percentage: f32| T::from(min + (max - min) * percentage as f64 * 0.01);
+        let first_result = roll_value(marble_bag.roll_with_seed(seed));
+
+        match roll_luck(*self.lucky_chance, seed) {
+            LuckResult::Unlucky => {
+                let second_result =
+                    roll_value(random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0));
+                if first_result.into() > second_result.into() {
+                    second_result
+                } else {
+                    first_result
+                }
+            }
+            LuckResult::Normal => first_result,
+            LuckResult::Lucky => {
+                let second_result =
+                    roll_value(random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0));
+                if first_result.into() < second_result.into() {
+                    second_result
+                } else {
+                    first_result
+                }
+            }
+        }
     }
 }
 
@@ -175,4 +262,79 @@ fn roll_luck(lucky_chance: Luck, seed: &mut RngSeed) -> LuckResult {
     }
 
     LuckResult::Normal
+}
+
+const MARBLE_MASK: u32 = (1 << MARBLE_COUNT) - 1;
+const MARBLE_SLICE_WIDTH: f32 = 100.0 / MARBLE_COUNT as f32;
+
+impl Rollable<f32> for &mut MarbleBag {
+    fn roll_with_seed(self, seed: &mut RngSeed) -> f32 {
+        let rank = seed.random_range(0..self.remaining_marbles);
+        let mut free_marbles = !self.picked_marbles & MARBLE_MASK;
+
+        for _ in 0..rank {
+            free_marbles &= free_marbles - 1;
+        }
+
+        let slice = free_marbles.trailing_zeros();
+        self.picked_marbles |= 1 << slice;
+        self.remaining_marbles -= 1;
+
+        if self.remaining_marbles == 0 {
+            self.picked_marbles = 0;
+            self.remaining_marbles = MARBLE_COUNT;
+        }
+
+        (slice as f32 + seed.random::<f32>()) * MARBLE_SLICE_WIDTH
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use shared::data::values::Percent;
+
+    #[test]
+    fn marble_bag_picks_every_slice_once_before_resetting() {
+        let mut bag = MarbleBag::new();
+        let mut seed = RngSeed::seed_from_u64(42);
+        let mut picked_slices = 0_u32;
+
+        for _ in 0..MARBLE_COUNT {
+            let roll = (&mut bag).roll_with_seed(&mut seed);
+            let slice = (roll / MARBLE_SLICE_WIDTH) as u32;
+
+            assert!((0.0..100.0).contains(&roll));
+            assert_eq!(picked_slices & (1 << slice), 0);
+            picked_slices |= 1 << slice;
+        }
+
+        assert_eq!(picked_slices, MARBLE_MASK);
+        assert_eq!(bag, MarbleBag::new());
+    }
+
+    #[test]
+    fn normal_marble_roll_only_draws_once() {
+        let chance = Chance::new_sure();
+        let mut seed = RngSeed::seed_from_u64(42);
+        let mut bag = MarbleBag::new();
+
+        assert!((&chance).roll_with_marble_rolls(&mut seed, &mut bag));
+        assert_eq!(bag.remaining_marbles, MARBLE_COUNT - 1);
+        assert_eq!(bag.picked_marbles.count_ones(), 1);
+    }
+
+    #[test]
+    fn lucky_roll_value_does_not_consume_another_marble() {
+        let chance = Chance {
+            value: Percent::new(50.0).into(),
+            lucky_chance: Luck::new(100.0).into(),
+        };
+        let mut bag = MarbleBag::new();
+
+        let _ = (&chance).roll_with_marble_bag(&mut bag);
+
+        assert_eq!(bag.remaining_marbles, MARBLE_COUNT - 1);
+        assert_eq!(bag.picked_marbles.count_ones(), 1);
+    }
 }

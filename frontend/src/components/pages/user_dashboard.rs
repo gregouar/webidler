@@ -37,7 +37,7 @@ use crate::{
             loading_screen::LoadingScreen,
             menu_panel::MenuPanel,
             toast::*,
-            tooltip::{StaticTooltip, StaticTooltipPosition},
+            tooltip::{HelpTooltip, StaticTooltip, StaticTooltipPosition},
         },
     },
 };
@@ -741,16 +741,7 @@ pub fn CreateCharacterPanel(
                                     }
                                 />
 
-                                <StaticTooltip
-                                    position=StaticTooltipPosition::Top
-                                    tooltip=|| {
-                                        "Legacy: this character plays in the permanent Legacy realm, with a separate economy and leaderboards."
-                                    }
-                                >
-                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
-                                        "?"
-                                    </span>
-                                </StaticTooltip>
+                                <HelpTooltip text="Legacy: this character plays in the permanent Legacy realm, with a separate economy and leaderboards." />
                             </div>
 
                             <div class="flex items-center gap-2">
@@ -762,16 +753,7 @@ pub fn CreateCharacterPanel(
                                     }
                                 />
 
-                                <StaticTooltip
-                                    position=StaticTooltipPosition::Top
-                                    tooltip=|| {
-                                        "Solo Self Found: this character cannot trade items with other players and plays in an isolated economy."
-                                    }
-                                >
-                                    <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
-                                        "?"
-                                    </span>
-                                </StaticTooltip>
+                                <HelpTooltip text="Solo Self Found: this character cannot trade items with other players and plays in an isolated economy." />
                             </div>
                         </div>
                     </CardInset>

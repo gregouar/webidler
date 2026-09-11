@@ -1,5 +1,5 @@
 {
-    "cheese"            : {
+    "cheese"               : {
         "name"      : "Melted Cheese",
         "icon"      : "statuses/cheese.svg",
         "debuff"    : true,
@@ -44,7 +44,7 @@
             }
         ]
     },
-    "greed"             : {
+    "greed"                : {
         "name"      : "Greed",
         "icon"      : "statuses/snatch.svg",
         "debuff"    : false,
@@ -67,7 +67,7 @@
             }
         ]
     },
-    "spider_hammer_uber": {
+    "spider_hammer_uber"   : {
         "name"       : "Infested",
         "icon"       : "statuses/spider.svg",
         "debuff"     : true,
@@ -78,7 +78,7 @@
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
         ]
     },
-    "desert_whip"       : {
+    "desert_whip"          : {
         "name"      : "Punishment",
         "icon"      : "statuses/whip.svg",
         "debuff"    : false,
@@ -101,6 +101,44 @@
                     "debuff"  : false
                 },
                 "value"       : 10.0,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "mosquito_sword_buff"  : {
+        "name"      : "Engorged",
+        "icon"      : "passives/muscle_up.svg",
+        "debuff"    : false,
+        "duration"  : 10,
+        "max_stacks": 50,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "Flat", "debuff": false},
+                "value"       : 2,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 10,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "mosquito_sword_debuff": {
+        "name"      : "Drained",
+        "icon"      : "passives/leeching_worm.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "More", "debuff": true},
+                "value"       : 1e200,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": true },
+                "value"       : 33,
                 "modifier"    : "Flat"
             }
         ]

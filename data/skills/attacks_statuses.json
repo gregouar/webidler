@@ -222,5 +222,35 @@
                 "modifier"    : "Percent"
             }
         ]
+    },
+    "ground_slam_tremor"        : {
+        "name"      : "Destabilized",
+        "icon"      : "statuses/earth_spit.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Block": null}, "modifier": "Increased", "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"Evade": null}, "modifier": "Increased", "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : {
+                        "SuccessChance": { "effect_type": {"FlatDamage": {}} }
+                    },
+                    "modifier": "Increased",
+                    "debuff"  : true
+                },
+                "value"       : 33,
+                "modifier"    : "Flat"
+            }
+        ]
     }
 }

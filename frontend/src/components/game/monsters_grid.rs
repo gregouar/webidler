@@ -60,7 +60,11 @@ pub fn MonstersGrid() -> impl IntoView {
                         all_monsters_dead.set(true);
                     }
                 },
-                std::time::Duration::from_secs(1),
+                if game_context.player_specs.read().movement_cooldown.get() < 2.0 {
+                    std::time::Duration::from_millis(100)
+                } else {
+                    std::time::Duration::from_secs(1)
+                },
             );
         } else {
             all_monsters_dead.set(false);
@@ -421,14 +425,28 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
         MonsterRarity::Boss => "boss-title xl:text-base font-display",
     };
 
-    let x_size = specs.character_specs.character_static.size.get_xy_size().0;
-    let skill_size = if x_size == 1 { "w-full" } else { "w-1/2" };
+    let skill_size = match specs.character_specs.character_static.size {
+        CharacterSize::Small | CharacterSize::Tall => "w-full",
+        CharacterSize::Huge => "w-2/3",
+        CharacterSize::Large | CharacterSize::Gargantuan => "w-1/2",
+    };
+    // let x_size = spe000000000cs.character_specs.character_static.size.get_xy_size().0;
+    // if x_size == 1 { "w-full" } else { "w-1/2" };
+
+    let skill_bar_width = match specs.character_specs.character_static.size {
+        CharacterSize::Gargantuan => 4,
+        _ => 2,
+    };
 
     view! {
         <div
             class=move || {
                 format!(
-                    "grid grid-cols-4 h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
+                    "grid {} h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
+                    match specs.character_specs.character_static.size {
+                        CharacterSize::Huge => "grid-cols-5",
+                        _ => "grid-cols-4",
+                    },
                     match settings.graphics_quality() {
                         GraphicsQuality::High => {
                             "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
@@ -462,7 +480,13 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
             }
         >
             <div
-                class="relative flex flex-col gap-1 xl:gap-2 col-span-3 h-full min-h-0"
+                class=format!(
+                    "relative flex flex-col gap-1 xl:gap-2 {} h-full min-h-0",
+                    match specs.character_specs.character_static.size {
+                        CharacterSize::Huge => "col-span-4",
+                        _ => "col-span-3",
+                    },
+                )
                 style="contain: layout paint;"
             >
                 <StaticTooltip tooltip=life_tooltip position=StaticTooltipPosition::Bottom>
@@ -505,7 +529,14 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         .into_iter()
                         .enumerate()
                         .map(|(i, p)| {
-                            view! { <MonsterSkill skill_specs=p index=i monster_index=index /> }
+                            view! {
+                                <MonsterSkill
+                                    skill_specs=p
+                                    index=i
+                                    monster_index=index
+                                    bar_width=skill_bar_width
+                                />
+                            }
                         })
                         .collect::<Vec<_>>()}
                 </div>
@@ -790,7 +821,12 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> impl IntoView {
+fn MonsterSkill(
+    skill_specs: SkillSpecs,
+    index: usize,
+    monster_index: usize,
+    bar_width: u8,
+) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let skill_type = skill_specs.skill_type;
     let skill_icon = skill_specs.icon.clone();
@@ -889,7 +925,7 @@ fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize) -> 
             value=progress_value
             reset=just_triggered
             disabled=is_dead
-            bar_width=2
+            bar_width
             icon_class="w-full h-full flex-no-shrink fill-current invert"
 
             on:touchstart={

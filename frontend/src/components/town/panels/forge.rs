@@ -34,6 +34,7 @@ use crate::components::{
         dropdown::SearchableDropdownMenu,
         menu_panel::MenuPanel,
         toast::*,
+        tooltip::HelpTooltip,
     },
 };
 
@@ -533,6 +534,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
     let toaster: Toasts = expect_context();
+    let confirm_context: ConfirmContext = expect_context();
 
     let user_gems = move || town_context.character.read().resource_gems;
 
@@ -600,6 +602,38 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
         }
     };
 
+    let try_upgrade_item = {
+        let confirm_context = confirm_context.clone();
+        move || {
+            let do_upgrade_item = Arc::new(do_upgrade_item);
+            let next_power_level = selected_item.with(|selected_item| match selected_item {
+                SelectedItem::InMarket(item) => item
+                    .item_specs
+                    .base
+                    .upgrade_levels
+                    .get(item.item_specs.modifiers.upgrade_level as usize)
+                    .map(|next_upgrade_level| {
+                        item.item_specs.required_level.max(*next_upgrade_level)
+                    }),
+                _ => None,
+            });
+            let character_power_level = town_context.character.read_untracked().max_area_level;
+
+            if let Some(next_power_level) = next_power_level
+                && next_power_level > character_power_level
+            {
+                (confirm_context.confirm)(
+                    format!(
+                        "Empowering this item will raise its required Power Level to {next_power_level}, above your Character Power Level of {character_power_level}, and make it unusable. Continue?"
+                    ),
+                    do_upgrade_item,
+                );
+            } else {
+                do_upgrade_item();
+            }
+        }
+    };
+
     let is_equipped = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(selected_item) => selected_item.recipient.is_some(),
@@ -616,7 +650,12 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardInsetTitle>"Empower Unique Item"</CardInsetTitle>
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Empower Unique Item"
+                    <HelpTooltip text="Empower upgrades a low-level Unique Item into a stronger version of itself. The maximum Empower level is determined by the Item Level." />
+                </span>
+            </CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">
@@ -627,7 +666,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
             <div class="flex flex-col gap-1 xl:gap-2">
                 <MenuButton
-                    on:click=move |_| do_upgrade_item()
+                    on:click=move |_| try_upgrade_item()
                     disabled=Signal::derive({
                         move || upgrade_price().map(|price| price > user_gems()).unwrap_or(true)
                     })

@@ -40,6 +40,15 @@
                 "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": true },
                 "value"       : 100,
                 "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : { "StatusResistance": {"status_id": "chill", "skill_type": null} },
+                    "modifier": "Flat",
+                    "debuff"  : false
+                },
+                "value"       : 100,
+                "modifier"    : "Flat"
             }
         ]
     }

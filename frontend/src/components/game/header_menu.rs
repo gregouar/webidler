@@ -9,6 +9,7 @@ use crate::components::{
         buttons::{MenuButton, MenuButtonRed},
         fullscreen::FullscreenButton,
         header::BaseHeaderMenu,
+        tutorial_popup::{TutorialPopup, TutorialPopupPosition},
         wiki::WikiButton,
     },
 };
@@ -21,7 +22,20 @@ pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
-    let show_power_shard_tip = RwSignal::new(false);
+    let show_passive_point_tutorial = Signal::derive(move || {
+        game_context
+            .area_id
+            .with(|area_id| area_id == "inn_basement.json")
+            && game_context.area_state.read().max_area_level_ever < 10
+            && game_context
+                .passives_tree_state
+                .read()
+                .purchased_nodes
+                .is_empty()
+            && game_context.player_resources.read().passive_points > 0
+            && !game_context.open_passives.get()
+    });
+    let power_shard_tip_triggered = RwSignal::new(false);
     let previous_max_power_shard_level = RwSignal::new(
         game_context
             .area_state
@@ -38,8 +52,9 @@ pub fn HeaderMenu() -> impl IntoView {
             .with(|area_id| area_id == "inn_basement.json")
             && previous_level == 0
             && max_power_shard_level > 0
+            && !show_passive_point_tutorial.get()
         {
-            show_power_shard_tip.set(true);
+            power_shard_tip_triggered.set(true);
         }
 
         previous_max_power_shard_level.set(max_power_shard_level);
@@ -48,7 +63,6 @@ pub fn HeaderMenu() -> impl IntoView {
     let stop_grind = {
         let conn: WebsocketContext = expect_context();
         move |_| {
-            show_power_shard_tip.set(false);
             if game_context.area_specs.read_untracked().training {
                 conn.send(&ClientMessage::EndGrind);
                 conn.send(
@@ -84,6 +98,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let gold = Signal::derive(move || resources.get().0);
     let gems = Signal::derive(move || resources.get().1);
     let shards = Signal::derive(move || resources.get().2);
+
     let shard_level_exceeded = Signal::derive(move || {
         let area_specs = game_context.area_specs.read();
         area_specs.can_reward_shards()
@@ -187,28 +202,28 @@ pub fn HeaderMenu() -> impl IntoView {
                     <span class="inline xl:hidden">"Inv."</span>
                     <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
                 </MenuButton>
-                <MenuButton on:click=move |_| open_passives()>
-                    <span class="inline xl:hidden">"Pas."</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
-                    {move || {
-                        let points = resources.get().3;
-                        if points > 0 { format!(" ({points})") } else { "".to_string() }
-                    }}
-                </MenuButton>
+                <TutorialPopup
+                    show=show_passive_point_tutorial
+                    position=TutorialPopupPosition::BelowRight
+                    message="Click here to spend your Passive Point on a node in your current Grind."
+                >
+                    <MenuButton on:click=move |_| open_passives()>
+                        <span class="inline xl:hidden">"Pas."</span>
+                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
+                        {move || {
+                            let points = resources.get().3;
+                            if points > 0 { format!(" ({points})") } else { "".to_string() }
+                        }}
+                    </MenuButton>
+                </TutorialPopup>
                 <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
-                <div class="relative">
+                <TutorialPopup
+                    show=power_shard_tip_triggered
+                    position=TutorialPopupPosition::BelowRight
+                    message="Click here to end the Grind and return to Town, where you can spend your Power Shard by Ascending a Passive and unlock a new Skill Slot in the Temple."
+                >
                     <MenuButtonRed on:click=stop_grind>"End"</MenuButtonRed>
-                    <Show when=move || show_power_shard_tip.get()>
-                        <div
-                            role="status"
-                            class="pointer-events-none absolute right-0 top-full z-50 mt-3 w-72 max-w-[calc(100vw-1rem)] rounded border border-amber-300/80 bg-zinc-900 px-3 py-2 text-left text-xs font-normal normal-case tracking-normal text-zinc-100 shadow-xl xl:text-sm"
-                        >
-                            <span class="font-bold text-amber-300">"Tip: "</span>
-                            "Click here to end the Grind and return to Town, where you can spend your Power Shard by Ascending a Passive and unlock a new Skill Slot in the Temple."
-                            <span class="absolute -top-2 right-4 h-0 w-0 border-x-8 border-b-8 border-x-transparent border-b-amber-300/80" />
-                        </div>
-                    </Show>
-                </div>
+                </TutorialPopup>
                 <MenuButton on:click=quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>

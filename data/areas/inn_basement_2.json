@@ -49,10 +49,8 @@
       ]
     },
     {
-      "min_level": 10,
-      "max_level": null,
-      "weight"   : 1000,
-      "spawns"   : [
+      "weight": 1000,
+      "spawns": [
         { "monster": "cockroach.json", "quantity": [0, 1] },
         { "monster": "centipede.json", "quantity": 1      },
         { "monster": "cockroach.json", "quantity": [0, 1] },
@@ -61,10 +59,8 @@
       ]
     },
     {
-      "min_level": 20,
-      "max_level": null,
-      "weight"   : 1000,
-      "spawns"   : [
+      "weight": 1000,
+      "spawns": [
         { "monster": "cat_skeleton.json", "quantity": [1, 2] },
         { "monster": "soot_imp.json",     "quantity": [2, 3] },
         { "monster": "soot_imp_2.json",   "quantity": [2, 3] },
@@ -72,10 +68,8 @@
       ]
     },
     {
-      "min_level": 30,
-      "max_level": null,
-      "weight"   : 1000,
-      "spawns"   : [
+      "weight": 1000,
+      "spawns": [
         { "monster": "barrel_mimic.json",    "quantity": [1, 2] },
         { "monster": "booze_elemental.json", "quantity": [2, 3] },
         { "monster": "patron_ghost.json",    "quantity": [1, 2] },
@@ -83,10 +77,8 @@
       ]
     },
     {
-      "min_level": 40,
-      "max_level": null,
-      "weight"   : 1000,
-      "spawns"   : [
+      "weight": 1000,
+      "spawns": [
         { "monster": "haunted_pot.json",     "quantity": [1, 2] },
         { "monster": "bat_fire.json",        "quantity": [2, 3] },
         { "monster": "haunted_lantern.json", "quantity": [1, 2] },

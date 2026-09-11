@@ -7,6 +7,7 @@ use crate::data::{
     character_status::StatusId,
     conditional_modifier::{Condition, ConditionalModifier},
     modifier::ModifiableValue,
+    rng::{MarbleBag, MarbleRollType},
     skill::{DamageType, RepeatedSkillEffect, SkillType},
     stat_effect::StatEffect,
     trigger::TriggersMap,
@@ -16,13 +17,15 @@ use crate::data::{
 use super::character_status::StatusMap;
 pub use super::skill::{SkillSpecs, SkillState};
 
+pub type MarbleBags = HashMap<MarbleRollType, MarbleBag>;
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum CharacterId {
     Player,
     Monster(usize),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq)]
 pub enum CharacterSize {
     #[default]
     Small, // 1x1
@@ -136,7 +139,7 @@ pub struct CharacterState {
     pub just_blocked: bool,
     pub just_evaded: bool,
 
-    // This feels dirty
+    // This feels dirty (probably should be split and only in backend)
     #[serde(default, skip_serializing, skip_deserializing)]
     pub dirty_specs: bool,
     #[serde(default, skip_serializing, skip_deserializing)]
@@ -145,6 +148,10 @@ pub struct CharacterState {
     pub repeated_skills: Vec<RepeatedSkillEffect>,
     #[serde(default, skip_serializing, skip_deserializing)]
     pub resurrected: bool,
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub marble_bags_skills: MarbleBags,
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub marble_bags_defensive: MarbleBags,
 }
 
 // This shouldn't be here

@@ -1,6 +1,6 @@
 {
   "area_specific": false,
-  "entries": [
+  "entries"      : [
     {"item_id": "hand_axe",         "weight": 4000                      },
     {"item_id": "iron_cap",         "weight": 4000                      },
     {"item_id": "chain_shirt",      "weight": 4000                      },
@@ -16,6 +16,7 @@
     {"item_id": "silver_chain",     "weight": 4000                      },
     {"item_id": "edict",            "weight":  100                      },
     {"item_id": "edict_menu",       "weight": 1999                      },
+    {"item_id": "edict_gems",       "weight":  999                      },
     {"item_id": "rune",             "weight":  400, "min_area_level": 90},
     {"item_id": "rune_berserker",   "weight":  999                      }
   ]

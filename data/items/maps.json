@@ -86,6 +86,61 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "edict_gems": {
+    "name": "Geological Survey",
+    "icon": "items/maps/edict_gems.webp",
+    "description": "According to our findings, there is considerably more gems underground than previously reported.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 100,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": "GemsFind",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 1000.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Armor": null
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 500.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Block": "Attack"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": null,
+      "reward_picks": 0,
+      "reward_slots": 0,
+      "max_power_shard_level": 300,
+      "loot_tables": [],
+      "replace_area_id": null,
+      "reward_loot_table": null
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "edict_menu": {
     "name": "Regulars' Menu",
     "icon": "items/maps/edict_menu.webp",
@@ -195,6 +250,188 @@
       "loot_tables": [],
       "replace_area_id": "inn_basement_2.json",
       "reward_loot_table": "edict_menu.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_mosquito": {
+    "name": "Pest Control Order",
+    "icon": "items/maps/edict_mosquito.webp",
+    "description": "It's mosquito season again. The Teerick Kingdom will pay for every head.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 150,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Description": "Enemies Drop no Item"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 500.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "mosquito_disease",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 5.0,
+            "source": {
+              "HitDamage": null
+            }
+          }
+        ],
+        "inherit_source_effects": false,
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 5.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "mosquito_disease",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "forest.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "forest_mosquito.json",
+      "reward_loot_table": "edict_mosquito.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_music": {
+    "name": "The Devil's Tempo",
+    "icon": "items/maps/edict_music.webp",
+    "description": "Faster. Faster. The Devil is waiting.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Local",
+        "value": 300.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 20.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "castle.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [
+        "edict_music.json"
+      ],
+      "replace_area_id": null,
+      "reward_loot_table": "edict_music.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [],

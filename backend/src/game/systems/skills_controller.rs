@@ -6,9 +6,10 @@ use shared::{
     computations::skill_cost_increase,
     constants::MAX_SKILL_LEVEL,
     data::{
-        character::CharacterId,
+        character::{CharacterId, MarbleBags},
         item::{SkillRange, SkillShape},
         player::{PlayerBaseSkill, PlayerResources},
+        rng::MarbleRollType,
         skill::{
             RepeatedSkillEffect, RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget,
             SkillTargetsGroup, SkillType, TargetType,
@@ -20,7 +21,7 @@ use shared::{
 use crate::game::{
     data::{event::EventsQueue, master_store::StatusesStore},
     systems::{skills_updater, stats_updater},
-    utils::rng::{self, RngSeed, Rollable, flip_coin},
+    utils::rng::{self, MarbleRollable, RngSeed, Rollable, flip_coin},
 };
 
 use super::{characters_controller, characters_controller::Target};
@@ -140,44 +141,47 @@ fn apply_repeated_skill_on_targets<'a>(
     already_hit: Option<&HashSet<CharacterId>>,
 ) -> Option<CharacterId> {
     let attacker = me.0;
+    let mut attacker_marble_bags = std::mem::take(&mut me.1.1.marble_bags_skills);
 
-    let (main_target_id, mut targets) = {
-        match targets_group.target_type {
-            TargetType::Enemy => find_targets(
-                targets_group,
-                (
-                    me.1.0.character_static.position_x,
-                    me.1.0.character_static.position_y,
-                ),
-                enemies,
-                already_hit,
+    let target_id = match targets_group.target_type {
+        TargetType::Enemy => find_targets(
+            targets_group,
+            (
+                me.1.0.character_static.position_x,
+                me.1.0.character_static.position_y,
             ),
-            TargetType::Friend => find_targets(
-                targets_group,
-                (
-                    me.1.0.character_static.position_x,
-                    me.1.0.character_static.position_y,
-                ),
-                friends,
-                already_hit,
+            enemies,
+            already_hit,
+        ),
+        TargetType::Friend => find_targets(
+            targets_group,
+            (
+                me.1.0.character_static.position_x,
+                me.1.0.character_static.position_y,
             ),
-            TargetType::Me => Some((me.0, vec![me])),
-        }
-    }?;
+            friends,
+            already_hit,
+        ),
+        TargetType::Me => Some((me.0, vec![&mut *me])),
+    }
+    .and_then(|(main_target_id, mut targets)| {
+        let applied = apply_skill_effects(
+            statuses_store,
+            events_queue,
+            attacker,
+            skill_id,
+            skill_type,
+            targets_group.range,
+            &targets_group.effects,
+            &mut targets,
+            0,
+            &mut attacker_marble_bags,
+        );
+        applied.then_some(main_target_id)
+    });
 
-    let applied = apply_skill_effects(
-        statuses_store,
-        events_queue,
-        attacker,
-        skill_id,
-        skill_type,
-        targets_group.range,
-        &targets_group.effects,
-        &mut targets,
-        0,
-    );
-
-    applied.then_some(main_target_id)
+    me.1.1.marble_bags_skills = attacker_marble_bags;
+    target_id
 }
 
 fn find_targets<'a, 'b>(
@@ -352,6 +356,7 @@ pub fn apply_skill_effects(
     skill_effects: &[SkillEffect],
     targets: &mut [&mut Target],
     trigger_depth: u8,
+    attacker_marble_bags: &mut MarbleBags,
 ) -> bool {
     let seed = rng::roll_seed();
 
@@ -363,9 +368,16 @@ pub fn apply_skill_effects(
         return false;
     }
 
-    for target in targets.iter_mut() {
+    for (target_index, target) in targets.iter_mut().enumerate().rev() {
         let mut seed = seed.clone();
         let mut succeed = true;
+
+        // Only clone if more than one target
+        let mut cloned_marble_bags = (target_index > 0).then(|| attacker_marble_bags.clone());
+        let per_target_marble_bags = match cloned_marble_bags.as_mut() {
+            Some(cloned_marble_bags) => cloned_marble_bags,
+            None => &mut *attacker_marble_bags,
+        };
 
         for skill_effect in skill_effects.iter() {
             if !succeed && !skill_effect.independent_application {
@@ -395,6 +407,7 @@ pub fn apply_skill_effects(
                 skill_id,
                 trigger_depth,
                 &mut seed,
+                per_target_marble_bags,
             ) || skill_effect.optional_application
         }
     }
@@ -497,8 +510,19 @@ fn apply_skill_effect_on_target(
     skill_id: &str,
     trigger_depth: u8,
     seed: &mut RngSeed,
+    attacker_marble_bags: &mut MarbleBags,
 ) -> bool {
-    if !skill_effect.success_chance.roll_with_seed(seed) {
+    let Some(effect_type) =
+        skills_updater::into_stat_skill_effect_type(statuses_store, &skill_effect.effect_type)
+    else {
+        return false;
+    };
+    if !(&skill_effect.success_chance).roll_with_marble_rolls(
+        seed,
+        attacker_marble_bags
+            .entry(MarbleRollType::SuccessChance { effect_type })
+            .or_default(),
+    ) {
         return false;
     }
 
@@ -515,14 +539,22 @@ fn apply_skill_effect_on_target(
             armor_penetration,
             damage_factors: _,
         } => {
-            let is_crit = crit_chance.roll_with_seed(seed);
+            let crit_marble_bag = attacker_marble_bags
+                .entry(MarbleRollType::CritChance)
+                .or_default();
+            let is_crit = crit_chance.roll_with_marble_rolls(seed, crit_marble_bag);
 
             let damage: HashMap<_, _> = damage
                 .iter()
                 .map(|(damage_type, value)| {
+                    let damage_marble_bag = attacker_marble_bags
+                        .entry(MarbleRollType::Damage {
+                            damage_type: *damage_type,
+                        })
+                        .or_default();
                     (
                         *damage_type,
-                        (*value).roll_with_seed(seed)
+                        (*value).roll_with_marble_rolls(seed, damage_marble_bag)
                             * (if is_crit {
                                 1.0 + **crit_damage * 0.01
                             } else {
@@ -560,6 +592,10 @@ fn apply_skill_effect_on_target(
         } => {
             let value = value.roll_with_seed(seed);
             let duration = duration.unwrap_or_default().roll_with_seed(seed);
+
+            if value.get() <= 0.0 {
+                return false;
+            }
 
             characters_controller::apply_status(
                 statuses_store,

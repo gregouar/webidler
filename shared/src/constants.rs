@@ -41,6 +41,8 @@ pub const MAX_EVADE: f32 = 80.0;
 pub const MAX_SKILL_LEVEL: u16 = 500;
 pub const MAX_AREA_LEVEL: u16 = 9999;
 
+pub const POWER_LEVEL_LEADERBOARD_AREA_ID: &str = "power_level";
+
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
 pub const MAX_ITEM_QUALITY: f32 = 25.0;
 

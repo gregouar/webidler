@@ -15,10 +15,7 @@ use sqlx::Transaction;
 use crate::{
     app_state::MasterStore,
     db::{self, pool::Database},
-    game::{
-        data::master_store::{SkillMasteriesStore, StatusesStore},
-        systems::skills_updater,
-    },
+    game::data::master_store::{SkillMasteriesStore, StatusesStore},
     rest::AppError,
 };
 
@@ -122,7 +119,7 @@ pub fn apply_skill_mastery(
     skill_specs: &mut SkillSpecs,
     skill_mastery_specs: &SkillMasterySpecs,
     skill_mastery_state: &SkillMasteryState,
-) {
+) -> Vec<StatEffect> {
     let upgrade_effects = skill_mastery_specs
         .upgrades
         .iter()
@@ -189,7 +186,7 @@ pub fn apply_skill_mastery(
         }
     }
 
-    let stat_effects: Vec<_> = upgrade_effects
+    upgrade_effects
         .filter(|(effect, _)| {
             matches!(
                 effect.effect_type,
@@ -200,9 +197,7 @@ pub fn apply_skill_mastery(
             )
         })
         .filter_map(|(effect, upgrade_level)| effect.compute_stat_effect(upgrade_level))
-        .collect();
-
-    skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, stat_effects.iter());
+        .collect()
 }
 
 pub fn generate_player_stat_effects(

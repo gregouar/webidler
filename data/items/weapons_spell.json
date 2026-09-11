@@ -686,6 +686,96 @@
       }
     ]
   },
+  "maestro_baton": {
+    "name": "The Maestro's Baton",
+    "icon": "items/weapons_spell/maestro_baton.webp",
+    "description": "One beat for fire. Two for thunder. Three for death.",
+    "slot": "Weapon",
+    "extra_slots": [],
+    "categories": [
+      "SpellWeapon"
+    ],
+    "min_area_level": 200,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 150.0,
+        "ignore_quality": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          200.0
+        ],
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Spell",
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 50.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      260,
+      330,
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 70.0
+        }
+      }
+    ]
+  },
   "crystal_wand": {
     "name": "Crystal Wand",
     "icon": "items/weapons_spell/crystal_wand.webp",
@@ -1203,7 +1293,8 @@
           "Restore": {
             "restore_type": "Mana",
             "skill_type": null,
-            "skill_id": null
+            "skill_id": null,
+            "modifier_description": "Flat"
           }
         },
         "modifier": "Increased",

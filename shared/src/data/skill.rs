@@ -253,6 +253,8 @@ pub enum SkillEffectType {
         item_slot: ItemSlot,
         #[serde(default)]
         factor: ModifiableValue<f64>,
+        #[serde(default)]
+        damage_type: Option<DamageType>,
     },
     FlatDamage {
         damage: DamageMap,

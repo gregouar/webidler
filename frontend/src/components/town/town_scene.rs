@@ -33,7 +33,7 @@ use crate::{
             card::{Card, CardInset, CardTitle, MenuCard},
             menu_panel::MenuPanel,
             number::{format_duration, format_duration_in_days},
-            tooltip::{StaticTooltip, StaticTooltipPosition},
+            tooltip::{HelpTooltip, StaticTooltip, StaticTooltipPosition},
         },
     },
 };
@@ -656,20 +656,11 @@ pub fn StartGrindPanel(
                                             on_click=choose_map
                                         >
                                             "Proclaim Edict"
-                                            <StaticTooltip
+                                            <HelpTooltip
                                                 position=StaticTooltipPosition::Top
-                                                tooltip=|| {
-                                                    view! {
-                                                        <div class="flex flex-col xl:space-y-1 w-[20vw] whitespace-normal">
-                                                            "An Edict is a special kind of item that drops at Power Level 100 or higher. It makes enemies stronger during a Grind, but increases rewards."
-                                                        </div>
-                                                    }
-                                                }
-                                            >
-                                                <span class="ml-1 inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help">
-                                                    "?"
-                                                </span>
-                                            </StaticTooltip>
+                                                class="ml-1"
+                                                text="An Edict is a special kind of item that drops at Power Level 100 or higher. It makes enemies stronger during a Grind, but increases rewards."
+                                            />
                                         </ItemDetailsPanel>
                                     </div>
 

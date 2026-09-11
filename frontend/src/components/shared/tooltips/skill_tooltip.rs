@@ -127,6 +127,23 @@ pub fn SkillTooltip(
         .map(|triggers| format_triggers(triggers, false, None, None))
         .collect::<Vec<_>>();
 
+    let weapon_cooldown_percent = player_base_skill.as_ref().and_then(|player_base_skill| {
+        player_base_skill
+            .base_skill_specs
+            .modifier_effects
+            .iter()
+            .find_map(|modifier_effect| {
+                matches!(
+                    &modifier_effect.source,
+                    ModifierEffectSource::ItemStats {
+                        item_stats: ItemStatsSource::Cooldown,
+                        ..
+                    }
+                )
+                .then_some(modifier_effect.factor.abs() * 100.0)
+            })
+    });
+
     // let auto_use_conditions = player_base_skill
     //     .as_ref()
     //     .map(|player_base_skill| {
@@ -204,6 +221,14 @@ pub fn SkillTooltip(
                         "Cooldown: "
                         <span class="text-stone-100">
                             {format!("{:.1}s", skill_specs.cooldown.get())}
+                        </span>
+                    }
+                        .into_any()
+                } else if let Some(weapon_cooldown_percent) = weapon_cooldown_percent {
+                    view! {
+                        "Cooldown: "
+                        <span class="text-stone-100">
+                            {format!("{}%", format_number(weapon_cooldown_percent))}
                         </span>
                     }
                         .into_any()
@@ -500,14 +525,25 @@ pub fn format_skill_effect(
         view! { <EffectLi>{success_chance}{description}</EffectLi> }.into_any()
     } else {
         match skill_effect.effect_type {
-        SkillEffectType::WeaponEffect { item_slot, factor } => {
+        SkillEffectType::WeaponEffect {
+            item_slot,
+            factor,
+            damage_type,
+        } => {
             let item_slot_str = item_tooltip::item_slot_str(item_slot);
+            let converted_damage = damage_type.map(|damage_type| {
+                view! {
+                    " as "
+                    {damage_type_str(Some(damage_type))}
+                    "Damage"
+                }
+            });
 
             view! {
                 <EffectLi>
                     "Deal "
                     <span class="font-semibold">{number::format_number(*factor * 100.0)}%</span>
-                    " of " {item_slot_str}" Damage"
+                    " of " {item_slot_str}" Damage" {converted_damage}
                 </EffectLi>
             }
             .into_any()
@@ -1038,8 +1074,18 @@ pub fn skill_effect_text(
 ) -> String {
     let _ = modifiers;
     match effect.effect_type {
-        SkillEffectType::WeaponEffect { item_slot, .. } => {
-            format!("Deal {} Damage", item_tooltip::item_slot_str(item_slot))
+        SkillEffectType::WeaponEffect {
+            item_slot,
+            damage_type,
+            ..
+        } => {
+            let converted_damage = damage_type
+                .map(|damage_type| format!(" as {}Damage", damage_type_str(Some(damage_type))))
+                .unwrap_or_default();
+            format!(
+                "Deal {} Damage{converted_damage}",
+                item_tooltip::item_slot_str(item_slot)
+            )
         }
         SkillEffectType::FlatDamage { damage, .. } => {
             format!(

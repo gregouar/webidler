@@ -1,0 +1,51 @@
+{
+  "name"              : "The Engorged One",
+  "portrait"          : "monsters/forest/mosquito_boss.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 500,
+  "size"              : "Huge",
+  "evade"             : {"Physical": 50, "Fire": 20, "Storm": 20, "Poison": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
+    {
+      "name"      : "Suck Me Dry",
+      "icon"      : "skills/needle_drill.svg",
+      "cooldown"  : 4.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [3, 6] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "bleed", "value": [10, 20] }
+            }
+          ]
+        },
+        {
+          "target_type": "Me",
+          "effects"    : [
+            { "Restore": {"restore_type": "Life", "value": 5, "modifier": "Percent"} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Gross Birth",
+      "icon"      : "skills/dinosaur_egg.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "target_type": "Friend",
+          "target_dead": true,
+          "effects"    : [ {"Resurrect": null} ]
+        }
+      ]
+    }
+  ]
+}

@@ -19,6 +19,7 @@ impl DataInit<&AreaSpecs> for AreaState {
             area_level: 1,
             is_boss: false,
             waves_done: 1,
+            used_wave_indices: Default::default(),
             max_area_level: 0,
             max_area_level_ever: 0,
             max_power_shard_level_ever: 0,
@@ -53,6 +54,8 @@ impl DataInit<&CharacterSpecs> for CharacterState {
             monitored_conditions: Default::default(),
             repeated_skills: Default::default(),
             resurrected: false,
+            marble_bags_skills: Default::default(),
+            marble_bags_defensive: Default::default(),
         }
     }
 }
