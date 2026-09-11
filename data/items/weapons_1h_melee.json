@@ -1086,6 +1086,18 @@
       },
       {
         "stat": {
+          "CritChance": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 5.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
           "StatusPower": {
             "status_id": null,
             "damage_type": "Any",
