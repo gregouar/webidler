@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -90,16 +92,18 @@ fn default_item_rarity() -> ModifiableValue<f64> {
 pub struct AreaState {
     pub area_level: AreaLevel,
     pub is_boss: bool,
-    pub waves_done: u8, // TODO: could rename to current wave
-
-    pub max_area_level: AreaLevel,             // Max for this grind
-    pub max_area_level_ever: AreaLevel,        // Max for all grind of this area
+    pub waves_done: u8,                 // TODO: could rename to current wave
+    pub max_area_level: AreaLevel,      // Max for this grind
+    pub max_area_level_ever: AreaLevel, // Max for all grind of this area
     pub max_power_shard_level_ever: AreaLevel, // Max for all grind of this area
     pub last_champion_spawn: AreaLevel,
 
     pub auto_progress: bool,
     pub going_back: i32,
     pub rush_mode: bool,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub used_wave_indices: HashSet<usize>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

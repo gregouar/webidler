@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use anyhow::Result;
 
 use shared::{
@@ -27,9 +29,14 @@ use crate::game::{
 
 use super::skills_updater;
 
-impl RandomWeighted for &MonsterWaveBlueprint {
+struct IndexedWave<'a> {
+    index: usize,
+    wave: &'a MonsterWaveBlueprint,
+}
+
+impl RandomWeighted for IndexedWave<'_> {
     fn random_weight(&self) -> u64 {
-        self.weight
+        self.wave.weight
     }
 }
 
@@ -95,15 +102,7 @@ fn generate_monsters_wave_specs(
         }
     }
 
-    let available_waves: Vec<_> = waves
-        .iter()
-        .filter(|wave| {
-            area_state.area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
-                && area_state.area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
-        })
-        .collect();
-
-    if let Some(wave) = rng::random_weighted_pick(&available_waves) {
+    if let Some(wave) = pick_monster_wave(waves, area_state) {
         return Ok((
             generate_all_monsters_specs(
                 monsters_specs_store,
@@ -117,6 +116,41 @@ fn generate_monsters_wave_specs(
     }
 
     Err(anyhow::format_err!("no monster wave available"))
+}
+
+fn pick_monster_wave<'a>(
+    waves: &'a [MonsterWaveBlueprint],
+    area_state: &mut AreaState,
+) -> Option<&'a MonsterWaveBlueprint> {
+    let mut available_waves =
+        available_monster_waves(waves, area_state.area_level, &area_state.used_wave_indices);
+
+    if available_waves.is_empty() {
+        area_state.used_wave_indices.clear();
+        available_waves =
+            available_monster_waves(waves, area_state.area_level, &area_state.used_wave_indices);
+    }
+
+    let picked_wave = rng::random_weighted_pick(&available_waves)?;
+    area_state.used_wave_indices.insert(picked_wave.index);
+    Some(picked_wave.wave)
+}
+
+fn available_monster_waves<'a>(
+    waves: &'a [MonsterWaveBlueprint],
+    area_level: AreaLevel,
+    used_wave_indices: &HashSet<usize>,
+) -> Vec<IndexedWave<'a>> {
+    waves
+        .iter()
+        .enumerate()
+        .filter(|(index, wave)| {
+            !used_wave_indices.contains(index)
+                && area_level >= wave.min_level.unwrap_or(AreaLevel::MIN)
+                && area_level <= wave.max_level.unwrap_or(AreaLevel::MAX)
+        })
+        .map(|(index, wave)| IndexedWave { index, wave })
+        .collect()
 }
 
 fn generate_all_monsters_specs(

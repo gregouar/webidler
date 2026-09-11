@@ -2,9 +2,7 @@ use std::iter;
 
 use itertools::all;
 use shared::{
-    constants::{
-        ITEM_REWARDS_BOSS_FACTOR, MAX_AREA_LEVEL, POWER_SHARD_LEVELS_NEEDED, WAVES_PER_AREA_LEVEL,
-    },
+    constants::{ITEM_REWARDS_BOSS_FACTOR, POWER_SHARD_LEVELS_NEEDED, WAVES_PER_AREA_LEVEL},
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
@@ -28,7 +26,8 @@ use crate::game::{
 };
 
 use super::{
-    loot_controller, loot_generator, player_controller, triggers_controller::TriggerContext,
+    area_controller, loot_controller, loot_generator, player_controller,
+    triggers_controller::TriggerContext,
 };
 
 pub async fn resolve_events(
@@ -530,13 +529,7 @@ fn handle_area_completed_event(
         }
     }
 
-    area_state.waves_done = 1;
-    if area_state.auto_progress {
-        area_state.area_level = area_state
-            .area_level
-            .saturating_add(1)
-            .clamp(1, MAX_AREA_LEVEL);
-    }
+    area_controller::auto_increase_area_level(area_state, 1);
 
     game_data.game_stats.areas_completed += 1;
 }
