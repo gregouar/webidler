@@ -10,7 +10,7 @@ use crate::components::{
         card::{CardHeader, CardInset, MenuCard},
         list_row::MenuListRow,
         menu_panel::MenuPanel,
-        number::{format_datetime, format_duration},
+        number::{format_datetime, format_duration, format_duration_in_days},
     },
 };
 
@@ -172,7 +172,11 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                                                                             </span>
                                                                         </div>
                                                                         <div class="text-sm text-zinc-300">
-                                                                            {format_duration(entry.elapsed_time, true)}
+                                                                            {if entry.elapsed_time.as_secs() > 24 * 3600 {
+                                                                                format_duration_in_days(entry.elapsed_time)
+                                                                            } else {
+                                                                                format_duration(entry.elapsed_time, true)
+                                                                            }}
                                                                         </div>
                                                                     </div>
 
