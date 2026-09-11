@@ -60,7 +60,11 @@ pub fn MonstersGrid() -> impl IntoView {
                         all_monsters_dead.set(true);
                     }
                 },
-                std::time::Duration::from_secs(1),
+                if game_context.player_specs.read().movement_cooldown.get() < 2.0 {
+                    std::time::Duration::from_millis(100)
+                } else {
+                    std::time::Duration::from_secs(1)
+                },
             );
         } else {
             all_monsters_dead.set(false);
@@ -525,7 +529,14 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         .into_iter()
                         .enumerate()
                         .map(|(i, p)| {
-                            view! { <MonsterSkill skill_specs=p index=i monster_index=index bar_width=skill_bar_width /> }
+                            view! {
+                                <MonsterSkill
+                                    skill_specs=p
+                                    index=i
+                                    monster_index=index
+                                    bar_width=skill_bar_width
+                                />
+                            }
                         })
                         .collect::<Vec<_>>()}
                 </div>
@@ -810,7 +821,12 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 }
 
 #[component]
-fn MonsterSkill(skill_specs: SkillSpecs, index: usize, monster_index: usize,bar_width: u8) -> impl IntoView {
+fn MonsterSkill(
+    skill_specs: SkillSpecs,
+    index: usize,
+    monster_index: usize,
+    bar_width: u8,
+) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let skill_type = skill_specs.skill_type;
     let skill_icon = skill_specs.icon.clone();
