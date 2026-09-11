@@ -4,16 +4,16 @@
         "icon"      : "statuses/musical_notes.svg",
         "debuff"    : false,
         "duration"  : 4,
-        "max_stacks": 10,
+        "max_stacks": 5,
         "effects"   : [
             {
                 "StatModifier": {"stat": "MovementSpeed", "modifier": "Increased", "debuff": false},
-                "value"       : 10,
+                "value"       : 20,
                 "modifier"    : "Flat"
             },
             {
                 "StatModifier": {
-                    "stat"    : { "Damage": {"damage_type": "Storm", "min_max": "Max", "skill_type": "Attack"} },
+                    "stat"    : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
                     "modifier": "Flat",
                     "debuff"  : false
                 },

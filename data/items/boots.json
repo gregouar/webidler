@@ -427,7 +427,18 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [],
+    "affixes": [
+      {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          100.0,
+          150.0
+        ],
+        "ignore_quality": true
+      }
+    ],
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -550,6 +561,14 @@
           },
           "modifier": "Flat",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 25.0
         }
       }
     ]
