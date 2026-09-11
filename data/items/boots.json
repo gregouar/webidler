@@ -466,7 +466,7 @@
               "damage": {
                 "Storm": [
                   0.0,
-                  50.0
+                  30.0
                 ]
               },
               "damage_factors": {},
