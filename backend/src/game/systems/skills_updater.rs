@@ -145,8 +145,7 @@ pub fn update_skill_specs(
                 character_attrs,
                 inventory,
             ))),
-        )
-        .into_iter(),
+        ),
     );
 
     apply_effects_to_skill_specs(

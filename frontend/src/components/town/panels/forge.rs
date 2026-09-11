@@ -605,7 +605,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
     let try_upgrade_item = {
         let confirm_context = confirm_context.clone();
         move || {
-            let do_upgrade_item = Arc::new(move || do_upgrade_item());
+            let do_upgrade_item = Arc::new(do_upgrade_item);
             let next_power_level = selected_item.with(|selected_item| match selected_item {
                 SelectedItem::InMarket(item) => item
                     .item_specs
