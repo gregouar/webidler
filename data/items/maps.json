@@ -406,6 +406,16 @@
         "scope": "Global",
         "value": 20.0,
         "ignore_quality": true
+      },
+      {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          50.0,
+          100.0
+        ],
+        "ignore_quality": true
       }
     ],
     "triggers": [],
