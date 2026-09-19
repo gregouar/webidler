@@ -1,0 +1,163 @@
+{
+    "max_player_level"       : {
+        "icon"       : "",
+        "name"       : "Let the Grind begin",
+        "description": "Reach Player Level 70 during any Grind.",
+        "goals"      : [ {"PlayerLevel": 70} ],
+        "rewards"    : [ {"Cosmetic": "pet_cat_dog"} ]
+    },
+    "all_base_areas"         : {
+        "icon"       : "",
+        "name"       : "Main Story",
+        "description": "Complete all Grind Quests.",
+        "goals"      : [
+            { "AreaLevel": {"value":  50, "area_id": "inn_basement.json"} },
+            { "AreaLevel": {"value":  50, "area_id": "forest.json"      } },
+            { "AreaLevel": {"value":  30, "area_id": "witch_lair.json"  } },
+            { "AreaLevel": {"value": 100, "area_id": "castle.json"      } },
+            { "AreaLevel": {"value": 100, "area_id": "island.json"      } },
+            { "AreaLevel": {"value":  30, "area_id": "peaks.json"       } },
+            { "AreaLevel": {"value": 150, "area_id": "yokai.json"       } },
+            { "AreaLevel": {"value": 150, "area_id": "desert.json"      } },
+            { "AreaLevel": {"value": 150, "area_id": "farwest.json"     } },
+            { "AreaLevel": {"value":  30, "area_id": "mythos.json"      } }
+        ],
+        "rewards"    : [ {"Cosmetic": "pet_crow"} ]
+    },
+    "power_level_600"        : {
+        "icon"       : "",
+        "name"       : "Endgame",
+        "description": "Reach Power Level 600.",
+        "goals"      : [ {"PowerLevel": 600} ],
+        "rewards"    : [ {"Cosmetic": "pet_crow"} ]
+    },
+    "power_level_900"        : {
+        "icon"       : "",
+        "name"       : "True Player",
+        "description": "Reach Power Level 900.",
+        "goals"      : [ {"PowerLevel": 900} ],
+        "rewards"    : [ {"Cosmetic": "title_true_player"} ]
+    },
+    "uniques_collector"      : {
+        "icon"       : "",
+        "name"       : "Bizarre Equipments",
+        "description": "Equip a Unique Item in each Equipment Slot.",
+        "goals"      : [
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Accessory"} },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Helmet"   } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Amulet"   } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Weapon"   } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Body"     } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Shield"   } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Gloves"   } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Boots"    } },
+            { "EquippedItem": {"item_rarity": "Unique", "item_slot": "Ring"     } }
+        ],
+        "rewards"    : [ {"Cosmetic": "title_uniques_collector"} ]
+    },
+    "max_equipment"          : {
+        "icon"       : "",
+        "name"       : "Legendary Equipment",
+        "description": "Equip a Power Level 600 Item in each Equipment Slot.",
+        "goals"      : [
+            { "EquippedItem": {"item_level": 600, "item_slot": "Accessory"} },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Helmet"   } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Amulet"   } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Weapon"   } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Body"     } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Shield"   } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Gloves"   } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Boots"    } },
+            { "EquippedItem": {"item_level": 600, "item_slot": "Ring"     } }
+        ],
+        "rewards"    : [ {"Cosmetic": "title_max_equipment"} ]
+    },
+    "all_runes"              : {
+        "icon"       : "",
+        "name"       : "Rune you Fool",
+        "description": "Equip a Rune in every Socket.",
+        "goals"      : [
+            { "EquippedItem": {"item_category": "Rune", "in_passives_tree": true, "amount": 8} }
+        ],
+        "rewards"    : [ {"Cosmetic": "title_all_runes"} ]
+    },
+    "all_unique_runes"       : {
+        "icon"       : "",
+        "name"       : "Runes Connoisseur",
+        "description": "Equip a Rune in every Socket.",
+        "goals"      : [
+            {
+                "EquippedItem": {
+                    "item_category"   : "Rune",
+                    "item_rarity"     : "Unique",
+                    "in_passives_tree": true,
+                    "amount"          : 8
+                }
+            }
+        ],
+        "rewards"    : [ {"Cosmetic": "title_all_unique_runes"} ]
+    },
+    "all_max_passives"       : {
+        "icon"       : "",
+        "name"       : "Ascension",
+        "description": "Ascend 70 Passives to Level 5.",
+        "goals"      : [
+            { "PassiveLevel": {"value": 5, "amount": 70} }
+        ],
+        "rewards"    : [ {"Cosmetic": "title_all_max_passives"} ]
+    },
+    "max_skill_level"        : {
+        "icon"       : "",
+        "name"       : "Skill Master",
+        "description": "Reach Skill Mastery 100 in any Skill.",
+        "goals"      : [
+            { "SkillLevel": {"value": 100} }
+        ],
+        "rewards"    : [ {"Cosmetic": "pet_crow"} ]
+    },
+    "max_various_skill_level": {
+        "icon"       : "",
+        "name"       : "Jack of All Trades",
+        "description": "Reach Skill Mastery 100 with an Attack, a Spell, a Blessing and a Curse.",
+        "goals"      : [
+            { "SkillLevel": {"value": 100, "skill_type": "Attack"  } },
+            { "SkillLevel": {"value": 100, "skill_type": "Spell"   } },
+            { "SkillLevel": {"value": 100, "skill_type": "Blessing"} },
+            { "SkillLevel": {"value": 100, "skill_type": "Curse"   } }
+        ],
+        "rewards"    : [ {"Cosmetic": "title_max_various_skill_level"} ]
+    },
+    "edict_menu"             : {
+        "icon"       : "",
+        "name"       : "Vanquisher of Tavernus",
+        "description": "Kill the Bosses of the Regular's Menu Unique Edict.",
+        "goals"      : [
+            { "AreaLevel": {"value": 50, "area_id": "inn_basement_2.json"} }
+        ],
+        "rewards"    : [ {"Cosmetic": "pet_otter"}, {"Cosmetic": "title_regular_patron"} ]
+    },
+    "edict_treasure"         : {
+        "icon"        : "",
+        "name"        : "Treasure Hunting",
+        "description" : "Equip 4 of the 6 Cursed Treasures.",
+        "goals_amount": 4,
+        "goals"       : [
+            { "EquippedItem": {"item_id": "treasure_gun"    } },
+            { "EquippedItem": {"item_id": "treasure_crown"  } },
+            { "EquippedItem": {"item_id": "treasure_cutlass"} },
+            { "EquippedItem": {"item_id": "treasure_idol"   } },
+            { "EquippedItem": {"item_id": "treasure_chest"  } },
+            { "EquippedItem": {"item_id": "treasure_compass"} }
+        ],
+        "rewards"     : [ {"Cosmetic": "pet_crab"} ]
+    },
+    "edict_witch"            : {
+        "icon"       : "",
+        "name"       : "Broodkiller",
+        "description": "Kill the Broodmother.",
+        "goals"      : [
+            { "AreaLevel": {"value": 30, "area_id": "witch_lair_2.json"} }
+        ],
+        "rewards"    : [ {"Cosmetic": "pet_witch"}, {"Cosmetic": "badge_witch"} ]
+    }
+}

@@ -174,3 +174,15 @@ impl PlayerInventory {
         }
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum PetButton {
+    Skill(u8),
+    LevelUp,
+    AutoPassive,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct PlayerPets {
+    pub assigned_pets: HashMap<PetButton, String>,
+}

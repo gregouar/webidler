@@ -1,1 +1,4 @@
-{ "meta": {"enabled": true}, "folders": ["castle", "desert", "forest", "inn", "island", "peaks", "witch", "yokai"] }
+{
+    "meta"   : {"enabled": true},
+    "folders": ["castle", "desert", "farwest", "forest", "inn", "island", "peaks", "witch", "yokai"]
+}

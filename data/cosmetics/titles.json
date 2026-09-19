@@ -1,0 +1,10 @@
+{
+    "title_uniques_collector"      : {"Title": "oddities collector" },
+    "title_max_equipment"          : {"Title": "legendary collector"},
+    "title_all_runes"              : {"Title": "runic"              },
+    "title_all_unique_runes"       : {"Title": "runes connoisseur"  },
+    "title_all_max_passives"       : {"Title": "ascendant"          },
+    "title_true_player"            : {"Title": "true player"        },
+    "title_max_various_skill_level": {"Title": "jack of all trades" },
+    "title_regular_patron"         : {"Title": "regular patron"     }
+}

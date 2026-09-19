@@ -1,0 +1,7 @@
+{
+    "pet_cat_dog": { "Pet": {"name": "Cat-Dog",       "icon": "pets/pet_catdog.webp"} },
+    "pet_crow"   : { "Pet": {"name": "Crow",          "icon": "pets/pet_crow.webp"  } },
+    "pet_otter"  : { "Pet": {"name": "Otter Wizard",  "icon": "pets/pet_otter.webp" } },
+    "pet_crab"   : { "Pet": {"name": "Treasure Crab", "icon": "pets/pet_crab.webp"  } },
+    "pet_witch"  : { "Pet": {"name": "Spider Witch",  "icon": "pets/pet_witch.webp" } }
+}

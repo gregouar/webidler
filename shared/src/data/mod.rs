@@ -1,9 +1,11 @@
+pub mod achievements;
 pub mod area;
 pub mod badges;
 pub mod chance;
 pub mod character;
 pub mod character_status;
 pub mod conditional_modifier;
+pub mod cosmetics;
 pub mod forge;
 pub mod game_stats;
 pub mod grind;
