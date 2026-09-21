@@ -4,7 +4,7 @@
         "name"       : "Let the Grind begin",
         "description": "Reach Player Level 70 during any Grind.",
         "goals"      : [ {"PlayerLevel": 70} ],
-        "rewards"    : [ {"Cosmetic": "pet_cat_dog"} ]
+        "rewards"    : [ {"Pet": "pet_chicken"} ]
     },
     "all_base_areas"         : {
         "icon"       : "",
@@ -22,14 +22,14 @@
             { "AreaLevel": {"value": 150, "area_id": "farwest.json"     } },
             { "AreaLevel": {"value":  30, "area_id": "mythos.json"      } }
         ],
-        "rewards"    : [ {"Cosmetic": "pet_crow"} ]
+        "rewards"    : [ {"Pet": "pet_cat_dog"} ]
     },
     "power_level_600"        : {
         "icon"       : "",
         "name"       : "Endgame",
         "description": "Reach Power Level 600.",
         "goals"      : [ {"PowerLevel": 600} ],
-        "rewards"    : [ {"Cosmetic": "pet_crow"} ]
+        "rewards"    : [ {"Pet": "pet_crow"} ]
     },
     "power_level_900"        : {
         "icon"       : "",
@@ -113,7 +113,7 @@
         "goals"      : [
             { "SkillLevel": {"value": 100} }
         ],
-        "rewards"    : [ {"Cosmetic": "pet_crow"} ]
+        "rewards"    : [ {"Pet": "pet_lizard"} ]
     },
     "max_various_skill_level": {
         "icon"       : "",
@@ -134,7 +134,16 @@
         "goals"      : [
             { "AreaLevel": {"value": 50, "area_id": "inn_basement_2.json"} }
         ],
-        "rewards"    : [ {"Cosmetic": "pet_otter"}, {"Cosmetic": "title_regular_patron"} ]
+        "rewards"    : [ {"Pet": "pet_otter"}, {"Cosmetic": "title_regular_patron"} ]
+    },
+    "edict_mosquito"         : {
+        "icon"       : "",
+        "name"       : "Pest Eradicator",
+        "description": "Reach Area Level 500 during Mosquito Season.",
+        "goals"      : [
+            { "AreaLevel": {"value": 500, "area_id": "forest_mosquito.json"} }
+        ],
+        "rewards"    : [ {"Pet": "pet_mosquito"} ]
     },
     "edict_treasure"         : {
         "icon"        : "",
@@ -149,7 +158,16 @@
             { "EquippedItem": {"item_id": "treasure_chest"  } },
             { "EquippedItem": {"item_id": "treasure_compass"} }
         ],
-        "rewards"     : [ {"Cosmetic": "pet_crab"} ]
+        "rewards"     : [ {"Pet": "pet_crab"}, {"Cosmetic": "title_treasure_hunter"} ]
+    },
+    "edict_mummy"            : {
+        "icon"       : "",
+        "name"       : "All About the Mummies",
+        "description": "Reach Area Level 500 during a Mummy Invasion.",
+        "goals"      : [
+            { "AreaLevel": {"value": 500, "area_id": "desert_mummy.json"} }
+        ],
+        "rewards"    : [ {"Pet": "pet_scarab"}, {"Cosmetic": "title_mummy_lover"} ]
     },
     "edict_witch"            : {
         "icon"       : "",
@@ -158,6 +176,6 @@
         "goals"      : [
             { "AreaLevel": {"value": 30, "area_id": "witch_lair_2.json"} }
         ],
-        "rewards"    : [ {"Cosmetic": "pet_witch"}, {"Cosmetic": "badge_witch"} ]
+        "rewards"    : [ {"Pet": "pet_witch"}, {"Cosmetic": "badge_witch"} ]
     }
 }

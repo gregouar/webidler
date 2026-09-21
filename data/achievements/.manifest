@@ -1,4 +1,0 @@
-{
-    "meta"     : { "enabled": true                                               },
-    "resources": {                  "achievements": ["global_achievements.json"] }
-}

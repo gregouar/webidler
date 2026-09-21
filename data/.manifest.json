@@ -2,6 +2,6 @@
   "meta"   : {"enabled": true},
   "folders": [
     "achievements", "areas",        "cosmetics",    "item_affixes", "item_names",   "items",        "loot",
-    "map_affixes",  "monsters",     "passives",     "rune_affixes", "skills",       "statuses",     "temple"
+    "map_affixes",  "monsters",     "passives",     "pets",         "rune_affixes", "skills",       "statuses", "temple"
   ]
 }

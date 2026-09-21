@@ -1,4 +1,0 @@
-{
-    "meta"     : { "enabled": true                                                                             },
-    "resources": {                  "cosmetics": ["badges.json", "pets.json", "portraits.json", "titles.json"] }
-}

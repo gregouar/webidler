@@ -6,5 +6,7 @@
     "title_all_max_passives"       : {"Title": "ascendant"          },
     "title_true_player"            : {"Title": "true player"        },
     "title_max_various_skill_level": {"Title": "jack of all trades" },
-    "title_regular_patron"         : {"Title": "regular patron"     }
+    "title_regular_patron"         : {"Title": "regular patron"     },
+    "title_treasure_hunter"        : {"Title": "treasure hunter"    },
+    "title_mummy_lover"            : {"Title": "mummy lover"        }
 }
