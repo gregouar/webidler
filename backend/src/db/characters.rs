@@ -1,6 +1,7 @@
 use sqlx::{FromRow, Transaction};
 
 use shared::data::{
+    cosmetics::CharacterCosmetics,
     realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
 };
@@ -22,6 +23,8 @@ pub struct CharacterEntry {
 
     pub character_name: String,
     pub portrait: String,
+    pub cosmetic_title: Option<String>,
+    pub cosmetic_badge: Option<String>,
     pub max_area_level: i32,
     pub resource_gems: f64,
     pub resource_shards: f64,
@@ -123,6 +126,8 @@ pub async fn read_character<'c>(
             is_ssf as "is_ssf!",
             character_name,
             portrait,
+            cosmetic_title,
+            cosmetic_badge,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
@@ -208,6 +213,8 @@ pub async fn read_all_user_characters<'c>(
             is_ssf as "is_ssf!",
             character_name,
             portrait,
+            cosmetic_title,
+            cosmetic_badge,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
@@ -252,19 +259,24 @@ pub async fn update_character<'c>(
     character_id: &UserCharacterId,
     name: &str,
     portrait: &str,
+    cosmetics: &CharacterCosmetics,
 ) -> Result<Option<()>, sqlx::Error> {
     let res = sqlx::query!(
         r#"
         UPDATE characters 
         SET
             character_name = $2,
-            portrait = $3
+            portrait = $3,
+            cosmetic_title = $4, 
+            cosmetic_badge = $5
         WHERE
             character_id = $1
         "#,
         character_id,
         name,
-        portrait
+        portrait,
+        cosmetics.title,
+        cosmetics.badge
     )
     .execute(executor)
     .await;
