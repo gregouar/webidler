@@ -5,6 +5,7 @@ pub mod leaderboard;
 pub mod loot_filter;
 pub mod news;
 pub mod passives;
+pub mod pets;
 pub mod player_count;
 pub mod resources;
 pub mod settings;

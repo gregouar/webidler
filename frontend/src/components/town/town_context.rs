@@ -3,13 +3,15 @@ use leptos::prelude::*;
 use std::collections::HashMap;
 
 use shared::data::{
+    cosmetics::CharacterCosmetics,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
+    pets::PlayerPets,
     player::PlayerInventory,
     skill::SkillSpecs,
     skill_mastery::PlayerSkillMasteries,
     stash::{Stash, StashType},
     temple::{BenedictionsCategory, PlayerBenedictions},
-    user::{UserCharacter, UserGrindArea},
+    user::{UserCharacter, UserGrindArea, UserUnlocks},
 };
 
 use crate::components::shared::inventory::InventoryEquipFilter;
@@ -17,8 +19,11 @@ use crate::components::shared::inventory::InventoryEquipFilter;
 #[derive(Clone, Copy)]
 pub struct TownContext {
     pub character: RwSignal<UserCharacter>,
+    pub character_cosmetics: RwSignal<CharacterCosmetics>,
+    pub player_pets: RwSignal<PlayerPets>,
     pub areas: RwSignal<Vec<UserGrindArea>>,
     pub inventory: RwSignal<PlayerInventory>,
+    pub user_unlocks: RwSignal<UserUnlocks>,
 
     pub character_stash: RwSignal<Stash>,
     pub user_stash: RwSignal<Stash>,
@@ -50,14 +55,19 @@ pub struct TownContext {
     pub open_skill_masteries: RwSignal<bool>,
     pub open_skill_mastery_details: RwSignal<bool>,
     pub open_settings: RwSignal<bool>,
+    pub open_achievements: RwSignal<bool>,
+    pub open_pets: RwSignal<bool>,
 }
 
 impl Default for TownContext {
     fn default() -> Self {
         Self {
             character: Default::default(),
+            character_cosmetics: Default::default(),
+            player_pets: Default::default(),
             areas: Default::default(),
             inventory: Default::default(),
+            user_unlocks: Default::default(),
             character_stash: RwSignal::new(Stash {
                 stash_type: StashType::Character,
                 ..Default::default()
@@ -90,6 +100,8 @@ impl Default for TownContext {
             open_skill_masteries: Default::default(),
             open_skill_mastery_details: Default::default(),
             open_settings: Default::default(),
+            open_achievements: Default::default(),
+            open_pets: Default::default(),
         }
     }
 }

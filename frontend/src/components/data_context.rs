@@ -3,8 +3,11 @@ use leptos::prelude::*;
 use std::collections::HashMap;
 
 use shared::data::{
+    achievements::AchievementSpecs,
     area::AreaSpecs,
     character_status::{StatusId, StatusSpecs},
+    cosmetics::CosmeticType,
+    pets::PetSpecs,
     skill::BaseSkillSpecs,
     skill_mastery::SkillMasterySpecs,
 };
@@ -17,6 +20,9 @@ pub struct DataContext {
     pub skill_specs: RwSignal<HashMap<String, BaseSkillSpecs>>,
     pub skill_mastery_specs: RwSignal<IndexMap<String, SkillMasterySpecs>>,
     pub statuses_specs: RwSignal<HashMap<StatusId, StatusSpecs>>,
+    pub cosmetics_specs: RwSignal<HashMap<String, CosmeticType>>,
+    pub pets_specs: RwSignal<HashMap<String, PetSpecs>>,
+    pub achievements: RwSignal<IndexMap<String, AchievementSpecs>>,
     pub loaded: RwSignal<bool>,
 }
 
@@ -26,6 +32,9 @@ pub fn provide_data_context() {
         skill_specs: RwSignal::new(Default::default()),
         skill_mastery_specs: RwSignal::new(Default::default()),
         statuses_specs: RwSignal::new(Default::default()),
+        cosmetics_specs: RwSignal::new(Default::default()),
+        pets_specs: RwSignal::new(Default::default()),
+        achievements: RwSignal::new(Default::default()),
         loaded: RwSignal::new(false),
     });
 }
@@ -36,10 +45,13 @@ impl DataContext {
             return Ok(());
         }
 
-        let (areas, skills, statuses) = futures::join!(
+        let (areas, skills, statuses, cosmetics, pets, achievements) = futures::join!(
             backend_client.get_areas(),
             backend_client.get_skills(),
-            backend_client.get_statuses()
+            backend_client.get_statuses(),
+            backend_client.get_cosmetics(),
+            backend_client.get_pets(),
+            backend_client.get_achievements(),
         );
 
         self.areas_specs.set(areas?.areas);
@@ -47,6 +59,9 @@ impl DataContext {
         self.skill_specs.set(skills.skills);
         self.skill_mastery_specs.set(skills.skill_masteries);
         self.statuses_specs.set(statuses?.statuses);
+        self.cosmetics_specs.set(cosmetics?.cosmetics);
+        self.pets_specs.set(pets?.pets);
+        self.achievements.set(achievements?.achievements);
 
         self.loaded.set(true);
 

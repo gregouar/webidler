@@ -7,8 +7,10 @@ use leptos_use::storage;
 
 use shared::data::{
     area::StartAreaConfig,
+    cosmetics::CosmeticType,
     grind::QuestSpecs,
     item::{ItemCategory, ItemSpecs},
+    pets::PetButton,
     user::UserGrindArea,
 };
 
@@ -24,6 +26,7 @@ use crate::{
         settings::SettingsContext,
         shared::{
             inventory::InventoryEquipFilter,
+            pets::PetSprite,
             skills::{SkillMasteryCard, skill_specs_with_mastery},
         },
         town::{TownContext, items_browser::ItemDetailsPanel},
@@ -206,25 +209,76 @@ fn PlayerCard() -> impl IntoView {
 #[component]
 pub fn PlayerName() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
     let max_area_level = move || town_context.character.read().max_area_level;
 
     let character_name = move || town_context.character.read().name.clone();
     view! {
-        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl">
-            <span class="font-bold font-display">{character_name}</span>
-            {move || {
-                (max_area_level() > 0)
-                    .then(|| {
-                        view! {
-                            <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
-                                " — Power Level: "
-                                <span class="font-semibold">{max_area_level()}</span>
-                            </span>
-                        }
-                    })
-            }}
-            <span></span>
-        </p>
+        <div class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl">
+            <div class="relative flex min-h-10 items-center justify-center gap-1 px-10 xl:min-h-20 xl:px-16">
+                <div class="absolute left-0 top-1/2 -translate-y-1/2">
+                    <TownAssignedPet button=PetButton::LevelUp flipped=true />
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex">
+                        {move || {
+                            town_context
+                                .character
+                                .read()
+                                .cosmetics
+                                .badge
+                                .as_ref()
+                                .and_then(|id| {
+                                    let cosmetics = data_context.cosmetics_specs.read();
+                                    let CosmeticType::Badge(badge) = cosmetics.get(id)? else {
+                                        return None
+                                    };
+                                    Some(
+                                        view! {
+                                            <img
+                                                src=img_asset(&badge.icon)
+                                                alt=badge.name.clone()
+                                                class="h-8 w-8 object-contain mr-1"
+                                            />
+                                        },
+                                    )
+                                })
+                        }} <span class="font-bold font-display">{character_name}</span>
+                        {move || {
+                            (max_area_level() > 0)
+                                .then(|| {
+                                    view! {
+                                        <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
+                                            " — Power Level: "
+                                            <span class="font-semibold">{max_area_level()}</span>
+                                        </span>
+                                    }
+                                })
+                        }}
+                    </div>
+                    <div class="hidden xl:block text-sm italic text-zinc-300">
+                        {move || {
+                            town_context
+                                .character
+                                .read()
+                                .cosmetics
+                                .title
+                                .as_ref()
+                                .and_then(|id| {
+                                    let cosmetics = data_context.cosmetics_specs.read();
+                                    let CosmeticType::Title(title) = cosmetics.get(id)? else {
+                                        return None
+                                    };
+                                    Some(title.clone())
+                                })
+                        }}
+                    </div>
+                </div>
+                <div class="absolute right-0 top-1/2 -translate-y-1/2">
+                    <TownAssignedPet button=PetButton::AutoPassive />
+                </div>
+            </div>
+        </div>
     }
 }
 
@@ -253,39 +307,58 @@ fn PlayerFavoriteSkillMastery(index: usize) -> impl IntoView {
     });
 
     view! {
+        <div class="relative min-w-0">
+            {move || {
+                favorite_mastery
+                    .get()
+                    .map(|(skill_id, skill_mastery_state, skill_specs)| {
+                        let skill_id_for_click = skill_id.clone();
+                        view! {
+                            <SkillMasteryCard
+                                skill_specs
+                                skill_mastery_state
+                                compact=true
+                                on_click=Callback::new(move |_| {
+                                    town_context
+                                        .selected_skill_mastery
+                                        .set(Some(skill_id_for_click.clone()));
+                                    town_context.open_skill_mastery_details.set(true);
+                                })
+                            />
+                        }
+                            .into_any()
+                    })
+                    .unwrap_or_else(|| {
+                        view! {
+                            <SkillMasteryCard
+                                empty_label=format!("Favorite {}", index + 1)
+                                compact=true
+                                on_click=Callback::new(move |_| {
+                                    town_context.selected_skill_mastery.set(None);
+                                    town_context.open_skill_masteries.set(true);
+                                })
+                            />
+                        }
+                            .into_any()
+                    })
+            }} <div class="absolute top-0 left-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+                <TownAssignedPet button=PetButton::from_skill_index(index) flipped=true />
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn TownAssignedPet(button: PetButton, #[prop(default = false)] flipped: bool) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+    view! {
         {move || {
-            favorite_mastery
-                .get()
-                .map(|(skill_id, skill_mastery_state, skill_specs)| {
-                    let skill_id_for_click = skill_id.clone();
-                    view! {
-                        <SkillMasteryCard
-                            skill_specs
-                            skill_mastery_state
-                            compact=true
-                            on_click=Callback::new(move |_| {
-                                town_context
-                                    .selected_skill_mastery
-                                    .set(Some(skill_id_for_click.clone()));
-                                town_context.open_skill_mastery_details.set(true);
-                            })
-                        />
-                    }
-                        .into_any()
-                })
-                .unwrap_or_else(|| {
-                    view! {
-                        <SkillMasteryCard
-                            empty_label=format!("Favorite {}", index + 1)
-                            compact=true
-                            on_click=Callback::new(move |_| {
-                                town_context.selected_skill_mastery.set(None);
-                                town_context.open_skill_masteries.set(true);
-                            })
-                        />
-                    }
-                        .into_any()
-                })
+            town_context
+                .player_pets
+                .read()
+                .get(&button)
+                .cloned()
+                .map(|pet_id| view! { <PetSprite pet_id flipped /> })
         }}
     }
 }

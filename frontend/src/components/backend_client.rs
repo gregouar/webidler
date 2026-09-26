@@ -19,24 +19,25 @@ use shared::{
             RejectMarketItemRequest, ResetPasswordRequest, SaveFavoriteSkillsRequest,
             SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SellMarketItemRequest,
             SignInRequest, SignUpRequest, SocketPassiveRequest, StoreStashItemRequest,
-            TakeStashItemRequest, UpdateAccountRequest, UpdateCharacterRequest,
-            UpgradeStashRequest,
+            TakeStashItemRequest, UpdateAccountRequest, UpdateCharacterPetsRequest,
+            UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
             BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
             DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
-            ForgotPasswordResponse, GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
-            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetPassivesResponse,
-            GetSkillsResponse, GetStatusesResponse, GetUserCharactersResponse,
-            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
-            InventorySortResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
-            PlayersCountResponse, RejectMarketItemResponse, ResetPasswordResponse,
-            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
-            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
-            UpgradeStashResponse,
+            ForgotPasswordResponse, GambleItemResponse, GetAccountUserUnlocksResponse,
+            GetAchievementsResponse, GetAreasResponse, GetBenedictionsResponse,
+            GetCharacterDetailsResponse, GetCosmeticsResponse, GetDiscordInviteResponse,
+            GetPassivesResponse, GetPetsResponse, GetSkillsResponse, GetStatusesResponse,
+            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
+            InventoryEquipResponse, InventorySortResponse, InventoryUnequipResponse,
+            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
+            ResetPasswordResponse, SaveFavoriteSkillsResponse, SavePassivesResponse,
+            SaveSkillMasteryUpgradesResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            UpdateAccountResponse, UpdateCharacterPetsResponse, UpgradeStashResponse,
         },
     },
 };
@@ -128,6 +129,18 @@ impl BackendClient {
 
     pub async fn get_statuses(&self) -> Result<GetStatusesResponse, BackendError> {
         self.get("game/statuses").await
+    }
+
+    pub async fn get_cosmetics(&self) -> Result<GetCosmeticsResponse, BackendError> {
+        self.get("game/cosmetics").await
+    }
+
+    pub async fn get_pets(&self) -> Result<GetPetsResponse, BackendError> {
+        self.get("game/pets").await
+    }
+
+    pub async fn get_achievements(&self) -> Result<GetAchievementsResponse, BackendError> {
+        self.get("game/achievements").await
     }
 
     pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {
@@ -260,6 +273,21 @@ impl BackendClient {
         character_id: &UserCharacterId,
     ) -> Result<GetCharacterDetailsResponse, BackendError> {
         self.get_auth(&format!("characters/{character_id}")).await
+    }
+
+    pub async fn get_account_user_unlocks(
+        &self,
+    ) -> Result<GetAccountUserUnlocksResponse, BackendError> {
+        self.get_auth("account/user-unlocks").await
+    }
+
+    pub async fn post_update_character_pets(
+        &self,
+        character_id: &UserCharacterId,
+        request: &UpdateCharacterPetsRequest,
+    ) -> Result<UpdateCharacterPetsResponse, BackendError> {
+        self.post_auth(&format!("characters/{character_id}/pets"), request)
+            .await
     }
 
     pub async fn get_character_by_name(

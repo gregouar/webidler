@@ -2,6 +2,7 @@ use leptos::{html::*, prelude::*};
 
 use crate::components::{
     chat::chat_context::ChatContext,
+    data_context::DataContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -20,6 +21,7 @@ use super::GameContext;
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
+    let data_context: DataContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
     let show_passive_point_tutorial = Signal::derive(move || {
@@ -217,6 +219,14 @@ pub fn HeaderMenu() -> impl IntoView {
                     </MenuButton>
                 </TutorialPopup>
                 <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
+                <MenuButton
+                    on:click=move |_| {
+                        game_context.open_pets.set(!game_context.open_pets.get_untracked())
+                    }
+                    disabled=move || game_context.user_unlocks.read().pets.is_empty()
+                >
+                    "Pets"
+                </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
                     position=TutorialPopupPosition::BelowRight

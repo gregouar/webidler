@@ -5,6 +5,10 @@ use crate::components::{
     chat::chat_context::ChatContext,
     data_context::DataContext,
     events::{EventsContext, Key},
+    icons::header_icons::{
+        AchievementsIcon, ForgeIcon, InventoryIcon, MarketIcon, PassivesIcon, PetsIcon, SkillsIcon,
+        StashIcon, TempleIcon,
+    },
     shared::{
         inventory::InventoryEquipFilter,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -215,19 +219,28 @@ pub fn HeaderMenu() -> impl IntoView {
                 <ShardsCounter value=shards w_full=true />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
-                <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
-                    <span class="inline xl:hidden">"Inv."</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
+                <MenuButton
+                    title="Inventory"
+                    on:click=move |_| open_inventory()
+                    disabled=disable_panels
+                >
+                    <InventoryIcon />
+                // <span class="inline xl:hidden">"Inv."</span>
+                // <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
                 </MenuButton>
-                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
-                    "Stash"
+                <MenuButton title="Stashes" on:click=move |_| open_stash() disabled=disable_panels>
+                    <StashIcon />
                 </MenuButton>
                 {move || {
                     (!disable_trade.get())
                         .then(|| {
                             view! {
-                                <MenuButton on:click=move |_| open_market() disabled=disable_panels>
-                                    "Market"
+                                <MenuButton
+                                    title="Market"
+                                    on:click=move |_| open_market()
+                                    disabled=disable_panels
+                                >
+                                    <MarketIcon />
                                     {move || {
                                         (town_context.market_stash.read().resource_gems > 0.0)
                                             .then_some(" [!]")
@@ -237,17 +250,22 @@ pub fn HeaderMenu() -> impl IntoView {
                             }
                         })
                 }}
-                <MenuButton on:click=move |_| open_forge() disabled=disable_panels>
-                    "Forge"
+                <MenuButton title="Forge" on:click=move |_| open_forge() disabled=disable_panels>
+                    <ForgeIcon />
                 </MenuButton>
                 <TutorialPopup
                     show=show_ascension_tutorial
                     position=TutorialPopupPosition::BelowRight
                     message="Spend a Power Shard to permanently Ascend a passive node."
                 >
-                    <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                        <span class="inline xl:hidden">"Pas"</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
+                    <MenuButton
+                        title="Passives"
+                        on:click=move |_| open_ascend()
+                        disabled=disable_panels
+                    >
+                        <PassivesIcon />
+                    // <span class="inline xl:hidden">"Pas"</span>
+                    // <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                     </MenuButton>
                 </TutorialPopup>
                 <TutorialPopup
@@ -255,8 +273,12 @@ pub fn HeaderMenu() -> impl IntoView {
                     position=TutorialPopupPosition::BelowRight
                     message="Buy a Skill Slot to use another skill during Grinds."
                 >
-                    <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
-                        "Temple"
+                    <MenuButton
+                        title="Temple"
+                        on:click=move |_| open_temple()
+                        disabled=disable_panels
+                    >
+                        <TempleIcon />
                     </MenuButton>
                 </TutorialPopup>
                 <TutorialPopup
@@ -265,15 +287,43 @@ pub fn HeaderMenu() -> impl IntoView {
                     message="Open Skills to spend your Skill Mastery Point on an upgrade."
                 >
                     <MenuButton
+                        title="Skills"
                         on:click=move |_| open_skill_masteries()
                         disabled=move || {
                             disable_panels.get()
                                 || town_context.player_skill_masteries.read().masteries.is_empty()
                         }
                     >
-                        "Skills"
+                        <SkillsIcon />
                     </MenuButton>
                 </TutorialPopup>
+                <MenuButton
+                    title="Pets"
+                    on:click=move |_| {
+                        town_context.open_pets.set(!town_context.open_pets.get_untracked())
+                    }
+                    disabled=move || {
+                        !data_context
+                            .pets_specs
+                            .read()
+                            .keys()
+                            .any(|id| { town_context.user_unlocks.read().pets.contains(id) })
+                    }
+                >
+                    <PetsIcon />
+                </MenuButton>
+                <MenuButton
+                    title="Achievements"
+                    on:click=move |_| {
+                        town_context
+                            .open_achievements
+                            .set(!town_context.open_achievements.get_untracked())
+                    }
+                >
+                    <AchievementsIcon />
+                // <span class="inline xl:hidden">"Ach."</span>
+                // <span class="hidden xl:inline">"Achievements"</span>
+                </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>

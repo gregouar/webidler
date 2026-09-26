@@ -1,3 +1,4 @@
+pub mod achievements;
 pub mod forge;
 pub mod inventory;
 pub mod market;
