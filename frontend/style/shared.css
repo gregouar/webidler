@@ -513,6 +513,72 @@ body {
   .btn {
     @apply cursor-pointer disabled:cursor-auto disabled:pointer-events-none;
   }
+
+  .button-press-high.button-auto-pressed {
+    animation: button-auto-press-high 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-high.button-auto-pressed::before {
+    animation: button-auto-press-highlight 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-medium.button-auto-pressed {
+    animation: button-auto-press-medium 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-low.button-auto-pressed {
+    animation: button-auto-press-low 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-skill-slot.button-auto-pressed {
+    animation: button-auto-press-skill-slot 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+}
+
+@keyframes button-auto-press-high {
+  20%,
+  100% {
+    translate: 0 1px;
+    filter: brightness(0.9);
+    color: white;
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.45),
+      0 1px 0 rgba(26, 17, 10, 0.95),
+      inset 0 3px 5px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+  }
+}
+
+@keyframes button-auto-press-highlight {
+  20%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes button-auto-press-medium {
+  20%,
+  100% {
+    translate: 0 1px;
+    filter: brightness(0.9);
+    color: white;
+  }
+}
+
+@keyframes button-auto-press-low {
+  20%,
+  100% {
+    translate: 0 1px;
+    filter: brightness(0.95);
+  }
+}
+
+@keyframes button-auto-press-skill-slot {
+  20%,
+  100% {
+    translate: 0 2px;
+    filter: brightness(0.5) sepia(1);
+  }
 }
 
 @layer base {

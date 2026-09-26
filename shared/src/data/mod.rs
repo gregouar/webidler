@@ -1,6 +1,5 @@
 pub mod achievements;
 pub mod area;
-pub mod badges;
 pub mod chance;
 pub mod character;
 pub mod character_status;
@@ -17,6 +16,7 @@ pub mod market;
 pub mod modifier;
 pub mod monster;
 pub mod passive;
+pub mod pets;
 pub mod player;
 pub mod realms;
 pub mod rng;

@@ -5,17 +5,20 @@ use std::{collections::HashMap, fmt, time::Duration};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    achievements::AchievementSpecs,
     area::{AreaLevel, AreaSpecs},
     character_status::{StatusId, StatusSpecs},
+    cosmetics::CosmeticType,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
+    pets::{PetSpecs, PlayerPets},
     player::PlayerInventory,
     realms::Realm,
     skill::{BaseSkillSpecs, SkillSpecs},
     skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
-    user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
+    user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId, UserUnlocks},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -127,14 +130,24 @@ pub struct GetCharacterDetailsResponse {
     pub skill_masteries: PlayerSkillMasteries,
     pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
 
+    pub user_unlocks: UserUnlocks,
+    pub pets: PlayerPets,
+
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
     pub market_stash: Option<Stash>,
-    // pub last_grind: Option<GrindStats>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpdateCharacterResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetAccountUserUnlocksResponse {
+    pub user_unlocks: UserUnlocks,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateCharacterPetsResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct DeleteCharacterResponse {}
@@ -158,6 +171,21 @@ pub struct GetStatusesResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetCosmeticsResponse {
+    pub cosmetics: HashMap<String, CosmeticType>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetPetsResponse {
+    pub pets: HashMap<String, PetSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetAchievementsResponse {
+    pub achievements: IndexMap<String, AchievementSpecs>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetPassivesResponse {
     pub passives_tree_specs: PassivesTreeSpecs,
 }
@@ -171,12 +199,14 @@ pub struct GetBenedictionsResponse {
 pub struct AscendPassivesResponse {
     pub character: UserCharacter,
     pub ascension: PassivesTreeAscension,
+    pub newly_unlocked_achievements: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SocketPassiveResponse {
     pub ascension: PassivesTreeAscension,
     pub inventory: PlayerInventory,
+    pub newly_unlocked_achievements: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -281,6 +311,8 @@ pub struct GambleItemResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryEquipResponse {
     pub inventory: PlayerInventory,
+    #[serde(default)]
+    pub newly_unlocked_achievements: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

@@ -1,9 +1,13 @@
-use std::time::Duration;
+use std::{
+    collections::{HashMap, HashSet},
+    time::Duration,
+};
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{area::AreaLevel, realms::Realm},
+    data::{area::AreaLevel, cosmetics::CharacterCosmetics, realms::Realm},
     types::Email,
 };
 
@@ -40,6 +44,7 @@ pub struct UserCharacter {
 
     pub name: String,
     pub portrait: String,
+    pub cosmetics: CharacterCosmetics,
     pub max_area_level: AreaLevel,
 
     pub is_ssf: bool,
@@ -58,6 +63,12 @@ pub struct UserGrindArea {
     pub area_id: String,
     pub max_level_reached: AreaLevel,
     pub max_power_shard_level: AreaLevel,
-    #[serde(default)]
     pub quest_completed: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct UserUnlocks {
+    pub achievements: HashMap<String, DateTime<Utc>>,
+    pub cosmetics: HashSet<String>,
+    pub pets: HashSet<String>,
 }

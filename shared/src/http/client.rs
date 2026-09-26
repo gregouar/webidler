@@ -4,10 +4,12 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
+        cosmetics::CharacterCosmetics,
         item::{InventorySortType, ItemCategory, ItemSlot},
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
+        pets::PlayerPets,
         realms::Realm,
         stash::StashType,
         temple::PlayerBenedictions,
@@ -72,6 +74,12 @@ pub struct CreateCharacterRequest {
 pub struct UpdateCharacterRequest {
     pub name: Username,
     pub portrait: AssetName,
+    pub cosmetics: CharacterCosmetics,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateCharacterPetsRequest {
+    pub pets: PlayerPets,
 }
 
 // Temple
