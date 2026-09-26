@@ -51,7 +51,7 @@ pub async fn update_achievements(
     Ok(new_achievements)
 }
 
-fn check_achievements(
+pub fn check_achievements(
     master_store: &MasterStore,
     already_unlocked: &HashMap<String, DateTime<Utc>>,
     context: &AchievementContext<'_>,
@@ -175,7 +175,7 @@ fn goal_satisfied(
                 context
                     .inventory
                     .equipped_items()
-                    .filter(|(slot, item)| matches(item))
+                    .filter(|(_, item)| matches(item))
                     .count()
                     >= required
             }

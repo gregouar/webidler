@@ -148,43 +148,12 @@ async fn new_game_instance(
                     player_skill_masteries,
                 )
             }
-            None => {
-                let mut player_inventory = PlayerInventory {
-                    max_bag_size: 40,
-                    ..Default::default()
-                };
-
-                let base_weapon_id = "dagger".to_string();
-                if let Some(base_weapon) = master_store
-                    .items_store
-                    .content
-                    .get(&base_weapon_id)
-                    .cloned()
-                {
-                    let _ = inventory_controller::equip_item(
-                        &mut player_inventory,
-                        loot_generator::roll_item_stats(
-                            base_weapon_id,
-                            base_weapon,
-                            ItemRarity::Normal,
-                            0,
-                            0,
-                            &master_store.item_affixes_table,
-                            &master_store.item_adjectives_table,
-                            &master_store.item_nouns_table,
-                            false,
-                            0.0, // &master_store.items_store.signature_key,
-                        ),
-                    );
-                }
-
-                (
-                    player_inventory,
-                    PassivesTreeState::default(),
-                    PlayerBenedictions::default(),
-                    PlayerSkillMasteries::default(),
-                )
-            }
+            None => (
+                new_player_inventory(master_store),
+                PassivesTreeState::default(),
+                PlayerBenedictions::default(),
+                PlayerSkillMasteries::default(),
+            ),
         };
 
     let mut player_resources = PlayerResources::default();
@@ -310,6 +279,37 @@ async fn new_game_instance(
     .await?;
 
     Ok(game_data)
+}
+
+pub fn new_player_inventory(master_store: &MasterStore) -> PlayerInventory {
+    let mut player_inventory = PlayerInventory {
+        max_bag_size: 40,
+        ..Default::default()
+    };
+    let base_weapon_id = "dagger".to_string();
+    if let Some(base_weapon) = master_store
+        .items_store
+        .content
+        .get(&base_weapon_id)
+        .cloned()
+    {
+        let _ = inventory_controller::equip_item(
+            &mut player_inventory,
+            loot_generator::roll_item_stats(
+                base_weapon_id,
+                base_weapon,
+                ItemRarity::Normal,
+                0,
+                0,
+                &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
+                false,
+                0.0,
+            ),
+        );
+    }
+    player_inventory
 }
 
 pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsStore) -> Result<()> {

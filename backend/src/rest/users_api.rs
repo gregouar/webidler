@@ -15,7 +15,6 @@ use chrono::{Duration, Utc};
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     data::{
-        badges::UserBadge,
         realms::Realm,
         user::{UserDetails, UserId},
     },
@@ -192,7 +191,7 @@ async fn get_me(
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     if let Some(crucible_badge) = crucible_badge(&db_pool, user.user_id).await {
-        user.chat_badge = serde_plain::to_string(&crucible_badge).ok();
+        user.chat_badge = Some(crucible_badge.to_string());
     }
 
     let email = user
@@ -211,7 +210,7 @@ async fn get_me(
 }
 
 // TODO: Move somewhere else, have proper cosmetic system
-async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBadge> {
+async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<&'static str> {
     let top_three_standard = db::leaderboard::get_area_leaderboard(
         db_pool,
         3,
@@ -239,7 +238,7 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
-        return Some(UserBadge::CrucibleChaosGold);
+        return Some("badge_chaos_gold");
     }
 
     if top_three_standard
@@ -251,7 +250,7 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
-        return Some(UserBadge::CrucibleChaosSilver);
+        return Some("badge_chaos_silver");
     }
 
     if top_three_standard
@@ -263,7 +262,7 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
-        return Some(UserBadge::CrucibleChaosBronze);
+        return Some("badge_chaos_bronze");
     }
 
     None
