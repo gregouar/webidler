@@ -233,6 +233,9 @@ async fn new_game_instance(
             })
             .unwrap_or_default();
 
+    let user_achievements =
+        db::user_unlocks::read_achievements(db_pool, &character.user_id).await?;
+
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
@@ -249,6 +252,7 @@ async fn new_game_instance(
         player_inventory,
         Duration::from_secs_f64(character.resource_stamina),
         player_controller,
+        user_achievements,
     )?;
 
     if game_data.area_specs.coming_soon {
