@@ -476,19 +476,7 @@ pub fn apply_status(
         }
     }
 
-    if !applied && !is_evaded {
-        return false;
-    }
-
-    if status_specs.effects.iter().any(|status_effect| {
-        matches!(
-            status_effect.status_effect_type,
-            StatusEffectType::StatModifier { .. } | StatusEffectType::Trigger { .. }
-        )
-    }) {
-        target_state.dirty_specs = true;
-    }
-
+    // Still register event to trigger on applied effects (even if not replacing old value)
     events_queue.register_event(GameEvent::StatusApplied(StatusEvent {
         source: attacker,
         target: *target_id,
@@ -502,6 +490,19 @@ pub fn apply_status(
         skill_id: skill_id.into(),
         trigger_depth,
     }));
+
+    if !applied {
+        return false;
+    }
+
+    if status_specs.effects.iter().any(|status_effect| {
+        matches!(
+            status_effect.status_effect_type,
+            StatusEffectType::StatModifier { .. } | StatusEffectType::Trigger { .. }
+        )
+    }) {
+        target_state.dirty_specs = true;
+    }
 
     let stun_lockout = *target_specs.character_attrs.stun_lockout;
     if is_stun && stun_lockout.get() > 0.0 {
