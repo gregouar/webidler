@@ -1,22 +1,28 @@
+use std::collections::HashMap;
+
 use anyhow::Result;
 
+use chrono::Utc;
 use shared::{
     computations,
     constants::{self, RUSH_MODE_SPEED_MULTIPLIER},
-    data::{realms::Realm, user::UserCharacterId},
-    messages::server::{ErrorMessage, ErrorType, ServerMessage},
-};
-
-use super::{
-    data::{event::EventsQueue, master_store::MasterStore},
-    game_data::GameInstanceData,
-    game_inputs, game_orchestrator, game_sync,
-    game_timer::GameTimer,
+    data::{
+        realms::Realm,
+        user::{UserCharacterId, UserId},
+    },
+    messages::server::{AchievementsUnlockedMessage, ErrorMessage, ErrorType, ServerMessage},
 };
 
 use crate::{
-    app_state::SessionsStore,
+    app_state::{MasterStore, SessionsStore},
     db::{self, DbPool},
+    game::{
+        data::event::EventsQueue,
+        game_data::GameInstanceData,
+        game_inputs, game_orchestrator, game_sync,
+        game_timer::GameTimer,
+        systems::achievements_controller::{self, AchievementContext},
+    },
     integration::chat::ChatIntegration,
     websocket::WebSocketConnection,
 };
@@ -27,6 +33,7 @@ pub struct GameInstance<'a> {
     chat_integration: ChatIntegration,
     master_store: MasterStore,
     sessions_store: SessionsStore,
+    user_id: UserId,
     character_id: &'a UserCharacterId,
     game_data: &'a mut GameInstanceData,
     events_queue: EventsQueue,
@@ -35,6 +42,7 @@ pub struct GameInstance<'a> {
 impl<'a> GameInstance<'a> {
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
+        user_id: UserId,
         character_id: &'a UserCharacterId,
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
@@ -44,6 +52,7 @@ impl<'a> GameInstance<'a> {
     ) -> Self {
         GameInstance {
             client_conn,
+            user_id,
             character_id,
             db_pool,
             chat_integration,
@@ -120,6 +129,14 @@ impl<'a> GameInstance<'a> {
             if game_timer.should_autosave() {
                 self.auto_save();
             }
+            if game_timer.should_check_achievements() {
+                self.check_achievements().await.unwrap_or_else(|error| {
+                    tracing::error!(
+                        "failed to update in-game achievements for user '{}': {error}",
+                        self.user_id
+                    )
+                });
+            }
 
             if self
                 .sessions_store
@@ -175,6 +192,72 @@ impl<'a> GameInstance<'a> {
                     )
                 });
         });
+    }
+
+    async fn check_achievements(&mut self) -> Result<()> {
+        let area_levels = HashMap::from([(
+            self.game_data.area_id.clone(),
+            self.game_data.area_state.read().max_area_level_ever,
+        )]);
+        let context = AchievementContext {
+            area_levels: &area_levels,
+            power_level: self.game_data.player_base_specs.read().max_area_level,
+            player_level: self.game_data.player_base_specs.read().level,
+            skill_masteries: &self.game_data.player_base_specs.read().skill_masteries,
+            ascension: &self.game_data.passives_tree_state.read().ascension,
+            inventory: self.game_data.player_inventory.read(),
+        };
+
+        let new_achievements = achievements_controller::check_achievements(
+            &self.master_store,
+            &self.game_data.user_achievements,
+            &context,
+        );
+
+        if new_achievements.is_empty() {
+            return Ok(());
+        }
+
+        for achievement_id in new_achievements.iter() {
+            self.game_data
+                .user_achievements
+                .insert(achievement_id.clone(), Utc::now());
+        }
+
+        // let mut tx = self.db_pool.begin().await?;
+        // let achievement_ids = achievements_controller::update_achievements(
+        //     &mut tx,
+        //     &self.master_store,
+        //     self.user_id,
+        //     &mut self.game_data.user_achievements,
+        //     &context,
+        // )
+        // .await?;
+        // tx.commit().await?;
+
+        self.client_conn
+            .send(
+                &AchievementsUnlockedMessage {
+                    achievement_ids: new_achievements.clone(),
+                }
+                .into(),
+            )
+            .await?;
+
+        let (db_pool, master_store, user_id) = (
+            self.db_pool.clone(),
+            self.master_store.clone(),
+            self.user_id,
+        );
+        tokio::spawn(async move {
+            update_achievements_impl(db_pool, &master_store, user_id, new_achievements)
+                .await
+                .unwrap_or_else(|e| {
+                    tracing::error!("failed to  update achievements '{}': {}", user_id, e)
+                });
+        });
+
+        Ok(())
     }
 
     async fn terminate_grind(&self) -> Result<()> {
@@ -398,6 +481,25 @@ async fn auto_save_impl(
     // .await?;
     db::game_instances::save_game_instance_data(&mut *tx, &character_id, game_data).await?;
 
+    tx.commit().await?;
+
+    Ok(())
+}
+
+async fn update_achievements_impl(
+    db_pool: DbPool,
+    master_store: &MasterStore,
+    user_id: UserId,
+    new_achievements: Vec<String>,
+) -> Result<()> {
+    let mut tx = db_pool.begin().await?;
+    achievements_controller::unlock_achievements(
+        &mut tx,
+        &master_store,
+        user_id,
+        &new_achievements,
+    )
+    .await?;
     tx.commit().await?;
 
     Ok(())

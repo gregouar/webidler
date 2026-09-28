@@ -32,11 +32,22 @@ pub async fn update_achievements(
     tx: &mut Transaction<'_, Database>,
     master_store: &MasterStore,
     user_id: UserId,
-    already_unlocked: &mut HashMap<String, DateTime<Utc>>,
+    already_unlocked: &HashMap<String, DateTime<Utc>>,
     context: &AchievementContext<'_>,
 ) -> Result<Vec<String>, AppError> {
     let new_achievements = check_achievements(master_store, already_unlocked, context);
 
+    unlock_achievements(tx, master_store, user_id, &new_achievements).await?;
+
+    Ok(new_achievements)
+}
+
+pub async fn unlock_achievements(
+    tx: &mut Transaction<'_, Database>,
+    master_store: &MasterStore,
+    user_id: UserId,
+    new_achievements: &[String],
+) -> Result<(), AppError> {
     for achievement_id in new_achievements.iter() {
         unlock_achievement(
             tx,
@@ -45,10 +56,9 @@ pub async fn update_achievements(
             achievement_id,
         )
         .await?;
-        already_unlocked.insert(achievement_id.clone(), Utc::now());
     }
 
-    Ok(new_achievements)
+    Ok(())
 }
 
 pub fn check_achievements(
