@@ -13,7 +13,7 @@ use shared::{
         realms::Realm,
         skill_mastery::PlayerSkillMasteries,
         temple::{BenedictionEffect, PlayerBenedictions},
-        user::UserCharacterId,
+        user::{UserCharacterId, UserId},
     },
 };
 
@@ -45,6 +45,7 @@ pub async fn create_session(
     area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
+    let user_id = character.user_id;
     tracing::debug!("create new session for player '{character_id}'...");
 
     let mut first_try = true;
@@ -75,7 +76,7 @@ pub async fn create_session(
 
     // If not available, try from saved games, otherwise start new game
     let game_instance_data = if let Some(saved_instance) =
-        load_game_instance(db_pool, master_store, &character_id).await
+        load_game_instance(db_pool, master_store, &character_id, character.user_id).await
     {
         saved_instance
     } else {
@@ -90,6 +91,7 @@ pub async fn create_session(
 
     Ok(Session {
         character_id,
+        user_id,
         last_active: Instant::now(),
         game_data: Box::new(game_instance_data),
     })
@@ -99,8 +101,11 @@ async fn load_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character_id: &UserCharacterId,
+    user_id: UserId,
 ) -> Option<GameInstanceData> {
-    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id).await {
+    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id, user_id)
+        .await
+    {
         Ok(Some((mut game_instance, saved_at))) => {
             // Maybe move this somewhere else
             game_instance.player_stamina += Duration::from_secs(

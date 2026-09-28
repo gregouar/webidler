@@ -16,7 +16,7 @@ use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     data::{
         realms::Realm,
-        user::{UserDetails, UserId},
+        user::{UserDetails, UserId, UserUnlocks},
     },
     http::{
         client::{
@@ -25,8 +25,8 @@ use shared::{
         },
         server::{
             DeleteAccountResponse, ForgotPasswordResponse, GetDiscordInviteResponse,
-            GetUserDetailsResponse, ResetPasswordResponse, SignInResponse, SignUpResponse,
-            UpdateAccountResponse,
+            GetAccountUserUnlocksResponse, GetUserDetailsResponse, ResetPasswordResponse,
+            SignInResponse, SignUpResponse, UpdateAccountResponse,
         },
     },
 };
@@ -44,6 +44,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/account/me", get(get_me))
+        .route("/account/user-unlocks", get(get_account_user_unlocks))
         .route("/account/update", post(post_update_account))
         .route("/account/{user_id}", delete(delete_account))
         .route("/discord", get(get_discord_invite))
@@ -60,6 +61,24 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/account/forgot-password", post(post_forgot_password))
         .route("/account/reset-password", post(post_reset_password))
         .merge(auth_routes)
+}
+
+async fn get_account_user_unlocks(
+    State(db_pool): State<db::DbPool>,
+    Extension(user): Extension<User>,
+) -> Result<Json<GetAccountUserUnlocksResponse>, AppError> {
+    let (achievements, cosmetics, pets) = tokio::join!(
+        db::user_unlocks::read_achievements(&db_pool, &user.user_id),
+        db::user_unlocks::read_cosmetics(&db_pool, &user.user_id),
+        db::user_unlocks::read_pets(&db_pool, &user.user_id),
+    );
+    Ok(Json(GetAccountUserUnlocksResponse {
+        user_unlocks: UserUnlocks {
+            achievements: achievements?,
+            cosmetics: cosmetics?,
+            pets: pets?,
+        },
+    }))
 }
 
 async fn post_sign_up(

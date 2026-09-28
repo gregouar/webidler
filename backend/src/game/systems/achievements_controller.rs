@@ -28,20 +28,6 @@ pub struct AchievementContext<'a> {
     pub inventory: &'a PlayerInventory,
 }
 
-pub async fn update_achievements(
-    tx: &mut Transaction<'_, Database>,
-    master_store: &MasterStore,
-    user_id: UserId,
-    already_unlocked: &HashMap<String, DateTime<Utc>>,
-    context: &AchievementContext<'_>,
-) -> Result<Vec<String>, AppError> {
-    let new_achievements = check_achievements(master_store, already_unlocked, context);
-
-    unlock_achievements(tx, master_store, user_id, &new_achievements).await?;
-
-    Ok(new_achievements)
-}
-
 pub async fn unlock_achievements(
     tx: &mut Transaction<'_, Database>,
     master_store: &MasterStore,
@@ -198,13 +184,13 @@ async fn unlock_achievement(
     achievements_store: &AchievementsStore,
     user_id: UserId,
     achievement_id: &str,
-) -> Result<(), AppError> {
+) -> Result<bool, AppError> {
     let achievement = achievements_store
         .get(achievement_id)
         .ok_or(AppError::NotFound)?;
 
     if !db::user_unlocks::unlock_achievement(tx, &user_id, achievement_id).await? {
-        return Ok(());
+        return Ok(false);
     }
 
     for reward in achievement.rewards.iter() {
@@ -218,5 +204,5 @@ async fn unlock_achievement(
         }
     }
 
-    Ok(())
+    Ok(true)
 }
