@@ -147,6 +147,12 @@ pub struct GetAccountUserUnlocksResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ReconcileAchievementsResponse {
+    pub user_unlocks: UserUnlocks,
+    pub newly_unlocked_achievements: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpdateCharacterPetsResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -199,14 +205,12 @@ pub struct GetBenedictionsResponse {
 pub struct AscendPassivesResponse {
     pub character: UserCharacter,
     pub ascension: PassivesTreeAscension,
-    pub newly_unlocked_achievements: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct SocketPassiveResponse {
     pub ascension: PassivesTreeAscension,
     pub inventory: PlayerInventory,
-    pub newly_unlocked_achievements: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -311,8 +315,6 @@ pub struct GambleItemResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryEquipResponse {
     pub inventory: PlayerInventory,
-    #[serde(default)]
-    pub newly_unlocked_achievements: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

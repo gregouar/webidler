@@ -27,6 +27,7 @@ impl_into_message! {
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
+        AchievementsUnlocked(AchievementsUnlockedMessage),
         Disconnect,
     }
 }
@@ -44,6 +45,11 @@ pub struct ErrorMessage {
     pub error_type: ErrorType,
     pub message: String,
     pub must_disconnect: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AchievementsUnlockedMessage {
+    pub achievement_ids: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]

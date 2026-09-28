@@ -15,7 +15,7 @@ use crate::{
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
     },
-    types::{AssetName, Email, ItemPrice, PaginationLimit, Password, Username},
+    types::{Email, ItemPrice, PaginationLimit, Password, Username},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -64,7 +64,7 @@ pub struct UpdateAccountRequest {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreateCharacterRequest {
     pub name: Username,
-    pub portrait: AssetName,
+    pub portrait: String,
 
     pub is_ssf: bool,
     pub legacy: bool,
@@ -73,7 +73,7 @@ pub struct CreateCharacterRequest {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UpdateCharacterRequest {
     pub name: Username,
-    pub portrait: AssetName,
+    pub portrait: String,
     pub cosmetics: CharacterCosmetics,
 }
 
