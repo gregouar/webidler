@@ -33,11 +33,12 @@ use shared::{
             GetPassivesResponse, GetPetsResponse, GetSkillsResponse, GetStatusesResponse,
             GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
             InventoryEquipResponse, InventorySortResponse, InventoryUnequipResponse,
-            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
-            ResetPasswordResponse, SaveFavoriteSkillsResponse, SavePassivesResponse,
-            SaveSkillMasteryUpgradesResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpdateAccountResponse, UpdateCharacterPetsResponse, UpgradeStashResponse,
+            LeaderboardResponse, NewsResponse, PlayersCountResponse, ReconcileAchievementsResponse,
+            RejectMarketItemResponse, ResetPasswordResponse, SaveFavoriteSkillsResponse,
+            SavePassivesResponse, SaveSkillMasteryUpgradesResponse, SellMarketItemResponse,
+            SignInResponse, SignUpResponse, SocketPassiveResponse, StoreStashItemResponse,
+            TakeStashItemResponse, UpdateAccountResponse, UpdateCharacterPetsResponse,
+            UpgradeStashResponse,
         },
     },
 };
@@ -279,6 +280,17 @@ impl BackendClient {
         &self,
     ) -> Result<GetAccountUserUnlocksResponse, BackendError> {
         self.get_auth("account/user-unlocks").await
+    }
+
+    pub async fn post_reconcile_achievements(
+        &self,
+        character_id: &UserCharacterId,
+    ) -> Result<ReconcileAchievementsResponse, BackendError> {
+        self.post_auth(
+            &format!("characters/{character_id}/achievements/reconcile"),
+            &(),
+        )
+        .await
     }
 
     pub async fn post_update_character_pets(
