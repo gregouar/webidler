@@ -24,8 +24,8 @@ use shared::{
             UpdateAccountRequest,
         },
         server::{
-            DeleteAccountResponse, ForgotPasswordResponse, GetDiscordInviteResponse,
-            GetAccountUserUnlocksResponse, GetUserDetailsResponse, ResetPasswordResponse,
+            DeleteAccountResponse, ForgotPasswordResponse, GetAccountUserUnlocksResponse,
+            GetDiscordInviteResponse, GetUserDetailsResponse, ResetPasswordResponse,
             SignInResponse, SignUpResponse, UpdateAccountResponse,
         },
     },

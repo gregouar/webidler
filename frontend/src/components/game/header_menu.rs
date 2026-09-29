@@ -2,7 +2,6 @@ use leptos::{html::*, prelude::*};
 
 use crate::components::{
     chat::chat_context::ChatContext,
-    data_context::DataContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
@@ -21,7 +20,6 @@ use super::GameContext;
 #[component]
 pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
-    let data_context: DataContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
     let show_passive_point_tutorial = Signal::derive(move || {

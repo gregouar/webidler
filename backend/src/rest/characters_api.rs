@@ -402,13 +402,7 @@ async fn post_update_character(
     {
         return Err(AppError::UserError("cosmetic is not unlocked".into()));
     }
-    verify_portrait_unlocked(
-        &db_pool,
-        &master_store,
-        &user.user_id,
-        &payload.portrait,
-    )
-    .await?;
+    verify_portrait_unlocked(&db_pool, &master_store, &user.user_id, &payload.portrait).await?;
 
     match db::characters::update_character(
         &db_pool,
