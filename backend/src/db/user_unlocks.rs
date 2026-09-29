@@ -2,12 +2,29 @@ use chrono::{DateTime, Utc};
 use sqlx::Transaction;
 use std::collections::{HashMap, HashSet};
 
-use shared::data::user::UserId;
+use shared::data::user::{UserId, UserUnlocks};
 
 use crate::db::{
-    pool::{Database, DbExecutor},
+    pool::{Database, DbExecutor, DbPool},
     utc_datetime::UtcDateTime,
 };
+
+pub async fn load_user_unlocks(
+    db_pool: &DbPool,
+    user_id: &UserId,
+) -> Result<UserUnlocks, anyhow::Error> {
+    let (achievements, cosmetics, pets) = tokio::try_join!(
+        read_achievements(db_pool, user_id),
+        read_cosmetics(db_pool, user_id),
+        read_pets(db_pool, user_id)
+    )?;
+
+    Ok(UserUnlocks {
+        achievements,
+        cosmetics,
+        pets,
+    })
+}
 
 pub async fn read_achievements<'c>(
     executor: impl DbExecutor<'c>,

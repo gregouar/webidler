@@ -150,6 +150,25 @@ pub async fn read_character<'c>(
     .await
 }
 
+pub async fn read_character_cosmetics<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> Result<Option<CharacterCosmetics>, sqlx::Error> {
+    sqlx::query_as!(
+        CharacterCosmetics,
+        r#"
+        SELECT
+            cosmetic_title as title,
+            cosmetic_badge as badge
+        FROM characters
+        WHERE characters.character_id = $1
+        "#,
+        character_id
+    )
+    .fetch_optional(executor)
+    .await
+}
+
 pub async fn read_character_area_completed<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,

@@ -13,10 +13,7 @@ use shared::{
         cosmetics::{CharacterCosmetics, CosmeticType},
         realms::Realm,
         stash::StashType,
-        user::{
-            UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId,
-            UserUnlocks,
-        },
+        user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
         client::{CreateCharacterRequest, UpdateCharacterPetsRequest, UpdateCharacterRequest},
@@ -168,9 +165,7 @@ async fn read_character_details(
         .ok_or(AppError::NotFound)?;
 
     let (
-        achievements,
-        cosmetics,
-        unlocked_pets,
+        user_unlocks,
         pets,
         areas_completed,
         character_data,
@@ -179,9 +174,7 @@ async fn read_character_details(
         user_stash,
         market_stash,
     ) = tokio::join!(
-        db::user_unlocks::read_achievements(&db_pool, &character.user_id),
-        db::user_unlocks::read_cosmetics(&db_pool, &character.user_id),
-        db::user_unlocks::read_pets(&db_pool, &character.user_id),
+        db::user_unlocks::load_user_unlocks(&db_pool, &character.user_id),
         db::characters_data::load_character_pets(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
@@ -191,11 +184,7 @@ async fn read_character_details(
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Market),
     );
 
-    let user_unlocks = UserUnlocks {
-        achievements: achievements?,
-        cosmetics: cosmetics?,
-        pets: unlocked_pets?,
-    };
+    let user_unlocks = user_unlocks?;
     let pets = pets?;
     let areas_completed = areas_completed?;
     let (inventory_data, ascension_data, benedictions, mut skill_masteries) =
@@ -315,17 +304,12 @@ async fn post_reconcile_achievements(
     )
     .await?;
 
-    let achievements = db::user_unlocks::read_achievements(&mut *tx, &user.user_id).await?;
-    let cosmetics = db::user_unlocks::read_cosmetics(&mut *tx, &user.user_id).await?;
-    let pets = db::user_unlocks::read_pets(&mut *tx, &user.user_id).await?;
     tx.commit().await?;
 
+    let user_unlocks = db::user_unlocks::load_user_unlocks(&db_pool, &user.user_id).await?;
+
     Ok(Json(ReconcileAchievementsResponse {
-        user_unlocks: UserUnlocks {
-            achievements,
-            cosmetics,
-            pets,
-        },
+        user_unlocks,
         newly_unlocked_achievements,
     }))
 }

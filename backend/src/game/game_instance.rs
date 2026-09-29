@@ -71,12 +71,28 @@ impl<'a> GameInstance<'a> {
                 .ok()
                 .flatten()
                 .unwrap_or_default();
+        let character_cosmetics =
+            db::characters::read_character_cosmetics(&self.db_pool, &self.user_id)
+                .await
+                .ok()
+                .flatten()
+                .unwrap_or_default();
+        let user_unlocks = db::user_unlocks::load_user_unlocks(&self.db_pool, &self.user_id)
+            .await
+            .unwrap_or_default();
+        let player_pets =
+            db::characters_data::load_character_pets(&self.db_pool, self.character_id)
+                .await
+                .unwrap_or_default();
 
         game_sync::sync_init_game(
             self.client_conn,
             self.character_id,
             self.game_data,
             passives_tree_build,
+            character_cosmetics,
+            user_unlocks,
+            player_pets,
         )
         .await?;
 

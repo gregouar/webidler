@@ -11,10 +11,10 @@ use shared::{
     },
 };
 
-use crate::components::ui::number::format_local_time;
 use crate::components::{
     backend_client::BackendClient,
     chat::chat_panel::ChatPanel,
+    data_context::DataContext,
     game::{
         GameContext,
         battle_scene::BattleScene,
@@ -22,8 +22,12 @@ use crate::components::{
         panels::{EndGrindPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
-    shared::settings::SettingsModal,
-    ui::{loading_screen::LoadingScreen, progress_bars::provide_cooldown_clock, toast::*},
+    shared::{pets::PetsPanel, settings::SettingsModal},
+    town::panels::achievements::apply_newly_unlocked_achievements,
+    ui::{
+        loading_screen::LoadingScreen, number::format_local_time,
+        progress_bars::provide_cooldown_clock, toast::*,
+    },
 };
 
 #[component]
@@ -107,6 +111,12 @@ pub fn GameInstance() -> impl IntoView {
                     <GameInventoryPanel open=game_context.open_inventory />
                     <EndGrindPanel />
                     <SettingsModal open=game_context.open_settings />
+                    <PetsPanel
+                        open=game_context.open_pets
+                        character_id=Signal::derive(move || game_context.character_id.get())
+                        player_pets=game_context.player_pets
+                        user_unlocks=game_context.user_unlocks
+                    />
                 </div>
             </Show>
             <ChatPanel character_id=get_character_id_storage.get_untracked() />
@@ -129,6 +139,16 @@ fn handle_message(
         }
         ServerMessage::UpdateGame(m) => {
             sync_game(game_context, *m);
+        }
+        ServerMessage::AchievementsUnlocked(message) => {
+            let data_context = expect_context::<DataContext>();
+            let toaster = expect_context::<Toasts>();
+            apply_newly_unlocked_achievements(
+                game_context.user_unlocks,
+                data_context,
+                toaster,
+                message.achievement_ids,
+            );
         }
         ServerMessage::Error(error_message) => {
             let toaster = expect_context::<Toasts>();
@@ -155,6 +175,8 @@ fn handle_message(
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
         character_id,
+        character_cosmetics,
+        user_unlocks,
         realm,
         area_id,
         map_item,
@@ -168,11 +190,15 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         skill_mastery_skill_specs,
         player_specs,
         player_state,
+        player_pets,
         auto_skills,
     } = init_message;
 
     game_context.started.set(true);
     game_context.character_id.set(character_id);
+    game_context.character_cosmetics.set(character_cosmetics);
+    game_context.player_pets.set(player_pets);
+    game_context.user_unlocks.set(user_unlocks);
     game_context.area_id.set(area_id);
     game_context.realm.set(realm);
     game_context.map_item.set(map_item);
