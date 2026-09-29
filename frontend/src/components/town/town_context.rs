@@ -105,3 +105,19 @@ impl Default for TownContext {
         }
     }
 }
+
+impl TownContext {
+    pub fn close_all_panels(self) {
+        self.open_inventory.set(false);
+        self.open_stash.set(false);
+        self.open_ascend.set(false);
+        self.open_market.set(false);
+        self.open_forge.set(false);
+        self.open_temple.set(false);
+        self.open_skill_masteries.set(false);
+        self.open_skill_mastery_details.set(false);
+        self.open_settings.set(false);
+        self.open_achievements.set(false);
+        self.open_pets.set(false);
+    }
+}
