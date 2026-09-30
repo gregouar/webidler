@@ -11,6 +11,7 @@ use crate::components::{
     chat::{chat_context::ChatContext, chat_panel::ChatPanel},
     data_context::DataContext,
     shared::{
+        achievements::AchievementsPanel,
         player_count::PlayerCount,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
         settings::SettingsModal,
@@ -18,7 +19,6 @@ use crate::components::{
     town::{
         TownContext,
         panels::{
-            achievements::AchievementsPanel,
             inventory::TownInventoryPanel,
             passives::PassivesPanel,
             skill_masteries::{SkillMasteriesPanel, SkillMasteryDetailsModal},
@@ -154,7 +154,10 @@ pub fn ViewCharacterPage() -> impl IntoView {
                             <SkillMasteryDetailsModal view_only=true />
                             <PassivesPanel open=town_context.open_ascend view_only=true />
                             <TownInventoryPanel open=town_context.open_inventory view_only=true />
-                            <AchievementsPanel open=town_context.open_achievements />
+                            <AchievementsPanel
+                                open=town_context.open_achievements
+                                user_unlocks=town_context.user_unlocks
+                            />
                             <SettingsModal open=town_context.open_settings />
                         </div>
                     }

@@ -22,8 +22,7 @@ use crate::components::{
         panels::{EndGrindPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
-    shared::{pets::PetsPanel, settings::SettingsModal},
-    town::panels::achievements::apply_newly_unlocked_achievements,
+    shared::{achievements, pets::PetsPanel, settings::SettingsModal},
     ui::{
         loading_screen::LoadingScreen, number::format_local_time,
         progress_bars::provide_cooldown_clock, toast::*,
@@ -143,8 +142,15 @@ fn handle_message(
         ServerMessage::AchievementsUnlocked(message) => {
             let data_context = expect_context::<DataContext>();
             let toaster = expect_context::<Toasts>();
-            apply_newly_unlocked_achievements(
-                game_context.user_unlocks,
+
+            for achievement_id in message.achievement_ids.iter() {
+                game_context
+                    .user_unlocks
+                    .write()
+                    .achievements
+                    .insert(achievement_id.clone(), Utc::now());
+            }
+            achievements::notify_newly_unlocked_achievements(
                 data_context,
                 toaster,
                 message.achievement_ids,
