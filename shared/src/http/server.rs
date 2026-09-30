@@ -117,6 +117,7 @@ pub struct CreateCharacterResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetUserCharactersResponse {
     pub characters: Vec<UserCharacter>,
+    pub user_unlocks: UserUnlocks,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

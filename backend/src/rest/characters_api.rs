@@ -129,6 +129,7 @@ async fn get_user_characters(
             .into_iter()
             .map(|c| c.into())
             .collect(),
+        user_unlocks: db::user_unlocks::load_user_unlocks(&db_pool, &user_id).await?,
     }))
 }
 
