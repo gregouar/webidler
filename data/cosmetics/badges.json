@@ -2,35 +2,35 @@
     "badge_dev"         : {
         "Badge": {
             "icon"       : "badges/badge_dev.webp",
-            "title"      : "Developer",
+            "name"       : "Developer",
             "description": "Please don't yell at him if everything is broken."
         }
     },
     "badge_witch"       : {
         "Badge": {
             "icon"       : "badges/badge_witch.webp",
-            "title"      : "Broodkiller",
+            "name"       : "Broodkiller",
             "description": "This player killed Amelia, the Broodborne Witch."
         }
     },
     "badge_chaos_gold"  : {
         "Badge": {
             "icon"       : "badges/badge_chaos_gold.webp",
-            "title"      : "Champion of the Chaos Dimension",
+            "name"       : "Champion of the Chaos Dimension",
             "description": "This player holds first place in 'The Chaos Dimension' crucible within a Realm."
         }
     },
     "badge_chaos_silver": {
         "Badge": {
             "icon"       : "badges/badge_chaos_silver.webp",
-            "title"      : "Vanguard of the Chaos Dimension",
+            "name"       : "Vanguard of the Chaos Dimension",
             "description": "This player holds second place in 'The Chaos Dimension' crucible within a Realm."
         }
     },
     "badge_chaos_bronze": {
         "Badge": {
             "icon"       : "badges/badge_chaos_bronze.webp",
-            "title"      : "Adept of the Chaos Dimension",
+            "name"       : "Adept of the Chaos Dimension",
             "description": "This player holds third place in 'The Chaos Dimension' crucible within a Realm."
         }
     }

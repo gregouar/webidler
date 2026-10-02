@@ -5,6 +5,7 @@ pub mod local_stats;
 pub mod loot_queue;
 pub mod monsters_grid;
 pub mod panels;
+pub mod pet_automation;
 pub mod player_card;
 pub mod portrait;
 pub mod websocket;

@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 use crate::data::{
     area::AreaLevel,
@@ -6,7 +7,7 @@ use crate::data::{
     skill::SkillType,
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AchievementSpecs {
     // pub scope: AchievementScope, Could be User, Character, Realm etc later
     pub icon: String,
@@ -20,19 +21,20 @@ pub struct AchievementSpecs {
     pub rewards: Vec<AchievementReward>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum AchievementReward {
     Cosmetic(String),
+    Pet(String),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum AchievementGoal {
     AreaLevel {
         value: AreaLevel,
         #[serde(default)]
         area_id: Option<String>,
     },
-    PowerLevel(u8),
+    PowerLevel(AreaLevel),
     PlayerLevel(u8),
     SkillLevel {
         value: u8,
@@ -46,7 +48,7 @@ pub enum AchievementGoal {
     PassiveLevel {
         value: u8,
         #[serde(default)]
-        passive_id: String,
+        passive_id: Option<Uuid>,
         #[serde(default = "default_one")]
         amount: u8,
     },

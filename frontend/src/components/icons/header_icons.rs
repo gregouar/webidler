@@ -4,7 +4,7 @@ use leptos::{html::*, prelude::*};
 pub fn ForgeIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -23,7 +23,7 @@ pub fn ForgeIcon() -> impl IntoView {
 pub fn InventoryIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -42,7 +42,7 @@ pub fn InventoryIcon() -> impl IntoView {
 pub fn StashIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -61,7 +61,7 @@ pub fn StashIcon() -> impl IntoView {
 pub fn MarketIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -80,7 +80,7 @@ pub fn MarketIcon() -> impl IntoView {
 pub fn PassivesIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -99,7 +99,7 @@ pub fn PassivesIcon() -> impl IntoView {
 pub fn SkillsIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -118,7 +118,7 @@ pub fn SkillsIcon() -> impl IntoView {
 pub fn PetsIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -136,7 +136,7 @@ pub fn PetsIcon() -> impl IntoView {
 pub fn TempleIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >
@@ -155,7 +155,7 @@ pub fn TempleIcon() -> impl IntoView {
 pub fn AchievementsIcon() -> impl IntoView {
     view! {
         <svg
-            class="inline-block h-[1em] xl:h-[1.4em] aspect-square"
+            class="inline-block h-[1em] xl:h-[1.6em] xl:mx-1 aspect-square"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512"
         >

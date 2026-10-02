@@ -129,24 +129,22 @@ pub fn update_skill_specs(
 
     skill_specs.targets = apply_weapon_effects(skill_specs.targets, inventory);
 
-    local_effects.extend(
-        EffectsMap::combine_all(
-            std::iter::once(compute_skill_upgrade_effects(
-                base_skill_specs,
-                upgrade_level.saturating_add(skill_specs.level_modifier),
-            ))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                &base_skill_specs.modifier_effects,
-                character_attrs,
-                inventory,
-            )))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                &skill_specs.extra_modifier_effects,
-                character_attrs,
-                inventory,
-            ))),
-        ),
-    );
+    local_effects.extend(EffectsMap::combine_all(
+        std::iter::once(compute_skill_upgrade_effects(
+            base_skill_specs,
+            upgrade_level.saturating_add(skill_specs.level_modifier),
+        ))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &base_skill_specs.modifier_effects,
+            character_attrs,
+            inventory,
+        )))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &skill_specs.extra_modifier_effects,
+            character_attrs,
+            inventory,
+        ))),
+    ));
 
     apply_effects_to_skill_specs(
         statuses_store,

@@ -217,6 +217,14 @@ pub fn HeaderMenu() -> impl IntoView {
                     </MenuButton>
                 </TutorialPopup>
                 <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
+                <MenuButton
+                    on:click=move |_| {
+                        game_context.open_pets.set(!game_context.open_pets.get_untracked())
+                    }
+                    disabled=move || game_context.user_unlocks.read().pets.is_empty()
+                >
+                    "Pets"
+                </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
                     position=TutorialPopupPosition::BelowRight

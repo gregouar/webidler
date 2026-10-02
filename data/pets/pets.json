@@ -1,12 +1,12 @@
 {
-    "pet_cat_dog" : {"name": "Cat-Dog",       "icon": "pets/pet_catdog.webp"  },
-    "pet_crow"    : {"name": "Crow",          "icon": "pets/pet_crow.webp"    },
-    "pet_lizard"  : {"name": "Lizard",        "icon": "pets/pet_lizard.webp"  },
-    "pet_chicken" : {"name": "Chicken",       "icon": "pets/pet_chicken.webp" },
-    "pet_owl"     : {"name": "Owl",           "icon": "pets/pet_owl.webp"     },
-    "pet_otter"   : {"name": "Otter Wizard",  "icon": "pets/pet_otter.webp"   },
-    "pet_mosquito": {"name": "Blood Sucker",  "icon": "pets/pet_mosquito.webp"},
-    "pet_crab"    : {"name": "Treasure Crab", "icon": "pets/pet_crab.webp"    },
-    "pet_scarab"  : {"name": "Scarab",        "icon": "pets/pet_scarab.webp"  },
-    "pet_witch"   : {"name": "Spider Witch",  "icon": "pets/pet_witch.webp"   }
+    "pet_cat_dog" : {"name": "Cat-Dog",          "icon": "pets/pet_catdog.webp"  },
+    "pet_crow"    : {"name": "Crow",             "icon": "pets/pet_crow.webp"    },
+    "pet_lizard"  : {"name": "Lizard",           "icon": "pets/pet_lizard.webp"  },
+    "pet_chicken" : {"name": "Chicken",          "icon": "pets/pet_chicken.webp" },
+    "pet_owl"     : {"name": "Owl",              "icon": "pets/pet_owl.webp"     },
+    "pet_otter"   : {"name": "Otter Wizard",     "icon": "pets/pet_otter.webp"   },
+    "pet_mosquito": {"name": "Blood Sucker",     "icon": "pets/pet_mosquito.webp"},
+    "pet_crab"    : {"name": "Treasure Crab",    "icon": "pets/pet_crab.webp"    },
+    "pet_scarab"  : {"name": "Desert Scarab",    "icon": "pets/pet_scarab.webp"  },
+    "pet_witch"   : {"name": "Spiderling Witch", "icon": "pets/pet_witch.webp"   }
 }

@@ -8,13 +8,14 @@ use leptos::{
 };
 use leptos_use::use_resize_observer;
 
-use shared::data::{badges::UserBadge, item::ItemSpecs, user::UserCharacterId};
-use shared_chat::types::{ChatChannel, ChatMessage};
+use shared::data::{cosmetics::CosmeticType, item::ItemSpecs, user::UserCharacterId};
+use shared_chat::types::{ChatChannel, ChatMessage, UserId};
 
 use crate::{
     assets::img_asset,
     components::{
         chat::chat_context::ChatContext,
+        data_context::DataContext,
         events::{EventsContext, Key, keyboard_event_key},
         shared::tooltips::{ItemTooltip, item_tooltip},
         ui::{
@@ -399,9 +400,8 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
             {msg
                 .chat_badge
                 .as_ref()
-                .and_then(|chat_badge| serde_plain::from_str(chat_badge).ok())
                 .map(|badge| {
-                    view! { <ChatBadge badge /> }
+                    view! { <ChatBadge badge=badge.clone() /> }
                 })} <p class="min-w-0 flex-1 text-gray-200 select-text">
                 <span
                     class=move || {
@@ -421,7 +421,14 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                         }
                     }
                 >
-                    {author_str(&msg)}
+                    <Author
+                        channel=msg.channel
+                        user_id=msg.user_id
+                        username=msg.username.clone()
+                        character_name=msg.character_name.clone()
+                        character_title=msg.character_title.clone()
+                    />
+
                 </span>
                 <span class="text-gray-500 select-none">": "</span>
                 {msg
@@ -437,52 +444,42 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
 }
 
 #[component]
-fn ChatBadge(badge: UserBadge) -> impl IntoView {
-    let (src, badge_title, badge_description) = match badge {
-        UserBadge::Developer => (
-            "badge_dev",
-            "Developer",
-            "Please don't yell at him if everything is broken.",
-        ),
-        UserBadge::WitchHunter => (
-            "badge_witch",
-            "Witch Hunter",
-            "This player killed Amelia, the Broodborne Witch.",
-        ),
-        UserBadge::CrucibleChaosGold => (
-            "badge_chaos_gold",
-            "Champion of the Chaos Dimension",
-            "This player holds first place in 'The Chaos Dimension' crucible within a Realm.",
-        ),
-        UserBadge::CrucibleChaosSilver => (
-            "badge_chaos_silver",
-            "Vanguard of the Chaos Dimension",
-            "This player holds second place in 'The Chaos Dimension' crucible within a Realm.",
-        ),
-        UserBadge::CrucibleChaosBronze => (
-            "badge_chaos_bronze",
-            "Adept of the Chaos Dimension",
-            "This player holds third place in 'The Chaos Dimension' crucible within a Realm.",
-        ),
-    };
+fn ChatBadge(badge: String) -> impl IntoView {
+    let data_context = expect_context::<DataContext>();
+    let badge_specs = Memo::new(move |_| {
+        data_context
+            .cosmetics_specs
+            .read()
+            .get(&badge)
+            .and_then(|cosmetic| match cosmetic {
+                CosmeticType::Badge(specs) => Some(specs.clone()),
+                _ => None,
+            })
+    });
 
-    let src = img_asset(&format!("badges/{}.webp", src));
+    move || {
+        badge_specs.get().map(|specs| {
+            let src = img_asset(&specs.icon);
+            let alt = specs.name.clone();
+            let badge_title = specs.name;
+            let badge_description = specs.description;
+            let tooltip = move || {
+                view! {
+                    <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
+                        <div class="font-semibold text-white">{badge_title.clone()}</div>
+                        <div class="text-sm text-zinc-300">{badge_description.clone()}</div>
+                    </div>
+                }
+            };
 
-    let tooltip = move || {
-        view! {
-            <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
-                <div class="font-semibold text-white">{badge_title}</div>
-                <div class="text-sm text-zinc-300">{badge_description}</div>
-            </div>
-        }
-    };
-
-    view! {
-        <div class="shrink-0">
-            <StaticTooltip position=StaticTooltipPosition::Right tooltip>
-                <img src=src alt=badge_title class="h-[32px] mr-1 aspect-square" />
-            </StaticTooltip>
-        </div>
+            view! {
+                <div class="shrink-0">
+                    <StaticTooltip position=StaticTooltipPosition::Right tooltip>
+                        <img src=src alt=alt class="h-[32px] mr-1 aspect-square" />
+                    </StaticTooltip>
+                </div>
+            }
+        })
     }
 }
 
@@ -515,20 +512,61 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     }
 }
 
-fn author_str(msg: &ChatMessage) -> String {
+#[component]
+fn Author(
+    channel: ChatChannel,
+    user_id: Option<UserId>,
+    username: Option<String>,
+    character_name: Option<String>,
+    character_title: Option<String>,
+) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
+    let data_context: DataContext = expect_context();
 
-    if let ChatChannel::System = msg.channel {
-        "[System]".into()
-    } else if let ChatChannel::Whisper(_) = msg.channel
-        && msg.user_id == chat_context.user_id.get()
+    if let ChatChannel::System = channel {
+        "[System]".into_any()
+    } else if let ChatChannel::Whisper(_) = channel
+        && user_id == chat_context.user_id.get()
     {
-        channel_str(msg.channel)
+        channel_str(channel).into_any()
     } else {
-        match (&msg.username, &msg.character_name) {
-            (Some(username), Some(character_name)) => format!("{username} [{character_name}]"),
-            (Some(username), None) => username.clone(),
-            _ => String::new(),
+        match (&username, &character_name) {
+            (Some(username), Some(character_name)) => {
+                let title = character_title.as_ref().and_then(|title| {
+                    data_context
+                        .cosmetics_specs
+                        .read()
+                        .get(title)
+                        .and_then(|cosmetic| match cosmetic {
+                            CosmeticType::Title(title) => Some(title.clone()),
+                            _ => None,
+                        })
+                });
+
+                title
+                    .map(|title| {
+                        view! {
+                            {username.clone()}
+                            " ["
+                            {character_name.clone()}
+                            " — "
+                            <span class="italic">{title}</span>
+                            "]"
+                        }
+                        .into_any()
+                    })
+                    .unwrap_or_else(|| {
+                        view! {
+                            {username.clone()}
+                            " ["
+                            {character_name.clone()}
+                            "]"
+                        }
+                        .into_any()
+                    })
+            }
+            (Some(username), None) => username.clone().into_any(),
+            _ => String::new().into_any(),
         }
     }
 }

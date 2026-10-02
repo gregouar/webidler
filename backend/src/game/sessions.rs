@@ -1,4 +1,5 @@
 use dashmap::{DashMap, DashSet};
+use shared::data::user::UserId;
 use std::{sync::Arc, time::Instant};
 
 pub use shared::data::user::UserCharacterId;
@@ -15,6 +16,7 @@ pub struct SessionsStore {
 
 #[derive(Debug, Clone)]
 pub struct Session {
+    pub user_id: UserId,
     pub character_id: UserCharacterId,
     pub last_active: Instant,
 

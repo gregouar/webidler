@@ -1,13 +1,13 @@
 {
     "max_player_level"       : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Let the Grind begin",
         "description": "Reach Player Level 70 during any Grind.",
         "goals"      : [ {"PlayerLevel": 70} ],
         "rewards"    : [ {"Pet": "pet_chicken"} ]
     },
     "all_base_areas"         : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Main Story",
         "description": "Complete all Grind Quests.",
         "goals"      : [
@@ -25,21 +25,21 @@
         "rewards"    : [ {"Pet": "pet_cat_dog"} ]
     },
     "power_level_600"        : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Endgame",
         "description": "Reach Power Level 600.",
         "goals"      : [ {"PowerLevel": 600} ],
         "rewards"    : [ {"Pet": "pet_crow"} ]
     },
     "power_level_900"        : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "True Player",
         "description": "Reach Power Level 900.",
         "goals"      : [ {"PowerLevel": 900} ],
         "rewards"    : [ {"Cosmetic": "title_true_player"} ]
     },
     "uniques_collector"      : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Bizarre Equipments",
         "description": "Equip a Unique Item in each Equipment Slot.",
         "goals"      : [
@@ -56,7 +56,7 @@
         "rewards"    : [ {"Cosmetic": "title_uniques_collector"} ]
     },
     "max_equipment"          : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Legendary Equipment",
         "description": "Equip a Power Level 600 Item in each Equipment Slot.",
         "goals"      : [
@@ -73,7 +73,7 @@
         "rewards"    : [ {"Cosmetic": "title_max_equipment"} ]
     },
     "all_runes"              : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Rune you Fool",
         "description": "Equip a Rune in every Socket.",
         "goals"      : [
@@ -82,7 +82,7 @@
         "rewards"    : [ {"Cosmetic": "title_all_runes"} ]
     },
     "all_unique_runes"       : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Runes Connoisseur",
         "description": "Equip a Rune in every Socket.",
         "goals"      : [
@@ -98,7 +98,7 @@
         "rewards"    : [ {"Cosmetic": "title_all_unique_runes"} ]
     },
     "all_max_passives"       : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Ascension",
         "description": "Ascend 70 Passives to Level 5.",
         "goals"      : [
@@ -107,7 +107,7 @@
         "rewards"    : [ {"Cosmetic": "title_all_max_passives"} ]
     },
     "max_skill_level"        : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Skill Master",
         "description": "Reach Skill Mastery 100 in any Skill.",
         "goals"      : [
@@ -116,7 +116,7 @@
         "rewards"    : [ {"Pet": "pet_lizard"} ]
     },
     "max_various_skill_level": {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Jack of All Trades",
         "description": "Reach Skill Mastery 100 with an Attack, a Spell, a Blessing and a Curse.",
         "goals"      : [
@@ -128,7 +128,7 @@
         "rewards"    : [ {"Cosmetic": "title_max_various_skill_level"} ]
     },
     "edict_menu"             : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Vanquisher of Tavernus",
         "description": "Kill the Bosses of the Regular's Menu Unique Edict.",
         "goals"      : [
@@ -137,7 +137,7 @@
         "rewards"    : [ {"Pet": "pet_otter"}, {"Cosmetic": "title_regular_patron"} ]
     },
     "edict_mosquito"         : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Pest Eradicator",
         "description": "Reach Area Level 500 during Mosquito Season.",
         "goals"      : [
@@ -146,7 +146,7 @@
         "rewards"    : [ {"Pet": "pet_mosquito"} ]
     },
     "edict_treasure"         : {
-        "icon"        : "",
+        "icon"        : "achievements/trophy.svg",
         "name"        : "Treasure Hunting",
         "description" : "Equip 4 of the 6 Cursed Treasures.",
         "goals_amount": 4,
@@ -161,7 +161,7 @@
         "rewards"     : [ {"Pet": "pet_crab"}, {"Cosmetic": "title_treasure_hunter"} ]
     },
     "edict_mummy"            : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "All About the Mummies",
         "description": "Reach Area Level 500 during a Mummy Invasion.",
         "goals"      : [
@@ -170,7 +170,7 @@
         "rewards"    : [ {"Pet": "pet_scarab"}, {"Cosmetic": "title_mummy_lover"} ]
     },
     "edict_witch"            : {
-        "icon"       : "",
+        "icon"       : "achievements/trophy.svg",
         "name"       : "Broodkiller",
         "description": "Kill the Broodmother.",
         "goals"      : [

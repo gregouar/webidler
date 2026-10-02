@@ -15,9 +15,8 @@ use chrono::{Duration, Utc};
 use shared::{
     constants::DEFAULT_MAX_CHARACTERS,
     data::{
-        badges::UserBadge,
         realms::Realm,
-        user::{UserDetails, UserId},
+        user::{UserDetails, UserId, UserUnlocks},
     },
     http::{
         client::{
@@ -25,9 +24,9 @@ use shared::{
             UpdateAccountRequest,
         },
         server::{
-            DeleteAccountResponse, ForgotPasswordResponse, GetDiscordInviteResponse,
-            GetUserDetailsResponse, ResetPasswordResponse, SignInResponse, SignUpResponse,
-            UpdateAccountResponse,
+            DeleteAccountResponse, ForgotPasswordResponse, GetAccountUserUnlocksResponse,
+            GetDiscordInviteResponse, GetUserDetailsResponse, ResetPasswordResponse,
+            SignInResponse, SignUpResponse, UpdateAccountResponse,
         },
     },
 };
@@ -45,6 +44,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     let auth_routes = Router::new()
         .route("/account/me", get(get_me))
+        .route("/account/user-unlocks", get(get_account_user_unlocks))
         .route("/account/update", post(post_update_account))
         .route("/account/{user_id}", delete(delete_account))
         .route("/discord", get(get_discord_invite))
@@ -61,6 +61,24 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/account/forgot-password", post(post_forgot_password))
         .route("/account/reset-password", post(post_reset_password))
         .merge(auth_routes)
+}
+
+async fn get_account_user_unlocks(
+    State(db_pool): State<db::DbPool>,
+    Extension(user): Extension<User>,
+) -> Result<Json<GetAccountUserUnlocksResponse>, AppError> {
+    let (achievements, cosmetics, pets) = tokio::join!(
+        db::user_unlocks::read_achievements(&db_pool, &user.user_id),
+        db::user_unlocks::read_cosmetics(&db_pool, &user.user_id),
+        db::user_unlocks::read_pets(&db_pool, &user.user_id),
+    );
+    Ok(Json(GetAccountUserUnlocksResponse {
+        user_unlocks: UserUnlocks {
+            achievements: achievements?,
+            cosmetics: cosmetics?,
+            pets: pets?,
+        },
+    }))
 }
 
 async fn post_sign_up(
@@ -192,7 +210,7 @@ async fn get_me(
         .ok_or_else(|| AppError::Unauthorized("invalid token".to_string()))?;
 
     if let Some(crucible_badge) = crucible_badge(&db_pool, user.user_id).await {
-        user.chat_badge = serde_plain::to_string(&crucible_badge).ok();
+        user.chat_badge = Some(crucible_badge.to_string());
     }
 
     let email = user
@@ -211,7 +229,7 @@ async fn get_me(
 }
 
 // TODO: Move somewhere else, have proper cosmetic system
-async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBadge> {
+async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<&'static str> {
     let top_three_standard = db::leaderboard::get_area_leaderboard(
         db_pool,
         3,
@@ -239,7 +257,7 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
-        return Some(UserBadge::CrucibleChaosGold);
+        return Some("badge_chaos_gold");
     }
 
     if top_three_standard
@@ -251,7 +269,7 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
-        return Some(UserBadge::CrucibleChaosSilver);
+        return Some("badge_chaos_silver");
     }
 
     if top_three_standard
@@ -263,7 +281,7 @@ async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<UserBad
             .map(|entry| entry.user_id == user_id)
             .unwrap_or_default()
     {
-        return Some(UserBadge::CrucibleChaosBronze);
+        return Some("badge_chaos_bronze");
     }
 
     None

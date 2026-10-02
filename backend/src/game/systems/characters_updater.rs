@@ -412,7 +412,12 @@ fn compute_character_specs(
             },
 
             StatType::StatConverter(specs) => {
-                stats_converters.push((specs.clone(), effect.modifier, effect.value, effect.bypass_ignore));
+                stats_converters.push((
+                    specs.clone(),
+                    effect.modifier,
+                    effect.value,
+                    effect.bypass_ignore,
+                ));
             }
             StatType::StatConditionalModifier { .. } => {}
 

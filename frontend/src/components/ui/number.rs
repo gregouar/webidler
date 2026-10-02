@@ -160,6 +160,13 @@ pub fn format_datetime(dt: DateTime<Utc>) -> String {
         .unwrap_or_default()
 }
 
+pub fn format_local_date(dt: DateTime<Utc>) -> String {
+    Date::new(&JsValue::from_str(&dt.to_rfc3339()))
+        .to_locale_date_string("default", &JsValue::UNDEFINED)
+        .as_string()
+        .unwrap_or_default()
+}
+
 pub fn format_local_time(dt: DateTime<Utc>) -> String {
     let options = Object::new();
     let _ = Reflect::set(&options, &"hour".into(), &"2-digit".into());
