@@ -50,7 +50,7 @@ pub fn App() -> impl IntoView {
     let confirm_state = provide_confirm_context();
 
     view! {
-        <Toaster position=ToasterPosition::BottomCenter></Toaster>
+        <Toaster position=ToasterPosition::BottomRight></Toaster>
         <ConfirmationModal state=confirm_state />
         <DynamicTooltip />
         <ChatProvider url=option_env!("BACKEND_CHAT_WS_URL")

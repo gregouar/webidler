@@ -1,3 +1,4 @@
+pub mod achievements_controller;
 pub mod area_controller;
 pub mod benedictions_controller;
 pub mod characters_controller;

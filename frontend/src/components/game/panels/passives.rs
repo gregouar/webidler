@@ -3,7 +3,10 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
-    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
+    data::{
+        passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
+        pets::PetButton,
+    },
     http::client::SavePassivesRequest,
     messages::client::PurchasePassiveMessage,
 };
@@ -11,7 +14,7 @@ use shared::{
 use crate::components::{
     backend_client::BackendClient,
     events::{EventsContext, Key},
-    game::{game_context::GameContext, websocket::WebsocketContext},
+    game::{game_context::GameContext, pet_automation::PetAutomation, websocket::WebsocketContext},
     shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, PassiveSkillStats, PurchaseStatus,
         node_meta_status,
@@ -138,16 +141,9 @@ fn AutoButton(highlighted_node: RwSignal<Option<PassiveNodeId>>) -> impl IntoVie
         }
     };
 
-    let auto_assign = {
+    let assign_nodes = Arc::new({
         let conn: WebsocketContext = expect_context();
-        let events_context: EventsContext = expect_context();
-        move |_| {
-            let mut amount = if events_context.key_pressed(Key::Ctrl) {
-                10.min(game_context.player_resources.read().passive_points)
-            } else {
-                1
-            };
-
+        move |mut amount: u16| {
             while let Some(node_id) = next_node.get_untracked()
                 && amount > 0
             {
@@ -155,17 +151,36 @@ fn AutoButton(highlighted_node: RwSignal<Option<PassiveNodeId>>) -> impl IntoVie
                 amount -= 1;
             }
         }
-    };
+    });
+    let events_context: EventsContext = expect_context();
 
     view! {
-        <div
-            on:mouseenter=move |_| hovered.set(true)
-            on:mouseleave=move |_| hovered.set(false)
-        >
+        <div on:mouseenter=move |_| hovered.set(true) on:mouseleave=move |_| hovered.set(false)>
             <StaticTooltip tooltip position=StaticTooltipPosition::Bottom>
-                <MenuButton on:click=auto_assign disabled>
-                    "Auto Assign"
-                </MenuButton>
+                <PetAutomation
+                    pet_button=PetButton::AutoPassive
+                    callback=Callback::new({
+                        let assign_nodes = assign_nodes.clone();
+                        move |_| assign_nodes(1)
+                    })
+                    disabled=disabled
+                >
+                    <MenuButton
+                        on:click={
+                            let assign_nodes = assign_nodes.clone();
+                            move |_| assign_nodes(
+                                if events_context.key_pressed(Key::Ctrl) {
+                                    10.min(game_context.player_resources.read().passive_points)
+                                } else {
+                                    1
+                                },
+                            )
+                        }
+                        disabled
+                    >
+                        "Auto Assign"
+                    </MenuButton>
+                </PetAutomation>
             </StaticTooltip>
         </div>
     }
@@ -365,9 +380,7 @@ fn InGameNode(
             show_upgrade=false
             search_node
             highlight_override=Signal::derive(move || {
-                highlighted_node
-                    .get()
-                    .map(|highlighted_node_id| highlighted_node_id == node_id)
+                highlighted_node.get().map(|highlighted_node_id| highlighted_node_id == node_id)
             })
         />
     }
