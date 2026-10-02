@@ -24,40 +24,57 @@ use crate::{
         },
     },
 };
+
 #[component]
 pub fn PetSprite(
     pet_id: String,
+    tooltip: bool,
     #[prop(optional)] class: Option<&'static str>,
     #[prop(default = false)] flipped: bool,
 ) -> impl IntoView {
     let data: DataContext = expect_context();
-    let settings: SettingsContext = expect_context();
     data.pets_specs
         .read_untracked()
         .get(&pet_id)
         .cloned()
         .map(|pet_specs| {
             let pet_name = pet_specs.name.clone();
-            view! {
-                <StaticTooltip position=StaticTooltipPosition::Top tooltip=move || pet_name.clone()>
-                    <img
-                        src=img_asset(&pet_specs.icon)
-                        alt=pet_specs.name.clone()
-                        class=format!(
-                            "z-20 w-12 xl:w-20 max-w-none object-contain
-                        {} {} {}",
-                            if settings.uses_surface_effects() {
-                                "xl:[filter:drop-shadow(0_0_3px_rgba(190,160,0,0.7))_drop-shadow(0_4px_12px_rgba(0,0,0,0.7))]"
-                            } else {
-                                ""
-                            },
-                            if flipped { "-scale-x-100" } else { "" },
-                            class.unwrap_or(&""),
-                        )
-                    />
-                </StaticTooltip>
+            if tooltip {
+                view! {
+                    <StaticTooltip
+                        position=StaticTooltipPosition::Top
+                        tooltip=move || pet_name.clone()
+                    >
+                        <PetImg pet_specs class flipped />
+                    </StaticTooltip>
+                }
+                .into_any()
+            } else {
+                view! { <PetImg pet_specs class flipped /> }.into_any()
             }
         })
+}
+
+#[component]
+fn PetImg(pet_specs: PetSpecs, class: Option<&'static str>, flipped: bool) -> impl IntoView {
+    let settings: SettingsContext = expect_context();
+    view! {
+        <img
+            src=img_asset(&pet_specs.icon)
+            alt=pet_specs.name.clone()
+            class=format!(
+                "z-20 w-12 xl:w-20 max-w-none object-contain
+                        {} {} {}",
+                if settings.uses_surface_effects() {
+                    "xl:[filter:drop-shadow(0_0_3px_rgba(190,160,0,0.7))_drop-shadow(0_4px_12px_rgba(0,0,0,0.7))]"
+                } else {
+                    ""
+                },
+                if flipped { "-scale-x-100" } else { "" },
+                class.unwrap_or(&""),
+            )
+        />
+    }
 }
 
 #[component]
@@ -117,7 +134,7 @@ pub fn PetsPanel(
                                                                 // alt=pet.name.clone()
                                                                 // class="h-20 w-20 object-contain drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)]"
                                                                 // />
-                                                                <PetSprite pet_id />
+                                                                <PetSprite pet_id tooltip=true />
                                                             // <span class="text-xs xl:text-sm font-medium text-zinc-300">
                                                             // {pet.name.clone()}
                                                             // </span>

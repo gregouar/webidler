@@ -358,7 +358,7 @@ fn TownAssignedPet(button: PetButton, #[prop(default = false)] flipped: bool) ->
                 .read()
                 .get(&button)
                 .cloned()
-                .map(|pet_id| view! { <PetSprite pet_id flipped /> })
+                .map(|pet_id| view! { <PetSprite pet_id flipped tooltip=true /> })
         }}
     }
 }

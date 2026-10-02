@@ -75,7 +75,7 @@ pub fn AssignedPet(
                                 if flipped { "left-0 xl:left-1" } else { "right-0 xl:right-1" },
                             )
                         }>
-                            <PetSprite pet_id flipped />
+                            <PetSprite pet_id flipped tooltip=false />
                         </div>
                     }
                 })
