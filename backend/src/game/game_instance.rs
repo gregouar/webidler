@@ -40,6 +40,7 @@ pub struct GameInstance<'a> {
 }
 
 impl<'a> GameInstance<'a> {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
         user_id: UserId,
@@ -513,13 +514,8 @@ async fn update_achievements_impl(
     new_achievements: Vec<String>,
 ) -> Result<()> {
     let mut tx = db_pool.begin().await?;
-    achievements_controller::unlock_achievements(
-        &mut tx,
-        &master_store,
-        user_id,
-        &new_achievements,
-    )
-    .await?;
+    achievements_controller::unlock_achievements(&mut tx, master_store, user_id, &new_achievements)
+        .await?;
     tx.commit().await?;
 
     Ok(())

@@ -166,7 +166,7 @@ fn goal_satisfied(
                     && context
                         .inventory
                         .get_equipped_item(slot)
-                        .is_some_and(|item_specs| matches(item_specs))
+                        .is_some_and(&matches)
             } else {
                 context
                     .inventory

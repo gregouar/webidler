@@ -71,7 +71,7 @@ fn PetImg(pet_specs: PetSpecs, class: Option<&'static str>, flipped: bool) -> im
                     ""
                 },
                 if flipped { "-scale-x-100" } else { "" },
-                class.unwrap_or(&""),
+                class.unwrap_or(""),
             )
         />
     }
