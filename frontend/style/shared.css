@@ -514,23 +514,28 @@ body {
     @apply cursor-pointer disabled:cursor-auto disabled:pointer-events-none;
   }
 
-  .button-press-high.button-auto-pressed {
+  .button-press-high.button-auto-pressed,
+  .button-auto-pressed .button-press-high {
     animation: button-auto-press-high 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
   }
 
-  .button-press-high.button-auto-pressed::before {
+  .button-press-high.button-auto-pressed::before,
+  .button-auto-pressed .button-press-high::before {
     animation: button-auto-press-highlight 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
   }
 
-  .button-press-medium.button-auto-pressed {
+  .button-press-medium.button-auto-pressed,
+  .button-auto-pressed .button-press-medium {
     animation: button-auto-press-medium 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
   }
 
-  .button-press-low.button-auto-pressed {
+  .button-press-low.button-auto-pressed,
+  .button-auto-pressed .button-press-low {
     animation: button-auto-press-low 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
   }
 
-  .button-press-skill-slot.button-auto-pressed {
+  .button-press-skill-slot.button-auto-pressed,
+  .button-auto-pressed .button-press-skill-slot {
     animation: button-auto-press-skill-slot 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
   }
 }

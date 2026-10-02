@@ -211,6 +211,10 @@ impl<'a> GameInstance<'a> {
     }
 
     async fn check_achievements(&mut self) -> Result<()> {
+        if self.game_data.area_specs.training {
+            return Ok(());
+        }
+
         let area_levels = HashMap::from([(
             self.game_data.area_id.clone(),
             self.game_data.area_state.read().max_area_level_ever,

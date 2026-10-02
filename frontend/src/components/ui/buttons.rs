@@ -5,7 +5,6 @@ use crate::components::settings::{GraphicsQuality, SettingsContext};
 #[component]
 pub fn MenuButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
-    #[prop(default = Signal::derive(|| false), into)] pressed: Signal<bool>,
     #[prop(optional)] button_type: Option<&'static str>,
     #[prop(optional)] title: Option<&'static str>,
     #[prop(optional)] class: Option<&'static str>,
@@ -79,15 +78,7 @@ pub fn MenuButton(
                     disabled:text-zinc-400 disabled:border-[#4b4030] disabled:opacity-60"
                     }
                 };
-                format!(
-                    "{quality_class} {} {}",
-                    if pressed.get() {
-                        "button-auto-pressed"
-                    } else {
-                        ""
-                    },
-                    class.unwrap_or_default(),
-                )
+                format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {
@@ -234,7 +225,6 @@ pub fn MenuButtonRed(
 #[component]
 pub fn FancyButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
-    #[prop(default = Signal::derive(|| false), into)] pressed: Signal<bool>,
     #[prop(optional)] class: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
@@ -300,15 +290,7 @@ pub fn FancyButton(
                     disabled:text-zinc-400 disabled:border-[#4b4030] disabled:opacity-60"
                     }
                 };
-                format!(
-                    "{quality_class} {} {}",
-                    if pressed.get() {
-                        "button-auto-pressed"
-                    } else {
-                        ""
-                    },
-                    class.unwrap_or_default(),
-                )
+                format!("{quality_class} {}", class.unwrap_or_default())
             }
             style:background-image=move || {
                 match settings.graphics_quality() {

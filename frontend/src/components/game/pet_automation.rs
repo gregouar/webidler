@@ -1,14 +1,59 @@
 use leptos::prelude::*;
+use leptos_use::{UseIntervalOptions, use_interval_with_options};
 
 use shared::data::pets::PetButton;
 
 use crate::components::{game::GameContext, shared::pets::PetSprite};
 
 pub const PET_CLICK_DURATION_MS: u64 = 560;
+pub const PET_CLICK_DELAY_MS: u64 = 1000;
+
+#[component]
+pub fn PetAutomation(
+    pet_button: PetButton,
+    #[prop(default = false)] flipped: bool,
+    callback: Callback<()>,
+    #[prop(into)] disabled: Signal<bool>,
+    children: Children,
+) -> impl IntoView {
+    let game_context: GameContext = expect_context();
+    let pet_clicking = RwSignal::new(false);
+
+    let _ = use_interval_with_options(
+        PET_CLICK_DELAY_MS,
+        UseIntervalOptions::default().callback(move |_| {
+            if game_context
+                .player_pets
+                .read_untracked()
+                .contains_key(&pet_button)
+                && !disabled.get_untracked()
+                && !game_context.area_specs.read_untracked().training
+            {
+                pet_clicking.set(true);
+                set_timeout(
+                    move || {
+                        if !disabled.get_untracked() {
+                            callback.run(());
+                        }
+                        pet_clicking.set(false);
+                    },
+                    std::time::Duration::from_millis(PET_CLICK_DURATION_MS),
+                );
+            }
+        }),
+    );
+
+    view! {
+        <div class="relative" class:button-auto-pressed=pet_clicking>
+            <AssignedPet pet_button flipped pressed=Signal::from(pet_clicking) />
+            {children()}
+        </div>
+    }
+}
 
 #[component]
 pub fn AssignedPet(
-    button: PetButton,
+    pet_button: PetButton,
     #[prop(default = false)] flipped: bool,
     #[prop(default = Signal::derive(|| false), into)] pressed: Signal<bool>,
 ) -> impl IntoView {
@@ -19,7 +64,7 @@ pub fn AssignedPet(
             game_context
                 .player_pets
                 .read()
-                .get(&button)
+                .get(&pet_button)
                 .cloned()
                 .map(|pet_id| {
                     view! {

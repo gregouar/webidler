@@ -293,10 +293,10 @@ fn update_assignment(
 
     let mut updated = previous.clone();
     if let Some(pet) = pet {
-        player_pets.retain(|_, assigned_pet| assigned_pet != &pet);
-        player_pets.insert(button, pet);
+        updated.retain(|_, assigned_pet| assigned_pet != &pet);
+        updated.insert(button, pet);
     } else {
-        player_pets.remove(&button);
+        updated.remove(&button);
     }
 
     player_pets.set(updated.clone());
