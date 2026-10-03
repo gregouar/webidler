@@ -181,7 +181,7 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                     </span>
                 </CardHeader>
 
-                <div class="grid grid-cols-2 gap-2 min-h-0 flex-1">
+                <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
                     <CardInset class="w-full" pad=false>
                         {move || {
                             match active_tab.get() {
