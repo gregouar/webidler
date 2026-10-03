@@ -12,12 +12,12 @@ use shared::{
     data::stash::{Stash, StashId, StashType},
     http::{
         client::{
-            BrowseStashItemsRequest, ExchangeGemsStashRequest, StashAction, StoreStashItemRequest,
-            TakeStashItemRequest, UpgradeStashRequest,
+            BrowseStashItemsRequest, ExchangeGemsStashRequest, GetStashItemsRequest, StashAction,
+            StoreStashItemRequest, TakeStashItemRequest, UpgradeStashRequest,
         },
         server::{
-            BrowseStashItemsResponse, ExchangeGemsStashResponse, StoreStashItemResponse,
-            TakeStashItemResponse, UpgradeStashResponse,
+            BrowseStashItemsResponse, ExchangeGemsStashResponse, GetStashItemsResponse,
+            StoreStashItemResponse, TakeStashItemResponse, UpgradeStashResponse,
         },
     },
 };
@@ -39,6 +39,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/stashes/upgrade", post(post_upgrade_stash))
         .route("/stashes/{stash_id}", post(post_browse_stash))
+        .route("/stashes/{stash_id}/items", post(post_get_stash_items))
         .route("/stashes/{stash_id}/gems", post(post_exchange_gems))
         .route("/stashes/{stash_id}/take", post(post_take_stash_item))
         .route("/stashes/{stash_id}/store", post(post_store_stash_item))
@@ -195,6 +196,36 @@ pub async fn post_exchange_gems(
         resource_gems: character_resources.resource_gems,
         stash: stash.into(),
     }))
+}
+
+pub async fn post_get_stash_items(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Path(stash_id): Path<StashId>,
+    Json(payload): Json<GetStashItemsRequest>,
+) -> Result<Json<GetStashItemsResponse>, AppError> {
+    let stash = db::stashes::get_stash(&db_pool, &stash_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    if stash.user_id != user.user_id {
+        return Err(AppError::Forbidden);
+    }
+
+    let mut items: Vec<_> = db::stash_items::read_full_stash_items(&db_pool, stash_id)
+        .await?
+        .into_iter()
+        .filter_map(|entry| stashes_controller::into_stash_item(&master_store.items_store, entry))
+        .collect();
+    items.sort_by(|a, b| {
+        payload
+            .sort_type
+            .compare(&a.item_specs, &b.item_specs)
+            .then_with(|| a.stash_item_id.cmp(&b.stash_item_id))
+    });
+
+    Ok(Json(GetStashItemsResponse { items }))
 }
 
 pub async fn post_browse_stash(

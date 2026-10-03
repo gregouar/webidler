@@ -307,6 +307,33 @@ pub async fn read_stash_item<'c>(
     .await
 }
 
+pub async fn read_full_stash_items<'c>(
+    executor: impl DbExecutor<'c>,
+    stash_id: StashId,
+) -> Result<Vec<StashItemEntry>, sqlx::Error> {
+    sqlx::query_as!(
+        StashItemEntry,
+        r#"
+        SELECT 
+            stash_items.stash_id as "stash_id: StashId", 
+            stash_items.stash_item_id,
+            stashes.user_id as "user_id: UserId",
+            owner.character_id as "character_id?: UserCharacterId",
+            owner.character_name as "character_name?: String",
+            stash_items.item_data as "item_data: JsonValue", 
+            stash_items.created_at
+        FROM stash_items
+        INNER JOIN stashes ON stashes.stash_id = stash_items.stash_id
+        LEFT JOIN characters AS owner ON owner.character_id = stash_items.character_id
+        WHERE stash_items.stash_id = $1 AND stash_items.deleted_at IS NULL
+        ORDER BY stash_items.stash_item_id
+        "#,
+        stash_id
+    )
+    .fetch_all(executor)
+    .await
+}
+
 pub async fn read_stash_items<'c>(
     executor: impl DbExecutor<'c>,
     stash_id: StashId,

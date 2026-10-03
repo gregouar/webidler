@@ -191,6 +191,12 @@ pub struct BrowseStashItemsRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GetStashItemsRequest {
+    pub character_id: UserCharacterId,
+    pub sort_type: InventorySortType,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StoreStashItemRequest {
     pub character_id: UserCharacterId,
     pub item_index: usize,

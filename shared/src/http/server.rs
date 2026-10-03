@@ -244,6 +244,11 @@ pub struct BrowseStashItemsResponse {
     pub has_more: bool,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetStashItemsResponse {
+    pub items: Vec<StashItem>,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StoreStashItemResponse {
     pub inventory: PlayerInventory,

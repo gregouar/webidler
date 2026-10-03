@@ -52,6 +52,57 @@ pub enum InventorySortType {
     Rarity,
     ItemType,
     ItemLevel,
+    ItemBase,
+}
+
+impl InventorySortType {
+    pub fn next(self) -> Self {
+        match self {
+            Self::Rarity => Self::ItemType,
+            Self::ItemType => Self::ItemLevel,
+            Self::ItemLevel => Self::ItemBase,
+            Self::ItemBase => Self::Rarity,
+        }
+    }
+
+    // pub fn label(self) -> &'static str {
+    //     match self {
+    //         Self::Rarity => "Rarity",
+    //         Self::ItemType => "Category",
+    //         Self::ItemLevel => "Level",
+    //         Self::ItemBase => "Item base",
+    //     }
+    // }
+
+    /// The same ordering is used for bags and full stash contents.
+    pub fn compare(self, a: &ItemSpecs, b: &ItemSpecs) -> std::cmp::Ordering {
+        let rarity = || b.modifiers.rarity.cmp(&a.modifiers.rarity);
+        let category = || {
+            a.base
+                .categories
+                .iter()
+                .next_back()
+                .cmp(&b.base.categories.iter().next_back())
+                .then_with(|| a.base.slot.cmp(&b.base.slot))
+        };
+        let level = || b.required_level.cmp(&a.required_level);
+        let ordering: std::cmp::Ordering = match self {
+            Self::Rarity => rarity().then_with(category).then_with(level),
+            Self::ItemType => category().then_with(rarity).then_with(level),
+            Self::ItemLevel => level().then_with(category).then_with(rarity),
+            Self::ItemBase => a
+                .base
+                .name
+                .cmp(&b.base.name)
+                .then_with(|| a.modifiers.base_item_id.cmp(&b.modifiers.base_item_id))
+                .then_with(rarity)
+                .then_with(level),
+        };
+        ordering
+            .then_with(|| a.modifiers.level.cmp(&b.modifiers.level))
+            .then_with(|| b.modifiers.quality.total_cmp(&a.modifiers.quality))
+            .then_with(|| a.modifiers.base_item_id.cmp(&b.modifiers.base_item_id))
+    }
 }
 
 #[derive(
