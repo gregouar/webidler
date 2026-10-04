@@ -212,7 +212,7 @@ fn BagItem(config: Arc<BagConfig>, item_index: usize) -> impl IntoView {
                                             if !accessibility.is_on_mobile()
                                                 && let Some(action) = config.right_click_action(item_index)
                                             {
-                                                invoke.run(action.clone());
+                                                invoke.run(*action);
                                             }
                                         }
                                     }
@@ -267,7 +267,7 @@ fn BagItem(config: Arc<BagConfig>, item_index: usize) -> impl IntoView {
                                                                     disabled=Signal::derive(move || {
                                                                         pending.get() || action.is_disabled(item_index)
                                                                     })
-                                                                    on_click=move || invoke.run(action.clone())
+                                                                    on_click=move || invoke.run(action)
                                                                 />
                                                             </Show>
                                                         }
