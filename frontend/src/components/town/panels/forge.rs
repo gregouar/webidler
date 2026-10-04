@@ -95,7 +95,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             <div class="mx-1">"Gamble"</div>
                         </TabButton>
                     </div>
-                    <div class="flex-1" />
+                    <div class="flex-1 mb-2" />
                 </CardHeader>
 
                 <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
