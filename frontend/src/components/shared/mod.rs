@@ -1,5 +1,6 @@
 pub mod account;
 pub mod achievements;
+pub mod bag_grid;
 pub mod inventory;
 pub mod item_card;
 pub mod leaderboard;

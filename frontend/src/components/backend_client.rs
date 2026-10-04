@@ -11,10 +11,10 @@ use shared::{
     },
     http::{
         client::{
-            AscendPassivesRequest, BrowseMarketItemsRequest, BrowseStashItemsRequest,
-            BuyBenedictionsRequest, BuyMarketItemRequest, CreateCharacterRequest,
-            EditMarketItemRequest, ExchangeGemsStashRequest, ForgeAffixRequest,
-            ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, InventoryDeleteRequest,
+            AscendPassivesRequest, BrowseMarketItemsRequest, BuyBenedictionsRequest,
+            BuyMarketItemRequest, CreateCharacterRequest, EditMarketItemRequest,
+            ExchangeGemsStashRequest, ForgeAffixRequest, ForgeUpgradeRequest,
+            ForgotPasswordRequest, GambleItemRequest, GetStashItemsRequest, InventoryDeleteRequest,
             InventoryEquipRequest, InventorySortRequest, InventoryUnequipRequest,
             RejectMarketItemRequest, ResetPasswordRequest, SaveFavoriteSkillsRequest,
             SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SellMarketItemRequest,
@@ -23,22 +23,22 @@ use shared::{
             UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
-            AscendPassivesResponse, BrowseMarketItemsResponse, BrowseStashItemsResponse,
-            BuyBenedictionsResponse, BuyMarketItemResponse, CreateCharacterResponse,
-            DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
+            AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
+            BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
+            DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
             ForgotPasswordResponse, GambleItemResponse, GetAccountUserUnlocksResponse,
             GetAchievementsResponse, GetAreasResponse, GetBenedictionsResponse,
             GetCharacterDetailsResponse, GetCosmeticsResponse, GetDiscordInviteResponse,
-            GetPassivesResponse, GetPetsResponse, GetSkillsResponse, GetStatusesResponse,
-            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
-            InventoryEquipResponse, InventorySortResponse, InventoryUnequipResponse,
-            LeaderboardResponse, NewsResponse, PlayersCountResponse, ReconcileAchievementsResponse,
-            RejectMarketItemResponse, ResetPasswordResponse, SaveFavoriteSkillsResponse,
-            SavePassivesResponse, SaveSkillMasteryUpgradesResponse, SellMarketItemResponse,
-            SignInResponse, SignUpResponse, SocketPassiveResponse, StoreStashItemResponse,
-            TakeStashItemResponse, UpdateAccountResponse, UpdateCharacterPetsResponse,
-            UpgradeStashResponse,
+            GetMarketStashItemsResponse, GetPassivesResponse, GetPetsResponse, GetSkillsResponse,
+            GetStashItemsResponse, GetStatusesResponse, GetUserCharactersResponse,
+            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
+            InventorySortResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
+            PlayersCountResponse, ReconcileAchievementsResponse, RejectMarketItemResponse,
+            ResetPasswordResponse, SaveFavoriteSkillsResponse, SavePassivesResponse,
+            SaveSkillMasteryUpgradesResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            UpdateAccountResponse, UpdateCharacterPetsResponse, UpgradeStashResponse,
         },
     },
 };
@@ -336,6 +336,13 @@ impl BackendClient {
 
     // Market
 
+    pub async fn get_market_stash_items(
+        &self,
+        stash_id: &StashId,
+    ) -> Result<GetMarketStashItemsResponse, BackendError> {
+        self.get_auth(&format!("market/listings/{stash_id}")).await
+    }
+
     pub async fn browse_market_items(
         &self,
         request: &BrowseMarketItemsRequest,
@@ -389,14 +396,23 @@ impl BackendClient {
             .await
     }
 
-    pub async fn browse_stash_items(
+    pub async fn get_stash_items(
         &self,
-        request: &BrowseStashItemsRequest,
+        request: &GetStashItemsRequest,
         stash_id: &StashId,
-    ) -> Result<BrowseStashItemsResponse, BackendError> {
-        self.post_auth(&format!("stashes/{stash_id}"), request)
+    ) -> Result<GetStashItemsResponse, BackendError> {
+        self.post_auth(&format!("stashes/{stash_id}/items"), request)
             .await
     }
+
+    // pub async fn browse_stash_items(
+    //     &self,
+    //     request: &BrowseStashItemsRequest,
+    //     stash_id: &StashId,
+    // ) -> Result<BrowseStashItemsResponse, BackendError> {
+    //     self.post_auth(&format!("stashes/{stash_id}"), request)
+    //         .await
+    // }
 
     pub async fn take_stash_item(
         &self,

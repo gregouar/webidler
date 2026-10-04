@@ -8,7 +8,7 @@ use shared::http::client::{
 use crate::components::{
     backend_client::BackendClient,
     shared::{
-        inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+        inventory::{Inventory, InventoryConfig, InventoryEquipFilter},
         loot_filter::LootFilterPanel,
         resources::show_resource_reward,
     },
@@ -187,7 +187,6 @@ pub fn TownInventoryPanel(
             on_equip: Some(Arc::new(on_equip)),
             on_sell: Some(Arc::new(on_sell)),
             on_sort: Some(Arc::new(on_sort)),
-            sell_type: SellType::Discard,
             sell_reward,
             max_item_level: Signal::derive(move || town_context.character.read().max_area_level),
             equip_filter: town_context.equip_filter.into(),

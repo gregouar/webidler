@@ -273,10 +273,20 @@ pub struct ExchangeGemsStashResponse {
     pub resource_gems: f64,
     pub stash: Stash,
 }
+// #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+// pub struct BrowseStashItemsResponse {
+//     pub items: Vec<StashItem>,
+//     pub has_more: bool,
+// }
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct BrowseStashItemsResponse {
+pub struct GetStashItemsResponse {
     pub items: Vec<StashItem>,
-    pub has_more: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetMarketStashItemsResponse {
+    pub items: Vec<MarketItem>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

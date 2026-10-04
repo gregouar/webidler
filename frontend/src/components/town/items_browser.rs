@@ -5,23 +5,23 @@ use std::sync::Arc;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemSlot, ItemSpecs},
+    item::{ItemRarity, ItemSlot, ItemSpecs},
     player::EquippedSlot,
     user::UserCharacterId,
 };
 
-use crate::{
-    assets::img_asset,
-    components::{
-        shared::{
-            item_card::ItemCard,
-            tooltips::{ItemTooltip, item_tooltip::ItemTooltipContent},
-        },
-        town::TownContext,
-        ui::{
-            list_row::MenuListRow,
-            tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
-        },
+use crate::assets::img_asset;
+use crate::components::{
+    shared::{
+        bag_grid::{BagConfig, BagGrid},
+        inventory::equipped_item_comparison,
+        item_card::ItemCard,
+        tooltips::{ItemTooltip, item_tooltip::ItemTooltipContent},
+    },
+    town::TownContext,
+    ui::{
+        list_row::MenuListRow,
+        tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
     },
 };
 
@@ -36,6 +36,10 @@ impl SelectedItem {
     pub fn is_empty(&self) -> bool {
         !matches!(self, SelectedItem::InMarket(_))
     }
+
+    // fn has_index(&self, index: usize) -> bool {
+    //     matches!(self, SelectedItem::InMarket(item) if item.index == index)
+    // }
 }
 
 #[derive(Clone)]
@@ -52,6 +56,77 @@ pub struct SelectedMarketItem {
     pub deleted_by: Option<(UserCharacterId, String)>,
 }
 
+fn inventory_item_allowed(item: &ItemSpecs, filter_unique: Option<bool>) -> bool {
+    filter_unique.is_none_or(|unique| (item.base.rarity == ItemRarity::Unique) == unique)
+}
+
+fn inventory_grid_item(
+    item: &ItemSpecs,
+    bag_index: usize,
+    bag_index_offset: usize,
+    filter_unique: Option<bool>,
+) -> Option<SelectedMarketItem> {
+    if !inventory_item_allowed(item, filter_unique) {
+        return None;
+    }
+    Some(SelectedMarketItem {
+        index: bag_index + bag_index_offset,
+        item_specs: Arc::new(item.clone()),
+        price: 0.0,
+        owner_id: None,
+        owner_name: None,
+        recipient: None,
+        rejected: false,
+        created_at: Utc::now(),
+        deleted_at: None,
+        deleted_by: None,
+    })
+}
+
+/// Bag-only selection shared by Forge and Market. Ineligible items remain visible.
+#[component]
+pub fn InventoryItemGrid(
+    selected_item: RwSignal<SelectedItem>,
+    #[prop(optional)] filter_unique: Option<bool>,
+    #[prop(default = 0)] bag_index_offset: usize,
+) -> impl IntoView {
+    let town = expect_context::<TownContext>();
+    let config = BagConfig {
+        items: Memo::new(move |_| town.inventory.read().bag.clone()).into(),
+        capacity: Signal::derive(move || town.inventory.read().max_bag_size as usize),
+        max_item_level: Signal::derive(move || town.character.read().max_area_level),
+        comparable_item: Some(equipped_item_comparison(town.inventory)),
+        context_tooltip_right: true,
+        dimmed: Some(Callback::new(move |index: usize| {
+            town.inventory.with(|inventory| {
+                inventory
+                    .bag
+                    .get(index)
+                    .is_none_or(|item| !inventory_item_allowed(item, filter_unique))
+            })
+        })),
+        on_select: Some(Callback::new(move |index: usize| {
+            let item = town.inventory.with_untracked(|inventory| {
+                inventory.bag.get(index).and_then(|item| {
+                    inventory_grid_item(item, index, bag_index_offset, filter_unique)
+                })
+            });
+            if let Some(item) = item {
+                selected_item.set(SelectedItem::InMarket(item));
+            }
+        })),
+        on_cancel: Some(Callback::new(move |_| {
+            selected_item.set(SelectedItem::None)
+        })),
+        ..Default::default()
+    };
+    view! {
+        <div class="py-2">
+            <BagGrid config compact=true />
+        </div>
+    }
+}
+
 #[component]
 pub fn BrowserEmptyItemSlot() -> impl IntoView {
     view! {
@@ -66,15 +141,82 @@ pub fn BrowserEmptyItemSlot() -> impl IntoView {
 }
 
 #[component]
+pub fn MarketItemsGrid(
+    selected_item: RwSignal<SelectedItem>,
+    #[prop(into)] items_list: Signal<Vec<SelectedMarketItem>>,
+    #[prop(into)] capacity: Signal<usize>,
+) -> impl IntoView {
+    let town_context = expect_context::<TownContext>();
+    let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
+    let config = BagConfig {
+        items: Memo::new(move |_| {
+            items_list.with(|items| {
+                items
+                    .iter()
+                    .map(|item| (*item.item_specs).clone())
+                    .collect()
+            })
+        })
+        .into(),
+        capacity,
+        max_item_level,
+        comparable_item: Some(equipped_item_comparison(town_context.inventory)),
+        context_tooltip_right: true,
+        on_select: Some(Callback::new(move |index: usize| {
+            if let Some(item) = items_list.with_untracked(|items| items.get(index).cloned()) {
+                selected_item.set(SelectedItem::InMarket(item));
+            }
+        })),
+        on_cancel: Some(Callback::new(move |_| {
+            selected_item.set(SelectedItem::None)
+        })),
+        overlay: Some(Callback::new(move |index: usize| {
+            items_list.with(|items| {
+                items
+                    .get(index)
+                    .map(|item| {
+                        view! {
+                            <div class="flex flex-col items-end rounded bg-black/75 px-1 text-xs xl:text-sm text-fuchsia-300">
+                                {item.recipient.is_some().then(|| view! { <span>"Offer"</span> })}
+                                {item
+                                    .rejected
+                                    .then(|| {
+                                        view! { <span class="text-red-400">"Rejected"</span> }
+                                    })} <div class="flex items-center gap-0.5 font-semibold">
+                                    <span>{format!("{:.0}", item.price)}</span>
+                                    <img
+                                        draggable="false"
+                                        src=img_asset("ui/gems.webp")
+                                        alt="Gems"
+                                        class="h-[2em] aspect-square shrink-0"
+                                    />
+                                </div>
+                            </div>
+                        }
+                    })
+                    .into_any()
+            })
+        })),
+        ..Default::default()
+    };
+
+    view! {
+        <div class="py-2 min-h-0 flex-1 overflow-y-auto">
+            <BagGrid config compact=true />
+        </div>
+    }
+}
+
+#[component]
 pub fn ItemsBrowser(
     selected_item: RwSignal<SelectedItem>,
     #[prop(into)] items_list: Signal<Vec<SelectedMarketItem>>,
     #[prop(optional)] reached_end_of_list: Option<RwSignal<bool>>,
     #[prop(optional)] has_more: Option<RwSignal<bool>>,
+    #[prop(default = true)] show_filter_hint: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
     let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
-
     let el = NodeRef::<Div>::new();
     if let Some(reached_end_of_list) = reached_end_of_list {
         use_infinite_scroll_with_options(
@@ -113,7 +255,7 @@ pub fn ItemsBrowser(
                 <div class="w-full h-full flex items-center justify-center">
                     <div class="flex flex-col items-center text-center gap-1">
                         <span class="text-zinc-400">"No Item Found"</span>
-                        <span class="text-zinc-400">"Maybe try other filters?"</span>
+                        {show_filter_hint.then(|| view! { <span class="text-zinc-400">"Maybe try other filters?"</span> })}
                     </div>
                 </div>
             })}
