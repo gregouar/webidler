@@ -567,7 +567,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
             </div>
 
             <CardInset class="relative min-h-0 flex-1">
-                <BagGrid config=bag.clone() />
+                <BagGrid config=bag.clone() compact=false />
             </CardInset>
 
         </MenuCard>
