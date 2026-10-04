@@ -4,6 +4,7 @@ use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
+    icons::header_icons::{InventoryIcon, PassivesIcon, PetsIcon, StatsIcon},
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
@@ -198,32 +199,33 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
-                <MenuButton on:click=move |_| open_inventory()>
-                    <span class="inline xl:hidden">"Inv."</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
+                <MenuButton on:click=move |_| open_inventory() title="Inventory">
+                    <InventoryIcon />
                 </MenuButton>
                 <TutorialPopup
                     show=show_passive_point_tutorial
                     position=TutorialPopupPosition::BelowRight
                     message="Click here to spend your Passive Point on a node in your current Grind."
                 >
-                    <MenuButton on:click=move |_| open_passives()>
-                        <span class="inline xl:hidden">"Pas."</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
+                    <MenuButton on:click=move |_| open_passives() title="Passives">
+                        <PassivesIcon />
                         {move || {
                             let points = resources.get().3;
                             if points > 0 { format!(" ({points})") } else { "".to_string() }
                         }}
                     </MenuButton>
                 </TutorialPopup>
-                <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
                 <MenuButton
                     on:click=move |_| {
                         game_context.open_pets.set(!game_context.open_pets.get_untracked())
                     }
                     disabled=move || game_context.user_unlocks.read().pets.is_empty()
+                    title="Pets"
                 >
-                    "Pets"
+                    <PetsIcon />
+                </MenuButton>
+                <MenuButton on:click=move |_| open_stats() title="Stats">
+                    <StatsIcon />
                 </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
