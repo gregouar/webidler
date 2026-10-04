@@ -35,16 +35,16 @@ pub fn use_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> NonNegative {
+    let mana_available = characters_controller::mana_available(&me.1.0.character_attrs, me.1.1);
     if skill_index >= me.1.0.skills_specs.len() || skill_index >= me.1.1.skills_states.len() {
-        return me.1.1.mana;
+        return mana_available;
     }
 
     let skill_specs = me.1.0.skills_specs.get(skill_index).unwrap();
-
     {
         let skill_state = me.1.1.skills_states.get(skill_index).unwrap();
-        if !skill_state.is_ready || me.1.1.mana.get() < skill_specs.mana_cost.get() {
-            return me.1.1.mana;
+        if !skill_state.is_ready || mana_available.get() < skill_specs.mana_cost.get() {
+            return mana_available;
         }
     }
 

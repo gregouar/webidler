@@ -182,12 +182,18 @@ pub struct ExchangeGemsStashRequest {
     pub stash_action: StashAction,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct BrowseStashItemsRequest {
-    pub filters: MarketFilters,
+// #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+// pub struct BrowseStashItemsRequest {
+//     pub filters: MarketFilters,
 
-    pub skip: u32,
-    pub limit: PaginationLimit,
+//     pub skip: u32,
+//     pub limit: PaginationLimit,
+// }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct GetStashItemsRequest {
+    pub character_id: UserCharacterId,
+    pub sort_type: InventorySortType,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
