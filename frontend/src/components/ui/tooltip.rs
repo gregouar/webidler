@@ -54,6 +54,7 @@ pub enum DynamicTooltipPosition {
     TopLeft,
     TopRight,
     AutoLeft,
+    AutoRight,
 }
 
 #[component]
@@ -105,6 +106,13 @@ pub fn DynamicTooltip() -> impl IntoView {
                     DynamicTooltipPosition::TopLeft
                 }
             }
+            DynamicTooltipPosition::AutoRight => {
+                if mouse_y < window_height / 2.0 {
+                    DynamicTooltipPosition::BottomRight
+                } else {
+                    DynamicTooltipPosition::TopRight
+                }
+            }
             x => x,
         };
 
@@ -114,6 +122,7 @@ pub fn DynamicTooltip() -> impl IntoView {
             DynamicTooltipPosition::TopLeft => (mouse_x - width, mouse_y - height),
             DynamicTooltipPosition::TopRight => (mouse_x, mouse_y - height),
             DynamicTooltipPosition::AutoLeft => (mouse_x - width, 0.0),
+            DynamicTooltipPosition::AutoRight => (mouse_x, 0.0),
             DynamicTooltipPosition::Auto => (0.0, 0.0),
         };
 
@@ -257,9 +266,7 @@ pub fn HelpTooltip(
             <span class=format!(
                 "inline-flex h-5 w-5 items-center justify-center rounded-full border border-zinc-500 text-xs text-zinc-300 cursor-help {}",
                 class.unwrap_or_default(),
-            )>
-                "?"
-            </span>
+            )>"?"</span>
         </StaticTooltip>
     }
 }

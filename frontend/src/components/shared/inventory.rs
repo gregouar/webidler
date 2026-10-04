@@ -1,7 +1,6 @@
 use std::{collections::HashSet, sync::Arc, time::Duration};
 
 use leptos::{html::Div, portal::Portal, prelude::*, web_sys};
-use leptos_use::on_click_outside;
 
 use shared::data::{
     area::AreaLevel,
@@ -12,10 +11,10 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
-        accessibility::AccessibilityContext,
         chat::chat_context::ChatContext,
         events::{EventsContext, Key},
         shared::{
+            bag_grid::{BagAction, BagConfig, BagGrid, BagSortButton, EmptySlot},
             item_card::ItemCard,
             resources::{ResourceReward, ResourceRewardOverlay},
             tooltips::ItemTooltip,
@@ -23,6 +22,7 @@ use crate::{
         ui::{
             buttons::{CloseButton, MenuButton},
             card::{CardInset, CardTitle, MenuCard},
+            context_menu::{ActionMenuRow, ActionMenuTone, ContextMenu},
             menu_panel::MenuPanel,
             tooltip::DynamicTooltipPosition,
         },
@@ -30,13 +30,6 @@ use crate::{
 };
 
 type SellQueue = RwSignal<HashSet<usize>>;
-
-#[derive(Clone, Copy, Default)]
-pub enum SellType {
-    #[default]
-    Sell,
-    Discard,
-}
 
 #[derive(Clone, Default)]
 pub enum InventoryEquipFilter {
@@ -62,7 +55,6 @@ pub struct InventoryConfig {
     pub on_equip: Option<Arc<dyn Fn(u8) + Send + Sync>>,
     pub on_sell: Option<Arc<dyn Fn(Vec<u8>) + Send + Sync>>,
     pub on_sort: Option<Arc<dyn Fn(InventorySortType) + Send + Sync>>,
-    pub sell_type: SellType,
     pub sell_reward: RwSignal<ResourceReward>,
     pub max_item_level: Signal<AreaLevel>,
     pub equip_filter: Signal<InventoryEquipFilter>,
@@ -429,13 +421,106 @@ pub fn EquippedItemContextMenu(
     }
 }
 
+/// Inventory-specific comparison supplied to any item grid displaying these items.
+pub fn equipped_item_comparison(
+    inventory: RwSignal<PlayerInventory>,
+) -> Callback<ItemSlot, Option<Arc<ItemSpecs>>> {
+    Callback::new(move |slot| {
+        inventory.with(|inventory| match inventory.equipped.get(&slot) {
+            Some(EquippedSlot::MainSlot(item)) => Some(Arc::from(item.clone())),
+            _ => None,
+        })
+    })
+}
+
+fn inventory_bag_config(inventory: &InventoryConfig, sell_queue: SellQueue) -> BagConfig {
+    let player_inventory = inventory.player_inventory;
+    let equip_filter = inventory.equip_filter;
+    let items = Memo::new(move |_| player_inventory.read().bag.clone());
+    let can_equip = Callback::new(move |index: usize| {
+        items.with(|items| {
+            items.get(index).is_some_and(|item| {
+                equip_filter.with(|filter| match filter {
+                    InventoryEquipFilter::Slot => item.base.slot.is_some(),
+                    InventoryEquipFilter::Map(area_id) => {
+                        item.base.map_specs.as_ref().is_some_and(|map| {
+                            map.area_id
+                                .as_ref()
+                                .is_none_or(|map_area| area_id == map_area)
+                        })
+                    }
+                    InventoryEquipFilter::Rune => item.base.rune_specs.is_some(),
+                    InventoryEquipFilter::Rarity { item_rarity, not } => {
+                        (item.modifiers.rarity == *item_rarity) != *not
+                    }
+                    InventoryEquipFilter::Bag => true,
+                })
+            })
+        })
+    });
+    let mut actions = Vec::new();
+    if let Some(on_equip) = inventory.on_equip.clone() {
+        actions.push(BagAction {
+            label: Callback::new(move |_| {
+                if matches!(equip_filter.get(), InventoryEquipFilter::Slot) {
+                    "Equip"
+                } else {
+                    "Use"
+                }
+                .into()
+            }),
+            visible: Some(can_equip),
+            on_action: Callback::new(move |index| {
+                on_equip(index as u8);
+                sell_queue.write().remove(&index);
+            }),
+            pending_duration: Some(Duration::from_millis(1000)),
+            ..Default::default()
+        });
+    }
+    if inventory.on_sell.is_some() {
+        actions.push(BagAction {
+            label: Callback::new(move |index| {
+                if sell_queue.read().contains(&index) {
+                    "Unsell"
+                } else {
+                    "Sell"
+                }
+                .into()
+            }),
+            tone: ActionMenuTone::Warning,
+            right_click: true,
+            on_action: Callback::new(move |index| {
+                sell_queue.update(|queue| {
+                    if !queue.remove(&index) {
+                        queue.insert(index);
+                    }
+                })
+            }),
+            ..Default::default()
+        });
+    }
+    BagConfig {
+        items: items.into(),
+        capacity: Signal::derive(move || player_inventory.read().max_bag_size as usize),
+        max_item_level: inventory.max_item_level,
+        comparable_item: Some(equipped_item_comparison(player_inventory)),
+        dimmed: Some(Callback::new(move |index| !can_equip.run(index))),
+        sell_badge: Some(Callback::new(move |index| {
+            sell_queue.read().contains(&index)
+        })),
+        show_sell_price: inventory.on_sell.is_some(),
+        actions,
+        ..Default::default()
+    }
+}
+
 #[component]
 fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
-    let next_sort_type = RwSignal::new(InventorySortType::Rarity);
     let sell_queue: SellQueue = expect_context();
+    let bag = inventory_bag_config(&inventory, sell_queue);
 
     view! {
-        // <div class="bg-zinc-800 rounded-md h-full w-[70%] gap-1 xl:gap-2 p-1 xl:p-2 shadow-lg ring-1 ring-zinc-950 relative flex flex-col">
         <MenuCard class="h-full w-[70%]">
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
@@ -454,44 +539,13 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                         .clone()
                         .map(|on_sort| {
                             view! {
-                                <MenuButton on:click=move |_| {
-                                    let sort_type = next_sort_type.get_untracked();
+                                <BagSortButton on_sort=move |sort_type| {
                                     sell_queue.write().drain();
                                     on_sort(sort_type);
-                                    next_sort_type
-                                        .set(
-                                            match sort_type {
-                                                InventorySortType::Rarity => InventorySortType::ItemType,
-                                                InventorySortType::ItemType => InventorySortType::ItemLevel,
-                                                InventorySortType::ItemLevel => InventorySortType::Rarity,
-                                            },
-                                        );
-                                }>
-                                    // {move || {
-                                    "Sort"
-                                // match next_sort_type.get() {
-                                // InventorySortType::Rarity => "Sort: Rarity",
-                                // InventorySortType::ItemType => "Sort: Type",
-                                // InventorySortType::ItemLevel => "Sort: Level",
-                                // }
-                                // }}
-                                </MenuButton>
+                                } />
                             }
                         })}
                 </div>
-
-                // {inventory
-                // .loot_preference
-                // .map(|loot_preference| {
-                // view! {
-                // <div class="flex items-center gap-2">
-                // <span class="hidden xl:inline text-zinc-400 text-sm">
-                // "Loot Preference:"
-                // </span>
-                // <LootFilterDropdown loot_preference />
-                // </div>
-                // }
-                // })}
 
                 {
                     let on_loot_filter = inventory.on_loot_filter.clone();
@@ -513,465 +567,10 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
             </div>
 
             <CardInset class="relative min-h-0 flex-1">
-                <div class="grid grid-cols-8 xl:grid-cols-10
-                gap-1 xl:gap-x-3 xl:gap-y-2 px-2 xl:px-3 relative">
-                    <For
-                        each=move || 0..inventory.player_inventory.read().max_bag_size as usize
-                        key=|i| *i
-                        let(i)
-                    >
-                        <BagItem inventory=inventory.clone() item_index=i />
-                    </For>
-                </div>
+                <BagGrid config=bag.clone() compact=false />
             </CardInset>
 
         </MenuCard>
-    }
-}
-
-#[component]
-fn BagItem(inventory: InventoryConfig, item_index: usize) -> impl IntoView {
-    let events_context: EventsContext = expect_context();
-    let chat_context: ChatContext = expect_context();
-
-    let is_being_equipped = RwSignal::new(false);
-
-    let maybe_item = Memo::new({
-        let inventory = inventory.clone();
-        move |_| {
-            inventory
-                .player_inventory
-                .read()
-                .bag
-                .get(item_index)
-                .cloned()
-                .map(Arc::new)
-        }
-    });
-
-    let comparable_item_specs = Memo::new({
-        let inventory = inventory.clone();
-        move |_| {
-            maybe_item.read().as_ref().and_then(|item_specs| {
-                item_specs.base.slot.and_then(|slot| {
-                    inventory
-                        .player_inventory
-                        .read()
-                        .equipped
-                        .get(&slot)
-                        .and_then(|equipped_slot| match equipped_slot {
-                            EquippedSlot::MainSlot(item_specs) => {
-                                Some(Arc::from(item_specs.clone()))
-                            }
-                            EquippedSlot::ExtraSlot(_) => None,
-                        })
-                })
-            })
-        }
-    });
-
-    Effect::new(move |_| {
-        let _ = maybe_item.get();
-        is_being_equipped.set(false);
-    });
-
-    let can_equip = Signal::derive(move || {
-        maybe_item
-            .read()
-            .as_ref()
-            .map(|item_specs| {
-                inventory
-                    .equip_filter
-                    .with(|equip_filter| match equip_filter {
-                        InventoryEquipFilter::Slot => item_specs.base.slot.is_some(),
-                        InventoryEquipFilter::Map(area_id) => item_specs
-                            .base
-                            .map_specs
-                            .as_ref()
-                            .map(|map_specs| {
-                                map_specs
-                                    .area_id
-                                    .as_ref()
-                                    .map(|map_area_id| *area_id == *map_area_id)
-                                    .unwrap_or(true)
-                            })
-                            .unwrap_or_default(),
-                        InventoryEquipFilter::Rune => item_specs.base.rune_specs.is_some(),
-                        InventoryEquipFilter::Rarity { item_rarity, not } => {
-                            (item_specs.modifiers.rarity == *item_rarity) != *not
-                        }
-                        InventoryEquipFilter::Bag => true,
-                    })
-            })
-            .unwrap_or_default()
-    });
-
-    let sell_queue = expect_context::<SellQueue>();
-    let is_queued_for_sale = move || sell_queue.read().contains(&item_index);
-
-    let show_menu = RwSignal::new(false);
-
-    let item_ref = NodeRef::new();
-    view! {
-        <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
-            {move || {
-                match maybe_item.get() {
-                    Some(item_specs) => {
-                        let inventory = inventory.clone();
-                        let comparable_item_specs = comparable_item_specs.get();
-
-                        view! {
-                            <div
-                                class="relative w-full h-full overflow-visible"
-                                class:brightness-50=move || !can_equip.get()
-                            >
-                                <ItemCard
-                                    item_specs=item_specs.clone()
-                                    comparable_item_specs=comparable_item_specs.clone()
-                                    on:click={
-                                        let chat_context = chat_context.clone();
-                                        move |_| {
-                                            if events_context.key_pressed(Key::Shift) {
-                                                chat_context.link_item(item_specs.clone());
-                                            } else {
-                                                show_menu.set(true);
-                                            }
-                                        }
-                                    }
-                                    // Ignore if Mobile:
-                                    on:contextmenu={
-                                        let accessibility: AccessibilityContext = expect_context();
-                                        move |ev| {
-                                            ev.prevent_default();
-                                            if !accessibility.is_on_mobile() {
-                                                sell_queue
-                                                    .update(|set| {
-                                                        if !set.remove(&item_index) {
-                                                            set.insert(item_index);
-                                                        }
-                                                    });
-                                            }
-                                        }
-                                    }
-                                    tooltip_position=DynamicTooltipPosition::AutoLeft
-                                    max_item_level=inventory.max_item_level
-                                    can_sell=inventory.on_sell.is_some()
-                                />
-
-                                <Show when=is_queued_for_sale>
-                                    <div class="absolute top-1 right-1 z-20 px-1.5 xl:px-2 py-0.5 text-[10px] xl:text-xs font-black tracking-[0.08em] text-[#ffe0d3] border border-[#8e4538] rounded-[3px] shadow-[0_3px_8px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,214,194,0.18)] bg-[linear-gradient(180deg,rgba(230,164,125,0.12),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(72,28,26,0.98),rgba(35,11,13,1))]">
-                                        {match inventory.sell_type {
-                                            SellType::Sell => "SELL",
-                                            SellType::Discard => "DISC.",
-                                        }}
-                                    </div>
-                                </Show>
-
-                                <Show when=move || is_being_equipped.try_get().unwrap_or_default()>
-                                    <div
-                                        class="absolute inset-0 z-30 w-full"
-                                        style="
-                                        background:
-                                        linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)),
-                                        linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92));
-                                        box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
-                                    ></div>
-                                </Show>
-
-                                <Show when=move || { show_menu.get() }>
-                                    <BagItemContextMenu
-                                        inventory=inventory.clone()
-                                        item_index=item_index
-                                        on_close=Callback::new(move |_| show_menu.set(false))
-                                        is_being_equipped=is_being_equipped
-                                        can_equip
-                                    />
-
-                                    {
-                                        let inventory = inventory.clone();
-                                        view! {
-                                            <Portal>
-                                                {
-                                                    let tooltip_ref = NodeRef::new();
-                                                    let tooltip_size = Memo::new(move |_| {
-                                                        let tooltip_div: Option<web_sys::HtmlDivElement> = tooltip_ref
-                                                            .get();
-                                                        tooltip_div
-                                                            .map(|tooltip_div| {
-                                                                let rect = tooltip_div.get_bounding_client_rect();
-                                                                (rect.width(), rect.height())
-                                                            })
-                                                            .unwrap_or_default()
-                                                    });
-                                                    let tooltip_pos = move || {
-                                                        let item_div: web_sys::HtmlDivElement = item_ref
-                                                            .get()
-                                                            .unwrap();
-                                                        let item_rect = item_div.get_bounding_client_rect();
-                                                        let (tooltip_width, tooltip_height) = tooltip_size.get();
-                                                        let window_height = web_sys::window()
-                                                            .unwrap()
-                                                            .inner_height()
-                                                            .unwrap()
-                                                            .as_f64()
-                                                            .unwrap();
-                                                        if tooltip_width > 0.0 {
-                                                            (
-                                                                (item_rect.left() - tooltip_width).max(0.0),
-                                                                item_rect.top().min(window_height - tooltip_height),
-                                                            )
-                                                        } else {
-                                                            (0.0, 0.0)
-                                                        }
-                                                    };
-
-                                                    view! {
-                                                        <div
-                                                            node_ref=tooltip_ref
-                                                            class="fixed left-0 z-50 transition-opacity duration-150 text-center px-2"
-                                                            style=move || {
-                                                                let (x, y) = tooltip_pos();
-                                                                format!("left:{}px; top:{}px;", x, y)
-                                                            }
-                                                        >
-                                                            <ItemTooltip
-                                                                item_specs=maybe_item.get().unwrap().clone()
-                                                                max_item_level=inventory.max_item_level
-                                                            />
-                                                        </div>
-                                                    }
-                                                }
-                                            </Portal>
-                                        }
-                                    }
-
-                                </Show>
-                            </div>
-                        }
-                            .into_any()
-                    }
-                    None => view! { <EmptySlot /> }.into_any(),
-                }
-            }}
-        </div>
-    }
-}
-
-#[component]
-pub fn BagItemContextMenu(
-    inventory: InventoryConfig,
-    item_index: usize,
-    on_close: Callback<()>,
-    is_being_equipped: RwSignal<bool>,
-    can_equip: Signal<bool>,
-) -> impl IntoView {
-    let sell_queue = expect_context::<SellQueue>();
-
-    let toggle_sell_mark = {
-        move || {
-            sell_queue.update(|set| {
-                if !set.remove(&item_index) {
-                    set.insert(item_index);
-                }
-            });
-            on_close.run(());
-        }
-    };
-
-    view! {
-        <ContextMenu on_close=on_close>
-            {{
-                inventory
-                    .on_equip
-                    .and_then(|on_equip| {
-                        can_equip
-                            .get_untracked()
-                            .then(|| {
-                                view! {
-                                    <ActionMenuRow
-                                        label=if let InventoryEquipFilter::Slot = inventory
-                                            .equip_filter
-                                            .get_untracked()
-                                        {
-                                            "Equip"
-                                        } else {
-                                            "Use"
-                                        }
-                                        tone=ActionMenuTone::Success
-                                        on_click=move || {
-                                            on_equip(item_index as u8);
-                                            sell_queue.write().remove(&item_index);
-                                            is_being_equipped.set(true);
-                                            set_timeout(
-                                                move || is_being_equipped.set(false),
-                                                Duration::from_millis(1000),
-                                            );
-                                            on_close.run(());
-                                        }
-                                    />
-                                }
-                            })
-                    })
-            }}
-            {(inventory.on_sell.is_some())
-                .then(|| {
-                    view! {
-                        <ActionMenuRow
-                            label_signal=Signal::derive(move || {
-                                if sell_queue.get().contains(&item_index) {
-                                    match inventory.sell_type {
-                                        SellType::Sell => "Unsell".to_string(),
-                                        SellType::Discard => "Keep".to_string(),
-                                    }
-                                } else {
-                                    match inventory.sell_type {
-                                        SellType::Sell => "Sell".to_string(),
-                                        SellType::Discard => "Discard".to_string(),
-                                    }
-                                }
-                            })
-                            tone=ActionMenuTone::Warning
-                            on_click=move || toggle_sell_mark()
-                        />
-                    }
-                })}
-            <ActionMenuRow
-                label="Cancel"
-                tone=ActionMenuTone::Neutral
-                on_click=move || on_close.run(())
-            />
-        </ContextMenu>
-    }
-}
-
-#[component]
-fn EmptySlot(#[prop(optional)] children: Option<Children>) -> impl IntoView {
-    view! {
-        <div class="relative isolate flex items-center justify-center w-full h-full overflow-clip rounded-[4px] xl:rounded-[6px] opacity-80 border border-[#56462f]/80 shadow-[0_3px_7px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(214,177,102,0.06),inset_0_-1px_0_rgba(0,0,0,0.38)] bg-[linear-gradient(180deg,rgba(214,177,102,0.03),rgba(0,0,0,0.12)),linear-gradient(135deg,rgba(39,38,44,0.94),rgba(15,15,18,1))]">
-            <div class="pointer-events-none absolute inset-[1px] rounded-[3px] xl:rounded-[5px] border border-white/5"></div>
-            <div class="relative z-10 flex h-full w-full items-center justify-center p-1">
-                {children.map(|children| children())}
-            </div>
-        </div>
-    }
-}
-
-#[component]
-pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView {
-    let node_ref = NodeRef::new();
-
-    let _ = on_click_outside(node_ref, move |_| {
-        on_close.run(());
-    });
-
-    view! {
-        <div
-            node_ref=node_ref
-            class="
-            absolute inset-0 z-30 flex flex-col justify-center 
-            w-full
-            p-1
-            text-center
-            overflow-clip
-            "
-            style="
-            animation: fade-in 0.2s ease-out forwards;
-            linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
-            linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
-            border: 1px solid rgba(108,83,41,0.72);
-            box-shadow:
-            0 10px 22px rgba(0,0,0,0.52),
-            inset 0 1px 0 rgba(240,215,159,0.16),
-            inset 0 -1px 0 rgba(0,0,0,0.45);
-            "
-        >
-            <div class="pointer-events-none absolute inset-[1px] border border-white/5"></div>
-            <div class="relative z-10 flex flex-col">{children()}</div>
-        </div>
-    }
-}
-
-#[derive(Clone, Copy)]
-enum ActionMenuTone {
-    Success,
-    Skill,
-    Warning,
-    Neutral,
-}
-
-#[derive(Clone, Copy)]
-struct ActionMenuRowTone {
-    text: &'static str,
-    hover_text: &'static str,
-    wash: &'static str,
-}
-
-fn action_menu_row_tone(tone: ActionMenuTone) -> ActionMenuRowTone {
-    match tone {
-        ActionMenuTone::Success => ActionMenuRowTone {
-            text: "text-amber-300",
-            hover_text: "hover:text-[#f2e5bc]",
-            wash: "rgba(247, 190, 77, 0.3)",
-        },
-        ActionMenuTone::Skill => ActionMenuRowTone {
-            text: "text-violet-300",
-            hover_text: "hover:text-fuchsia-100",
-            wash: "rgba(112,80,138,0.36)",
-        },
-        ActionMenuTone::Warning => ActionMenuRowTone {
-            text: "text-[#f86c47]",
-            hover_text: "hover:text-[#ffd4c8]",
-            wash: "rgba(192,92,61,0.30)",
-        },
-        ActionMenuTone::Neutral => ActionMenuRowTone {
-            text: "text-zinc-300",
-            hover_text: "hover:text-zinc-100",
-            wash: "rgba(255,255,255,0.10)",
-        },
-    }
-}
-
-#[component]
-fn ActionMenuRow(
-    #[prop(optional)] label: Option<&'static str>,
-    #[prop(optional, into)] label_signal: Option<Signal<String>>,
-    tone: ActionMenuTone,
-    #[prop(into)] on_click: Callback<()>,
-) -> impl IntoView {
-    let tone = action_menu_row_tone(tone);
-    view! {
-        <button
-            class=format!(
-                "btn relative w-full overflow-clip px-2 xl:px-2.5 py-1.5 xl:py-2
-                text-sm xl:text-base font-semibold tracking-[0.04em]
-                transition-colors duration-150 {} {}
-                bg-zinc-900/90
-                text-center active:brightness-90",
-                tone.text,
-                tone.hover_text,
-            )
-            on:click=move |_| on_click.run(())
-        >
-            <div
-                class="pointer-events-none absolute inset-0 hover:bg-white/[0.02]"
-                style=format!(
-                    "background:
-                    linear-gradient(90deg, transparent, {}, transparent);
-                 border-top: 1px solid rgba(255,255,255,0.04);",
-                    tone.wash,
-                )
-            />
-            <span class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent"></span>
-            <span class="drop-shadow-[0_2px_2px_rgba(0,0,0,0.95)]">
-                {move || {
-                    label_signal
-                        .as_ref()
-                        .map(|label_signal| label_signal.get())
-                        .or_else(|| label.map(str::to_string))
-                        .unwrap_or_default()
-                }}
-            </span>
-        </button>
     }
 }
 
@@ -1008,17 +607,9 @@ fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
                     }
                     disabled=disabled
                 >
-                    <span class="inline xl:hidden">
-                        {match inventory.sell_type {
-                            SellType::Sell => "Sell all",
-                            SellType::Discard => "Discard all",
-                        }}
-                    </span>
+                    <span class="inline xl:hidden">"Sell all"</span>
                     <span class="hidden xl:inline font-variant:small-caps">
-                        {match inventory.sell_type {
-                            SellType::Sell => "Sell all marked items",
-                            SellType::Discard => "Discard all marked items",
-                        }}
+                        "Sell all marked items"
                     </span>
                 </MenuButton>
                 <Portal>
@@ -1033,16 +624,6 @@ fn SellAllButton(inventory: InventoryConfig) -> impl IntoView {
         }
     })
 }
-
-// #[component]
-// pub fn LootFilterDropdown(loot_preference: RwSignal<Option<ItemCategory>>) -> impl IntoView {
-//     let options = std::iter::once(None)
-//         .chain(ItemCategory::iter().map(Some))
-//         .map(|category| (category, loot_filter_category_to_str(category).into()))
-//         .collect();
-
-//     view! { <SearchableDropdownMenu options chosen_option=loot_preference /> }
-// }
 
 pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
     use ItemCategory::*;

@@ -412,7 +412,12 @@ fn compute_character_specs(
             },
 
             StatType::StatConverter(specs) => {
-                stats_converters.push((specs.clone(), effect.modifier, effect.value, effect.bypass_ignore));
+                stats_converters.push((
+                    specs.clone(),
+                    effect.modifier,
+                    effect.value,
+                    effect.bypass_ignore,
+                ));
             }
             StatType::StatConditionalModifier { .. } => {}
 
@@ -631,53 +636,52 @@ pub fn extend_triggers_from_skills_and_statuses(
                 inherit_owner_effects,
             } = &status_effect.status_effect_type
             {
-                for status_state in status_stacks.iter() {
-                    let mut trigger_effect = trigger_specs.trigger_effect.clone();
+                let mut trigger_effect = trigger_specs.trigger_effect.clone();
 
-                    let modifier_effects: Vec<_> = trigger_effect
-                        .modifiers
-                        .iter()
-                        .filter_map(|modifier_effect| {
-                            let modifier_value = match modifier_effect.source {
-                                TriggerEffectModifierSource::TriggerStatusValue => {
-                                    status_state.value.get()
-                                }
-                                TriggerEffectModifierSource::TriggerStatusDuration => {
-                                    status_state.duration.get()
-                                }
-                                _ => 0.0,
-                            };
+                let modifier_effects: Vec<_> = trigger_effect
+                    .modifiers
+                    .iter()
+                    .filter_map(|modifier_effect| {
+                        let modifier_value = match modifier_effect.source {
+                            TriggerEffectModifierSource::TriggerStatusValue => status_stacks
+                                .iter()
+                                .map(|status_stack| status_stack.value.get())
+                                .sum(),
+                            TriggerEffectModifierSource::TriggerStatusDuration => status_stacks
+                                .iter()
+                                .map(|status_stack| status_stack.duration.get())
+                                .sum(),
+                            _ => 0.0,
+                        };
 
-                            (modifier_value > 0.0).then(|| StatEffect {
-                                stat: modifier_effect.stat.clone(),
-                                modifier: modifier_effect.modifier,
-                                value: modifier_value * modifier_effect.factor,
-                                bypass_ignore: true,
-                            })
+                        (modifier_value > 0.0).then(|| StatEffect {
+                            stat: modifier_effect.stat.clone(),
+                            modifier: modifier_effect.modifier,
+                            value: modifier_value * modifier_effect.factor,
+                            bypass_ignore: true,
                         })
-                        .collect();
+                    })
+                    .collect();
 
-                    let combined_effects =
-                        modifier_effects.iter().chain(if *inherit_owner_effects {
-                            effects.iter()
-                        } else {
-                            [].iter()
-                        });
+                let combined_effects = modifier_effects.iter().chain(if *inherit_owner_effects {
+                    effects.iter()
+                } else {
+                    [].iter()
+                });
 
-                    // Mandatory to compute skill effects even if modifier_effects is empty to
-                    // initialize trigger status with base values
-                    triggers_updater::compute_trigger_specs_effects(
-                        statuses_store,
-                        &mut trigger_effect,
-                        combined_effects.clone(),
-                    );
+                // Mandatory to compute skill effects even if modifier_effects is empty to
+                // initialize trigger status with base values
+                triggers_updater::compute_trigger_specs_effects(
+                    statuses_store,
+                    &mut trigger_effect,
+                    combined_effects.clone(),
+                );
 
-                    character_specs.triggers.push(
-                        trigger_specs.trigger.clone(),
-                        trigger_effect,
-                        Some(character_id),
-                    );
-                }
+                character_specs.triggers.push(
+                    trigger_specs.trigger.clone(),
+                    trigger_effect,
+                    Some(character_id),
+                );
             }
         }
     }

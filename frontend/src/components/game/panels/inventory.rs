@@ -13,7 +13,7 @@ use shared::{
 use crate::components::{
     game::{game_context::GameContext, websocket::WebsocketContext},
     shared::{
-        inventory::{Inventory, InventoryConfig, InventoryEquipFilter, SellType},
+        inventory::{Inventory, InventoryConfig, InventoryEquipFilter},
         loot_filter::LootFilterPanel,
         resources::show_resource_reward,
     },
@@ -25,21 +25,6 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
     let conn = expect_context::<WebsocketContext>();
     let confirm_context = expect_context::<ConfirmContext>();
-
-    // Loot filter
-    // Effect::new({
-    //     let conn = conn.clone();
-    //     move || {
-    //         conn.send(
-    //             &FilterLootMessage {
-    //                 preferred_loot: game_context.loot_preference.get(),
-    //             }
-    //             .into(),
-    //         );
-    //     }
-    // });
-
-    // let open_loot_filter = { move || {} };
     let open_loot_filter = RwSignal::new(false);
     let sell_reward = RwSignal::new(Default::default());
 
@@ -188,14 +173,12 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
 
     let inventory_config = InventoryConfig {
         player_inventory: game_context.player_inventory,
-        // loot_preference: Some(game_context.loot_preference),
         on_loot_filter: Some(Arc::new(move || open_loot_filter.set(true))),
         on_unequip: Some(Arc::new(try_unequip)),
         on_sheathe: Some(Arc::new(try_sheathe)),
         on_equip: Some(Arc::new(try_equip)),
         on_sell: Some(Arc::new(sell)),
         on_sort: Some(Arc::new(sort)),
-        sell_type: SellType::Sell,
         sell_reward,
         max_item_level: Signal::derive(move || {
             game_context.player_base_specs.read().max_area_level

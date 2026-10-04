@@ -1,6 +1,6 @@
 {
   "name"    : "Nasty Cockroach",
-  "portrait": "monsters/inn/cockroach.webp",
+  "portrait": "monsters/inn/cockroach_gdca.webp",
   "max_life": 5,
   "armor"   : {"Physical": 20, "Poison": 20},
   "block"   : {"Attack": 20, "Spell": 10},
