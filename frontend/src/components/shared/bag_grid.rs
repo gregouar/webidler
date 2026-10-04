@@ -66,7 +66,11 @@ pub struct BagConfig {
     pub items: Signal<Vec<ItemSpecs>>,
     pub capacity: Signal<usize>,
     pub max_item_level: Signal<AreaLevel>,
-    pub actions: Vec<BagAction>, // An empty action list gives a read-only bag with tooltips and a Cancel menu.
+    pub actions: Vec<BagAction>,
+    /// Select directly and open a Cancel-only menu without a tooltip.
+    pub on_select: Option<Callback<usize>>,
+    pub on_cancel: Option<Callback<usize>>,
+    pub overlay: Option<Callback<usize, AnyView>>,
     pub comparable_item: Option<Callback<ItemSlot, Option<Arc<ItemSpecs>>>>, // To allow comparison with equipped item
     pub dimmed: Option<Callback<usize, bool>>,
     pub sell_badge: Option<Callback<usize, bool>>,
@@ -114,6 +118,9 @@ fn BagItem(config: Arc<BagConfig>, item_index: usize) -> impl IntoView {
     let context_tooltip_right = config.context_tooltip_right;
     let selection_key = (config.menu_id, item_index);
     let selected = config.selected;
+    let on_select = config.on_select;
+    let on_cancel = config.on_cancel;
+    let overlay = config.overlay;
 
     let pending = RwSignal::new(false);
     let maybe_item = Memo::new({
@@ -175,104 +182,125 @@ fn BagItem(config: Arc<BagConfig>, item_index: usize) -> impl IntoView {
     let item_ref = NodeRef::<Div>::new();
 
     view! {
-        <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
-            {move || match maybe_item.get() {
-                Some(item_specs) => {
-                    let chat = chat.clone();
-                    let config = config.clone();
-                    let dimmed = dimmed.clone();
-                    view! {
-                        <div class="relative w-full h-full overflow-visible">
-                            <ItemCard
-                                item_specs=item_specs.clone()
-                                comparable_item_specs=comparable_item.get()
-                                class:brightness-50=dimmed
-                                on:click=move |_| {
-                                    if events.key_pressed(Key::Shift) {
-                                        chat.link_item(item_specs.clone());
-                                    } else {
-                                        selected.set(Some(selection_key));
-                                    }
-                                }
-                                on:contextmenu={
-                                    let config = config.clone();
-                                    move |ev| {
-                                        ev.prevent_default();
-                                        if !accessibility.is_on_mobile()
-                                            && let Some(action) = config.right_click_action(item_index)
-                                        {
-                                            invoke.run(action.clone());
+        <div class="min-w-0">
+            <div node_ref=item_ref class="relative group w-full aspect-[2/3]">
+                {move || match maybe_item.get() {
+                    Some(item_specs) => {
+                        let chat = chat.clone();
+                        let config = config.clone();
+                        let dimmed = dimmed.clone();
+                        view! {
+                            <div class="relative w-full h-full overflow-visible">
+                                <ItemCard
+                                    item_specs=item_specs.clone()
+                                    comparable_item_specs=comparable_item.get()
+                                    class:brightness-50=dimmed
+                                    on:click=move |_| {
+                                        if events.key_pressed(Key::Shift) {
+                                            chat.link_item(item_specs.clone());
+                                        } else if let Some(on_select) = on_select {
+                                            on_select.run(item_index);
+                                            selected.set(Some(selection_key));
+                                        } else {
+                                            selected.set(Some(selection_key));
                                         }
                                     }
-                                }
-                                tooltip_position=if context_tooltip_right {
-                                    DynamicTooltipPosition::AutoRight
-                                } else {
-                                    DynamicTooltipPosition::AutoLeft
-                                }
-                                max_item_level
-                                can_sell=show_sell_price
-                            />
-                            <Show when=move || badge.get().unwrap_or_default()>
-                                <div class="absolute top-1 right-1 z-20 px-1.5 xl:px-2 py-0.5 text-[10px] xl:text-xs font-black tracking-[0.08em] text-[#ffe0d3] border border-[#8e4538] rounded-[3px] shadow-[0_3px_8px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,214,194,0.18)] bg-[linear-gradient(180deg,rgba(230,164,125,0.12),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(72,28,26,0.98),rgba(35,11,13,1))]">
-                                    "SELL"
-                                </div>
-                            </Show>
-                            <Show when=move || pending.get()>
-                                <div
-                                    class="absolute inset-0 z-30 w-full"
-                                    style="background: linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)), linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92)); box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
-                                ></div>
-                            </Show>
-                            <Show when=show_menu>
-                                {
-                                    let config = config.clone();
-                                    view! {
-                                        <ContextMenu on_close=Callback::new(move |_| {
-                                            selected.set(None)
-                                        })>
-                                            {config
-                                                .actions
-                                                .clone()
-                                                .into_iter()
-                                                .map(|action| {
-                                                    view! {
-                                                        <Show when=move || action.is_visible(item_index)>
-                                                            <ActionMenuRow
-                                                                label_signal=Signal::derive(move || {
-                                                                    action.label.run(item_index)
-                                                                })
-                                                                tone=action.tone
-                                                                disabled=Signal::derive(move || {
-                                                                    pending.get() || action.is_disabled(item_index)
-                                                                })
-                                                                on_click=move || invoke.run(action.clone())
-                                                            />
-                                                        </Show>
-                                                    }
-                                                })
-                                                .collect_view()}
-                                            <ActionMenuRow
-                                                label="Cancel"
-                                                tone=ActionMenuTone::Neutral
-                                                on_click=move || selected.set(None)
-                                            />
-                                        </ContextMenu>
+                                    on:contextmenu={
+                                        let config = config.clone();
+                                        move |ev| {
+                                            ev.prevent_default();
+                                            if !accessibility.is_on_mobile()
+                                                && let Some(action) = config.right_click_action(item_index)
+                                            {
+                                                invoke.run(action.clone());
+                                            }
+                                        }
                                     }
-                                }
-                                <BagContextTooltip
-                                    item_ref
-                                    item_specs=maybe_item.get().unwrap()
+                                    tooltip_position=if context_tooltip_right {
+                                        DynamicTooltipPosition::AutoRight
+                                    } else {
+                                        DynamicTooltipPosition::AutoLeft
+                                    }
                                     max_item_level
-                                    right=context_tooltip_right
+                                    can_sell=show_sell_price
                                 />
-                            </Show>
-                        </div>
+                                {overlay
+                                    .map(|overlay| {
+                                        view! {
+                                            <div class="pointer-events-none absolute bottom-1 right-1 z-20 max-w-[calc(100%-0.5rem)]">
+                                                {move || overlay.run(item_index)}
+                                            </div>
+                                        }
+                                    })}
+                                <Show when=move || badge.get().unwrap_or_default()>
+                                    <div class="absolute top-1 right-1 z-20 px-1.5 xl:px-2 py-0.5 text-[10px] xl:text-xs font-black tracking-[0.08em] text-[#ffe0d3] border border-[#8e4538] rounded-[3px] shadow-[0_3px_8px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,214,194,0.18)] bg-[linear-gradient(180deg,rgba(230,164,125,0.12),rgba(0,0,0,0.18)),linear-gradient(180deg,rgba(72,28,26,0.98),rgba(35,11,13,1))]">
+                                        "SELL"
+                                    </div>
+                                </Show>
+                                <Show when=move || pending.get()>
+                                    <div
+                                        class="absolute inset-0 z-30 w-full"
+                                        style="background: linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)), linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92)); box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
+                                    ></div>
+                                </Show>
+                                <Show when=show_menu>
+                                    {
+                                        let config = config.clone();
+                                        view! {
+                                            <ContextMenu on_close=Callback::new(move |_| {
+                                                if selected.get_untracked() == Some(selection_key) {
+                                                    selected.set(None);
+                                                }
+                                            })>
+                                                {config
+                                                    .actions
+                                                    .clone()
+                                                    .into_iter()
+                                                    .map(|action| {
+                                                        view! {
+                                                            <Show when=move || action.is_visible(item_index)>
+                                                                <ActionMenuRow
+                                                                    label_signal=Signal::derive(move || {
+                                                                        action.label.run(item_index)
+                                                                    })
+                                                                    tone=action.tone
+                                                                    disabled=Signal::derive(move || {
+                                                                        pending.get() || action.is_disabled(item_index)
+                                                                    })
+                                                                    on_click=move || invoke.run(action.clone())
+                                                                />
+                                                            </Show>
+                                                        }
+                                                    })
+                                                    .collect_view()}
+                                                <ActionMenuRow
+                                                    label="Cancel"
+                                                    tone=ActionMenuTone::Neutral
+                                                    on_click=move || {
+                                                        selected.set(None);
+                                                        if let Some(on_cancel) = on_cancel {
+                                                            on_cancel.run(item_index);
+                                                        }
+                                                    }
+                                                />
+                                            </ContextMenu>
+                                        }
+                                    } <Show when=move || on_select.is_none()>
+                                        <BagContextTooltip
+                                            item_ref
+                                            item_specs=maybe_item.get().unwrap()
+                                            max_item_level
+                                            right=context_tooltip_right
+                                        />
+                                    </Show>
+                                </Show>
+                            </div>
+                        }
+                            .into_any()
                     }
-                        .into_any()
-                }
-                None => view! { <EmptySlot /> }.into_any(),
-            }}
+                    None => view! { <EmptySlot /> }.into_any(),
+                }}
+            </div>
         </div>
     }
 }

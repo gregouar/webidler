@@ -1,16 +1,16 @@
-use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
 use shared_chat::types::ChatChannel;
 use std::sync::Arc;
 use strum::IntoEnumIterator;
 
 use shared::{
+    computations,
     data::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy, MarketStatFilter},
         modifier::Modifier,
         skill::{DamageType, RestoreType, SkillType},
-        stash::Stash,
+        stash::{Stash, StashType},
         stat_effect::{
             ArmorStatType, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
             StatusDamageType,
@@ -19,6 +19,7 @@ use shared::{
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
         ExchangeGemsStashRequest, RejectMarketItemRequest, SellMarketItemRequest, StashAction,
+        UpgradeStashRequest,
     },
     types::{ItemPrice, PaginationLimit, Username},
 };
@@ -27,13 +28,16 @@ use crate::components::{
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
     shared::{
-        inventory::{InventoryEquipFilter, loot_filter_category_to_str},
-        resources::{GemsCounter, GemsIcon},
+        inventory::loot_filter_category_to_str,
+        resources::{GemsCounter, GemsIcon, GoldIcon},
         tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
     },
     town::{
         TownContext,
-        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        items_browser::{
+            InventoryItemGrid, ItemDetails, ItemsBrowser, MarketItemsGrid, SelectedItem,
+            SelectedMarketItem,
+        },
     },
     ui::{
         Separator,
@@ -43,7 +47,7 @@ use crate::components::{
         dropdown::{DropdownMenu, SearchableDropdownMenu},
         input::{Input, ValidatedInput},
         menu_panel::MenuPanel,
-        number::format_datetime,
+        number::{format_datetime, format_number},
         toast::*,
         tooltip::{StaticTooltip, StaticTooltipPosition},
     },
@@ -105,47 +109,15 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                         >
                             "Buy"
                         </TabButton>
-                        {move || {
-                            if disable_sell.get() {
-                                view! {
-                                    <StaticTooltip
-                                        tooltip=move || {
-                                            disable_sell
-                                                .get()
-                                                .then_some({
-                                                    "Buy a Market Stash with Gold to sell on the Market"
-                                                })
-                                        }
-                                        position=StaticTooltipPosition::Bottom
-                                        class:flex-1
-                                        class:flex
-                                    >
-                                        <TabButton
-                                            is_active=Signal::derive(move || {
-                                                active_tab.get() == MarketTab::Sell
-                                            })
-                                            disabled=disable_sell
-                                        >
-                                            "Sell"
-                                        </TabButton>
-                                    </StaticTooltip>
-                                }
-                                    .into_any()
-                            } else {
-                                view! {
-                                    <TabButton
-                                        is_active=Signal::derive(move || {
-                                            active_tab.get() == MarketTab::Sell
-                                        })
-                                        on:click=move |_| { switch_tab(MarketTab::Sell) }
-                                    >
-                                        "Sell"
-                                    </TabButton>
-                                }
-                                    .into_any()
-                            }
-                        }}
-
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == MarketTab::Sell
+                            })
+                            on:click=move |_| { switch_tab(MarketTab::Sell) }
+                            disabled=disable_sell
+                        >
+                            "Sell"
+                        </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
                                 active_tab.get() == MarketTab::Listings
@@ -174,6 +146,9 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
 
                     <div class="flex-1"></div>
 
+                    <div class="flex shrink-0 justify-end mb-2 mr-2 xl:mr-4">
+                        <MarketStashUpgradeButton />
+                    </div>
                     <span class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
                         {move || {
                             format!("({} / {})", stash.read().items_amount, stash.read().max_items)
@@ -187,44 +162,15 @@ pub fn MarketPanel(open: RwSignal<bool>) -> impl IntoView {
                             match active_tab.get() {
                                 MarketTab::Filters => view! { <MainFilters filters /> }.into_any(),
                                 MarketTab::Buy => {
-                                    view! {
-                                        <MarketBrowser
-                                            selected_item
-                                            filters
-                                            own_listings=false
-                                            is_deleted=false
-                                        />
-                                    }
-                                        .into_any()
+                                    view! { <MarketBrowser selected_item filters /> }.into_any()
                                 }
                                 MarketTab::Sell => {
-                                    view! { <InventoryBrowser selected_item /> }.into_any()
+                                    view! { <InventoryItemGrid selected_item /> }.into_any()
                                 }
                                 MarketTab::Listings => {
-                                    view! {
-                                        <MarketBrowser
-                                            selected_item
-                                            filters
-                                            own_listings=true
-                                            is_deleted=false
-                                        />
-                                    }
-                                        .into_any()
+                                    view! { <MarketListings selected_item /> }.into_any()
                                 }
-                                MarketTab::Logs => {
-                                    view! {
-                                        <MarketBrowser
-                                            selected_item
-                                            filters=Signal::derive(|| MarketFilters {
-                                                order_by: MarketOrderBy::Time,
-                                                ..Default::default()
-                                            })
-                                            own_listings=true
-                                            is_deleted=true
-                                        />
-                                    }
-                                        .into_any()
-                                }
+                                MarketTab::Logs => view! { <MarketLogs selected_item /> }.into_any(),
                             }
                         }}
                     </CardInset>
@@ -290,8 +236,8 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
 
     let do_take = {
         let character_id = town_context.character.read_untracked().character_id;
-        let stash_id = stash.read_untracked().stash_id;
         move |_| {
+            let stash_id = stash.read_untracked().stash_id;
             let amount =
                 ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default();
             spawn_local({
@@ -338,11 +284,130 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
 }
 
 #[component]
+fn MarketStashUpgradeButton() -> impl IntoView {
+    let town = expect_context::<TownContext>();
+    let backend = expect_context::<BackendClient>();
+    let toaster = expect_context::<Toasts>();
+    let stash = town.market_stash;
+    let busy = RwSignal::new(false);
+    let upgrade = Memo::new(move |_| computations::stash_upgrade(&stash.get()));
+    let disabled =
+        Signal::derive(move || busy.get() || upgrade.get().1 > town.character.read().resource_gold);
+    let do_upgrade = move |_| {
+        if disabled.get_untracked() {
+            return;
+        }
+        let character_id = town.character.read_untracked().character_id;
+        busy.set(true);
+        spawn_local(async move {
+            match backend
+                .upgrade_stash(&UpgradeStashRequest {
+                    character_id,
+                    stash_type: StashType::Market,
+                })
+                .await
+            {
+                Ok(response) => {
+                    stash.set(response.stash);
+                    town.character.write().resource_gold = response.resource_gold;
+                }
+                Err(error) => show_toast(
+                    toaster,
+                    format!("Failed to upgrade market stash: {error}"),
+                    ToastVariant::Error,
+                ),
+            }
+            busy.set(false);
+        });
+    };
+    view! {
+        <MenuButton on:click=do_upgrade disabled>
+            <span class="flex items-center gap-1 whitespace-nowrap">
+                {move || if stash.read().max_items == 0 { "Buy Stash" } else { "Upgrade Stash" }}
+                " (" {move || format_number(upgrade.get().1).to_string()}<GoldIcon />")"
+            </span>
+        </MenuButton>
+    }
+}
+
+#[component]
+fn MarketListings(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let town = expect_context::<TownContext>();
+    let backend = expect_context::<BackendClient>();
+    let toaster = expect_context::<Toasts>();
+    let items = RwSignal::new(Vec::<SelectedMarketItem>::new());
+    let refresh = RwSignal::new(0u64);
+    let request_version = RwSignal::new(0u64);
+    let stash_contents = Memo::new(move |_| {
+        let stash = town.market_stash.read();
+        (stash.stash_id, stash.max_items, stash.items_amount)
+    });
+    // Price edits clear the selection; removals also need to refresh the stash.
+    Effect::new(move || {
+        if !matches!(selected_item.get(), SelectedItem::InMarket(_)) {
+            refresh.update(|value| *value += 1);
+        }
+    });
+    Effect::new(move || {
+        refresh.track();
+        let (stash_id, capacity, _) = stash_contents.get();
+        let version = request_version.get_untracked() + 1;
+        request_version.set(version);
+        if capacity == 0 {
+            items.set(Vec::new());
+            return;
+        }
+        spawn_local(async move {
+            let response = backend.get_market_stash_items(&stash_id).await;
+            if request_version.try_get_untracked() != Some(version) {
+                return;
+            }
+            match response {
+                Ok(response) => items.set(response.items.into_iter().map(Into::into).collect()),
+                Err(error) => show_toast(
+                    toaster,
+                    format!("Failed to load listings: {error}"),
+                    ToastVariant::Error,
+                ),
+            }
+        });
+    });
+    view! {
+        <MarketItemsGrid
+            selected_item
+            items_list=items
+            capacity=Signal::derive(move || town.market_stash.read().max_items)
+        />
+    }
+}
+
+#[component]
 fn MarketBrowser(
     selected_item: RwSignal<SelectedItem>,
     #[prop(into)] filters: Signal<MarketFilters>,
-    own_listings: bool,
-    is_deleted: bool,
+) -> impl IntoView {
+    view! { <MarketList selected_item filters logs=false /> }
+}
+
+#[component]
+fn MarketLogs(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    view! {
+        <MarketList
+            selected_item
+            logs=true
+            filters=Signal::derive(|| MarketFilters {
+                order_by: MarketOrderBy::Time,
+                ..Default::default()
+            })
+        />
+    }
+}
+
+#[component]
+fn MarketList(
+    selected_item: RwSignal<SelectedItem>,
+    filters: Signal<MarketFilters>,
+    logs: bool,
 ) -> impl IntoView {
     let items_per_page = PaginationLimit::try_new(10).unwrap_or_default();
 
@@ -394,8 +459,8 @@ fn MarketBrowser(
                             skip,
                             limit: items_per_page,
                             filters,
-                            own_listings,
-                            is_deleted,
+                            own_listings: logs,
+                            is_deleted: logs,
                         })
                         .await
                         .unwrap_or_default();
@@ -410,76 +475,14 @@ fn MarketBrowser(
         }
     });
 
-    view! { <ItemsBrowser selected_item items_list reached_end_of_list has_more /> }
-}
-
-#[component]
-fn InventoryBrowser(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
-    let town_context: TownContext = expect_context();
-
-    let select_from_inventory = move |_| {
-        town_context.selected_item_index.set(None);
-        town_context.equip_filter.set(InventoryEquipFilter::Bag);
-        town_context.open_inventory.set(true);
-    };
-
-    Effect::new(move || {
-        if let Some(item_index) = town_context.selected_item_index.get() {
-            let item_specs = town_context
-                .inventory
-                .read()
-                .bag
-                .get(item_index as usize)
-                .cloned();
-
-            if let Some(item_specs) = item_specs {
-                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
-                    index: item_index as usize,
-                    item_specs: Arc::new(item_specs),
-                    price: 0.0,
-                    owner_id: None,
-                    owner_name: None,
-                    recipient: None,
-                    rejected: false,
-                    created_at: Utc::now(),
-                    deleted_at: None,
-                    deleted_by: None,
-                }));
-            }
-        }
-    });
-
-    let items_list = Signal::derive(move || {
-        town_context
-            .inventory
-            .read()
-            .bag
-            .iter()
-            .enumerate()
-            .map(|(index, item)| SelectedMarketItem {
-                index,
-                owner_id: None,
-                owner_name: None,
-                // owner_id: town_context.character.read_untracked().character_id,
-                // owner_name: town_context.character.read_untracked().name.clone(),
-                recipient: None,
-                item_specs: Arc::new(item.clone()),
-                price: 0.0,
-                rejected: false,
-                created_at: Utc::now(),
-                deleted_at: None,
-                deleted_by: None,
-            })
-            .collect::<Vec<_>>()
-    });
-
     view! {
-        <div class="w-full px-2 pt-2">
-            <MenuButton class="w-full" on:click=select_from_inventory>
-                "Pick from Inventory"
-            </MenuButton>
-        </div>
-        <ItemsBrowser selected_item items_list />
+        <ItemsBrowser
+            selected_item
+            items_list
+            reached_end_of_list
+            has_more
+            show_filter_hint=!logs
+        />
     }
 }
 

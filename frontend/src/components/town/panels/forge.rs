@@ -18,13 +18,10 @@ use std::sync::Arc;
 
 use crate::components::{
     backend_client::BackendClient,
-    shared::{
-        inventory::{InventoryEquipFilter, loot_filter_category_to_str},
-        resources::GemsIcon,
-    },
+    shared::{inventory::loot_filter_category_to_str, resources::GemsIcon},
     town::{
         TownContext,
-        items_browser::{ItemDetails, ItemsBrowser, SelectedItem, SelectedMarketItem},
+        items_browser::{InventoryItemGrid, ItemDetails, SelectedItem, SelectedMarketItem},
     },
     ui::{
         Separator,
@@ -107,9 +104,10 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         {move || match active_tab.get() {
                             ForgeTab::Affix | ForgeTab::UniqueUpgrade => {
                                 view! {
-                                    <InventoryBrowser
+                                    <InventoryItemGrid
                                         selected_item
                                         filter_unique=active_tab.get() == ForgeTab::UniqueUpgrade
+                                        bag_index_offset=9
                                     />
                                 }
                                     .into_any()
@@ -136,102 +134,6 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </MenuCard>
         </MenuPanel>
-    }
-}
-
-#[component]
-fn InventoryBrowser(selected_item: RwSignal<SelectedItem>, filter_unique: bool) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
-
-    let select_from_inventory = move |_| {
-        town_context.selected_item_index.set(None);
-        town_context.equip_filter.set(InventoryEquipFilter::Rarity {
-            item_rarity: ItemRarity::Unique,
-            not: !filter_unique,
-        });
-        town_context.open_inventory.set(true);
-    };
-
-    Effect::new(move || {
-        if let Some(item_index) = town_context.selected_item_index.get() {
-            let item_specs = town_context
-                .inventory
-                .read()
-                .nth(item_index as usize)
-                .cloned();
-
-            if let Some(item_specs) = item_specs {
-                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
-                    index: item_index as usize,
-                    item_specs: Arc::new(item_specs),
-                    price: 0.0,
-                    owner_id: None,
-                    owner_name: None,
-                    recipient: None,
-                    rejected: false,
-                    created_at: Utc::now(),
-                    deleted_at: None,
-                    deleted_by: None,
-                }));
-            }
-
-            town_context.selected_item_index.set(None);
-        }
-    });
-
-    let items_list = Signal::derive({
-        move || {
-            town_context.inventory.with(|inventory| {
-                inventory
-                    .equipped_items()
-                    .map(|(slot, item)| SelectedMarketItem {
-                        index: slot.into(),
-                        owner_id: None,
-                        owner_name: None,
-                        // owner_id: town_context.character.read_untracked().character_id,
-                        // owner_name: town_context.character.read_untracked().name.clone(),
-                        recipient: Some((
-                            town_context.character.read_untracked().character_id,
-                            "".into(),
-                        )),
-                        item_specs: Arc::new(*item.clone()),
-                        price: 0.0,
-                        rejected: false,
-                        created_at: Utc::now(),
-                        deleted_at: None,
-                        deleted_by: None,
-                    })
-                    .chain(inventory.bag.iter().enumerate().map(|(index, item)| {
-                        SelectedMarketItem {
-                            index: index + 9,
-                            // owner_id: town_context.character.read_untracked().character_id,
-                            // owner_name: town_context.character.read_untracked().name.clone(),
-                            owner_id: None,
-                            owner_name: None,
-                            recipient: None,
-                            item_specs: Arc::new(item.clone()),
-                            price: 0.0,
-                            rejected: false,
-                            created_at: Utc::now(),
-                            deleted_at: None,
-                            deleted_by: None,
-                        }
-                    }))
-                    .filter(|market_item| {
-                        (market_item.item_specs.base.rarity == ItemRarity::Unique) == filter_unique
-                    })
-                    .collect::<Vec<_>>()
-            })
-        }
-    });
-
-    view! {
-        <div class="w-full px-2 pt-2">
-            <MenuButton class="w-full" on:click=select_from_inventory>
-                "Pick from Inventory"
-            </MenuButton>
-        </div>
-        <ItemsBrowser selected_item items_list />
     }
 }
 
