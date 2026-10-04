@@ -293,7 +293,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 
                     <div class="flex-1"></div>
 
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 mb-2">
                         <BagSortButton
                             on_sort=sort_both
                             disabled=Signal::derive(move || busy.get() || loading.get())
@@ -302,7 +302,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 
                     <div class="flex-1"></div>
 
-                    <div class="flex justify-end">
+                    <div class="flex justify-end mb-2">
                         <MenuButton on:click=do_upgrade disabled=upgrade_disabled>
                             <span class="flex items-center gap-1">
                                 {move || {
@@ -313,7 +313,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                         </MenuButton>
                     </div>
                 </CardHeader>
-                <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1 mt-2">
+                <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
                     <CardInset class="min-w-0 min-h-0" pad=false>
                         <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                             <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
