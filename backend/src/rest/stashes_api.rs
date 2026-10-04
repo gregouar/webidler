@@ -12,12 +12,12 @@ use shared::{
     data::stash::{Stash, StashId, StashType},
     http::{
         client::{
-            BrowseStashItemsRequest, ExchangeGemsStashRequest, GetStashItemsRequest, StashAction,
-            StoreStashItemRequest, TakeStashItemRequest, UpgradeStashRequest,
+            ExchangeGemsStashRequest, GetStashItemsRequest, StashAction, StoreStashItemRequest,
+            TakeStashItemRequest, UpgradeStashRequest,
         },
         server::{
-            BrowseStashItemsResponse, ExchangeGemsStashResponse, GetStashItemsResponse,
-            StoreStashItemResponse, TakeStashItemResponse, UpgradeStashResponse,
+            ExchangeGemsStashResponse, GetStashItemsResponse, StoreStashItemResponse,
+            TakeStashItemResponse, UpgradeStashResponse,
         },
     },
 };
@@ -38,7 +38,7 @@ use super::AppError;
 pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/stashes/upgrade", post(post_upgrade_stash))
-        .route("/stashes/{stash_id}", post(post_browse_stash))
+        // .route("/stashes/{stash_id}", post(post_browse_stash))
         .route("/stashes/{stash_id}/items", post(post_get_stash_items))
         .route("/stashes/{stash_id}/gems", post(post_exchange_gems))
         .route("/stashes/{stash_id}/take", post(post_take_stash_item))
@@ -228,39 +228,39 @@ pub async fn post_get_stash_items(
     Ok(Json(GetStashItemsResponse { items }))
 }
 
-pub async fn post_browse_stash(
-    State(db_pool): State<db::DbPool>,
-    State(master_store): State<MasterStore>,
-    Extension(user): Extension<User>,
-    Path(stash_id): Path<StashId>,
-    Json(payload): Json<BrowseStashItemsRequest>,
-) -> Result<Json<BrowseStashItemsResponse>, AppError> {
-    let stash = db::stashes::get_stash(&db_pool, &stash_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
+// pub async fn post_browse_stash(
+//     State(db_pool): State<db::DbPool>,
+//     State(master_store): State<MasterStore>,
+//     Extension(user): Extension<User>,
+//     Path(stash_id): Path<StashId>,
+//     Json(payload): Json<BrowseStashItemsRequest>,
+// ) -> Result<Json<BrowseStashItemsResponse>, AppError> {
+//     let stash = db::stashes::get_stash(&db_pool, &stash_id)
+//         .await?
+//         .ok_or(AppError::NotFound)?;
 
-    if stash.user_id != user.user_id {
-        return Err(AppError::Forbidden);
-    }
-    let (items, has_more) = db::stash_items::read_stash_items(
-        &db_pool,
-        stash_id,
-        payload.filters,
-        payload.skip as i64,
-        payload.limit.into_inner(),
-    )
-    .await?;
+//     if stash.user_id != user.user_id {
+//         return Err(AppError::Forbidden);
+//     }
+//     let (items, has_more) = db::stash_items::read_stash_items(
+//         &db_pool,
+//         stash_id,
+//         payload.filters,
+//         payload.skip as i64,
+//         payload.limit.into_inner(),
+//     )
+//     .await?;
 
-    Ok(Json(BrowseStashItemsResponse {
-        items: items
-            .into_iter()
-            .filter_map(|item_entry| {
-                stashes_controller::into_stash_item(&master_store.items_store, item_entry)
-            })
-            .collect(),
-        has_more,
-    }))
-}
+//     Ok(Json(BrowseStashItemsResponse {
+//         items: items
+//             .into_iter()
+//             .filter_map(|item_entry| {
+//                 stashes_controller::into_stash_item(&master_store.items_store, item_entry)
+//             })
+//             .collect(),
+//         has_more,
+//     }))
+// }
 
 pub async fn post_take_stash_item(
     State(db_pool): State<db::DbPool>,

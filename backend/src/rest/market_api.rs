@@ -1,9 +1,17 @@
 use anyhow::{Result, anyhow};
 
-use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
+use axum::{
+    Extension, Json, Router,
+    extract::{Path, State},
+    middleware,
+    routing::{get, post},
+};
 
 use shared::{
-    data::{market::MarketItem, stash::StashType},
+    data::{
+        market::MarketItem,
+        stash::{StashId, StashType},
+    },
     http::{
         client::{
             BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -11,7 +19,7 @@ use shared::{
         },
         server::{
             BrowseMarketItemsResponse, BuyMarketItemResponse, EditMarketItemResponse,
-            RejectMarketItemResponse, SellMarketItemResponse,
+            GetMarketStashItemsResponse, RejectMarketItemResponse, SellMarketItemResponse,
         },
     },
 };
@@ -37,6 +45,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/market/reject", post(post_reject_market_item))
         .route("/market/sell", post(post_sell_market_item))
         .route("/market/edit", post(post_edit_market_item))
+        .route("/market/listings/{stash_id}", get(get_market_stash_items))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
@@ -309,6 +318,28 @@ pub async fn post_edit_market_item(
     tx.commit().await?;
 
     Ok(Json(EditMarketItemResponse {}))
+}
+
+pub async fn get_market_stash_items(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Path(stash_id): Path<StashId>,
+) -> Result<Json<GetMarketStashItemsResponse>, AppError> {
+    let stash = db::stashes::get_stash(&db_pool, &stash_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+    if stash.user_id != user.user_id || stash.stash_type.0 != StashType::Market {
+        return Err(AppError::Forbidden);
+    }
+
+    let items: Vec<_> = db::market::read_full_market_stash_items(&db_pool, stash_id)
+        .await?
+        .into_iter()
+        .filter_map(|entry| into_market_item(&master_store.items_store, entry))
+        .collect();
+
+    Ok(Json(GetMarketStashItemsResponse { items }))
 }
 
 fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Option<MarketItem> {
