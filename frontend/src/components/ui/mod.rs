@@ -2,6 +2,7 @@ pub mod buttons;
 pub mod card;
 pub mod checkbox;
 pub mod confirm;
+pub mod context_menu;
 pub mod dropdown;
 pub mod fullscreen;
 pub mod header;

@@ -521,7 +521,7 @@ pub fn TabButton(
                     "btn relative {}
                     tracking-[0.08em]
                     inline-flex shrink-0 items-center justify-center
-                    px-2 xl:px-3 py-1 xl:py-2
+                    px-2 xl:px-3 py-1 xl:py-3
                     text-sm xl:text-base font-extrabold {}
                     border-t border-l border-r rounded-t-[6px] {}
                     transition-all duration-200

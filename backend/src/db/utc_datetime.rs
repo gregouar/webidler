@@ -31,6 +31,10 @@ impl Type<Sqlite> for UtcDateTime {
     fn type_info() -> <Sqlite as sqlx::Database>::TypeInfo {
         <NaiveDateTime as Type<Sqlite>>::type_info()
     }
+
+    fn compatible(ty: &<Sqlite as sqlx::Database>::TypeInfo) -> bool {
+        <NaiveDateTime as Type<Sqlite>>::compatible(ty)
+    }
 }
 
 impl<'r> Decode<'r, Sqlite> for UtcDateTime {

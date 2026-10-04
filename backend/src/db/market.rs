@@ -4,6 +4,7 @@ use shared::data::{
     market::MarketFilters,
     modifier::invert_formatted_effect_value,
     realms::{Realm, RealmId},
+    stash::StashId,
     user::{UserCharacterId, UserId},
 };
 
@@ -107,6 +108,42 @@ pub async fn sell_item<'c>(
         realm_id
     )
     .fetch_one(&mut **executor)
+    .await
+}
+
+/// All active listings from one stash, including private and rejected offers.
+pub async fn read_full_market_stash_items<'c>(
+    executor: impl DbExecutor<'c>,
+    stash_id: StashId,
+) -> Result<Vec<MarketEntry>, sqlx::Error> {
+    sqlx::query_as::<_, MarketEntry>(
+        r#"
+        SELECT 
+            market.market_id, 
+            stash_items.stash_item_id,
+            owner.user_id AS owner_id, 
+            owner.username AS owner_name,
+            market.recipient_id, 
+            recipient.username AS recipient_name,
+            market.rejected, 
+            market.price, stash_items.item_data,
+            market.created_at, 
+            market.deleted_at,
+            buyer.user_id AS deleted_by_id, 
+            buyer.username AS deleted_by_name
+        FROM market
+        INNER JOIN stash_items ON stash_items.stash_item_id = market.stash_item_id
+        INNER JOIN stashes ON stashes.stash_id = stash_items.stash_id
+        INNER JOIN users AS owner ON owner.user_id = stashes.user_id
+        LEFT JOIN users AS recipient ON recipient.user_id = market.recipient_id
+        LEFT JOIN users AS buyer ON buyer.user_id = market.deleted_by
+        WHERE stash_items.stash_id = $1
+            AND stash_items.deleted_at IS NULL AND market.deleted_at IS NULL
+        ORDER BY market.created_at DESC
+        "#,
+    )
+    .bind(stash_id)
+    .fetch_all(executor)
     .await
 }
 
