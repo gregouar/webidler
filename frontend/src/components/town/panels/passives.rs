@@ -453,11 +453,11 @@ fn ConfirmAscendButton(
     ascension_cost: RwSignal<f64>,
     has_changed: Memo<bool>,
 ) -> impl IntoView {
-    let do_ascend = Arc::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let toaster = expect_context::<Toasts>();
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let toaster = expect_context::<Toasts>();
 
+    let do_ascend = Arc::new({
         let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({
@@ -513,10 +513,10 @@ fn RefundAscendButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
 ) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let toaster = expect_context::<Toasts>();
     let do_reset = Arc::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let toaster = expect_context::<Toasts>();
         let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({

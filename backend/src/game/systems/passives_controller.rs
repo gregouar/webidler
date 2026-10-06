@@ -1,3 +1,4 @@
+use sqlx::Transaction;
 use std::collections::{HashMap, VecDeque};
 
 use shared::{
@@ -11,7 +12,6 @@ use shared::{
         user::UserCharacterId,
     },
 };
-use sqlx::Transaction;
 
 use crate::{
     app_state::MasterStore,
@@ -145,7 +145,6 @@ pub async fn update_ascension(
 
     db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
         .await?;
-
     Ok(())
 }
 

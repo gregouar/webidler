@@ -15,10 +15,10 @@ use shared::{
             SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SocketPassiveRequest,
         },
         server::{
-            AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, GetStatusesResponse,
-            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
-            SocketPassiveResponse,
+            AscendPassivesResponse, BuyBenedictionsResponse, GetAchievementsResponse,
+            GetAreasResponse, GetBenedictionsResponse, GetCosmeticsResponse, GetPassivesResponse,
+            GetPetsResponse, GetSkillsResponse, GetStatusesResponse, SaveFavoriteSkillsResponse,
+            SavePassivesResponse, SaveSkillMasteryUpgradesResponse, SocketPassiveResponse,
         },
     },
 };
@@ -65,8 +65,11 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/game/areas", get(get_areas))
         .route("/game/skills", get(get_skills))
         .route("/game/statuses", get(get_statuses))
+        .route("/game/cosmetics", get(get_cosmetics))
+        .route("/game/pets", get(get_pets))
         .route("/game/passives", get(get_passives))
         .route("/game/benedictions", get(get_benedictions))
+        .route("/game/achievements", get(get_achievements))
         .merge(auth_routes)
 }
 
@@ -96,6 +99,30 @@ pub async fn get_statuses(
 ) -> Result<Json<GetStatusesResponse>, AppError> {
     Ok(Json(GetStatusesResponse {
         statuses: (*master_store.statuses_store).clone().into_iter().collect(),
+    }))
+}
+
+pub async fn get_cosmetics(
+    State(master_store): State<MasterStore>,
+) -> Result<Json<GetCosmeticsResponse>, AppError> {
+    Ok(Json(GetCosmeticsResponse {
+        cosmetics: (*master_store.cosmetics_store).clone(),
+    }))
+}
+
+pub async fn get_pets(
+    State(master_store): State<MasterStore>,
+) -> Result<Json<GetPetsResponse>, AppError> {
+    Ok(Json(GetPetsResponse {
+        pets: (*master_store.pets_store).clone(),
+    }))
+}
+
+pub async fn get_achievements(
+    State(master_store): State<MasterStore>,
+) -> Result<Json<GetAchievementsResponse>, AppError> {
+    Ok(Json(GetAchievementsResponse {
+        achievements: (*master_store.achievements_store).clone(),
     }))
 }
 

@@ -6,6 +6,7 @@ use crate::components::settings::{GraphicsQuality, SettingsContext};
 pub fn MenuButton(
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
     #[prop(optional)] button_type: Option<&'static str>,
+    #[prop(optional)] title: Option<&'static str>,
     #[prop(optional)] class: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
@@ -16,7 +17,7 @@ pub fn MenuButton(
             class=move || {
                 let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => {
-                        "btn relative isolate overflow-clip
+                        "btn button-press-high relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -40,7 +41,7 @@ pub fn MenuButton(
                     disabled:before:hidden"
                     }
                     GraphicsQuality::Medium => {
-                        "btn relative isolate overflow-clip
+                        "btn button-press-medium relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow-lg/50 shadow-black/90
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -62,7 +63,7 @@ pub fn MenuButton(
                      disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
-                        "btn relative isolate overflow-clip
+                        "btn button-press-low relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
                     py-1 xl:py-2 px-2 xl:px-4 rounded-[4px] xl:rounded-[6px]
@@ -111,6 +112,7 @@ pub fn MenuButton(
                 }
             }
             type=button_type
+            title=title
             disabled=disabled
         >
             <Show when=move || settings.graphics_quality() != GraphicsQuality::Low>
@@ -233,7 +235,7 @@ pub fn FancyButton(
             class=move || {
                 let quality_class = match settings.graphics_quality() {
                     GraphicsQuality::High => {
-                        "btn relative isolate overflow-clip
+                        "btn button-press-high relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -257,7 +259,7 @@ pub fn FancyButton(
                     disabled:before:hidden"
                     }
                     GraphicsQuality::Medium => {
-                        "btn relative isolate overflow-clip
+                        "btn button-press-medium relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold text-shadow shadow-black/90
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]
@@ -274,7 +276,7 @@ pub fn FancyButton(
                     disabled:shadow-none"
                     }
                     GraphicsQuality::Low => {
-                        "btn relative isolate overflow-clip
+                        "btn button-press-low relative isolate overflow-clip
                     tracking-[0.08em]
                     text-stone-100 font-extrabold
                     px-2 xl:px-3 rounded-[4px] xl:rounded-[6px]

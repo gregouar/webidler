@@ -1,7 +1,7 @@
 use codee::string::JsonSerdeCodec;
-use leptos::prelude::*;
+use leptos::{prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
-use leptos_use::storage;
+use leptos_use::{storage, watch_debounced};
 
 use shared::{
     data::user::{UserCharacterActivity, UserCharacterId},
@@ -12,7 +12,12 @@ use crate::components::{
     backend_client::{BackendClient, BackendError},
     chat::chat_panel::ChatPanel,
     data_context::DataContext,
-    shared::{player_count::PlayerCount, settings::SettingsModal},
+    shared::{
+        achievements::{AchievementsPanel, notify_newly_unlocked_achievements},
+        pets::PetsPanel,
+        player_count::PlayerCount,
+        settings::SettingsModal,
+    },
     town::{
         TownContext,
         header_menu::HeaderMenu,
@@ -27,7 +32,7 @@ use crate::components::{
         },
         town_scene::TownScene,
     },
-    ui::loading_screen::LoadingScreen,
+    ui::{loading_screen::LoadingScreen, toast::Toasts},
 };
 
 #[component]
@@ -37,9 +42,64 @@ pub fn TownPage() -> impl IntoView {
 
     let data_context: DataContext = expect_context();
     let backend = expect_context::<BackendClient>();
+    let toaster = expect_context::<Toasts>();
 
     let (get_character_id_storage, _, _) =
         storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+    let town_loaded = RwSignal::new(false);
+    let static_data_loaded = RwSignal::new(false);
+    let achievements_request_in_flight = RwSignal::new(false);
+    let achievements_request_pending = RwSignal::new(false);
+
+    let reconcile_achievements = Callback::new(move |()| {
+        if achievements_request_in_flight.get_untracked() {
+            achievements_request_pending.set(true);
+            return;
+        }
+
+        achievements_request_in_flight.set(true);
+        spawn_local(async move {
+            loop {
+                achievements_request_pending.set(false);
+                let character_id = town_context.character.read_untracked().character_id;
+                match backend.post_reconcile_achievements(&character_id).await {
+                    Ok(response) => {
+                        town_context.user_unlocks.set(response.user_unlocks);
+                        notify_newly_unlocked_achievements(
+                            data_context,
+                            toaster,
+                            response.newly_unlocked_achievements,
+                        );
+                    }
+                    Err(error) => {
+                        leptos::logging::error!("Failed to reconcile town achievements: {error}")
+                    }
+                }
+
+                if !achievements_request_pending.get_untracked() {
+                    break;
+                }
+            }
+            achievements_request_in_flight.set(false);
+        });
+    });
+
+    let _ = watch_debounced(
+        move || {
+            town_context.character.track();
+            town_context.areas.track();
+            town_context.inventory.track();
+            town_context.passives_tree_ascension.track();
+            town_context.player_skill_masteries.track();
+            town_loaded.get() && static_data_loaded.get()
+        },
+        move |loaded, _, _| {
+            if *loaded {
+                reconcile_achievements.run(());
+            }
+        },
+        1000.0,
+    );
 
     let passives_tree_specs = LocalResource::new({
         move || async move {
@@ -65,6 +125,8 @@ pub fn TownPage() -> impl IntoView {
         move || async move {
             if data_context.load_data(backend).await.is_err() {
                 use_navigate()("/", Default::default());
+            } else {
+                static_data_loaded.set(true);
             }
         }
     });
@@ -88,10 +150,16 @@ pub fn TownPage() -> impl IntoView {
                     market_stash,
                     skill_masteries,
                     skill_mastery_skill_specs,
+                    user_unlocks,
+                    pets,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
                         use_navigate()("/game", Default::default())
                     }
+                    town_context
+                        .character_cosmetics
+                        .set(character.cosmetics.clone());
+                    town_context.player_pets.set(pets);
                     town_context.character.set(character);
                     town_context.areas.set(areas);
                     town_context.inventory.set(inventory);
@@ -102,7 +170,8 @@ pub fn TownPage() -> impl IntoView {
                     town_context
                         .skill_mastery_skill_specs
                         .set(skill_mastery_skill_specs);
-                    // town_context.last_grind.set(last_grind);
+
+                    town_context.user_unlocks.set(user_unlocks);
                     if let Some(character_stash) = character_stash {
                         town_context.character_stash.set(character_stash);
                     }
@@ -112,6 +181,7 @@ pub fn TownPage() -> impl IntoView {
                     if let Some(market_stash) = market_stash {
                         town_context.market_stash.set(market_stash);
                     }
+                    town_loaded.set(true);
                 }
                 Err(BackendError::Unauthorized(_) | BackendError::NotFound) => {
                     use_navigate()("/", Default::default())
@@ -147,6 +217,18 @@ pub fn TownPage() -> impl IntoView {
                             <ForgePanel open=town_context.open_forge />
                             <TownInventoryPanel open=town_context.open_inventory />
                             <SettingsModal open=town_context.open_settings />
+                            <AchievementsPanel
+                                open=town_context.open_achievements
+                                user_unlocks=town_context.user_unlocks
+                            />
+                            <PetsPanel
+                                open=town_context.open_pets
+                                character_id=Signal::derive(move || {
+                                    town_context.character.read().character_id
+                                })
+                                player_pets=town_context.player_pets
+                                user_unlocks=town_context.user_unlocks
+                            />
                         </div>
                     }
                 })}

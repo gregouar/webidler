@@ -10,16 +10,17 @@ use backend_shared::profanities_checker::ProfanitiesChecker;
 use shared::{
     data::{
         area::AreaLevel,
-        // game_stats::GrindStats,
+        cosmetics::{CharacterCosmetics, CosmeticType},
         realms::Realm,
         stash::StashType,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserGrindArea, UserId},
     },
     http::{
-        client::{CreateCharacterRequest, UpdateCharacterRequest},
+        client::{CreateCharacterRequest, UpdateCharacterPetsRequest, UpdateCharacterRequest},
         server::{
             CreateCharacterResponse, DeleteCharacterResponse, GetCharacterDetailsResponse,
-            GetUserCharactersResponse, UpdateCharacterResponse,
+            GetUserCharactersResponse, ReconcileAchievementsResponse, UpdateCharacterPetsResponse,
+            UpdateCharacterResponse,
         },
     },
     types::Username,
@@ -29,11 +30,16 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, User},
     db,
-    game::data::{
-        inventory_data::inventory_data_to_player_inventory,
-        passives::ascension_data_to_passives_tree_ascension,
+    game::{
+        data::{
+            inventory_data::inventory_data_to_player_inventory,
+            passives::ascension_data_to_passives_tree_ascension,
+        },
+        systems::{
+            achievements_controller::{self, AchievementContext},
+            skills_updater,
+        },
     },
-    game::systems::skills_updater,
     rest::utils::{
         MsgPack, verify_character_in_town, verify_character_not_deleted, verify_character_user,
     },
@@ -46,6 +52,14 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/users/{user_id}/characters", post(post_create_character))
         .route("/characters/{character_id}", get(get_character_details))
         .route("/characters/{character_id}", post(post_update_character))
+        .route(
+            "/characters/{character_id}/pets",
+            post(post_update_character_pets),
+        )
+        .route(
+            "/characters/{character_id}/achievements/reconcile",
+            post(post_reconcile_achievements),
+        )
         .route("/characters/{character_id}", delete(delete_character))
         .layer(middleware::from_fn_with_state(
             app_state,
@@ -64,6 +78,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 
 async fn post_create_character(
     State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
     State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Path(user_id): Path<UserId>,
     Extension(current_user): Extension<User>,
@@ -80,6 +95,8 @@ async fn post_create_character(
         ));
     }
 
+    verify_portrait_unlocked(&db_pool, &master_store, &user_id, &payload.portrait).await?;
+
     let realm = match (payload.legacy, payload.is_ssf) {
         (true, true) => Realm::LegacySSF,
         (true, false) => Realm::Legacy,
@@ -91,7 +108,7 @@ async fn post_create_character(
         &db_pool,
         &user_id,
         &payload.name,
-        &format!("adventurers/{}.webp", payload.portrait.into_inner()),
+        &payload.portrait,
         realm,
         payload.is_ssf,
     )
@@ -112,6 +129,7 @@ async fn get_user_characters(
             .into_iter()
             .map(|c| c.into())
             .collect(),
+        user_unlocks: db::user_unlocks::load_user_unlocks(&db_pool, &user_id).await?,
     }))
 }
 
@@ -148,23 +166,27 @@ async fn read_character_details(
         .ok_or(AppError::NotFound)?;
 
     let (
+        user_unlocks,
+        pets,
         areas_completed,
         character_data,
         passives_build,
-        // last_grind_data,
         character_stash,
         user_stash,
         market_stash,
     ) = tokio::join!(
+        db::user_unlocks::load_user_unlocks(&db_pool, &character.user_id),
+        db::characters_data::load_character_pets(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
         db::characters_builds::load_character_build(&db_pool, &character_id),
-        // db::game_stats::load_last_game_stats(&db_pool, &character_id),
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Character),
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::User),
         db::stashes::get_character_stash_by_type(&db_pool, &character, StashType::Market),
     );
 
+    let user_unlocks = user_unlocks?;
+    let pets = pets?;
     let areas_completed = areas_completed?;
     let (inventory_data, ascension_data, benedictions, mut skill_masteries) =
         character_data?.unwrap_or_default();
@@ -212,15 +234,10 @@ async fn read_character_details(
         &skill_masteries,
     );
 
-    // let last_grind = last_grind_data.map(|last_grind_data| {
-    //     let (_, skills) = last_grind_data;
-    //     GrindStats {
-    //         skills: skills.unwrap_or_default(),
-    //     }
-    // });
+    let character: UserCharacter = character.into();
 
     Ok(MsgPack(GetCharacterDetailsResponse {
-        character: character.into(),
+        character,
         areas,
         inventory,
         ascension,
@@ -232,11 +249,109 @@ async fn read_character_details(
         market_stash,
         skill_masteries,
         skill_mastery_skill_specs,
+        user_unlocks,
+        pets,
     }))
+}
+
+async fn post_reconcile_achievements(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Path(character_id): Path<UserCharacterId>,
+    Extension(user): Extension<User>,
+) -> Result<Json<ReconcileAchievementsResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+    let character = db::characters::read_character(&mut *tx, &character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+    verify_character_not_deleted(&character)?;
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    let areas = db::characters::read_character_areas_completed(&mut *tx, &character_id).await?;
+    let (inventory_data, ascension_data, _, skill_masteries) =
+        db::characters_data::load_character_data(&mut *tx, &character_id)
+            .await?
+            .ok_or(AppError::NotFound)?;
+    let already_unlocked =
+        db::user_unlocks::read_achievements(&mut *tx, &character.user_id).await?;
+
+    let area_levels = areas
+        .into_iter()
+        .map(|area| (area.area_id, area.max_area_level as AreaLevel))
+        .collect();
+    let inventory = inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let ascension =
+        ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
+
+    let newly_unlocked_achievements = achievements_controller::check_achievements(
+        &master_store,
+        &already_unlocked,
+        &AchievementContext {
+            area_levels: &area_levels,
+            power_level: character.max_area_level as AreaLevel,
+            player_level: 0,
+            skill_masteries: &skill_masteries,
+            ascension: &ascension,
+            inventory: &inventory,
+        },
+    );
+
+    achievements_controller::unlock_achievements(
+        &mut tx,
+        &master_store,
+        character.user_id,
+        &newly_unlocked_achievements,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    let user_unlocks = db::user_unlocks::load_user_unlocks(&db_pool, &user.user_id).await?;
+
+    Ok(Json(ReconcileAchievementsResponse {
+        user_unlocks,
+        newly_unlocked_achievements,
+    }))
+}
+
+async fn post_update_character_pets(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Path(character_id): Path<UserCharacterId>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<UpdateCharacterPetsRequest>,
+) -> Result<Json<UpdateCharacterPetsResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+    let character = db::characters::read_character(&mut *tx, &character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+    verify_character_not_deleted(&character)?;
+    verify_character_user(&character, &user)?;
+
+    let unlocked = db::user_unlocks::read_pets(&mut *tx, &user.user_id).await?;
+    if payload
+        .pets
+        .values()
+        .any(|id| !unlocked.contains(id) || !master_store.pets_store.contains_key(id))
+    {
+        return Err(AppError::UserError("pet is not unlocked".into()));
+    }
+    let mut unique_pets = std::collections::HashSet::new();
+    if !payload.pets.values().all(|pet| unique_pets.insert(pet)) {
+        return Err(AppError::UserError(
+            "a pet can only be assigned to one button per character".into(),
+        ));
+    }
+
+    db::characters_data::save_character_pets(&mut *tx, &character_id, &payload.pets).await?;
+    tx.commit().await?;
+    Ok(Json(UpdateCharacterPetsResponse {}))
 }
 
 async fn post_update_character(
     State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
     State(profanities_checker): State<Arc<ProfanitiesChecker>>,
     Path(character_id): Path<UserCharacterId>,
     Extension(user): Extension<User>,
@@ -255,17 +370,64 @@ async fn post_update_character(
         ));
     }
 
+    let unlocked = db::user_unlocks::read_cosmetics(&db_pool, &user.user_id).await?;
+    let validate = |id: &str, expected: fn(&CosmeticType) -> bool| {
+        unlocked.contains(id) && master_store.cosmetics_store.get(id).is_some_and(expected)
+    };
+    if payload
+        .cosmetics
+        .title
+        .as_deref()
+        .is_some_and(|id| !validate(id, |c| matches!(c, CosmeticType::Title(_))))
+        || payload
+            .cosmetics
+            .badge
+            .as_deref()
+            .is_some_and(|id| !validate(id, |c| matches!(c, CosmeticType::Badge(_))))
+    {
+        return Err(AppError::UserError("cosmetic is not unlocked".into()));
+    }
+    verify_portrait_unlocked(&db_pool, &master_store, &user.user_id, &payload.portrait).await?;
+
     match db::characters::update_character(
         &db_pool,
         &character_id,
         &payload.name,
-        &format!("adventurers/{}.webp", payload.portrait.into_inner()),
+        &payload.portrait,
+        &payload.cosmetics,
     )
     .await?
     {
         Some(_) => Ok(Json(UpdateCharacterResponse {})),
         None => Err(AppError::UserError("name already taken".to_string())),
     }
+}
+
+async fn verify_portrait_unlocked(
+    db_pool: &db::DbPool,
+    master_store: &MasterStore,
+    user_id: &UserId,
+    portrait_name: &str,
+) -> Result<(), AppError> {
+    let portrait = master_store.cosmetics_store.iter().find(|(id, cosmetic)| {
+        matches!(
+            cosmetic,
+            CosmeticType::Portrait(specs)
+                if *id == portrait_name
+
+        )
+    });
+    let Some((cosmetic_id, CosmeticType::Portrait(specs))) = portrait else {
+        return Err(AppError::UserError("unknown portrait".into()));
+    };
+    if specs.locked
+        && !db::user_unlocks::read_cosmetics(db_pool, user_id)
+            .await?
+            .contains(cosmetic_id)
+    {
+        return Err(AppError::UserError("portrait is not unlocked".into()));
+    }
+    Ok(())
 }
 
 async fn delete_character(
@@ -292,6 +454,10 @@ impl From<db::characters::CharacterEntry> for UserCharacter {
             character_id: val.character_id,
             name: val.character_name,
             portrait: val.portrait,
+            cosmetics: CharacterCosmetics {
+                title: val.cosmetic_title,
+                badge: val.cosmetic_badge,
+            },
             is_ssf: val.is_ssf,
             resource_gems: val.resource_gems,
             resource_shards: val.resource_shards,
