@@ -218,12 +218,15 @@ pub fn ChatPanel(
 
             class:hidden=move || !chat_context.opened.get()
         >
-            <ChatCard>
+            <ChatCard pinned=Signal::derive(pinned)>
 
                 // Header (drag handle)
                 <div
                     class="flex shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2 border-b border-zinc-700 bg-zinc-800/80"
                     class:cursor-move=move || !pinned()
+                    style:background-color=move || {
+                        if pinned() { "" } else { "rgb(39 39 42 / 0.85)" }
+                    }
                     on:mousedown=start_drag
                 >
                     <div class="flex flex-wrap gap-2 items-center">
@@ -310,6 +313,9 @@ pub fn ChatPanel(
                         view! {
                             <div
                                 class="px-3 py-2 bg-zinc-900/70 text-[13px] text-zinc-400 overflow-hidden max-h-14 cursor-pointer"
+                                style:background-color=move || {
+                                    if pinned() { "" } else { "rgb(24 24 27 / 0.9)" }
+                                }
                                 on:click=move |_| chat_context.minimized.set(false)
                             >
                                 {move || {
@@ -328,6 +334,9 @@ pub fn ChatPanel(
                             <div
                                 class="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
                                 text-wrap wrap-break-word"
+                                style:background-color=move || {
+                                    if pinned() { "" } else { "rgb(24 24 27 / 0.9)" }
+                                }
                                 node_ref=messages_node
                                 on:scroll=move |_| {
                                     if let Some(el) = messages_node.get()
@@ -347,13 +356,30 @@ pub fn ChatPanel(
                             </div>
 
                             // Input
-                            <div class="shrink-0 border-t border-zinc-700 bg-zinc-900/80">
+                            <div
+                                class="shrink-0 border-t border-zinc-700 bg-zinc-900/80"
+                                style:background-color=move || {
+                                    if pinned() { "" } else { "rgb(24 24 27 / 0.85)" }
+                                }
+                            >
                                 <div class="flex items-stretch">
 
                                     // Channel selector
                                     <div class="relative">
                                         <button
-                                            class="h-full px-3 text-sm border-r border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700/80 flex items-center gap-2"
+                                            class=move || {
+                                                format!(
+                                                    "h-full px-3 text-sm border-r border-zinc-700 hover:bg-zinc-600/80 active:bg-zinc-500/80 active:shadow-inner transition-colors flex items-center gap-2 {}",
+                                                    if dropdown_open.get() {
+                                                        "bg-zinc-700/80"
+                                                    } else if pinned() {
+                                                        "bg-zinc-800/80"
+                                                    } else {
+                                                        "bg-transparent"
+                                                    },
+                                                )
+                                            }
+                                            aria-expanded=move || dropdown_open.get().to_string()
                                             on:click=move |_| dropdown_open.update(|o| *o = !*o)
                                         >
                                             <span class=move || channel_color(
@@ -370,7 +396,7 @@ pub fn ChatPanel(
                                                     <div class="absolute bottom-full left-0 w-28 bg-zinc-900 border border-zinc-700 shadow-lg text-sm">
 
                                                         <button
-                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-amber-400"
+                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 active:bg-zinc-700 active:shadow-inner transition-colors text-amber-400"
                                                             on:click=move |_| {
                                                                 chat_context.write_channel.set(ChatChannel::Global);
                                                                 chat_context
@@ -384,7 +410,7 @@ pub fn ChatPanel(
                                                         </button>
 
                                                         <button
-                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-emerald-400"
+                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 active:bg-zinc-700 active:shadow-inner transition-colors text-emerald-400"
                                                             on:click=move |_| {
                                                                 chat_context.write_channel.set(ChatChannel::Trade);
                                                                 chat_context
@@ -426,6 +452,9 @@ pub fn ChatPanel(
                                             })}
                                         <textarea
                                             class="w-full min-w-0 resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none z-2"
+                                            style:background-color=move || {
+                                                if pinned() { "" } else { "transparent" }
+                                            }
                                             rows="2"
                                             maxlength="200"
                                             prop:value=move || input_value.get()
@@ -457,11 +486,25 @@ pub fn ChatPanel(
 }
 
 #[component]
-fn ChatCard(children: Children) -> impl IntoView {
+fn ChatCard(pinned: Signal<bool>, children: Children) -> impl IntoView {
     view! {
-        <Card class="h-full min-h-0 text-sm text-gray-200" pad=false gap=false>
-            {children()}
-        </Card>
+        <div class="relative flex h-full min-h-0 flex-col text-sm text-gray-200">
+            <Show when=move || pinned.get()>
+                <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                    <Card class="h-full" pad=false gap=false>
+                        {()}
+                    </Card>
+                </div>
+            </Show>
+            // Keep the content mounted when pinning so focus and scroll position survive.
+            <div class=move || {
+                if pinned.get() {
+                    "relative z-10 flex min-h-0 flex-1 flex-col m-[2px] overflow-hidden clip-octagon"
+                } else {
+                    "relative flex min-h-0 flex-1 flex-col border border-zinc-700/50 shadow-xl"
+                }
+            }>{children()}</div>
+        </div>
     }
 }
 
