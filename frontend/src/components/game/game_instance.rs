@@ -13,7 +13,6 @@ use shared::{
 
 use crate::components::{
     backend_client::BackendClient,
-    chat::chat_panel::ChatPanel,
     data_context::DataContext,
     game::{
         GameContext,
@@ -118,7 +117,6 @@ pub fn GameInstance() -> impl IntoView {
                     />
                 </div>
             </Show>
-            <ChatPanel character_id=get_character_id_storage.get_untracked() />
         </main>
     }
 }

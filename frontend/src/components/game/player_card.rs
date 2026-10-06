@@ -285,13 +285,13 @@ pub fn PlayerCard() -> impl IntoView {
     // });
 
     view! {
-        <Card class="w-1/3">
+        <Card class="w-full flex-1 min-h-0 xl:px-1">
             // <div class="max-h-full w-1/3
             // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
             // bg-zinc-800 ring-1 ring-zinc-950
             // rounded-md shadow-xl/30">
 
-            <PlayerName />
+            <PlayerName class:-mb-2/>
 
             <div
                 class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2"
@@ -403,7 +403,7 @@ pub fn PlayerCard() -> impl IntoView {
                 />
             </StaticTooltip>
 
-            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
+            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-4">
                 // style="contain: layout paint;"
                 <For each=move || { 0..visible_skill_count.get() } key=|i| *i let(i)>
                     <PlayerSkill index=i is_dead />
@@ -471,21 +471,21 @@ pub fn PlayerName() -> impl IntoView {
                         })
                 }} {player_name} " - " {move || game_context.player_base_specs.read().level}
             </div>
-            <div class="hidden xl:block text-sm italic text-zinc-300">
-                {move || {
-                    game_context
-                        .character_cosmetics
-                        .read()
-                        .title
-                        .as_ref()
-                        .and_then(|id| {
-                            let cosmetics = data_context.cosmetics_specs.read();
-                            let shared::data::cosmetics::CosmeticType::Title(title) = cosmetics
-                                .get(id)? else { return None };
-                            Some(title.clone())
-                        })
-                }}
-            </div>
+        // <div class="hidden xl:block text-sm italic text-zinc-300">
+        // {move || {
+        // game_context
+        // .character_cosmetics
+        // .read()
+        // .title
+        // .as_ref()
+        // .and_then(|id| {
+        // let cosmetics = data_context.cosmetics_specs.read();
+        // let shared::data::cosmetics::CosmeticType::Title(title) = cosmetics
+        // .get(id)? else { return None };
+        // Some(title.clone())
+        // })
+        // }}
+        // </div>
         </div>
     }
 }
