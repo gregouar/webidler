@@ -29,7 +29,7 @@ use crate::{
         ui::{
             buttons::{FancyButton, Toggle},
             card::Card,
-            number::{Number, format_number},
+            number::{Number, NumberInset, format_number},
             progress_bars::{
                 CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
                 predictive_cooldown,
@@ -286,10 +286,7 @@ pub fn PlayerCard() -> impl IntoView {
 
     view! {
         <Card class="w-full flex-1 min-h-0 xl:px-1">
-            // <div class="max-h-full w-1/3
-            // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
-            // bg-zinc-800 ring-1 ring-zinc-950
-            // rounded-md shadow-xl/30">
+
 
             <PlayerName class:-mb-2/>
 
@@ -304,7 +301,7 @@ pub fn PlayerCard() -> impl IntoView {
                         value=life_percent
                     />
                 </StaticTooltip>
-                <div class="flex flex-col gap-1 xl:gap-2">
+                <div class="flex flex-col gap-1">
                     <div class="flex-1 min-h-0">
                         <CharacterPortrait
                             image_uri=game_context
@@ -322,37 +319,60 @@ pub fn PlayerCard() -> impl IntoView {
                             statuses=statuses
                             character_triggers
                         />
-                    // enable_blink=false
                     </div>
-                    <TutorialPopup
-                        show=show_level_up_tutorial
-                        position=TutorialPopupPosition::Above
-                        message="Click here to Level Up and gain a Passive Point."
-                    >
-                        <PetAutomation
-                            pet_button=PetButton::LevelUp
-                            callback=Callback::new({
-                                let level_up = level_up.clone();
-                                move |_| level_up(1)
-                            })
-                            disabled=disable_level_up
+
+                    <div class="flex items-center gap-1 xl:gap-2 xl:px-2 w-full">
+                        <StaticTooltip tooltip= || "Player Level" position=StaticTooltipPosition::Top>
+                            <NumberInset>
+                                <div class="xl:px-2 text-shadow-lg/100 shadow-gray-950 text-amber-200 text-sm xl:text-lg font-bold font-number">
+                                    <span class="w-[2ch]">
+                                        {move || game_context.player_base_specs.read().level}
+                                    </span>
+                                </div>
+                            </NumberInset>
+                        </StaticTooltip>
+                        <div class="flex-1">
+                            <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
+                                <HorizontalProgressBar
+                                    class="h-3 xl:h-4"
+                                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                                    value=xp_percent
+                                    reset=just_leveled_up
+                                />
+                            </StaticTooltip>
+                        </div>
+                        <TutorialPopup
+                            show=show_level_up_tutorial
+                            position=TutorialPopupPosition::Above
+                            message="Click here to Level Up and gain a Passive Point."
+
                         >
-                            <FancyButton
-                                class="w-full"
-                                disabled=disable_level_up
-                                on:click={
+                            <PetAutomation
+                                pet_button=PetButton::LevelUp
+                                callback=Callback::new({
                                     let level_up = level_up.clone();
-                                    move |_| level_up(
-                                        if events_context.key_pressed(Key::Ctrl) { 10 } else { 1 },
-                                    )
-                                }
+                                    move |_| level_up(1)
+                                })
+                                disabled=disable_level_up
                             >
-                                <span class="text-base xl:text-lg">
-                                    {move || if max_level.get() { "Max Level" } else { "Level Up" }}
-                                </span>
-                            </FancyButton>
-                        </PetAutomation>
-                    </TutorialPopup>
+                                <FancyButton
+                                    class="w-full"
+                                    disabled=disable_level_up
+                                    on:click={
+                                        let level_up = level_up.clone();
+                                        move |_| level_up(
+                                            if events_context.key_pressed(Key::Ctrl) { 10 } else { 1 },
+                                        )
+                                    }
+                                >
+                                    <span class="text-base xl:text-lg">
+                                        <span class="inline 2xl:hidden"> {move || if max_level.get() { "Max" } else { "+" }}</span>
+                                        <span class="hidden 2xl:inline"> {move || if max_level.get() { "Max Level" } else { "Level Up" }}</span>
+                                    </span>
+                                </FancyButton>
+                            </PetAutomation>
+                        </TutorialPopup>
+                    </div>
                 </div>
 
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
@@ -394,17 +414,16 @@ pub fn PlayerCard() -> impl IntoView {
                 </StaticTooltip>
             </div>
 
-            <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
-                <HorizontalProgressBar
-                    class="h-2 xl:h-4"
-                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
-                    value=xp_percent
-                    reset=just_leveled_up
-                />
-            </StaticTooltip>
+            // <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
+            //     <HorizontalProgressBar
+            //         class="h-2 xl:h-4"
+            //         bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+            //         value=xp_percent
+            //         reset=just_leveled_up
+            //     />
+            // </StaticTooltip>
 
             <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-4">
-                // style="contain: layout paint;"
                 <For each=move || { 0..visible_skill_count.get() } key=|i| *i let(i)>
                     <PlayerSkill index=i is_dead />
                 </For>
@@ -449,7 +468,7 @@ pub fn PlayerName() -> impl IntoView {
 
     view! {
         <div class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-xl">
-            <div class="flex items-center justify-center gap-1 font-bold font-display">
+            <div class="flex items-center justify-center gap-1 font-bold">
                 {move || {
                     game_context
                         .character_cosmetics
@@ -469,23 +488,24 @@ pub fn PlayerName() -> impl IntoView {
                                 },
                             )
                         })
-                }} {player_name} " - " {move || game_context.player_base_specs.read().level}
+                }} <span class="font-display">{player_name}</span>
+                <span class="hidden xl:block text-sm xl:text-base italic">
+                    {move || {
+                        game_context
+                            .character_cosmetics
+                            .read()
+                            .title
+                            .as_ref()
+                            .and_then(|id| {
+                                let cosmetics = data_context.cosmetics_specs.read();
+                                let shared::data::cosmetics::CosmeticType::Title(title) = cosmetics
+                                    .get(id)? else { return None };
+                                Some(format!(" — {}", title))
+                            })
+                    }}
+                </span>
             </div>
-        // <div class="hidden xl:block text-sm italic text-zinc-300">
-        // {move || {
-        // game_context
-        // .character_cosmetics
-        // .read()
-        // .title
-        // .as_ref()
-        // .and_then(|id| {
-        // let cosmetics = data_context.cosmetics_specs.read();
-        // let shared::data::cosmetics::CosmeticType::Title(title) = cosmetics
-        // .get(id)? else { return None };
-        // Some(title.clone())
-        // })
-        // }}
-        // </div>
+
         </div>
     }
 }
