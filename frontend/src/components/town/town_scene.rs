@@ -65,7 +65,10 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                     <div class="absolute inset-0 flex flex-col gap-1 xl:gap-4">
                         <PlayerCard />
                         <Show when=move || !view_only>
-                            <ChatPanel character_id=town_context.character.read_untracked().character_id pinnable=true />
+                            <ChatPanel
+                                character_id=town_context.character.read_untracked().character_id
+                                pinnable=true
+                            />
                         </Show>
                     </div>
                 </div>
@@ -223,7 +226,7 @@ pub fn PlayerName() -> impl IntoView {
     let character_name = move || town_context.character.read().name.clone();
     view! {
         <div class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl">
-            <div class="relative flex min-h-10 items-center justify-center gap-1 px-10 xl:min-h-20 xl:px-16">
+            <div class="relative flex items-center justify-center gap-1 px-10 xl:px-16">
                 <div class="absolute left-0 top-1/2 -translate-y-1/2">
                     <TownAssignedPet button=PetButton::LevelUp flipped=true />
                 </div>
