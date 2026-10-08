@@ -19,6 +19,7 @@ use shared::{
 
 use crate::components::{
     backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::{
         inventory::InventoryEquipFilter,
@@ -53,13 +54,14 @@ pub fn PassivesPanel(
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
 
     let ascension_cost = RwSignal::new(0.0);
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
     let passives_tree_build = RwSignal::new(PurchasedNodes::default());
 
     let tree_connections =
-        Memo::new(move |_| town_context.passives_tree_specs.with(compute_connections));
+        Memo::new(move |_| data_context.passives_tree_specs.with(compute_connections));
 
     Effect::new(move || {
         let mut initial_cost = 0.0;
@@ -77,7 +79,7 @@ pub fn PassivesPanel(
             passives_tree_ascension.update(|passives_tree_ascension| {
                 *passives_tree_ascension = temp;
                 passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
-                    let keep = town_context
+                    let keep = data_context
                         .passives_tree_specs
                         .read_untracked()
                         .nodes
@@ -103,7 +105,7 @@ pub fn PassivesPanel(
 
     let validated_ascension = Memo::new(move |_| {
         passives_tree_ascension.with(|passives_tree_ascension| {
-            town_context
+            data_context
                 .passives_tree_specs
                 .with(|passives_tree_specs| {
                     tree_connections.with(|tree_connections| {
@@ -118,7 +120,7 @@ pub fn PassivesPanel(
     });
 
     let validated_build = Memo::new(move |_| {
-        town_context
+        data_context
             .passives_tree_specs
             .with(|passives_tree_specs| {
                 town_context
@@ -154,7 +156,7 @@ pub fn PassivesPanel(
         loaded_ascension.with(|loaded_ascension| {
             if let Some(loaded_ascension) = loaded_ascension {
                 let mut loaded_ascension = loaded_ascension.clone();
-                let passives_tree_specs = town_context.passives_tree_specs.read_untracked();
+                let passives_tree_specs = data_context.passives_tree_specs.read_untracked();
 
                 loaded_ascension
                     .ascended_nodes
@@ -176,7 +178,7 @@ pub fn PassivesPanel(
     Effect::new(move || {
         loaded_build.with(|loaded_build| {
             if let Some(loaded_build) = loaded_build {
-                let passives_tree_specs = town_context.passives_tree_specs.read_untracked();
+                let passives_tree_specs = data_context.passives_tree_specs.read_untracked();
                 passives_tree_build.set(
                     loaded_build
                         .iter()
@@ -371,13 +373,14 @@ pub fn AscendPanelHeader(
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
 
     let reset = move || {
         let mut initial_cost = 0.0;
         passives_tree_ascension.update(|passives_tree_ascension| {
             *passives_tree_ascension = town_context.passives_tree_ascension.get_untracked();
             passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
-                let keep = town_context
+                let keep = data_context
                     .passives_tree_specs
                     .read_untracked()
                     .nodes
@@ -742,6 +745,7 @@ fn PassiveSkillTree(
     view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
 
@@ -791,7 +795,7 @@ fn PassiveSkillTree(
     });
 
     let derived_passives_tree_specs = Memo::new(move |_| {
-        let mut passives_tree_specs = town_context.passives_tree_specs.get();
+        let mut passives_tree_specs = data_context.passives_tree_specs.get();
         for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
             let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
             node_specs.effects = (&(item_specs
@@ -812,21 +816,21 @@ fn PassiveSkillTree(
         <Pannable>
             <For
                 each=move || {
-                    town_context.passives_tree_specs.read().connections.clone().into_iter()
+                    data_context.passives_tree_specs.read().connections.clone().into_iter()
                 }
                 key=|conn| (conn.from, conn.to)
                 let(conn)
             >
                 <AscendConnection
                     connection=conn
-                    passives_tree_specs=town_context.passives_tree_specs
+                    passives_tree_specs=data_context.passives_tree_specs
                     passives_tree_ascension
                     passives_tree_build
                     active_tab
                 />
             </For>
             <For
-                each=move || { town_context.passives_tree_specs.read().nodes.clone().into_iter() }
+                each=move || { data_context.passives_tree_specs.read().nodes.clone().into_iter() }
                 key=|(id, _)| *id
                 let((id, node))
             >

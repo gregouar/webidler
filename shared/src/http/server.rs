@@ -162,43 +162,15 @@ pub struct DeleteCharacterResponse {}
 // Game
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetAreasResponse {
+pub struct GetMasterDataResponse {
     pub areas: HashMap<String, AreaSpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetSkillsResponse {
     pub skills: HashMap<String, BaseSkillSpecs>,
     pub skill_masteries: IndexMap<String, SkillMasterySpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetStatusesResponse {
     pub statuses: HashMap<StatusId, StatusSpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetCosmeticsResponse {
     pub cosmetics: HashMap<String, CosmeticType>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetPetsResponse {
     pub pets: HashMap<String, PetSpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetAchievementsResponse {
     pub achievements: IndexMap<String, AchievementSpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetPassivesResponse {
     pub passives_tree_specs: PassivesTreeSpecs,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetBenedictionsResponse {
     pub benedictions_specs: IndexMap<String, BenedictionsCategory>,
 }
 

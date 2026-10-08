@@ -1,16 +1,15 @@
-use indexmap::IndexMap;
 use leptos::prelude::*;
 use std::collections::HashMap;
 
 use shared::data::{
     cosmetics::CharacterCosmetics,
-    passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
+    passive::{PassivesTreeAscension, PurchasedNodes},
     pets::PlayerPets,
     player::PlayerInventory,
     skill::SkillSpecs,
     skill_mastery::PlayerSkillMasteries,
     stash::{Stash, StashType},
-    temple::{BenedictionsCategory, PlayerBenedictions},
+    temple::PlayerBenedictions,
     user::{UserCharacter, UserGrindArea, UserUnlocks},
 };
 
@@ -29,11 +28,9 @@ pub struct TownContext {
     pub user_stash: RwSignal<Stash>,
     pub market_stash: RwSignal<Stash>,
 
-    pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     pub passives_tree_build: RwSignal<PurchasedNodes>,
 
-    pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
     pub player_benedictions: RwSignal<PlayerBenedictions>,
 
     pub player_skill_masteries: RwSignal<PlayerSkillMasteries>,
@@ -80,10 +77,8 @@ impl Default for TownContext {
                 stash_type: StashType::Market,
                 ..Default::default()
             }),
-            passives_tree_specs: Default::default(),
             passives_tree_ascension: Default::default(),
             passives_tree_build: Default::default(),
-            benedictions_specs: Default::default(),
             player_benedictions: Default::default(),
             player_skill_masteries: Default::default(),
             skill_mastery_skill_specs: Default::default(),

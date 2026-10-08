@@ -100,26 +100,6 @@ pub fn TownPage() -> impl IntoView {
         1000.0,
     );
 
-    let passives_tree_specs = LocalResource::new({
-        move || async move {
-            backend
-                .get_passives()
-                .await
-                .map(|response| response.passives_tree_specs)
-                .unwrap_or_default()
-        }
-    });
-
-    let benedictions_specs = LocalResource::new({
-        move || async move {
-            backend
-                .get_benedictions()
-                .await
-                .map(|response| response.benedictions_specs)
-                .unwrap_or_default()
-        }
-    });
-
     let data_load = LocalResource::new({
         move || async move {
             if data_context.load_data(backend).await.is_err() {
@@ -200,8 +180,6 @@ pub fn TownPage() -> impl IntoView {
                 {move || Suspend::new(async move {
                     data_load.await;
                     initial_load.await;
-                    town_context.passives_tree_specs.set(passives_tree_specs.await);
-                    town_context.benedictions_specs.set(benedictions_specs.await);
                     view! {
                         <HeaderMenu />
                         <div class="relative flex-1">

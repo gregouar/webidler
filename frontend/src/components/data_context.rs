@@ -1,15 +1,18 @@
+use futures::lock::Mutex;
 use indexmap::IndexMap;
 use leptos::prelude::*;
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 
 use shared::data::{
     achievements::AchievementSpecs,
     area::AreaSpecs,
     character_status::{StatusId, StatusSpecs},
     cosmetics::CosmeticType,
+    passive::PassivesTreeSpecs,
     pets::PetSpecs,
     skill::BaseSkillSpecs,
     skill_mastery::SkillMasterySpecs,
+    temple::BenedictionsCategory,
 };
 
 use crate::components::backend_client::{BackendClient, BackendError};
@@ -23,7 +26,11 @@ pub struct DataContext {
     pub cosmetics_specs: RwSignal<HashMap<String, CosmeticType>>,
     pub pets_specs: RwSignal<HashMap<String, PetSpecs>>,
     pub achievements: RwSignal<IndexMap<String, AchievementSpecs>>,
-    pub loaded: RwSignal<bool>,
+    pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
+
+    load_lock: StoredValue<Arc<Mutex<()>>>,
+    loaded: RwSignal<bool>,
 }
 
 pub fn provide_data_context() {
@@ -35,33 +42,34 @@ pub fn provide_data_context() {
         cosmetics_specs: RwSignal::new(Default::default()),
         pets_specs: RwSignal::new(Default::default()),
         achievements: RwSignal::new(Default::default()),
+        passives_tree_specs: RwSignal::new(Default::default()),
+        benedictions_specs: RwSignal::new(Default::default()),
+        load_lock: StoredValue::new(Arc::new(Mutex::new(()))),
         loaded: RwSignal::new(false),
     });
 }
 
 impl DataContext {
     pub async fn load_data(&self, backend_client: BackendClient) -> Result<(), BackendError> {
+        // Concurrent consumers share the first successful load.
+        let load_lock = self.load_lock.get_value();
+        let _guard = load_lock.lock().await;
+
         if self.loaded.get_untracked() {
             return Ok(());
         }
 
-        let (areas, skills, statuses, cosmetics, pets, achievements) = futures::join!(
-            backend_client.get_areas(),
-            backend_client.get_skills(),
-            backend_client.get_statuses(),
-            backend_client.get_cosmetics(),
-            backend_client.get_pets(),
-            backend_client.get_achievements(),
-        );
+        let data = backend_client.get_master_data().await?;
 
-        self.areas_specs.set(areas?.areas);
-        let skills = skills?;
-        self.skill_specs.set(skills.skills);
-        self.skill_mastery_specs.set(skills.skill_masteries);
-        self.statuses_specs.set(statuses?.statuses);
-        self.cosmetics_specs.set(cosmetics?.cosmetics);
-        self.pets_specs.set(pets?.pets);
-        self.achievements.set(achievements?.achievements);
+        self.areas_specs.set(data.areas);
+        self.skill_specs.set(data.skills);
+        self.skill_mastery_specs.set(data.skill_masteries);
+        self.statuses_specs.set(data.statuses);
+        self.cosmetics_specs.set(data.cosmetics);
+        self.pets_specs.set(data.pets);
+        self.achievements.set(data.achievements);
+        self.passives_tree_specs.set(data.passives_tree_specs);
+        self.benedictions_specs.set(data.benedictions_specs);
 
         self.loaded.set(true);
 

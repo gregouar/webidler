@@ -28,10 +28,8 @@ use shared::{
             DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
             ForgotPasswordResponse, GambleItemResponse, GetAccountUserUnlocksResponse,
-            GetAchievementsResponse, GetAreasResponse, GetBenedictionsResponse,
-            GetCharacterDetailsResponse, GetCosmeticsResponse, GetDiscordInviteResponse,
-            GetMarketStashItemsResponse, GetPassivesResponse, GetPetsResponse, GetSkillsResponse,
-            GetStashItemsResponse, GetStatusesResponse, GetUserCharactersResponse,
+            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetMarketStashItemsResponse,
+            GetMasterDataResponse, GetStashItemsResponse, GetUserCharactersResponse,
             GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
             InventorySortResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
             PlayersCountResponse, ReconcileAchievementsResponse, RejectMarketItemResponse,
@@ -120,32 +118,8 @@ impl BackendClient {
         self.get("news").await
     }
 
-    pub async fn get_areas(&self) -> Result<GetAreasResponse, BackendError> {
-        self.get("game/areas").await
-    }
-
-    pub async fn get_skills(&self) -> Result<GetSkillsResponse, BackendError> {
-        self.get("game/skills").await
-    }
-
-    pub async fn get_statuses(&self) -> Result<GetStatusesResponse, BackendError> {
-        self.get("game/statuses").await
-    }
-
-    pub async fn get_cosmetics(&self) -> Result<GetCosmeticsResponse, BackendError> {
-        self.get("game/cosmetics").await
-    }
-
-    pub async fn get_pets(&self) -> Result<GetPetsResponse, BackendError> {
-        self.get("game/pets").await
-    }
-
-    pub async fn get_achievements(&self) -> Result<GetAchievementsResponse, BackendError> {
-        self.get("game/achievements").await
-    }
-
-    pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {
-        self.get("game/passives").await
+    pub async fn get_master_data(&self) -> Result<GetMasterDataResponse, BackendError> {
+        self.get("game/master-data").await
     }
 
     pub async fn post_ascend_passives(
@@ -167,10 +141,6 @@ impl BackendClient {
         request: &SavePassivesRequest,
     ) -> Result<SavePassivesResponse, BackendError> {
         self.post_auth("game/passives/build", request).await
-    }
-
-    pub async fn get_benedictions(&self) -> Result<GetBenedictionsResponse, BackendError> {
-        self.get("game/benedictions").await
     }
 
     pub async fn post_buy_benedictions(

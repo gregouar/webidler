@@ -42,7 +42,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
     let show_temple_tutorial = Signal::derive(move || {
         town_context.character.read().resource_gold >= 100.0
-            && !has_bought_extra_skill_slot(town_context)
+            && !has_bought_extra_skill_slot(town_context, data_context)
             && !town_context.open_temple.get()
             && !town_context.open_ascend.get()
             && !show_ascension_tutorial.get()
@@ -330,8 +330,8 @@ pub fn HeaderMenu() -> impl IntoView {
     }
 }
 
-fn has_bought_extra_skill_slot(town_context: TownContext) -> bool {
-    let benedictions_specs = town_context.benedictions_specs.read();
+fn has_bought_extra_skill_slot(town_context: TownContext, data_context: DataContext) -> bool {
+    let benedictions_specs = data_context.benedictions_specs.read();
     town_context
         .player_benedictions
         .read()
