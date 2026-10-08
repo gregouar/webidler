@@ -24,6 +24,7 @@ use crate::{
         backend_client::BackendClient,
         chat::{chat_context::ChatContext, chat_panel::ChatPanel},
         data_context::DataContext,
+        icons::header_icons::AchievementsIcon,
         settings::SettingsContext,
         shared::{
             account::AccountSettingsPanel, achievements::AchievementsPanel,
@@ -136,19 +137,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                         open_leaderboard.set(false);
                         open_account.set(false);
                         open_achievements.set(false);
-                    }>"Game Settings"</MenuButton>
-                    <MenuButton on:click=move |_| {
-                        open_leaderboard.set(!open_leaderboard.get_untracked());
-                        open_settings.set(false);
-                        open_account.set(false);
-                        open_achievements.set(false);
-                    }>"Leaderboard"</MenuButton>
-                    <MenuButton on:click=move |_| {
-                        open_achievements.set(!open_achievements.get_untracked());
-                        open_settings.set(false);
-                        open_leaderboard.set(false);
-                        open_account.set(false);
-                    }>"Achievements"</MenuButton>
+                    }>"⚙"</MenuButton>
                     <MenuButton
                         class:hidden
                         class:xl:inline
@@ -156,8 +145,14 @@ pub fn UserDashboardPage() -> impl IntoView {
                             chat_context.opened.set(!chat_context.opened.get_untracked())
                         }
                     >
-                        "Chat"
+                        "🗪"
                     </MenuButton>
+                    <MenuButton on:click=move |_| {
+                        open_leaderboard.set(!open_leaderboard.get_untracked());
+                        open_settings.set(false);
+                        open_account.set(false);
+                        open_achievements.set(false);
+                    }>"Leaderboard"</MenuButton>
                     <a
                         href="https://webidler.gitbook.io/wiki/"
                         target="_blank"
@@ -172,6 +167,17 @@ pub fn UserDashboardPage() -> impl IntoView {
                 </h1>
 
                 <div class="flex gap-2">
+                    <MenuButton
+                        on:click=move |_| {
+                            open_achievements.set(!open_achievements.get_untracked());
+                            open_settings.set(false);
+                            open_leaderboard.set(false);
+                            open_account.set(false);
+                        }
+                        title="Achievements"
+                    >
+                        <AchievementsIcon />
+                    </MenuButton>
                     <MenuButton on:click=move |_| {
                         open_account.set(!open_account.get_untracked());
                         open_leaderboard.set(false);
