@@ -17,6 +17,7 @@ use shared::data::{
 use crate::{
     assets::img_asset,
     components::{
+        chat::chat_panel::ChatPanel,
         data_context::DataContext,
         game::portrait::CharacterPortrait,
         icons::{
@@ -60,7 +61,17 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
 
         <div class="absolute inset-0 p-1 xl:p-4">
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
-                <PlayerCard />
+                <div class="relative w-1/3 min-w-0">
+                    <div class="absolute inset-0 flex flex-col gap-1 xl:gap-4">
+                        <PlayerCard />
+                        <Show when=move || !view_only>
+                            <ChatPanel
+                                character_id=town_context.character.read_untracked().character_id
+                                pinnable=true
+                            />
+                        </Show>
+                    </div>
+                </div>
 
                 <Card class="w-2/3 aspect-[12/8]">
                     <div class="px-2 xl:px-4 relative z-10 flex items-center justify-between gap-1 xl:gap-2 flex-wrap
@@ -171,10 +182,10 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <Card class="w-1/3 min-h-0">
+        <Card class="w-full flex-1 min-h-0">
             <PlayerName />
 
-            <div class="min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
+            <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">
                 <div class="flex flex-col gap-1 xl:gap-2">
                     <div class="flex-1 min-h-0">
                         {move || {
@@ -215,7 +226,7 @@ pub fn PlayerName() -> impl IntoView {
     let character_name = move || town_context.character.read().name.clone();
     view! {
         <div class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-l xl:text-xl">
-            <div class="relative flex min-h-10 items-center justify-center gap-1 px-10 xl:min-h-20 xl:px-16">
+            <div class="relative flex items-center justify-center gap-1 px-10 xl:px-16">
                 <div class="absolute left-0 top-1/2 -translate-y-1/2">
                     <TownAssignedPet button=PetButton::LevelUp flipped=true />
                 </div>

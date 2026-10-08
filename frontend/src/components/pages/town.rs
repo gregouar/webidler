@@ -10,7 +10,6 @@ use shared::{
 
 use crate::components::{
     backend_client::{BackendClient, BackendError},
-    chat::chat_panel::ChatPanel,
     data_context::DataContext,
     shared::{
         achievements::{AchievementsPanel, notify_newly_unlocked_achievements},
@@ -207,7 +206,6 @@ pub fn TownPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene />
-                            <ChatPanel character_id=get_character_id_storage.get_untracked() />
                             <TemplePanel open=town_context.open_temple />
                             <SkillMasteriesPanel open=town_context.open_skill_masteries />
                             <SkillMasteryDetailsModal />
