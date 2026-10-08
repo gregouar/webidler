@@ -8,7 +8,7 @@ use shared::http::server::GetCharacterDetailsResponse;
 
 use crate::components::{
     backend_client::BackendClient,
-    chat::{chat_context::ChatContext, chat_panel::ChatPanel},
+    chat::chat_context::ChatContext,
     data_context::DataContext,
     shared::{
         achievements::AchievementsPanel,
@@ -145,7 +145,6 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         <HeaderMenu />
                         <div class="relative flex-1">
                             <TownScene view_only=true />
-                            <ChatPanel />
                             <TemplePanel open=town_context.open_temple view_only=true />
                             <SkillMasteriesPanel
                                 open=town_context.open_skill_masteries

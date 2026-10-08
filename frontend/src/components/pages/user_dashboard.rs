@@ -190,7 +190,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
             <PlayerCount />
             <DiscordInviteBanner />
-            <ChatPanel />
 
             <div class="relative flex-1">
                 <SettingsModal open=open_settings />
@@ -267,7 +266,15 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
 
                                         <div class="w-full min-h-0 flex justify-center gap-2 xl:gap-4">
-                                            <NewsPanel />
+                                            <div class="relative w-3xl min-w-0">
+                                                <div class="absolute inset-0 flex flex-col gap-2 xl:gap-4">
+                                                    <NewsPanel />
+                                                    <ChatPanel
+                                                        pinnable=true
+                                                        pin_label="Pin chat below news"
+                                                    />
+                                                </div>
+                                            </div>
                                             <CharactersSelection
                                                 areas=areas.clone()
                                                 characters
@@ -1017,12 +1024,12 @@ fn DiscordInviteBanner() -> impl IntoView {
 #[component]
 fn NewsPanel() -> impl IntoView {
     view! {
-        <Card class="text-left w-3xl">
-            <div class="px-4">
+        <Card class="text-left w-full flex-1 min-h-0">
+            <div class="px-4 shrink-0">
                 <CardTitle>"News"</CardTitle>
             </div>
 
-            <NewsInset />
+            <NewsInset class="w-full flex-1 min-h-0 gap-3" />
         </Card>
     }
 }

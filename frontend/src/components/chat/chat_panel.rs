@@ -30,7 +30,8 @@ use crate::{
 #[component]
 pub fn ChatPanel(
     #[prop(optional)] character_id: Option<UserCharacterId>,
-    #[prop(optional)] pinnable: bool,
+    #[prop(default = true)] pinnable: bool,
+    #[prop(default = "Pin chat below player")] pin_label: &'static str,
 ) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
@@ -272,11 +273,9 @@ pub fn ChatPanel(
                         <Show when=move || pinnable>
                             <button
                                 class="flex items-center hover:text-white"
-                                title=move || {
-                                    if pinned() { "Unpin chat" } else { "Pin chat below player" }
-                                }
+                                title=move || { if pinned() { "Unpin chat" } else { pin_label } }
                                 aria-label=move || {
-                                    if pinned() { "Unpin chat" } else { "Pin chat below player" }
+                                    if pinned() { "Unpin chat" } else { pin_label }
                                 }
                                 aria-pressed=move || pinned().to_string()
                                 on:click=move |_| chat_context.set_pinned.set(Some(!pinned()))

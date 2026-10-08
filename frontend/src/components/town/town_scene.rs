@@ -64,12 +64,19 @@ pub fn TownScene(#[prop(default = false)] view_only: bool) -> impl IntoView {
                 <div class="relative w-1/3 min-w-0">
                     <div class="absolute inset-0 flex flex-col gap-1 xl:gap-4">
                         <PlayerCard />
-                        <Show when=move || !view_only>
-                            <ChatPanel
-                                character_id=town_context.character.read_untracked().character_id
-                                pinnable=true
-                            />
-                        </Show>
+                        {if view_only {
+                            view! { <ChatPanel pinnable=true /> }
+                        } else {
+                            view! {
+                                <ChatPanel
+                                    character_id=town_context
+                                        .character
+                                        .read_untracked()
+                                        .character_id
+                                    pinnable=true
+                                />
+                            }
+                        }}
                     </div>
                 </div>
 
