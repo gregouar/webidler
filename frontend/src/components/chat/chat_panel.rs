@@ -485,6 +485,7 @@ pub fn ChatPanel(
     }
 }
 
+#[allow(clippy::unused_unit)]
 #[component]
 fn ChatCard(pinned: Signal<bool>, children: Children) -> impl IntoView {
     view! {
