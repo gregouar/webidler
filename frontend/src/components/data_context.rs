@@ -1,12 +1,18 @@
+use futures::lock::Mutex;
 use indexmap::IndexMap;
 use leptos::prelude::*;
-use std::collections::HashMap;
+use std::{collections::HashMap, sync::Arc};
 
 use shared::data::{
+    achievements::AchievementSpecs,
     area::AreaSpecs,
     character_status::{StatusId, StatusSpecs},
+    cosmetics::CosmeticType,
+    passive::PassivesTreeSpecs,
+    pets::PetSpecs,
     skill::BaseSkillSpecs,
     skill_mastery::SkillMasterySpecs,
+    temple::BenedictionsCategory,
 };
 
 use crate::components::backend_client::{BackendClient, BackendError};
@@ -17,7 +23,14 @@ pub struct DataContext {
     pub skill_specs: RwSignal<HashMap<String, BaseSkillSpecs>>,
     pub skill_mastery_specs: RwSignal<IndexMap<String, SkillMasterySpecs>>,
     pub statuses_specs: RwSignal<HashMap<StatusId, StatusSpecs>>,
-    pub loaded: RwSignal<bool>,
+    pub cosmetics_specs: RwSignal<HashMap<String, CosmeticType>>,
+    pub pets_specs: RwSignal<HashMap<String, PetSpecs>>,
+    pub achievements: RwSignal<IndexMap<String, AchievementSpecs>>,
+    pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
+    pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
+
+    load_lock: StoredValue<Arc<Mutex<()>>>,
+    loaded: RwSignal<bool>,
 }
 
 pub fn provide_data_context() {
@@ -26,27 +39,37 @@ pub fn provide_data_context() {
         skill_specs: RwSignal::new(Default::default()),
         skill_mastery_specs: RwSignal::new(Default::default()),
         statuses_specs: RwSignal::new(Default::default()),
+        cosmetics_specs: RwSignal::new(Default::default()),
+        pets_specs: RwSignal::new(Default::default()),
+        achievements: RwSignal::new(Default::default()),
+        passives_tree_specs: RwSignal::new(Default::default()),
+        benedictions_specs: RwSignal::new(Default::default()),
+        load_lock: StoredValue::new(Arc::new(Mutex::new(()))),
         loaded: RwSignal::new(false),
     });
 }
 
 impl DataContext {
     pub async fn load_data(&self, backend_client: BackendClient) -> Result<(), BackendError> {
+        // Concurrent consumers share the first successful load.
+        let load_lock = self.load_lock.get_value();
+        let _guard = load_lock.lock().await;
+
         if self.loaded.get_untracked() {
             return Ok(());
         }
 
-        let (areas, skills, statuses) = futures::join!(
-            backend_client.get_areas(),
-            backend_client.get_skills(),
-            backend_client.get_statuses()
-        );
+        let data = backend_client.get_master_data().await?;
 
-        self.areas_specs.set(areas?.areas);
-        let skills = skills?;
-        self.skill_specs.set(skills.skills);
-        self.skill_mastery_specs.set(skills.skill_masteries);
-        self.statuses_specs.set(statuses?.statuses);
+        self.areas_specs.set(data.areas);
+        self.skill_specs.set(data.skills);
+        self.skill_mastery_specs.set(data.skill_masteries);
+        self.statuses_specs.set(data.statuses);
+        self.cosmetics_specs.set(data.cosmetics);
+        self.pets_specs.set(data.pets);
+        self.achievements.set(data.achievements);
+        self.passives_tree_specs.set(data.passives_tree_specs);
+        self.benedictions_specs.set(data.benedictions_specs);
 
         self.loaded.set(true);
 

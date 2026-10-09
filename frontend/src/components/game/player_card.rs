@@ -5,34 +5,42 @@ use leptos::{html::*, prelude::*};
 use shared::{
     computations::{player_level_up_cost, skill_cost_increase},
     constants::{MAX_SKILL_LEVEL, MAX_SKILL_SLOTS},
+    data::pets::PetButton,
     messages::client::{
-        LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage, UseSkillMessage,
+        BuySkillMessage, LevelUpPlayerMessage, LevelUpSkillMessage, SetAutoSkillMessage,
+        UseSkillMessage,
     },
 };
 
-use crate::components::{
-    events::{EventsContext, Key},
-    game::websocket::WebsocketContext,
-    icons::battle_scene::AutoUseIcon,
-    shared::{
-        skills::{SKILL_PROGRESS_RING_COLOR, SkillProgressBar},
-        tooltips::SkillTooltip,
-    },
-    ui::{
-        buttons::{FancyButton, Toggle},
-        card::Card,
-        number::{Number, format_number},
-        progress_bars::{
-            CircularProgressBar, HorizontalProgressBar, VerticalProgressBar, predictive_cooldown,
+use crate::{
+    assets::img_asset,
+    components::{
+        data_context::DataContext,
+        events::{EventsContext, Key},
+        game::{
+            GameContext, pet_automation::PetAutomation, portrait::CharacterPortrait,
+            websocket::WebsocketContext,
         },
-        tooltip::{
-            DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
+        icons::battle_scene::AutoUseIcon,
+        shared::{
+            skills::{SKILL_PROGRESS_RING_COLOR, SkillProgressBar},
+            tooltips::SkillTooltip,
         },
-        tutorial_popup::{TutorialPopup, TutorialPopupPosition},
+        ui::{
+            buttons::{FancyButton, Toggle},
+            card::Card,
+            number::{Number, NumberInset, format_number},
+            progress_bars::{
+                CircularProgressBar, HorizontalProgressBar, VerticalProgressBar,
+                predictive_cooldown,
+            },
+            tooltip::{
+                DynamicTooltipPosition, DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition,
+            },
+            tutorial_popup::{TutorialPopup, TutorialPopupPosition},
+        },
     },
 };
-
-use super::{GameContext, portrait::CharacterPortrait};
 
 #[component]
 pub fn PlayerCard() -> impl IntoView {
@@ -200,13 +208,7 @@ pub fn PlayerCard() -> impl IntoView {
         }
     });
 
-    let level_up = move |_| {
-        let amount = if events_context.key_pressed(Key::Ctrl) {
-            10
-        } else {
-            1
-        };
-
+    let level_up = Arc::new(move |amount: u8| {
         game_context.player_base_specs.update(|player_base_specs| {
             game_context.player_resources.update(|player_resources| {
                 for _ in 0..amount {
@@ -225,7 +227,7 @@ pub fn PlayerCard() -> impl IntoView {
 
         just_leveled_up.set(true);
         conn.send(&LevelUpPlayerMessage { amount }.into());
-    };
+    });
     let disable_level_up = Memo::new(move |_| {
         max_xp.get() > game_context.player_resources.read().experience || max_level.get()
     });
@@ -252,15 +254,6 @@ pub fn PlayerCard() -> impl IntoView {
         let (skill_count, max_skills) = skill_capacity.get();
         skill_count.min(max_skills)
     });
-    let empty_skill_slot_count = Memo::new(move |_| {
-        let (skill_count, max_skills) = skill_capacity.get();
-        max_skills.saturating_sub(skill_count)
-    });
-    let locked_skill_slot_count = Memo::new(move |_| {
-        let (_, max_skills) = skill_capacity.get();
-        (MAX_SKILL_SLOTS as usize).saturating_sub(max_skills)
-    });
-
     let character_triggers = Memo::new(move |_| {
         game_context
             .player_specs
@@ -292,13 +285,10 @@ pub fn PlayerCard() -> impl IntoView {
     // });
 
     view! {
-        <Card class="w-1/3">
-            // <div class="max-h-full w-1/3
-            // flex flex-col gap-1 xl:gap-2 p-1 xl:p-2
-            // bg-zinc-800 ring-1 ring-zinc-950
-            // rounded-md shadow-xl/30">
+        <Card class="w-full flex-1 min-h-0 xl:px-1">
 
-            <PlayerName />
+
+            <PlayerName class:-mb-2/>
 
             <div
                 class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2"
@@ -311,7 +301,7 @@ pub fn PlayerCard() -> impl IntoView {
                         value=life_percent
                     />
                 </StaticTooltip>
-                <div class="flex flex-col gap-1 xl:gap-2">
+                <div class="flex flex-col gap-1">
                     <div class="flex-1 min-h-0">
                         <CharacterPortrait
                             image_uri=game_context
@@ -329,19 +319,60 @@ pub fn PlayerCard() -> impl IntoView {
                             statuses=statuses
                             character_triggers
                         />
-                    // enable_blink=false
                     </div>
-                    <TutorialPopup
-                        show=show_level_up_tutorial
-                        position=TutorialPopupPosition::Above
-                        message="Click here to Level Up and gain a Passive Point."
-                    >
-                        <FancyButton class="w-full" disabled=disable_level_up on:click=level_up>
-                            <span class="text-base xl:text-lg">
-                                {move || if max_level.get() { "Max Level" } else { "Level Up" }}
-                            </span>
-                        </FancyButton>
-                    </TutorialPopup>
+
+                    <div class="flex items-center gap-1 xl:gap-2 xl:px-2 w-full">
+                        <StaticTooltip tooltip= || "Player Level" position=StaticTooltipPosition::Top>
+                            <NumberInset>
+                                <div class="xl:px-2 text-shadow-lg/100 shadow-gray-950 text-amber-200 text-sm xl:text-lg font-bold font-number">
+                                    <span class="w-[2ch]">
+                                        {move || game_context.player_base_specs.read().level}
+                                    </span>
+                                </div>
+                            </NumberInset>
+                        </StaticTooltip>
+                        <div class="flex-1">
+                            <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
+                                <HorizontalProgressBar
+                                    class="h-3 xl:h-4"
+                                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+                                    value=xp_percent
+                                    reset=just_leveled_up
+                                />
+                            </StaticTooltip>
+                        </div>
+                        <TutorialPopup
+                            show=show_level_up_tutorial
+                            position=TutorialPopupPosition::Above
+                            message="Click here to Level Up and gain a Passive Point."
+
+                        >
+                            <PetAutomation
+                                pet_button=PetButton::LevelUp
+                                callback=Callback::new({
+                                    let level_up = level_up.clone();
+                                    move |_| level_up(1)
+                                })
+                                disabled=disable_level_up
+                            >
+                                <FancyButton
+                                    class="w-full"
+                                    disabled=disable_level_up
+                                    on:click={
+                                        let level_up = level_up.clone();
+                                        move |_| level_up(
+                                            if events_context.key_pressed(Key::Ctrl) { 10 } else { 1 },
+                                        )
+                                    }
+                                >
+                                    <span class="text-base xl:text-lg">
+                                        <span class="inline 2xl:hidden"> {move || if max_level.get() { "Max" } else { "+" }}</span>
+                                        <span class="hidden 2xl:inline"> {move || if max_level.get() { "Max Level" } else { "Level Up" }}</span>
+                                    </span>
+                                </FancyButton>
+                            </PetAutomation>
+                        </TutorialPopup>
+                    </div>
                 </div>
 
                 <StaticTooltip tooltip=mana_tooltip position=StaticTooltipPosition::Left>
@@ -383,25 +414,38 @@ pub fn PlayerCard() -> impl IntoView {
                 </StaticTooltip>
             </div>
 
-            <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
-                <HorizontalProgressBar
-                    class="h-2 xl:h-4"
-                    bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
-                    value=xp_percent
-                    reset=just_leveled_up
-                />
-            </StaticTooltip>
+            // <StaticTooltip tooltip=xp_tooltip position=StaticTooltipPosition::Top>
+            //     <HorizontalProgressBar
+            //         class="h-2 xl:h-4"
+            //         bar_color="bg-gradient-to-b from-neutral-300 to-neutral-500"
+            //         value=xp_percent
+            //         reset=just_leveled_up
+            //     />
+            // </StaticTooltip>
 
-            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-2">
-                // style="contain: layout paint;"
+            <div class="flex-none items-center grid grid-cols-4 gap-1 xl:gap-4">
                 <For each=move || { 0..visible_skill_count.get() } key=|i| *i let(i)>
                     <PlayerSkill index=i is_dead />
                 </For>
-                <For each=move || { 0..empty_skill_slot_count.get() } key=|i| *i let(_)>
-                    <EmptySkillSlotButton locked=false />
+                <For
+                    each=move || {
+                        let (skill_count, max_skills) = skill_capacity.get();
+                        skill_count.min(max_skills)..max_skills
+                    }
+                    key=|i| *i
+                    let(i)
+                >
+                    <EmptySkillSlotButton index=i locked=false />
                 </For>
-                <For each=move || { 0..locked_skill_slot_count.get() } key=|i| *i let(_)>
-                    <EmptySkillSlotButton locked=true />
+                <For
+                    each=move || {
+                        let (_, max_skills) = skill_capacity.get();
+                        max_skills..MAX_SKILL_SLOTS as usize
+                    }
+                    key=|i| *i
+                    let(i)
+                >
+                    <EmptySkillSlotButton index=i locked=true />
                 </For>
             </div>
         </Card>
@@ -411,6 +455,7 @@ pub fn PlayerCard() -> impl IntoView {
 #[component]
 pub fn PlayerName() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let data_context = expect_context::<DataContext>();
 
     let player_name = Memo::new(move |_| {
         game_context
@@ -422,17 +467,100 @@ pub fn PlayerName() -> impl IntoView {
     });
 
     view! {
-        <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-xl font-display">
-            <span class="font-bold">
-                {player_name} " - " {move || game_context.player_base_specs.read().level}
-            </span>
-        </p>
+        <div class="text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-xl">
+            <div class="flex items-center justify-center gap-1 font-bold">
+                {move || {
+                    game_context
+                        .character_cosmetics
+                        .read()
+                        .badge
+                        .as_ref()
+                        .and_then(|id| {
+                            let cosmetics = data_context.cosmetics_specs.read();
+                            let shared::data::cosmetics::CosmeticType::Badge(badge) = cosmetics
+                                .get(id)? else { return None };
+                            Some(
+                                view! {
+                                    <img
+                                        src=img_asset(&badge.icon)
+                                        class="h-7 w-7 object-contain"
+                                    />
+                                },
+                            )
+                        })
+                }} <span class="font-display">{player_name}</span>
+                <span class="hidden xl:block text-sm xl:text-base italic">
+                    {move || {
+                        game_context
+                            .character_cosmetics
+                            .read()
+                            .title
+                            .as_ref()
+                            .and_then(|id| {
+                                let cosmetics = data_context.cosmetics_specs.read();
+                                let shared::data::cosmetics::CosmeticType::Title(title) = cosmetics
+                                    .get(id)? else { return None };
+                                Some(format!(" — {}", title))
+                            })
+                    }}
+                </span>
+            </div>
+
+        </div>
     }
 }
 
 #[component]
-fn EmptySkillSlotButton(locked: bool) -> impl IntoView {
+fn EmptySkillSlotButton(index: usize, locked: bool) -> impl IntoView {
     let game_context: GameContext = expect_context();
+    let data_context = expect_context::<DataContext>();
+    let conn = expect_context::<WebsocketContext>();
+
+    let disable_auto = move || {
+        if locked {
+            return true;
+        }
+
+        let base = game_context.player_base_specs.read();
+        if index != base.skills.len() || index >= base.max_skills as usize {
+            return true;
+        }
+
+        base.skill_masteries
+            .favorite_skills
+            .iter()
+            .find(|skill_id| {
+                !base.skills.contains_key(*skill_id)
+                    && data_context
+                        .skill_specs
+                        .read()
+                        .get(*skill_id)
+                        .is_some_and(|skill| !skill.hidden)
+            })
+            .is_none()
+    };
+
+    let auto_assign = Callback::new(move |_| {
+        let base = game_context.player_base_specs.read_untracked();
+        let Some(skill_id) = base
+            .skill_masteries
+            .favorite_skills
+            .iter()
+            .find(|skill_id| {
+                !base.skills.contains_key(*skill_id)
+                    && data_context
+                        .skill_specs
+                        .read_untracked()
+                        .get(*skill_id)
+                        .is_some_and(|skill| !skill.hidden)
+            })
+            .cloned()
+        else {
+            return;
+        };
+
+        conn.send(&BuySkillMessage { skill_id }.into());
+    });
 
     let skill_slot_tooltip = move || {
         if locked {
@@ -459,43 +587,49 @@ fn EmptySkillSlotButton(locked: bool) -> impl IntoView {
     view! {
         <div class="flex flex-col  xl:gap-1">
             <StaticTooltip tooltip=skill_slot_tooltip position=StaticTooltipPosition::Top>
-                <button
-                    class="btn w-full h-full
-                    hover:brightness-125
-                    active:brightness-50 active:sepia active:translate-y-[2px]
-                    disabled:brightness-75 disabled:saturate-10 disabled:opacity-40
-                    "
-                    on:click=move |_| game_context.open_skills.set(true)
-                    disabled=locked
+                <PetAutomation
+                    pet_button=PetButton::from_skill_index(index)
+                    flipped=true
+                    callback=auto_assign
+                    disabled=disable_auto
                 >
-                    <CircularProgressBar
-                        bar_color=SKILL_PROGRESS_RING_COLOR
-                        value=Signal::derive(|| 0.0)
-                        bar_width=4
+                    <button
+                        class="btn button-press-skill-slot relative w-full h-full
+                        hover:brightness-125
+                        active:brightness-50 active:sepia active:translate-y-[2px]
+                        disabled:brightness-75 disabled:saturate-10 disabled:opacity-40"
+                        on:click=move |_| game_context.open_skills.set(true)
+                        disabled=locked
                     >
-                        <svg
-                            width="100%"
-                            height="100%"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="xl:drop-shadow-[0px_4px_black] text-zinc-300"
+                        <CircularProgressBar
+                            bar_color=SKILL_PROGRESS_RING_COLOR
+                            value=Signal::derive(|| 0.0)
+                            bar_width=4
                         >
-                            <path
-                                d="M12 5V19"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                            />
-                            <path
-                                d="M5 12H19"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                            />
-                        </svg>
-                    </CircularProgressBar>
-                </button>
+                            <svg
+                                width="100%"
+                                height="100%"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="xl:drop-shadow-[0px_4px_black] text-zinc-300"
+                            >
+                                <path
+                                    d="M12 5V19"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M5 12H19"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                        </CircularProgressBar>
+                    </button>
+                </PetAutomation>
             </StaticTooltip>
 
             <div class="flex h-6 items-stretch justify-around xl:px-1 gap-1 xl:h-8 xl:gap-2  invisible">
@@ -603,14 +737,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     });
 
     let conn = expect_context::<WebsocketContext>();
-    let use_skill = move || {
+    let use_skill = Arc::new(move || {
         conn.send(
             &UseSkillMessage {
                 skill_index: index as u8,
             }
             .into(),
         );
-    };
+    });
 
     let conn = expect_context::<WebsocketContext>();
     let set_auto_skill = move |value| {
@@ -674,13 +808,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
 
     let conn = expect_context::<WebsocketContext>();
     let events_context: EventsContext = expect_context();
-    let level_up = move |_| {
-        let (amount, cost) = if events_context.key_pressed(Key::Ctrl) {
-            level_up_batch.get()
-        } else {
-            (1, level_up_cost.get())
-        };
-
+    let upgrade_skill = Arc::new(move |amount: u8, cost: f64| {
         game_context.player_base_specs.update(|player_base_specs| {
             if let Some((_, player_base_skill)) = player_base_specs.skills.get_index_mut(index) {
                 game_context.player_resources.write().gold -= cost;
@@ -699,6 +827,17 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             }
             .into(),
         );
+    });
+    let level_up = {
+        let upgrade_skill = upgrade_skill.clone();
+        move || {
+            let (amount, cost) = if events_context.key_pressed(Key::Ctrl) {
+                level_up_batch.get()
+            } else {
+                (1, level_up_cost.get())
+            };
+            upgrade_skill(amount, cost);
+        }
     };
 
     let disable_level_up = Memo::new(move |_| {
@@ -814,8 +953,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                     let use_skill = use_skill.clone();
                     view! {
                         <button
-                            class="btn w-full h-full isolate
-                            active:brightness-50 active:sepia"
+                            class="btn relative w-full h-full isolate active:brightness-50 active:sepia active:translate-y-[2px]"
                             on:click=move |_| use_skill()
                             disabled=move || !is_ready.get() || disabled_auto.get()
                         >
@@ -854,11 +992,10 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                         disabled=disabled_auto
                         class="h-full max-h-full leading-none  py-1 xl:py-1.5"
                     >
-                        // "↻"
                         <AutoUseIcon />
                     </Toggle>
                 </StaticTooltip>
-                <div class="flex-1 h-full">
+                <div class="relative flex-1 h-full">
                     <TutorialPopup
                         show=show_skill_upgrade_tutorial
                         position=TutorialPopupPosition::AboveLeft
@@ -870,31 +1007,24 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                             position=StaticTooltipPosition::Top
                             class="flex h-full w-full"
                         >
-                            <FancyButton
+                            <PetAutomation
+                                pet_button=PetButton::from_skill_index(index)
+                                flipped=true
+                                callback=Callback::new({
+                                    let level_up = level_up.clone();
+                                    move |_| level_up()
+                                })
                                 disabled=disable_level_up
-                                on:click=level_up
-                                class="w-full h-full max-h-full leading-none py-1"
                             >
-                                // <span class="text-base font-bold xl:text-2xl">"+"</span>
-
-                                <span class="inline 2xl:hidden text-base">"+"</span>
-                                <span class="hidden 2xl:inline text-lg">"Upg."</span>
-
-                            // <svg
-                            // xmlns="http://www.w3.org/2000/svg"
-                            // class="block h-full max-h-full aspect-square"
-                            // fill="none"
-                            // viewBox="0 0 24 24"
-                            // stroke="currentColor"
-                            // stroke-width="2"
-                            // >
-                            // <path
-                            // stroke-linecap="round"
-                            // stroke-linejoin="round"
-                            // d="M12 4v16m8-8H4"
-                            // />
-                            // </svg>
-                            </FancyButton>
+                                <FancyButton
+                                    disabled=disable_level_up
+                                    on:click=move |_| level_up()
+                                    class="w-full h-full max-h-full leading-none py-1"
+                                >
+                                    <span class="inline 2xl:hidden text-base">"+"</span>
+                                    <span class="hidden 2xl:inline text-lg">"Upg."</span>
+                                </FancyButton>
+                            </PetAutomation>
                         </StaticTooltip>
                     </TutorialPopup>
                 </div>

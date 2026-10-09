@@ -38,6 +38,8 @@ pub struct ChatContext {
     set_stored_messages: WriteSignal<Vec<ChatMessage>>,
     pub send: Callback<(String, Option<CharacterId>)>,
 
+    pub pinned: Signal<bool>,
+    pub set_pinned: WriteSignal<Option<bool>>,
     pub minimized: RwSignal<bool>,
     pub opened: RwSignal<bool>,
     pub selected_channels: RwSignal<HashSet<ChatChannel>>,
@@ -57,6 +59,8 @@ impl ChatContext {
 pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     let accessibility_context: AccessibilityContext = expect_context();
     let opened = RwSignal::new(!accessibility_context.is_on_mobile());
+    let (stored_pinned, set_pinned, _) =
+        storage::use_local_storage::<Option<bool>, JsonSerdeCodec>("chat_pinned");
 
     // Websocket
     let on_error_callback = {
@@ -180,6 +184,8 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
             CHAT_HISTORY_CAPACITY,
         )),
         set_stored_messages,
+        pinned: Signal::derive(move || stored_pinned.get().unwrap_or(true)),
+        set_pinned,
         // TODO: Store in storage
         minimized: RwSignal::new(true),
         opened,

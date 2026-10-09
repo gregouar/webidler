@@ -1,0 +1,22 @@
+{
+    "human_male_1"   : { "Portrait": {"image": "adventurers/human_male_1_gdca.webp"} },
+    "human_female_1" : { "Portrait": {"image": "adventurers/human_female_1.webp"   } },
+    "human_male_2"   : { "Portrait": {"image": "adventurers/human_male_2.webp"     } },
+    "human_female_2" : { "Portrait": {"image": "adventurers/human_female_2.webp"   } },
+    "human_male_3"   : { "Portrait": {"image": "adventurers/human_male_3.webp"     } },
+    "human_female_3" : { "Portrait": {"image": "adventurers/human_female_3.webp"   } },
+    "orc_male_1"     : { "Portrait": {"image": "adventurers/orc_male_1.webp"       } },
+    "orc_female_1"   : { "Portrait": {"image": "adventurers/orc_female_1.webp"     } },
+    "elf_male_1"     : { "Portrait": {"image": "adventurers/elf_male_1.webp"       } },
+    "elf_female_1"   : { "Portrait": {"image": "adventurers/elf_female_1.webp"     } },
+    "demon_male_1"   : { "Portrait": {"image": "adventurers/demon_male_1.webp"     } },
+    "demon_female_1" : { "Portrait": {"image": "adventurers/demon_female_1.webp"   } },
+    "furry_male_1"   : { "Portrait": {"image": "adventurers/furry_male_1.webp"     } },
+    "furry_female_1" : { "Portrait": {"image": "adventurers/furry_female_1.webp"   } },
+    "blue_male_1"    : { "Portrait": {"image": "adventurers/blue_male_1.webp"      } },
+    "blue_female_1"  : { "Portrait": {"image": "adventurers/blue_female_1.webp"    } },
+    "insect_male_1"  : { "Portrait": {"image": "adventurers/insect_male_1.webp"    } },
+    "insect_female_1": { "Portrait": {"image": "adventurers/insect_female_1.webp"  } },
+    "undead_male_1"  : { "Portrait": {"image": "adventurers/undead_male_1.webp"    } },
+    "undead_female_1": { "Portrait": {"image": "adventurers/undead_female_1.webp"  } }
+}

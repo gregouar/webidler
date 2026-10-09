@@ -1,6 +1,7 @@
 use std::{collections::HashMap, sync::Arc};
 
 use codee::string::JsonSerdeCodec;
+use indexmap::IndexMap;
 use leptos::{html::*, prelude::*, task::spawn_local, web_sys};
 use leptos_router::hooks::use_navigate;
 use leptos_use::storage;
@@ -8,11 +9,12 @@ use leptos_use::storage;
 use shared::{
     data::{
         area::AreaSpecs,
+        cosmetics::{CharacterCosmetics, CosmeticType},
         realms::Realm,
         user::{UserCharacter, UserCharacterActivity, UserCharacterId, UserDetails, UserId},
     },
     http::client::{CreateCharacterRequest, UpdateCharacterRequest},
-    types::{AssetName, Username},
+    types::Username,
 };
 
 use crate::{
@@ -21,10 +23,13 @@ use crate::{
         accessibility::AccessibilityContext,
         backend_client::BackendClient,
         chat::{chat_context::ChatContext, chat_panel::ChatPanel},
+        data_context::DataContext,
+        icons::header_icons::AchievementsIcon,
         settings::SettingsContext,
         shared::{
-            account::AccountSettingsPanel, leaderboard::LeaderboardPanel, news::NewsInset,
-            player_count::PlayerCount, settings::SettingsModal,
+            account::AccountSettingsPanel, achievements::AchievementsPanel,
+            leaderboard::LeaderboardPanel, news::NewsInset, player_count::PlayerCount,
+            settings::SettingsModal,
         },
         ui::{
             ALink,
@@ -32,6 +37,7 @@ use crate::{
             card::{Card, CardInset, CardTitle, MenuCard},
             checkbox::Checkbox,
             confirm::ConfirmContext,
+            dropdown::DropdownMenu,
             header::BaseHeaderMenu,
             input::ValidatedInput,
             loading_screen::LoadingScreen,
@@ -45,31 +51,33 @@ use crate::{
 #[component]
 pub fn UserDashboardPage() -> impl IntoView {
     let refresh_trigger = RwSignal::new(0u64);
+    let data_context = expect_context::<DataContext>();
 
     let username = RwSignal::new(String::new());
+    // let dashboard_user_unlocks = RwSignal::new(UserUnlocks::default());
 
     let async_data = LocalResource::new({
         let backend = expect_context::<BackendClient>();
         move || async move {
             let _ = refresh_trigger.read();
 
-            let areas = backend
-                .get_areas()
-                .await
-                .map(|r| r.areas)
-                .unwrap_or_default();
+            if data_context.load_data(backend).await.is_err() {
+                return None;
+            }
+            let areas = data_context.areas_specs.get_untracked();
 
             let user_details = backend.get_me().await.map(|r| r.user_details).ok();
-
             match user_details {
                 Some(user_details) => {
-                    let characters = backend
+                    let (characters, user_unlocks) = backend
                         .get_user_characters(&user_details.user.user_id)
                         .await
-                        .map(|r| r.characters)
+                        .map(|r| (r.characters, r.user_unlocks))
                         .unwrap_or_default();
+
                     username.set(user_details.user.username.clone());
-                    Some((areas, user_details, characters))
+
+                    Some((areas, user_details, characters, user_unlocks))
                 }
                 None => None,
             }
@@ -109,11 +117,14 @@ pub fn UserDashboardPage() -> impl IntoView {
     let open_settings = RwSignal::new(false);
     let open_account = RwSignal::new(false);
     let open_leaderboard = RwSignal::new(false);
+    let open_achievements = RwSignal::new(false);
     let open_character_panel = RwSignal::new(false);
 
     let selected_character_id = RwSignal::new(None);
     let selected_character_name = RwSignal::new(None);
     let selected_character_portrait = RwSignal::new(None);
+    let selected_character_title = RwSignal::new(None::<String>);
+    let selected_character_badge = RwSignal::new(None::<String>);
 
     let chat_context: ChatContext = expect_context();
 
@@ -125,12 +136,8 @@ pub fn UserDashboardPage() -> impl IntoView {
                         open_settings.set(!open_settings.get_untracked());
                         open_leaderboard.set(false);
                         open_account.set(false);
-                    }>"Game Settings"</MenuButton>
-                    <MenuButton on:click=move |_| {
-                        open_leaderboard.set(!open_leaderboard.get_untracked());
-                        open_settings.set(false);
-                        open_account.set(false);
-                    }>"Leaderboard"</MenuButton>
+                        open_achievements.set(false);
+                    }>"⚙"</MenuButton>
                     <MenuButton
                         class:hidden
                         class:xl:inline
@@ -138,8 +145,14 @@ pub fn UserDashboardPage() -> impl IntoView {
                             chat_context.opened.set(!chat_context.opened.get_untracked())
                         }
                     >
-                        "Chat"
+                        "🗪"
                     </MenuButton>
+                    <MenuButton on:click=move |_| {
+                        open_leaderboard.set(!open_leaderboard.get_untracked());
+                        open_settings.set(false);
+                        open_account.set(false);
+                        open_achievements.set(false);
+                    }>"Leaderboard"</MenuButton>
                     <a
                         href="https://webidler.gitbook.io/wiki/"
                         target="_blank"
@@ -154,10 +167,22 @@ pub fn UserDashboardPage() -> impl IntoView {
                 </h1>
 
                 <div class="flex gap-2">
+                    <MenuButton
+                        on:click=move |_| {
+                            open_achievements.set(!open_achievements.get_untracked());
+                            open_settings.set(false);
+                            open_leaderboard.set(false);
+                            open_account.set(false);
+                        }
+                        title="Achievements"
+                    >
+                        <AchievementsIcon />
+                    </MenuButton>
                     <MenuButton on:click=move |_| {
                         open_account.set(!open_account.get_untracked());
                         open_leaderboard.set(false);
                         open_settings.set(false);
+                        open_achievements.set(false);
                     }>"Account Settings"</MenuButton>
                     <MenuButtonRed on:click=move |_| sign_out()>"Sign Out"</MenuButtonRed>
                 </div>
@@ -165,7 +190,6 @@ pub fn UserDashboardPage() -> impl IntoView {
 
             <PlayerCount />
             <DiscordInviteBanner />
-            <ChatPanel />
 
             <div class="relative flex-1">
                 <SettingsModal open=open_settings />
@@ -177,11 +201,54 @@ pub fn UserDashboardPage() -> impl IntoView {
                 }>
                     {move || {
                         Suspend::new(async move {
-                            let (areas, user_details, characters) = async_data
+                            let (areas, user_details, characters, user_unlocks) = async_data
                                 .await
                                 .unwrap_or_default();
+                            let cosmetics = data_context.cosmetics_specs.read_untracked();
+                            let portraits = cosmetics
+                                .iter()
+                                .filter(|(id, cosmetic)| {
+                                    matches!(
+                                        cosmetic,
+                                        CosmeticType::Portrait(specs)
+                                        if !specs.locked || user_unlocks.cosmetics.contains(*id)
+                                    )
+                                })
+                                .map(|(id, _)| id.clone())
+                                .collect::<Vec<_>>();
+                            let titles = cosmetics
+                                .iter()
+                                .filter_map(|(id, cosmetic)| {
+                                    (user_unlocks.cosmetics.contains(id))
+                                        .then(|| match cosmetic {
+                                            CosmeticType::Title(title) => {
+                                                Some((id.clone(), title.clone()))
+                                            }
+                                            _ => None,
+                                        })
+                                        .flatten()
+                                })
+                                .collect::<Vec<_>>();
+                            let badges = cosmetics
+                                .iter()
+                                .filter_map(|(id, cosmetic)| {
+                                    (user_unlocks.cosmetics.contains(id))
+                                        .then(|| match cosmetic {
+                                            CosmeticType::Badge(badge) => {
+                                                Some((id.clone(), badge.name.clone()))
+                                            }
+                                            _ => None,
+                                        })
+                                        .flatten()
+                                })
+                                .collect::<Vec<_>>();
                             let areas = Arc::new(areas);
+
                             view! {
+                                <AchievementsPanel
+                                    open=open_achievements
+                                    user_unlocks=Signal::from(user_unlocks)
+                                />
                                 <CreateCharacterPanel
                                     open=open_character_panel
                                     user_id=user_details.user.user_id
@@ -189,12 +256,25 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     selected_character_id
                                     selected_character_name
                                     selected_character_portrait
+                                    selected_character_title
+                                    selected_character_badge
+                                    available_portraits=portraits
+                                    available_titles=titles
+                                    available_badges=badges
                                 />
                                 <div class="absolute inset-0 p-1 xl:p-4">
                                     <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
 
                                         <div class="w-full min-h-0 flex justify-center gap-2 xl:gap-4">
-                                            <NewsPanel />
+                                            <div class="relative w-3xl min-w-0">
+                                                <div class="absolute inset-0 flex flex-col gap-2 xl:gap-4">
+                                                    <NewsPanel />
+                                                    <ChatPanel
+                                                        pinnable=true
+                                                        pin_label="Pin chat below news"
+                                                    />
+                                                </div>
+                                            </div>
                                             <CharactersSelection
                                                 areas=areas.clone()
                                                 characters
@@ -204,6 +284,8 @@ pub fn UserDashboardPage() -> impl IntoView {
                                                 selected_character_id
                                                 selected_character_name
                                                 selected_character_portrait
+                                                selected_character_title
+                                                selected_character_badge
                                             />
                                         </div>
                                     </div>
@@ -226,7 +308,9 @@ fn CharactersSelection(
     open_character_panel: RwSignal<bool>,
     selected_character_id: RwSignal<Option<UserCharacterId>>,
     selected_character_name: RwSignal<Option<Username>>,
-    selected_character_portrait: RwSignal<Option<AssetName>>,
+    selected_character_portrait: RwSignal<Option<String>>,
+    selected_character_title: RwSignal<Option<String>>,
+    selected_character_badge: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let characters_len = characters.len();
 
@@ -254,6 +338,8 @@ fn CharactersSelection(
                                     selected_character_id
                                     selected_character_name
                                     selected_character_portrait
+                                    selected_character_title
+                                    selected_character_badge
                                 />
                             }
                         }
@@ -267,6 +353,8 @@ fn CharactersSelection(
                                     selected_character_id.set(None);
                                     selected_character_name.set(None);
                                     selected_character_portrait.set(None);
+                                    selected_character_title.set(None);
+                                    selected_character_badge.set(None);
                                 } />
                             },
                         )
@@ -287,9 +375,21 @@ fn CharacterSlot(
     open_character_panel: RwSignal<bool>,
     selected_character_id: RwSignal<Option<UserCharacterId>>,
     selected_character_name: RwSignal<Option<Username>>,
-    selected_character_portrait: RwSignal<Option<AssetName>>,
+    selected_character_portrait: RwSignal<Option<String>>,
+    selected_character_title: RwSignal<Option<String>>,
+    selected_character_badge: RwSignal<Option<String>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let data_context = expect_context::<DataContext>();
+    let portrait_image = data_context
+        .cosmetics_specs
+        .read_untracked()
+        .get(&character.portrait)
+        .and_then(|cosmetic| match cosmetic {
+            CosmeticType::Portrait(specs) => Some(specs.image.clone()),
+            _ => None,
+        })
+        .unwrap_or_else(|| character.portrait.clone());
     let is_legacy = matches!(character.realm, Realm::Legacy | Realm::LegacySSF);
     let is_ssf =
         character.is_ssf || matches!(character.realm, Realm::StandardSSF | Realm::LegacySSF);
@@ -356,16 +456,16 @@ fn CharacterSlot(
     let edit_character = {
         let character_id = character.character_id;
         let name = character.name.clone();
-        let portrait = character
-            .portrait
-            .clone()
-            .replace(".webp", "")
-            .replace("adventurers/", "");
+        let portrait = character.portrait.clone();
+        let title = character.cosmetics.title.clone();
+        let badge = character.cosmetics.badge.clone();
         move |_| {
             open_character_panel.set(true);
             selected_character_id.set(Some(character_id));
             selected_character_name.set(Username::try_new(&name).ok());
-            selected_character_portrait.set(AssetName::try_new(&portrait).ok());
+            selected_character_portrait.set(Some(portrait.clone()));
+            selected_character_title.set(title.clone());
+            selected_character_badge.set(badge.clone());
         }
     };
 
@@ -424,7 +524,7 @@ fn CharacterSlot(
             >
                 <img
                     draggable="false"
-                    src=img_asset(&character.portrait)
+                    src=img_asset(&portrait_image)
                     alt="Portrait"
                     class="w-full h-full object-cover"
                 />
@@ -600,7 +700,12 @@ pub fn CreateCharacterPanel(
     refresh_trigger: RwSignal<u64>,
     selected_character_id: RwSignal<Option<UserCharacterId>>,
     selected_character_name: RwSignal<Option<Username>>,
-    selected_character_portrait: RwSignal<Option<AssetName>>,
+    selected_character_portrait: RwSignal<Option<String>>,
+    selected_character_title: RwSignal<Option<String>>,
+    selected_character_badge: RwSignal<Option<String>>,
+    available_portraits: Vec<String>,
+    available_titles: Vec<(String, String)>,
+    available_badges: Vec<(String, String)>,
 ) -> impl IntoView {
     let processing = RwSignal::new(false);
     let is_ssf_character = RwSignal::new(false);
@@ -610,11 +715,15 @@ pub fn CreateCharacterPanel(
         if open.get() && selected_character_id.get().is_none() {
             is_ssf_character.set(false);
             is_legacy_character.set(false);
+            selected_character_title.set(None);
+            selected_character_badge.set(None);
         }
     });
 
     let disable_submit = Signal::derive(move || {
-        selected_character_name.read().is_none() || selected_character_portrait.read().is_none()
+        processing.get()
+            || selected_character_name.read().is_none()
+            || selected_character_portrait.read().is_none()
     });
 
     let on_submit = {
@@ -636,6 +745,10 @@ pub fn CreateCharacterPanel(
                                 &UpdateCharacterRequest {
                                     name: selected_character_name.get_untracked().unwrap(),
                                     portrait: selected_character_portrait.get_untracked().unwrap(),
+                                    cosmetics: CharacterCosmetics {
+                                        title: selected_character_title.get_untracked(),
+                                        badge: selected_character_badge.get_untracked(),
+                                    },
                                 },
                             )
                             .await
@@ -686,28 +799,21 @@ pub fn CreateCharacterPanel(
         }
     };
 
-    let portraits = [
-        "human_male_1_gdca",
-        "human_female_1",
-        "human_male_2",
-        "human_female_2",
-        "human_male_3",
-        "human_female_3",
-        "orc_male_1",
-        "orc_female_1",
-        "elf_male_1",
-        "elf_female_1",
-        "demon_male_1",
-        "demon_female_1",
-        "furry_male_1",
-        "furry_female_1",
-        "blue_male_1",
-        "blue_female_1",
-        "insect_male_1",
-        "insect_female_1",
-        "undead_male_1",
-        "undead_female_1",
-    ];
+    let data_context = expect_context::<DataContext>();
+    // let mut portraits = available_portraits;
+    // portraits.sort_unstable();
+    // portraits.dedup();
+    let portraits = StoredValue::new(available_portraits);
+    let mut title_options = IndexMap::from([(None, "None".to_string())]);
+    for (id, title) in available_titles {
+        title_options.insert(Some(id), title);
+    }
+    let title_options = StoredValue::new(title_options);
+    let mut badge_options = IndexMap::from([(None, "None".to_string())]);
+    for (id, badge) in available_badges {
+        badge_options.insert(Some(id), badge);
+    }
+    let badge_options = StoredValue::new(badge_options);
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
@@ -760,16 +866,47 @@ pub fn CreateCharacterPanel(
                 </Show>
 
                 <CardInset class="flex-1 min-h-0">
+                    <Show when=move || selected_character_id.read().is_some()>
+                        <div class="grid grid-cols-1 gap-3 text-left xl:grid-cols-2 my-1 text-center">
+                            <label class="flex flex-col gap-1.5">
+                                <span class="text-sm font-medium text-zinc-400">"Title"</span>
+                                <DropdownMenu
+                                    options=title_options.get_value()
+                                    chosen_option=selected_character_title
+                                    missing_text="-"
+                                />
+                            </label>
+                            <label class="flex flex-col gap-1.5">
+                                <span class="text-sm font-medium text-zinc-400">"Badge"</span>
+                                <DropdownMenu
+                                    options=badge_options.get_value()
+                                    chosen_option=selected_character_badge
+                                    missing_text="-"
+                                />
+                            </label>
+                        </div>
+                    </Show>
                     <span class="block text-sm font-medium text-zinc-400">"Choose a Portrait"</span>
                     <div class="grid grid-cols-4 gap-1 xl:gap-2">
                         <For
-                            each=move || portraits
-                            key=|src| src.to_string()
-                            children=move |src| {
+                            each=move || portraits.get_value()
+                            key=|src| src.clone()
+                            children=move |src: String| {
+                                let image = data_context
+                                    .cosmetics_specs
+                                    .read_untracked()
+                                    .get(&src)
+                                    .and_then(|cosmetic| match cosmetic {
+                                        CosmeticType::Portrait(specs) => Some(specs.image.clone()),
+                                        _ => None,
+                                    })
+                                    .unwrap_or_else(|| src.clone());
+                                let selected_src = src.clone();
+                                let clicked_src = src.clone();
                                 let is_selected = Signal::derive(move || {
                                     selected_character_portrait
                                         .get()
-                                        .map(|portrait| portrait.into_inner() == src)
+                                        .map(|portrait| portrait == selected_src)
                                         .unwrap_or_default()
                                 });
                                 view! {
@@ -785,13 +922,12 @@ pub fn CreateCharacterPanel(
                                         class:border-transparent=move || !is_selected.get()
                                         class:brightness-30=move || !is_selected.get()
                                         on:click=move |_| {
-                                            selected_character_portrait
-                                                .set(AssetName::try_new(src).ok());
+                                            selected_character_portrait.set(Some(clicked_src.clone()));
                                         }
                                     >
                                         <img
                                             draggable="false"
-                                            src=img_asset(&format!("adventurers/{src}.webp"))
+                                            src=img_asset(&image)
                                             alt="Portrait"
                                             class="object-cover"
                                         />
@@ -888,12 +1024,12 @@ fn DiscordInviteBanner() -> impl IntoView {
 #[component]
 fn NewsPanel() -> impl IntoView {
     view! {
-        <Card class="text-left w-3xl">
-            <div class="px-4">
+        <Card class="text-left w-full flex-1 min-h-0">
+            <div class="px-4 shrink-0">
                 <CardTitle>"News"</CardTitle>
             </div>
 
-            <NewsInset />
+            <NewsInset class="w-full flex-1 min-h-0 gap-3" />
         </Card>
     }
 }

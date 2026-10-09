@@ -9,6 +9,7 @@ use shared::{
 
 use crate::components::{
     backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     settings::SettingsContext,
     shared::{
@@ -157,12 +158,12 @@ fn BenedictionsList(
     cost: RwSignal<f64>,
     view_only: bool,
 ) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
 
     view! {
         <div class="w-full space-y-12">
             <For
-                each=move || town_context.benedictions_specs.get().into_iter()
+                each=move || data_context.benedictions_specs.get().into_iter()
                 key=|(category_id, _)| category_id.clone()
                 let:((category_id, category_specs))
             >
@@ -622,10 +623,10 @@ pub fn EffectDescription(
                 {
                     return view! { <li class="text-zinc-400">"Max Level"</li> }.into_any();
                 }
-
                 value()
                     .map(|value| match benediction_specs.effect.clone() {
                         BenedictionEffect::StartingGold => {
+
                             view! {
                                 {effects_tooltip::effect_li(
                                     format!("+{} Starting Gold", format_number(value)),

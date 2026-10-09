@@ -42,7 +42,9 @@ pub fn TownInventoryPanel(
                             })
                             .await
                         {
-                            Ok(response) => town_context.inventory.set(response.inventory),
+                            Ok(response) => {
+                                town_context.inventory.set(response.inventory);
+                            }
                             Err(e) => show_toast(
                                 toaster,
                                 format!("Failed to equip item: {e}"),

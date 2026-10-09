@@ -237,7 +237,7 @@ fn BagItem(config: Arc<BagConfig>, item_index: usize) -> impl IntoView {
                                         "SELL"
                                     </div>
                                 </Show>
-                                <Show when=move || pending.get()>
+                                <Show when=move || pending.try_get().unwrap_or_default()>
                                     <div
                                         class="absolute inset-0 z-30 w-full"
                                         style="background: linear-gradient(180deg, rgba(214,177,102,0.04), rgba(0,0,0,0.08)), linear-gradient(135deg, rgba(32,31,36,0.82), rgba(8,8,10,0.92)); box-shadow: inset 0 0 0 1px rgba(108,83,41,0.55), inset 0 0 18px rgba(0,0,0,0.45);"
