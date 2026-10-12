@@ -4,7 +4,8 @@
   "rarity"            : "Boss",
   "max_life"          : 500,
   "size"              : "Huge",
-  "evade"             : {"Physical": 50, "Fire": 20, "Storm": 20, "Poison": 100},
+  "evade"             : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "armor"             : {"Physical": 50, "Poison": 200},
   "stun_lockout"      : 3.0,
   "status_resistances": [ {"status_id": "stun", "value": 30} ],
   "skills"            : [

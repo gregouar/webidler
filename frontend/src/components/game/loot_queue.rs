@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use leptos::{html::*, prelude::*};
+use leptos::{html::*, prelude::*, reactive::traits::Track};
 
 use leptos_use::watch_throttled;
 use shared::{
@@ -26,7 +26,7 @@ use crate::components::{
         loot_filter::{FilterRule, FilterRuleType, LootFilter},
         resources::{ResourceReward, ResourceRewardOverlay},
     },
-    ui::tooltip::DynamicTooltipPosition,
+    ui::{toast::*, tooltip::DynamicTooltipPosition},
 };
 
 #[component]
@@ -35,6 +35,7 @@ pub fn LootQueue() -> impl IntoView {
     let accessibility: AccessibilityContext = expect_context();
     let settings: SettingsContext = expect_context();
     let game_context: GameContext = expect_context();
+    let toaster: Toasts = expect_context();
 
     let pickup_loot = {
         let conn = conn.clone();
@@ -131,6 +132,7 @@ pub fn LootQueue() -> impl IntoView {
 
     let loot_filter = game_context.loot_filter;
     let queued_loot = Signal::derive(move || {
+        game_context.player_inventory.track(); // Track to retry pickup if inventory changes
         if loot_filter.read().immediate_mode {
             game_context
                 .queued_loot
@@ -147,26 +149,46 @@ pub fn LootQueue() -> impl IntoView {
                 .cloned()
         }
     });
-    let last_try = RwSignal::new(Default::default());
+
+    let no_more_space = RwSignal::new(false);
     let _ = watch_throttled(
         move || queued_loot.get(),
         {
             let pickup_loot = pickup_loot.clone();
             let sell_loot = sell_loot.clone();
             move |queued_loot: &Option<QueuedLoot>, _, _| {
-                if let Some(queued_loot) = queued_loot
-                    && last_try.try_get_untracked().unwrap_or_default() != queued_loot.identifier
-                {
+                if let Some(queued_loot) = queued_loot {
                     match filter_loot(loot_filter, &queued_loot.item_specs) {
-                        Some(FilterRuleType::Pickup) => pickup_loot(queued_loot.identifier),
-                        Some(FilterRuleType::Sell) => sell_loot(queued_loot.identifier),
+                        Some(FilterRuleType::Pickup) => {
+                            if game_context.player_inventory.read_untracked().bag.len()
+                                < game_context.player_inventory.read_untracked().max_bag_size
+                                    as usize
+                            {
+                                pickup_loot(queued_loot.identifier);
+                                no_more_space.set(false);
+                            } else {
+                                no_more_space.set(true);
+                            }
+                        }
+                        Some(FilterRuleType::Sell) => {
+                            sell_loot(queued_loot.identifier);
+                        }
                         None => {}
                     }
-                    last_try.set(queued_loot.identifier);
                 }
             }
         },
-        1000.0,
+        100.0,
+    );
+
+    let _ = watch_throttled(
+        move || no_more_space.get(),
+        move |no_more_space, _, _| {
+            if *no_more_space {
+                show_toast(toaster, "No more space in bag!", ToastVariant::Warning);
+            }
+        },
+        5000.0,
     );
 
     view! {

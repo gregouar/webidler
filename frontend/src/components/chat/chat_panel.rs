@@ -17,7 +17,10 @@ use crate::{
         chat::chat_context::ChatContext,
         data_context::DataContext,
         events::{EventsContext, Key, keyboard_event_key},
-        shared::tooltips::{ItemTooltip, item_tooltip},
+        shared::{
+            item_card::ItemCard,
+            tooltips::{ItemTooltip, item_tooltip},
+        },
         ui::{
             card::Card,
             checkbox::Checkbox,
@@ -612,8 +615,11 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             let show_affixes = show_affixes.get();
             // TODO: Compare? Max Item Level?
             view! {
-                <div class="flex gap-1 xl:gap-2">
-                    <ItemTooltip item_specs show_affixes />
+                <div class="relative flex items-start">
+                    <ItemTooltip item_specs=item_specs.clone() show_affixes />
+                    <div class="absolute right-full top-0 w-20 xl:w-24 pointer-events-none">
+                        <ItemCard item_specs />
+                    </div>
                 </div>
             }
             .into_any()
