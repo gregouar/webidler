@@ -4,13 +4,17 @@
 
 This repository contains **webidler**, a browser-based idle action RPG written in Rust. It takes inspiration from the depth of games such as Path of Exile: meaningful itemization, build experimentation, layered progression, and long-term optimization. It must remain its own game.
 
-When adding content or mechanics:
+Gameplay design is owner-directed. Agents must not invent, rebalance, or expand the game on their own.
 
-- Create original names, lore, art direction, skills, items, encounters, and progression systems. Do not copy Path of Exile text, assets, characters, locations, passive-tree layouts, exact balance values, or proprietary terminology.
-- Preserve the idle-first experience. Choices and build planning should matter, while routine combat can continue with limited input.
-- Prefer interesting tradeoffs and build synergies over a single obvious numerical upgrade.
-- Keep progression legible. Players should be able to understand why a stat changed, why they died, and where a reward came from.
-- Treat balance numbers as tunable data when possible, not scattered constants in UI code.
+### Protected gameplay and content scope
+
+- Do not change balance values, formulas, drop rates, rarity weights, affix ranges, enemy strength, encounter pacing, resource costs, rewards, progression speed, unlock requirements, or automation behavior unless the user explicitly requests that exact kind of change.
+- Do not add or rewrite items, skills, passives, affixes, monsters, areas, encounters, quests, pets, lore, names, descriptions, or other game content without clear user-provided direction.
+- A request to fix, refactor, optimize, migrate, restyle, or improve UI does not authorize gameplay or content changes. Preserve observable gameplay behavior and existing data values while completing such work.
+- Do not make incidental "balance fixes," fill perceived content gaps, normalize unusual values, or replace deliberate mechanics based on personal judgment.
+- If a requested feature cannot be completed without an unspecified design, balance value, reward, or content decision, implement the neutral/non-gameplay portion when possible and ask the user for that decision rather than guessing.
+- When gameplay or content work is explicitly authorized, keep the change limited to the supplied requirements. Flag consequential interactions or missing parameters before broadening its scope.
+- Any authorized new creative content must use original names, lore, art direction, skills, items, encounters, and progression concepts. Do not copy Path of Exile text, assets, characters, locations, passive-tree layouts, exact balance values, or proprietary terminology.
 
 These instructions apply to the whole repository. More specific `AGENTS.md` files, if added later, override this file for their subtree.
 
@@ -54,6 +58,8 @@ The main loop in `backend/src/game/game_orchestrator.rs` has an intentional orde
 - Keep per-tick work bounded. Avoid database or network calls inside hot simulation loops.
 
 ## Data-driven game content
+
+Treat `data/` as owner-authored game design, not as a backlog for autonomous improvement. Read it to understand dependencies and validate implementation work, but modify it only when the user clearly requests the specific content or balance change. Purely structural edits such as schema migrations must preserve all gameplay meaning and numerical values unless directed otherwise.
 
 Follow the neighboring JSON schema and naming style in `data/`. Resource keys are stable identifiers: use lowercase `snake_case`, keep them unique, and do not rename a shipped key casually because saves and cross-resource references may depend on it.
 
@@ -129,7 +135,7 @@ Keep HTTP routing/transport in `rest` or `websocket`, persistence in `db`, orche
 
 Before editing, read the target file, its module entry point, and a nearby analogous implementation. Search references to any type, resource key, message variant, or database column you change.
 
-For a gameplay feature, normally consider this full slice:
+For an explicitly requested gameplay feature, normally consider this full slice:
 
 1. Domain types and pure calculations in `shared`.
 2. JSON definitions and manifests in `data`, if content-driven.
@@ -194,6 +200,7 @@ For UI changes, also inspect the affected flow in a browser when available. Comp
 Before handing off a change:
 
 - The implementation lives in the correct crate/layer and preserves server authority.
+- No gameplay balance or content changed without explicit user direction; unrelated work preserves existing behavior and values.
 - Content IDs and manifest entries resolve, and new assets use valid repository-relative paths.
 - Protocol and persisted-state changes are compatible or deliberately migrated.
 - SQLite and PostgreSQL schemas remain aligned.
