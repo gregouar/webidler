@@ -91,11 +91,11 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConverter": {
-                  "source"    : { "Damage": {"damage_type": "Storm", "min_max": null} },
+                  "source": { "Damage": {"damage_type": "Storm", "min_max": null} },
                   "stat"      : {
                     "Damage": {
                       "skill_type" : null,
@@ -172,7 +172,7 @@
       "flat_damage" : {
         "title"       : "High Voltage",
         "base_cost"   : 2,
-        "upgrade_cost": 0,
+        "upgrade_cost": 2,
         "max_level"   : 10,
         "effects"     : [
           {
@@ -545,7 +545,7 @@
           },
           {
             "value"        : 20,
-            "upgrade_value": 0,
+            "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
@@ -588,7 +588,7 @@
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
               "modifier": "More"
             },
-            "hidden"       : true
+            "hidden": true
           }
         ]
       },
@@ -629,7 +629,7 @@
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire_self"} },
               "modifier": "More"
             },
-            "hidden"       : true
+            "hidden": true
           }
         ]
       },
@@ -663,7 +663,7 @@
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
               "modifier": "More"
             },
-            "hidden"       : true
+            "hidden": true
           },
           {
             "value"        : 15,
@@ -673,7 +673,7 @@
               "modifier"     : "More",
               "bypass_ignore": true
             },
-            "hidden"       : true
+            "hidden": true
           }
         ]
       },
@@ -685,7 +685,7 @@
         "effects"     : [
           {
             "value"        : -100,
-            "upgrade_value": 0,
+            "upgrade_value":    0,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
               "modifier": "More"
@@ -693,12 +693,12 @@
           },
           {
             "value"        : -100,
-            "upgrade_value": 0,
+            "upgrade_value":    0,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
               "modifier": "More"
             },
-            "hidden"       : true
+            "hidden": true
           },
           {
             "value"        : 1,
@@ -715,7 +715,7 @@
               "stat"    : { "SkillTargetModifier": {"shape": "Square4", "skill_id": "unrighteous_fire"} },
               "modifier": "Flat"
             },
-            "hidden"       : true
+            "hidden": true
           }
         ]
       },
@@ -736,8 +736,8 @@
             "ReplaceStatusId": {"old_status_id": "righteous_fire_self", "new_status_id": "unrighteous_fire_self"}
           },
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 {
@@ -848,7 +848,7 @@
             "SkillEffect"  : { "ApplyStatus": {"status_id": "poison_cloud_vulnerability", "value": 100} }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "poison_cloud_vulnerability"} },
@@ -958,7 +958,7 @@
         "effects"     : [
           {
             "value"        : -1e+200,
-            "upgrade_value": 0,
+            "upgrade_value":  0     ,
             "StatEffect"   : {
               "stat"    : { "Damage": {"damage_type": "Storm"} },
               "modifier": "More"
@@ -966,7 +966,7 @@
           },
           {
             "value"        : 30,
-            "upgrade_value": 5,
+            "upgrade_value":  5,
             "StatEffect"   : {
               "stat"    : { "StatusEscalation": {"status_id": "poison"} },
               "modifier": "Flat"
@@ -1028,7 +1028,7 @@
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : { "Damage": {"damage_type": "Fire"} },
+                  "stat": { "Damage": {"damage_type": "Fire"} },
                   "conditions": [
                     { "HasStatus": {"status_id": "curse_flammability"} }
                   ]
@@ -1043,7 +1043,7 @@
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+                  "stat": { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
                   "conditions": [
                     { "HasStatus": {"status_id": "curse_conductivity"} }
                   ]
@@ -1062,11 +1062,11 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 20,
+            "upgrade_value":  20,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : {"Damage": {}},
+                  "stat": {"Damage": {}},
                   "conditions": [
                     { "StatusStacks": {"skill_type": "Curse"} }
                   ]
@@ -1077,15 +1077,15 @@
           },
           {
             "value"        : 100,
-            "upgrade_value": 20,
+            "upgrade_value":  20,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : { "Damage": {"damage_type": "Physical"} },
+                  "stat": { "Damage": {"damage_type": "Physical"} },
                   "conditions": [
                     { "StatusStacks": {"skill_type": "Curse"} }
                   ],
-                  "skill_id"  : "curse_putridity_hit"
+                  "skill_id": "curse_putridity_hit"
                 }
               },
               "modifier": "More",
@@ -1113,7 +1113,7 @@
                   { "HasStatus": {"damage_type": "Poison"} }
                 ]
               },
-              "target"    : "Me",
+              "target": "Me",
               "effects"   : [
                 { "Restore": {"restore_type": "Life", "value": 3, "modifier": "Flat"} }
               ]
@@ -1137,7 +1137,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
