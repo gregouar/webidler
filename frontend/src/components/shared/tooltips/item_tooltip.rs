@@ -749,6 +749,7 @@ fn affix_type_str(affix_type: AffixType) -> &'static str {
         AffixType::Suffix => "Suffix",
         AffixType::Unique => "Base affix",
         AffixType::Upgrade => "Empowering affix",
+        AffixType::Soul => "Soul affix",
     }
 }
 

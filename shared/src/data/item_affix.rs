@@ -18,6 +18,7 @@ pub enum AffixType {
     Suffix,
     Unique,
     Upgrade,
+    Soul,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]

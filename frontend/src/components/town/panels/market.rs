@@ -221,7 +221,7 @@ pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
         Some(ItemRarity::Normal) => "Common",
         Some(ItemRarity::Magic) => "Magical",
         Some(ItemRarity::Rare) => "Rare",
-        Some(ItemRarity::Masterwork) => "Masterwork",
+        Some(ItemRarity::Masterwork) => "Soulforged",
         Some(ItemRarity::Unique) => "Unique",
     }
 }

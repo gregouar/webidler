@@ -455,7 +455,7 @@ pub fn remove_affix(
     let affixes_amount = match affix_type {
         AffixType::Prefix => prefixes_amount,
         AffixType::Suffix => suffixes_amount,
-        AffixType::Unique | AffixType::Upgrade => 0,
+        AffixType::Unique | AffixType::Upgrade | AffixType::Soul => 0,
     };
 
     let affix_subindex = rng::random_range(0..affixes_amount).unwrap_or_default();
