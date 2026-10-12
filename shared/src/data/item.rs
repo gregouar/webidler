@@ -185,6 +185,7 @@ pub enum ItemCategory {
     // Other categories:
     Map,
     Rune,
+    Soul,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]

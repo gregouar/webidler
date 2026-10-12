@@ -72,6 +72,7 @@ pub fn ItemTooltipContent(
         let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
         let upgrade_affixes =
             formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
+        let soul_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Soul);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
             (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
@@ -110,6 +111,15 @@ pub fn ItemTooltipContent(
                             // "Base affixes:"
                             // </li>
                             {upgrade_affixes}
+                        }
+                    })}
+                {(!soul_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-zinc-400 text-xs xl:text-sm ">
+                            // "Base affixes:"
+                            // </li>
+                            {soul_affixes}
                         }
                     })}
             }
@@ -796,6 +806,7 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Ring => "Ring",
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
+        ItemCategory::Soul => "Soul",
     }
 }
 
