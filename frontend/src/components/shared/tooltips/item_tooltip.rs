@@ -75,7 +75,11 @@ pub fn ItemTooltipContent(
         let soul_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Soul);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
-            (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
+            !base_affixes.is_empty()
+                || !prefixes.is_empty()
+                || !suffixes.is_empty()
+                || !upgrade_affixes.is_empty()
+                || !soul_affixes.is_empty(),
             view! {
                 {(!base_affixes.is_empty())
                     .then(|| {
@@ -250,6 +254,7 @@ pub fn ItemTooltipContent(
                         }
                     })}
                 <QualityTooltip item_specs=item_specs.clone() />
+                <SoulTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
                 <RuneTooltip item_specs=item_specs.clone() />
@@ -695,6 +700,23 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                         <span class="text-white font-semibold">
                             {format!("+{:.0}%", item_specs.modifiers.quality)}
                         </span>
+                    </li>
+                }
+            })}
+    }
+}
+
+#[component]
+pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Soul)
+            .then(|| {
+                view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm  italic">
+                        "Can be imbued into a Rare Item of the same category to grant:"
                     </li>
                 }
             })}
