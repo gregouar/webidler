@@ -143,7 +143,7 @@ For an explicitly requested gameplay feature, normally consider this full slice:
 4. Client/server message changes in `shared`, if state crosses the socket.
 5. Rendering and player input in `frontend`.
 6. Persistence and paired migrations, if state survives a session.
-7. Focused tests for formulas, boundary conditions, validation, and serialization.
+7. Tests only when the behavior is sufficiently tricky or regression-prone to justify them.
 
 Keep patches focused. Do not reformat unrelated files, rename broad APIs incidentally, edit generated build output, or replace user-authored changes. Prefer extending established patterns over introducing a parallel abstraction.
 
@@ -183,7 +183,11 @@ cargo test --no-default-features --features postgres
 
 Do not claim a PostgreSQL or Trunk check passed if its required service/tool was unavailable. State exactly which commands ran and any environmental limitation.
 
-Add or update tests near the behavior they protect. Prioritize tests for:
+### Test policy
+
+Do not generate tests by default. Routine UI composition, straightforward CRUD, wiring, renames, styling, data edits, and simple transformations do not need new tests unless the user asks for them. Validate those changes with the existing formatter, compiler, lints, existing test suite, and targeted manual checks.
+
+Add a small focused test only when implementing genuinely tricky behavior whose correctness is difficult to establish through compilation or direct inspection. Good candidates include:
 
 - modifier stacking and local/global scope;
 - damage, mitigation, cooldown, resource, and reward boundaries;
@@ -192,6 +196,8 @@ Add or update tests near the behavior they protect. Prioritize tests for:
 - save/message serialization compatibility;
 - cross-referenced data loading;
 - migration behavior for both database engines.
+
+Prefer a few high-value behavioral cases over broad generated coverage, snapshots, or tests that merely restate the implementation. Do not refactor production code solely to make a simple change testable. When no tests are added, report the checks or manual validation that were performed instead.
 
 For UI changes, also inspect the affected flow in a browser when available. Compare it beside an adjacent existing screen and verify that typography, surfaces, controls, spacing, colors, and interaction states feel like one system. Test loading, empty, error, disabled, selected, hover/focus, and narrow-screen states rather than only the happy path. Check both high and low graphics quality and, for animated UI, the animations-disabled setting.
 
@@ -204,7 +210,7 @@ Before handing off a change:
 - Content IDs and manifest entries resolve, and new assets use valid repository-relative paths.
 - Protocol and persisted-state changes are compatible or deliberately migrated.
 - SQLite and PostgreSQL schemas remain aligned.
-- Formatting and relevant checks/tests have run.
+- Formatting and relevant checks have run; tests were added only when justified by tricky behavior or explicitly requested.
 - Frontend work reuses the existing component hierarchy and matches neighboring screens across responsive and graphics-quality modes.
 - Player-facing mechanics and formulas are understandable in the UI.
 - New creative content is original and does not imitate protected Path of Exile material too closely.

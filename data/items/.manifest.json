@@ -1,24 +1,11 @@
 {
-  "meta": {
-    "enabled": true
-  },
+  "meta": {"enabled": true},
   "resources": {
     "items": [
-      "cloaks.json",
-      "amulets.json",
-      "body_armors.json",
-      "boots.json",
-      "focuses.json",
-      "gloves.json",
-      "helmets.json",
-      "maps.json",
-      "rings.json",
-      "runes.json",
-      "shields.json",
-      "weapons_1h_melee.json",
-      "weapons_2h_melee.json",
-      "weapons_ranged.json",
-      "weapons_spell.json"
+      "cloaks.json",           "amulets.json",          "body_armors.json",      "boots.json",
+      "focuses.json",          "gloves.json",           "helmets.json",          "maps.json",
+      "rings.json",            "runes.json",            "shields.json",          "souls.json",
+      "weapons_1h_melee.json", "weapons_2h_melee.json", "weapons_ranged.json",   "weapons_spell.json"
     ]
   }
 }

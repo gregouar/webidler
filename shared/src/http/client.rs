@@ -238,6 +238,19 @@ pub struct ForgeUpgradeRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeSacrificeRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeImbueRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+    pub soul_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GambleItemRequest {
     pub character_id: UserCharacterId,
     pub item_category: Option<ItemCategory>,
