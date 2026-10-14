@@ -10,18 +10,23 @@ use shared::{
         player::EquippedSlot,
     },
     http::client::{
-        ForgeAffixOperation, ForgeAffixRequest, ForgeUpgradeRequest, GambleItemRequest,
-        InventoryDeleteRequest,
+        ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
+        ForgeUpgradeRequest, GambleItemRequest, InventoryDeleteRequest, InventorySortRequest,
     },
 };
 use std::sync::Arc;
 
 use crate::components::{
     backend_client::BackendClient,
-    shared::{inventory::loot_filter_category_to_str, resources::GemsIcon},
+    shared::{
+        bag_grid::BagSortButton, inventory::loot_filter_category_to_str, resources::GemsIcon,
+    },
     town::{
         TownContext,
-        items_browser::{InventoryItemGrid, ItemDetails, SelectedItem, SelectedMarketItem},
+        items_browser::{
+            InventoryItemEligibility, InventoryItemGrid, ItemDetails, SelectedItem,
+            SelectedMarketItem,
+        },
     },
     ui::{
         Separator,
@@ -38,19 +43,26 @@ use crate::components::{
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum ForgeTab {
     Affix,
+    Sacrifice,
+    Imbue,
     Gamble,
     UniqueUpgrade,
 }
 
 #[component]
 pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
+    let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
+    let toaster: Toasts = expect_context();
     let selected_item = RwSignal::new(SelectedItem::None);
+    let selected_soul = RwSignal::new(SelectedItem::None);
     let gamble_category = RwSignal::new(None);
     let active_tab = RwSignal::new(ForgeTab::Affix);
+    let sorting = RwSignal::new(false);
 
     let switch_tab = move |new_tab| {
         selected_item.set(SelectedItem::None);
+        selected_soul.set(SelectedItem::None);
         town_context.selected_item_index.set(None);
         active_tab.set(new_tab);
     };
@@ -58,8 +70,39 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
     Effect::new(move || {
         if open.get() || town_context.open_inventory.get() {
             selected_item.set(SelectedItem::None);
+            selected_soul.set(SelectedItem::None);
             town_context.selected_item_index.set(None);
         }
+    });
+
+    let sort_inventory = Callback::new(move |sort_type| {
+        if sorting.get_untracked() {
+            return;
+        }
+
+        selected_item.set(SelectedItem::None);
+        selected_soul.set(SelectedItem::None);
+        town_context.selected_item_index.set(None);
+        sorting.set(true);
+
+        let character_id = town_context.character.read_untracked().character_id;
+        spawn_local(async move {
+            match backend
+                .inventory_sort(&InventorySortRequest {
+                    character_id,
+                    sort_type,
+                })
+                .await
+            {
+                Ok(response) => town_context.inventory.set(response.inventory),
+                Err(error) => show_toast(
+                    toaster,
+                    format!("Failed to sort inventory: {error}"),
+                    ToastVariant::Error,
+                ),
+            }
+            sorting.set(false);
+        });
     });
 
     view! {
@@ -75,6 +118,24 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             class:py-3
                         >
                             <div class="mx-1">"Craft"</div>
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == ForgeTab::Sacrifice
+                            })
+                            on:click=move |_| { switch_tab(ForgeTab::Sacrifice) }
+                            class:py-3
+                        >
+                            <div class="mx-1">"Sacrifice"</div>
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
+                                active_tab.get() == ForgeTab::Imbue
+                            })
+                            on:click=move |_| { switch_tab(ForgeTab::Imbue) }
+                            class:py-3
+                        >
+                            <div class="mx-1">"Imbue"</div>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
@@ -96,18 +157,58 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         </TabButton>
                     </div>
                     <div class="flex-1 mb-2" />
+                    <div class="mb-2">
+                        <BagSortButton
+                            on_sort=sort_inventory
+                            disabled=Signal::derive(move || sorting.get())
+                        />
+                    </div>
                 </CardHeader>
 
                 <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
                     <CardInset class="w-full" pad=false>
 
                         {move || match active_tab.get() {
-                            ForgeTab::Affix | ForgeTab::UniqueUpgrade => {
+                            ForgeTab::Affix | ForgeTab::UniqueUpgrade | ForgeTab::Sacrifice => {
+                                let eligibility = match active_tab.get() {
+                                    ForgeTab::Affix => InventoryItemEligibility::NonUnique,
+                                    ForgeTab::UniqueUpgrade => InventoryItemEligibility::Unique,
+                                    ForgeTab::Sacrifice => InventoryItemEligibility::Sacrifice,
+                                    _ => InventoryItemEligibility::Any,
+                                };
                                 view! {
                                     <InventoryItemGrid
                                         selected_item
-                                        filter_unique=active_tab.get() == ForgeTab::UniqueUpgrade
+                                        eligibility
                                         bag_index_offset=9
+                                    />
+                                }
+                                    .into_any()
+                            }
+                            ForgeTab::Imbue => {
+                                let on_item_select = Callback::new(move |item: SelectedMarketItem| {
+                                    if item.item_specs.base.categories.contains(&ItemCategory::Soul)
+                                    {
+                                        selected_soul.set(SelectedItem::InMarket(item));
+                                    } else {
+                                        selected_item.set(SelectedItem::InMarket(item));
+                                    }
+                                });
+                                let on_item_cancel = Callback::new(move |item: SelectedMarketItem| {
+                                    if item.item_specs.base.categories.contains(&ItemCategory::Soul)
+                                    {
+                                        selected_soul.set(SelectedItem::None);
+                                    } else {
+                                        selected_item.set(SelectedItem::None);
+                                    }
+                                });
+                                view! {
+                                    <InventoryItemGrid
+                                        selected_item
+                                        eligibility=InventoryItemEligibility::Imbue
+                                        bag_index_offset=9
+                                        on_item_select
+                                        on_item_cancel
                                     />
                                 }
                                     .into_any()
@@ -122,6 +223,12 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         {move || match active_tab.get() {
                             ForgeTab::Affix => {
                                 view! { <ForgeAffixDetails selected_item /> }.into_any()
+                            }
+                            ForgeTab::Sacrifice => {
+                                view! { <SacrificeDetails selected_item /> }.into_any()
+                            }
+                            ForgeTab::Imbue => {
+                                view! { <ImbueDetails selected_item selected_soul /> }.into_any()
                             }
                             ForgeTab::UniqueUpgrade => {
                                 view! { <UpgradeUniqueDetails selected_item /> }.into_any()
@@ -432,6 +539,202 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 }
 
 #[component]
+pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let backend: BackendClient = expect_context();
+    let town_context: TownContext = expect_context();
+    let toaster: Toasts = expect_context();
+
+    let sacrifice_price = move || {
+        selected_item.with(|selected| match selected {
+            SelectedItem::InMarket(item) => Some(computations::sacrifice_price(
+                &item.item_specs.modifiers.affixes,
+            )),
+            _ => None,
+        })
+    };
+
+    let do_sacrifice = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move || {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
+                spawn_local(async move {
+                    match backend
+                        .forge_sacrifice(&ForgeSacrificeRequest {
+                            character_id,
+                            item_index: item.index as u32,
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            let updated_item = response
+                                .inventory
+                                .bag
+                                .get(item.index.saturating_sub(9))
+                                .cloned();
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.write().resource_gems = response.resource_gems;
+                            if let Some(updated_item) = updated_item {
+                                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
+                                    item_specs: Arc::new(updated_item),
+                                    ..item
+                                }));
+                            } else {
+                                selected_item.set(SelectedItem::None);
+                            }
+                        }
+                        Err(error) => show_toast(
+                            toaster,
+                            format!("Failed to sacrifice item: {error}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                });
+            }
+        }
+    };
+
+    // let try_sacrifice = move || {
+    //     (confirm_context.confirm)(
+    //         "Sacrificing destroys this item and extracts one random affix. Continue?".into(),
+    //         Arc::new(do_sacrifice),
+    //     );
+    // };
+
+    view! {
+        <div class="flex h-full w-full flex-col justify-between">
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Sacrifice Item"
+                    <HelpTooltip text="Destroy a Rare Item with four affixes to extract of the affixes as a matching Item Soul." />
+                </span>
+            </CardInsetTitle>
+            <ItemDetails selected_item show_affixes=true />
+            <MenuButton
+                on:click=move |_| do_sacrifice()
+                disabled=Signal::derive(move || {
+                    sacrifice_price()
+                        .is_none_or(|price| { price > town_context.character.read().resource_gems })
+                })
+            >
+                <div class="flex w-full items-center justify-center gap-1 text-zinc-400 h-[2em]">
+                    {move || {
+                        match sacrifice_price() {
+                            Some(price) => {
+                                view! {
+                                    "Sacrifice for "
+                                    <span class="font-bold text-fuchsia-300">{price}</span>
+                                    <GemsIcon />
+                                }
+                                    .into_any()
+                            }
+                            None => view! { "Sacrifice Item" }.into_any(),
+                        }
+                    }}
+                </div>
+            </MenuButton>
+        </div>
+    }
+}
+
+#[component]
+pub fn ImbueDetails(
+    selected_item: RwSignal<SelectedItem>,
+    selected_soul: RwSignal<SelectedItem>,
+) -> impl IntoView {
+    let backend: BackendClient = expect_context();
+    let town_context: TownContext = expect_context();
+    let toaster: Toasts = expect_context();
+
+    let compatible = move || {
+        selected_item.with(|selected_item| {
+            selected_soul.with(|selected_soul| match (selected_item, selected_soul) {
+                (SelectedItem::InMarket(item), SelectedItem::InMarket(soul)) => {
+                    let mut expected_categories = item.item_specs.base.categories.clone();
+                    expected_categories.insert(ItemCategory::Soul);
+                    soul.item_specs.base.categories == expected_categories
+                        && soul.item_specs.modifiers.affixes.len() == 1
+                        && soul
+                            .item_specs
+                            .modifiers
+                            .affixes
+                            .first()
+                            .is_some_and(|affix| {
+                                item.item_specs.modifiers.can_replace_soul_affix(affix)
+                            })
+                }
+                _ => false,
+            })
+        })
+    };
+
+    let do_imbue = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move || {
+            if let (SelectedItem::InMarket(item), SelectedItem::InMarket(soul)) =
+                (selected_item.get(), selected_soul.get())
+            {
+                spawn_local(async move {
+                    match backend
+                        .forge_imbue(&ForgeImbueRequest {
+                            character_id,
+                            item_index: item.index as u32,
+                            soul_index: soul.index as u32,
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            town_context.inventory.set(response.inventory);
+                            selected_item.set(SelectedItem::None);
+                            selected_soul.set(SelectedItem::None);
+                        }
+                        Err(error) => show_toast(
+                            toaster,
+                            format!("Failed to imbue item: {error}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                });
+            }
+        }
+    };
+
+    // let try_imbue = move || {
+    //     let replacing = selected_item.with(|selected| match selected {
+    //         SelectedItem::InMarket(item) => {
+    //             item.item_specs.modifiers.count_affixes(AffixType::Soul) > 0
+    //         }
+    //         _ => false,
+    //     });
+    //     let message = if replacing {
+    //         "Imbuing consumes the selected Soul and replaces the existing Soul affix. Continue?"
+    //     } else {
+    //         "Imbuing consumes the selected Soul. Continue?"
+    //     };
+    //     (confirm_context.confirm)(message.into(), Arc::new(do_imbue));
+    // };
+
+    view! {
+        <div class="flex h-full w-full min-h-0 flex-col justify-between gap-2">
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Imbue Item"
+                    <HelpTooltip text="Imbue a Rare or Soulforged Item using an Item Soul of the same category." />
+                </span>
+            </CardInsetTitle>
+            <div class="flex flex-col gap-2 xl:gap-4 overflow-y-auto">
+                <ItemDetails selected_item show_affixes=true />
+                <ItemDetails selected_item=selected_soul show_affixes=true compact=true />
+            </div>
+            <MenuButton on:click=move |_| do_imbue() disabled=Signal::derive(move || !compatible())>
+                {move || {
+                    if compatible() { "Imbue Item" } else { "Select a compatible Item and Soul" }
+                }}
+            </MenuButton>
+        </div>
+    }
+}
+
+#[component]
 pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
@@ -572,9 +875,9 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                     disabled=Signal::derive({
                         move || upgrade_price().map(|price| price > user_gems()).unwrap_or(true)
                     })
-                    class:mb-1
-                    class:xl:mb-2
                 >
+                    // class:mb-1
+                    // class:xl:mb-2
                     <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
                         {move || {
                             if wrong_item() {
