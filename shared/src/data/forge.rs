@@ -1,5 +1,8 @@
 use crate::{
-    data::{item::ItemBase, item_affix::AffixType},
+    data::{
+        item::{ItemBase, ItemCategory},
+        item_affix::AffixType,
+    },
     http::client::ForgeAffixOperation,
 };
 
@@ -27,6 +30,10 @@ pub fn affix_operation_price(
     affixes_amount: usize,
     item_base: &ItemBase,
 ) -> Option<f64> {
+    if item_base.categories.contains(&ItemCategory::Soul) {
+        return None;
+    }
+
     match operation {
         ForgeAffixOperation::Add(affix_type) => {
             affix_price(affixes_amount, item_base.map_specs.is_some()).map(|price| {

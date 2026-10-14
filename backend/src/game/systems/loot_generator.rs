@@ -490,12 +490,14 @@ fn update_rarity(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) {
-    let new_rarity = if affixes_amount <= 2 {
-        ItemRarity::Magic
-    } else if affixes_amount <= 4 {
-        ItemRarity::Rare
-    } else {
+    let new_rarity = if modifiers.count_affixes(AffixType::Soul) > 0 {
         ItemRarity::Masterwork
+    } else if affixes_amount > 2 {
+        ItemRarity::Rare
+    } else if affixes_amount > 0 {
+        ItemRarity::Magic
+    } else {
+        ItemRarity::Normal
     };
 
     if new_rarity != modifiers.rarity

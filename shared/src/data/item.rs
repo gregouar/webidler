@@ -78,11 +78,16 @@ impl InventorySortType {
     pub fn compare(self, a: &ItemSpecs, b: &ItemSpecs) -> std::cmp::Ordering {
         let rarity = || b.modifiers.rarity.cmp(&a.modifiers.rarity);
         let category = || {
-            a.base
-                .categories
-                .iter()
-                .next_back()
-                .cmp(&b.base.categories.iter().next_back())
+            let sort_category = |item: &ItemSpecs| {
+                let mut categories = item.base.categories.iter().rev().copied();
+                let category = categories.next();
+                let soul_category = (category == Some(ItemCategory::Soul))
+                    .then(|| categories.next())
+                    .flatten();
+                (category, soul_category)
+            };
+            sort_category(a)
+                .cmp(&sort_category(b))
                 .then_with(|| a.base.slot.cmp(&b.base.slot))
         };
         let level = || b.required_level.cmp(&a.required_level);
@@ -391,5 +396,14 @@ impl ItemModifiers {
             .iter()
             .map(|affix| affix.family.clone())
             .collect()
+    }
+
+    /// A soul affix can replace another of the same family, but not be added on an item with
+    /// other affixes of the same family.
+    pub fn can_replace_soul_affix(&self, soul_affix: &ItemAffix) -> bool {
+        !self
+            .affixes
+            .iter()
+            .any(|affix| affix.affix_type != AffixType::Soul && affix.family == soul_affix.family)
     }
 }
