@@ -649,10 +649,10 @@ pub fn ImbueDetails(
         selected_item.with(|selected_item| {
             selected_soul.with(|selected_soul| match (selected_item, selected_soul) {
                 (SelectedItem::InMarket(item), SelectedItem::InMarket(soul)) => {
-                    let mut expected_categories = item.item_specs.base.categories.clone();
-                    expected_categories.insert(ItemCategory::Soul);
-                    soul.item_specs.base.categories == expected_categories
-                        && soul.item_specs.modifiers.affixes.len() == 1
+                    soul.item_specs
+                        .base
+                        .categories
+                        .is_superset(&item.item_specs.base.categories)
                         && soul
                             .item_specs
                             .modifiers

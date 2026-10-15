@@ -362,7 +362,7 @@ pub fn add_affix(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> bool {
-    if base.rarity == ItemRarity::Unique {
+    if base.rarity == ItemRarity::Unique || base.categories.contains(&ItemCategory::Soul) {
         return false;
     }
 
