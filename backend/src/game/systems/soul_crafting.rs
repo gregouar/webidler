@@ -39,21 +39,6 @@ pub fn sacrifice(item: &ItemSpecs, items_store: &ItemsStore) -> Result<ItemSpecs
         ));
     }
 
-    let expected_categories = item
-        .base
-        .categories
-        .iter()
-        .copied()
-        .chain(std::iter::once(ItemCategory::Soul))
-        .collect();
-    let (base_item_id, soul_base) = items_store
-        .content
-        .iter()
-        .find(|(_, base)| base.categories == expected_categories)
-        .ok_or(AppError::UserError(
-            "no Soul base exists for this item category".to_string(),
-        ))?;
-
     let normal_affixes: Vec<_> = item
         .modifiers
         .affixes
@@ -66,10 +51,16 @@ pub fn sacrifice(item: &ItemSpecs, items_store: &ItemsStore) -> Result<ItemSpecs
     let mut affix = normal_affixes[affix_index].clone();
     affix.affix_type = AffixType::Soul;
 
-    Ok(items_controller::create_item_specs(
-        soul_base.clone(),
+    let soul_item_id = items_store
+        .soul_by_categories
+        .get(&item.base.categories)
+        .ok_or(AppError::UserError(
+            "no Soul base exists for this item category".to_string(),
+        ))?;
+    let soul_item = items_controller::init_item_specs_from_store(
+        items_store,
         ItemModifiers {
-            base_item_id: base_item_id.clone(),
+            base_item_id: soul_item_id.clone(),
             name: format!("{} Soul", item.modifiers.name),
             rarity: ItemRarity::Masterwork,
             level: affix.item_level,
@@ -77,8 +68,10 @@ pub fn sacrifice(item: &ItemSpecs, items_store: &ItemsStore) -> Result<ItemSpecs
             quality: 0.0,
             upgrade_level: 0,
         },
-        0.0,
-    ))
+    )
+    .ok_or(AppError::NotFound)?;
+
+    Ok(soul_item)
 }
 
 pub fn imbue(item: &mut ItemSpecs, mut soul: ItemSpecs) -> Result<(), AppError> {

@@ -172,10 +172,7 @@ impl MasterStore {
             skills_store: Arc::new(skills_store?),
             skill_masteries_store: Arc::new(skill_masteries_store?),
             statuses_store: Arc::new(statuses_store?.into_indexed_keys()),
-            items_store: Arc::new(ItemsStore {
-                content: items_store_content?,
-                signature_key: item_signature_key,
-            }),
+            items_store: Arc::new(ItemsStore::new(items_store_content?, item_signature_key)),
             item_affixes_table: Arc::new(item_affixes_table?),
             item_adjectives_table: Arc::new(item_adjectives_table?),
             item_nouns_table: Arc::new(item_nouns_table?),
