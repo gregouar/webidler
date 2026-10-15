@@ -683,9 +683,27 @@ pub fn ImbueDetails(
                         .await
                     {
                         Ok(response) => {
+                            let result_index = if soul.index < item.index {
+                                item.index.saturating_sub(1)
+                            } else {
+                                item.index
+                            };
+                            let result_item = result_index
+                                .checked_sub(9)
+                                .and_then(|bag_index| response.inventory.bag.get(bag_index))
+                                .cloned();
+
                             town_context.inventory.set(response.inventory);
-                            selected_item.set(SelectedItem::None);
                             selected_soul.set(SelectedItem::None);
+                            if let Some(result_item) = result_item {
+                                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
+                                    index: result_index,
+                                    item_specs: Arc::new(result_item),
+                                    ..item
+                                }));
+                            } else {
+                                selected_item.set(SelectedItem::None);
+                            }
                         }
                         Err(error) => show_toast(
                             toaster,

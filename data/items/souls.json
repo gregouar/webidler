@@ -245,5 +245,43 @@
         "ignore_quality" : true,
         "upgrade_levels" : [],
         "upgrade_effects": []
+    },
+    "map_soul"            : {
+        "name"           : "Edict Soul",
+        "icon"           : "items/souls/map_soul.webp",
+        "description"    : null,
+        "slot"           : null,
+        "extra_slots"    : [],
+        "categories"     : ["Map", "Soul"],
+        "min_area_level" : 0,
+        "rarity"         : "Masterwork",
+        "affixes"        : [],
+        "triggers"       : [],
+        "weapon_specs"   : null,
+        "armor_specs"    : null,
+        "rune_specs"     : null,
+        "map_specs"      : null,
+        "ignore_quality" : true,
+        "upgrade_levels" : [],
+        "upgrade_effects": []
+    },
+    "rune_soul"           : {
+        "name"           : "Rune Soul",
+        "icon"           : "items/souls/rune_soul.webp",
+        "description"    : null,
+        "slot"           : null,
+        "extra_slots"    : [],
+        "categories"     : ["Rune", "Soul"],
+        "min_area_level" : 0,
+        "rarity"         : "Masterwork",
+        "affixes"        : [],
+        "triggers"       : [],
+        "weapon_specs"   : null,
+        "armor_specs"    : null,
+        "rune_specs"     : null,
+        "map_specs"      : null,
+        "ignore_quality" : true,
+        "upgrade_levels" : [],
+        "upgrade_effects": []
     }
 }
