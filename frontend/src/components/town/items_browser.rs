@@ -480,11 +480,7 @@ pub fn ItemDetailsPanel(
                 <div class="pointer-events-none absolute inset-[1px] rounded-[9px] border border-white/5"></div>
                 <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
 
-                <div class=if compact {
-                    "relative z-10 flex h-full w-full min-h-0 flex-row gap-4 xl:gap-6 p-3 xl:p-4"
-                } else {
-                    "relative z-10 flex h-full w-full min-h-0 flex-row gap-4 xl:gap-6 p-3 xl:p-4"
-                }>
+                <div class="relative z-10 flex h-full w-full min-h-0 flex-row gap-4 xl:gap-6 p-3 xl:p-4">
                     <div class=if compact {
                         "flex h-full flex-shrink-0 items-center"
                     } else {
