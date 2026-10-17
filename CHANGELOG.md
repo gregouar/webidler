@@ -1,5 +1,23 @@
 # Changelog
 
+## Major Game Update: «Pets & Achievements»
+
+Features:
+
+- Achievements: meeting certain goals unlock achievements bound to your account, rewarding with various Cosmetics and Pets.
+- Pets: they can be assigned to various buttons to automate the clicking. Also they are cute.
+- Soul Crafting: it is no longer possible to add a fifth affix directly in the Forge. Instead, you can Sacrifice a Rare Item with 2 Prefixes and 2 Suffixes to extract randomly on of these as a Soul Affix. The Soul Affix can then be Imbued on another Rare Item of the same category. A Soul Affix can always be replaced by another. Soul Affixes are tradable Items.
+
+Content:
+
+- New Areas: Grim Frontier and Eldritch Depths.
+
+Balance Changes:
+
+Fixes:
+
+- Increased Modifiers are not longer multiplicative when applied to triggered effects.
+
 ## Major Game Update: «Skill Masteries»
 
 Features:

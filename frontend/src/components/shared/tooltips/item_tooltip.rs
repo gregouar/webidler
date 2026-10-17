@@ -72,9 +72,14 @@ pub fn ItemTooltipContent(
         let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
         let upgrade_affixes =
             formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
+        let soul_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Soul);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
-            (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
+            !base_affixes.is_empty()
+                || !prefixes.is_empty()
+                || !suffixes.is_empty()
+                || !upgrade_affixes.is_empty()
+                || !soul_affixes.is_empty(),
             view! {
                 {(!base_affixes.is_empty())
                     .then(|| {
@@ -110,6 +115,15 @@ pub fn ItemTooltipContent(
                             // "Base affixes:"
                             // </li>
                             {upgrade_affixes}
+                        }
+                    })}
+                {(!soul_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-zinc-400 text-xs xl:text-sm ">
+                            // "Base affixes:"
+                            // </li>
+                            {soul_affixes}
                         }
                     })}
             }
@@ -240,6 +254,7 @@ pub fn ItemTooltipContent(
                         }
                     })}
                 <QualityTooltip item_specs=item_specs.clone() />
+                <SoulTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
                 <RuneTooltip item_specs=item_specs.clone() />
@@ -691,6 +706,23 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     }
 }
 
+#[component]
+pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Soul)
+            .then(|| {
+                view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm  italic">
+                        "Can be imbued into a Rare Item of the same category to grant:"
+                    </li>
+                }
+            })}
+    }
+}
+
 pub fn formatted_affixes_list(
     affixes: &[ItemAffix],
     affix_type: AffixType,
@@ -749,6 +781,7 @@ fn affix_type_str(affix_type: AffixType) -> &'static str {
         AffixType::Suffix => "Suffix",
         AffixType::Unique => "Base affix",
         AffixType::Upgrade => "Empowering affix",
+        AffixType::Soul => "Soul affix",
     }
 }
 
@@ -795,6 +828,7 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Ring => "Ring",
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
+        ItemCategory::Soul => "Soul",
     }
 }
 

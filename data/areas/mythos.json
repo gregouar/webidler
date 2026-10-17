@@ -7,6 +7,11 @@
         "item_level_modifier": 180,
         "header_background": "areas/mythos_header.webp",
         "footer_background": "areas/mythos_footer.webp",
+        "quest": {
+            "description": "TBD.",
+            "area_level" : 30,
+            "reward"     : { "Item": {"item_id": "edict_3", "item_rarity": "Rare", "max_affixes": true, "level": 600} }
+        },
         "coming_soon": true
     },
     "loot_tables": [

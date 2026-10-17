@@ -13,30 +13,31 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyBenedictionsRequest,
             BuyMarketItemRequest, CreateCharacterRequest, EditMarketItemRequest,
-            ExchangeGemsStashRequest, ForgeAffixRequest, ForgeUpgradeRequest,
-            ForgotPasswordRequest, GambleItemRequest, GetStashItemsRequest, InventoryDeleteRequest,
-            InventoryEquipRequest, InventorySortRequest, InventoryUnequipRequest,
-            RejectMarketItemRequest, ResetPasswordRequest, SaveFavoriteSkillsRequest,
-            SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SellMarketItemRequest,
-            SignInRequest, SignUpRequest, SocketPassiveRequest, StoreStashItemRequest,
-            TakeStashItemRequest, UpdateAccountRequest, UpdateCharacterRequest,
-            UpgradeStashRequest,
+            ExchangeGemsStashRequest, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
+            ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, GetStashItemsRequest,
+            InventoryDeleteRequest, InventoryEquipRequest, InventorySortRequest,
+            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
+            SaveFavoriteSkillsRequest, SavePassivesRequest, SaveSkillMasteryUpgradesRequest,
+            SellMarketItemRequest, SignInRequest, SignUpRequest, SocketPassiveRequest,
+            StoreStashItemRequest, TakeStashItemRequest, UpdateAccountRequest,
+            UpdateCharacterPetsRequest, UpdateCharacterRequest, UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
             BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
             DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
-            ExchangeGemsStashResponse, ForgeAffixResponse, ForgeUpgradeResponse,
-            ForgotPasswordResponse, GambleItemResponse, GetAreasResponse, GetBenedictionsResponse,
-            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetMarketStashItemsResponse,
-            GetPassivesResponse, GetSkillsResponse, GetStashItemsResponse, GetStatusesResponse,
-            GetUserCharactersResponse, GetUserDetailsResponse, InventoryDeleteResponse,
-            InventoryEquipResponse, InventorySortResponse, InventoryUnequipResponse,
-            LeaderboardResponse, NewsResponse, PlayersCountResponse, RejectMarketItemResponse,
-            ResetPasswordResponse, SaveFavoriteSkillsResponse, SavePassivesResponse,
-            SaveSkillMasteryUpgradesResponse, SellMarketItemResponse, SignInResponse,
-            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
-            UpdateAccountResponse, UpgradeStashResponse,
+            ExchangeGemsStashResponse, ForgeAffixResponse, ForgeImbueResponse,
+            ForgeSacrificeResponse, ForgeUpgradeResponse, ForgotPasswordResponse,
+            GambleItemResponse, GetAccountUserUnlocksResponse, GetCharacterDetailsResponse,
+            GetDiscordInviteResponse, GetMarketStashItemsResponse, GetMasterDataResponse,
+            GetStashItemsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
+            InventoryDeleteResponse, InventoryEquipResponse, InventorySortResponse,
+            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
+            ReconcileAchievementsResponse, RejectMarketItemResponse, ResetPasswordResponse,
+            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
+            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
+            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
+            UpdateCharacterPetsResponse, UpgradeStashResponse,
         },
     },
 };
@@ -118,20 +119,8 @@ impl BackendClient {
         self.get("news").await
     }
 
-    pub async fn get_areas(&self) -> Result<GetAreasResponse, BackendError> {
-        self.get("game/areas").await
-    }
-
-    pub async fn get_skills(&self) -> Result<GetSkillsResponse, BackendError> {
-        self.get("game/skills").await
-    }
-
-    pub async fn get_statuses(&self) -> Result<GetStatusesResponse, BackendError> {
-        self.get("game/statuses").await
-    }
-
-    pub async fn get_passives(&self) -> Result<GetPassivesResponse, BackendError> {
-        self.get("game/passives").await
+    pub async fn get_master_data(&self) -> Result<GetMasterDataResponse, BackendError> {
+        self.get("game/master-data").await
     }
 
     pub async fn post_ascend_passives(
@@ -153,10 +142,6 @@ impl BackendClient {
         request: &SavePassivesRequest,
     ) -> Result<SavePassivesResponse, BackendError> {
         self.post_auth("game/passives/build", request).await
-    }
-
-    pub async fn get_benedictions(&self) -> Result<GetBenedictionsResponse, BackendError> {
-        self.get("game/benedictions").await
     }
 
     pub async fn post_buy_benedictions(
@@ -260,6 +245,32 @@ impl BackendClient {
         character_id: &UserCharacterId,
     ) -> Result<GetCharacterDetailsResponse, BackendError> {
         self.get_auth(&format!("characters/{character_id}")).await
+    }
+
+    pub async fn get_account_user_unlocks(
+        &self,
+    ) -> Result<GetAccountUserUnlocksResponse, BackendError> {
+        self.get_auth("account/user-unlocks").await
+    }
+
+    pub async fn post_reconcile_achievements(
+        &self,
+        character_id: &UserCharacterId,
+    ) -> Result<ReconcileAchievementsResponse, BackendError> {
+        self.post_auth(
+            &format!("characters/{character_id}/achievements/reconcile"),
+            &(),
+        )
+        .await
+    }
+
+    pub async fn post_update_character_pets(
+        &self,
+        character_id: &UserCharacterId,
+        request: &UpdateCharacterPetsRequest,
+    ) -> Result<UpdateCharacterPetsResponse, BackendError> {
+        self.post_auth(&format!("characters/{character_id}/pets"), request)
+            .await
     }
 
     pub async fn get_character_by_name(
@@ -406,6 +417,20 @@ impl BackendClient {
         request: &ForgeUpgradeRequest,
     ) -> Result<ForgeUpgradeResponse, BackendError> {
         self.post_auth("forge/upgrade", request).await
+    }
+
+    pub async fn forge_sacrifice(
+        &self,
+        request: &ForgeSacrificeRequest,
+    ) -> Result<ForgeSacrificeResponse, BackendError> {
+        self.post_auth("forge/sacrifice", request).await
+    }
+
+    pub async fn forge_imbue(
+        &self,
+        request: &ForgeImbueRequest,
+    ) -> Result<ForgeImbueResponse, BackendError> {
+        self.post_auth("forge/imbue", request).await
     }
 
     pub async fn gamble_item(

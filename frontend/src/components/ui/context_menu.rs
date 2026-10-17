@@ -23,14 +23,8 @@ pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView 
             animation: fade-in 0.2s ease-out forwards;
             linear-gradient(180deg, rgba(214,177,102,0.08), rgba(0,0,0,0.16)),
             linear-gradient(135deg, rgba(42,40,46,0.96), rgba(17,16,20,0.98));
-            border: 1px solid rgba(108,83,41,0.72);
-            box-shadow:
-            0 10px 22px rgba(0,0,0,0.52),
-            inset 0 1px 0 rgba(240,215,159,0.16),
-            inset 0 -1px 0 rgba(0,0,0,0.45);
             "
         >
-            <div class="pointer-events-none absolute inset-[1px] border border-white/5"></div>
             <div class="relative z-10 flex flex-col">{children()}</div>
         </div>
     }

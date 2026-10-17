@@ -362,7 +362,7 @@ pub fn add_affix(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> bool {
-    if base.rarity == ItemRarity::Unique {
+    if base.rarity == ItemRarity::Unique || base.categories.contains(&ItemCategory::Soul) {
         return false;
     }
 
@@ -455,7 +455,7 @@ pub fn remove_affix(
     let affixes_amount = match affix_type {
         AffixType::Prefix => prefixes_amount,
         AffixType::Suffix => suffixes_amount,
-        AffixType::Unique | AffixType::Upgrade => 0,
+        AffixType::Unique | AffixType::Upgrade | AffixType::Soul => 0,
     };
 
     let affix_subindex = rng::random_range(0..affixes_amount).unwrap_or_default();
@@ -490,12 +490,14 @@ fn update_rarity(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) {
-    let new_rarity = if affixes_amount <= 2 {
-        ItemRarity::Magic
-    } else if affixes_amount <= 4 {
-        ItemRarity::Rare
-    } else {
+    let new_rarity = if modifiers.count_affixes(AffixType::Soul) > 0 {
         ItemRarity::Masterwork
+    } else if affixes_amount > 2 {
+        ItemRarity::Rare
+    } else if affixes_amount > 0 {
+        ItemRarity::Magic
+    } else {
+        ItemRarity::Normal
     };
 
     if new_rarity != modifiers.rarity

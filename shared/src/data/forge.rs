@@ -1,19 +1,22 @@
 use crate::{
-    data::{item::ItemBase, item_affix::AffixType},
+    data::{
+        item::{ItemBase, ItemCategory},
+        item_affix::AffixType,
+    },
     http::client::ForgeAffixOperation,
 };
 
-pub const MAX_AFFIXES: usize = 5;
+pub const MAX_AFFIXES: usize = 4;
 pub const PREFIX_PRICE_FACTOR: f64 = 2.0;
 pub const SUFFIX_PRICE_FACTOR: f64 = 2.0;
 
-fn affix_price(amount: usize, is_edict: bool) -> Option<f64> {
+fn affix_price(amount: usize, _is_edict: bool) -> Option<f64> {
     match amount {
         0 => Some(1.0),
         1 => Some(3.0),
         2 => Some(5.0),
         3 => Some(10.0),
-        4 => Some(if is_edict { 20.0 } else { 50.0 }),
+        // 4 => Some(if is_edict { 20.0 } else { 50.0 }),
         _ => None,
     }
 }
@@ -27,6 +30,10 @@ pub fn affix_operation_price(
     affixes_amount: usize,
     item_base: &ItemBase,
 ) -> Option<f64> {
+    if item_base.categories.contains(&ItemCategory::Soul) {
+        return None;
+    }
+
     match operation {
         ForgeAffixOperation::Add(affix_type) => {
             affix_price(affixes_amount, item_base.map_specs.is_some()).map(|price| {

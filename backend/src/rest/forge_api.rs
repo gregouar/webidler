@@ -6,8 +6,14 @@ use shared::{
     computations, constants,
     data::forge::affix_operation_price,
     http::{
-        client::{ForgeAffixOperation, ForgeAffixRequest, ForgeUpgradeRequest, GambleItemRequest},
-        server::{ForgeAffixResponse, ForgeUpgradeResponse, GambleItemResponse},
+        client::{
+            ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
+            ForgeUpgradeRequest, GambleItemRequest,
+        },
+        server::{
+            ForgeAffixResponse, ForgeImbueResponse, ForgeSacrificeResponse, ForgeUpgradeResponse,
+            GambleItemResponse,
+        },
     },
 };
 
@@ -20,6 +26,7 @@ use crate::{
         systems::{
             inventory_controller, items_controller,
             loot_generator::{self, GenerateLootTemplate},
+            soul_crafting,
         },
     },
     rest::utils::{verify_character_in_town, verify_character_user},
@@ -31,13 +38,14 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/forge/affix", post(post_affix))
         .route("/forge/upgrade", post(post_upgrade))
+        .route("/forge/sacrifice", post(post_sacrifice))
+        .route("/forge/imbue", post(post_imbue))
         .route("/forge/gamble", post(post_gamble))
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
         ))
 }
-
 pub async fn post_affix(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,
@@ -186,6 +194,114 @@ pub async fn post_upgrade(
         resource_gems: character_resources.resource_gems,
         inventory,
     }))
+}
+
+pub async fn post_sacrifice(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<ForgeSacrificeRequest>,
+) -> Result<Json<ForgeSacrificeResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, _, _, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    let bag_index = payload
+        .item_index
+        .checked_sub(9)
+        .ok_or(AppError::UserError(
+            "equipped items cannot be sacrificed".into(),
+        ))? as usize;
+    let item = inventory.bag.get(bag_index).ok_or(AppError::NotFound)?;
+
+    let price = computations::sacrifice_price(&item.modifiers.affixes);
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        -price,
+        0.0,
+        0.0,
+        0.0,
+    )
+    .await?;
+    if character_resources.resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".into()));
+    }
+
+    inventory.bag[bag_index] = soul_crafting::sacrifice(item, &master_store.items_store)?;
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+    tx.commit().await?;
+
+    Ok(Json(ForgeSacrificeResponse {
+        resource_gems: character_resources.resource_gems,
+        inventory,
+    }))
+}
+
+pub async fn post_imbue(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<ForgeImbueRequest>,
+) -> Result<Json<ForgeImbueResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, _, _, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    let item_index = payload
+        .item_index
+        .checked_sub(9)
+        .ok_or(AppError::UserError(
+            "equipped items cannot be imbued".into(),
+        ))? as usize;
+    let soul_index = payload
+        .soul_index
+        .checked_sub(9)
+        .ok_or(AppError::UserError(
+            "equipped items cannot be used as Souls".into(),
+        ))? as usize;
+
+    let soul = inventory
+        .bag
+        .get(soul_index)
+        .cloned()
+        .ok_or(AppError::NotFound)?;
+    let item = inventory
+        .bag
+        .get_mut(item_index)
+        .ok_or(AppError::NotFound)?;
+    soul_crafting::imbue(item, soul)?;
+
+    inventory.bag.remove(soul_index);
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+    tx.commit().await?;
+
+    Ok(Json(ForgeImbueResponse { inventory }))
 }
 
 pub async fn post_gamble(

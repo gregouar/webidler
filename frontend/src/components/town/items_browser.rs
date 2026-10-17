@@ -5,7 +5,7 @@ use std::sync::Arc;
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemRarity, ItemSlot, ItemSpecs},
+    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
     player::EquippedSlot,
     user::UserCharacterId,
 };
@@ -56,17 +56,45 @@ pub struct SelectedMarketItem {
     pub deleted_by: Option<(UserCharacterId, String)>,
 }
 
-fn inventory_item_allowed(item: &ItemSpecs, filter_unique: Option<bool>) -> bool {
-    filter_unique.is_none_or(|unique| (item.base.rarity == ItemRarity::Unique) == unique)
+#[derive(Clone, Copy)]
+pub enum InventoryItemEligibility {
+    Any,
+    Unique,
+    NonUnique,
+    Sacrifice,
+    Imbue,
+}
+
+fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibility) -> bool {
+    match eligibility {
+        InventoryItemEligibility::Any => true,
+        InventoryItemEligibility::Unique => item.base.rarity == ItemRarity::Unique,
+        InventoryItemEligibility::NonUnique => {
+            item.base.rarity != ItemRarity::Unique
+                && !item.base.categories.contains(&ItemCategory::Soul)
+        }
+        InventoryItemEligibility::Sacrifice => {
+            item.modifiers.rarity == ItemRarity::Rare
+                && item.modifiers.count_nonunique_affixes() == 4
+                && !item.base.categories.contains(&ItemCategory::Soul)
+        }
+        InventoryItemEligibility::Imbue => {
+            (matches!(
+                item.modifiers.rarity,
+                ItemRarity::Rare | ItemRarity::Masterwork
+            ) && !item.base.categories.contains(&ItemCategory::Soul))
+                || item.base.categories.contains(&ItemCategory::Soul)
+        }
+    }
 }
 
 fn inventory_grid_item(
     item: &ItemSpecs,
     bag_index: usize,
     bag_index_offset: usize,
-    filter_unique: Option<bool>,
+    eligibility: InventoryItemEligibility,
 ) -> Option<SelectedMarketItem> {
-    if !inventory_item_allowed(item, filter_unique) {
+    if !inventory_item_allowed(item, eligibility) {
         return None;
     }
     Some(SelectedMarketItem {
@@ -87,8 +115,10 @@ fn inventory_grid_item(
 #[component]
 pub fn InventoryItemGrid(
     selected_item: RwSignal<SelectedItem>,
-    #[prop(optional)] filter_unique: Option<bool>,
+    #[prop(default = InventoryItemEligibility::Any)] eligibility: InventoryItemEligibility,
     #[prop(default = 0)] bag_index_offset: usize,
+    #[prop(optional)] on_item_select: Option<Callback<SelectedMarketItem>>,
+    #[prop(optional)] on_item_cancel: Option<Callback<SelectedMarketItem>>,
 ) -> impl IntoView {
     let town = expect_context::<TownContext>();
     let config = BagConfig {
@@ -102,21 +132,34 @@ pub fn InventoryItemGrid(
                 inventory
                     .bag
                     .get(index)
-                    .is_none_or(|item| !inventory_item_allowed(item, filter_unique))
+                    .is_none_or(|item| !inventory_item_allowed(item, eligibility))
             })
         })),
         on_select: Some(Callback::new(move |index: usize| {
             let item = town.inventory.with_untracked(|inventory| {
                 inventory.bag.get(index).and_then(|item| {
-                    inventory_grid_item(item, index, bag_index_offset, filter_unique)
+                    inventory_grid_item(item, index, bag_index_offset, eligibility)
                 })
             });
             if let Some(item) = item {
-                selected_item.set(SelectedItem::InMarket(item));
+                if let Some(on_item_select) = on_item_select {
+                    on_item_select.run(item);
+                } else {
+                    selected_item.set(SelectedItem::InMarket(item));
+                }
             }
         })),
-        on_cancel: Some(Callback::new(move |_| {
-            selected_item.set(SelectedItem::None)
+        on_cancel: Some(Callback::new(move |index: usize| {
+            let item = town.inventory.with_untracked(|inventory| {
+                inventory.bag.get(index).and_then(|item| {
+                    inventory_grid_item(item, index, bag_index_offset, eligibility)
+                })
+            });
+            if let (Some(on_item_cancel), Some(item)) = (on_item_cancel, item) {
+                on_item_cancel.run(item);
+            } else {
+                selected_item.set(SelectedItem::None);
+            }
         })),
         ..Default::default()
     };
@@ -372,6 +415,7 @@ pub fn ItemRow(
 pub fn ItemDetails(
     selected_item: RwSignal<SelectedItem>,
     #[prop(default = false)] show_affixes: bool,
+    #[prop(default = false)] compact: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
     let max_item_level = Signal::derive(move || town_context.character.read().max_area_level);
@@ -382,7 +426,7 @@ pub fn ItemDetails(
     });
 
     view! {
-        <ItemDetailsPanel item_specs=selected_specs show_affixes max_item_level>
+        <ItemDetailsPanel item_specs=selected_specs show_affixes max_item_level compact>
             "No Item Selected"
         </ItemDetailsPanel>
     }
@@ -392,6 +436,7 @@ pub fn ItemDetails(
 pub fn ItemDetailsPanel(
     #[prop(into)] item_specs: Signal<Option<Arc<ItemSpecs>>>,
     #[prop(default = false)] show_affixes: bool,
+    #[prop(default = false)] compact: bool,
     max_item_level: Signal<AreaLevel>,
     #[prop(optional, into)] selected: Option<Signal<bool>>,
     #[prop(optional, into)] on_click: Option<Callback<()>>,
@@ -408,11 +453,12 @@ pub fn ItemDetailsPanel(
             <div
                 class=move || {
                     format!(
-                        "relative isolate w-full h-auto aspect-5/2 overflow-clip rounded-[10px] border
+                        "relative isolate w-full overflow-clip rounded-[10px] border
                         bg-[linear-gradient(180deg,rgba(226,193,122,0.05),rgba(0,0,0,0.02)_28%,rgba(0,0,0,0.14)_100%),linear-gradient(135deg,rgba(40,39,45,0.98),rgba(18,18,22,1))]
                         shadow-[0_6px_16px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.04),inset_0_-1px_0_rgba(0,0,0,0.35)]
                         transition-[border-color,background-color,box-shadow,transform] duration-150
-                        {} {}",
+                        {} {} {}",
+                        if compact { "h-auto aspect-5/1" } else { "h-auto aspect-5/2" },
                         if is_selected.get() {
                             "border-[#b28a4f] shadow-[0_6px_18px_rgba(0,0,0,0.26),inset_0_1px_0_rgba(244,225,181,0.07),inset_0_0_0_1px_rgba(214,177,102,0.16)]"
                         } else {
@@ -435,8 +481,16 @@ pub fn ItemDetailsPanel(
                 <div class="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
 
                 <div class="relative z-10 flex h-full w-full min-h-0 flex-row gap-4 xl:gap-6 p-3 xl:p-4">
-                    <div class="flex w-1/4 max-w-[12rem] flex-shrink-0 items-center">
-                        <div class="relative w-full aspect-[2/3]">
+                    <div class=if compact {
+                        "flex h-full flex-shrink-0 items-center"
+                    } else {
+                        "flex w-1/4 max-w-[12rem] flex-shrink-0 items-center"
+                    }>
+                        <div class=if compact {
+                            "relative h-full aspect-[2/3]"
+                        } else {
+                            "relative w-full aspect-[2/3]"
+                        }>
                             {move || {
                                 item_specs
                                     .get()

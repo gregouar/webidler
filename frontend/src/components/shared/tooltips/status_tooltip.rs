@@ -118,6 +118,7 @@ fn format_status_effect_line(
                 Some(damage_color),
                 Some(status_name),
                 Some(skill_value),
+                None,
             );
 
             if value == (0.0, 0.0) && trigger_modifier_damage_str.is_none() {

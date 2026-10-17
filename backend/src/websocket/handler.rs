@@ -125,6 +125,7 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
 
     let game = GameInstance::new(
         &mut conn,
+        session.user_id,
         &session.character_id,
         &mut session.game_data,
         app_state.db_pool.clone(),

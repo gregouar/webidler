@@ -13,7 +13,7 @@ use shared::{
         realms::Realm,
         skill_mastery::PlayerSkillMasteries,
         temple::{BenedictionEffect, PlayerBenedictions},
-        user::UserCharacterId,
+        user::{UserCharacterId, UserId},
     },
 };
 
@@ -45,6 +45,7 @@ pub async fn create_session(
     area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
+    let user_id = character.user_id;
     tracing::debug!("create new session for player '{character_id}'...");
 
     let mut first_try = true;
@@ -75,7 +76,7 @@ pub async fn create_session(
 
     // If not available, try from saved games, otherwise start new game
     let game_instance_data = if let Some(saved_instance) =
-        load_game_instance(db_pool, master_store, &character_id).await
+        load_game_instance(db_pool, master_store, &character_id, character.user_id).await
     {
         saved_instance
     } else {
@@ -90,6 +91,7 @@ pub async fn create_session(
 
     Ok(Session {
         character_id,
+        user_id,
         last_active: Instant::now(),
         game_data: Box::new(game_instance_data),
     })
@@ -99,8 +101,11 @@ async fn load_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character_id: &UserCharacterId,
+    user_id: UserId,
 ) -> Option<GameInstanceData> {
-    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id).await {
+    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id, user_id)
+        .await
+    {
         Ok(Some((mut game_instance, saved_at))) => {
             // Maybe move this somewhere else
             game_instance.player_stamina += Duration::from_secs(
@@ -148,43 +153,12 @@ async fn new_game_instance(
                     player_skill_masteries,
                 )
             }
-            None => {
-                let mut player_inventory = PlayerInventory {
-                    max_bag_size: 40,
-                    ..Default::default()
-                };
-
-                let base_weapon_id = "dagger".to_string();
-                if let Some(base_weapon) = master_store
-                    .items_store
-                    .content
-                    .get(&base_weapon_id)
-                    .cloned()
-                {
-                    let _ = inventory_controller::equip_item(
-                        &mut player_inventory,
-                        loot_generator::roll_item_stats(
-                            base_weapon_id,
-                            base_weapon,
-                            ItemRarity::Normal,
-                            0,
-                            0,
-                            &master_store.item_affixes_table,
-                            &master_store.item_adjectives_table,
-                            &master_store.item_nouns_table,
-                            false,
-                            0.0, // &master_store.items_store.signature_key,
-                        ),
-                    );
-                }
-
-                (
-                    player_inventory,
-                    PassivesTreeState::default(),
-                    PlayerBenedictions::default(),
-                    PlayerSkillMasteries::default(),
-                )
-            }
+            None => (
+                new_player_inventory(master_store),
+                PassivesTreeState::default(),
+                PlayerBenedictions::default(),
+                PlayerSkillMasteries::default(),
+            ),
         };
 
     let mut player_resources = PlayerResources::default();
@@ -264,6 +238,9 @@ async fn new_game_instance(
             })
             .unwrap_or_default();
 
+    let user_achievements =
+        db::user_unlocks::read_achievements(db_pool, &character.user_id).await?;
+
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
         master_store,
@@ -280,6 +257,7 @@ async fn new_game_instance(
         player_inventory,
         Duration::from_secs_f64(character.resource_stamina),
         player_controller,
+        user_achievements,
     )?;
 
     if game_data.area_specs.coming_soon {
@@ -310,6 +288,37 @@ async fn new_game_instance(
     .await?;
 
     Ok(game_data)
+}
+
+pub fn new_player_inventory(master_store: &MasterStore) -> PlayerInventory {
+    let mut player_inventory = PlayerInventory {
+        max_bag_size: 40,
+        ..Default::default()
+    };
+    let base_weapon_id = "dagger".to_string();
+    if let Some(base_weapon) = master_store
+        .items_store
+        .content
+        .get(&base_weapon_id)
+        .cloned()
+    {
+        let _ = inventory_controller::equip_item(
+            &mut player_inventory,
+            loot_generator::roll_item_stats(
+                base_weapon_id,
+                base_weapon,
+                ItemRarity::Normal,
+                0,
+                0,
+                &master_store.item_affixes_table,
+                &master_store.item_adjectives_table,
+                &master_store.item_nouns_table,
+                false,
+                0.0,
+            ),
+        );
+    }
+    player_inventory
 }
 
 pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsStore) -> Result<()> {

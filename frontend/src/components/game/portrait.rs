@@ -78,6 +78,15 @@ pub fn CharacterPortrait(
     });
 
     let data_context: DataContext = expect_context();
+    let image_uri = data_context
+        .cosmetics_specs
+        .read_untracked()
+        .get(&image_uri)
+        .and_then(|cosmetic| match cosmetic {
+            shared::data::cosmetics::CosmeticType::Portrait(specs) => Some(specs.image.clone()),
+            _ => None,
+        })
+        .unwrap_or(image_uri);
 
     let statuses_map = Memo::new(move |_| {
         statuses.read().iter().fold(
