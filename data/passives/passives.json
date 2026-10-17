@@ -10709,14 +10709,7 @@
                 },
                 "modifier": "Flat",
                 "factor": 1.0,
-                "source": {
-                  "StatusDuration": {
-                    "status_id": null,
-                    "damage_type": "Poison",
-                    "debuff": null,
-                    "skill_type": null
-                  }
-                }
+                "source": "TriggeringStatusDuration"
               }
             ],
             "inherit_source_effects": false,
@@ -14056,7 +14049,7 @@
                 "modifier": "Flat",
                 "factor": 0.5,
                 "source": {
-                  "StatusValue": {
+                  "TargetStatusValue": {
                     "status_id": "bleed",
                     "damage_type": null,
                     "debuff": null,
@@ -14077,7 +14070,7 @@
                 "modifier": "Flat",
                 "factor": 0.5,
                 "source": {
-                  "StatusDuration": {
+                  "TargetStatusDuration": {
                     "status_id": "bleed",
                     "damage_type": null,
                     "debuff": null,
@@ -14123,24 +14116,6 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14157,6 +14132,24 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14198,7 +14191,7 @@
                 "modifier": "Flat",
                 "factor": 0.5,
                 "source": {
-                  "StatusValue": {
+                  "TargetStatusValue": {
                     "status_id": "burn",
                     "damage_type": null,
                     "debuff": null,
@@ -14219,7 +14212,7 @@
                 "modifier": "Flat",
                 "factor": 0.5,
                 "source": {
-                  "StatusDuration": {
+                  "TargetStatusDuration": {
                     "status_id": "burn",
                     "damage_type": null,
                     "debuff": null,
@@ -14256,12 +14249,21 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusFaster": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -14284,21 +14286,12 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
+                      "skill_id": null,
                       "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14340,7 +14333,7 @@
                 "modifier": "Flat",
                 "factor": 0.5,
                 "source": {
-                  "StatusValue": {
+                  "TargetStatusValue": {
                     "status_id": "poison",
                     "damage_type": null,
                     "debuff": null,
@@ -14361,7 +14354,7 @@
                 "modifier": "Flat",
                 "factor": 0.5,
                 "source": {
-                  "StatusDuration": {
+                  "TargetStatusDuration": {
                     "status_id": "poison",
                     "damage_type": null,
                     "debuff": null,
@@ -14416,6 +14409,15 @@
                     }
                   },
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14427,15 +14429,6 @@
                   },
                   {
                     "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,

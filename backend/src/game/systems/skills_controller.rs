@@ -8,6 +8,7 @@ use shared::{
     data::{
         character::{CharacterId, MarbleBags},
         item::{SkillRange, SkillShape},
+        modifier::BaseModifiableValue,
         player::{PlayerBaseSkill, PlayerResources},
         rng::MarbleRollType,
         skill::{
@@ -552,15 +553,14 @@ fn apply_skill_effect_on_target(
                             damage_type: *damage_type,
                         })
                         .or_default();
-                    (
-                        *damage_type,
-                        (*value).roll_with_marble_rolls(seed, damage_marble_bag)
-                            * (if is_crit {
-                                1.0 + **crit_damage * 0.01
-                            } else {
-                                1.0
-                            }),
-                    )
+                    let mut amount = (*value).roll_with_marble_rolls(seed, damage_marble_bag);
+                    let crit_factor = if is_crit {
+                        1.0 + **crit_damage * 0.01
+                    } else {
+                        1.0
+                    };
+                    amount.base_mut(|base| base.multiply_value(crit_factor));
+                    (*damage_type, amount)
                 })
                 .collect();
 
@@ -621,7 +621,7 @@ fn apply_skill_effect_on_target(
             statuses_store,
             target,
             status_filter,
-            value.roll_with_seed(seed),
+            *value.roll_with_seed(seed),
             modifier,
         ),
         SkillEffectType::Restore {
@@ -648,7 +648,7 @@ fn apply_skill_effect_on_target(
         } => characters_controller::refresh_skills_cooldown(
             target,
             skill_filter,
-            value.roll_with_seed(seed),
+            *value.roll_with_seed(seed),
             modifier,
         ),
     }
