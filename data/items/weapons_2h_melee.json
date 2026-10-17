@@ -1268,18 +1268,18 @@
                 }
               },
               {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
                   "damage_type": "Physical",
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],
@@ -1782,7 +1782,7 @@
             "modifier": "Flat",
             "factor": 0.5,
             "source": {
-              "StatusValue": {
+              "TargetStatusValue": {
                 "status_id": "open_wound",
                 "damage_type": null,
                 "debuff": null,
