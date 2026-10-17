@@ -133,7 +133,7 @@ pub fn apply_trigger_effects(
                         modifier_effects.push(effect(Modifier::Increased, value.increased()));
                     }
                     if value.decreased() != 0.0 {
-                        modifier_effects.push(effect(Modifier::Increased, -value.decreased()));
+                        modifier_effects.push(effect(Modifier::Increased, value.decreased()));
                     }
                     if value.more() != 0.0 {
                         modifier_effects.push(effect(

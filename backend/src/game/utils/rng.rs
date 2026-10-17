@@ -228,10 +228,14 @@ fn reconstruct_modifiable_roll<T>(
 where
     T: Into<f64> + From<f64> + Copy + BaseModifiableValue,
 {
-    let min: f64 = (*range.min).into();
     let max: f64 = (*range.max).into();
+    let min: f64 = (*range.min).into();
 
-    let normalized_value = normalized_value.clamp(0.0, 1.0);
+    let normalized_value = if min <= max {
+        normalized_value.clamp(0.0, 1.0)
+    } else {
+        1.0
+    };
     let interpolate = |min: f64, max: f64| min + (max - min) * normalized_value;
 
     let rolled_value = interpolate(min, max);
