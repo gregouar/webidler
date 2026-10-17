@@ -15,7 +15,7 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{Matchable, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
-    trigger::{TriggerEffectModifier, TriggerSpecs},
+    trigger::{StatusTrigger, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
 use strum::IntoEnumIterator;
@@ -396,6 +396,7 @@ pub fn format_target(
                 // effects_map,
                 None,
                 None,
+                None,
             )
         })
         .collect::<Vec<_>>();
@@ -461,6 +462,7 @@ fn format_status_trigger_value(
         None,
         trigger_status_name,
         None,
+        None,
     )
     .map(|modifier_str| {
         view! {
@@ -505,6 +507,7 @@ pub fn format_skill_effect(
     // effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    triggering_status: Option<&StatusTrigger>,
 ) -> impl IntoView + use<> {
     if skill_effect.success_chance.value.get() <= 0.0 {
         return None;
@@ -577,6 +580,7 @@ pub fn format_skill_effect(
                         Some(damage_color),
                         trigger_status_name,
                         trigger_status_value,
+                        triggering_status,
                     );
                     let unblockable_str = unblockable.then_some("Unblockable ");
                     if value.max.get() > 0.0 || trigger_modifier_str.is_some() {
@@ -671,7 +675,9 @@ pub fn format_skill_effect(
                         "",
                         None,
                         None,
-                        trigger_status_name,trigger_status_value
+                        trigger_status_name,
+                        trigger_status_value,
+                        triggering_status,
                     );
                     let apply_str = if self_target {
                         "Gain"
