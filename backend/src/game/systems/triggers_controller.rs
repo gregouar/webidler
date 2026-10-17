@@ -5,6 +5,7 @@ use rand::{self, seq::IteratorRandom};
 use shared::data::{
     character::CharacterId,
     character_status::StatusId,
+    modifier::{Modifier, invert_formatted_effect_value},
     skill::{DamageType, RepeatedSkillEffect, SkillTargetsGroup, SkillType},
     stat_effect::{StatEffect, compare_options},
     trigger::{OwnedTrigger, TriggerEffectModifierSource, TriggerTarget},
@@ -47,6 +48,7 @@ pub fn apply_trigger_effects(
     }
 
     for trigger_context in trigger_contexts.into_iter().take(100) {
+        // tracing::warn!("{:#?}", trigger_context);
         let trigger_effect = trigger_context.owned_trigger.trigger_effect;
 
         if trigger_context.trigger_depth > 3 {
@@ -93,172 +95,222 @@ pub fn apply_trigger_effects(
             ),
         };
 
-        let statuses_context: Vec<StatusModifierData> = if let Some(status_context) =
-            trigger_context.status_context
-        {
-            [StatusModifierData {
-                status_id: &status_context.status_id,
-                damage_type: status_context.damage_type,
-                debuff: status_context.debuff,
-                skill_type: status_context.skill_type,
-                value: status_context.value,
-                duration: status_context.duration,
-            }]
-            .into()
-        } else {
-            game_data
-                .character_state(trigger_context.target)
-                .map(|character_state| {
-                    character_state
-                        .statuses
-                        .iter()
-                        .flat_map(|(status_id, status_stacks)| {
-                            let (damage_type, debuff) = statuses_store
-                                .get(status_id)
-                                .map(|status_specs| (status_specs.damage_type, status_specs.debuff))
-                                .unwrap_or_default();
-                            status_stacks
-                                .iter()
-                                .map(move |status_state| StatusModifierData {
-                                    skill_type: status_state.skill_type,
-                                    damage_type,
-                                    debuff,
-                                    status_id,
-                                    value: status_state.value,
-                                    duration: status_state.duration,
-                                })
-                        })
-                        .collect()
-                })
-                .unwrap_or_default()
-        };
-
-        let trigger_effects: Vec<_> =
-            if trigger_effect.modifiers.is_empty() && !trigger_effect.inherit_source_effects {
-                trigger_effect.effects
-            } else {
-                let modifier_effects: Vec<_> = trigger_effect
-                    .modifiers
+        // TODO: Remove aggregate and just iterate below over the state
+        let statuses_context: Vec<StatusModifierData> = game_data
+            .character_state(trigger_context.target)
+            .map(|character_state| {
+                character_state
+                    .statuses
                     .iter()
-                    .map(|modifier| StatEffect {
-                        stat: modifier.stat.clone(),
-                        modifier: modifier.modifier,
-                        value: modifier.factor
-                            * match &modifier.source {
-                                TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
-                                    trigger_context
-                                        .hit_context
-                                        .as_ref()
-                                        .and_then(|hit| hit.damage.get(damage_type))
-                                        .map(|d| d.get())
-                                        .unwrap_or_default()
-                                }
-                                TriggerEffectModifierSource::HitDamage(None) => trigger_context
-                                    .hit_context
-                                    .as_ref()
-                                    .map(|hit| hit.damage.values().map(|d| d.get()).sum())
-                                    .unwrap_or_default(),
-                                TriggerEffectModifierSource::HitCrit => trigger_context
-                                    .hit_context
-                                    .as_ref()
-                                    .map(|hit| hit.crit_damage.is_some() as i64 as f64)
-                                    .unwrap_or_default(),
-                                TriggerEffectModifierSource::HitCritDamage => trigger_context
-                                    .hit_context
-                                    .as_ref()
-                                    .and_then(|hit| hit.crit_damage)
-                                    .unwrap_or_default(),
-                                TriggerEffectModifierSource::AreaLevel => {
-                                    trigger_context.level as f64
-                                        + *game_data.area_specs.power_level as f64
-                                }
-                                TriggerEffectModifierSource::StatusValue {
-                                    status_filter,
-                                    skill_type,
-                                } => statuses_context
-                                    .iter()
-                                    .filter(|status_data| {
-                                        status_filter.is_match_with_status(
-                                            status_data.status_id,
-                                            status_data.damage_type,
-                                            status_data.debuff,
-                                        ) && compare_options(
-                                            &skill_type.as_ref(),
-                                            &Some(&status_data.skill_type),
-                                        )
-                                    })
-                                    .map(|status_event| status_event.value.get())
-                                    .sum(),
-                                TriggerEffectModifierSource::StatusDuration {
-                                    status_filter,
-                                    skill_type,
-                                } => statuses_context
-                                    .iter()
-                                    .filter(|status_data| {
-                                        status_filter.is_match_with_status(
-                                            status_data.status_id,
-                                            status_data.damage_type,
-                                            status_data.debuff,
-                                        ) && compare_options(
-                                            &skill_type.as_ref(),
-                                            &Some(&status_data.skill_type),
-                                        )
-                                    })
-                                    .map(|status_data| status_data.duration.get())
-                                    .sum(),
-                                TriggerEffectModifierSource::StatusStacks {
-                                    status_filter,
-                                    skill_type,
-                                } => statuses_context
-                                    .iter()
-                                    .filter(|status_data| {
-                                        status_filter.is_match_with_status(
-                                            status_data.status_id,
-                                            status_data.damage_type,
-                                            status_data.debuff,
-                                        ) && compare_options(
-                                            &skill_type.as_ref(),
-                                            &Some(&status_data.skill_type),
-                                        )
-                                    })
-                                    .count() as f64,
-                                TriggerEffectModifierSource::RestoreValue => trigger_context
-                                    .restore_context
-                                    .as_ref()
-                                    .map(|restore| restore.value.get())
-                                    .unwrap_or_default(),
-                                TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
-                                TriggerEffectModifierSource::TriggerStatusValue => 0.0,
-                            },
-                        bypass_ignore: true,
-                    })
-                    .collect();
-
-                let empty_vec = Default::default();
-                let source_effects = if trigger_effect.inherit_source_effects {
-                    game_data
-                        .character_specs(trigger_context.source)
-                        .map(|character_specs| &character_specs.effects)
-                        .unwrap_or(&empty_vec)
-                } else {
-                    &empty_vec
-                };
-
-                trigger_effect
-                    .effects
-                    .into_iter()
-                    .map(|mut effect| {
-                        skills_updater::compute_skill_specs_effects(
-                            statuses_store,
-                            &trigger_effect.trigger_id,
-                            trigger_effect.skill_type,
-                            &mut effect,
-                            modifier_effects.iter().chain(source_effects.iter()),
-                        );
-                        effect
+                    .flat_map(|(status_id, status_stacks)| {
+                        let (damage_type, debuff) = statuses_store
+                            .get(status_id)
+                            .map(|status_specs| (status_specs.damage_type, status_specs.debuff))
+                            .unwrap_or_default();
+                        status_stacks
+                            .iter()
+                            .map(move |status_state| StatusModifierData {
+                                skill_type: status_state.skill_type,
+                                damage_type,
+                                debuff,
+                                status_id,
+                                value: status_state.value,
+                                duration: status_state.duration,
+                            })
                     })
                     .collect()
+            })
+            .unwrap_or_default();
+
+        let trigger_effects: Vec<_> = if trigger_effect.modifiers.is_empty()
+            && !trigger_effect.inherit_source_effects
+        {
+            trigger_effect.effects
+        } else {
+            let modifier_effects: Vec<_> = trigger_effect
+                .modifiers
+                .iter()
+                .flat_map(|modifier| {
+                    let modifiable_source = (modifier.modifier == Modifier::Flat)
+                        .then(|| match &modifier.source {
+                            TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
+                                trigger_context
+                                    .hit_context
+                                    .as_ref()
+                                    .and_then(|hit| hit.damage.get(damage_type))
+                            }
+                            TriggerEffectModifierSource::TriggeringStatusValue => trigger_context
+                                .status_context
+                                .as_ref()
+                                .map(|status| &status.value),
+                            TriggerEffectModifierSource::TriggeringStatusDuration => {
+                                trigger_context
+                                    .status_context
+                                    .as_ref()
+                                    .map(|status| &status.duration)
+                            }
+                            _ => None,
+                        })
+                        .flatten();
+
+                    if let Some(value) = modifiable_source {
+                        let effect = |effect_modifier, value| StatEffect {
+                            stat: modifier.stat.clone(),
+                            modifier: effect_modifier,
+                            value,
+                            bypass_ignore: true,
+                        };
+
+                        let mut effects =
+                            vec![effect(Modifier::Flat, modifier.factor * value.base().get())];
+
+                        if value.increased() != 0.0 {
+                            effects.push(effect(Modifier::Increased, value.increased()));
+                        }
+                        if value.decreased() != 0.0 {
+                            effects.push(effect(Modifier::Increased, -value.decreased()));
+                        }
+                        if value.more() != 0.0 {
+                            effects.push(effect(
+                                Modifier::More,
+                                invert_formatted_effect_value(value.more(), Modifier::More),
+                            ));
+                        }
+
+                        return effects;
+                    }
+
+                    let value = match &modifier.source {
+                        TriggerEffectModifierSource::HitDamage(Some(damage_type)) => {
+                            trigger_context
+                                .hit_context
+                                .as_ref()
+                                .and_then(|hit| hit.damage.get(damage_type))
+                                .map(|d| d.get())
+                                .unwrap_or_default()
+                        }
+                        // NB: The following doesn't play nicely with increased modifiers
+                        TriggerEffectModifierSource::HitDamage(None) => trigger_context
+                            .hit_context
+                            .as_ref()
+                            .map(|hit| hit.damage.values().map(|d| d.get()).sum())
+                            .unwrap_or_default(),
+                        TriggerEffectModifierSource::HitCrit => trigger_context
+                            .hit_context
+                            .as_ref()
+                            .map(|hit| hit.crit_damage.is_some() as i64 as f64)
+                            .unwrap_or_default(),
+                        TriggerEffectModifierSource::HitCritDamage => trigger_context
+                            .hit_context
+                            .as_ref()
+                            .and_then(|hit| hit.crit_damage)
+                            .unwrap_or_default(),
+                        TriggerEffectModifierSource::AreaLevel => {
+                            trigger_context.level as f64 + *game_data.area_specs.power_level as f64
+                        }
+                        TriggerEffectModifierSource::TriggeringStatusValue => trigger_context
+                            .status_context
+                            .as_ref()
+                            .map(|status| status.value.get())
+                            .unwrap_or_default(),
+                        TriggerEffectModifierSource::TriggeringStatusDuration => trigger_context
+                            .status_context
+                            .as_ref()
+                            .map(|status| status.duration.get())
+                            .unwrap_or_default(),
+                        TriggerEffectModifierSource::TargetStatusValue {
+                            status_filter,
+                            skill_type,
+                        } => statuses_context
+                            .iter()
+                            .filter(|status_data| {
+                                status_filter.is_match_with_status(
+                                    status_data.status_id,
+                                    status_data.damage_type,
+                                    status_data.debuff,
+                                ) && compare_options(
+                                    &skill_type.as_ref(),
+                                    &Some(&status_data.skill_type),
+                                )
+                            })
+                            .map(|status_event| status_event.value.get())
+                            .sum(),
+                        TriggerEffectModifierSource::TargetStatusDuration {
+                            status_filter,
+                            skill_type,
+                        } => statuses_context
+                            .iter()
+                            .filter(|status_data| {
+                                status_filter.is_match_with_status(
+                                    status_data.status_id,
+                                    status_data.damage_type,
+                                    status_data.debuff,
+                                ) && compare_options(
+                                    &skill_type.as_ref(),
+                                    &Some(&status_data.skill_type),
+                                )
+                            })
+                            .map(|status_data| status_data.duration.get())
+                            .sum(),
+                        TriggerEffectModifierSource::TargetStatusStacks {
+                            status_filter,
+                            skill_type,
+                        } => statuses_context
+                            .iter()
+                            .filter(|status_data| {
+                                status_filter.is_match_with_status(
+                                    status_data.status_id,
+                                    status_data.damage_type,
+                                    status_data.debuff,
+                                ) && compare_options(
+                                    &skill_type.as_ref(),
+                                    &Some(&status_data.skill_type),
+                                )
+                            })
+                            .count() as f64,
+                        TriggerEffectModifierSource::RestoreValue => trigger_context
+                            .restore_context
+                            .as_ref()
+                            .map(|restore| restore.value.get())
+                            .unwrap_or_default(),
+                        TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
+                        TriggerEffectModifierSource::TriggerStatusValue => 0.0,
+                    };
+
+                    vec![StatEffect {
+                        stat: modifier.stat.clone(),
+                        modifier: modifier.modifier,
+                        value: modifier.factor * value,
+                        bypass_ignore: true,
+                    }]
+                })
+                .collect();
+
+            let empty_vec = Default::default();
+            let source_effects = if trigger_effect.inherit_source_effects {
+                game_data
+                    .character_specs(trigger_context.source)
+                    .map(|character_specs| &character_specs.effects)
+                    .unwrap_or(&empty_vec)
+            } else {
+                &empty_vec
             };
+
+            trigger_effect
+                .effects
+                .into_iter()
+                .map(|mut effect| {
+                    skills_updater::compute_skill_specs_effects(
+                        statuses_store,
+                        &trigger_effect.trigger_id,
+                        trigger_effect.skill_type,
+                        &mut effect,
+                        modifier_effects.iter().chain(source_effects.iter()),
+                    );
+                    effect
+                })
+                .collect()
+        };
 
         let max_repeat = trigger_effect.skill_repeat.value.roll();
         let mut attacker_marble_bags = match attacker {
@@ -322,6 +374,8 @@ pub fn apply_trigger_effects(
                     )
                 }
             };
+
+            // tracing::warn!("{:#?}", trigger_effects);
 
             skills_controller::apply_skill_effects(
                 statuses_store,
