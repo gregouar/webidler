@@ -834,9 +834,8 @@ pub fn format_skill_effect(
             value,
             modifier,
         } => {
-            let value_str = (matches!(modifier, RestoreModifier::Percent)
-                && *value.max == 100.0
-                && *value.min == 100.0)
+            let value_str = (!(matches!(modifier, RestoreModifier::Percent)
+                && *value.min == 100.0))
                 .then(|| match modifier {
                     RestoreModifier::Percent => view! {
                         {format_min_max(value)}
@@ -844,8 +843,8 @@ pub fn format_skill_effect(
                     }
                     .into_any(),
                     RestoreModifier::Flat => view! {
-                        {format_duration(value)}
-                        "s from "
+                        {format_min_max(value)}
+                        " seconds from "
                     }
                     .into_any(),
                 });
@@ -928,16 +927,16 @@ where
     format_min_max_f64(*value.min, *value.max)
 }
 
-fn format_duration<T>(value: ChanceRange<ModifiableValue<T>>) -> impl IntoView
-where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
-    T: Into<f64> + PartialEq,
-{
-    let min = (*value.min).into();
-    let max = (*value.max).into();
+// fn format_duration<T>(value: ChanceRange<ModifiableValue<T>>) -> impl IntoView
+// where
+//     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+//     T: Into<f64> + PartialEq,
+// {
+//     let min = (*value.min).into();
+//     let max = (*value.max).into();
 
-    format_duration_values(min, max)
-}
+//     format_duration_values(min, max)
+// }
 
 fn format_duration_values(min: f64, max: f64) -> impl IntoView {
     let format_min_max = |min, max| {
