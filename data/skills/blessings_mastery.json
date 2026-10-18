@@ -117,7 +117,7 @@
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
-                                    "stat"      : {"CritChance": {}},
+                                    "stat": {"CritChance": {}},
                                     "conditions": [
                                         { "HasStatus": {"status_id": "blessing_crit"} }
                                     ]
@@ -141,7 +141,7 @@
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
-                                    "stat"      : {"CritDamage": {}},
+                                    "stat": {"CritDamage": {}},
                                     "conditions": [
                                         { "HasStatus": {"status_id": "blessing_crit"} }
                                     ]
@@ -202,7 +202,7 @@
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
-                                    "stat"      : {"Evade": null},
+                                    "stat": {"Evade": null},
                                     "conditions": [
                                         { "HasStatus": {"status_id": "blessing_protection"} }
                                     ]
@@ -221,8 +221,8 @@
                 "max_level"   : 5,
                 "effects"     : [
                     {
-                        "value"        : 3,
-                        "upgrade_value": 3,
+                        "value"        : 10,
+                        "upgrade_value": 10,
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
@@ -293,7 +293,7 @@
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
-                                    "stat"      : {"Damage": {}},
+                                    "stat": {"Damage": {}},
                                     "conditions": [
                                         { "HasStatus": {"status_id": "blessing_heal"} }
                                     ]
@@ -313,7 +313,7 @@
                 "effects"     : [
                     {
                         "value"        : -100,
-                        "upgrade_value": 0,
+                        "upgrade_value":    0,
                         "StatEffect"   : {
                             "stat"    : { "DamageTaken": {"damage_type": "Poison"} },
                             "modifier": "More",
@@ -388,11 +388,11 @@
                 "effects"     : [
                     {
                         "value"        : 50,
-                        "upgrade_value": 0,
+                        "upgrade_value":  0,
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
-                                    "stat"      : "GoldFind",
+                                    "stat": "GoldFind",
                                     "conditions": [
                                         "ThreatLevel",
                                         { "HasStatus": {"status_id": "blessing_gold"} }
@@ -490,7 +490,7 @@
                         "StatEffect"   : {"stat": "ManaRegen", "modifier": "More", "scope": "Global"}
                     },
                     {
-                        "value"        : 0,
+                        "value"        :  0,
                         "upgrade_value": 30,
                         "StatEffect"   : {
                             "stat"    : { "Restore": {"restore_type": "Mana"} },
