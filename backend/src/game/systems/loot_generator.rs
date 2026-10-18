@@ -341,11 +341,17 @@ fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
             let mut effect = roll_affix_effect(e);
             effect.stat_effect.value *= quality_factor;
 
+            let affix_type = if base_item.categories.contains(&ItemCategory::Soul) {
+                AffixType::Soul
+            } else {
+                AffixType::Unique
+            };
+
             ItemAffix {
                 name: "Unique".to_string(),
                 family: base_item.name.clone(),
                 tags: BTreeSet::new(),
-                affix_type: AffixType::Unique,
+                affix_type,
                 tier: 1,
                 item_level: base_item.min_area_level,
                 effects: vec![effect],
