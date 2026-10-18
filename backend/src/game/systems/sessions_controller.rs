@@ -28,7 +28,7 @@ use crate::{
         sessions::{Session, SessionsStore},
         systems::{
             benedictions_controller, inventory_controller, player_controller::PlayerController,
-            player_updater,
+            player_updater, skill_masteries_controller,
         },
     },
     rest::AppError,
@@ -140,26 +140,38 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let (mut player_inventory, passives_tree_state, player_benedictions, player_skill_masteries) =
-        match character_data {
-            Some((inventory_data, ascension_data, player_benedictions, player_skill_masteries)) => {
-                (
-                    inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
-                    PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
-                        &master_store.items_store,
-                        ascension_data,
-                    )),
-                    player_benedictions,
-                    player_skill_masteries,
-                )
-            }
-            None => (
-                new_player_inventory(master_store),
-                PassivesTreeState::default(),
-                PlayerBenedictions::default(),
-                PlayerSkillMasteries::default(),
-            ),
-        };
+    let (
+        mut player_inventory,
+        passives_tree_state,
+        mut player_benedictions,
+        mut player_skill_masteries,
+    ) = match character_data {
+        Some((inventory_data, ascension_data, player_benedictions, player_skill_masteries)) => (
+            inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
+            PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
+                &master_store.items_store,
+                ascension_data,
+            )),
+            player_benedictions,
+            player_skill_masteries,
+        ),
+        None => (
+            new_player_inventory(master_store),
+            PassivesTreeState::default(),
+            PlayerBenedictions::default(),
+            PlayerSkillMasteries::default(),
+        ),
+    };
+
+    benedictions_controller::sanitize_benedictions(
+        &master_store.benedictions_store,
+        &mut player_benedictions,
+    );
+
+    skill_masteries_controller::sanitize_skill_masteries(
+        &master_store.skill_masteries_store,
+        &mut player_skill_masteries,
+    );
 
     let mut player_resources = PlayerResources::default();
     player_resources.gold += benedictions_controller::find_benediction_value(

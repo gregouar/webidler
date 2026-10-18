@@ -191,10 +191,7 @@ fn BenedictionCategorySection(
     let events_context: EventsContext = expect_context();
 
     let category_title = category_specs.title.clone();
-    let max_level_text = category_specs
-        .max_upgrade_level
-        .map(|max_level| max_level.to_string())
-        .unwrap_or_else(|| "No cap".to_string());
+    let max_level_text = category_specs.max_upgrade_level.to_string();
     let price = Memo::new({
         let category_specs = category_specs.clone();
         let category_id = category_id.clone();
@@ -233,14 +230,8 @@ fn BenedictionCategorySection(
             })
         }
     });
-    let max_level_reached = Signal::derive({
-        let max_upgrade_level = category_specs.max_upgrade_level;
-        move || {
-            max_upgrade_level
-                .map(|max_upgrade_level| bought_points.get() >= max_upgrade_level)
-                .unwrap_or_default()
-        }
-    });
+    let max_level_reached =
+        Signal::derive(move || bought_points.get() >= category_specs.max_upgrade_level);
     let buy_disabled = Signal::derive(move || {
         max_level_reached.get()
             || cost.get() + price.get() > town_context.character.read().resource_gold
@@ -264,11 +255,7 @@ fn BenedictionCategorySection(
 
             #[allow(clippy::explicit_counter_loop)]
             for _ in 0..10 {
-                if category_specs
-                    .max_upgrade_level
-                    .map(|max_upgrade_level| upgrade_level >= max_upgrade_level)
-                    .unwrap_or_default()
-                {
+                if upgrade_level >= category_specs.max_upgrade_level {
                     break;
                 }
 
@@ -415,7 +402,7 @@ fn BenedictionRow(
     category_id: String,
     benediction_id: String,
     benediction_specs: BenedictionSpecs,
-    max_upgrade_level: Option<u64>,
+    max_upgrade_level: u64,
     player_benedictions: RwSignal<PlayerBenedictions>,
     view_only: bool,
 ) -> impl IntoView {
@@ -607,7 +594,7 @@ pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> Strin
 pub fn EffectDescription(
     benediction_specs: BenedictionSpecs,
     upgrade_level: Signal<u64>,
-    max_upgrade_level: Option<u64>,
+    max_upgrade_level: u64,
 ) -> impl IntoView {
     let value = {
         let benediction_specs = benediction_specs.clone();
@@ -617,10 +604,7 @@ pub fn EffectDescription(
     view! {
         <ul class="text-xs xl:text-sm text-amber-100 break-words">
             {move || {
-                if max_upgrade_level
-                    .map(|max_upgrade_level| upgrade_level.get() > max_upgrade_level)
-                    .unwrap_or(false)
-                {
+                if upgrade_level.get() > max_upgrade_level {
                     return view! { <li class="text-zinc-400">"Max Level"</li> }.into_any();
                 }
                 value()

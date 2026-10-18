@@ -309,7 +309,7 @@ pub async fn post_save_skill_mastery_upgrades(
         &master_store,
         &payload.character_id,
         &payload.skill_id,
-        &payload.upgrades_bought,
+        payload.upgrades_bought,
     )
     .await?;
 

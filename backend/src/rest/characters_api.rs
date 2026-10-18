@@ -37,7 +37,7 @@ use crate::{
         },
         systems::{
             achievements_controller::{self, AchievementContext},
-            skills_updater,
+            benedictions_controller, skill_masteries_controller, skills_updater,
         },
     },
     rest::utils::{
@@ -188,12 +188,22 @@ async fn read_character_details(
     let user_unlocks = user_unlocks?;
     let pets = pets?;
     let areas_completed = areas_completed?;
-    let (inventory_data, ascension_data, benedictions, mut skill_masteries) =
+    let (inventory_data, ascension_data, mut benedictions, mut skill_masteries) =
         character_data?.unwrap_or_default();
     // let last_grind_data = last_grind_data?;
     let character_stash = character_stash?.map(|x| x.into());
     let user_stash = user_stash?.map(|x| x.into());
     let market_stash = market_stash?.map(|x| x.into());
+
+    benedictions_controller::sanitize_benedictions(
+        &master_store.benedictions_store,
+        &mut benedictions,
+    );
+
+    skill_masteries_controller::sanitize_skill_masteries(
+        &master_store.skill_masteries_store,
+        &mut skill_masteries,
+    );
 
     let areas: Vec<UserGrindArea> = master_store
         .area_blueprints_store
