@@ -70,15 +70,34 @@ pub fn HeaderMenu() -> impl IntoView {
     let disable_panels = Signal::derive(move || town_context.character.read().max_area_level == 0);
     let disable_trade = Signal::derive(move || town_context.character.read().is_ssf);
 
+    let switch_panel = move |open_signal: RwSignal<bool>| {
+        let open_value = !open_signal.get_untracked();
+        town_context.open_inventory.set(false);
+        town_context.open_stash.set(false);
+        town_context.open_ascend.set(false);
+        town_context.open_market.set(false);
+        town_context.open_forge.set(false);
+        town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
+        town_context.open_achievements.set(false);
+        town_context.open_pets.set(false);
+        open_signal.set(open_value);
+    };
+
     let open_inventory = move || {
         town_context
             .open_inventory
             .set(!town_context.open_inventory.get_untracked());
+        town_context.equip_filter.set(InventoryEquipFilter::Slot);
+
         town_context.open_ascend.set(false);
+        town_context.open_market.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
         town_context.open_skill_mastery_details.set(false);
-        town_context.equip_filter.set(InventoryEquipFilter::Slot);
+        town_context.open_achievements.set(false);
+        town_context.open_pets.set(false);
     };
 
     Effect::new(move || {
@@ -88,16 +107,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_stash = move || {
-        town_context
-            .open_stash
-            .set(!town_context.open_stash.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
+        switch_panel(town_context.open_stash);
     };
 
     Effect::new(move || {
@@ -107,16 +117,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_market = move || {
-        town_context
-            .open_market
-            .set(!town_context.open_market.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
+        switch_panel(town_context.open_market);
     };
 
     Effect::new(move || {
@@ -126,16 +127,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_forge = move || {
-        town_context
-            .open_forge
-            .set(!town_context.open_forge.get_untracked());
-        town_context.open_market.set(false);
-        town_context.open_ascend.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
+        switch_panel(town_context.open_forge);
     };
 
     Effect::new(move || {
@@ -145,16 +137,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_ascend = move || {
-        town_context
-            .open_ascend
-            .set(!town_context.open_ascend.get_untracked());
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
+        switch_panel(town_context.open_ascend);
     };
 
     Effect::new(move || {
@@ -164,16 +147,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_temple = move || {
-        town_context
-            .open_temple
-            .set(!town_context.open_temple.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
+        switch_panel(town_context.open_temple);
     };
 
     Effect::new(move || {
@@ -183,16 +157,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_skill_masteries = move || {
-        town_context
-            .open_skill_masteries
-            .set(!town_context.open_skill_masteries.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_stash.set(false);
-        town_context.open_temple.set(false);
+        switch_panel(town_context.open_skill_masteries);
     };
 
     view! {

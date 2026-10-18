@@ -61,6 +61,20 @@ pub fn HeaderMenu() -> impl IntoView {
         previous_max_power_shard_level.set(max_power_shard_level);
     });
 
+    let switch_panel = move |open_signal: RwSignal<bool>| {
+        let open_value = !open_signal.get_untracked();
+
+        game_context.open_inventory.set(false);
+        game_context.open_passives.set(false);
+        game_context.open_statistics.set(false);
+        game_context.open_skills.set(false);
+        game_context.open_end_grind.set(false);
+        game_context.open_achievements.set(false);
+        game_context.open_pets.set(false);
+
+        open_signal.set(open_value);
+    };
+
     let stop_grind = {
         let conn: WebsocketContext = expect_context();
         move |_| {
@@ -74,7 +88,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     .into(),
                 );
             } else {
-                game_context.open_end_grind.set(true);
+                switch_panel(game_context.open_end_grind);
             }
         }
     };
@@ -107,11 +121,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_inventory = move || {
-        game_context
-            .open_inventory
-            .set(!game_context.open_inventory.get_untracked());
-        game_context.open_statistics.set(false);
-        game_context.open_passives.set(false);
+        switch_panel(game_context.open_inventory);
     };
 
     Effect::new(move || {
@@ -121,11 +131,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_passives = move || {
-        game_context.open_inventory.set(false);
-        game_context
-            .open_passives
-            .set(!game_context.open_passives.get_untracked());
-        game_context.open_statistics.set(false);
+        switch_panel(game_context.open_passives);
     };
 
     Effect::new(move || {
@@ -135,11 +141,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_stats = move || {
-        game_context.open_inventory.set(false);
-        game_context.open_passives.set(false);
-        game_context
-            .open_statistics
-            .set(!game_context.open_statistics.get_untracked());
+        switch_panel(game_context.open_statistics);
     };
 
     Effect::new(move || {
@@ -147,6 +149,14 @@ pub fn HeaderMenu() -> impl IntoView {
             open_stats()
         }
     });
+
+    let open_pets = move || {
+        switch_panel(game_context.open_pets);
+    };
+
+    let open_achievements = move || {
+        switch_panel(game_context.open_achievements);
+    };
 
     view! {
         <BaseHeaderMenu>
@@ -219,22 +229,13 @@ pub fn HeaderMenu() -> impl IntoView {
                     <StatsIcon />
                 </MenuButton>
                 <MenuButton
-                    on:click=move |_| {
-                        game_context.open_pets.set(!game_context.open_pets.get_untracked())
-                    }
+                    on:click=move |_| { open_pets() }
                     disabled=move || game_context.user_unlocks.read().pets.is_empty()
                     title="Pets"
                 >
                     <PetsIcon />
                 </MenuButton>
-                <MenuButton
-                    on:click=move |_| {
-                        game_context
-                            .open_achievements
-                            .set(!game_context.open_achievements.get_untracked())
-                    }
-                    title="Achievements"
-                >
+                <MenuButton on:click=move |_| { open_achievements() } title="Achievements">
                     <AchievementsIcon />
                 </MenuButton>
                 <TutorialPopup
