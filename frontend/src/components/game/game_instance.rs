@@ -21,7 +21,11 @@ use crate::components::{
         panels::{EndGrindPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
-    shared::{achievements, pets::PetsPanel, settings::SettingsModal},
+    shared::{
+        achievements::{self, AchievementsPanel},
+        pets::PetsPanel,
+        settings::SettingsModal,
+    },
     ui::{
         loading_screen::LoadingScreen, number::format_local_time,
         progress_bars::provide_cooldown_clock, toast::*,
@@ -109,6 +113,10 @@ pub fn GameInstance() -> impl IntoView {
                     <GameInventoryPanel open=game_context.open_inventory />
                     <EndGrindPanel />
                     <SettingsModal open=game_context.open_settings />
+                    <AchievementsPanel
+                        open=game_context.open_achievements
+                        user_unlocks=game_context.user_unlocks
+                    />
                     <PetsPanel
                         open=game_context.open_pets
                         character_id=Signal::derive(move || game_context.character_id.get())

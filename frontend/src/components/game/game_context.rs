@@ -76,6 +76,7 @@ pub struct GameContext {
     pub open_skills: RwSignal<bool>,
     pub open_end_grind: RwSignal<bool>,
     pub open_settings: RwSignal<bool>,
+    pub open_achievements: RwSignal<bool>,
     pub open_pets: RwSignal<bool>,
 
     pub loot_filter: RwSignal<LootFilter>,
@@ -134,6 +135,7 @@ impl GameContext {
             open_skills: RwSignal::new(false),
             open_end_grind: RwSignal::new(false),
             open_settings: RwSignal::new(false),
+            open_achievements: RwSignal::new(false),
             open_pets: RwSignal::new(false),
 
             loot_filter: Default::default(),

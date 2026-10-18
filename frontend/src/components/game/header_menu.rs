@@ -4,7 +4,7 @@ use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
-    icons::header_icons::{InventoryIcon, PassivesIcon, PetsIcon, StatsIcon},
+    icons::header_icons::{AchievementsIcon, InventoryIcon, PassivesIcon, PetsIcon, StatsIcon},
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
@@ -215,6 +215,9 @@ pub fn HeaderMenu() -> impl IntoView {
                         }}
                     </MenuButton>
                 </TutorialPopup>
+                <MenuButton on:click=move |_| open_stats() title="Stats">
+                    <StatsIcon />
+                </MenuButton>
                 <MenuButton
                     on:click=move |_| {
                         game_context.open_pets.set(!game_context.open_pets.get_untracked())
@@ -224,8 +227,15 @@ pub fn HeaderMenu() -> impl IntoView {
                 >
                     <PetsIcon />
                 </MenuButton>
-                <MenuButton on:click=move |_| open_stats() title="Stats">
-                    <StatsIcon />
+                <MenuButton
+                    on:click=move |_| {
+                        game_context
+                            .open_achievements
+                            .set(!game_context.open_achievements.get_untracked())
+                    }
+                    title="Achievements"
+                >
+                    <AchievementsIcon />
                 </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
