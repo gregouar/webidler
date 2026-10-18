@@ -660,6 +660,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             stat_skill_effect_type_str(effect_type.as_ref()),
             skill_filter_str(skill_filter, " with ", true),
         ),
+        StatType::RefreshedCooldown { skill_filter } => format!(
+            "Refreshed Cooldown{}",
+            skill_filter_str(skill_filter, " with ", true)
+        ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
         }
@@ -1043,6 +1047,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     skill_filter_str(skill_filter, " with ", true),
                 )
             }
+        }
+        StatType::RefreshedCooldown { skill_filter } => {
+            format!(
+                "{} seconds to Refreshed Cooldown{}",
+                format_adds_removes(value, true, ""),
+                skill_filter_str(skill_filter, " with ", true)
+            )
         }
         StatType::SkillLevel(skill_filter) => {
             let mut r = format!(

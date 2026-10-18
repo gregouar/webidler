@@ -41,7 +41,7 @@
     "max_skill_level"        : {
         "icon"       : "achievements/star_altar.svg",
         "name"       : "Skill Master",
-        "description": "Reach Skill Mastery 100 in any Skill.",
+        "description": "Reach Skill Mastery 100 with any Skill.",
         "goals"      : [
             { "SkillLevel": {"value": 100} }
         ],

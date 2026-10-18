@@ -444,6 +444,7 @@ fn compute_character_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }
+            | StatType::RefreshedCooldown { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. }

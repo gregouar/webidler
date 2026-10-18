@@ -1404,9 +1404,16 @@ pub fn apply_stat_effect_on_skill_effect(
         SkillEffectType::Kill => {}
         SkillEffectType::RefreshCooldown {
             skill_filter: _,
-            value: _,
+            value,
             modifier: _,
-        } => {}
+        } => {
+            if let StatType::RefreshedCooldown { skill_filter } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                value.min.apply_effect(effect);
+                value.max.apply_effect(effect);
+            }
+        }
     }
 
     None

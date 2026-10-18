@@ -403,6 +403,7 @@ fn modify_player_specs(
                 ..
             })
             | StatType::SuccessChance { .. }
+            | StatType::RefreshedCooldown { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillRepeat { .. }

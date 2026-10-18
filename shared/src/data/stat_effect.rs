@@ -277,6 +277,10 @@ pub enum StatType {
         skill_filter: StatSkillFilter,
         roll_type: LuckyRollType,
     },
+    RefreshedCooldown {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
     SkillConditionalModifier {
         stat: Box<StatType>,
         #[serde(flatten)]
@@ -382,6 +386,12 @@ impl Matchable for StatType {
             ) => {
                 skill_filter.is_match(skill_filter_2) && compare_options(effect_type, effect_type_2)
             }
+            (
+                RefreshedCooldown { skill_filter },
+                RefreshedCooldown {
+                    skill_filter: skill_filter_2,
+                },
+            ) => skill_filter.is_match(skill_filter_2),
             (
                 ManaCost { skill_filter },
                 ManaCost {

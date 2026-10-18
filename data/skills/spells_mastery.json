@@ -1246,5 +1246,126 @@
         ]
       }
     }
+  },
+  "taunt"          : {
+    "max_level": 100,
+    "upgrades" : {
+      "power"               : {
+        "title"       : "Taunt Effects",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 2,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "taunt"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "taunt_refresh"       : {
+        "title"       : "Provocation",
+        "base_cost"   : 5,
+        "upgrade_cost": 5,
+        "max_level"   : 3,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"RefreshedCooldown": {}}, "modifier": "Flat" }
+          },
+          {
+            "value"        : 15,
+            "upgrade_value": 15,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "taunt"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "threat_speed"        : {
+        "title"       : "Threatening Face",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {"scope": "Global", "modifier": "More", "stat": "ThreatGain"}
+          }
+        ]
+      },
+      "armor_damage"        : {
+        "title"       : "Daunting Presence",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "scope"   : "Global",
+              "modifier": "Flat",
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Armor": {"damage_type": "Physical"} },
+                  "stat"      : { "StatusPower": {"status_id": "taunt"} },
+                  "is_extra"  : true,
+                  "skill_type": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "poison_vulnerability": {
+        "title"       : "Toxic Personality",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "vulnerability_poison", "value": 100} }
+          },
+          {
+            "value"        : 5,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "modifier": "Flat",
+              "scope"   : "Global",
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Armor": {"damage_type": "Poison"} },
+                  "stat"      : { "StatusPower": {"status_id": "vulnerability_poison"} },
+                  "is_extra"  : true,
+                  "skill_type": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "critical"            : {
+        "title"       : "Reckless Mockery",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "taunt_critical", "value": 100} }
+          }
+        ]
+      }
+    }
   }
 }
