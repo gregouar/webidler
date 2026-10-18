@@ -1,21 +1,22 @@
-Wave 1 (saloon):
+Wave 1 (saloon OR wanted edict?):
 ------
 Cowboy/Wanted Bandit
 Hangman Revenant
-Piano Mimic 
+Piano Mimic  (2x2)
 (too much repeat with inn basement?)
 
-Wave 2 (mines?):
+Wave 2 (wastelands):
+---------
+Dancing Cactus
+Big Foot (1x2)
+Vulture
+-> Fun Guy (fungi infested prospector)
+
+Wave 2 (mines REMOVE):
 ------
 Gold digger?
 Mine cart?
 Fun Guy (fungi infested prospector)
-
-Wave 2bis (wastelands):
----------
-Dancing Cactus
-Big Foot
-Vulture
 
 Wave 3 (cult):
 ------
@@ -40,7 +41,8 @@ Boss:
 ----
 
 The Black Sheriff ?
-
+Train ?
+=> would like a 2x2 and 1x2
 
 
 
