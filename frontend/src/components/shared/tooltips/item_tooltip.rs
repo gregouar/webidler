@@ -752,7 +752,11 @@ pub fn formatted_affixes_list(
                         .collect();
 
                     view! {
-                        <li class="text-zinc-400 text-xs -mb-1">
+                        <li class=if affix_type == AffixType::Soul {
+                            "text-fuchsia-400 text-xs -mb-1"
+                        } else {
+                            "text-zinc-400 text-xs -mb-1"
+                        }>
                             {affix_type_str(affix.affix_type)}" "
                             <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
                             {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}

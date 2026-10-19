@@ -389,48 +389,6 @@ impl<'a> GameInstance<'a> {
                     tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
                 }
 
-                let power_level = self.game_data.player_base_specs.read().max_area_level;
-                match db::leaderboard::update_leaderboard(
-                    &mut tx,
-                    self.character_id,
-                    &realm_id,
-                    constants::POWER_LEVEL_LEADERBOARD_AREA_ID,
-                    power_level as i32,
-                    character_resources.played_time_seconds,
-                )
-                .await
-                {
-                    Ok(true) => {
-                        if let Err(err) = self
-                            .chat_integration
-                            .broadcast_message(
-                                format!(
-                                    "'{}'{} is the first to reach Power Level {}!",
-                                    self.game_data
-                                        .player_base_specs
-                                        .read()
-                                        .character_static
-                                        .name,
-                                    realm_label,
-                                    power_level,
-                                ),
-                                None,
-                            )
-                            .await
-                        {
-                            tracing::error!("failed to broadcast power level highscore: {}", err);
-                        }
-                    }
-                    Err(err) => {
-                        tracing::error!(
-                            "failed to update power level leaderboard '{}': {}",
-                            self.character_id,
-                            err
-                        );
-                    }
-                    _ => {}
-                }
-
                 match db::leaderboard::update_leaderboard(
                     &mut tx,
                     self.character_id,
@@ -463,12 +421,54 @@ impl<'a> GameInstance<'a> {
                             )
                             .await
                         {
-                            tracing::error!("failed to broadcast highscore: {}", err);
+                            tracing::error!("failed to broadcast highs core: {}", err);
                         }
                     }
                     Err(err) => {
                         tracing::error!(
                             "failed to update leaderboard '{}': {}",
+                            self.character_id,
+                            err
+                        );
+                    }
+                    _ => {}
+                }
+
+                let power_level = self.game_data.player_base_specs.read().max_area_level;
+                match db::leaderboard::update_leaderboard(
+                    &mut tx,
+                    self.character_id,
+                    &realm_id,
+                    constants::POWER_LEVEL_LEADERBOARD_AREA_ID,
+                    power_level as i32,
+                    character_resources.played_time_seconds,
+                )
+                .await
+                {
+                    Ok(true) => {
+                        if let Err(err) = self
+                            .chat_integration
+                            .broadcast_message(
+                                format!(
+                                    "'{}'{} is the first to reach Power Level {}!",
+                                    self.game_data
+                                        .player_base_specs
+                                        .read()
+                                        .character_static
+                                        .name,
+                                    realm_label,
+                                    power_level,
+                                ),
+                                None,
+                            )
+                            .await
+                        {
+                            tracing::error!("failed to broadcast power level high score: {}", err);
+                        }
+                    }
+                    Err(err) => {
+                        tracing::error!(
+                            "failed to update power level leaderboard '{}': {}",
                             self.character_id,
                             err
                         );
