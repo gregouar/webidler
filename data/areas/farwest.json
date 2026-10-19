@@ -8,20 +8,20 @@
         "header_background": "areas/farwest_header.webp",
         "footer_background": "areas/farwest_footer.webp",
         "quest": {
-            "description": "TBD.",
-            "area_level" : 150,
-            "reward"     : { "Loot": {"item_rarity": "Unique", "item_category": "Rune", "level": 500} }
+            "description": "The Prospector's digging has gone too far. Put an end to his cursed operation before his Deep Borer unearths a horror the frontier was never meant to face.",
+            "area_level": 150,
+            "reward": { "Loot": {"item_rarity": "Unique", "item_category": "Rune", "level": 500} }
         },
-        "coming_soon": true
+        "coming_soon": false
     },
     "loot_tables": [
         "tier_1.json",  "tier_2.json",  "tier_3.json",  "tier_4.json",  "tier_5.json",  "tier_6.json",  "tier_7.json",
         "tier_8.json",  "tier_9.json",  "tier_10.json"
     ],
-    "bosses"     : [],
+    "bosses": [],
     "waves"      : [
         {
-            "min_level": 1,
+            "min_level":    1,
             "max_level": null,
             "weight"   : 1000,
             "spawns"   : [

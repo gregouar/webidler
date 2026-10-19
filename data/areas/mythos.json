@@ -8,20 +8,20 @@
         "header_background": "areas/mythos_header.webp",
         "footer_background": "areas/mythos_footer.webp",
         "quest": {
-            "description": "TBD.",
-            "area_level" : 30,
-            "reward"     : { "Item": {"item_id": "edict_3", "item_rarity": "Rare", "max_affixes": true, "level": 600} }
+            "description": "Descend into the Eldritch Depths and confront the horrors lurking beyond the boundaries of reality.",
+            "area_level": 30,
+            "reward": { "Item": {"item_id": "edict_3", "item_rarity": "Rare", "max_affixes": true, "level": 600} }
         },
-        "coming_soon": true
+        "coming_soon": false
     },
     "loot_tables": [
         "tier_1.json",  "tier_2.json",  "tier_3.json",  "tier_4.json",  "tier_5.json",  "tier_6.json",  "tier_7.json",
         "tier_8.json",  "tier_9.json",  "tier_10.json"
     ],
-    "bosses"     : [],
+    "bosses": [],
     "waves"      : [
         {
-            "min_level": 1,
+            "min_level":    1,
             "max_level": null,
             "weight"   : 1000,
             "spawns"   : [

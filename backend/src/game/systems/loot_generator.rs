@@ -8,7 +8,9 @@ use shared::{
         chance::ChanceRange,
         forge::MAX_AFFIXES,
         item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
-        item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+        item_affix::{
+            AffixEffect, AffixEffectBlueprint, AffixTag, AffixType, ItemAffix, ItemAffixBlueprint,
+        },
         stat_effect::StatEffect,
     },
 };
@@ -348,11 +350,11 @@ fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
             };
 
             ItemAffix {
-                name: "Unique".to_string(),
+                name: base_item.name.clone(),
                 family: base_item.name.clone(),
-                tags: BTreeSet::new(),
+                tags: BTreeSet::from([AffixTag::Unique]),
                 affix_type,
-                tier: 1,
+                tier: 0,
                 item_level: base_item.min_area_level,
                 effects: vec![effect],
             }

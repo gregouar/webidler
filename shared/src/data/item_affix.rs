@@ -23,6 +23,8 @@ pub enum AffixType {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]
 pub enum AffixTag {
+    Unique,
+
     Speed,
     Skill,
 

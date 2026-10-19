@@ -787,6 +787,7 @@ fn affix_type_str(affix_type: AffixType) -> &'static str {
 
 fn affix_tag_str(affix_tag: AffixTag) -> &'static str {
     match affix_tag {
+        AffixTag::Unique => "Unique",
         AffixTag::Attack => "Attack",
         AffixTag::Armor => "Defense",
         AffixTag::Critical => "Critical",
