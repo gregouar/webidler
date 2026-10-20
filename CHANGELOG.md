@@ -20,7 +20,7 @@ Balance Changes:
 
 Fixes:
 
-- Increased Modifiers are not longer multiplicative when applied to triggered effects.
+- Increased Modifiers are not longer multiplicative when applied to triggered effects (e.g. Caustic Convergence Increased Fire & Increased Toxic Damage are now additive).
 
 ## Major Game Update: «Skill Masteries»
 
