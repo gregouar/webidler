@@ -308,6 +308,7 @@ fn roll_base_item(
                 items_store
                     .content
                     .get(&l.item_id)
+                    .filter(|base| !base.categories.contains(&ItemCategory::Remnant))
                     .map(|base| base.min_area_level)
                     .unwrap_or_default()
             })
@@ -319,7 +320,7 @@ fn roll_base_item(
                 items_store
                     .content
                     .get(&l.item_id)
-                    .map(|base| base.min_area_level == max_level)
+                    .map(|base| base.min_area_level >= max_level)
                     .unwrap_or_default()
             })
             .collect()

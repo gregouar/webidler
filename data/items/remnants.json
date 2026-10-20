@@ -1,6 +1,6 @@
 {
-    "amulet_remnant": {
-        "name"           : "Remnant of Amulets",
+    "amulet_remnant"         : {
+        "name"           : "Remnant of an Amulet",
         "icon"           : "items/remnants/amulet_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -18,8 +18,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "body_remnant": {
-        "name"           : "Remnant of Body Armor",
+    "body_remnant"           : {
+        "name"           : "Remnant of a Body Armor",
         "icon"           : "items/remnants/body_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -37,7 +37,7 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "boots_remnant": {
+    "boots_remnant"          : {
         "name"           : "Remnant of Boots",
         "icon"           : "items/remnants/boots_remnant.webp",
         "description"    : null,
@@ -56,8 +56,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "cloak_remnant": {
-        "name"           : "Remnant of Cloaks",
+    "cloak_remnant"          : {
+        "name"           : "Remnant of a Cloak",
         "icon"           : "items/remnants/cloak_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -75,8 +75,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "focus_remnant": {
-        "name"           : "Remnant of Foci",
+    "focus_remnant"          : {
+        "name"           : "Remnant of a Magic Focus",
         "icon"           : "items/remnants/focus_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -94,7 +94,7 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "gloves_remnant": {
+    "gloves_remnant"         : {
         "name"           : "Remnant of Gloves",
         "icon"           : "items/remnants/gloves_remnant.webp",
         "description"    : null,
@@ -113,8 +113,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "helmet_remnant": {
-        "name"           : "Remnant of Helmets",
+    "helmet_remnant"         : {
+        "name"           : "Remnant of a Helmet",
         "icon"           : "items/remnants/helmet_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -133,7 +133,7 @@
         "upgrade_effects": []
     },
     "melee_weapon_1h_remnant": {
-        "name"           : "Remnant of One-Handed Melee Weapons",
+        "name"           : "Remnant of a One-Handed Melee Weapon",
         "icon"           : "items/remnants/melee_weapon_1h_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -152,7 +152,7 @@
         "upgrade_effects": []
     },
     "melee_weapon_2h_remnant": {
-        "name"           : "Remnant of Two-Handed Melee Weapons",
+        "name"           : "Remnant of a Two-Handed Melee Weapon",
         "icon"           : "items/remnants/melee_weapon_2h_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -170,8 +170,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "ranged_weapon_remnant": {
-        "name"           : "Remnant of Ranged Weapons",
+    "ranged_weapon_remnant"  : {
+        "name"           : "Remnant of a Ranged Weapon",
         "icon"           : "items/remnants/ranged_weapon_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -189,8 +189,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "ring_remnant": {
-        "name"           : "Remnant of Rings",
+    "ring_remnant"           : {
+        "name"           : "Remnant of a Ring",
         "icon"           : "items/remnants/ring_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -208,8 +208,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "shield_remnant": {
-        "name"           : "Remnant of Shields",
+    "shield_remnant"         : {
+        "name"           : "Remnant of a Shield",
         "icon"           : "items/remnants/shield_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -227,8 +227,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "spell_weapon_remnant": {
-        "name"           : "Remnant of Spell Weapons",
+    "spell_weapon_remnant"   : {
+        "name"           : "Remnant of a Spell Weapon",
         "icon"           : "items/remnants/spell_weapon_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -246,8 +246,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "map_remnant": {
-        "name"           : "Remnant of Edicts",
+    "map_remnant"            : {
+        "name"           : "Remnant of an Edict",
         "icon"           : "items/remnants/map_remnant.webp",
         "description"    : null,
         "slot"           : null,
@@ -265,8 +265,8 @@
         "upgrade_levels" : [],
         "upgrade_effects": []
     },
-    "rune_remnant": {
-        "name"           : "Remnant of Runes",
+    "rune_remnant"           : {
+        "name"           : "Remnant of a Rune",
         "icon"           : "items/remnants/rune_remnant.webp",
         "description"    : null,
         "slot"           : null,

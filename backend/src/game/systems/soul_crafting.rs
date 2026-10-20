@@ -30,7 +30,7 @@ pub fn can_imbue(item: &ItemSpecs) -> bool {
 
 pub fn is_compatible_soul(item: &ItemSpecs, soul: &ItemSpecs) -> bool {
     can_imbue(item)
-        && !soul.base.categories.contains(&ItemCategory::Remnant)
+        && soul.base.categories.contains(&ItemCategory::Soul)
         && soul.base.categories.is_superset(&item.base.categories)
         && soul.modifiers.affixes.len() == 1
         && soul
@@ -77,7 +77,11 @@ pub fn sacrifice(item: &ItemSpecs, items_store: &ItemsStore) -> Result<ItemSpecs
         items_store,
         ItemModifiers {
             base_item_id: soul_item_id.clone(),
-            name: format!("{} Soul", item.modifiers.name),
+            name: if affix.tags.contains(&AffixTag::Unique) {
+                format!("{} Soul", affix.name)
+            } else {
+                format!("{} Soul", item.modifiers.name)
+            },
             rarity: if affix.tags.contains(&AffixTag::Unique) {
                 ItemRarity::Unique
             } else {
