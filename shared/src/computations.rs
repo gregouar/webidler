@@ -132,7 +132,12 @@ pub fn gamble_price(item_level: AreaLevel) -> f64 {
 pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
     (affixes
         .iter()
-        .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
+        .filter(|affix| {
+            matches!(
+                affix.affix_type,
+                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+            )
+        })
         .map(|affix| affix.item_level as f64)
         .max_by(|a, b| a.total_cmp(b))
         .unwrap_or_default()

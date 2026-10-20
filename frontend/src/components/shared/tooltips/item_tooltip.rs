@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::BTreeSet, sync::Arc};
 use strum::IntoEnumIterator;
 
 use leptos::{html::*, prelude::*};
@@ -714,13 +714,57 @@ pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             .categories
             .contains(&ItemCategory::Soul)
             .then(|| {
+                let soul_category = soul_category_str(&item_specs.base.categories);
                 view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm">
+                        {format!("{} Soul", soul_category)}
+                    </li>
                     <li class="text-zinc-400 text-xs xl:text-sm  italic">
                         "Can be imbued into a Rare Item of the same category to grant:"
                     </li>
                 }
             })}
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Remnant)
+            .then(|| {
+                view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm  italic">
+                        "Can be sacrificed for a chance to extract its Unique Soul."
+                    </li>
+                }
+            })}
     }
+}
+
+fn soul_category_str(item_categories: &BTreeSet<ItemCategory>) -> &'static str {
+    item_categories
+        .iter()
+        .find(|item_category| {
+            matches!(
+                item_category,
+                ItemCategory::Accessory
+                    | ItemCategory::Amulet
+                    | ItemCategory::Body
+                    | ItemCategory::Boots
+                    | ItemCategory::Cloak
+                    | ItemCategory::Focus
+                    | ItemCategory::Gloves
+                    | ItemCategory::Helmet
+                    | ItemCategory::Map
+                    | ItemCategory::MeleeWeapon1H
+                    | ItemCategory::MeleeWeapon2H
+                    | ItemCategory::RangedWeapon
+                    | ItemCategory::Ring
+                    | ItemCategory::Rune
+                    | ItemCategory::Shield
+                    | ItemCategory::SpellWeapon
+            )
+        })
+        .copied()
+        .map(item_category_str)
+        .unwrap_or("")
 }
 
 pub fn formatted_affixes_list(
@@ -834,6 +878,7 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
         ItemCategory::Soul => "Soul",
+        ItemCategory::Remnant => "Remnant",
     }
 }
 

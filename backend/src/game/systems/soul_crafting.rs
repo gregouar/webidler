@@ -1,6 +1,6 @@
 use shared::data::{
     item::{ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
-    item_affix::AffixType,
+    item_affix::{AffixTag, AffixType},
 };
 
 use crate::{
@@ -9,9 +9,15 @@ use crate::{
 };
 
 pub fn can_sacrifice(item: &ItemSpecs) -> bool {
-    item.modifiers.rarity == ItemRarity::Rare
-        && !item.base.categories.contains(&ItemCategory::Soul)
-        && item.modifiers.count_nonunique_affixes() == 4
+    if item.base.categories.contains(&ItemCategory::Soul) {
+        return false;
+    }
+
+    if item.base.categories.contains(&ItemCategory::Remnant) {
+        return true;
+    }
+
+    item.modifiers.rarity == ItemRarity::Rare && item.modifiers.count_nonunique_affixes() == 4
 }
 
 pub fn can_imbue(item: &ItemSpecs) -> bool {
@@ -19,10 +25,12 @@ pub fn can_imbue(item: &ItemSpecs) -> bool {
         item.modifiers.rarity,
         ItemRarity::Rare | ItemRarity::Masterwork
     ) && !item.base.categories.contains(&ItemCategory::Soul)
+        && !item.base.categories.contains(&ItemCategory::Remnant)
 }
 
 pub fn is_compatible_soul(item: &ItemSpecs, soul: &ItemSpecs) -> bool {
     can_imbue(item)
+        && soul.base.categories.contains(&ItemCategory::Soul)
         && soul.base.categories.is_superset(&item.base.categories)
         && soul.modifiers.affixes.len() == 1
         && soul
@@ -35,34 +43,50 @@ pub fn is_compatible_soul(item: &ItemSpecs, soul: &ItemSpecs) -> bool {
 pub fn sacrifice(item: &ItemSpecs, items_store: &ItemsStore) -> Result<ItemSpecs, AppError> {
     if !can_sacrifice(item) {
         return Err(AppError::UserError(
-            "only Rare items with four affixes can be sacrificed".to_string(),
+            "only Remnants or Rare items with four affixes can be sacrificed".to_string(),
         ));
     }
 
-    let normal_affixes: Vec<_> = item
+    let extractable_affixes: Vec<_> = item
         .modifiers
         .affixes
         .iter()
-        .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
+        .filter(|affix| {
+            matches!(
+                affix.affix_type,
+                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+            )
+        })
         .collect();
-    let affix_index = rng::random_range(0..normal_affixes.len()).ok_or(AppError::UserError(
-        "failed to select an affix for the Soul".to_string(),
-    ))?;
-    let mut affix = normal_affixes[affix_index].clone();
+    let affix_index = rng::random_range(0..extractable_affixes.len()).ok_or(
+        AppError::UserError("failed to select an affix for the Soul".to_string()),
+    )?;
+    let mut affix = extractable_affixes[affix_index].clone();
     affix.affix_type = AffixType::Soul;
 
-    let soul_item_id = items_store
-        .soul_by_categories
-        .get(&item.base.categories)
-        .ok_or(AppError::UserError(
-            "no Soul base exists for this item category".to_string(),
-        ))?;
+    let mut soul_categories = item.base.categories.clone();
+    soul_categories.remove(&ItemCategory::Remnant);
+    let soul_item_id =
+        items_store
+            .soul_by_categories
+            .get(&soul_categories)
+            .ok_or(AppError::UserError(
+                "no Soul base exists for this item category".to_string(),
+            ))?;
     let soul_item = items_controller::init_item_specs_from_store(
         items_store,
         ItemModifiers {
             base_item_id: soul_item_id.clone(),
-            name: format!("{} Soul", item.modifiers.name),
-            rarity: ItemRarity::Masterwork,
+            name: if affix.tags.contains(&AffixTag::Unique) {
+                format!("{} Soul", affix.name)
+            } else {
+                format!("{} Soul", item.modifiers.name)
+            },
+            rarity: if affix.tags.contains(&AffixTag::Unique) {
+                ItemRarity::Unique
+            } else {
+                ItemRarity::Masterwork
+            },
             level: affix.item_level,
             affixes: vec![affix],
             quality: 0.0,

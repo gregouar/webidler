@@ -1,6 +1,6 @@
 {
     "amulet_soul"         : {
-        "name"           : "Amulet Soul",
+        "name"           : "Soul of an Amulet",
         "icon"           : "items/souls/amulet_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -19,7 +19,7 @@
         "upgrade_effects": []
     },
     "body_soul"           : {
-        "name"           : "Body Armor Soul",
+        "name"           : "Soul of a Body Armor",
         "icon"           : "items/souls/body_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -38,7 +38,7 @@
         "upgrade_effects": []
     },
     "boots_soul"          : {
-        "name"           : "Boots Soul",
+        "name"           : "Soul of Boots",
         "icon"           : "items/souls/boots_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -57,7 +57,7 @@
         "upgrade_effects": []
     },
     "cloak_soul"          : {
-        "name"           : "Cloak Soul",
+        "name"           : "Soul of a Cloak",
         "icon"           : "items/souls/cloak_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -76,7 +76,7 @@
         "upgrade_effects": []
     },
     "focus_soul"          : {
-        "name"           : "Focus Soul",
+        "name"           : "Soul of a Magic Focus",
         "icon"           : "items/souls/focus_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -95,7 +95,7 @@
         "upgrade_effects": []
     },
     "gloves_soul"         : {
-        "name"           : "Gloves Soul",
+        "name"           : "Soul of Gloves",
         "icon"           : "items/souls/gloves_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -114,7 +114,7 @@
         "upgrade_effects": []
     },
     "helmet_soul"         : {
-        "name"           : "Helmet Soul",
+        "name"           : "Soul of a Helmet",
         "icon"           : "items/souls/helmet_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -133,7 +133,7 @@
         "upgrade_effects": []
     },
     "melee_weapon_1h_soul": {
-        "name"           : "One-Handed Melee Weapon Soul",
+        "name"           : "Soul of a One-Handed Melee Weapon",
         "icon"           : "items/souls/melee_weapon_1h_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -152,7 +152,7 @@
         "upgrade_effects": []
     },
     "melee_weapon_2h_soul": {
-        "name"           : "Two-Handed Melee Weapon Soul",
+        "name"           : "Soul of a Two-Handed Melee Weapon",
         "icon"           : "items/souls/melee_weapon_2h_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -171,7 +171,7 @@
         "upgrade_effects": []
     },
     "ranged_weapon_soul"  : {
-        "name"           : "Ranged Weapon Soul",
+        "name"           : "Soul of a Ranged Weapon",
         "icon"           : "items/souls/ranged_weapon_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -190,7 +190,7 @@
         "upgrade_effects": []
     },
     "ring_soul"           : {
-        "name"           : "Ring Soul",
+        "name"           : "Soul of a Ring",
         "icon"           : "items/souls/ring_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -209,7 +209,7 @@
         "upgrade_effects": []
     },
     "shield_soul"         : {
-        "name"           : "Shield Soul",
+        "name"           : "Soul of a Shield",
         "icon"           : "items/souls/shield_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -228,7 +228,7 @@
         "upgrade_effects": []
     },
     "spell_weapon_soul"   : {
-        "name"           : "Spell Weapon Soul",
+        "name"           : "Soul of a Spell Weapon",
         "icon"           : "items/souls/spell_weapon_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -247,7 +247,7 @@
         "upgrade_effects": []
     },
     "map_soul"            : {
-        "name"           : "Edict Soul",
+        "name"           : "Soul of an Edict",
         "icon"           : "items/souls/map_soul.webp",
         "description"    : null,
         "slot"           : null,
@@ -266,7 +266,7 @@
         "upgrade_effects": []
     },
     "rune_soul"           : {
-        "name"           : "Rune Soul",
+        "name"           : "Soul of a Rune",
         "icon"           : "items/souls/rune_soul.webp",
         "description"    : null,
         "slot"           : null,
