@@ -12,11 +12,11 @@ Features:
 Content:
 
 - New Areas: Grim Frontier and Eldritch Depths.
-- New Skill: Taunt.
+- New Skill: Taunt, which partially refresh Enemy Skill Cooldowns at the cost of taking more damage.
 
 Balance Changes:
 
-- Various Passives & Skill Masteries tweaks.
+- Various Unique Items, Passives & Skill Masteries tweaks.
 
 Fixes:
 
