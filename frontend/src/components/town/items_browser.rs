@@ -72,17 +72,20 @@ fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibilit
         InventoryItemEligibility::NonUnique => {
             item.base.rarity != ItemRarity::Unique
                 && !item.base.categories.contains(&ItemCategory::Soul)
+                && !item.base.categories.contains(&ItemCategory::Remnant)
         }
         InventoryItemEligibility::Sacrifice => {
-            item.modifiers.rarity == ItemRarity::Rare
-                && item.modifiers.count_nonunique_affixes() == 4
-                && !item.base.categories.contains(&ItemCategory::Soul)
+            !item.base.categories.contains(&ItemCategory::Soul)
+                && (item.base.categories.contains(&ItemCategory::Remnant)
+                    || (item.modifiers.rarity == ItemRarity::Rare
+                        && item.modifiers.count_nonunique_affixes() == 4))
         }
         InventoryItemEligibility::Imbue => {
             (matches!(
                 item.modifiers.rarity,
                 ItemRarity::Rare | ItemRarity::Masterwork
-            ) && !item.base.categories.contains(&ItemCategory::Soul))
+            ) && !item.base.categories.contains(&ItemCategory::Soul)
+                && !item.base.categories.contains(&ItemCategory::Remnant))
                 || item.base.categories.contains(&ItemCategory::Soul)
         }
     }

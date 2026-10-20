@@ -546,9 +546,17 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
 
     let sacrifice_price = move || {
         selected_item.with(|selected| match selected {
-            SelectedItem::InMarket(item) => Some(computations::sacrifice_price(
-                &item.item_specs.modifiers.affixes,
-            )),
+            SelectedItem::InMarket(item)
+                if !item
+                    .item_specs
+                    .base
+                    .categories
+                    .contains(&ItemCategory::Soul) =>
+            {
+                Some(computations::sacrifice_price(
+                    &item.item_specs.modifiers.affixes,
+                ))
+            }
             _ => None,
         })
     };
@@ -605,7 +613,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
             <CardInsetTitle>
                 <span class="inline-flex items-center gap-1">
                     "Sacrifice Item"
-                    <HelpTooltip text="Destroy a Rare Item with four affixes to extract of the affixes as a matching Item Soul." />
+                    <HelpTooltip text="Destroy a Rare Item with four affixes to extract one affix as a matching Item Soul." />
                 </span>
             </CardInsetTitle>
             <ItemDetails selected_item show_affixes=true />

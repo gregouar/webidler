@@ -4,9 +4,9 @@
     "items": [
       "cloaks.json",           "amulets.json",          "body_armors.json",      "boots.json",
       "focuses.json",          "gloves.json",           "helmets.json",          "maps.json",
-      "rings.json",            "runes.json",            "shields.json",          "souls_unique.json",
-      "souls.json",            "weapons_1h_melee.json", "weapons_2h_melee.json", "weapons_ranged.json",
-      "weapons_spell.json"
+      "rings.json",            "runes.json",            "remnants.json",         "shields.json",
+      "souls_unique.json",     "souls.json",            "weapons_1h_melee.json", "weapons_2h_melee.json",
+      "weapons_ranged.json",   "weapons_spell.json"
     ]
   }
 }

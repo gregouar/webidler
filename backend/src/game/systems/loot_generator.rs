@@ -127,7 +127,7 @@ pub fn roll_item(
     )
     .map(|(base_item_id, base)| {
         let rarity = if base.rarity != ItemRarity::Unique {
-            rarity.clamp(base.rarity, ItemRarity::Rare)
+            rarity.clamp(base.rarity, ItemRarity::Masterwork)
         } else {
             ItemRarity::Unique
         };
@@ -194,7 +194,7 @@ pub fn roll_item_stats(
                 max: 2,
                 ..Default::default()
             },
-            ItemRarity::Rare => ChanceRange {
+            ItemRarity::Rare | ItemRarity::Masterwork => ChanceRange {
                 min: 3,
                 max: 4,
                 ..Default::default()
@@ -209,6 +209,17 @@ pub fn roll_item_stats(
             &base,
             &mut modifiers,
             None,
+            affixes_table,
+            adjectives_table,
+            nouns_table,
+        );
+    }
+
+    if rarity == ItemRarity::Masterwork {
+        add_affix(
+            &base,
+            &mut modifiers,
+            Some(AffixType::Soul),
             affixes_table,
             adjectives_table,
             nouns_table,
@@ -377,11 +388,12 @@ pub fn add_affix(
     let prefixes_amount = modifiers.count_affixes(AffixType::Prefix);
     let suffixes_amount = modifiers.count_affixes(AffixType::Suffix);
 
-    if prefixes_amount + suffixes_amount >= MAX_AFFIXES {
+    if prefixes_amount + suffixes_amount >= MAX_AFFIXES && affix_type != Some(AffixType::Soul) {
         return false;
     }
 
     let affix_type = match affix_type {
+        Some(AffixType::Soul) => AffixType::Soul,
         Some(AffixType::Prefix) => {
             if prefixes_amount <= suffixes_amount {
                 AffixType::Prefix
