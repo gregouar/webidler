@@ -30,7 +30,9 @@ pub fn affix_operation_price(
     affixes_amount: usize,
     item_base: &ItemBase,
 ) -> Option<f64> {
-    if item_base.categories.contains(&ItemCategory::Soul) {
+    if item_base.categories.contains(&ItemCategory::Soul)
+        || item_base.categories.contains(&ItemCategory::Remnant)
+    {
         return None;
     }
 

@@ -720,6 +720,17 @@ pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                     </li>
                 }
             })}
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Remnant)
+            .then(|| {
+                view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm  italic">
+                        "Can be sacrificed for a chance to extract its Unique Soul."
+                    </li>
+                }
+            })}
     }
 }
 
@@ -834,6 +845,7 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
         ItemCategory::Soul => "Soul",
+        ItemCategory::Remnant => "Remnant",
     }
 }
 

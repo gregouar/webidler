@@ -191,6 +191,7 @@ pub enum ItemCategory {
     Map,
     Rune,
     Soul,
+    Remnant,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
