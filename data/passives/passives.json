@@ -1550,7 +1550,7 @@
         "icon": "passives/caduceus.svg",
         "x": 52.5,
         "y": 95.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Life",
         "effects": [
@@ -2211,7 +2211,7 @@
         "icon": "passives/myrmidon.svg",
         "x": -95.0,
         "y": 62.5,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Armor",
         "effects": [
@@ -2898,7 +2898,7 @@
         "icon": "passives/centaur_heart.svg",
         "x": -52.5,
         "y": 95.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Life",
         "effects": [
@@ -5473,7 +5473,7 @@
         "icon": "passives/wisdom.svg",
         "x": -35.0,
         "y": -87.5,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Mana",
         "effects": [
@@ -8397,7 +8397,7 @@
         "icon": "passives/kneeling.svg",
         "x": -155.0,
         "y": -50.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Status",
         "effects": [
@@ -9379,7 +9379,7 @@
         "icon": "passives/pouch.svg",
         "x": 0.0,
         "y": 0.0,
-        "size": 2,
+        "size": 3,
         "root_node": true,
         "node_type": "Gold",
         "effects": [
@@ -13061,7 +13061,7 @@
         "icon": "passives/coins.svg",
         "x": 60.0,
         "y": -60.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Gold",
         "effects": [
@@ -13362,7 +13362,7 @@
         "icon": "passives/crab.svg",
         "x": -95.0,
         "y": -62.5,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Armor",
         "effects": [
@@ -14106,6 +14106,24 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -14122,24 +14140,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -14239,6 +14239,24 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14258,30 +14276,12 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   }
                 ],
@@ -14381,30 +14381,30 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -14418,7 +14418,7 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14582,7 +14582,7 @@
         "icon": "passives/coins.svg",
         "x": -60.0,
         "y": 60.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Gold",
         "effects": [
@@ -14742,7 +14742,7 @@
         "icon": "passives/candle_skull.svg",
         "x": 180.0,
         "y": 62.5,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Utility",
         "effects": [
@@ -15720,7 +15720,7 @@
         "icon": "passives/meditation.svg",
         "x": 35.0,
         "y": -87.5,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Mana",
         "effects": [
@@ -15757,7 +15757,7 @@
         "icon": "passives/coins.svg",
         "x": -60.0,
         "y": -60.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Gold",
         "effects": [
@@ -17139,7 +17139,7 @@
         "icon": "passives/coins.svg",
         "x": 60.0,
         "y": 60.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Gold",
         "effects": [
