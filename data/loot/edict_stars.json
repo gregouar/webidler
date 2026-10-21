@@ -1,0 +1,6 @@
+{
+    "area_specific": true,
+    "entries"      : [
+        {"item_id": "passive_blood_magic_amulet_soul", "weight": 10, "min_area_level": 1, "boss_only": true}
+    ]
+}
