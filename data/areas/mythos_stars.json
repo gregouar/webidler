@@ -13,9 +13,15 @@
     "loot_tables": [
         "tier_1.json",      "tier_2.json",      "tier_3.json",      "tier_4.json",      "tier_5.json",
         "tier_6.json",      "tier_7.json",      "tier_8.json",      "tier_9.json",      "tier_10.json",
-        "edict_stars.json"
+        "area_mythos.json", "edict_stars.json"
     ],
-    "bosses": [],
+    "bosses"     : [
+        {
+            "level"   : 50,
+            "interval": 10,
+            "spawns"  : [ {"monster": "witch_2.json", "quantity": 1} ]
+        }
+    ],
     "waves"      : [
         {
             "min_level":    1,

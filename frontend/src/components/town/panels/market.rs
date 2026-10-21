@@ -2,6 +2,7 @@ use leptos::{prelude::*, task::spawn_local};
 use shared_chat::types::ChatChannel;
 use std::sync::Arc;
 use strum::IntoEnumIterator;
+use uuid::uuid;
 
 use shared::{
     computations,
@@ -12,8 +13,8 @@ use shared::{
         skill::{DamageType, RestoreType, SkillType},
         stash::{Stash, StashType},
         stat_effect::{
-            ArmorStatType, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
-            StatusDamageType,
+            ArmorStatType, LuckyRollType, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
+            StatType, StatusDamageType,
         },
     },
     http::client::{
@@ -1719,6 +1720,19 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::ItemAreaChance, Modifier::Increased),
         (StatType::ItemLevel, Modifier::Flat),
         (StatType::GemsFind, Modifier::Increased),
+        // Unique souls
+        (
+            StatType::Lucky {
+                skill_filter: Default::default(),
+                roll_type: LuckyRollType::Evade(None),
+            },
+            Modifier::Flat,
+        ),
+        // Unique passive souls
+        (
+            StatType::AllocatePassive(uuid!("d47c084d-d9f2-479a-b1a8-f538845af398")),
+            Modifier::Flat,
+        ),
     ];
 
     let options = available_stats
