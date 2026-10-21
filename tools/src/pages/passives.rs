@@ -709,16 +709,17 @@ fn EditNodeMenu(
                     );
                     let pending_history = RwSignal::new(false);
                     Effect::new(move || {
-                        if let Some(latest_node_specs) =
-                            passives_tree_specs.read().nodes.get(&node_id).cloned()
-                            && node_specs.get_untracked() != latest_node_specs
+                        if let Some(latest_node_specs) = passives_tree_specs
+                            .read()
+                            .nodes
+                            .get(&node_id)
+                            .cloned() && node_specs.get_untracked() != latest_node_specs
                         {
                             node_specs.set(latest_node_specs);
                         }
                     });
                     Effect::new(move || {
                         let value = node_specs.get();
-
                         if let SelectedNode::Single(node_id) = selected_node.get_untracked()
                             && passives_tree_specs
                                 .read_untracked()
@@ -751,6 +752,7 @@ fn EditNodeMenu(
                         WatchDebouncedOptions::default().immediate(false),
                     );
                     Some(
+
                         view! {
                             <CardHeader
                                 title="Edit Node"
@@ -860,7 +862,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
 
     view! {
         <CardInset class="flex-1">
-            <div class="text-amber-300">{node_id.to_string()}</div>
+            <div class="text-amber-300 select-text">{node_id.to_string()}</div>
             <ValidatedInput label="Name" id="node_name" input_type="text" bind=node_name />
             <ValidatedInput label="Icon" id="node_icon" input_type="text" bind=node_icon />
             <div class="flex justify-between gap-2">

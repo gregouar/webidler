@@ -1,6 +1,21 @@
 {
     "area_specific": true,
     "entries"      : [
-        {"item_id": "passive_blood_magic_amulet_soul", "weight": 10, "min_area_level": 1, "boss_only": true}
+        {"item_id": "passive_blood_magic_amulet_soul",          "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_lucky_dice_amulet_soul",           "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_overwhelming_force_amulet_soul",   "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_arcane_bastion_amulet_soul",       "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_mana_shield_amulet_soul",          "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_grim_pact_amulet_soul",            "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_spread_destruction_amulet_soul",   "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_unstable_power_amulet_soul",       "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_blessed_heart_amulet_soul",        "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_stunning_blow_amulet_soul",        "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_legionnaire_stance_amulet_soul",   "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_discipline_amulet_soul",           "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_sickening_concoction_amulet_soul", "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_hubris_amulet_soul",               "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_bonfire_amulet_soul",              "weight": 10, "min_area_level": 1, "boss_only": true},
+        {"item_id": "passive_pyromaniac_amulet_soul",           "weight": 10, "min_area_level": 1, "boss_only": true}
     ]
 }
