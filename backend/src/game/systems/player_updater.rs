@@ -120,7 +120,7 @@ pub fn update_player_specs(
     area_specs: &AreaSpecs,
     area_threat: &AreaThreat,
 ) -> PlayerSpecs {
-    let effects: Vec<_> = [
+    let mut effects: Vec<_> = [
         player_base_specs.effects.clone(),
         player_inventory
             .equipped_items()
@@ -130,17 +130,35 @@ pub fn update_player_specs(
                     .into_iter()
             })
             .collect(),
-        passive::generate_effects_fom_passives(
-            passives_tree_specs,
-            &passives_tree_state.ascension,
-            &passives_tree_state.purchased_nodes,
-        ),
         skill_masteries_controller::generate_player_stat_effects(
             skill_masteries_store,
             player_base_specs,
         ),
     ]
     .concat();
+
+    let mut purchased_nodes = passives_tree_state.purchased_nodes.clone();
+    for effect in effects.iter() {
+        if let StatType::AllocatePassive(passive_id) = &effect.stat
+            && let Some(passive_specs) = passives_tree_specs.nodes.get(passive_id)
+            && (!passive_specs.locked
+                || passives_tree_state
+                    .ascension
+                    .ascended_nodes
+                    .get(passive_id)
+                    .copied()
+                    .unwrap_or_default()
+                    > 0)
+        {
+            purchased_nodes.insert(passive_id.clone());
+        }
+    }
+
+    effects.extend(passive::generate_effects_fom_passives(
+        passives_tree_specs,
+        &passives_tree_state.ascension,
+        &purchased_nodes,
+    ));
 
     let mut player_specs = compute_player_specs(
         skill_masteries_store,
@@ -416,6 +434,7 @@ fn modify_player_specs(
             | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::PowerLevel
+            | StatType::AllocatePassive(_) // Done in init_player_specs
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }

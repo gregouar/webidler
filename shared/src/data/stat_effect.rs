@@ -10,6 +10,7 @@ use crate::{
         conditional_modifier::Condition,
         item::{SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
+        passive::PassiveNodeId,
         skill::{RestoreModifier, RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
         values::NonNegative,
@@ -323,6 +324,7 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
+    AllocatePassive(PassiveNodeId),
     GoldFind,
     PowerLevel,
     Description2(String),

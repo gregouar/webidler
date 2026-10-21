@@ -797,7 +797,7 @@ pub fn formatted_affixes_list(
 
                     view! {
                         <li class=if affix_type == AffixType::Soul {
-                            "text-fuchsia-400 text-xs -mb-1"
+                            "text-fuchsia-300 text-xs -mb-1"
                         } else {
                             "text-zinc-400 text-xs -mb-1"
                         }>

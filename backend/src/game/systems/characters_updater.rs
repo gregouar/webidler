@@ -429,7 +429,10 @@ fn compute_character_specs(
             // Only for player (for now...)
             StatType::RestoreOnHit { .. } => {}
             // Only for player
-            StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
+            StatType::MovementSpeed
+            | StatType::GoldFind
+            | StatType::ThreatGain
+            | StatType::AllocatePassive(_) => {}
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }

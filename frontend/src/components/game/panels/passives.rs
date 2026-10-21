@@ -4,8 +4,9 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
     data::{
-        passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
+        passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PurchasedNodes},
         pets::PetButton,
+        stat_effect::StatType,
     },
     http::client::SavePassivesRequest,
     messages::client::PurchasePassiveMessage,
@@ -256,15 +257,33 @@ fn PassiveSkillTree(
     let points_available =
         Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
 
+    let purchased_nodes = Memo::new(move |_| {
+        let mut nodes = game_context
+            .passives_tree_state
+            .read()
+            .purchased_nodes
+            .clone();
+        for stat_effect in game_context
+            .player_specs
+            .read()
+            .character_specs
+            .effects
+            .iter()
+        {
+            if let StatType::AllocatePassive(node_id) = stat_effect.stat {
+                nodes.insert(node_id);
+            }
+        }
+        nodes
+    });
+
     view! {
         <PassiveSkillStats
             passives_tree_specs=game_context.passives_tree_specs
             passives_tree_ascension=Signal::derive(move || {
                 game_context.passives_tree_state.read().ascension.clone()
             })
-            purchased_nodes=Signal::derive(move || {
-                game_context.passives_tree_state.read().purchased_nodes.clone()
-            })
+            purchased_nodes
         />
         <Pannable>
             <For
@@ -287,6 +306,7 @@ fn PassiveSkillTree(
                     points_available=points_available
                     search_node
                     highlighted_node
+                    purchased_nodes
                 />
             </For>
         </Pannable>
@@ -300,6 +320,7 @@ fn InGameNode(
     points_available: Memo<bool>,
     search_node: RwSignal<Option<String>>,
     highlighted_node: RwSignal<Option<PassiveNodeId>>,
+    #[prop(into)] purchased_nodes: Signal<PurchasedNodes>,
 ) -> impl IntoView {
     let game_context: GameContext = expect_context();
     let node_level = Memo::new(move |_| {
@@ -336,12 +357,7 @@ fn InGameNode(
             // node_specs.max_upgrade_level,
         );
 
-        let purchase_status = if game_context
-            .passives_tree_state
-            .read()
-            .purchased_nodes
-            .contains(&node_id)
-        {
+        let purchase_status = if purchased_nodes.read().contains(&node_id) {
             PurchaseStatus::Purchased
         } else if meta_status != MetaStatus::Locked
             && points_available.get()
