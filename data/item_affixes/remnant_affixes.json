@@ -19,5 +19,24 @@
                 "ignore_quality": true
             }
         ]
+    },
+    {
+        "name"        : "Balanced",
+        "family"      : "remnant_affix",
+        "tags"        : ["Attack", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"RemoveSlotUse": "Shield"},
+                "modifier"      : "Flat",
+                "scope"         : "Local",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
     }
 ]

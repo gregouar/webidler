@@ -460,6 +460,7 @@ fn compute_character_specs(
             | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::PowerLevel
+            | StatType::RemoveSlotUse(_)
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }

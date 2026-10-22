@@ -40,7 +40,7 @@ pub fn init_item_specs_from_store(
 }
 
 pub fn create_item_specs(
-    base: ItemBase,
+    mut base: ItemBase,
     mut modifiers: ItemModifiers,
     gold_price: f64,
     // signature_key: &HmacKey,
@@ -49,6 +49,12 @@ pub fn create_item_specs(
 
     let effects: Vec<StatEffect> =
         (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
+
+    for effect in effects.iter() {
+        if let StatType::RemoveSlotUse(item_slot) = &effect.stat {
+            base.extra_slots.remove(item_slot);
+        }
+    }
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
     // TODO: compute triggers with local effects applied to it

@@ -669,14 +669,24 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Shield => "Off-hand",
                     ItemSlot::Accessory => "Cloak",
                     ItemSlot::Weapon => {
-                        if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
-                            "Two-Handed Weapon"
+                        if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon2H) {
+                            "Two-Handed Melee Weapon"
+                        } else if item_specs.base.categories.contains(&ItemCategory::RangedWeapon) {
+                            "Ranged Weapon"
+                        } else if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon1H)
+                        {
+                            "One-Handed Melee Weapon"
                         } else {
-                            "One-Handed Weapon"
+                            "Weapon"
                         }
                     }
                 };
                 let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
+                // if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
+                // "Two-Handed Weapon"
+                // } else {
+                // "One-Handed Weapon"
+                // }
 
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm ">
