@@ -150,7 +150,7 @@ pub fn update_player_specs(
                     .unwrap_or_default()
                     > 0)
         {
-            purchased_nodes.insert(passive_id.clone());
+            purchased_nodes.insert(*passive_id);
         }
     }
 
