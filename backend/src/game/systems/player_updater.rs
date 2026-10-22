@@ -435,6 +435,7 @@ fn modify_player_specs(
             | StatType::GemsFind
             | StatType::PowerLevel
             | StatType::AllocatePassive(_) // Done in init_player_specs
+            | StatType::RemoveSlotUse(_)
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }
