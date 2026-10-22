@@ -94,14 +94,13 @@ fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibilit
 fn inventory_grid_item(
     item: &ItemSpecs,
     bag_index: usize,
-    bag_index_offset: usize,
     eligibility: InventoryItemEligibility,
 ) -> Option<SelectedMarketItem> {
     if !inventory_item_allowed(item, eligibility) {
         return None;
     }
     Some(SelectedMarketItem {
-        index: bag_index + bag_index_offset,
+        index: bag_index,
         item_specs: Arc::new(item.clone()),
         price: 0.0,
         owner_id: None,
@@ -119,7 +118,6 @@ fn inventory_grid_item(
 pub fn InventoryItemGrid(
     selected_item: RwSignal<SelectedItem>,
     #[prop(default = InventoryItemEligibility::Any)] eligibility: InventoryItemEligibility,
-    #[prop(default = 0)] bag_index_offset: usize,
     #[prop(optional)] on_item_select: Option<Callback<SelectedMarketItem>>,
     #[prop(optional)] on_item_cancel: Option<Callback<SelectedMarketItem>>,
 ) -> impl IntoView {
@@ -140,9 +138,10 @@ pub fn InventoryItemGrid(
         })),
         on_select: Some(Callback::new(move |index: usize| {
             let item = town.inventory.with_untracked(|inventory| {
-                inventory.bag.get(index).and_then(|item| {
-                    inventory_grid_item(item, index, bag_index_offset, eligibility)
-                })
+                inventory
+                    .bag
+                    .get(index)
+                    .and_then(|item| inventory_grid_item(item, index, eligibility))
             });
             if let Some(item) = item {
                 if let Some(on_item_select) = on_item_select {
@@ -154,9 +153,10 @@ pub fn InventoryItemGrid(
         })),
         on_cancel: Some(Callback::new(move |index: usize| {
             let item = town.inventory.with_untracked(|inventory| {
-                inventory.bag.get(index).and_then(|item| {
-                    inventory_grid_item(item, index, bag_index_offset, eligibility)
-                })
+                inventory
+                    .bag
+                    .get(index)
+                    .and_then(|item| inventory_grid_item(item, index, eligibility))
             });
             if let (Some(on_item_cancel), Some(item)) = (on_item_cancel, item) {
                 on_item_cancel.run(item);
