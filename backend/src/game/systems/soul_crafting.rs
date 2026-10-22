@@ -98,20 +98,26 @@ pub fn sacrifice(item: &ItemSpecs, items_store: &ItemsStore) -> Result<ItemSpecs
     Ok(soul_item)
 }
 
-pub fn imbue(item: &mut ItemSpecs, mut soul: ItemSpecs) -> Result<(), AppError> {
+pub fn imbue(item: &ItemSpecs, mut soul: ItemSpecs) -> Result<ItemSpecs, AppError> {
     if !is_compatible_soul(item, &soul) {
         return Err(AppError::UserError(
             "Item and Soul are not compatible".to_string(),
         ));
     }
 
-    item.modifiers
+    let mut item_modifiers = item.modifiers.clone();
+
+    item_modifiers
         .affixes
         .retain(|affix| affix.affix_type != AffixType::Soul);
-    item.modifiers
+    item_modifiers
         .affixes
         .push(soul.modifiers.affixes.pop().ok_or(AppError::NotFound)?);
-    item.modifiers.rarity = ItemRarity::Masterwork;
+    item_modifiers.rarity = ItemRarity::Masterwork;
 
-    Ok(())
+    Ok(items_controller::create_item_specs(
+        item.base.clone(),
+        item_modifiers,
+        0.0,
+    ))
 }
