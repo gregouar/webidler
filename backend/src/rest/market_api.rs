@@ -33,7 +33,7 @@ use crate::{
         systems::{inventory_controller, items_controller, stashes_controller},
     },
     integration::chat::ChatIntegration,
-    rest::utils::{verify_character_in_town, verify_character_user, verify_not_ssf},
+    rest::utils::{MsgPack, verify_character_in_town, verify_character_user, verify_not_ssf},
 };
 
 use super::AppError;
@@ -325,7 +325,7 @@ pub async fn get_market_stash_items(
     State(master_store): State<MasterStore>,
     Extension(user): Extension<User>,
     Path(stash_id): Path<StashId>,
-) -> Result<Json<GetMarketStashItemsResponse>, AppError> {
+) -> Result<MsgPack<GetMarketStashItemsResponse>, AppError> {
     let stash = db::stashes::get_stash(&db_pool, &stash_id)
         .await?
         .ok_or(AppError::NotFound)?;
@@ -339,7 +339,7 @@ pub async fn get_market_stash_items(
         .filter_map(|entry| into_market_item(&master_store.items_store, entry))
         .collect();
 
-    Ok(Json(GetMarketStashItemsResponse { items }))
+    Ok(MsgPack(GetMarketStashItemsResponse { items }))
 }
 
 fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Option<MarketItem> {
