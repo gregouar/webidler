@@ -14058,7 +14058,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 0.75,
                 "source": {
                   "TargetStatusDuration": {
                     "status_id": "bleed",
@@ -14097,15 +14097,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14140,6 +14131,15 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -14200,7 +14200,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 0.75,
                 "source": {
                   "TargetStatusDuration": {
                     "status_id": "burn",
@@ -14248,7 +14248,7 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14276,7 +14276,7 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14342,7 +14342,7 @@
                   }
                 },
                 "modifier": "Flat",
-                "factor": 0.5,
+                "factor": 0.75,
                 "source": {
                   "TargetStatusDuration": {
                     "status_id": "poison",
@@ -14381,6 +14381,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -14399,7 +14408,7 @@
                     }
                   },
                   {
-                    "StatusFaster": {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14415,15 +14424,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
