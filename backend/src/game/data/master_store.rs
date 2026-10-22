@@ -3,7 +3,7 @@ use backend_shared::signature::HmacKey;
 use futures::future::join_all;
 use indexmap::IndexMap;
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     path::{Path, PathBuf},
     sync::Arc,
 };
@@ -13,11 +13,13 @@ use shared::data::{
     character_status::{StatusEffectType, StatusSpecs},
     cosmetics::CosmeticType,
     grind::QuestReward,
+    item::ItemCategory,
     monster::MonsterSpecs,
     passive::PassivesTreeSpecs,
     pets::PetSpecs,
     skill::{BaseSkillSpecs, SkillEffectType},
     skill_mastery::SkillMasterySpecs,
+    stat_effect::StatType,
     temple::BenedictionsCategory,
 };
 
@@ -224,6 +226,41 @@ where
 
 fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
     let mut errors = Vec::new();
+
+    let size_two_passives = master_store
+        .passives_store
+        .values()
+        .flat_map(|tree| &tree.nodes)
+        .filter_map(|(passive_id, passive)| (passive.size == 2).then_some(*passive_id))
+        .collect::<HashSet<_>>();
+    let mut passive_soul_affixes = HashSet::new();
+
+    for (item_id, item) in master_store
+        .items_store
+        .content
+        .iter()
+        .filter(|(_, item)| item.categories.contains(&ItemCategory::Soul))
+    {
+        for affix in &item.affixes {
+            let StatType::AllocatePassive(passive_id) = &affix.stat else {
+                continue;
+            };
+
+            passive_soul_affixes.insert(*passive_id);
+
+            if !size_two_passives.contains(passive_id) {
+                errors.push(anyhow!(
+                    "Soul item '{item_id}' allocates passive '{passive_id}', which is not a size-2 passive node"
+                ));
+            }
+        }
+    }
+
+    for passive_id in size_two_passives.difference(&passive_soul_affixes) {
+        errors.push(anyhow!(
+            "Size-2 passive node '{passive_id}' has no soul item affix"
+        ));
+    }
 
     for (achievement_id, achievement) in master_store.achievements_store.iter() {
         for reward in &achievement.rewards {

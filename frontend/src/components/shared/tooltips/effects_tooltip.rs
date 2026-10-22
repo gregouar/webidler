@@ -7,6 +7,7 @@ use shared::data::{
     character_status::{StatusEffectType, StatusModifier},
     item_affix::AffixEffectScope,
     modifier::Modifier,
+    passive::PassiveNodeId,
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
@@ -725,6 +726,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 )
             }
         }
+        StatType::AllocatePassive(_) => "XXX".into(),
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -1179,6 +1181,9 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
             conditions_tooltip::format_conditions_duration(*conditions_duration),
         ),
+        StatType::AllocatePassive(passive_id) => {
+            format!("Allocate {} Passive", format_passive_str(passive_id))
+        }
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -1286,4 +1291,15 @@ fn format_status_power(
         skill_filter_str(skill_filter, "", false),
         status_type_value_str(status_filter)
     )
+}
+
+fn format_passive_str(passive_id: &PassiveNodeId) -> String {
+    let data_context: DataContext = expect_context();
+    data_context
+        .passives_tree_specs
+        .read_untracked()
+        .nodes
+        .get(passive_id)
+        .map(|passive_specs| passive_specs.name.clone())
+        .unwrap_or(passive_id.to_string())
 }
