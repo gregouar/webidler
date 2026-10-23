@@ -175,6 +175,7 @@ impl StatStatusFilter {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
+    RemoveSlotUse(ItemSlot),
     GemsFind,
     ItemRarity,
     ItemAreaChance,
@@ -325,7 +326,6 @@ pub enum StatType {
         skill_filter: StatSkillFilter,
     },
     AllocatePassive(PassiveNodeId),
-    RemoveSlotUse(ItemSlot),
     GoldFind,
     PowerLevel,
     Description2(String),
