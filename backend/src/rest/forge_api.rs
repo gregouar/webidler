@@ -70,7 +70,8 @@ pub async fn post_affix(
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
     let item = inventory
-        .nth_mut(payload.item_index as usize)
+        .bag
+        .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
 
     let price = affix_operation_price(
@@ -115,12 +116,6 @@ pub async fn post_affix(
 
     *item = items_controller::create_item_specs(item.base.clone(), item.modifiers.clone(), 0.0);
 
-    if payload.item_index < 9 && item.required_level as i32 > character.max_area_level {
-        return Err(AppError::UserError(
-            "cannot forge equipped item of that power level".into(),
-        ));
-    }
-
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
 
@@ -156,7 +151,8 @@ pub async fn post_upgrade(
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
     let item = inventory
-        .nth_mut(payload.item_index as usize)
+        .bag
+        .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
 
     let price = computations::upgrade_item_price(item).ok_or(AppError::UserError(
@@ -178,12 +174,6 @@ pub async fn post_upgrade(
     }
 
     *item = items_controller::upgrade_item(item)?;
-
-    if payload.item_index < 9 && item.required_level as i32 > character.max_area_level {
-        return Err(AppError::UserError(
-            "cannot empower equipped item of that power level".into(),
-        ));
-    }
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -217,12 +207,7 @@ pub async fn post_sacrifice(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    let bag_index = payload
-        .item_index
-        .checked_sub(9)
-        .ok_or(AppError::UserError(
-            "equipped items cannot be sacrificed".into(),
-        ))? as usize;
+    let bag_index = payload.item_index as usize;
     let item = inventory.bag.get(bag_index).ok_or(AppError::NotFound)?;
 
     let price = computations::sacrifice_price(&item.modifiers.affixes);
@@ -271,18 +256,8 @@ pub async fn post_imbue(
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
-    let item_index = payload
-        .item_index
-        .checked_sub(9)
-        .ok_or(AppError::UserError(
-            "equipped items cannot be imbued".into(),
-        ))? as usize;
-    let soul_index = payload
-        .soul_index
-        .checked_sub(9)
-        .ok_or(AppError::UserError(
-            "equipped items cannot be used as Souls".into(),
-        ))? as usize;
+    let item_index = payload.item_index as usize;
+    let soul_index = payload.soul_index as usize;
 
     let soul = inventory
         .bag

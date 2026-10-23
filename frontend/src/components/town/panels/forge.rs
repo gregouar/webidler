@@ -7,7 +7,6 @@ use shared::{
         forge,
         item::{ItemCategory, ItemRarity},
         item_affix::AffixType,
-        player::EquippedSlot,
     },
     http::client::{
         ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
@@ -177,11 +176,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                                     _ => InventoryItemEligibility::Any,
                                 };
                                 view! {
-                                    <InventoryItemGrid
-                                        selected_item
-                                        eligibility
-                                        bag_index_offset=9
-                                    />
+                                    <InventoryItemGrid selected_item eligibility />
                                 }
                                     .into_any()
                             }
@@ -206,7 +201,6 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                                     <InventoryItemGrid
                                         selected_item
                                         eligibility=InventoryItemEligibility::Imbue
-                                        bag_index_offset=9
                                         on_item_select
                                         on_item_cancel
                                     />
@@ -275,23 +269,8 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                             .await
                         {
                             Ok(response) => {
-                                let updated_item_specs = if item.index < 9 {
-                                    response
-                                        .inventory
-                                        .equipped
-                                        .get(&item.index.try_into().unwrap())
-                                        .cloned()
-                                        .and_then(|equipped_item| match equipped_item {
-                                            EquippedSlot::MainSlot(item_specs) => Some(*item_specs),
-                                            _ => None,
-                                        })
-                                } else {
-                                    response
-                                        .inventory
-                                        .bag
-                                        .get(item.index.saturating_sub(9))
-                                        .cloned()
-                                };
+                                let updated_item_specs =
+                                    response.inventory.bag.get(item.index).cloned();
 
                                 if let Some(updated_item_specs) = updated_item_specs {
                                     selected_item.try_set(SelectedItem::InMarket(
@@ -574,11 +553,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
                         .await
                     {
                         Ok(response) => {
-                            let updated_item = response
-                                .inventory
-                                .bag
-                                .get(item.index.saturating_sub(9))
-                                .cloned();
+                            let updated_item = response.inventory.bag.get(item.index).cloned();
                             town_context.inventory.set(response.inventory);
                             town_context.character.write().resource_gems = response.resource_gems;
                             if let Some(updated_item) = updated_item {
@@ -696,10 +671,7 @@ pub fn ImbueDetails(
                             } else {
                                 item.index
                             };
-                            let result_item = result_index
-                                .checked_sub(9)
-                                .and_then(|bag_index| response.inventory.bag.get(bag_index))
-                                .cloned();
+                            let result_item = response.inventory.bag.get(result_index).cloned();
 
                             town_context.inventory.set(response.inventory);
                             selected_soul.set(SelectedItem::None);
@@ -790,23 +762,8 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                             .await
                         {
                             Ok(response) => {
-                                let updated_item_specs = if item.index < 9 {
-                                    response
-                                        .inventory
-                                        .equipped
-                                        .get(&item.index.try_into().unwrap())
-                                        .cloned()
-                                        .and_then(|equipped_item| match equipped_item {
-                                            EquippedSlot::MainSlot(item_specs) => Some(*item_specs),
-                                            _ => None,
-                                        })
-                                } else {
-                                    response
-                                        .inventory
-                                        .bag
-                                        .get(item.index.saturating_sub(9))
-                                        .cloned()
-                                };
+                                let updated_item_specs =
+                                    response.inventory.bag.get(item.index).cloned();
 
                                 if let Some(updated_item_specs) = updated_item_specs {
                                     selected_item.try_set(SelectedItem::InMarket(

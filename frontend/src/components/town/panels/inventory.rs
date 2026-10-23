@@ -53,17 +53,9 @@ pub fn TownInventoryPanel(
                         }
                     }
                 }),
-                InventoryEquipFilter::Map(_) | InventoryEquipFilter::Rune => {
-                    town_context.selected_item_index.set(Some(item_index));
-                    town_context.open_inventory.set(false);
-                }
-                InventoryEquipFilter::Rarity { .. } => {
-                    town_context
-                        .selected_item_index
-                        .set(Some(item_index.saturating_add(9)));
-                    town_context.open_inventory.set(false);
-                }
-                InventoryEquipFilter::Bag => {
+                InventoryEquipFilter::Map(_)
+                | InventoryEquipFilter::Rune
+                | InventoryEquipFilter::Bag => {
                     town_context.selected_item_index.set(Some(item_index));
                     town_context.open_inventory.set(false);
                 }
@@ -96,11 +88,6 @@ pub fn TownInventoryPanel(
                 InventoryEquipFilter::Map(_)
                 | InventoryEquipFilter::Rune
                 | InventoryEquipFilter::Bag => {}
-                InventoryEquipFilter::Rarity { .. } => {
-                    let item_index: usize = item_slot.into();
-                    town_context.selected_item_index.set(Some(item_index as u8));
-                    town_context.open_inventory.set(false);
-                }
             })
     };
 
