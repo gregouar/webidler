@@ -5,8 +5,10 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffectType, StatusModifier},
+    item::ItemSlot,
     item_affix::AffixEffectScope,
     modifier::Modifier,
+    passive::PassiveNodeId,
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
@@ -17,7 +19,7 @@ use shared::data::{
 use crate::components::{
     data_context::DataContext,
     shared::tooltips::{
-        conditions_tooltip,
+        conditions_tooltip, item_tooltip,
         skill_tooltip::{
             self, restore_type_str, skill_filter_str, skill_type_str, skills_type_str,
         },
@@ -660,6 +662,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             stat_skill_effect_type_str(effect_type.as_ref()),
             skill_filter_str(skill_filter, " with ", true),
         ),
+        StatType::RefreshedCooldown { skill_filter } => format!(
+            "Refreshed Cooldown{}",
+            skill_filter_str(skill_filter, " with ", true)
+        ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
         }
@@ -721,6 +727,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 )
             }
         }
+        StatType::AllocatePassive(_) => "XXX".into(),
+        StatType::RemoveSlotUse(_) => "XXX".into(),
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -1044,6 +1052,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
+        StatType::RefreshedCooldown { skill_filter } => {
+            format!(
+                "{} seconds to Refreshed Cooldown{}",
+                format_adds_removes(value, true, ""),
+                skill_filter_str(skill_filter, " with ", true)
+            )
+        }
         StatType::SkillLevel(skill_filter) => {
             let mut r = format!(
                 "{} Level(s) to {}",
@@ -1168,6 +1183,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
             conditions_tooltip::format_conditions_duration(*conditions_duration),
         ),
+        StatType::AllocatePassive(passive_id) => {
+            format!("Allocate {} Passive", format_passive_str(passive_id))
+        }
+        StatType::RemoveSlotUse(item_slot) => {
+            if let ItemSlot::Shield = item_slot {
+                "Can be wielded One Handed".into()
+            } else {
+                format!("Don't use {} slot", item_tooltip::item_slot_str(*item_slot))
+            }
+        }
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -1275,4 +1300,15 @@ fn format_status_power(
         skill_filter_str(skill_filter, "", false),
         status_type_value_str(status_filter)
     )
+}
+
+fn format_passive_str(passive_id: &PassiveNodeId) -> String {
+    let data_context: DataContext = expect_context();
+    data_context
+        .passives_tree_specs
+        .read_untracked()
+        .nodes
+        .get(passive_id)
+        .map(|passive_specs| passive_specs.name.clone())
+        .unwrap_or(passive_id.to_string())
 }

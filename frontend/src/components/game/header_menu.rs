@@ -4,6 +4,7 @@ use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
+    icons::header_icons::{AchievementsIcon, InventoryIcon, PassivesIcon, PetsIcon, StatsIcon},
     shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
     ui::{
         buttons::{MenuButton, MenuButtonRed},
@@ -60,6 +61,20 @@ pub fn HeaderMenu() -> impl IntoView {
         previous_max_power_shard_level.set(max_power_shard_level);
     });
 
+    let switch_panel = move |open_signal: RwSignal<bool>| {
+        let open_value = !open_signal.get_untracked();
+
+        game_context.open_inventory.set(false);
+        game_context.open_passives.set(false);
+        game_context.open_statistics.set(false);
+        game_context.open_skills.set(false);
+        game_context.open_end_grind.set(false);
+        game_context.open_achievements.set(false);
+        game_context.open_pets.set(false);
+
+        open_signal.set(open_value);
+    };
+
     let stop_grind = {
         let conn: WebsocketContext = expect_context();
         move |_| {
@@ -73,7 +88,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     .into(),
                 );
             } else {
-                game_context.open_end_grind.set(true);
+                switch_panel(game_context.open_end_grind);
             }
         }
     };
@@ -106,11 +121,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_inventory = move || {
-        game_context
-            .open_inventory
-            .set(!game_context.open_inventory.get_untracked());
-        game_context.open_statistics.set(false);
-        game_context.open_passives.set(false);
+        switch_panel(game_context.open_inventory);
     };
 
     Effect::new(move || {
@@ -120,11 +131,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_passives = move || {
-        game_context.open_inventory.set(false);
-        game_context
-            .open_passives
-            .set(!game_context.open_passives.get_untracked());
-        game_context.open_statistics.set(false);
+        switch_panel(game_context.open_passives);
     };
 
     Effect::new(move || {
@@ -134,11 +141,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_stats = move || {
-        game_context.open_inventory.set(false);
-        game_context.open_passives.set(false);
-        game_context
-            .open_statistics
-            .set(!game_context.open_statistics.get_untracked());
+        switch_panel(game_context.open_statistics);
     };
 
     Effect::new(move || {
@@ -146,6 +149,14 @@ pub fn HeaderMenu() -> impl IntoView {
             open_stats()
         }
     });
+
+    let open_pets = move || {
+        switch_panel(game_context.open_pets);
+    };
+
+    let open_achievements = move || {
+        switch_panel(game_context.open_achievements);
+    };
 
     view! {
         <BaseHeaderMenu>
@@ -198,25 +209,35 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
-                <MenuButton on:click=move |_| open_inventory()>
-                    <span class="inline xl:hidden">"Inv."</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
+                <MenuButton on:click=move |_| open_inventory() title="Inventory">
+                    <InventoryIcon />
                 </MenuButton>
                 <TutorialPopup
                     show=show_passive_point_tutorial
                     position=TutorialPopupPosition::BelowRight
                     message="Click here to spend your Passive Point on a node in your current Grind."
                 >
-                    <MenuButton on:click=move |_| open_passives()>
-                        <span class="inline xl:hidden">"Pas."</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
+                    <MenuButton on:click=move |_| open_passives() title="Passives">
+                        <PassivesIcon />
                         {move || {
                             let points = resources.get().3;
                             if points > 0 { format!(" ({points})") } else { "".to_string() }
                         }}
                     </MenuButton>
                 </TutorialPopup>
-                <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
+                <MenuButton on:click=move |_| open_stats() title="Stats">
+                    <StatsIcon />
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| { open_pets() }
+                    disabled=move || game_context.user_unlocks.read().pets.is_empty()
+                    title="Pets"
+                >
+                    <PetsIcon />
+                </MenuButton>
+                <MenuButton on:click=move |_| { open_achievements() } title="Achievements">
+                    <AchievementsIcon />
+                </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
                     position=TutorialPopupPosition::BelowRight

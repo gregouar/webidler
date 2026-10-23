@@ -1,4 +1,5 @@
-use std::{collections::HashMap, sync::Arc};
+use indexmap::IndexMap;
+use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
@@ -22,7 +23,7 @@ use frontend::components::{
 
 use crate::{header::HeaderMenu, utils::json_editor::JsonEditor};
 
-type SkillsStore = HashMap<String, BaseSkillSpecs>;
+type SkillsStore = IndexMap<String, BaseSkillSpecs>;
 
 #[component]
 pub fn SkillsPage() -> impl IntoView {
@@ -247,7 +248,7 @@ fn SkillEditor(
 
     let delete_skill = move || {
         if let Some(skill_id) = selected_skill.get_untracked() {
-            skills_store.write().remove(&skill_id);
+            skills_store.write().swap_remove(&skill_id);
             selected_skill.set(None);
         }
     };

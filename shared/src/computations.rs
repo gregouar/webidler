@@ -9,6 +9,7 @@ use crate::{
     data::{
         area::{AreaLevel, AreaState},
         item::{ItemRarity, ItemSpecs},
+        item_affix::{AffixType, ItemAffix},
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
@@ -126,6 +127,22 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
 
 pub fn gamble_price(item_level: AreaLevel) -> f64 {
     (item_level as f64 / 20.0).floor() + 10.0
+}
+
+pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
+    (affixes
+        .iter()
+        .filter(|affix| {
+            matches!(
+                affix.affix_type,
+                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+            )
+        })
+        .map(|affix| affix.item_level as f64)
+        .max_by(|a, b| a.total_cmp(b))
+        .unwrap_or_default()
+        / 5.0)
+        .round()
 }
 
 pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {

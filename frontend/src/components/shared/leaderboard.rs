@@ -6,6 +6,7 @@ use shared::{constants::POWER_LEVEL_LEADERBOARD_AREA_ID, data::realms::Realm};
 
 use crate::components::{
     backend_client::BackendClient,
+    data_context::DataContext,
     ui::{
         card::{CardHeader, CardInset, MenuCard},
         list_row::MenuListRow,
@@ -38,19 +39,17 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
 
     let leaderboard_and_areas = LocalResource::new({
         let backend = expect_context::<BackendClient>();
+        let data_context = expect_context::<DataContext>();
         move || {
             let selected_realm = selected_realm.get();
             async move {
+                let _ = data_context.load_data(backend).await;
                 (
                     backend
                         .get_leaderboard(selected_realm)
                         .await
                         .unwrap_or_default(),
-                    backend
-                        .get_areas()
-                        .await
-                        .map(|resp| resp.areas)
-                        .unwrap_or_default(),
+                    data_context.areas_specs.get_untracked(),
                 )
             }
         }

@@ -6,7 +6,7 @@ use rand_chacha::ChaCha8Rng;
 
 use shared::data::{
     chance::{BoundedChance, Chance, ChanceRange},
-    modifier::ModifiableValue,
+    modifier::{BaseModifiableValue, ModifiableValue},
     rng::{MARBLE_COUNT, MarbleBag},
     values::Luck,
 };
@@ -180,69 +180,82 @@ where
     }
 }
 
-// impl<T> Rollable<T> for ChanceRange<ModifiableValue<T>>
-// where
-//     T: rand::distr::uniform::SampleUniform + PartialOrd + Copy,
-//     // T: std::ops::Add<Output = T> + BaseModifiableValue + Default,
-// {
-//     fn roll_with_seed(&self, seed: &mut RngSeed) -> T {
-//         ChanceRange::<T> {
-//             min: *self.min,
-//             max: *self.max,
-//             lucky_chance: self.lucky_chance,
-//         }
-//         .roll_with_seed(seed)
-//     }
-// }
-
-impl<T> Rollable<T> for ChanceRange<ModifiableValue<T>>
+impl<T> Rollable<ModifiableValue<T>> for ChanceRange<ModifiableValue<T>>
 where
-    T: Into<f64> + From<f64> + Copy,
+    T: Into<f64> + From<f64> + Copy + BaseModifiableValue,
 {
-    fn roll_with_seed(self, seed: &mut RngSeed) -> T {
-        ChanceRange::<f64> {
-            min: (*self.min).into(),
-            max: (*self.max).into(),
+    fn roll_with_seed(self, seed: &mut RngSeed) -> ModifiableValue<T> {
+        let normalized_value = ChanceRange::<f64> {
+            min: 0.0,
+            max: 1.0,
             lucky_chance: self.lucky_chance,
         }
-        .roll_with_seed(seed)
-        .into()
+        .roll_with_seed(seed);
+
+        reconstruct_modifiable_roll(&self, normalized_value)
     }
 }
 
-impl<T> MarbleRollable<T> for ChanceRange<ModifiableValue<T>>
+impl<T> MarbleRollable<ModifiableValue<T>> for ChanceRange<ModifiableValue<T>>
 where
-    T: Into<f64> + From<f64> + Copy,
+    T: Into<f64> + From<f64> + Copy + BaseModifiableValue,
 {
-    fn roll_with_marble_rolls(self, seed: &mut RngSeed, marble_bag: &mut MarbleBag) -> T {
-        let max: f64 = (*self.max).into();
-        let min: f64 = (*self.min).into();
-        let min = min.min(max);
-        let roll_value = |percentage: f32| T::from(min + (max - min) * percentage as f64 * 0.01);
-        let first_result = roll_value(marble_bag.roll_with_seed(seed));
+    fn roll_with_marble_rolls(
+        self,
+        seed: &mut RngSeed,
+        marble_bag: &mut MarbleBag,
+    ) -> ModifiableValue<T> {
+        let normalized_value = marble_bag.roll_with_seed(seed) as f64 * 0.01;
 
-        match roll_luck(*self.lucky_chance, seed) {
+        let normalized_value = match roll_luck(*self.lucky_chance, seed) {
             LuckResult::Unlucky => {
-                let second_result =
-                    roll_value(random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0));
-                if first_result.into() > second_result.into() {
-                    second_result
-                } else {
-                    first_result
-                }
+                normalized_value.min(random_range_with_seed(0.0..=1.0, seed).unwrap_or(1.0))
             }
-            LuckResult::Normal => first_result,
+            LuckResult::Normal => normalized_value,
             LuckResult::Lucky => {
-                let second_result =
-                    roll_value(random_range_with_seed(0.0..=100.0, seed).unwrap_or(100.0));
-                if first_result.into() < second_result.into() {
-                    second_result
-                } else {
-                    first_result
-                }
+                normalized_value.max(random_range_with_seed(0.0..=1.0, seed).unwrap_or(1.0))
             }
-        }
+        };
+
+        reconstruct_modifiable_roll(&self, normalized_value)
     }
+}
+
+fn reconstruct_modifiable_roll<T>(
+    range: &ChanceRange<ModifiableValue<T>>,
+    normalized_value: f64,
+) -> ModifiableValue<T>
+where
+    T: Into<f64> + From<f64> + Copy + BaseModifiableValue,
+{
+    let max: f64 = (*range.max).into();
+    let min: f64 = (*range.min).into();
+
+    let normalized_value = if min <= max {
+        normalized_value.clamp(0.0, 1.0)
+    } else {
+        1.0
+    };
+    let interpolate = |min: f64, max: f64| min + (max - min) * normalized_value;
+
+    let rolled_value = interpolate(min, max);
+    let increased = interpolate(range.min.increased(), range.max.increased());
+    let decreased = interpolate(range.min.decreased(), range.max.decreased());
+    let more = interpolate(range.min.more(), range.max.more());
+
+    let factor = ModifiableValue::new(T::from(1.0), increased, decreased, more, 0.0).factor();
+
+    if factor == 0.0 || !factor.is_finite() || rolled_value < 0.0 {
+        return ModifiableValue::new(T::from(rolled_value), 0.0, 0.0, 0.0, 0.0);
+    }
+
+    ModifiableValue::new(
+        T::from(rolled_value / factor),
+        increased,
+        decreased,
+        more,
+        0.0,
+    )
 }
 
 enum LuckResult {
@@ -293,6 +306,36 @@ impl Rollable<f32> for &mut MarbleBag {
 mod tests {
     use super::*;
     use shared::data::values::Percent;
+
+    #[test]
+    fn reconstructed_modifiable_roll_preserves_value_and_interpolates_modifiers() {
+        let range: ChanceRange<ModifiableValue<f64>> = ChanceRange {
+            min: ModifiableValue::new(10.0, 100.0, 0.0, 0.0, 0.0),
+            max: ModifiableValue::new(30.0, 0.0, 0.0, 0.0, 0.0),
+            lucky_chance: Default::default(),
+        };
+
+        let rolled = reconstruct_modifiable_roll(&range, 0.5);
+
+        assert!((*rolled - 25.0).abs() < 1e-12);
+        assert!((rolled.increased() - 50.0).abs() < 1e-12);
+        assert_eq!(rolled.converted(), 0.0);
+    }
+
+    #[test]
+    fn reconstructed_modifiable_roll_bakes_conversion_into_base() {
+        let range: ChanceRange<ModifiableValue<f64>> = ChanceRange {
+            min: ModifiableValue::new(20.0, 0.0, 0.0, 0.0, 50.0),
+            max: ModifiableValue::new(40.0, 0.0, 0.0, 0.0, 50.0),
+            lucky_chance: Default::default(),
+        };
+
+        let rolled = reconstruct_modifiable_roll(&range, 0.5);
+
+        assert!((*rolled - 15.0).abs() < 1e-12);
+        assert!((*rolled.base() - 15.0).abs() < 1e-12);
+        assert_eq!(rolled.converted(), 0.0);
+    }
 
     #[test]
     fn marble_bag_picks_every_slice_once_before_resetting() {

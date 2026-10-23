@@ -900,7 +900,7 @@
             "modifier": "Flat",
             "factor": 0.1,
             "source": {
-              "StatusValue": {
+              "TargetStatusValue": {
                 "status_id": "open_wound",
                 "damage_type": null,
                 "debuff": null,

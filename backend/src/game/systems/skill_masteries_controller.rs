@@ -52,25 +52,23 @@ pub async fn update_skill_mastery_upgrades(
     master_store: &MasterStore,
     character_id: &UserCharacterId,
     skill_id: &str,
-    upgrades_bought: &HashMap<String, u16>,
+    upgrades_bought: HashMap<String, u16>,
 ) -> Result<(), AppError> {
     let (_, _, _, mut skill_masteries) =
         db::characters_data::load_character_data(&mut **tx, character_id)
             .await?
             .unwrap_or_default();
 
-    validate_skill_mastery_upgrades(
-        &master_store.skill_masteries_store,
-        &skill_masteries,
-        skill_id,
-        upgrades_bought,
-    )?;
-
-    skill_masteries
+    let skill_mastery = skill_masteries
         .masteries
         .get_mut(skill_id)
-        .ok_or_else(|| anyhow::anyhow!("invalid skill mastery"))?
-        .upgrades_bought = upgrades_bought.clone();
+        .ok_or_else(|| anyhow::anyhow!("invalid skill mastery"))?;
+
+    skill_mastery.upgrades_bought = upgrades_bought;
+
+    if !validate_skill_mastery(&master_store.skill_masteries_store, skill_id, skill_mastery) {
+        return Err(AppError::UserError("invalid skill mastery".into()));
+    };
 
     db::characters_data::save_character_skill_masteries(&mut **tx, character_id, &skill_masteries)
         .await?;
@@ -78,40 +76,52 @@ pub async fn update_skill_mastery_upgrades(
     Ok(())
 }
 
-pub fn validate_skill_mastery_upgrades(
+pub fn sanitize_skill_masteries(
     skill_masteries_store: &SkillMasteriesStore,
-    skill_masteries: &PlayerSkillMasteries,
-    skill_id: &str,
-    upgrades_bought: &HashMap<String, u16>,
-) -> anyhow::Result<()> {
-    let mastery = skill_masteries
+    skill_masteries: &mut PlayerSkillMasteries,
+) {
+    skill_masteries
+        .favorite_skills
+        .retain(|skill_id| skill_masteries_store.contains_key(skill_id));
+    skill_masteries
         .masteries
-        .get(skill_id)
-        .ok_or_else(|| anyhow::anyhow!("invalid skill mastery"))?;
-    let mastery_specs = skill_masteries_store
-        .get(skill_id)
-        .ok_or_else(|| anyhow::anyhow!("invalid skill mastery"))?;
-    let mastery_level = mastery.level(mastery_specs.max_level);
+        .retain(|skill_id, _| skill_masteries_store.contains_key(skill_id));
+
+    for (skill_id, mastery_state) in skill_masteries.masteries.iter_mut() {
+        if !validate_skill_mastery(skill_masteries_store, skill_id, mastery_state) {
+            mastery_state.upgrades_bought.clear();
+        }
+    }
+}
+
+fn validate_skill_mastery(
+    skill_masteries_store: &SkillMasteriesStore,
+    skill_id: &str,
+    mastery_state: &SkillMasteryState,
+) -> bool {
+    let Some(mastery_specs) = skill_masteries_store.get(skill_id) else {
+        return false;
+    };
+    let mastery_level = mastery_state.level(mastery_specs.max_level);
     let mut spent_points = 0u16;
 
-    for (upgrade_id, upgrade_level) in upgrades_bought {
-        let upgrade_specs = mastery_specs
-            .upgrades
-            .get(upgrade_id)
-            .ok_or_else(|| anyhow::anyhow!("invalid skill mastery"))?;
+    for (upgrade_id, upgrade_level) in mastery_state.upgrades_bought.iter() {
+        let Some(upgrade_specs) = mastery_specs.upgrades.get(upgrade_id) else {
+            return false;
+        };
 
         if *upgrade_level > upgrade_specs.max_level {
-            return Err(anyhow::anyhow!("invalid skill mastery"));
+            return false;
         }
 
         spent_points = spent_points.saturating_add(upgrade_specs.compute_cost(*upgrade_level));
     }
 
     if spent_points > mastery_level {
-        return Err(anyhow::anyhow!("invalid skill mastery"));
+        return false;
     }
 
-    Ok(())
+    true
 }
 
 pub fn apply_skill_mastery(

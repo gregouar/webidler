@@ -129,24 +129,22 @@ pub fn update_skill_specs(
 
     skill_specs.targets = apply_weapon_effects(skill_specs.targets, inventory);
 
-    local_effects.extend(
-        EffectsMap::combine_all(
-            std::iter::once(compute_skill_upgrade_effects(
-                base_skill_specs,
-                upgrade_level.saturating_add(skill_specs.level_modifier),
-            ))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                &base_skill_specs.modifier_effects,
-                character_attrs,
-                inventory,
-            )))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                &skill_specs.extra_modifier_effects,
-                character_attrs,
-                inventory,
-            ))),
-        ),
-    );
+    local_effects.extend(EffectsMap::combine_all(
+        std::iter::once(compute_skill_upgrade_effects(
+            base_skill_specs,
+            upgrade_level.saturating_add(skill_specs.level_modifier),
+        ))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &base_skill_specs.modifier_effects,
+            character_attrs,
+            inventory,
+        )))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &skill_specs.extra_modifier_effects,
+            character_attrs,
+            inventory,
+        ))),
+    ));
 
     apply_effects_to_skill_specs(
         statuses_store,
@@ -1406,9 +1404,16 @@ pub fn apply_stat_effect_on_skill_effect(
         SkillEffectType::Kill => {}
         SkillEffectType::RefreshCooldown {
             skill_filter: _,
-            value: _,
+            value,
             modifier: _,
-        } => {}
+        } => {
+            if let StatType::RefreshedCooldown { skill_filter } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                value.min.apply_effect(effect);
+                value.max.apply_effect(effect);
+            }
+        }
     }
 
     None

@@ -4,7 +4,7 @@ use leptos::{html::Div, portal::Portal, prelude::*, web_sys};
 
 use shared::data::{
     area::AreaLevel,
-    item::{InventorySortType, ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
+    item::{InventorySortType, ItemCategory, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -37,11 +37,6 @@ pub enum InventoryEquipFilter {
     Slot,
     Map(String),
     Rune,
-    Rarity {
-        // Maybe later rename to Any, and not_item_rarity
-        item_rarity: ItemRarity,
-        not: bool,
-    },
     Bag,
 }
 
@@ -213,7 +208,6 @@ fn EquippedItemEquippedSlot(
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
-    let equipped_item_rarity = item_specs.modifiers.rarity;
     let is_weapon = item_specs.weapon_specs.is_some();
     let is_sheathed = Signal::derive({
         let inventory = inventory.clone();
@@ -233,9 +227,6 @@ fn EquippedItemEquippedSlot(
                 InventoryEquipFilter::Map(_)
                 | InventoryEquipFilter::Rune
                 | InventoryEquipFilter::Bag => false,
-                InventoryEquipFilter::Rarity { item_rarity, not } => {
-                    (equipped_item_rarity == *item_rarity) != *not
-                }
             })
     });
 
@@ -450,9 +441,6 @@ fn inventory_bag_config(inventory: &InventoryConfig, sell_queue: SellQueue) -> B
                         })
                     }
                     InventoryEquipFilter::Rune => item.base.rune_specs.is_some(),
-                    InventoryEquipFilter::Rarity { item_rarity, not } => {
-                        (item.modifiers.rarity == *item_rarity) != *not
-                    }
                     InventoryEquipFilter::Bag => true,
                 })
             })
@@ -649,6 +637,8 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
             Ring => "Ring",
             Map => "Edict",
             Rune => "Rune",
+            Soul => "Soul",
+            Remnant => "Remnant",
         },
         None => "Any Item",
     }

@@ -4,16 +4,18 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     data::{
+        cosmetics::CharacterCosmetics,
         item::{InventorySortType, ItemCategory, ItemSlot},
         item_affix::AffixType,
         market::MarketFilters,
         passive::{PassiveNodeId, PurchasedNodes},
+        pets::PlayerPets,
         realms::Realm,
         stash::StashType,
         temple::PlayerBenedictions,
         user::{UserCharacterId, UserId},
     },
-    types::{AssetName, Email, ItemPrice, PaginationLimit, Password, Username},
+    types::{Email, ItemPrice, PaginationLimit, Password, Username},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -62,7 +64,7 @@ pub struct UpdateAccountRequest {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CreateCharacterRequest {
     pub name: Username,
-    pub portrait: AssetName,
+    pub portrait: String,
 
     pub is_ssf: bool,
     pub legacy: bool,
@@ -71,7 +73,13 @@ pub struct CreateCharacterRequest {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UpdateCharacterRequest {
     pub name: Username,
-    pub portrait: AssetName,
+    pub portrait: String,
+    pub cosmetics: CharacterCosmetics,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateCharacterPetsRequest {
+    pub pets: PlayerPets,
 }
 
 // Temple
@@ -227,6 +235,19 @@ pub struct ForgeAffixRequest {
 pub struct ForgeUpgradeRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeSacrificeRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeImbueRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+    pub soul_index: u32,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

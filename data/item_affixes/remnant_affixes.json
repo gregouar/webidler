@@ -1,0 +1,42 @@
+[
+    {
+        "name"        : "Slippery",
+        "family"      : "remnant_affix",
+        "tags"        : ["Armor", "Stealth", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Boots", "Accessory"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {
+                    "Lucky": { "skill_type": null, "skill_id": null, "roll_type": {"Evade": null} }
+                },
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 100.0,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Balanced",
+        "family"      : "remnant_affix",
+        "tags"        : ["Attack", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"RemoveSlotUse": "Shield"},
+                "modifier"      : "Flat",
+                "scope"         : "Local",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
+    }
+]

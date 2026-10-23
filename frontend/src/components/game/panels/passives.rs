@@ -3,7 +3,11 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
-    data::passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs},
+    data::{
+        passive::{PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PurchasedNodes},
+        pets::PetButton,
+        stat_effect::StatType,
+    },
     http::client::SavePassivesRequest,
     messages::client::PurchasePassiveMessage,
 };
@@ -11,7 +15,7 @@ use shared::{
 use crate::components::{
     backend_client::BackendClient,
     events::{EventsContext, Key},
-    game::{game_context::GameContext, websocket::WebsocketContext},
+    game::{game_context::GameContext, pet_automation::PetAutomation, websocket::WebsocketContext},
     shared::passives::{
         Connection, MetaStatus, Node, NodeStatus, PassiveSkillStats, PurchaseStatus,
         node_meta_status,
@@ -138,16 +142,9 @@ fn AutoButton(highlighted_node: RwSignal<Option<PassiveNodeId>>) -> impl IntoVie
         }
     };
 
-    let auto_assign = {
+    let assign_nodes = Arc::new({
         let conn: WebsocketContext = expect_context();
-        let events_context: EventsContext = expect_context();
-        move |_| {
-            let mut amount = if events_context.key_pressed(Key::Ctrl) {
-                10.min(game_context.player_resources.read().passive_points)
-            } else {
-                1
-            };
-
+        move |mut amount: u16| {
             while let Some(node_id) = next_node.get_untracked()
                 && amount > 0
             {
@@ -155,17 +152,36 @@ fn AutoButton(highlighted_node: RwSignal<Option<PassiveNodeId>>) -> impl IntoVie
                 amount -= 1;
             }
         }
-    };
+    });
+    let events_context: EventsContext = expect_context();
 
     view! {
-        <div
-            on:mouseenter=move |_| hovered.set(true)
-            on:mouseleave=move |_| hovered.set(false)
-        >
+        <div on:mouseenter=move |_| hovered.set(true) on:mouseleave=move |_| hovered.set(false)>
             <StaticTooltip tooltip position=StaticTooltipPosition::Bottom>
-                <MenuButton on:click=auto_assign disabled>
-                    "Auto Assign"
-                </MenuButton>
+                <PetAutomation
+                    pet_button=PetButton::AutoPassive
+                    callback=Callback::new({
+                        let assign_nodes = assign_nodes.clone();
+                        move |_| assign_nodes(1)
+                    })
+                    disabled=disabled
+                >
+                    <MenuButton
+                        on:click={
+                            let assign_nodes = assign_nodes.clone();
+                            move |_| assign_nodes(
+                                if events_context.key_pressed(Key::Ctrl) {
+                                    10.min(game_context.player_resources.read().passive_points)
+                                } else {
+                                    1
+                                },
+                            )
+                        }
+                        disabled
+                    >
+                        "Auto Assign"
+                    </MenuButton>
+                </PetAutomation>
             </StaticTooltip>
         </div>
     }
@@ -241,15 +257,33 @@ fn PassiveSkillTree(
     let points_available =
         Memo::new(move |_| game_context.player_resources.read().passive_points > 0);
 
+    let purchased_nodes = Memo::new(move |_| {
+        let mut nodes = game_context
+            .passives_tree_state
+            .read()
+            .purchased_nodes
+            .clone();
+        for stat_effect in game_context
+            .player_specs
+            .read()
+            .character_specs
+            .effects
+            .iter()
+        {
+            if let StatType::AllocatePassive(node_id) = stat_effect.stat {
+                nodes.insert(node_id);
+            }
+        }
+        nodes
+    });
+
     view! {
         <PassiveSkillStats
             passives_tree_specs=game_context.passives_tree_specs
             passives_tree_ascension=Signal::derive(move || {
                 game_context.passives_tree_state.read().ascension.clone()
             })
-            purchased_nodes=Signal::derive(move || {
-                game_context.passives_tree_state.read().purchased_nodes.clone()
-            })
+            purchased_nodes
         />
         <Pannable>
             <For
@@ -272,6 +306,7 @@ fn PassiveSkillTree(
                     points_available=points_available
                     search_node
                     highlighted_node
+                    purchased_nodes
                 />
             </For>
         </Pannable>
@@ -285,6 +320,7 @@ fn InGameNode(
     points_available: Memo<bool>,
     search_node: RwSignal<Option<String>>,
     highlighted_node: RwSignal<Option<PassiveNodeId>>,
+    #[prop(into)] purchased_nodes: Signal<PurchasedNodes>,
 ) -> impl IntoView {
     let game_context: GameContext = expect_context();
     let node_level = Memo::new(move |_| {
@@ -321,12 +357,7 @@ fn InGameNode(
             // node_specs.max_upgrade_level,
         );
 
-        let purchase_status = if game_context
-            .passives_tree_state
-            .read()
-            .purchased_nodes
-            .contains(&node_id)
-        {
+        let purchase_status = if purchased_nodes.read().contains(&node_id) {
             PurchaseStatus::Purchased
         } else if meta_status != MetaStatus::Locked
             && points_available.get()
@@ -365,9 +396,7 @@ fn InGameNode(
             show_upgrade=false
             search_node
             highlight_override=Signal::derive(move || {
-                highlighted_node
-                    .get()
-                    .map(|highlighted_node_id| highlighted_node_id == node_id)
+                highlighted_node.get().map(|highlighted_node_id| highlighted_node_id == node_id)
             })
         />
     }

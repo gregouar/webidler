@@ -107,7 +107,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Gloves",
-              "factor": 1.0
+              "factor": 1.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -194,7 +195,7 @@
                 "lucky_chance": 0.0
               },
               "crit_damage": 100.0,
-              "unblockable": false,
+              "unblockable": true,
               "armor_penetration": 0.0
             },
             "ignore_stat_effects": [],
@@ -608,7 +609,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 1.0
+              "factor": 1.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -732,7 +734,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 1.0
+              "factor": 1.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -953,7 +956,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 2.0
+              "factor": 2.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -1057,7 +1061,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.4
+              "factor": 0.4,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -1161,7 +1166,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.7
+              "factor": 0.7,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],

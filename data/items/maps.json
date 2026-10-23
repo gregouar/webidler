@@ -691,7 +691,7 @@
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
-        "value": 60.0,
+        "value": 90.0,
         "ignore_quality": true
       },
       {
@@ -868,6 +868,69 @@
       "loot_tables": [],
       "replace_area_id": "chaos_gold.json",
       "reward_loot_table": "edict_gold.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_stars": {
+    "name": "Map of the Stars",
+    "icon": "items/maps/edict_stars.webp",
+    "description": "Ripped from the Necronomicon. What kind of Eldritch Horror could this summon?",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 700,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Description": "Reward with an Eldritch Soul"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 190.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "PowerLevel",
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 140.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "mythos.json",
+      "reward_picks": 0,
+      "reward_slots": 3,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "mythos_stars.json",
+      "reward_loot_table": "edict_stars.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [],

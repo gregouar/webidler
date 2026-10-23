@@ -1,5 +1,5 @@
 {
-    "righteous_fire"            : {
+    "righteous_fire": {
         "name"       : "Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -11,7 +11,7 @@
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 5, "modifier": "Percent" }
         ]
     },
-    "righteous_fire_self"       : {
+    "righteous_fire_self": {
         "name"       : "Self-Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -22,7 +22,7 @@
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 20, "modifier": "Percent" }
         ]
     },
-    "unrighteous_fire"          : {
+    "unrighteous_fire": {
         "name"       : "Unrighteous Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -34,7 +34,7 @@
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 5, "modifier": "Percent" }
         ]
     },
-    "unrighteous_fire_self"     : {
+    "unrighteous_fire_self": {
         "name"       : "Self-Loathing Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -45,7 +45,7 @@
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 20, "modifier": "Percent" }
         ]
     },
-    "blizzard_vulnerability"    : {
+    "blizzard_vulnerability": {
         "name"      : "Chilblains",
         "icon"      : "statuses/hand_bandage.svg",
         "debuff"    : true,
@@ -59,7 +59,7 @@
             }
         ]
     },
-    "burning_ray_scorching"     : {
+    "burning_ray_scorching": {
         "name"      : "Scorched",
         "icon"      : "passives/flaming_claw.svg",
         "debuff"    : true,
@@ -88,6 +88,44 @@
                 },
                 "value"       : 100,
                 "modifier"    : "Percent"
+            }
+        ]
+    },
+    "taunt": {
+        "name"      : "Taunted",
+        "icon"      : "skills/taunt.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "taunt_critical": {
+        "name"      : "Reckless",
+        "icon"      : "skills/taunt.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 50.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"CritDamage": {}}, "modifier": "Flat", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"CritChance": {}}, "modifier": "Flat", "debuff": false },
+                "value"       : 10.0,
+                "modifier"    : "Flat"
             }
         ]
     }

@@ -8,8 +8,9 @@ use crate::{
         chance::ChanceRange,
         character_status::StatusId,
         conditional_modifier::Condition,
-        item::{SkillRange, SkillShape},
+        item::{ItemSlot, SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
+        passive::PassiveNodeId,
         skill::{RestoreModifier, RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
         values::NonNegative,
@@ -174,6 +175,7 @@ impl StatStatusFilter {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
+    RemoveSlotUse(ItemSlot),
     GemsFind,
     ItemRarity,
     ItemAreaChance,
@@ -277,6 +279,10 @@ pub enum StatType {
         skill_filter: StatSkillFilter,
         roll_type: LuckyRollType,
     },
+    RefreshedCooldown {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
     SkillConditionalModifier {
         stat: Box<StatType>,
         #[serde(flatten)]
@@ -319,6 +325,8 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
+    AllocatePassive(PassiveNodeId),
+    RemoveSlotUse(ItemSlot),
     GoldFind,
     PowerLevel,
     Description2(String),
@@ -382,6 +390,12 @@ impl Matchable for StatType {
             ) => {
                 skill_filter.is_match(skill_filter_2) && compare_options(effect_type, effect_type_2)
             }
+            (
+                RefreshedCooldown { skill_filter },
+                RefreshedCooldown {
+                    skill_filter: skill_filter_2,
+                },
+            ) => skill_filter.is_match(skill_filter_2),
             (
                 ManaCost { skill_filter },
                 ManaCost {

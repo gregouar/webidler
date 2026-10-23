@@ -173,8 +173,10 @@ pub fn update_character_specs(
             .entry(skill_type)
             .or_default()
             .value
-            .base_mut()
-            .set_bounds(Some(0.0), Some(MAX_BLOCK));
+            .base_mut(|mut base| {
+                base.set_bounds(Some(0.0), Some(MAX_BLOCK));
+                base
+            });
     }
 
     for damage_type in DamageType::iter() {
@@ -184,8 +186,10 @@ pub fn update_character_specs(
             .entry(damage_type)
             .or_default()
             .value
-            .base_mut()
-            .set_bounds(Some(0.0), Some(MAX_EVADE));
+            .base_mut(|mut base| {
+                base.set_bounds(Some(0.0), Some(MAX_EVADE));
+                base
+            });
     }
 
     // for skill_type in SkillType::iter() {
@@ -425,7 +429,10 @@ fn compute_character_specs(
             // Only for player (for now...)
             StatType::RestoreOnHit { .. } => {}
             // Only for player
-            StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
+            StatType::MovementSpeed
+            | StatType::GoldFind
+            | StatType::ThreatGain
+            | StatType::AllocatePassive(_) => {}
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }
@@ -440,6 +447,7 @@ fn compute_character_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }
+            | StatType::RefreshedCooldown { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. }
@@ -452,6 +460,7 @@ fn compute_character_specs(
             | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::PowerLevel
+            | StatType::RemoveSlotUse(_)
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }

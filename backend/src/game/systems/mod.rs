@@ -1,3 +1,4 @@
+pub mod achievements_controller;
 pub mod area_controller;
 pub mod benedictions_controller;
 pub mod characters_controller;
@@ -18,6 +19,7 @@ pub mod sessions_controller;
 pub mod skill_masteries_controller;
 pub mod skills_controller;
 pub mod skills_updater;
+pub mod soul_crafting;
 pub mod stashes_controller;
 pub mod stats_updater;
 pub mod statuses_controller;

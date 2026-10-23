@@ -183,20 +183,22 @@ pub struct TriggerEffectModifier {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
+    TriggeringStatusValue,
+    TriggeringStatusDuration,
     AreaLevel,
-    StatusValue {
+    TargetStatusValue {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
-    StatusDuration {
+    TargetStatusDuration {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
-    StatusStacks {
+    TargetStatusStacks {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]

@@ -8,19 +8,21 @@ use leptos::{
 };
 use leptos_use::use_resize_observer;
 
-use shared::data::{badges::UserBadge, item::ItemSpecs, user::UserCharacterId};
-use shared_chat::types::{ChatChannel, ChatMessage};
+use shared::data::{cosmetics::CosmeticType, item::ItemSpecs, user::UserCharacterId};
+use shared_chat::types::{ChatChannel, ChatMessage, UserId};
 
 use crate::{
     assets::img_asset,
     components::{
         chat::chat_context::ChatContext,
+        data_context::DataContext,
         events::{EventsContext, Key, keyboard_event_key},
         shared::{
             item_card::ItemCard,
             tooltips::{ItemTooltip, item_tooltip},
         },
         ui::{
+            card::Card,
             checkbox::Checkbox,
             number::format_datetime,
             tooltip::{DynamicTooltipTarget, StaticTooltip, StaticTooltipPosition},
@@ -29,21 +31,31 @@ use crate::{
 };
 
 #[component]
-pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> impl IntoView {
+pub fn ChatPanel(
+    #[prop(optional)] character_id: Option<UserCharacterId>,
+    #[prop(default = true)] pinnable: bool,
+    #[prop(default = "Pin chat below player")] pin_label: &'static str,
+) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
+    let pinned = move || pinnable && chat_context.pinned.get();
     let panel_ref = NodeRef::new();
     let position = RwSignal::new((50i32, 50i32)); // bottom, left
 
     let clamp_panel = move || {
+        if pinned() {
+            return;
+        }
         let (bottom, left) = position.get_untracked();
 
         let win = window();
         let height = win.inner_height().unwrap().as_f64().unwrap() as i32;
         let width = win.inner_width().unwrap().as_f64().unwrap() as i32;
 
-        let panel: web_sys::HtmlDivElement = panel_ref.get().unwrap();
+        let Some(panel): Option<web_sys::HtmlDivElement> = panel_ref.get() else {
+            return;
+        };
         let rect = panel.get_bounding_client_rect();
         let panel_width = rect.width() as i32;
         let panel_height = rect.height() as i32;
@@ -59,6 +71,9 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
     let drag_start_mouse = RwSignal::new((0i32, 0i32));
     let drag_start_position = RwSignal::new((0i32, 0i32));
     let start_drag = move |ev: leptos::ev::MouseEvent| {
+        if pinned() {
+            return;
+        }
         dragging.set(true);
 
         drag_start_mouse.set((ev.screen_x(), ev.screen_y()));
@@ -185,8 +200,21 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
     // TODO: Split in components
     view! {
         <div
-            class="fixed z-50 select-none text-left"
+            class=move || {
+                if pinned() {
+                    "min-h-0 w-full shrink-0 select-none text-left"
+                } else {
+                    "fixed z-50 w-[420px] max-w-[100vw] select-none text-left"
+                }
+            }
             style=move || {
+                if pinned() {
+                    return if chat_context.minimized.get() {
+                        String::new()
+                    } else {
+                        "height:25%;max-height:300px;".to_owned()
+                    };
+                }
                 let (bottom, left) = position.get();
                 format!("bottom:{}px; left:{}px;", bottom, left)
             }
@@ -194,14 +222,18 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
 
             class:hidden=move || !chat_context.opened.get()
         >
-            <div class="w-[420px] bg-zinc-900/80 backdrop-blur border border-zinc-700 text-sm text-gray-200 flex flex-col shadow-xl">
+            <ChatCard pinned=Signal::derive(pinned)>
 
                 // Header (drag handle)
                 <div
-                    class="flex items-center justify-between px-4 py-2 border-b border-zinc-700 bg-zinc-800/80 cursor-move"
+                    class="flex shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2 border-b border-zinc-700 bg-zinc-800/80"
+                    class:cursor-move=move || !pinned()
+                    style:background-color=move || {
+                        if pinned() { "" } else { "rgb(39 39 42 / 0.85)" }
+                    }
                     on:mousedown=start_drag
                 >
-                    <div class="flex gap-4 items-center">
+                    <div class="flex flex-wrap gap-2 items-center">
                         {[ChatChannel::Global, ChatChannel::Trade, ChatChannel::System]
                             .into_iter()
                             .map(move |channel| {
@@ -224,17 +256,54 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                             .collect::<Vec<_>>()}
                     </div>
 
-                    <div class="flex gap-3 text-zinc-400">
+                    <div
+                        class="flex gap-3 text-zinc-400"
+                        on:mousedown=move |ev| ev.stop_propagation()
+                    >
                         <button
                             class="hover:text-white"
                             on:click=move |_| { chat_context.minimized.update(|m| *m = !*m) }
+                            title=move || {
+                                if chat_context.minimized.get() {
+                                    "Expand chat"
+                                } else {
+                                    "Reduce chat"
+                                }
+                            }
                         >
                             {move || { if chat_context.minimized.get() { "▼" } else { "—" } }}
                         </button>
-
+                        <Show when=move || pinnable>
+                            <button
+                                class="flex items-center hover:text-white"
+                                title=move || { if pinned() { "Unpin chat" } else { pin_label } }
+                                aria-label=move || {
+                                    if pinned() { "Unpin chat" } else { pin_label }
+                                }
+                                aria-pressed=move || pinned().to_string()
+                                on:click=move |_| chat_context.set_pinned.set(Some(!pinned()))
+                            >
+                                <svg
+                                    class="h-4 w-4"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.75"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M16 3H8l1 6-3 3v3h12v-3l-3-3 1-6ZM12 15v6" />
+                                    <Show when=pinned>
+                                        <path d="m3 3 18 18" />
+                                    </Show>
+                                </svg>
+                            </button>
+                        </Show>
                         <button
                             class="hover:text-red-400"
                             on:click=move |_| chat_context.opened.set(false)
+                            title="Close chat"
                         >
                             "✕"
                         </button>
@@ -245,7 +314,10 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                     if chat_context.minimized.get() {
                         view! {
                             <div
-                                class="px-4 py-2 bg-zinc-900/70 text-[13px] text-zinc-400 text-ellipsis cursor-pointer"
+                                class="px-3 py-2 bg-zinc-900/70 text-[13px] text-zinc-400 overflow-hidden max-h-14 cursor-pointer"
+                                style:background-color=move || {
+                                    if pinned() { "" } else { "rgb(24 24 27 / 0.9)" }
+                                }
                                 on:click=move |_| chat_context.minimized.set(false)
                             >
                                 {move || {
@@ -262,8 +334,11 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                         view! {
                             // Messages
                             <div
-                                class="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
+                                class="flex-1 min-h-0 overflow-y-auto px-4 py-3 space-y-2 bg-zinc-900/70 max-h-[320px]
                                 text-wrap wrap-break-word"
+                                style:background-color=move || {
+                                    if pinned() { "" } else { "rgb(24 24 27 / 0.9)" }
+                                }
                                 node_ref=messages_node
                                 on:scroll=move |_| {
                                     if let Some(el) = messages_node.get()
@@ -283,13 +358,30 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                             </div>
 
                             // Input
-                            <div class="border-t border-zinc-700 bg-zinc-900/80">
+                            <div
+                                class="shrink-0 border-t border-zinc-700 bg-zinc-900/80"
+                                style:background-color=move || {
+                                    if pinned() { "" } else { "rgb(24 24 27 / 0.85)" }
+                                }
+                            >
                                 <div class="flex items-stretch">
 
                                     // Channel selector
                                     <div class="relative">
                                         <button
-                                            class="h-full px-3 text-sm border-r border-zinc-700 bg-zinc-800/80 hover:bg-zinc-700/80 flex items-center gap-2"
+                                            class=move || {
+                                                format!(
+                                                    "h-full px-3 text-sm border-r border-zinc-700 hover:bg-zinc-600/80 active:bg-zinc-500/80 active:shadow-inner transition-colors flex items-center gap-2 {}",
+                                                    if dropdown_open.get() {
+                                                        "bg-zinc-700/80"
+                                                    } else if pinned() {
+                                                        "bg-zinc-800/80"
+                                                    } else {
+                                                        "bg-transparent"
+                                                    },
+                                                )
+                                            }
+                                            aria-expanded=move || dropdown_open.get().to_string()
                                             on:click=move |_| dropdown_open.update(|o| *o = !*o)
                                         >
                                             <span class=move || channel_color(
@@ -306,7 +398,7 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                                                     <div class="absolute bottom-full left-0 w-28 bg-zinc-900 border border-zinc-700 shadow-lg text-sm">
 
                                                         <button
-                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-amber-400"
+                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 active:bg-zinc-700 active:shadow-inner transition-colors text-amber-400"
                                                             on:click=move |_| {
                                                                 chat_context.write_channel.set(ChatChannel::Global);
                                                                 chat_context
@@ -320,7 +412,7 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                                                         </button>
 
                                                         <button
-                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 text-emerald-400"
+                                                            class="w-full text-left px-3 py-2 hover:bg-zinc-800 active:bg-zinc-700 active:shadow-inner transition-colors text-emerald-400"
                                                             on:click=move |_| {
                                                                 chat_context.write_channel.set(ChatChannel::Trade);
                                                                 chat_context
@@ -342,7 +434,7 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                                         }}
                                     </div>
 
-                                    <div class="flex-1 flex flex-col">
+                                    <div class="min-w-0 flex-1 flex flex-col">
                                         // Textarea
                                         {chat_context
                                             .linked_item
@@ -361,7 +453,10 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                                                 }
                                             })}
                                         <textarea
-                                            class=" resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none focus:ring-1 focus:ring-amber-500 z-2"
+                                            class="w-full min-w-0 resize-none px-3 py-2 text-gray-200 bg-zinc-900/80 focus:outline-none z-2"
+                                            style:background-color=move || {
+                                                if pinned() { "" } else { "transparent" }
+                                            }
                                             rows="2"
                                             maxlength="200"
                                             prop:value=move || input_value.get()
@@ -387,7 +482,31 @@ pub fn ChatPanel(#[prop(optional)] character_id: Option<UserCharacterId>) -> imp
                     }
                 }}
 
-            </div>
+            </ChatCard>
+        </div>
+    }
+}
+
+#[allow(clippy::unused_unit)]
+#[component]
+fn ChatCard(pinned: Signal<bool>, children: Children) -> impl IntoView {
+    view! {
+        <div class="relative flex h-full min-h-0 flex-col text-sm text-gray-200">
+            <Show when=move || pinned.get()>
+                <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+                    <Card class="h-full" pad=false gap=false>
+                        {()}
+                    </Card>
+                </div>
+            </Show>
+            // Keep the content mounted when pinning so focus and scroll position survive.
+            <div class=move || {
+                if pinned.get() {
+                    "relative z-10 flex min-h-0 flex-1 flex-col m-[2px] overflow-hidden clip-octagon"
+                } else {
+                    "relative flex min-h-0 flex-1 flex-col border border-zinc-700/50 shadow-xl"
+                }
+            }>{children()}</div>
         </div>
     }
 }
@@ -402,9 +521,8 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
             {msg
                 .chat_badge
                 .as_ref()
-                .and_then(|chat_badge| serde_plain::from_str(chat_badge).ok())
                 .map(|badge| {
-                    view! { <ChatBadge badge /> }
+                    view! { <ChatBadge badge=badge.clone() /> }
                 })} <p class="min-w-0 flex-1 text-gray-200 select-text">
                 <span
                     class=move || {
@@ -424,7 +542,14 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
                         }
                     }
                 >
-                    {author_str(&msg)}
+                    <Author
+                        channel=msg.channel
+                        user_id=msg.user_id
+                        username=msg.username.clone()
+                        character_name=msg.character_name.clone()
+                        character_title=msg.character_title.clone()
+                    />
+
                 </span>
                 <span class="text-gray-500 select-none">": "</span>
                 {msg
@@ -440,52 +565,42 @@ fn ChatMessageRow(msg: ChatMessage) -> impl IntoView {
 }
 
 #[component]
-fn ChatBadge(badge: UserBadge) -> impl IntoView {
-    let (src, badge_title, badge_description) = match badge {
-        UserBadge::Developer => (
-            "badge_dev",
-            "Developer",
-            "Please don't yell at him if everything is broken.",
-        ),
-        UserBadge::WitchHunter => (
-            "badge_witch",
-            "Witch Hunter",
-            "This player killed Amelia, the Broodborne Witch.",
-        ),
-        UserBadge::CrucibleChaosGold => (
-            "badge_chaos_gold",
-            "Champion of the Chaos Dimension",
-            "This player holds first place in 'The Chaos Dimension' crucible within a Realm.",
-        ),
-        UserBadge::CrucibleChaosSilver => (
-            "badge_chaos_silver",
-            "Vanguard of the Chaos Dimension",
-            "This player holds second place in 'The Chaos Dimension' crucible within a Realm.",
-        ),
-        UserBadge::CrucibleChaosBronze => (
-            "badge_chaos_bronze",
-            "Adept of the Chaos Dimension",
-            "This player holds third place in 'The Chaos Dimension' crucible within a Realm.",
-        ),
-    };
+fn ChatBadge(badge: String) -> impl IntoView {
+    let data_context = expect_context::<DataContext>();
+    let badge_specs = Memo::new(move |_| {
+        data_context
+            .cosmetics_specs
+            .read()
+            .get(&badge)
+            .and_then(|cosmetic| match cosmetic {
+                CosmeticType::Badge(specs) => Some(specs.clone()),
+                _ => None,
+            })
+    });
 
-    let src = img_asset(&format!("badges/{}.webp", src));
+    move || {
+        badge_specs.get().map(|specs| {
+            let src = img_asset(&specs.icon);
+            let alt = specs.name.clone();
+            let badge_title = specs.name;
+            let badge_description = specs.description;
+            let tooltip = move || {
+                view! {
+                    <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
+                        <div class="font-semibold text-white">{badge_title.clone()}</div>
+                        <div class="text-sm text-zinc-300">{badge_description.clone()}</div>
+                    </div>
+                }
+            };
 
-    let tooltip = move || {
-        view! {
-            <div class="flex flex-col xl:space-y-1 max-w-[20vw] whitespace-normal">
-                <div class="font-semibold text-white">{badge_title}</div>
-                <div class="text-sm text-zinc-300">{badge_description}</div>
-            </div>
-        }
-    };
-
-    view! {
-        <div class="shrink-0">
-            <StaticTooltip position=StaticTooltipPosition::Right tooltip>
-                <img src=src alt=badge_title class="h-[32px] mr-1 aspect-square" />
-            </StaticTooltip>
-        </div>
+            view! {
+                <div class="shrink-0">
+                    <StaticTooltip position=StaticTooltipPosition::Right tooltip>
+                        <img src=src alt=alt class="h-[32px] mr-1 aspect-square" />
+                    </StaticTooltip>
+                </div>
+            }
+        })
     }
 }
 
@@ -521,20 +636,61 @@ fn ChatItem(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     }
 }
 
-fn author_str(msg: &ChatMessage) -> String {
+#[component]
+fn Author(
+    channel: ChatChannel,
+    user_id: Option<UserId>,
+    username: Option<String>,
+    character_name: Option<String>,
+    character_title: Option<String>,
+) -> impl IntoView {
     let chat_context: ChatContext = expect_context();
+    let data_context: DataContext = expect_context();
 
-    if let ChatChannel::System = msg.channel {
-        "[System]".into()
-    } else if let ChatChannel::Whisper(_) = msg.channel
-        && msg.user_id == chat_context.user_id.get()
+    if let ChatChannel::System = channel {
+        "[System]".into_any()
+    } else if let ChatChannel::Whisper(_) = channel
+        && user_id == chat_context.user_id.get()
     {
-        channel_str(msg.channel)
+        channel_str(channel).into_any()
     } else {
-        match (&msg.username, &msg.character_name) {
-            (Some(username), Some(character_name)) => format!("{username} [{character_name}]"),
-            (Some(username), None) => username.clone(),
-            _ => String::new(),
+        match (&username, &character_name) {
+            (Some(username), Some(character_name)) => {
+                let title = character_title.as_ref().and_then(|title| {
+                    data_context
+                        .cosmetics_specs
+                        .read()
+                        .get(title)
+                        .and_then(|cosmetic| match cosmetic {
+                            CosmeticType::Title(title) => Some(title.clone()),
+                            _ => None,
+                        })
+                });
+
+                title
+                    .map(|title| {
+                        view! {
+                            {username.clone()}
+                            " ["
+                            {character_name.clone()}
+                            " — "
+                            <span class="italic">{title}</span>
+                            "]"
+                        }
+                        .into_any()
+                    })
+                    .unwrap_or_else(|| {
+                        view! {
+                            {username.clone()}
+                            " ["
+                            {character_name.clone()}
+                            "]"
+                        }
+                        .into_any()
+                    })
+            }
+            (Some(username), None) => username.clone().into_any(),
+            _ => String::new().into_any(),
         }
     }
 }

@@ -191,7 +191,7 @@ impl ChatSession {
         msg: ClientPostMessage,
     ) -> std::result::Result<(), ErrorMessage> {
         // let (linked_item, item_signature) = msg.linked_item.unzip();
-        let character_name = self
+        let character = self
             .character_resolver
             .resolve(msg.character_id)
             .await
@@ -210,8 +210,14 @@ impl ChatSession {
                     user_id: Some(self.user_details.user.user_id),
                     username: Some(self.user_details.user.username.clone()),
                     character_id: msg.character_id,
-                    character_name,
-                    chat_badge: self.user_details.chat_badge.clone(),
+                    character_name: character.as_ref().map(|character| character.name.clone()),
+                    character_title: character
+                        .as_ref()
+                        .and_then(|character| character.cosmetics.title.clone()),
+                    chat_badge: character
+                        .as_ref()
+                        .and_then(|character| character.cosmetics.badge.clone())
+                        .or_else(|| self.user_details.chat_badge.clone()),
                     content: msg.content.into_inner(),
                     linked_item: msg.linked_item,
                     // item_signature,

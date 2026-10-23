@@ -11,7 +11,8 @@ use shared::{
 };
 
 use crate::components::{
-    accessibility::AccessibilityContext, backend_client::BackendClient, ui::buttons::CloseButton,
+    accessibility::AccessibilityContext, backend_client::BackendClient, data_context::DataContext,
+    ui::buttons::CloseButton,
 };
 
 #[derive(Clone, PartialEq)]
@@ -80,13 +81,11 @@ pub fn PlayerCount() -> impl IntoView {
         })
     });
 
+    let data_context = expect_context::<DataContext>();
     LocalResource::new({
         move || async move {
-            let areas = backend
-                .get_areas()
-                .await
-                .map(|resp| resp.areas)
-                .unwrap_or_default();
+            let _ = data_context.load_data(backend).await;
+            let areas = data_context.areas_specs.get_untracked();
 
             match backend.get_players_count().await {
                 Ok(resp) => {

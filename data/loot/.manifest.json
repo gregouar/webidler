@@ -1,5 +1,5 @@
 {
-  "meta"     : {"enabled": true},
+  "meta": {"enabled": true},
   "resources": {
     "gamble_table": ["0_gamble_table.json"],
     "loot"        : [
@@ -7,9 +7,9 @@
       "tier_5.json",         "tier_6.json",         "tier_7.json",         "tier_8.json",
       "tier_9.json",         "tier_10.json",        "area_inn.json",       "area_forest.json",
       "area_witch.json",     "area_castle.json",    "area_island.json",    "area_wyrm.json",
-      "area_yokai.json",     "area_desert.json",    "area_chaos.json",     "edict_gold.json",
-      "edict_menu.json",     "edict_mosquito.json", "edict_treasure.json", "edict_mummy.json",
-      "edict_music.json",    "edict_witch.json"
+      "area_yokai.json",     "area_desert.json",    "area_farwest.json",   "area_mythos.json",
+      "area_chaos.json",     "edict_gold.json",     "edict_menu.json",     "edict_mosquito.json",
+      "edict_treasure.json", "edict_stars.json",    "edict_mummy.json",    "edict_music.json",    "edict_witch.json"
     ]
   }
 }

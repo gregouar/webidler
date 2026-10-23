@@ -14,8 +14,7 @@
     "price_increase_factor": 1e5,
     "max_upgrade_level"    : 60,
     "benedictions"         : {
-      "starting_gold" : {"value": 100, "effect": "StartingGold",  "upgrade_value": 100, "upgrade_modifier": "More"},
-      "starting_level": {"value":   1, "effect": "StartingLevel", "upgrade_value":   1, "upgrade_modifier": "Flat"}
+      "starting_level": {"value": 1, "effect": "StartingLevel", "upgrade_value": 1, "upgrade_modifier": "Flat"}
     }
   },
   "attributes" : {
@@ -45,7 +44,7 @@
     "max_upgrade_level"    : 200,
     "benedictions"         : {
       "armor_physical": {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": { "stat": {"Armor": "Physical"}, "modifier": "Flat" }
         },
@@ -53,7 +52,7 @@
         "upgrade_modifier": "Flat"
       },
       "armor_fire"    : {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": { "stat": {"Armor": "Fire"}, "modifier": "Flat" }
         },
@@ -61,7 +60,7 @@
         "upgrade_modifier": "Flat"
       },
       "armor_poison"  : {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": { "stat": {"Armor": "Poison"}, "modifier": "Flat" }
         },
@@ -69,7 +68,7 @@
         "upgrade_modifier": "Flat"
       },
       "armor_storm"   : {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": { "stat": {"Armor": "Storm"}, "modifier": "Flat" }
         },
@@ -85,7 +84,7 @@
     "max_upgrade_level"    : 200,
     "benedictions"         : {
       "damage_physical": {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": {
             "stat"    : { "Damage": {"damage_type": "Physical"} },
@@ -96,7 +95,7 @@
         "upgrade_modifier": "Flat"
       },
       "damage_fire"    : {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": {
             "stat"    : { "Damage": {"damage_type": "Fire"} },
@@ -107,7 +106,7 @@
         "upgrade_modifier": "Flat"
       },
       "damage_poison"  : {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": {
             "stat"    : { "Damage": {"damage_type": "Poison"} },
@@ -118,7 +117,7 @@
         "upgrade_modifier": "Flat"
       },
       "damage_storm"   : {
-        "value"           : 5,
+        "value": 5,
         "effect"          : {
           "StatEffect": {
             "stat"    : { "Damage": {"damage_type": "Storm"} },

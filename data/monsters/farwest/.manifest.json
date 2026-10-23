@@ -1,0 +1,4 @@
+{
+  "meta"     : { "enabled": true                                                  },
+  "resources": {                  "monsters": [], "statuses": ["0_statuses.json"] }
+}

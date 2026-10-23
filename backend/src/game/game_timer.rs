@@ -2,12 +2,14 @@ use std::time::{Duration, Instant};
 
 const LOOP_MIN_PERIOD: Duration = Duration::from_millis(100);
 const AUTOSAVE_DELAY: Duration = Duration::from_secs(60);
+const ACHIEVEMENTS_CHECK_DELAY: Duration = Duration::from_secs(1);
 
 #[derive(Debug, Clone)]
 pub struct GameTimer {
     last_tick: Instant,
     last_update: Instant,
     last_autosave: Instant,
+    last_achievements_check: Instant,
 }
 
 impl GameTimer {
@@ -16,6 +18,7 @@ impl GameTimer {
             last_tick: Instant::now(),
             last_update: Instant::now(),
             last_autosave: Instant::now(),
+            last_achievements_check: Instant::now(),
         }
     }
 
@@ -39,6 +42,16 @@ impl GameTimer {
         let now = Instant::now();
         if Instant::now() - self.last_autosave > AUTOSAVE_DELAY {
             self.last_autosave = now;
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn should_check_achievements(&mut self) -> bool {
+        let now = Instant::now();
+        if Instant::now() - self.last_achievements_check > ACHIEVEMENTS_CHECK_DELAY {
+            self.last_achievements_check = now;
             true
         } else {
             false

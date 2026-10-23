@@ -8,7 +8,9 @@ use shared::{
         chance::ChanceRange,
         forge::MAX_AFFIXES,
         item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
-        item_affix::{AffixEffect, AffixEffectBlueprint, AffixType, ItemAffix, ItemAffixBlueprint},
+        item_affix::{
+            AffixEffect, AffixEffectBlueprint, AffixTag, AffixType, ItemAffix, ItemAffixBlueprint,
+        },
         stat_effect::StatEffect,
     },
 };
@@ -125,7 +127,7 @@ pub fn roll_item(
     )
     .map(|(base_item_id, base)| {
         let rarity = if base.rarity != ItemRarity::Unique {
-            rarity.clamp(base.rarity, ItemRarity::Rare)
+            rarity.clamp(base.rarity, ItemRarity::Masterwork)
         } else {
             ItemRarity::Unique
         };
@@ -192,7 +194,7 @@ pub fn roll_item_stats(
                 max: 2,
                 ..Default::default()
             },
-            ItemRarity::Rare => ChanceRange {
+            ItemRarity::Rare | ItemRarity::Masterwork => ChanceRange {
                 min: 3,
                 max: 4,
                 ..Default::default()
@@ -207,6 +209,17 @@ pub fn roll_item_stats(
             &base,
             &mut modifiers,
             None,
+            affixes_table,
+            adjectives_table,
+            nouns_table,
+        );
+    }
+
+    if rarity == ItemRarity::Masterwork {
+        add_affix(
+            &base,
+            &mut modifiers,
+            Some(AffixType::Soul),
             affixes_table,
             adjectives_table,
             nouns_table,
@@ -295,6 +308,7 @@ fn roll_base_item(
                 items_store
                     .content
                     .get(&l.item_id)
+                    .filter(|base| !base.categories.contains(&ItemCategory::Remnant))
                     .map(|base| base.min_area_level)
                     .unwrap_or_default()
             })
@@ -306,7 +320,7 @@ fn roll_base_item(
                 items_store
                     .content
                     .get(&l.item_id)
-                    .map(|base| base.min_area_level == max_level)
+                    .map(|base| base.min_area_level >= max_level)
                     .unwrap_or_default()
             })
             .collect()
@@ -341,12 +355,18 @@ fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
             let mut effect = roll_affix_effect(e);
             effect.stat_effect.value *= quality_factor;
 
+            let affix_type = if base_item.categories.contains(&ItemCategory::Soul) {
+                AffixType::Soul
+            } else {
+                AffixType::Unique
+            };
+
             ItemAffix {
-                name: "Unique".to_string(),
+                name: base_item.name.clone(),
                 family: base_item.name.clone(),
-                tags: BTreeSet::new(),
-                affix_type: AffixType::Unique,
-                tier: 1,
+                tags: BTreeSet::from([AffixTag::Unique]),
+                affix_type,
+                tier: 0,
                 item_level: base_item.min_area_level,
                 effects: vec![effect],
             }
@@ -362,18 +382,19 @@ pub fn add_affix(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) -> bool {
-    if base.rarity == ItemRarity::Unique {
+    if base.rarity == ItemRarity::Unique || base.categories.contains(&ItemCategory::Soul) {
         return false;
     }
 
     let prefixes_amount = modifiers.count_affixes(AffixType::Prefix);
     let suffixes_amount = modifiers.count_affixes(AffixType::Suffix);
 
-    if prefixes_amount + suffixes_amount >= MAX_AFFIXES {
+    if prefixes_amount + suffixes_amount >= MAX_AFFIXES && affix_type != Some(AffixType::Soul) {
         return false;
     }
 
     let affix_type = match affix_type {
+        Some(AffixType::Soul) => AffixType::Soul,
         Some(AffixType::Prefix) => {
             if prefixes_amount <= suffixes_amount {
                 AffixType::Prefix
@@ -455,7 +476,7 @@ pub fn remove_affix(
     let affixes_amount = match affix_type {
         AffixType::Prefix => prefixes_amount,
         AffixType::Suffix => suffixes_amount,
-        AffixType::Unique | AffixType::Upgrade => 0,
+        AffixType::Unique | AffixType::Upgrade | AffixType::Soul => 0,
     };
 
     let affix_subindex = rng::random_range(0..affixes_amount).unwrap_or_default();
@@ -490,12 +511,14 @@ fn update_rarity(
     adjectives_table: &ItemAdjectivesTable,
     nouns_table: &ItemNounsTable,
 ) {
-    let new_rarity = if affixes_amount <= 2 {
-        ItemRarity::Magic
-    } else if affixes_amount <= 4 {
-        ItemRarity::Rare
-    } else {
+    let new_rarity = if modifiers.count_affixes(AffixType::Soul) > 0 {
         ItemRarity::Masterwork
+    } else if affixes_amount > 2 {
+        ItemRarity::Rare
+    } else if affixes_amount > 0 {
+        ItemRarity::Magic
+    } else {
+        ItemRarity::Normal
     };
 
     if new_rarity != modifiers.rarity
