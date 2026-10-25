@@ -1,6 +1,5 @@
 use std::collections::{HashMap, HashSet};
 
-use indexmap::IndexSet;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
@@ -24,7 +23,7 @@ pub struct PlayerBaseSpecs {
 
     pub max_skills: u8,
     pub skills: HashMap<String, PlayerBaseSkill>,
-    pub skills_in_use: IndexSet<String>,
+    pub skills_in_use: Vec<String>,
     pub skill_masteries: PlayerSkillMasteries,
 
     pub level: u8,

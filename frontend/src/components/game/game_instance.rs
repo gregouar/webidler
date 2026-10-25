@@ -206,7 +206,6 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         auto_skills,
     } = init_message;
 
-    game_context.started.set(true);
     game_context.character_id.set(character_id);
     game_context.character_cosmetics.set(character_cosmetics);
     game_context.player_pets.set(player_pets);
@@ -227,6 +226,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.player_auto_skills.set(auto_skills);
+    game_context.started.set(true);
 }
 
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {

@@ -64,7 +64,7 @@ pub fn init_player_base_specs(
         character_attrs: base_player_character_attrs(1),
         effects,
         max_skills,
-        buy_skill_cost: 0.0,
+        skills_in_use: Default::default(),
         skills: Default::default(),
         level: 1,
         experience_needed: 20.0,
@@ -317,21 +317,26 @@ fn compute_player_specs(
     }
 
     player_specs.character_specs.skills_specs = player_base_specs
-        .skills
+        .skills_in_use
         .iter()
-        .map(|(skill_id, player_base_skill)| {
-            skills_updater::update_skill_specs(
-                statuses_store,
-                skill_id.to_string(),
-                &player_base_skill.base_skill_specs,
-                player_base_skill.upgrade_level,
-                effects,
-                &player_specs.character_specs.character_attrs,
-                Some(player_inventory),
-                skill_masteries_store
-                    .get(skill_id)
-                    .zip(player_base_specs.skill_masteries.masteries.get(skill_id)),
-            )
+        .flat_map(|skill_id| {
+            player_base_specs
+                .skills
+                .get(skill_id)
+                .map(|player_base_skill| {
+                    skills_updater::update_skill_specs(
+                        statuses_store,
+                        skill_id.to_string(),
+                        &player_base_skill.base_skill_specs,
+                        player_base_skill.upgrade_level,
+                        effects,
+                        &player_specs.character_specs.character_attrs,
+                        Some(player_inventory),
+                        skill_masteries_store
+                            .get(skill_id)
+                            .zip(player_base_specs.skill_masteries.masteries.get(skill_id)),
+                    )
+                })
         })
         .collect();
 

@@ -7,7 +7,7 @@
     "cooldown": 0.0,
     "mana_cost": 0.0,
     "required_item": null,
-    "upgrade_cost": 10.0,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
         "stat": {

@@ -324,18 +324,11 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
 pub fn make_weapon_skill(
     skills_store: &SkillsStore,
     item_slot: ItemSlot,
-    item_level: u16,
 ) -> Option<(String, BaseSkillSpecs)> {
     let skill_id = item_slot_to_skill_id(item_slot);
     let base_skill_specs = skills_store.get(skill_id).cloned()?;
 
-    Some((
-        skill_id.to_string(),
-        BaseSkillSpecs {
-            upgrade_cost: 10.0 + 0.5 * item_level as f64,
-            ..base_skill_specs
-        },
-    ))
+    Some((skill_id.to_string(), base_skill_specs))
 }
 
 fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {

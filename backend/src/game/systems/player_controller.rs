@@ -290,7 +290,6 @@ pub fn equip_item_from_bag(
             player_state,
             player_controller,
             slot,
-            new_item.modifiers.level,
         );
     }
 
@@ -356,7 +355,6 @@ pub fn toggle_sheathe_item(
         player_state,
         player_controller,
         item_slot,
-        item_specs.modifiers.level,
     ) {
         return Err(AppError::UserError(
             "No empty Skill Slot is available.".into(),
@@ -410,10 +408,10 @@ pub fn init_skills_from_inventory(
     let weapons = player_inventory
         .equipped_items()
         .filter(|(_, equipped_item)| equipped_item.weapon_specs.is_some())
-        .map(|(item_slot, equipped_item)| (item_slot, equipped_item.modifiers.level))
+        .map(|(item_slot, _)| item_slot)
         .collect::<Vec<_>>();
 
-    for (item_slot, item_level) in weapons {
+    for item_slot in weapons {
         if !player_inventory.sheathed.contains(&item_slot)
             && !equip_weapon(
                 skills_store,
@@ -422,7 +420,6 @@ pub fn init_skills_from_inventory(
                 player_state,
                 player_controller,
                 item_slot,
-                item_level,
             )
         {
             player_inventory.sheathed.insert(item_slot);
@@ -437,9 +434,10 @@ fn unequip_weapon(
     item_slot: ItemSlot,
 ) {
     let to_remove: Vec<_> = player_base_specs
-        .skills
-        .values()
+        .skills_in_use
+        .iter()
         .enumerate()
+        .flat_map(|(i, skill_id)| Some(i).zip(player_base_specs.skills.get(skill_id)))
         .filter_map(|(i, player_skill)| (player_skill.item_slot? == item_slot).then_some(i))
         .collect();
 
@@ -460,10 +458,9 @@ fn equip_weapon(
     player_state: &mut PlayerState,
     player_controller: &mut PlayerController,
     item_slot: ItemSlot,
-    item_level: u16,
 ) -> bool {
     if let Some((skill_id, base_skill_specs)) =
-        items_controller::make_weapon_skill(skills_store, item_slot, item_level)
+        items_controller::make_weapon_skill(skills_store, item_slot)
     {
         if equip_base_skill(
             player_base_specs,
@@ -494,31 +491,35 @@ pub fn equip_base_skill(
     auto_use: bool,
     item_slot: Option<ItemSlot>,
 ) -> bool {
-    if player_base_specs.skills.len() >= player_base_specs.max_skills as usize {
+    if player_base_specs.skills_in_use.len() >= player_base_specs.max_skills as usize {
         return false;
     }
 
     let index = if item_slot.is_some() {
         0
     } else {
-        player_base_specs.skills.len()
+        player_base_specs.skills_in_use.len()
     };
+
+    player_base_specs
+        .skills
+        .entry(skill_id.clone())
+        .and_modify(|player_base_skill| {
+            player_base_skill.base_skill_specs = base_skill_specs.clone()
+        })
+        .or_insert(PlayerBaseSkill {
+            item_slot,
+            upgrade_level: 1,
+            next_upgrade_cost: base_skill_specs.upgrade_cost,
+            base_skill_specs,
+        });
 
     player_state
         .character_state
         .skills_states
         .insert(index, Default::default());
 
-    player_base_specs.skills.shift_insert(
-        index,
-        skill_id,
-        PlayerBaseSkill {
-            item_slot,
-            upgrade_level: 1,
-            next_upgrade_cost: base_skill_specs.upgrade_cost,
-            base_skill_specs,
-        },
-    );
+    player_base_specs.skills_in_use.insert(index, skill_id);
 
     player_controller
         .auto_skills
@@ -534,8 +535,8 @@ pub fn unequip_base_skill(
     player_controller: &mut PlayerController,
     skill_index: usize,
 ) {
-    if skill_index < player_base_specs.skills.len() {
-        player_base_specs.skills.shift_remove_index(skill_index);
+    if skill_index < player_base_specs.skills_in_use.len() {
+        player_base_specs.skills_in_use.remove(skill_index);
     }
 
     if skill_index < player_state.character_state.skills_states.len() {
