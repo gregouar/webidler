@@ -343,9 +343,8 @@ pub fn PlayerCard() -> impl IntoView {
                         </div>
                         <TutorialPopup
                             show=show_level_up_tutorial
-                            position=TutorialPopupPosition::Above
+                            position=TutorialPopupPosition::AboveRight
                             message="Click here to Level Up and gain a Passive Point."
-
                         >
                             <PetAutomation
                                 pet_button=PetButton::LevelUp
@@ -767,9 +766,10 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         move |_| {
             game_context.player_base_specs.with(|player_base_specs| {
                 player_base_specs
-                    .skills
-                    .get_index(index)
-                    .map(|(_, player_base_skill)| Arc::new(player_base_skill.clone()))
+                    .skills_in_use
+                    .get(index)
+                    .and_then(|skill_id| player_base_specs.skills.get(skill_id))
+                    .map(|player_base_skill| Arc::new(player_base_skill.clone()))
             })
         },
         |_, _| true,
@@ -810,7 +810,9 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
     let events_context: EventsContext = expect_context();
     let upgrade_skill = Arc::new(move |amount: u8, cost: f64| {
         game_context.player_base_specs.update(|player_base_specs| {
-            if let Some((_, player_base_skill)) = player_base_specs.skills.get_index_mut(index) {
+            if let Some(skill_id) = player_base_specs.skills_in_use.get(index)
+                && let Some(player_base_skill) = player_base_specs.skills.get_mut(skill_id)
+            {
                 game_context.player_resources.write().gold -= cost;
                 for _ in 0..amount {
                     player_base_skill.upgrade_level =

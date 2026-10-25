@@ -23,6 +23,32 @@ pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
+
+    let inventory_tip_triggered = RwSignal::new(false);
+    let inventory_tip_has_triggered = RwSignal::new(false);
+    let is_first_grind = game_context
+        .area_id
+        .with_untracked(|area_id| area_id == "inn_basement.json")
+        && game_context.area_state.read_untracked().max_area_level_ever == 0;
+    let previous_bag_empty = RwSignal::new(true);
+
+    Effect::new(move || {
+        let bag_empty = game_context.player_inventory.read().bag.is_empty();
+
+        if is_first_grind
+            && !inventory_tip_has_triggered.get_untracked()
+            && previous_bag_empty.get_untracked()
+            && !bag_empty
+        {
+            inventory_tip_has_triggered.set(true);
+            inventory_tip_triggered.set(true);
+        }
+
+        previous_bag_empty.set(bag_empty);
+    });
+
+    let show_inventory_tutorial =
+        Signal::derive(move || inventory_tip_triggered.get() && !game_context.open_inventory.get());
     let show_passive_point_tutorial = Signal::derive(move || {
         game_context
             .area_id
@@ -35,6 +61,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 .is_empty()
             && game_context.player_resources.read().passive_points > 0
             && !game_context.open_passives.get()
+            && !show_inventory_tutorial.get()
     });
     let power_shard_tip_triggered = RwSignal::new(false);
     let previous_max_power_shard_level = RwSignal::new(
@@ -121,6 +148,9 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_inventory = move || {
+        if !game_context.open_inventory.get_untracked() {
+            inventory_tip_triggered.set(false);
+        }
         switch_panel(game_context.open_inventory);
     };
 
@@ -209,9 +239,15 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
-                <MenuButton on:click=move |_| open_inventory() title="Inventory">
-                    <InventoryIcon />
-                </MenuButton>
+                <TutorialPopup
+                    show=show_inventory_tutorial
+                    position=TutorialPopupPosition::BelowRight
+                    message="You picked up your first item. Click here to equip it."
+                >
+                    <MenuButton on:click=move |_| open_inventory() title="Inventory">
+                        <InventoryIcon />
+                    </MenuButton>
+                </TutorialPopup>
                 <TutorialPopup
                     show=show_passive_point_tutorial
                     position=TutorialPopupPosition::BelowRight

@@ -6,6 +6,7 @@ use super::buttons::CloseButton;
 pub enum TutorialPopupPosition {
     Above,
     AboveLeft,
+    AboveRight,
     BelowLeft,
     #[default]
     BelowRight,
@@ -16,6 +17,7 @@ impl TutorialPopupPosition {
         match self {
             Self::Above => "bottom-full left-1/2 mb-3 -translate-x-1/2",
             Self::AboveLeft => "bottom-full left-0 mb-3",
+            Self::AboveRight => "bottom-full right-0 mb-3",
             Self::BelowLeft => "left-0 top-full mt-3",
             Self::BelowRight => "right-0 top-full mt-3",
         }
@@ -28,6 +30,9 @@ impl TutorialPopupPosition {
             }
             Self::AboveLeft => {
                 "-bottom-2 left-4 border-x-8 border-t-8 border-x-transparent border-t-amber-300/80"
+            }
+            Self::AboveRight => {
+                "-bottom-2 right-4 border-x-8 border-t-8 border-x-transparent border-t-amber-300/80"
             }
             Self::BelowLeft => {
                 "-top-2 left-4 border-x-8 border-b-8 border-x-transparent border-b-amber-300/80"

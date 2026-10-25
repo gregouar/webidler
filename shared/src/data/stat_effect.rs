@@ -326,7 +326,6 @@ pub enum StatType {
         skill_filter: StatSkillFilter,
     },
     AllocatePassive(PassiveNodeId),
-    RemoveSlotUse(ItemSlot),
     GoldFind,
     PowerLevel,
     Description2(String),
