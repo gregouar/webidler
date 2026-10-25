@@ -324,6 +324,24 @@
       }
     }
   },
+  "spark"          : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage": {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          }
+        ]
+      }
+    }
+  },
   "fireball"       : {
     "max_level": 100,
     "upgrades" : {

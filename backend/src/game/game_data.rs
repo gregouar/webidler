@@ -73,6 +73,8 @@ pub struct GameInstanceData {
     pub grind_rewards: LazySyncer<Option<GrindRewards>>,
     pub terminate_grind: bool, // Actually close the grind
     pub quest_completed: bool, // Was the quest already completed in a PREVIOUS grind
+
+    pub tick_number: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -246,6 +248,8 @@ impl GameInstanceData {
             grind_rewards: LazySyncer::new(None),
             terminate_grind: false,
             quest_completed,
+
+            tick_number: 0,
         })
     }
 

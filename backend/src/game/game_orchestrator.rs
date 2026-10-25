@@ -41,6 +41,11 @@ pub async fn tick(
         return Ok(());
     }
 
+    game_data.tick_number = game_data.tick_number.wrapping_add(1);
+    events_queue.register_event(GameEvent::Tick {
+        tick_number: game_data.tick_number,
+    });
+
     update_threat(events_queue, game_data, elapsed_time);
 
     if game_data.area_state.read().rush_mode {

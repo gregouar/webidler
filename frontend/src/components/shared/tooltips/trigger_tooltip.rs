@@ -168,17 +168,23 @@ pub fn format_trigger_modifier(
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
     triggering_status: Option<&StatusTrigger>,
 ) -> Option<impl IntoView + use<>> {
-    modifier.map(|modifier| {
+    modifier.and_then(|modifier| {
+        if modifier.hidden {
+            return None;
+        }
+
         if let Some(trigger_modifier_value) =
             get_trigger_modifier_value(modifier, factor, trigger_status_value)
         {
-            return view! {
-                <span class=format!(
-                    "font-semibold {}",
-                    value_color.unwrap_or_default(),
-                )>{skill_tooltip::format_min_max(trigger_modifier_value)}</span>
-            }
-            .into_any();
+            return Some(
+                view! {
+                    <span class=format!(
+                        "font-semibold {}",
+                        value_color.unwrap_or_default(),
+                    )>{skill_tooltip::format_min_max(trigger_modifier_value)}</span>
+                }
+                .into_any(),
+            );
         }
 
         let factor = modifier.factor * factor.unwrap_or(1.0);
@@ -192,12 +198,12 @@ pub fn format_trigger_modifier(
                 " of "
             }
         });
-        view! {
+        Some(view! {
             {factor_str}
             {trigger_modifier_source_str(&modifier.source, trigger_status_name, triggering_status)}
             {suffix}
         }
-        .into_any()
+        .into_any())
     })
 }
 
@@ -221,6 +227,7 @@ pub fn format_extra_trigger_modifiers(
             StatType::Restore { .. } => modifier.modifier == Modifier::Increased,
             _ => true,
         })
+        .filter(|modifier| !modifier.hidden)
         .map(|modifier| {
             let stat_effect = StatEffect {
                 stat: modifier.stat.clone(),
@@ -336,6 +343,12 @@ pub fn trigger_modifier_source_str(
             Some(trigger_status_name) => format!("{} Value", trigger_status_name),
             None => "Status Value".to_string(),
         },
+        TriggerEffectModifierSource::TriggerStatusStack { ignore_initial: _ } => {
+            match trigger_status_name {
+                Some(trigger_status_name) => format!("{} Stacks", trigger_status_name),
+                None => "Status Stacks".to_string(),
+            }
+        }
     }
 }
 
@@ -399,6 +412,12 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             },
         },
         EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
+        EventTrigger::OnTick(tick_trigger) => {
+            format!(
+                "Every {:.1} seconds",
+                0.1 * tick_trigger.tick_interval as f64
+            )
+        }
     }
 }
 
