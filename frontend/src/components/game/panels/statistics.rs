@@ -631,6 +631,41 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         })
                                         .collect::<Vec<_>>()
                                 }}
+                                {move || {
+                                    let crit_damage_taken_stats = collapse_equal_crit_damage_taken_stats(
+                                        SkillType::iter()
+                                            .map(|skill_type| {
+                                                (
+                                                    skill_type,
+                                                    game_context
+                                                        .player_specs
+                                                        .read()
+                                                        .character_specs
+                                                        .character_attrs
+                                                        .crit_damage_taken
+                                                        .get(&skill_type)
+                                                        .map(|value| **value)
+                                                        .unwrap_or(100.0)
+                                                        .max(0.0),
+                                                )
+                                            })
+                                            .collect(),
+                                    );
+                                    crit_damage_taken_stats
+                                        .into_iter()
+                                        .map(|(skill_type, value)| {
+                                            view! {
+                                                <Stat
+                                                    label=format!(
+                                                        "{}Critical Hit Damage Taken",
+                                                        skill_type_str(skill_type),
+                                                    )
+                                                    value=move || { format!("{}%", format_number(value)) }
+                                                />
+                                            }
+                                        })
+                                        .collect::<Vec<_>>()
+                                }}
                             </StatCategory>
 
                             <StatCategory title="Utility">
@@ -919,6 +954,24 @@ fn collapse_equal_evade_stats(
             .into_iter()
             .filter(|(_, evade)| evade.value.get() != 0.0)
             .map(|(damage_type, evade)| (Some(damage_type), evade))
+            .collect()
+    }
+}
+
+fn collapse_equal_crit_damage_taken_stats(
+    stats: Vec<(SkillType, f64)>,
+) -> Vec<(Option<SkillType>, f64)> {
+    let Some(first_value) = stats.first().map(|(_, value)| *value) else {
+        return Vec::new();
+    };
+
+    if first_value != 100.0 && stats.iter().all(|(_, value)| *value == first_value) {
+        vec![(None, first_value)]
+    } else {
+        stats
+            .into_iter()
+            .filter(|(_, value)| *value != 100.0)
+            .map(|(skill_type, value)| (Some(skill_type), value))
             .collect()
     }
 }

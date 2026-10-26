@@ -355,6 +355,20 @@ fn compute_character_specs(
                     }
                 }
             }
+            StatType::CritDamageTaken { skill_type } => {
+                let skill_types = match skill_type {
+                    Some(skill_type) => vec![*skill_type],
+                    None => SkillType::iter().collect(),
+                };
+
+                for skill_type in skill_types {
+                    character_attrs
+                        .crit_damage_taken
+                        .entry(skill_type)
+                        .or_insert(100.0.into())
+                        .apply_effect(effect);
+                }
+            }
             StatType::StatusResistance {
                 skill_type,
                 status_id,

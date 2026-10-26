@@ -425,6 +425,7 @@ fn modify_player_specs(
             | StatType::Evade(_)
             | StatType::EvadeDamageTaken
             | StatType::DamageTaken { .. }
+            | StatType::CritDamageTaken { .. }
             | StatType::StatusResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:
