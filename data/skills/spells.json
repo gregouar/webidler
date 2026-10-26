@@ -91,8 +91,13 @@
     "mana_cost"      : 5,
     "upgrade_cost"   : 50,
     "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
+      {
+        "stat"    : { "Damage": {"skill_id": "spark"} },
+        "modifier": "More",
+        "scope"   : "Global",
+        "value"   : 30
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
     ],
     "targets"        : [
       {

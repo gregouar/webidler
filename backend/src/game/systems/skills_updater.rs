@@ -73,16 +73,11 @@ pub fn reset_skills(skills_states: &mut [SkillState]) {
         skill_state.just_triggered = false;
     }
 }
-#[allow(clippy::too_many_arguments)]
-pub fn update_skill_specs(
-    statuses_store: &StatusesStore,
+
+pub fn init_skill_specs(
     skill_id: String,
     base_skill_specs: &BaseSkillSpecs,
-    upgrade_level: u16,
     effects: &[StatEffect],
-    character_attrs: &CharacterAttrs,
-    inventory: Option<&PlayerInventory>,
-    skill_mastery: Option<(&SkillMasterySpecs, &SkillMasteryState)>,
 ) -> SkillSpecs {
     let level_modifier = effects
         .iter()
@@ -98,7 +93,7 @@ pub fn update_skill_specs(
         })
         .sum();
 
-    let mut skill_specs = SkillSpecs {
+    SkillSpecs {
         skill_id,
         name: base_skill_specs.name.clone(),
         icon: base_skill_specs.icon.clone(),
@@ -113,8 +108,20 @@ pub fn update_skill_specs(
         usable: true,
         extra_modifier_effects: Default::default(),
         auto_use_conditions: base_skill_specs.auto_use_conditions.clone(),
-    };
+    }
+}
 
+#[allow(clippy::too_many_arguments)]
+pub fn update_skill_specs(
+    statuses_store: &StatusesStore,
+    mut skill_specs: SkillSpecs,
+    base_skill_specs: &BaseSkillSpecs,
+    upgrade_level: u16,
+    effects: &[StatEffect],
+    character_attrs: &CharacterAttrs,
+    inventory: Option<&PlayerInventory>,
+    skill_mastery: Option<(&SkillMasterySpecs, &SkillMasteryState)>,
+) -> SkillSpecs {
     let mut local_effects = if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery
     {
         skill_masteries_controller::apply_skill_mastery(
@@ -133,6 +140,7 @@ pub fn update_skill_specs(
         std::iter::once(compute_skill_upgrade_effects(
             base_skill_specs,
             upgrade_level.saturating_add(skill_specs.level_modifier),
+            AffixEffectScope::Local,
         ))
         .chain(std::iter::once(compute_skill_modifier_effects(
             &base_skill_specs.modifier_effects,
@@ -353,7 +361,7 @@ pub fn compute_skill_mastery_skill_specs_for_skill(
 
     Some(update_skill_specs(
         statuses_store,
-        skill_id.to_string(),
+        init_skill_specs(skill_id.to_string(), base_skill_specs, &global_stat_effects),
         base_skill_specs,
         1,
         &global_stat_effects,
@@ -565,12 +573,18 @@ pub fn apply_effects_to_skill_specs<'a>(
     }
 }
 
-pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u16) -> EffectsMap {
+pub fn compute_skill_upgrade_effects(
+    base_skill_specs: &BaseSkillSpecs,
+    level: u16,
+    scope: AffixEffectScope,
+) -> EffectsMap {
     let level = level as f64 - 1.0;
 
-    base_skill_specs.upgrade_effects.iter().fold(
-        EffectsMap::default(),
-        |mut effects_map, effect| {
+    base_skill_specs
+        .upgrade_effects
+        .iter()
+        .filter(|effect| effect.scope == scope)
+        .fold(EffectsMap::default(), |mut effects_map, effect| {
             *effects_map
                 .0
                 .entry((
@@ -585,8 +599,7 @@ pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u
                 _ => effect.stat_effect.value * level,
             };
             effects_map
-        },
-    )
+        })
 }
 
 fn compute_skill_modifier_effects(

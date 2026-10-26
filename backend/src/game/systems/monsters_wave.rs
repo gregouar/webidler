@@ -10,6 +10,7 @@ use shared::{
     },
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
+        item_affix::AffixEffectScope,
         modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
         stat_effect::{StatEffect, StatType},
@@ -295,7 +296,11 @@ fn generate_monster_specs(
             if base_skill_specs.upgrade_effects.is_empty() {
                 skills_updater::update_skill_specs(
                     statuses_store,
-                    "".to_string(),
+                    skills_updater::init_skill_specs(
+                        "monster".to_string(),
+                        base_skill_specs,
+                        &upgrade_effects,
+                    ),
                     base_skill_specs,
                     1,
                     &upgrade_effects,
@@ -307,11 +312,16 @@ fn generate_monster_specs(
                 let effects: Vec<_> = (&skills_updater::compute_skill_upgrade_effects(
                     base_skill_specs,
                     monster_level,
+                    AffixEffectScope::Local,
                 ))
                     .into();
                 skills_updater::update_skill_specs(
                     statuses_store,
-                    "".to_string(),
+                    skills_updater::init_skill_specs(
+                        "monster".to_string(),
+                        base_skill_specs,
+                        &effects,
+                    ),
                     base_skill_specs,
                     1,
                     &effects,
