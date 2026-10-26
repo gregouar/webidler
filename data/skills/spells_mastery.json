@@ -336,7 +336,11 @@
           {
             "value"        : 10,
             "upgrade_value": 10,
-            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "spark"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
           }
         ]
       }
