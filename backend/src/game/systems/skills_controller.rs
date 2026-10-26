@@ -8,7 +8,6 @@ use shared::{
     data::{
         character::{CharacterId, MarbleBags},
         item::{SkillRange, SkillShape},
-        modifier::BaseModifiableValue,
         player::{PlayerBaseSkill, PlayerResources},
         rng::MarbleRollType,
         skill::{
@@ -553,14 +552,10 @@ fn apply_skill_effect_on_target(
                             damage_type: *damage_type,
                         })
                         .or_default();
-                    let mut amount = (*value).roll_with_marble_rolls(seed, damage_marble_bag);
-                    let crit_factor = if is_crit {
-                        1.0 + **crit_damage * 0.01
-                    } else {
-                        1.0
-                    };
-                    amount.base_mut(|base| base.multiply_value(crit_factor));
-                    (*damage_type, amount)
+                    (
+                        *damage_type,
+                        (*value).roll_with_marble_rolls(seed, damage_marble_bag),
+                    )
                 })
                 .collect();
 
