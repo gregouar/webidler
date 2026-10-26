@@ -40,6 +40,9 @@ pub async fn resolve_events(
     let events = events_queue.consume_events();
     for event in events.iter() {
         match event {
+            GameEvent::Tick { tick_number } => {
+                handle_tick_event(&mut trigger_contexts, game_data, *tick_number)
+            }
             GameEvent::Hit(hit_event) => {
                 handle_hit_event(&mut trigger_contexts, game_data, master_store, hit_event)
             }
@@ -74,6 +77,52 @@ pub async fn resolve_events(
         game_data,
         trigger_contexts,
     );
+}
+
+fn handle_tick_event<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &mut GameInstanceData,
+    tick_number: usize,
+) {
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
+
+    for (character_id, character_specs) in characters {
+        for (trigger, owned_triggers) in character_specs.triggers.iter() {
+            let tick_trigger = match trigger {
+                EventTrigger::OnTick(t) => t,
+                _ => continue,
+            };
+
+            if !tick_number.is_multiple_of(tick_trigger.tick_interval) {
+                continue;
+            }
+
+            trigger_contexts.extend(owned_triggers.iter().cloned().map(|owned_trigger| {
+                TriggerContext {
+                    owned_trigger,
+                    source: character_id,
+                    target: character_id,
+                    hit_context: None,
+                    status_context: None,
+                    restore_context: None,
+                    level: 0,
+                    trigger_depth: 0,
+                }
+            }));
+        }
+    }
 }
 
 fn handle_hit_event<'a>(

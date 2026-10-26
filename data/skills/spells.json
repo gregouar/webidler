@@ -82,6 +82,32 @@
       }
     ]
   },
+  "spark"          : {
+    "name"           : "Spark",
+    "description"    : "Imbue yourself with electricity to electrocute a random foe on a regular basis.",
+    "icon"           : "skills/spark.svg",
+    "skill_type"     : "Spell",
+    "cooldown"       : 3,
+    "mana_cost"      : 5,
+    "upgrade_cost"   : 50,
+    "upgrade_effects": [
+      {
+        "stat"    : { "Damage": {"skill_id": "spark"} },
+        "modifier": "More",
+        "scope"   : "Global",
+        "value"   : 30
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
+    ],
+    "targets"        : [
+      {
+        "target_type": "Me",
+        "effects"    : [
+          { "ApplyStatus": {"status_id": "spark", "value": 1} }
+        ]
+      }
+    ]
+  },
   "fireball"       : {
     "name"           : "Fireball",
     "description"    : "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",

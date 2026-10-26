@@ -1,4 +1,56 @@
 {
+    "spark": {
+        "name"      : "Sparking",
+        "icon"      : "skills/spark.svg",
+        "debuff"    : false,
+        "duration"  : 3,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_owner_effects" : true,
+                    "inherit_source_effects": false,
+                    "trigger_id"            : "spark",
+                    "target"                : "Enemy",
+                    "skill_type"            : "Spell",
+                    "skill_repeat"          : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
+                    "OnTick"                : {"tick_interval": 3},
+                    "effects"               : [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Storm": [0, 3] }
+                            }
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark"} },
+                            "modifier": "Flat",
+                            "factor"  : 1,
+                            "source"  : { "TriggerStatusStack": {"ignore_initial": true} },
+                            "hidden"  : true
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "spark_crit_vuln": {
+        "name"      : "Critical Accumulation",
+        "icon"      : "skills/spark.svg",
+        "debuff"    : true,
+        "duration"  : 1,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"CritDamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
     "righteous_fire": {
         "name"       : "Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",

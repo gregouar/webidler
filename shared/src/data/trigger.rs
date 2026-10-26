@@ -96,6 +96,7 @@ pub enum EventTrigger {
     OnApplyStatus(StatusTrigger),
     OnReceiveStatus(StatusTrigger),
     OnRestored(RestoreTrigger),
+    OnTick(TickTrigger),
 }
 
 // TODO: replace by simple tag system?
@@ -150,6 +151,11 @@ pub struct RestoreTrigger {
     pub is_triggered: Option<bool>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
+pub struct TickTrigger {
+    pub tick_interval: usize,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerEffect {
     pub trigger_id: String,
@@ -178,6 +184,8 @@ pub struct TriggerEffectModifier {
     pub modifier: Modifier,
     pub factor: f64,
     pub source: TriggerEffectModifierSource,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -206,6 +214,10 @@ pub enum TriggerEffectModifierSource {
     },
     TriggerStatusDuration,
     TriggerStatusValue,
+    TriggerStatusStack {
+        #[serde(default)]
+        ignore_initial: bool,
+    },
     HitCrit,
     HitCritDamage,
     RestoreValue,

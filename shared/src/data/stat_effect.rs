@@ -188,6 +188,10 @@ pub enum StatType {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
+    CritDamageTaken {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
     Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
     Evade(#[serde(default)] Option<DamageType>),
@@ -367,6 +371,12 @@ impl Matchable for StatType {
                 compare_options(skill_type, skill_type_2)
                     && compare_options(damage_type, damage_type_2)
             }
+            (
+                CritDamageTaken { skill_type },
+                CritDamageTaken {
+                    skill_type: skill_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2),
             (
                 Lucky {
                     skill_filter,

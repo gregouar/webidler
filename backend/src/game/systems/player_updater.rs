@@ -15,7 +15,7 @@ use shared::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
         skill_mastery::PlayerSkillMasteries,
-        stat_effect::{StatConverterSource, StatConverterSpecs, StatEffect, StatType},
+        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
         values::{AtLeastOne, NonNegative},
     },
@@ -217,7 +217,7 @@ fn compute_player_specs(
     player_base_specs: &PlayerBaseSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
-    effects: Vec<StatEffect>,
+    mut effects: Vec<StatEffect>,
 ) -> PlayerSpecs {
     let mut player_specs = PlayerSpecs::init(player_base_specs);
 
@@ -245,6 +245,38 @@ fn compute_player_specs(
         .or_default()
         .value
         .apply_modifier(total_block as f64, Modifier::Flat);
+
+    let skills_specs: Vec<_> = player_base_specs
+        .skills_in_use
+        .iter()
+        .flat_map(|skill_id| {
+            player_base_specs
+                .skills
+                .get(skill_id)
+                .map(|player_base_skill| {
+                    (
+                        player_base_skill,
+                        skills_updater::init_skill_specs(
+                            skill_id.to_string(),
+                            &player_base_skill.base_skill_specs,
+                            &effects,
+                        ),
+                    )
+                })
+        })
+        .collect();
+
+    effects.extend(EffectsMap::combine_all(skills_specs.iter().map(
+        |(player_base_skill, skill_specs)| {
+            skills_updater::compute_skill_upgrade_effects(
+                &player_base_skill.base_skill_specs,
+                player_base_skill
+                    .upgrade_level
+                    .saturating_add(skill_specs.level_modifier),
+                AffixEffectScope::Global,
+            )
+        },
+    )));
 
     player_specs.character_specs = characters_updater::update_character_specs(
         statuses_store,
@@ -316,27 +348,25 @@ fn compute_player_specs(
         );
     }
 
-    player_specs.character_specs.skills_specs = player_base_specs
-        .skills_in_use
-        .iter()
-        .flat_map(|skill_id| {
-            player_base_specs
-                .skills
-                .get(skill_id)
-                .map(|player_base_skill| {
-                    skills_updater::update_skill_specs(
-                        statuses_store,
-                        skill_id.to_string(),
-                        &player_base_skill.base_skill_specs,
-                        player_base_skill.upgrade_level,
-                        effects,
-                        &player_specs.character_specs.character_attrs,
-                        Some(player_inventory),
-                        skill_masteries_store
-                            .get(skill_id)
-                            .zip(player_base_specs.skill_masteries.masteries.get(skill_id)),
-                    )
-                })
+    player_specs.character_specs.skills_specs = skills_specs
+        .into_iter()
+        .map(|(player_base_skill, skill_specs)| {
+            let skill_mastery = skill_masteries_store.get(&skill_specs.skill_id).zip(
+                player_base_specs
+                    .skill_masteries
+                    .masteries
+                    .get(&skill_specs.skill_id),
+            );
+            skills_updater::update_skill_specs(
+                statuses_store,
+                skill_specs,
+                &player_base_skill.base_skill_specs,
+                player_base_skill.upgrade_level,
+                effects,
+                &player_specs.character_specs.character_attrs,
+                Some(player_inventory),
+                skill_mastery,
+            )
         })
         .collect();
 
@@ -395,6 +425,7 @@ fn modify_player_specs(
             | StatType::Evade(_)
             | StatType::EvadeDamageTaken
             | StatType::DamageTaken { .. }
+            | StatType::CritDamageTaken { .. }
             | StatType::StatusResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:

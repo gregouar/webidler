@@ -80,6 +80,7 @@ fn update_status(
                 )]),
                 status_state.skill_type,
                 *armor_penetration,
+                None,
             );
         }
     }

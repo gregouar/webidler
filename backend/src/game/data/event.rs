@@ -23,6 +23,9 @@ pub enum GameEvent {
     ThreatIncreased(ThreatLevel),
     StatusApplied(StatusEvent),
     Restored(RestoreEvent), // MaximumLife(CharacterId),
+    Tick {
+        tick_number: usize,
+    },
 }
 
 #[derive(Debug, Clone)]

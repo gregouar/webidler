@@ -80,7 +80,16 @@ pub fn attack_character(
             .collect(),
         skill_type,
         armor_penetration,
+        crit_damage,
     ) > 0.0;
+
+    // Correct damage amount by crit factor for event registering
+    if let Some(crit_damage) = crit_damage {
+        let crit_factor = 1.0 + crit_damage * 0.01;
+        for amount in damage.values_mut() {
+            amount.base_mut(|base| base.multiply_value(crit_factor));
+        }
+    }
 
     if is_hurt {
         target_state.just_hurt = true;
@@ -114,6 +123,7 @@ pub fn damage_character(
     damage: &HashMap<DamageType, NonNegative>,
     skill_type: SkillType,
     armor_penetration: Percent,
+    crit_damage: Option<f64>,
 ) -> f64 {
     let amount = damage
         .iter()
@@ -124,6 +134,7 @@ pub fn damage_character(
                 *damage_type,
                 skill_type,
                 armor_penetration,
+                crit_damage,
             )
             .get()
         })
@@ -150,6 +161,7 @@ fn compute_damage(
     damage_type: DamageType,
     skill_type: SkillType,
     armor_penetration: Percent,
+    crit_damage: Option<f64>,
 ) -> NonNegative {
     let damage_taken = character_attrs
         .damage_taken
@@ -169,7 +181,19 @@ fn compute_damage(
         ) * (1.0 - armor_penetration.get() as f64 * 0.01))
         .max(0.0);
 
-    (damage_taken * armor_factor * amount.get()).into()
+    let crit_factor = crit_damage
+        .map(|crit_damage| {
+            let crit_damage_taken = character_attrs
+                .crit_damage_taken
+                .get(&skill_type)
+                .map(|value| **value)
+                .unwrap_or(100.0);
+
+            1.0 + (crit_damage * crit_damage_taken * 0.0001).max(0.0)
+        })
+        .unwrap_or(1.0);
+
+    (damage_taken * armor_factor * crit_factor * amount.get()).into()
 }
 
 #[allow(clippy::too_many_arguments)]

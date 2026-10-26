@@ -221,6 +221,7 @@ pub fn apply_trigger_effects(
                         .unwrap_or_default(),
                     TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
                     TriggerEffectModifierSource::TriggerStatusValue => 0.0,
+                    TriggerEffectModifierSource::TriggerStatusStack { .. } => 0.0,
                 };
 
                 modifier_effects.push(StatEffect {

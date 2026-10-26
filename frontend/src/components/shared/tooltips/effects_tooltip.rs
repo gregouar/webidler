@@ -645,6 +645,9 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type_str(*damage_type),
             skill_type_str(*skill_type)
         ),
+        StatType::CritDamageTaken { skill_type } => {
+            format!("{}Critical Hit Damage Taken", skill_type_str(*skill_type))
+        }
         StatType::ThreatGain => "Threat Gain".into(),
         StatType::Lucky {
             skill_filter,
@@ -994,6 +997,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type)
             )
         }
+        StatType::CritDamageTaken { skill_type } => format!(
+            "{} extra {}Critical Hit Damage Taken",
+            format_flat_number(value, false),
+            skill_type_str(*skill_type)
+        ),
         StatType::Lucky {
             skill_filter,
             roll_type,
