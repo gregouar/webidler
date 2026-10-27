@@ -27,7 +27,7 @@
         "affix_type"  : "Soul",
         "tier"        : 10,
         "weight"      : 100,
-        "restrictions": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon2H"],
+        "restrictions": ["MeleeWeapon2H"],
         "item_level"  : 600,
         "effects"     : [
             {
@@ -55,6 +55,49 @@
                 "modifier"      : "More",
                 "scope"         : "Global",
                 "value"         : -1e300,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Armored",
+        "family"      : "remnant_affix",
+        "tags"        : ["Armor", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Amulet", "Shield"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"Armor": null},
+                "modifier"      : "More",
+                "scope"         : "Global",
+                "value"         : [20, 30],
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Flickering",
+        "family"      : "remnant_affix",
+        "tags"        : ["Attack", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["MeleeWeapon1H"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {
+                    "SkillTargetModifier": {
+                        "skill_id": "weapon_skill",
+                        "repeat"  : {"min_value": 2, "max_value": 3, "target": "Any"}
+                    }
+                },
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 1,
                 "ignore_quality": true
             }
         ]

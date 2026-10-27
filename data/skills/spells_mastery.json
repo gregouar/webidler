@@ -1314,7 +1314,7 @@
       },
       "low_life_use"  : {
         "title"       : "Survival Instinct",
-        "base_cost"   : 5,
+        "base_cost"   : 2,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
