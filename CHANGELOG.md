@@ -13,6 +13,7 @@ Content:
 
 - New Areas: Grim Frontier and Eldritch Depths.
 - New Skill: Taunt, which partially refresh Enemy Skill Cooldowns at the cost of taking more damage.
+- New Skill: Spark, imbue yourself with electricity to repeatedly shock enemies.
 
 Balance Changes:
 
