@@ -93,7 +93,15 @@ pub fn attack_character(
 
     if is_hurt {
         target_state.just_hurt = true;
-        if crit_damage.is_some() {
+        if crit_damage.is_some()
+            && target_specs
+                .character_attrs
+                .crit_damage_taken
+                .get(&skill_type)
+                .map(|value| **value)
+                .unwrap_or(100.0)
+                > 0.0
+        {
             target_state.just_hurt_crit = true;
         }
     }

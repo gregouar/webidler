@@ -408,7 +408,7 @@
               "OnHit"     : { "skill_ids": ["spark"], "is_hurt": true },
               "target"    : "SameTarget",
               "effects"   : [
-                { "ApplyStatus": {"status_id": "spark_crit_vuln", "value": 30} }
+                { "ApplyStatus": {"status_id": "spark_crit_vuln", "value": 20} }
               ]
             }
           },
