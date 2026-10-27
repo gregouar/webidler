@@ -25,7 +25,20 @@
         {"item_id": "rune_root",               "weight":  10240, "min_area_level": 590},
         {"item_id": "rune_armor",              "weight":   5120                       },
         {"item_id": "rune_divine",             "weight":   5120                       },
+        {"item_id": "cloak_remnant",           "weight":  10240                       },
+        {"item_id": "helmet_remnant",          "weight":  10240                       },
+        {"item_id": "amulet_remnant",          "weight":  10240                       },
+        {"item_id": "melee_weapon_1h_remnant", "weight":  10240                       },
+        {"item_id": "melee_weapon_2h_remnant", "weight":  10240                       },
+        {"item_id": "ranged_weapon_remnant",   "weight":  10240                       },
+        {"item_id": "spell_weapon_remnant",    "weight":  10240                       },
+        {"item_id": "body_remnant",            "weight":  10240                       },
+        {"item_id": "shield_remnant",          "weight":  10240                       },
+        {"item_id": "focus_remnant",           "weight":  10240                       },
+        {"item_id": "gloves_remnant",          "weight":  10240                       },
         {"item_id": "boots_remnant",           "weight":  10240                       },
-        {"item_id": "melee_weapon_2h_remnant", "weight":  10240                       }
+        {"item_id": "ring_remnant",            "weight":  10240                       },
+        {"item_id": "rune_remnant",            "weight":  10240                       },
+        {"item_id": "map_remnant",             "weight":  10240                       }
     ]
 }

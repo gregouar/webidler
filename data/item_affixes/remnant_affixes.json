@@ -36,6 +36,26 @@
                 "scope"         : "Local",
                 "value"         : 1,
                 "ignore_quality": true
+            },
+            { "stat": {"Damage": {}}, "modifier": "More", "scope": "Local", "value": -43, "ignore_quality": true }
+        ]
+    },
+    {
+        "name"        : "Unwavering",
+        "family"      : "remnant_affix",
+        "tags"        : ["Armor", "Critical", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Helmet", "Body"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"CritDamageTaken": {}},
+                "modifier"      : "More",
+                "scope"         : "Global",
+                "value"         : -1e300,
+                "ignore_quality": true
             }
         ]
     }

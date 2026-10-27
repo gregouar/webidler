@@ -269,10 +269,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                             <div class="relative w-3xl min-w-0">
                                                 <div class="absolute inset-0 flex flex-col gap-2 xl:gap-4">
                                                     <NewsPanel />
-                                                    <ChatPanel
-                                                        pinnable=true
-                                                        pin_label="Pin chat below news"
-                                                    />
+                                                    <ChatPanel pinnable=true pin_label="Pin chat below news" />
                                                 </div>
                                             </div>
                                             <CharactersSelection
@@ -536,9 +533,11 @@ fn CharacterSlot(
                 </div>
 
                 <div class="xl:space-y-1 overflow-x-hidden text-left pr-10">
-                    <div class="text-lg font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
+                    <div>
                         <ALink underline=false href=format!("/view-character/{}", character.name)>
-                            {character.name.clone()}
+                            <span class="text-lg font-semibold text-shadow-lg/100 shadow-gray-950 text-amber-300 truncate font-display">
+                                {character.name.clone()}
+                            </span>
                         </ALink>
                     </div>
 
@@ -574,7 +573,7 @@ fn CharacterSlot(
                         }}
                     </div>
 
-                    <div class="text-sm text-zinc-400 truncate">
+                    <div class="text-sm text-zinc-300 truncate">
                         {if character.max_area_level > 0 {
                             format!("Power Level: {}", character.max_area_level)
                         } else {
@@ -582,7 +581,7 @@ fn CharacterSlot(
                         }}
                     </div>
 
-                    <div class="text-sm text-zinc-400 truncate">
+                    <div class="text-sm text-zinc-300 truncate">
                         {match character.activity {
                             UserCharacterActivity::Rusting => view! { "Rusting in Town" }.into_any(),
                             UserCharacterActivity::Grinding(area_id, area_level) => {

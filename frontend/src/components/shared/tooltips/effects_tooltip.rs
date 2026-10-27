@@ -474,6 +474,13 @@ pub fn modifier_str(modifier: Modifier) -> &'static str {
 }
 
 pub fn format_multiplier_stat(effect: &StatEffect) -> String {
+    if let StatType::CritDamageTaken { skill_type } = effect.stat
+        && effect.modifier == Modifier::More
+        && effect.value < -1e200
+    {
+        return format!("Immune to {}Critical Hits", skill_type_str(skill_type));
+    }
+
     format!(
         "{} {}",
         format_effect_value(effect),
