@@ -92,6 +92,7 @@
                 "stat"          : {
                     "SkillTargetModifier": {
                         "skill_id": "weapon_skill",
+                        "range"   : "Any",
                         "repeat"  : {"min_value": 2, "max_value": 3, "target": "Any"}
                     }
                 },
