@@ -27,8 +27,8 @@ use crate::{
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
         systems::{
-            benedictions_controller, inventory_controller, player_controller::PlayerController,
-            player_updater, skill_masteries_controller,
+            benedictions_controller, inventory_controller, passives_controller,
+            player_controller::PlayerController, player_updater, skill_masteries_controller,
         },
     },
     rest::AppError,
@@ -192,15 +192,20 @@ async fn new_game_instance(
     .clamp(0.0, (MAX_SKILL_SLOTS - DEFAULT_SKILL_SLOTS) as f64) as u8;
     let max_skills = DEFAULT_SKILL_SLOTS + extra_skill_slots;
 
+    let mut effects: Vec<_> = benedictions_controller::generate_effects_map_from_benedictions(
+        &master_store.benedictions_store,
+        &player_benedictions,
+    )
+    .into();
+    effects.extend(passives_controller::generate_allocated_sockets_effects(
+        &passives_tree_state.ascension,
+    ));
+
     let player_base_specs = player_updater::init_player_base_specs(
         character.character_name,
         character.portrait,
         character.max_area_level as AreaLevel,
-        benedictions_controller::generate_effects_map_from_benedictions(
-            &master_store.benedictions_store,
-            &player_benedictions,
-        )
-        .into(),
+        effects,
         player_skill_masteries,
         max_skills,
     );

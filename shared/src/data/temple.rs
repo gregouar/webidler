@@ -30,7 +30,7 @@ pub struct BenedictionSpecs {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub enum BenedictionEffect {
-    StartingGold,
+    StartingGold, // TODO: Remove?
     StartingLevel,
     SkillSlots,
     StatEffect { stat: StatType, modifier: Modifier },

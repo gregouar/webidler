@@ -1349,6 +1349,9 @@ fn format_status_power(
 
 fn format_passive_str(passive_id: &PassiveNodeId) -> String {
     let data_context: DataContext = expect_context();
+    if passive_id.is_nil() {
+        return "Socketed".to_string();
+    }
     data_context
         .passives_tree_specs
         .read_untracked()

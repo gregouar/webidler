@@ -176,6 +176,7 @@ impl StatStatusFilter {
 pub enum StatType {
     Description(String),
     MaxPlayerLevel,
+    AllocatePassive(PassiveNodeId),
     RemoveSlotUse(ItemSlot),
     GemsFind,
     ItemRarity,
@@ -330,7 +331,6 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
     },
-    AllocatePassive(PassiveNodeId),
     GoldFind,
     PowerLevel,
     Description2(String),

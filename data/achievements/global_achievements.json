@@ -34,8 +34,8 @@
     "power_level_900"        : {
         "icon"       : "achievements/trophy.svg",
         "name"       : "True Player",
-        "description": "Reach Power Level 900.",
-        "goals"      : [ {"PowerLevel": 900} ],
+        "description": "Reach Power Level 1000.",
+        "goals"      : [ {"PowerLevel": 1000} ],
         "rewards"    : [ {"Cosmetic": "title_true_player"} ]
     },
     "max_skill_level"        : {
@@ -80,7 +80,7 @@
     "all_runes"              : {
         "icon"       : "achievements/rune_stone.svg",
         "name"       : "Rune you Fool",
-        "description": "Equip a Rune in every Socket.",
+        "description": "Equip a Rune in 8 different Sockets.",
         "goals"      : [
             { "EquippedItem": {"item_category": "Rune", "in_passives_tree": true, "amount": 8} }
         ],
@@ -89,7 +89,7 @@
     "all_unique_runes"       : {
         "icon"       : "achievements/rune_stone.svg",
         "name"       : "Runes Connoisseur",
-        "description": "Equip a Unique Rune in every Socket.",
+        "description": "Equip a Unique Rune in 8 different Sockets.",
         "goals"      : [
             {
                 "EquippedItem": {

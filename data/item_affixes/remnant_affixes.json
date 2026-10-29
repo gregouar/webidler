@@ -102,5 +102,44 @@
                 "ignore_quality": true
             }
         ]
+    },
+    {
+        "name"        : "Innate",
+        "family"      : "remnant_affix",
+        "tags"        : ["Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Rune"],
+        "item_level"  : 600,
+        "effects"     : [
+            {"stat": "MaxPlayerLevel", "modifier": "Flat", "scope": "Global", "value": -1, "ignore_quality": true},
+            {
+                "stat"          : {"AllocatePassive": "00000000-0000-0000-0000-000000000000"},
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Sharding",
+        "family"      : "remnant_affix",
+        "tags"        : ["Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Map"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"Description": "Unlock Power Shards up to 150 extra Area Levels"},
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
     }
 ]
