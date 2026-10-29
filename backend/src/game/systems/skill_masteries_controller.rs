@@ -59,6 +59,8 @@ pub async fn update_skill_mastery_upgrades(
             .await?
             .unwrap_or_default();
 
+    sanitize_skill_masteries(&master_store.skill_masteries_store, &mut skill_masteries);
+
     let skill_mastery = skill_masteries
         .masteries
         .get_mut(skill_id)

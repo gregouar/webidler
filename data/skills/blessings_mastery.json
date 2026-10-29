@@ -249,7 +249,7 @@
     "blessing_heal"      : {
         "max_level": 100,
         "upgrades" : {
-            "power"            : {
+            "power"         : {
                 "title"       : "Blessing Effects",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -265,7 +265,7 @@
                     }
                 ]
             },
-            "duration"         : {
+            "duration"      : {
                 "title"       : "Duration",
                 "base_cost"   : 1,
                 "upgrade_cost": 1,
@@ -281,19 +281,25 @@
                     }
                 ]
             },
-            "damage"           : {
+            "damage"        : {
                 "title"       : "Renewed Vigor",
-                "base_cost"   : 10,
-                "upgrade_cost": 10,
-                "max_level"   : 5,
+                "base_cost"   : 20,
+                "upgrade_cost": 0,
+                "max_level"   : 1,
                 "effects"     : [
                     {
                         "value"        : 10,
-                        "upgrade_value": 10,
+                        "upgrade_value":  0,
                         "StatEffect"   : {
                             "stat"    : {
                                 "StatConditionalModifier": {
-                                    "stat": {"Damage": {}},
+                                    "stat"      : {
+                                        "StatConverter": {
+                                            "stat"    : {"Damage": {}},
+                                            "source"  : "LifeRegen",
+                                            "is_extra": true
+                                        }
+                                    },
                                     "conditions": [
                                         { "HasStatus": {"status_id": "blessing_heal"} }
                                     ]
@@ -305,17 +311,19 @@
                     }
                 ]
             },
-            "poison_resistance": {
+            "low_life_regen": {
                 "title"       : "Fortitude",
-                "base_cost"   : 10,
+                "base_cost"   : 20,
                 "upgrade_cost": 0,
                 "max_level"   : 1,
                 "effects"     : [
                     {
-                        "value"        : -100,
-                        "upgrade_value":    0,
+                        "value"        : 50,
+                        "upgrade_value":  0,
                         "StatEffect"   : {
-                            "stat"    : { "DamageTaken": {"damage_type": "Poison"} },
+                            "stat"    : {
+                                "StatConditionalModifier": { "conditions": ["LowLife"], "stat": "LifeRegen" }
+                            },
                             "modifier": "More",
                             "scope"   : "Global"
                         }

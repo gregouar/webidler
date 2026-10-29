@@ -3,8 +3,8 @@
         "name"      : "Sparking",
         "icon"      : "skills/spark.svg",
         "debuff"    : false,
-        "duration"  : 3,
-        "max_stacks": 10,
+        "duration"  : 2,
+        "max_stacks": 5,
         "effects"   : [
             {
                 "Trigger" : {
@@ -139,6 +139,34 @@
                     "debuff"  : false
                 },
                 "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "heal_buff_damage": {
+        "name"      : "Refreshed",
+        "icon"      : "statuses/heal_refresh.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 50.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "heal_debuff_damage": {
+        "name"      : "Cleansed",
+        "icon"      : "statuses/heal_cleanse.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
                 "modifier"    : "Percent"
             }
         ]

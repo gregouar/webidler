@@ -381,7 +381,7 @@
         "title"       : "Capacitance",
         "base_cost"   : 2,
         "upgrade_cost": 2,
-        "max_level"   : 20,
+        "max_level"   : 10,
         "effects"     : [
           {
             "value"        : 1,
@@ -1325,16 +1325,24 @@
           }
         ]
       },
-      "mana_cost"     : {
-        "title"       : "Efficiency",
-        "base_cost"   : 2,
-        "upgrade_cost": 2,
-        "max_level"   : 10,
+      "heal_faster"   : {
+        "title"       : "Fast Healing",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : -1,
-            "upgrade_value": -1,
-            "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "Flat" }
+            "value"        : 6,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
+          },
+          {
+            "value"        : -300,
+            "upgrade_value":    0,
+            "StatEffect"   : {
+              "stat"    : { "Restore": {"restore_type": "Life"} },
+              "modifier": "More"
+            }
           }
         ]
       },
@@ -1351,6 +1359,28 @@
               "RefreshStatus"          : {"debuff": false, "value": 100, "modifier": "Percent"},
               "independent_application": true
             }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus": {"status_id": "heal_buff_damage", "value": 0},
+              "conditional_modifiers"  : [
+                {
+                  "conditions": [
+                    { "StatusStacks": {"debuff": false} }
+                  ],
+                  "effects"   : [
+                    {
+                      "stat"    : { "StatusPower": {"status_id": "heal_buff_damage"} },
+                      "modifier": "Flat",
+                      "value"   : 5
+                    }
+                  ]
+                }
+              ],
+              "independent_application": true
+            }
           }
         ]
       },
@@ -1365,6 +1395,28 @@
             "upgrade_value": 0,
             "SkillEffect"  : {
               "RefreshStatus"          : {"debuff": true, "value": -100, "modifier": "Percent"},
+              "independent_application": true
+            }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus": {"status_id": "heal_debuff_damage", "value": 0},
+              "conditional_modifiers"  : [
+                {
+                  "conditions": [
+                    { "StatusStacks": {"debuff": true} }
+                  ],
+                  "effects"   : [
+                    {
+                      "stat"    : { "StatusPower": {"status_id": "heal_debuff_damage"} },
+                      "modifier": "Flat",
+                      "value"   : 20
+                    }
+                  ]
+                }
+              ],
               "independent_application": true
             }
           }

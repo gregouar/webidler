@@ -1251,7 +1251,7 @@ fn format_status_power(
 ) -> String {
     let data_context: DataContext = expect_context();
     if let Some(status_id) = &status_filter.status_id
-        && let Some(status_specs) = data_context.statuses_specs.read().get(status_id)
+        && let Some(status_specs) = data_context.statuses_specs.read_untracked().get(status_id)
     {
         let mut effects_str = Vec::new();
         let mut stop = false;
