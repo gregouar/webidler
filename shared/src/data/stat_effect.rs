@@ -175,6 +175,7 @@ impl StatStatusFilter {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
+    MaxPlayerLevel,
     RemoveSlotUse(ItemSlot),
     GemsFind,
     ItemRarity,

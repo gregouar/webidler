@@ -8,15 +8,6 @@
       "extra_skill_slots": {"value": 1, "effect": "SkillSlots", "upgrade_value": 1, "upgrade_modifier": "Flat"}
     }
   },
-  "quickstart" : {
-    "title"                : "Quickstart",
-    "price"                : 1e5,
-    "price_increase_factor": 1e5,
-    "max_upgrade_level"    : 60,
-    "benedictions"         : {
-      "starting_level": {"value": 1, "effect": "StartingLevel", "upgrade_value": 1, "upgrade_modifier": "Flat"}
-    }
-  },
   "attributes" : {
     "title"                : "Attributes",
     "price"                : 1e6,
@@ -32,6 +23,29 @@
       "mana_max": {
         "value"           : 5,
         "effect"          : { "StatEffect": {"stat": "Mana", "modifier": "Flat"} },
+        "upgrade_value"   : 1,
+        "upgrade_modifier": "Flat"
+      }
+    }
+  },
+  "quickstart" : {
+    "title"                : "Quickstart",
+    "price"                : 1e5,
+    "price_increase_factor": 1e5,
+    "max_upgrade_level"    : 50,
+    "benedictions"         : {
+      "starting_level": {"value": 1, "effect": "StartingLevel", "upgrade_value": 1, "upgrade_modifier": "Flat"}
+    }
+  },
+  "max_level"  : {
+    "title"                : "Overleveling",
+    "price"                : 1e70,
+    "max_upgrade_level"    : 5,
+    "price_increase_factor": 1e15,
+    "benedictions"         : {
+      "max_level": {
+        "value"           : 1,
+        "effect"          : { "StatEffect": {"stat": "MaxPlayerLevel", "modifier": "Flat"} },
         "upgrade_value"   : 1,
         "upgrade_modifier": "Flat"
       }

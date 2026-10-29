@@ -109,6 +109,7 @@ fn handle_client_message(
             for _ in 0..m.amount {
                 player_controller::level_up(
                     game_data.player_base_specs.mutate(),
+                    game_data.player_specs.read(),
                     &mut game_data.player_state,
                     game_data.player_resources.mutate(),
                 );

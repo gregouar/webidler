@@ -288,7 +288,7 @@
                 "max_level"   : 1,
                 "effects"     : [
                     {
-                        "value"        : 10,
+                        "value"        : 50,
                         "upgrade_value":  0,
                         "StatEffect"   : {
                             "stat"    : {

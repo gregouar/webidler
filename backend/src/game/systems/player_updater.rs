@@ -290,12 +290,14 @@ fn compute_player_specs(
     let effects = &player_specs.character_specs.effects;
 
     let ModifiablePlayerSpecs {
+        max_player_level,
         movement_cooldown,
         gold_find,
         threat_gain,
         restore_on_hit,
     } = modify_player_specs(
         ModifiablePlayerSpecs {
+            max_player_level: (player_base_specs.max_level as f64).into(),
             movement_cooldown: player_specs.movement_cooldown.into(),
             gold_find: player_specs.gold_find.into(),
             threat_gain: player_specs.threat_gain.into(),
@@ -304,6 +306,7 @@ fn compute_player_specs(
         effects,
     );
 
+    player_specs.max_level = (*max_player_level) as u8;
     player_specs.movement_cooldown = *movement_cooldown;
     player_specs.gold_find = *gold_find * *area_specs.gold_find * 0.01;
     player_specs.threat_gain = *threat_gain;
@@ -375,6 +378,7 @@ fn compute_player_specs(
 
 #[derive(Clone, Default)]
 pub struct ModifiablePlayerSpecs {
+    pub max_player_level: ModifiableValue<f64>,
     pub movement_cooldown: ModifiableValue<AtLeastOne>,
     pub gold_find: ModifiableValue<NonNegative>,
     pub threat_gain: ModifiableValue<NonNegative>,
@@ -388,6 +392,7 @@ fn modify_player_specs(
 ) -> ModifiablePlayerSpecs {
     for effect in effects.iter() {
         match effect.stat {
+            StatType::MaxPlayerLevel => modifiable_player_specs.max_player_level.apply_effect(effect),
             StatType::MovementSpeed => modifiable_player_specs
                 .movement_cooldown
                 .apply_negative_effect(effect),

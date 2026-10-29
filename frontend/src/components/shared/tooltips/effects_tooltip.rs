@@ -450,12 +450,37 @@ pub fn format_stat(effect: &StatEffect) -> String {
             true => "gained as",
             false => "converted to",
         };
+        let value = if let StatConverterSource::LifeRegen | StatConverterSource::ManaRegen =
+            stat_converter_specs.source
+        {
+            effect.value * 10.0
+        } else {
+            effect.value
+        };
         format!(
             "{}% of {} {extra_str} {}{}",
-            format_flat_number(Some(effect.value), false),
+            format_flat_number(Some(value), false),
             stat_converter_source_str(stat_converter_specs.source, stat_converter_specs.uncapped),
             modifier_str(effect.modifier),
             format_multiplier_stat_name(&stat_converter_specs.stat)
+        )
+    } else if let StatType::StatConditionalModifier {
+        stat,
+        conditions,
+        conditions_duration,
+    } = &effect.stat
+    {
+        format!(
+            "{} {}{}{}",
+            format_stat(&StatEffect {
+                stat: *stat.clone(),
+                modifier: effect.modifier,
+                value: effect.value,
+                bypass_ignore: effect.bypass_ignore
+            }),
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions, "when "),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
+            conditions_tooltip::format_conditions_duration(*conditions_duration),
         )
     } else {
         match effect.modifier {
@@ -491,6 +516,7 @@ pub fn format_multiplier_stat(effect: &StatEffect) -> String {
 
 pub fn format_multiplier_stat_name(stat: &StatType) -> String {
     match stat {
+        StatType::MaxPlayerLevel => "Maximum Player Level".to_string(),
         StatType::Life => "Maximum Life".to_string(),
         StatType::LifeRegen => "Life Regeneration".to_string(),
         StatType::Mana => "Maximum Mana".to_string(),
@@ -747,6 +773,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
+        StatType::MaxPlayerLevel => format!(
+            "{} Maximum Player Level",
+            format_adds_removes(value, false, "")
+        ),
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
             "{} Life Regeneration per second",

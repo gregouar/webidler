@@ -959,7 +959,7 @@ fn AscendNode(
             }
             PassivesTab::Build => {
                 if (derived_node_specs.read().locked && node_level.get() == 0)
-                    || (passives_tree_build.read().len() + 1 >= DEFAULT_MAX_LEVEL as usize)
+                    || (passives_tree_build.read().len() + 1 >= 75)
                 {
                     0
                 } else if derived_node_specs.read().root_node {

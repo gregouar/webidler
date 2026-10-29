@@ -231,11 +231,12 @@ pub fn reward_player(
 
 pub fn level_up(
     player_base_specs: &mut PlayerBaseSpecs,
+    player_specs: &PlayerSpecs,
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
     if player_resources.experience < player_base_specs.experience_needed
-        || player_base_specs.level >= player_base_specs.max_level
+        || player_base_specs.level >= player_specs.max_level
     {
         return false;
     }

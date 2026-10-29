@@ -41,6 +41,8 @@ pub struct PlayerBaseSpecs {
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
 
+    pub max_level: u8,
+
     pub movement_cooldown: AtLeastOne,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,

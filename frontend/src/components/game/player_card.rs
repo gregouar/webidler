@@ -164,23 +164,19 @@ pub fn PlayerCard() -> impl IntoView {
     let conn = expect_context::<WebsocketContext>();
     let level_progress = Memo::new(move |_| {
         game_context.player_base_specs.with(|player_base_specs| {
-            (
-                player_base_specs.level,
-                player_base_specs.max_level,
-                player_base_specs.experience_needed,
-            )
+            (player_base_specs.level, player_base_specs.experience_needed)
         })
     });
     let max_level = Memo::new(move |_| {
-        let (level, max_level, _) = level_progress.get();
-        level >= max_level
+        let (level, _) = level_progress.get();
+        level >= game_context.player_specs.read().max_level
     });
 
     let max_xp = Memo::new(move |_| {
         if max_level.get() {
             0.0
         } else {
-            level_progress.get().2
+            level_progress.get().1
         }
     });
     let xp = Memo::new(move |_| game_context.player_resources.read().experience);
@@ -213,7 +209,8 @@ pub fn PlayerCard() -> impl IntoView {
             game_context.player_resources.update(|player_resources| {
                 for _ in 0..amount {
                     if player_resources.experience < player_base_specs.experience_needed
-                        || player_base_specs.level >= player_base_specs.max_level
+                        || player_base_specs.level
+                            >= game_context.player_specs.read_untracked().max_level
                     {
                         break;
                     }
