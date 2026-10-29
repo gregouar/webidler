@@ -721,18 +721,30 @@ pub fn format_skill_effect(
                         skip = true;
                     }
 
-                    status_effects_str.map(|status_effects| {
-                        view! {
-                            <EffectLi>
-                                {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
-                                {format_duration_values(duration.0, duration.1)}
-                                {trigger_modifier_duration_str}{format_escalation(escalation)}
-                                {stacks_str}
-                            </EffectLi>
-                            <EffectLi>{status_effects}</EffectLi>
-                        }
-                    })
+                     view! {
+                         <EffectLi>
+                             {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
+                             {format_duration_values(duration.0, duration.1)}
+                             {trigger_modifier_duration_str}{format_escalation(escalation)}
+                             {stacks_str}
+                         </EffectLi>
+                         {status_effects_str
+                             .map(|status_effects| view! { <EffectLi>{status_effects}</EffectLi> })}
+                     }
                         .into_any()
+
+                    // status_effects_str.map(|status_effects| {
+                    //     view! {
+                    //         <EffectLi>
+                    //             {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
+                    //             {format_duration_values(duration.0, duration.1)}
+                    //             {trigger_modifier_duration_str}{format_escalation(escalation)}
+                    //             {stacks_str}
+                    //         </EffectLi>
+                    //         <EffectLi>{status_effects}</EffectLi>
+                    //     }
+                    // })
+                    //     .into_any()
                 }
                 None => view! { <EffectLi>{success_chance}"Apply "{status_name}" " {format_min_max(value)}</EffectLi> }
                 .into_any(),
@@ -872,7 +884,10 @@ pub fn format_skill_effect(
                 .map(|effect| effect.stat.clone()),
         )
     });
-    let conditional_modifiers = conditional_modifiers
+    let has_flat_conditional_modifiers = conditional_modifiers
+        .iter()
+        .any(|c| c.effects.iter().any(|e| e.modifier == Modifier::Flat));
+    let conditional_modifiers_str = conditional_modifiers
         .into_iter()
         .map(format_conditional_modifier)
         .collect::<Vec<_>>();
@@ -884,12 +899,12 @@ pub fn format_skill_effect(
     //     .map(format_ignored_stat)
     //     .collect();
 
-    if skip {
+    if skip && !has_flat_conditional_modifiers {
         None
     } else {
         Some(view! {
             {base_effects}
-            {conditional_modifiers}
+            {conditional_modifiers_str}
             {formatted_modifiers}
         })
     }

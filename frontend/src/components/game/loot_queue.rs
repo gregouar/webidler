@@ -423,8 +423,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if req_item_level
         .map(|req_item_level| !match rule_type {
-            FilterRuleType::Pickup => item_specs.required_level >= req_item_level,
-            FilterRuleType::Sell => item_specs.required_level <= req_item_level,
+            FilterRuleType::Pickup => item_specs.base.min_area_level >= req_item_level,
+            FilterRuleType::Sell => item_specs.base.min_area_level <= req_item_level,
         })
         .unwrap_or_default()
     {
