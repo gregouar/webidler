@@ -24,13 +24,14 @@ use crate::components::{
         TownContext,
         items_browser::{
             InventoryItemEligibility, InventoryItemGrid, ItemDetails, SelectedItem,
-            SelectedMarketItem,
+            SelectedMarketItem, inventory_grid_item,
         },
     },
     ui::{
         Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
+        checkbox::Checkbox,
         confirm::ConfirmContext,
         dropdown::SearchableDropdownMenu,
         menu_panel::MenuPanel,
@@ -116,7 +117,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             on:click=move |_| { switch_tab(ForgeTab::Affix) }
                             class:py-3
                         >
-                            <div class="mx-1">"Craft"</div>
+                            <div class="mx-1">"Forge"</div>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
@@ -175,10 +176,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                                     ForgeTab::Sacrifice => InventoryItemEligibility::Sacrifice,
                                     _ => InventoryItemEligibility::Any,
                                 };
-                                view! {
-                                    <InventoryItemGrid selected_item eligibility />
-                                }
-                                    .into_any()
+                                view! { <InventoryItemGrid selected_item eligibility /> }.into_any()
                             }
                             ForgeTab::Imbue => {
                                 let on_item_select = Callback::new(move |item: SelectedMarketItem| {
@@ -244,6 +242,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
     let town_context: TownContext = expect_context();
     let toaster: Toasts = expect_context();
     let confirm_context: ConfirmContext = expect_context();
+    let auto_confirm_destructive_actions = RwSignal::new(false);
 
     let user_gems = move || town_context.character.read().resource_gems;
 
@@ -297,6 +296,80 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
         }
     };
 
+    let perform_replace_affix = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move |affix_type| {
+            if let SelectedItem::InMarket(item) = selected_item.get() {
+                spawn_local(async move {
+                    let remove_response = match backend
+                        .forge_affix(&ForgeAffixRequest {
+                            character_id,
+                            item_index: item.index as u32,
+                            operation: ForgeAffixOperation::Remove,
+                        })
+                        .await
+                    {
+                        Ok(response) => response,
+                        Err(error) => {
+                            show_toast(
+                                toaster,
+                                format!("Failed to replace affix: {error}"),
+                                ToastVariant::Error,
+                            );
+                            return;
+                        }
+                    };
+
+                    match backend
+                        .forge_affix(&ForgeAffixRequest {
+                            character_id,
+                            item_index: item.index as u32,
+                            operation: ForgeAffixOperation::Add(affix_type),
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            let updated_item_specs =
+                                response.inventory.bag.get(item.index).cloned();
+
+                            if let Some(updated_item_specs) = updated_item_specs {
+                                selected_item.try_set(SelectedItem::InMarket(SelectedMarketItem {
+                                    item_specs: Arc::new(updated_item_specs),
+                                    ..item
+                                }));
+                            }
+
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.write().resource_gems = response.resource_gems;
+                        }
+                        Err(error) => {
+                            let updated_item_specs =
+                                remove_response.inventory.bag.get(item.index).cloned();
+
+                            if let Some(updated_item_specs) = updated_item_specs {
+                                selected_item.try_set(SelectedItem::InMarket(SelectedMarketItem {
+                                    item_specs: Arc::new(updated_item_specs),
+                                    ..item
+                                }));
+                            }
+
+                            town_context.inventory.set(remove_response.inventory);
+                            town_context.character.write().resource_gems =
+                                remove_response.resource_gems;
+                            show_toast(
+                                toaster,
+                                format!(
+                                    "Affix was removed, but adding its replacement failed: {error}"
+                                ),
+                                ToastVariant::Error,
+                            );
+                        }
+                    }
+                });
+            }
+        }
+    };
+
     let try_add_affix = {
         let confirm_context = confirm_context.clone();
         move |affix_type| {
@@ -319,10 +392,33 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
         let confirm_context = confirm_context.clone();
         move || {
             let do_remove_affix = Arc::new(move || do_affix_operation(ForgeAffixOperation::Remove));
-            (confirm_context.confirm)(
-                "Removing an affix is random and cannot be undone. Continue?".to_string(),
-                do_remove_affix.clone(),
-            );
+            if auto_confirm_destructive_actions.get_untracked() {
+                do_remove_affix();
+            } else {
+                (confirm_context.confirm)(
+                    "Removing an affix is random and cannot be undone. Continue?".to_string(),
+                    do_remove_affix,
+                );
+            }
+        }
+    };
+
+    let try_replace_affix = {
+        let confirm_context = confirm_context.clone();
+        move |affix_type| {
+            let do_replace_affix = Arc::new(move || perform_replace_affix(affix_type));
+            if auto_confirm_destructive_actions.get_untracked() {
+                do_replace_affix();
+            } else {
+                let message = if town_context.character.read_untracked().max_area_level
+                    < item_level()
+                {
+                    "Replacing an affix is random and cannot be undone. The new affix may make this item unusable for your character. Continue?"
+                } else {
+                    "Replacing an affix is random and cannot be undone. Continue?"
+                };
+                (confirm_context.confirm)(message.to_string(), do_replace_affix);
+            }
         }
     };
 
@@ -408,6 +504,44 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
         })
     };
 
+    let replace_price = move |affix_type| {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(item) => {
+                if item.item_specs.base.rarity == ItemRarity::Unique {
+                    return None;
+                }
+
+                let prefixes = item.item_specs.modifiers.count_affixes(AffixType::Prefix);
+                let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
+                let available = match affix_type {
+                    None => prefixes + suffixes > 0,
+                    Some(AffixType::Prefix) => prefixes > suffixes,
+                    Some(AffixType::Suffix) => suffixes > prefixes,
+                    _ => false,
+                };
+
+                if !available {
+                    return None;
+                }
+
+                let affixes_amount = prefixes + suffixes;
+                let remove_price = forge::affix_operation_price(
+                    ForgeAffixOperation::Remove,
+                    affixes_amount,
+                    &item.item_specs.base,
+                )?;
+                let add_price = forge::affix_operation_price(
+                    ForgeAffixOperation::Add(affix_type),
+                    affixes_amount.checked_sub(1)?,
+                    &item.item_specs.base,
+                )?;
+
+                Some(remove_price + add_price)
+            }
+            _ => None,
+        })
+    };
+
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
             <CardInsetTitle>"Forge Item"</CardInsetTitle>
@@ -420,97 +554,192 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
             </div>
 
             <div class="flex flex-col gap-1 xl:gap-2">
-                <MenuButton
-                    on:click={
-                        let try_add_affix = try_add_affix.clone();
-                        move |_| try_add_affix(None)
-                    }
-                    disabled=Signal::derive({
-                        move || affix_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                    class:mb-1
-                    class:xl:mb-2
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
-                        "Add random" <span class="text-white font-bold">"Affix"</span>
-                        {move || {
-                            affix_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButton>
-                <MenuButton
-                    on:click={
-                        let try_add_affix = try_add_affix.clone();
-                        move |_| try_add_affix(Some(AffixType::Prefix))
-                    }
-                    disabled=Signal::derive({
-                        move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
-                        "Add random" <span class="text-white font-bold">"Prefix"</span>
-                        {move || {
-                            prefix_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButton>
-                <MenuButton
-                    on:click=move |_| try_add_affix(Some(AffixType::Suffix))
-                    disabled=Signal::derive({
-                        move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
-                        "Add random" <span class="text-white font-bold">"Suffix"</span>
-                        {move || {
-                            suffix_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButton>
+                <div class="w-full flex justify-end">
+                    <Checkbox
+                        label="Auto confirm remove".to_string()
+                        checked=auto_confirm_destructive_actions
+                        on_change=move |checked| auto_confirm_destructive_actions.set(checked)
+                    />
+                </div>
+                <div class="flex gap-1 xl:gap-2 w-full mb-1 xl:mb-2">
+                    <MenuButton
+                        on:click={
+                            let try_add_affix = try_add_affix.clone();
+                            move |_| try_add_affix(None)
+                        }
+                        disabled=Signal::derive({
+                            move || affix_price().map(|price| price > user_gems()).unwrap_or(true)
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Add random" <span class="text-white font-bold">"Affix"</span>
+                            {move || {
+                                affix_price()
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButton>
+                    <MenuButtonRed
+                        on:click={
+                            let try_replace_affix = try_replace_affix.clone();
+                            move |_| try_replace_affix(None)
+                        }
+                        disabled=Signal::derive({
+                            move || {
+                                replace_price(None).map(|price| price > user_gems()).unwrap_or(true)
+                            }
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Replace random" <span class="text-white font-bold">"Affix"</span>
+                            {move || {
+                                replace_price(None)
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButtonRed>
+                </div>
+                <div class="flex gap-1 xl:gap-2 w-full">
+                    <MenuButton
+                        on:click={
+                            let try_add_affix = try_add_affix.clone();
+                            move |_| try_add_affix(Some(AffixType::Prefix))
+                        }
+                        disabled=Signal::derive({
+                            move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Add random" <span class="text-white font-bold">"Prefix"</span>
+                            {move || {
+                                prefix_price()
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButton>
+                    <MenuButtonRed
+                        on:click={
+                            let try_replace_affix = try_replace_affix.clone();
+                            move |_| try_replace_affix(Some(AffixType::Prefix))
+                        }
+                        disabled=Signal::derive({
+                            move || {
+                                replace_price(Some(AffixType::Prefix))
+                                    .map(|price| price > user_gems())
+                                    .unwrap_or(true)
+                            }
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Replace random" <span class="text-white font-bold">"Prefix"</span>
+                            {move || {
+                                replace_price(Some(AffixType::Prefix))
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButtonRed>
+                </div>
+                <div class="flex gap-1 xl:gap-2 w-full">
+                    <MenuButton
+                        on:click=move |_| try_add_affix(Some(AffixType::Suffix))
+                        disabled=Signal::derive({
+                            move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Add random" <span class="text-white font-bold">"Suffix"</span>
+                            {move || {
+                                suffix_price()
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButton>
+                    <MenuButtonRed
+                        on:click=move |_| try_replace_affix(Some(AffixType::Suffix))
+                        disabled=Signal::derive({
+                            move || {
+                                replace_price(Some(AffixType::Suffix))
+                                    .map(|price| price > user_gems())
+                                    .unwrap_or(true)
+                            }
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Replace random" <span class="text-white font-bold">"Suffix"</span>
+                            {move || {
+                                replace_price(Some(AffixType::Suffix))
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButtonRed>
+                </div>
 
-                <MenuButtonRed
-                    on:click=move |_| try_remove_affix()
-                    disabled=Signal::derive({
-                        move || remove_price().map(|price| price > user_gems()).unwrap_or(true)
-                    })
-                    class:mt-1
-                    class:xl:mt-2
-                >
-                    <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
-                        "Remove random" <span class="text-white font-bold">"Affix"</span>
-                        {move || {
-                            remove_price()
-                                .map(|price| {
-                                    view! {
-                                        "for "
-                                        <span class="text-fuchsia-300 font-bold">{price}</span>
-                                        <GemsIcon />
-                                    }
-                                })
-                        }}
-                    </div>
-                </MenuButtonRed>
+                <div class="grid grid-cols-2 gap-1 xl:gap-2 w-full mt-1 xl:mt-2">
+                    <div></div>
+                    <MenuButtonRed
+                        on:click=move |_| try_remove_affix()
+                        disabled=Signal::derive({
+                            move || remove_price().map(|price| price > user_gems()).unwrap_or(true)
+                        })
+                        class:w-full
+                    >
+                        <div class="w-full flex justify-center items-center gap-1 text-zinc-400 h-[2em]">
+                            "Remove random" <span class="text-white font-bold">"Affix"</span>
+                            {move || {
+                                remove_price()
+                                    .map(|price| {
+                                        view! {
+                                            "for "
+                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <GemsIcon />
+                                        }
+                                    })
+                            }}
+                        </div>
+                    </MenuButtonRed>
+                </div>
 
             </div>
         </div>
@@ -522,6 +751,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
     let toaster: Toasts = expect_context();
+    let discarding = RwSignal::new(false);
 
     let sacrifice_price = move || {
         selected_item.with(|selected| match selected {
@@ -537,6 +767,16 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
                 ))
             }
             _ => None,
+        })
+    };
+
+    let soul_selected = move || {
+        selected_item.with(|selected| {
+            matches!(
+                selected,
+                SelectedItem::InMarket(item)
+                    if item.item_specs.base.categories.contains(&ItemCategory::Soul)
+            )
         })
     };
 
@@ -576,6 +816,62 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
         }
     };
 
+    let do_discard = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move || {
+            if !discarding.get_untracked()
+                && let SelectedItem::InMarket(item) = selected_item.get()
+                && item
+                    .item_specs
+                    .base
+                    .categories
+                    .contains(&ItemCategory::Soul)
+            {
+                discarding.set(true);
+                spawn_local(async move {
+                    match backend
+                        .inventory_delete(&InventoryDeleteRequest {
+                            character_id,
+                            item_indexes: vec![item.index as u8],
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            // Removing an item compacts the bag, so the item that was directly to
+                            // its right now occupies the discarded item's index.
+                            let next_item = response
+                                .inventory
+                                .bag
+                                .get(item.index)
+                                .and_then(|next_item| {
+                                    inventory_grid_item(
+                                        next_item,
+                                        item.index,
+                                        InventoryItemEligibility::Any,
+                                    )
+                                })
+                                .map(SelectedItem::InMarket)
+                                .unwrap_or(SelectedItem::None);
+
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.update(|character| {
+                                character.resource_gold = response.resource_gold;
+                                character.resource_gems = response.resource_gems;
+                            });
+                            selected_item.set(next_item);
+                        }
+                        Err(error) => show_toast(
+                            toaster,
+                            format!("Failed to discard soul: {error}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                    discarding.set(false);
+                });
+            }
+        }
+    };
+
     // let try_sacrifice = move || {
     //     (confirm_context.confirm)(
     //         "Sacrificing destroys this item and extracts one random affix. Continue?".into(),
@@ -592,29 +888,41 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
                 </span>
             </CardInsetTitle>
             <ItemDetails selected_item show_affixes=true />
-            <MenuButton
-                on:click=move |_| do_sacrifice()
-                disabled=Signal::derive(move || {
-                    sacrifice_price()
-                        .is_none_or(|price| { price > town_context.character.read().resource_gems })
-                })
-            >
-                <div class="flex w-full items-center justify-center gap-1 text-zinc-400 h-[2em]">
-                    {move || {
-                        match sacrifice_price() {
-                            Some(price) => {
-                                view! {
-                                    "Sacrifice for "
-                                    <span class="font-bold text-fuchsia-300">{price}</span>
-                                    <GemsIcon />
+            <div class="flex gap-1 xl:gap-2 w-full">
+                <MenuButton
+                    on:click=move |_| do_sacrifice()
+                    disabled=Signal::derive(move || {
+                        sacrifice_price()
+                            .is_none_or(|price| {
+                                price > town_context.character.read().resource_gems
+                            })
+                    })
+                    class:w-full
+                >
+                    <div class="flex w-full items-center justify-center gap-1 text-zinc-400 h-[2em]">
+                        {move || {
+                            match sacrifice_price() {
+                                Some(price) => {
+                                    view! {
+                                        "Sacrifice for "
+                                        <span class="font-bold text-fuchsia-300">{price}</span>
+                                        <GemsIcon />
+                                    }
+                                        .into_any()
                                 }
-                                    .into_any()
+                                None => view! { "Sacrifice Item" }.into_any(),
                             }
-                            None => view! { "Sacrifice Item" }.into_any(),
-                        }
-                    }}
-                </div>
-            </MenuButton>
+                        }}
+                    </div>
+                </MenuButton>
+                <MenuButtonRed
+                    on:click=move |_| do_discard()
+                    disabled=Signal::derive(move || discarding.get() || !soul_selected())
+                    class:w-full
+                >
+                    "Discard"
+                </MenuButtonRed>
+            </div>
         </div>
     }
 }

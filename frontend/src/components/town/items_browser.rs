@@ -91,7 +91,7 @@ fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibilit
     }
 }
 
-fn inventory_grid_item(
+pub(super) fn inventory_grid_item(
     item: &ItemSpecs,
     bag_index: usize,
     eligibility: InventoryItemEligibility,
