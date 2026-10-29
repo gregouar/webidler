@@ -46,7 +46,7 @@ pub const REPEATED_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
     max_base: false,
     max_affixes: false,
     filter_category: None,
-    prevent_categories: &[ItemCategory::Rune],
+    prevent_categories: &[ItemCategory::Rune, ItemCategory::Remnant],
 };
 
 pub const MAP_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
