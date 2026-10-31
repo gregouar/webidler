@@ -4,6 +4,7 @@ use shared::data::{
     area::{AreaLevel, ThreatLevel},
     character::CharacterId,
     character_status::StatusId,
+    modifier::ModifiableValue,
     skill::{DamageType, RestoreType, SkillRange, SkillType},
     values::NonNegative,
 };
@@ -22,6 +23,9 @@ pub enum GameEvent {
     ThreatIncreased(ThreatLevel),
     StatusApplied(StatusEvent),
     Restored(RestoreEvent), // MaximumLife(CharacterId),
+    Tick {
+        tick_number: usize,
+    },
 }
 
 #[derive(Debug, Clone)]
@@ -38,7 +42,7 @@ pub struct HitEvent {
     pub is_blocked: bool,
     pub is_hurt: bool,
 
-    pub damage: HashMap<DamageType, NonNegative>,
+    pub damage: HashMap<DamageType, ModifiableValue<NonNegative>>,
 }
 #[derive(Debug, Clone)]
 pub struct StatusEvent {
@@ -54,8 +58,8 @@ pub struct StatusEvent {
     pub skill_type: SkillType,
 
     pub is_evaded: bool,
-    pub value: NonNegative,
-    pub duration: NonNegative,
+    pub value: ModifiableValue<NonNegative>,
+    pub duration: ModifiableValue<NonNegative>,
 }
 
 #[derive(Debug, Clone)]

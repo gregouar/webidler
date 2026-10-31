@@ -15,7 +15,7 @@ use shared::data::{
         SkillTargetsGroup, SkillType, TargetType,
     },
     stat_effect::{Matchable, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
-    trigger::{TriggerEffectModifier, TriggerSpecs},
+    trigger::{StatusTrigger, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
 use strum::IntoEnumIterator;
@@ -396,6 +396,7 @@ pub fn format_target(
                 // effects_map,
                 None,
                 None,
+                None,
             )
         })
         .collect::<Vec<_>>();
@@ -461,6 +462,7 @@ fn format_status_trigger_value(
         None,
         trigger_status_name,
         None,
+        None,
     )
     .map(|modifier_str| {
         view! {
@@ -505,6 +507,7 @@ pub fn format_skill_effect(
     // effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    triggering_status: Option<&StatusTrigger>,
 ) -> impl IntoView + use<> {
     if skill_effect.success_chance.value.get() <= 0.0 {
         return None;
@@ -577,6 +580,7 @@ pub fn format_skill_effect(
                         Some(damage_color),
                         trigger_status_name,
                         trigger_status_value,
+                        triggering_status,
                     );
                     let unblockable_str = unblockable.then_some("Unblockable ");
                     if value.max.get() > 0.0 || trigger_modifier_str.is_some() {
@@ -671,7 +675,9 @@ pub fn format_skill_effect(
                         "",
                         None,
                         None,
-                        trigger_status_name,trigger_status_value
+                        trigger_status_name,
+                        trigger_status_value,
+                        triggering_status,
                     );
                     let apply_str = if self_target {
                         "Gain"
@@ -715,18 +721,30 @@ pub fn format_skill_effect(
                         skip = true;
                     }
 
-                    status_effects_str.map(|status_effects| {
-                        view! {
-                            <EffectLi>
-                                {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
-                                {format_duration_values(duration.0, duration.1)}
-                                {trigger_modifier_duration_str}{format_escalation(escalation)}
-                                {stacks_str}
-                            </EffectLi>
-                            <EffectLi>{status_effects}</EffectLi>
-                        }
-                    })
+                     view! {
+                         <EffectLi>
+                             {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
+                             {format_duration_values(duration.0, duration.1)}
+                             {trigger_modifier_duration_str}{format_escalation(escalation)}
+                             {stacks_str}
+                         </EffectLi>
+                         {status_effects_str
+                             .map(|status_effects| view! { <EffectLi>{status_effects}</EffectLi> })}
+                     }
                         .into_any()
+
+                    // status_effects_str.map(|status_effects| {
+                    //     view! {
+                    //         <EffectLi>
+                    //             {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
+                    //             {format_duration_values(duration.0, duration.1)}
+                    //             {trigger_modifier_duration_str}{format_escalation(escalation)}
+                    //             {stacks_str}
+                    //         </EffectLi>
+                    //         <EffectLi>{status_effects}</EffectLi>
+                    //     }
+                    // })
+                    //     .into_any()
                 }
                 None => view! { <EffectLi>{success_chance}"Apply "{status_name}" " {format_min_max(value)}</EffectLi> }
                 .into_any(),
@@ -828,9 +846,8 @@ pub fn format_skill_effect(
             value,
             modifier,
         } => {
-            let value_str = (matches!(modifier, RestoreModifier::Percent)
-                && *value.max == 100.0
-                && *value.min == 100.0)
+            let value_str = (!(matches!(modifier, RestoreModifier::Percent)
+                && *value.min == 100.0))
                 .then(|| match modifier {
                     RestoreModifier::Percent => view! {
                         {format_min_max(value)}
@@ -838,8 +855,8 @@ pub fn format_skill_effect(
                     }
                     .into_any(),
                     RestoreModifier::Flat => view! {
-                        {format_duration(value)}
-                        "s from "
+                        {format_min_max(value)}
+                        " seconds from "
                     }
                     .into_any(),
                 });
@@ -867,7 +884,10 @@ pub fn format_skill_effect(
                 .map(|effect| effect.stat.clone()),
         )
     });
-    let conditional_modifiers = conditional_modifiers
+    let has_flat_conditional_modifiers = conditional_modifiers
+        .iter()
+        .any(|c| c.effects.iter().any(|e| e.modifier == Modifier::Flat));
+    let conditional_modifiers_str = conditional_modifiers
         .into_iter()
         .map(format_conditional_modifier)
         .collect::<Vec<_>>();
@@ -879,12 +899,12 @@ pub fn format_skill_effect(
     //     .map(format_ignored_stat)
     //     .collect();
 
-    if skip {
+    if skip && !has_flat_conditional_modifiers {
         None
     } else {
         Some(view! {
             {base_effects}
-            {conditional_modifiers}
+            {conditional_modifiers_str}
             {formatted_modifiers}
         })
     }
@@ -922,16 +942,16 @@ where
     format_min_max_f64(*value.min, *value.max)
 }
 
-fn format_duration<T>(value: ChanceRange<ModifiableValue<T>>) -> impl IntoView
-where
-    T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
-    T: Into<f64> + PartialEq,
-{
-    let min = (*value.min).into();
-    let max = (*value.max).into();
+// fn format_duration<T>(value: ChanceRange<ModifiableValue<T>>) -> impl IntoView
+// where
+//     T: std::ops::Add<Output = T> + BaseModifiableValue + Default + Copy,
+//     T: Into<f64> + PartialEq,
+// {
+//     let min = (*value.min).into();
+//     let max = (*value.max).into();
 
-    format_duration_values(min, max)
-}
+//     format_duration_values(min, max)
+// }
 
 fn format_duration_values(min: f64, max: f64) -> impl IntoView {
     let format_min_max = |min, max| {

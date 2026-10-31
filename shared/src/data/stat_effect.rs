@@ -8,8 +8,9 @@ use crate::{
         chance::ChanceRange,
         character_status::StatusId,
         conditional_modifier::Condition,
-        item::{SkillRange, SkillShape},
+        item::{ItemSlot, SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
+        passive::PassiveNodeId,
         skill::{RestoreModifier, RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
         values::NonNegative,
@@ -174,6 +175,9 @@ impl StatStatusFilter {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
+    MaxPlayerLevel,
+    AllocatePassive(PassiveNodeId),
+    RemoveSlotUse(ItemSlot),
     GemsFind,
     ItemRarity,
     ItemAreaChance,
@@ -185,6 +189,10 @@ pub enum StatType {
         skill_type: Option<SkillType>,
         #[serde(default)]
         damage_type: Option<DamageType>,
+    },
+    CritDamageTaken {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
     },
     Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
@@ -277,6 +285,10 @@ pub enum StatType {
         skill_filter: StatSkillFilter,
         roll_type: LuckyRollType,
     },
+    RefreshedCooldown {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
     SkillConditionalModifier {
         stat: Box<StatType>,
         #[serde(flatten)]
@@ -361,6 +373,12 @@ impl Matchable for StatType {
                     && compare_options(damage_type, damage_type_2)
             }
             (
+                CritDamageTaken { skill_type },
+                CritDamageTaken {
+                    skill_type: skill_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2),
+            (
                 Lucky {
                     skill_filter,
                     roll_type,
@@ -382,6 +400,12 @@ impl Matchable for StatType {
             ) => {
                 skill_filter.is_match(skill_filter_2) && compare_options(effect_type, effect_type_2)
             }
+            (
+                RefreshedCooldown { skill_filter },
+                RefreshedCooldown {
+                    skill_filter: skill_filter_2,
+                },
+            ) => skill_filter.is_match(skill_filter_2),
             (
                 ManaCost { skill_filter },
                 ManaCost {

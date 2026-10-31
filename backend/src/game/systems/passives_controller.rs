@@ -1,3 +1,4 @@
+use sqlx::Transaction;
 use std::collections::{HashMap, VecDeque};
 
 use shared::{
@@ -6,12 +7,13 @@ use shared::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
         item_affix::AffixEffectScope,
+        modifier::Modifier,
         passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
         player::PlayerResources,
+        stat_effect::{StatEffect, StatType},
         user::UserCharacterId,
     },
 };
-use sqlx::Transaction;
 
 use crate::{
     app_state::MasterStore,
@@ -82,10 +84,20 @@ pub fn compute_passives_tree_specs(
             node_specs.icon = item_specs.base.icon.clone();
             node_specs.name = item_specs.modifiers.name.clone();
 
-            node_specs.effects = (&(item_specs
+            let mut effects: Vec<_> = (&(item_specs
                 .modifiers
                 .aggregate_effects(AffixEffectScope::Global, false)))
                 .into(); // TODO: Better copy, don't aggregate?
+
+            for effect in effects.iter_mut() {
+                if let StatType::AllocatePassive(passive_id) = &mut effect.stat
+                    && passive_id.is_nil()
+                {
+                    *passive_id = *passive_node_id;
+                }
+            }
+
+            node_specs.effects = effects;
             node_specs.triggers = item_specs.base.triggers.clone();
             node_specs.root_node |= item_specs
                 .base
@@ -95,6 +107,31 @@ pub fn compute_passives_tree_specs(
                 .unwrap_or_default();
         }
     }
+}
+
+pub fn generate_allocated_sockets_effects(
+    passives_tree_ascension: &PassivesTreeAscension,
+) -> Vec<StatEffect> {
+    let mut returned_effects = Vec::new();
+    for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
+        let effects: Vec<_> = (&(item_specs
+            .modifiers
+            .aggregate_effects(AffixEffectScope::Global, false)))
+            .into();
+        for effect in effects.iter() {
+            if let StatType::AllocatePassive(passive_id) = &effect.stat
+                && passive_id.is_nil()
+            {
+                returned_effects.push(StatEffect {
+                    stat: StatType::AllocatePassive(*passive_node_id),
+                    modifier: Modifier::Flat,
+                    value: 1.0,
+                    bypass_ignore: true,
+                });
+            }
+        }
+    }
+    returned_effects
 }
 
 pub fn refund_missing(
@@ -145,7 +182,6 @@ pub async fn update_ascension(
 
     db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
         .await?;
-
     Ok(())
 }
 

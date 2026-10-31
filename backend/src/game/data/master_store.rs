@@ -3,18 +3,23 @@ use backend_shared::signature::HmacKey;
 use futures::future::join_all;
 use indexmap::IndexMap;
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     path::{Path, PathBuf},
     sync::Arc,
 };
 
 use shared::data::{
+    achievements::{AchievementReward, AchievementSpecs},
     character_status::{StatusEffectType, StatusSpecs},
+    cosmetics::CosmeticType,
     grind::QuestReward,
+    item::ItemCategory,
     monster::MonsterSpecs,
     passive::PassivesTreeSpecs,
+    pets::PetSpecs,
     skill::{BaseSkillSpecs, SkillEffectType},
     skill_mastery::SkillMasterySpecs,
+    stat_effect::StatType,
     temple::BenedictionsCategory,
 };
 
@@ -45,9 +50,15 @@ pub type StatusesStore = IndexedStore<String, StatusSpecs>;
 pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
 pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
+pub type AchievementsStore = IndexMap<String, AchievementSpecs>;
+pub type CosmeticsStore = HashMap<String, CosmeticType>;
+pub type PetsStore = HashMap<String, PetSpecs>;
 
 #[derive(Debug, Clone)]
 pub struct MasterStore {
+    pub achievements_store: Arc<AchievementsStore>,
+    pub cosmetics_store: Arc<CosmeticsStore>,
+    pub pets_store: Arc<PetsStore>,
     pub passives_store: Arc<PassivesStore>,
     pub benedictions_store: Arc<BenedictionsStore>,
     pub skills_store: Arc<SkillsStore>,
@@ -64,6 +75,9 @@ pub struct MasterStore {
 }
 
 impl LoadJsonFromFile for MonsterSpecs {}
+impl LoadJsonFromFile for AchievementSpecs {}
+impl LoadJsonFromFile for CosmeticType {}
+impl LoadJsonFromFile for PetSpecs {}
 impl LoadJsonFromFile for BaseSkillSpecs {}
 impl LoadJsonFromFile for SkillMasterySpecs {}
 impl LoadJsonFromFile for StatusSpecs {}
@@ -78,6 +92,9 @@ impl MasterStore {
         let manifest = manifest::load_manifest(folder_path).await?;
 
         let (
+            achievements_store,
+            cosmetics_store,
+            pets_store,
             passives_store,
             benedictions_store,
             skills_store,
@@ -91,6 +108,9 @@ impl MasterStore {
             gamble_tables_store,
             monster_specs_store,
         ) = tokio::join!(
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Achievements)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Cosmetics)),
+            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Pets)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Passives)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Benedictions)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Skills)),
@@ -146,15 +166,15 @@ impl MasterStore {
         // TODO: Pre attack indexed keys?
 
         let master_store = MasterStore {
+            achievements_store: Arc::new(achievements_store?),
+            cosmetics_store: Arc::new(cosmetics_store?),
+            pets_store: Arc::new(pets_store?),
             passives_store: Arc::new(passives_store?),
             benedictions_store: Arc::new(benedictions_store?),
             skills_store: Arc::new(skills_store?),
             skill_masteries_store: Arc::new(skill_masteries_store?),
             statuses_store: Arc::new(statuses_store?.into_indexed_keys()),
-            items_store: Arc::new(ItemsStore {
-                content: items_store_content?,
-                signature_key: item_signature_key,
-            }),
+            items_store: Arc::new(ItemsStore::new(items_store_content?, item_signature_key)),
             item_affixes_table: Arc::new(item_affixes_table?),
             item_adjectives_table: Arc::new(item_adjectives_table?),
             item_nouns_table: Arc::new(item_nouns_table?),
@@ -206,6 +226,59 @@ where
 
 fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
     let mut errors = Vec::new();
+
+    let size_two_passives = master_store
+        .passives_store
+        .values()
+        .flat_map(|tree| &tree.nodes)
+        .filter_map(|(passive_id, passive)| (passive.size == 2).then_some(*passive_id))
+        .collect::<HashSet<_>>();
+    let mut passive_soul_affixes = HashSet::new();
+
+    for (item_id, item) in master_store
+        .items_store
+        .content
+        .iter()
+        .filter(|(_, item)| item.categories.contains(&ItemCategory::Soul))
+    {
+        for affix in &item.affixes {
+            let StatType::AllocatePassive(passive_id) = &affix.stat else {
+                continue;
+            };
+
+            passive_soul_affixes.insert(*passive_id);
+
+            if !size_two_passives.contains(passive_id) {
+                errors.push(anyhow!(
+                    "Soul item '{item_id}' allocates passive '{passive_id}', which is not a size-2 passive node"
+                ));
+            }
+        }
+    }
+
+    for passive_id in size_two_passives.difference(&passive_soul_affixes) {
+        errors.push(anyhow!(
+            "Size-2 passive node '{passive_id}' has no soul item affix"
+        ));
+    }
+
+    for (achievement_id, achievement) in master_store.achievements_store.iter() {
+        for reward in &achievement.rewards {
+            let missing_reward = match reward {
+                AchievementReward::Cosmetic(id) => {
+                    (!master_store.cosmetics_store.contains_key(id)).then_some(("cosmetic", id))
+                }
+                AchievementReward::Pet(id) => {
+                    (!master_store.pets_store.contains_key(id)).then_some(("pet", id))
+                }
+            };
+            if let Some((reward_type, reward_id)) = missing_reward {
+                errors.push(anyhow!(
+                    "Missing {reward_type} reward '{reward_id}' referenced by achievement '{achievement_id}'"
+                ));
+            }
+        }
+    }
 
     for loot in master_store
         .loot_tables_store

@@ -1,7 +1,12 @@
 use anyhow::Result;
 
 use shared::{
-    data::{passive::PurchasedNodes, user::UserCharacterId},
+    data::{
+        cosmetics::CharacterCosmetics,
+        passive::PurchasedNodes,
+        pets::PlayerPets,
+        user::{UserCharacterId, UserUnlocks},
+    },
     messages::server::{InitGameMessage, SyncGameStateMessage},
 };
 
@@ -14,12 +19,17 @@ pub async fn sync_init_game(
     character_id: &UserCharacterId,
     game_data: &mut GameInstanceData,
     passives_tree_build: PurchasedNodes,
+    character_cosmetics: CharacterCosmetics,
+    user_unlocks: UserUnlocks,
+    player_pets: PlayerPets,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
         .send(
             &InitGameMessage {
                 character_id: *character_id,
+                character_cosmetics,
+                user_unlocks,
                 realm: game_data.realm,
                 area_id: game_data.area_id.clone(),
                 map_item: game_data.map_item.clone(),
@@ -33,6 +43,7 @@ pub async fn sync_init_game(
                 skill_mastery_skill_specs: game_data.skill_mastery_skill_specs.clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
+                player_pets,
                 auto_skills: game_data.player_controller.auto_skills.read().clone(),
             }
             .into(),

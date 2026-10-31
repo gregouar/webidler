@@ -7,6 +7,7 @@ use shared::{
         character::{CharacterAttrs, CharacterId, CharacterState},
         character_status::{StatusEffectType, StatusId},
         item::SkillRange,
+        modifier::{BaseModifiableValue, ModifiableValue},
         player::CharacterSpecs,
         rng::MarbleRollType,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
@@ -32,7 +33,7 @@ pub fn attack_character(
     events_queue: &mut EventsQueue,
     target: &mut Target,
     attacker: CharacterId,
-    damage: HashMap<DamageType, NonNegative>,
+    mut damage: HashMap<DamageType, ModifiableValue<NonNegative>>,
     skill_type: SkillType,
     range: SkillRange,
     crit_damage: Option<f64>,
@@ -61,44 +62,58 @@ pub fn attack_character(
             .unwrap_or_default()
     };
 
+    if is_blocked {
+        let block_factor = target_specs.character_attrs.block_damage.get() as f64 * 0.01;
+        for amount in damage.values_mut() {
+            amount.base_mut(|base| base.multiply_value(block_factor));
+        }
+        target_state.just_blocked = true;
+    }
+
     let is_hurt = damage_character(
         &target_specs.character_attrs,
         &mut target_state.life,
         &mut target_state.mana,
-        &damage,
+        &damage
+            .iter()
+            .map(|(damage_type, value)| (*damage_type, **value))
+            .collect(),
         skill_type,
-        is_blocked,
         armor_penetration,
+        crit_damage,
     ) > 0.0;
 
-    if is_blocked {
-        target_state.just_blocked = true;
+    // Correct damage amount by crit factor for event registering
+    if let Some(crit_damage) = crit_damage {
+        let crit_factor = 1.0 + crit_damage * 0.01;
+        for amount in damage.values_mut() {
+            amount.base_mut(|base| base.multiply_value(crit_factor));
+        }
     }
 
     if is_hurt {
         target_state.just_hurt = true;
-        if crit_damage.is_some() {
+        if crit_damage.is_some()
+            && target_specs
+                .character_attrs
+                .crit_damage_taken
+                .get(&skill_type)
+                .map(|value| **value)
+                .unwrap_or(100.0)
+                > 0.0
+        {
             target_state.just_hurt_crit = true;
         }
     }
 
     // Couldn't find how to do this better
-    let event_damage = if is_blocked {
-        let block_factor = target_specs.character_attrs.block_damage.get() as f64 * 0.01;
-        damage
-            .into_iter()
-            .map(|(damage_type, amount)| (damage_type, amount * block_factor))
-            .collect()
-    } else {
-        damage
-    };
 
     events_queue.register_event(GameEvent::Hit(HitEvent {
         source: attacker,
         target: *target_id,
         skill_type,
         range,
-        damage: event_damage,
+        damage,
         crit_damage,
         is_blocked,
         is_hurt,
@@ -115,8 +130,8 @@ pub fn damage_character(
     mana: &mut NonNegative,
     damage: &HashMap<DamageType, NonNegative>,
     skill_type: SkillType,
-    is_blocked: bool,
     armor_penetration: Percent,
+    crit_damage: Option<f64>,
 ) -> f64 {
     let amount = damage
         .iter()
@@ -126,8 +141,8 @@ pub fn damage_character(
                 *amount,
                 *damage_type,
                 skill_type,
-                is_blocked,
                 armor_penetration,
+                crit_damage,
             )
             .get()
         })
@@ -153,8 +168,8 @@ fn compute_damage(
     amount: NonNegative,
     damage_type: DamageType,
     skill_type: SkillType,
-    is_blocked: bool,
     armor_penetration: Percent,
+    crit_damage: Option<f64>,
 ) -> NonNegative {
     let damage_taken = character_attrs
         .damage_taken
@@ -174,13 +189,19 @@ fn compute_damage(
         ) * (1.0 - armor_penetration.get() as f64 * 0.01))
         .max(0.0);
 
-    let block_factor = if is_blocked {
-        character_attrs.block_damage.get() as f64 * 0.01
-    } else {
-        1.0
-    };
+    let crit_factor = crit_damage
+        .map(|crit_damage| {
+            let crit_damage_taken = character_attrs
+                .crit_damage_taken
+                .get(&skill_type)
+                .map(|value| **value)
+                .unwrap_or(100.0);
 
-    (damage_taken * armor_factor * block_factor * amount.get()).into()
+            1.0 + (crit_damage * crit_damage_taken * 0.0001).max(0.0)
+        })
+        .unwrap_or(1.0);
+
+    (damage_taken * armor_factor * crit_factor * amount.get()).into()
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -189,13 +210,13 @@ pub fn restore_character(
     target: &mut Target,
     attacker: CharacterId,
     restore_type: RestoreType,
-    amount: f64,
+    amount: ModifiableValue<f64>,
     modifier: RestoreModifier,
     skill_type: SkillType,
     skill_id: &str,
     trigger_depth: u8,
 ) -> bool {
-    let (applied, value) = regenerate_character(target, restore_type, amount, modifier, false);
+    let (applied, value) = regenerate_character(target, restore_type, *amount, modifier, false);
 
     if applied {
         events_queue.register_event(GameEvent::Restored(RestoreEvent {
@@ -376,8 +397,8 @@ pub fn apply_status(
     attacker: CharacterId,
     status_id: &StatusId,
     skill_type: SkillType,
-    value: NonNegative,
-    duration: NonNegative,
+    mut value: ModifiableValue<NonNegative>,
+    mut duration: ModifiableValue<NonNegative>,
     escalation: NonNegative,
     max_stacks: u8,
     avoidable: bool,
@@ -404,7 +425,9 @@ pub fn apply_status(
         .sum();
 
     let factor = (1.0 - status_resistance * 0.01).clamp(0.0, 1.0);
-    let duration = duration * factor;
+    // let duration = duration * factor;
+    // (*duration.base_mut()) = duration.base().multiply_value(factor);
+    duration.base_mut(|base| base.multiply_value(factor));
 
     if duration.get() <= 0.1 || !target_state.is_alive {
         return false;
@@ -440,7 +463,9 @@ pub fn apply_status(
         1.0
     };
 
-    let value = value * evade_factor;
+    // let value = value * evade_factor;
+    // *value.base_mut() = value.base() * evade_factor;
+    value.base_mut(|base| base.multiply_value(evade_factor));
 
     let try_apply = value.get() > 0.0;
     let mut applied = try_apply;
@@ -453,10 +478,10 @@ pub fn apply_status(
 
         if status_stacks.len() < max_stacks as usize {
             status_stacks.push(statuses_controller::initialize_status_state(
-                attacker, skill_type, value, duration, escalation,
+                attacker, skill_type, *value, *duration, escalation,
             ));
         } else if let Some(cur_status_state) = status_stacks.iter_mut().find(|cur_status_state| {
-            compute_effect_weight(value, duration, escalation, false)
+            compute_effect_weight(*value, *duration, escalation, false)
                 > compute_effect_weight(
                     cur_status_state.base_value,
                     cur_status_state.duration,
@@ -465,11 +490,11 @@ pub fn apply_status(
                 )
         }) {
             cur_status_state.owner = attacker;
-            cur_status_state.base_value = value;
-            cur_status_state.value = value;
-            cur_status_state.duration = duration;
+            cur_status_state.base_value = *value;
+            cur_status_state.value = *value;
+            cur_status_state.duration = *duration;
             cur_status_state.escalation = escalation;
-            cur_status_state.max_duration = duration;
+            cur_status_state.max_duration = *duration;
             cur_status_state.skill_type = skill_type;
         } else {
             applied = false;
@@ -513,8 +538,8 @@ pub fn apply_status(
             attacker,
             &"stun_lockout".into(), //This feels moronic
             SkillType::Other,
-            100.0.into(),
-            duration + stun_lockout,
+            NonNegative(100.0).into(),
+            (*duration + stun_lockout).into(),
             0.0.into(),
             1,
             false,

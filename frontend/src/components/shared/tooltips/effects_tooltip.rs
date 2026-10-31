@@ -5,8 +5,10 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffectType, StatusModifier},
+    item::ItemSlot,
     item_affix::AffixEffectScope,
     modifier::Modifier,
+    passive::PassiveNodeId,
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
         ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
@@ -17,7 +19,7 @@ use shared::data::{
 use crate::components::{
     data_context::DataContext,
     shared::tooltips::{
-        conditions_tooltip,
+        conditions_tooltip, item_tooltip,
         skill_tooltip::{
             self, restore_type_str, skill_filter_str, skill_type_str, skills_type_str,
         },
@@ -448,12 +450,37 @@ pub fn format_stat(effect: &StatEffect) -> String {
             true => "gained as",
             false => "converted to",
         };
+        let value = if let StatConverterSource::LifeRegen | StatConverterSource::ManaRegen =
+            stat_converter_specs.source
+        {
+            effect.value * 10.0
+        } else {
+            effect.value
+        };
         format!(
             "{}% of {} {extra_str} {}{}",
-            format_flat_number(Some(effect.value), false),
+            format_flat_number(Some(value), false),
             stat_converter_source_str(stat_converter_specs.source, stat_converter_specs.uncapped),
             modifier_str(effect.modifier),
             format_multiplier_stat_name(&stat_converter_specs.stat)
+        )
+    } else if let StatType::StatConditionalModifier {
+        stat,
+        conditions,
+        conditions_duration,
+    } = &effect.stat
+    {
+        format!(
+            "{} {}{}{}",
+            format_stat(&StatEffect {
+                stat: *stat.clone(),
+                modifier: effect.modifier,
+                value: effect.value,
+                bypass_ignore: effect.bypass_ignore
+            }),
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions, "when "),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
+            conditions_tooltip::format_conditions_duration(*conditions_duration),
         )
     } else {
         match effect.modifier {
@@ -472,6 +499,13 @@ pub fn modifier_str(modifier: Modifier) -> &'static str {
 }
 
 pub fn format_multiplier_stat(effect: &StatEffect) -> String {
+    if let StatType::CritDamageTaken { skill_type } = effect.stat
+        && effect.modifier == Modifier::More
+        && effect.value < -1e200
+    {
+        return format!("Immune to {}Critical Hits", skill_type_str(skill_type));
+    }
+
     format!(
         "{} {}",
         format_effect_value(effect),
@@ -482,6 +516,7 @@ pub fn format_multiplier_stat(effect: &StatEffect) -> String {
 
 pub fn format_multiplier_stat_name(stat: &StatType) -> String {
     match stat {
+        StatType::MaxPlayerLevel => "Maximum Player Level".to_string(),
         StatType::Life => "Maximum Life".to_string(),
         StatType::LifeRegen => "Life Regeneration".to_string(),
         StatType::Mana => "Maximum Mana".to_string(),
@@ -643,6 +678,9 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type_str(*damage_type),
             skill_type_str(*skill_type)
         ),
+        StatType::CritDamageTaken { skill_type } => {
+            format!("{}Critical Hit Damage Taken", skill_type_str(*skill_type))
+        }
         StatType::ThreatGain => "Threat Gain".into(),
         StatType::Lucky {
             skill_filter,
@@ -659,6 +697,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             "Chance to {}{}",
             stat_skill_effect_type_str(effect_type.as_ref()),
             skill_filter_str(skill_filter, " with ", true),
+        ),
+        StatType::RefreshedCooldown { skill_filter } => format!(
+            "Refreshed Cooldown{}",
+            skill_filter_str(skill_filter, " with ", true)
         ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
@@ -721,6 +763,8 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 )
             }
         }
+        StatType::AllocatePassive(_) => "XXX".into(),
+        StatType::RemoveSlotUse(_) => "XXX".into(),
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -729,6 +773,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
+        StatType::MaxPlayerLevel => format!(
+            "{} Maximum Player Level",
+            format_adds_removes(value, false, "")
+        ),
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
             "{} Life Regeneration per second",
@@ -986,6 +1034,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type)
             )
         }
+        StatType::CritDamageTaken { skill_type } => format!(
+            "{} extra {}Critical Hit Damage Taken",
+            format_flat_number(value, false),
+            skill_type_str(*skill_type)
+        ),
         StatType::Lucky {
             skill_filter,
             roll_type,
@@ -1043,6 +1096,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     skill_filter_str(skill_filter, " with ", true),
                 )
             }
+        }
+        StatType::RefreshedCooldown { skill_filter } => {
+            format!(
+                "{} seconds to Refreshed Cooldown{}",
+                format_adds_removes(value, true, ""),
+                skill_filter_str(skill_filter, " with ", true)
+            )
         }
         StatType::SkillLevel(skill_filter) => {
             let mut r = format!(
@@ -1168,6 +1228,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
             conditions_tooltip::format_conditions_duration(*conditions_duration),
         ),
+        StatType::AllocatePassive(passive_id) => {
+            format!("Allocate {} Passive", format_passive_str(passive_id))
+        }
+        StatType::RemoveSlotUse(item_slot) => {
+            if let ItemSlot::Shield = item_slot {
+                "Can be wielded One Handed".into()
+            } else {
+                format!("Don't use {} slot", item_tooltip::item_slot_str(*item_slot))
+            }
+        }
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -1211,7 +1281,7 @@ fn format_status_power(
 ) -> String {
     let data_context: DataContext = expect_context();
     if let Some(status_id) = &status_filter.status_id
-        && let Some(status_specs) = data_context.statuses_specs.read().get(status_id)
+        && let Some(status_specs) = data_context.statuses_specs.read_untracked().get(status_id)
     {
         let mut effects_str = Vec::new();
         let mut stop = false;
@@ -1275,4 +1345,18 @@ fn format_status_power(
         skill_filter_str(skill_filter, "", false),
         status_type_value_str(status_filter)
     )
+}
+
+fn format_passive_str(passive_id: &PassiveNodeId) -> String {
+    let data_context: DataContext = expect_context();
+    if passive_id.is_nil() {
+        return "Socketed".to_string();
+    }
+    data_context
+        .passives_tree_specs
+        .read_untracked()
+        .nodes
+        .get(passive_id)
+        .map(|passive_specs| passive_specs.name.clone())
+        .unwrap_or(passive_id.to_string())
 }

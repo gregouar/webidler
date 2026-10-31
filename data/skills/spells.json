@@ -82,6 +82,32 @@
       }
     ]
   },
+  "spark"          : {
+    "name"           : "Spark",
+    "description"    : "Imbue yourself with electricity to electrocute a random foe on a regular basis.",
+    "icon"           : "skills/spark.svg",
+    "skill_type"     : "Spell",
+    "cooldown"       : 3,
+    "mana_cost"      : 5,
+    "upgrade_cost"   : 50,
+    "upgrade_effects": [
+      {
+        "stat"    : { "Damage": {"skill_id": "spark"} },
+        "modifier": "More",
+        "scope"   : "Global",
+        "value"   : 30
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
+    ],
+    "targets"        : [
+      {
+        "target_type": "Me",
+        "effects"    : [
+          { "ApplyStatus": {"status_id": "spark", "value": 1} }
+        ]
+      }
+    ]
+  },
   "fireball"       : {
     "name"           : "Fireball",
     "description"    : "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",
@@ -123,8 +149,8 @@
     ],
     "targets"        : [
       {
-        "range"  : "Distance",
-        "shape"  : "Horizontal3",
+        "range": "Distance",
+        "shape": "Horizontal3",
         "effects": [
           {
             "ApplyStatus": { "status_id": "burn", "value": [2, 5] }
@@ -171,8 +197,8 @@
     "ignore_stat_effects": [],
     "targets"            : [
       {
-        "range"  : "Melee",
-        "shape"  : "Vertical2",
+        "range": "Melee",
+        "shape": "Vertical2",
         "effects": [
           { "ApplyStatus": {"status_id": "righteous_fire", "value": 100} }
         ]
@@ -181,7 +207,7 @@
         "target_type": "Me",
         "effects"    : [
           {
-            "ApplyStatus"        : {"status_id": "righteous_fire_self", "value": 100},
+            "ApplyStatus": {"status_id": "righteous_fire_self", "value": 100},
             "ignore_stat_effects": [
               {"Damage": {}},
               { "StatusDuration": {"damage_type": "Any"} },
@@ -247,8 +273,8 @@
     ],
     "targets": [
       {
-        "range"  : "Any",
-        "shape"  : "Vertical2",
+        "range": "Any",
+        "shape": "Vertical2",
         "effects": [
           {
             "FlatDamage": {
@@ -276,8 +302,8 @@
     ],
     "targets"        : [
       {
-        "range"  : "Distance",
-        "shape"  : "All",
+        "range": "Distance",
+        "shape": "All",
         "effects": [
           {
             "FlatDamage": { "damage": {"Physical": 1} }
@@ -308,6 +334,33 @@
         "target_type": "Me",
         "effects"    : [
           { "Restore": {"restore_type": "Life", "value": 25, "modifier": "Flat"} }
+        ]
+      }
+    ]
+  },
+  "taunt"          : {
+    "name"           : "Taunt",
+    "description"    : "Taunt enemies to attack you faster, at the cost of taking more damage.",
+    "icon"           : "skills/taunt.svg",
+    "skill_type"     : "Spell",
+    "cooldown"       : 3,
+    "mana_cost"      : 5,
+    "upgrade_cost"   : 50,
+    "upgrade_effects": [
+      {
+        "stat"    : { "StatusPower": {"status_id": "taunt"} },
+        "modifier": "Flat",
+        "value"   : 2
+      },
+      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
+    ],
+    "targets"        : [
+      {
+        "range": "Distance",
+        "shape": "All",
+        "effects": [
+          { "RefreshCooldown": {"value": 2, "modifier": "Flat"}                                                     },
+          {                                                      "ApplyStatus": {"status_id": "taunt", "value": 20} }
         ]
       }
     ]

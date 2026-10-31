@@ -79,8 +79,8 @@ fn update_status(
                         * elapsed_time_f64.get().min(status_state.duration.get())),
                 )]),
                 status_state.skill_type,
-                false,
                 *armor_penetration,
+                None,
             );
         }
     }

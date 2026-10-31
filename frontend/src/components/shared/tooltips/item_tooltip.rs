@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{collections::BTreeSet, sync::Arc};
 use strum::IntoEnumIterator;
 
 use leptos::{html::*, prelude::*};
@@ -72,9 +72,14 @@ pub fn ItemTooltipContent(
         let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
         let upgrade_affixes =
             formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
+        let soul_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Soul);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
-            (!base_affixes.is_empty() || !prefixes.is_empty() || !suffixes.is_empty()),
+            !base_affixes.is_empty()
+                || !prefixes.is_empty()
+                || !suffixes.is_empty()
+                || !upgrade_affixes.is_empty()
+                || !soul_affixes.is_empty(),
             view! {
                 {(!base_affixes.is_empty())
                     .then(|| {
@@ -110,6 +115,15 @@ pub fn ItemTooltipContent(
                             // "Base affixes:"
                             // </li>
                             {upgrade_affixes}
+                        }
+                    })}
+                {(!soul_affixes.is_empty())
+                    .then(|| {
+                        view! {
+                            // <li class="text-zinc-400 text-xs xl:text-sm ">
+                            // "Base affixes:"
+                            // </li>
+                            {soul_affixes}
                         }
                     })}
             }
@@ -240,6 +254,7 @@ pub fn ItemTooltipContent(
                         }
                     })}
                 <QualityTooltip item_specs=item_specs.clone() />
+                <SoulTooltip item_specs=item_specs.clone() />
                 <ArmorTooltip item_specs=item_specs.clone() />
                 <WeaponTooltip item_specs=item_specs.clone() />
                 <RuneTooltip item_specs=item_specs.clone() />
@@ -654,14 +669,24 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Shield => "Off-hand",
                     ItemSlot::Accessory => "Cloak",
                     ItemSlot::Weapon => {
-                        if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
-                            "Two-Handed Weapon"
+                        if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon2H) {
+                            "Two-Handed Melee Weapon"
+                        } else if item_specs.base.categories.contains(&ItemCategory::RangedWeapon) {
+                            "Ranged Weapon"
+                        } else if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon1H)
+                        {
+                            "One-Handed Melee Weapon"
                         } else {
-                            "One-Handed Weapon"
+                            "Weapon"
                         }
                     }
                 };
                 let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
+                // if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
+                // "Two-Handed Weapon"
+                // } else {
+                // "One-Handed Weapon"
+                // }
 
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm ">
@@ -689,6 +714,67 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 }
             })}
     }
+}
+
+#[component]
+pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+    view! {
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Soul)
+            .then(|| {
+                let soul_category = soul_category_str(&item_specs.base.categories);
+                view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm">
+                        {format!("{} Soul", soul_category)}
+                    </li>
+                    <li class="text-zinc-400 text-xs xl:text-sm  italic">
+                        "Can be imbued into a Rare Item of the same category to grant:"
+                    </li>
+                }
+            })}
+        {item_specs
+            .base
+            .categories
+            .contains(&ItemCategory::Remnant)
+            .then(|| {
+                view! {
+                    <li class="text-zinc-400 text-xs xl:text-sm  italic">
+                        "Can be sacrificed for a chance to extract its Unique Soul."
+                    </li>
+                }
+            })}
+    }
+}
+
+fn soul_category_str(item_categories: &BTreeSet<ItemCategory>) -> &'static str {
+    item_categories
+        .iter()
+        .find(|item_category| {
+            matches!(
+                item_category,
+                ItemCategory::Accessory
+                    | ItemCategory::Amulet
+                    | ItemCategory::Body
+                    | ItemCategory::Boots
+                    | ItemCategory::Cloak
+                    | ItemCategory::Focus
+                    | ItemCategory::Gloves
+                    | ItemCategory::Helmet
+                    | ItemCategory::Map
+                    | ItemCategory::MeleeWeapon1H
+                    | ItemCategory::MeleeWeapon2H
+                    | ItemCategory::RangedWeapon
+                    | ItemCategory::Ring
+                    | ItemCategory::Rune
+                    | ItemCategory::Shield
+                    | ItemCategory::SpellWeapon
+            )
+        })
+        .copied()
+        .map(item_category_str)
+        .unwrap_or("")
 }
 
 pub fn formatted_affixes_list(
@@ -720,7 +806,11 @@ pub fn formatted_affixes_list(
                         .collect();
 
                     view! {
-                        <li class="text-zinc-400 text-xs -mb-1">
+                        <li class=if affix_type == AffixType::Soul {
+                            "text-fuchsia-300 text-xs -mb-1"
+                        } else {
+                            "text-zinc-400 text-xs -mb-1"
+                        }>
                             {affix_type_str(affix.affix_type)}" "
                             <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
                             {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}
@@ -749,11 +839,13 @@ fn affix_type_str(affix_type: AffixType) -> &'static str {
         AffixType::Suffix => "Suffix",
         AffixType::Unique => "Base affix",
         AffixType::Upgrade => "Empowering affix",
+        AffixType::Soul => "Soul affix",
     }
 }
 
 fn affix_tag_str(affix_tag: AffixTag) -> &'static str {
     match affix_tag {
+        AffixTag::Unique => "Unique",
         AffixTag::Attack => "Attack",
         AffixTag::Armor => "Defense",
         AffixTag::Critical => "Critical",
@@ -795,6 +887,8 @@ pub fn item_category_str(item_category: ItemCategory) -> &'static str {
         ItemCategory::Ring => "Ring",
         ItemCategory::Map => "Edict",
         ItemCategory::Rune => "Rune",
+        ItemCategory::Soul => "Soul",
+        ItemCategory::Remnant => "Remnant",
     }
 }
 

@@ -1,61 +1,18 @@
 {
-  "meta": {
-    "enabled": true
-  },
+  "meta": {"enabled": true},
   "resources": {
     "item_affixes": [
-      "amulet_suffixes.json",
-
-      "armor_prefixes.json",
-      "armor_suffixes.json",
-
-      "attack_weapon_prefixes.json",
-      "attack_weapon_suffixes.json",
-
-      "body_prefixes.json",
-      "body_suffixes.json",
-
-      "boots_prefixes.json",
-      "boots_suffixes.json",
-
-      "crit_prefixes.json",
-      "crit_suffixes.json",
-
-      "dot_damage_suffixes.json",
-
-      "elemental_damage_prefixes.json",
-
-      "evade_suffixes.json",
-
-      "focus_prefixes.json",
-      "focus_suffixes.json",
-
-      "gloves_prefixes.json",
-      "gloves_suffixes.json",
-
-      "gold_suffixes.json",
-
-      "helmet_prefixes.json",
-      "helmet_suffixes.json",
-
-      "jewelry_prefixes.json",
-
-      "life_prefixes.json",
-      "life_suffixes.json",
-
-      "mana_prefixes.json",
-      "mana_suffixes.json",
-
-      "resistance_suffixes.json",
-
-      "shield_prefixes.json",
-      "shield_suffixes.json",
-
-      "skill_damage_suffixes.json",
-
-      "speed_prefixes.json",
-
-      "spell_suffixes.json"
+      "amulet_suffixes.json",           "armor_prefixes.json",            "armor_suffixes.json",
+      "attack_weapon_prefixes.json",    "attack_weapon_suffixes.json",    "body_prefixes.json",
+      "body_suffixes.json",             "boots_prefixes.json",            "boots_suffixes.json",
+      "crit_prefixes.json",             "crit_suffixes.json",             "dot_damage_suffixes.json",
+      "elemental_damage_prefixes.json", "evade_suffixes.json",            "focus_prefixes.json",
+      "focus_suffixes.json",            "gloves_prefixes.json",           "gloves_suffixes.json",
+      "gold_suffixes.json",             "helmet_prefixes.json",           "helmet_suffixes.json",
+      "jewelry_prefixes.json",          "life_prefixes.json",             "life_suffixes.json",
+      "mana_prefixes.json",             "mana_suffixes.json",             "remnant_affixes.json",
+      "resistance_suffixes.json",       "shield_prefixes.json",           "shield_suffixes.json",
+      "skill_damage_suffixes.json",     "speed_prefixes.json",            "spell_suffixes.json"
     ]
   }
 }

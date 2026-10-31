@@ -1,5 +1,57 @@
 {
-    "righteous_fire"            : {
+    "spark": {
+        "name"      : "Sparking",
+        "icon"      : "skills/spark.svg",
+        "debuff"    : false,
+        "duration"  : 2,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_owner_effects" : true,
+                    "inherit_source_effects": false,
+                    "trigger_id"            : "spark",
+                    "target"                : "Enemy",
+                    "skill_type"            : "Spell",
+                    "skill_repeat"          : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
+                    "OnTick"                : {"tick_interval": 3},
+                    "effects"               : [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Storm": [0, 3] }
+                            }
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark"} },
+                            "modifier": "Flat",
+                            "factor"  : 1,
+                            "source"  : { "TriggerStatusStack": {"ignore_initial": true} },
+                            "hidden"  : true
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "spark_crit_vuln": {
+        "name"      : "Critical Accumulation",
+        "icon"      : "skills/spark.svg",
+        "debuff"    : true,
+        "duration"  : 1,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"CritDamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "righteous_fire": {
         "name"       : "Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -11,7 +63,7 @@
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 5, "modifier": "Percent" }
         ]
     },
-    "righteous_fire_self"       : {
+    "righteous_fire_self": {
         "name"       : "Self-Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -22,7 +74,7 @@
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 20, "modifier": "Percent" }
         ]
     },
-    "unrighteous_fire"          : {
+    "unrighteous_fire": {
         "name"       : "Unrighteous Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -34,7 +86,7 @@
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 5, "modifier": "Percent" }
         ]
     },
-    "unrighteous_fire_self"     : {
+    "unrighteous_fire_self": {
         "name"       : "Self-Loathing Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -45,7 +97,7 @@
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 20, "modifier": "Percent" }
         ]
     },
-    "blizzard_vulnerability"    : {
+    "blizzard_vulnerability": {
         "name"      : "Chilblains",
         "icon"      : "statuses/hand_bandage.svg",
         "debuff"    : true,
@@ -59,7 +111,7 @@
             }
         ]
     },
-    "burning_ray_scorching"     : {
+    "burning_ray_scorching": {
         "name"      : "Scorched",
         "icon"      : "passives/flaming_claw.svg",
         "debuff"    : true,
@@ -88,6 +140,72 @@
                 },
                 "value"       : 100,
                 "modifier"    : "Percent"
+            }
+        ]
+    },
+    "heal_buff_damage": {
+        "name"      : "Refreshed",
+        "icon"      : "statuses/heal_refresh.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 50.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "heal_debuff_damage": {
+        "name"      : "Cleansed",
+        "icon"      : "statuses/heal_cleanse.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "taunt": {
+        "name"      : "Taunted",
+        "icon"      : "skills/taunt.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "taunt_critical": {
+        "name"      : "Reckless",
+        "icon"      : "skills/taunt.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 50.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"CritDamage": {}}, "modifier": "Flat", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"CritChance": {}}, "modifier": "Flat", "debuff": false },
+                "value"       : 10.0,
+                "modifier"    : "Flat"
             }
         ]
     }

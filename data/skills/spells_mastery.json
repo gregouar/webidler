@@ -324,6 +324,131 @@
       }
     }
   },
+  "spark"          : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"      : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "spark"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "duration"    : {
+        "title"       : "Duration",
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 0.2,
+            "upgrade_value": 0.2,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "spark"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "crit_chance" : {
+        "title"       : "Critical Hit Chance",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "CritChance": {"skill_id": "spark"} },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "stacks"      : {
+        "title"       : "Capacitance",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "spark"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "crit_status" : {
+        "title"       : "Critical Accumulation",
+        "base_cost"   : 10,
+        "upgrade_cost": 1,
+        "max_level"   : 11,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id": "spark_crit_status",
+              "skill_type": "Spell",
+              "OnHit"     : { "skill_ids": ["spark"], "is_hurt": true },
+              "target"    : "SameTarget",
+              "effects"   : [
+                { "ApplyStatus": {"status_id": "spark_crit_vuln", "value": 20} }
+              ]
+            }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "spark_crit_vuln"} },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "damage_stack": {
+        "title"       : "Overcharge",
+        "base_cost"   : 5,
+        "upgrade_cost": 5,
+        "max_level"   : 5,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : {
+                "StatConditionalModifier": {
+                  "stat": { "Damage": {"skill_id": "spark"} },
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "spark"} }
+                  ]
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      }
+    }
+  },
   "fireball"       : {
     "max_level": 100,
     "upgrades" : {
@@ -1189,7 +1314,7 @@
       },
       "low_life_use"  : {
         "title"       : "Survival Instinct",
-        "base_cost"   : 5,
+        "base_cost"   : 2,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -1200,16 +1325,24 @@
           }
         ]
       },
-      "mana_cost"     : {
-        "title"       : "Efficiency",
-        "base_cost"   : 2,
-        "upgrade_cost": 2,
-        "max_level"   : 10,
+      "heal_faster"   : {
+        "title"       : "Fast Healing",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : -1,
-            "upgrade_value": -1,
-            "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "Flat" }
+            "value"        : 6,
+            "upgrade_value": 0,
+            "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
+          },
+          {
+            "value"        : -300,
+            "upgrade_value":    0,
+            "StatEffect"   : {
+              "stat"    : { "Restore": {"restore_type": "Life"} },
+              "modifier": "More"
+            }
           }
         ]
       },
@@ -1224,6 +1357,28 @@
             "upgrade_value": 0,
             "SkillEffect"  : {
               "RefreshStatus"          : {"debuff": false, "value": 100, "modifier": "Percent"},
+              "independent_application": true
+            }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus": {"status_id": "heal_buff_damage", "value": 0},
+              "conditional_modifiers"  : [
+                {
+                  "conditions": [
+                    { "StatusStacks": {"debuff": false} }
+                  ],
+                  "effects"   : [
+                    {
+                      "stat"    : { "StatusPower": {"status_id": "heal_buff_damage"} },
+                      "modifier": "Flat",
+                      "value"   : 5
+                    }
+                  ]
+                }
+              ],
               "independent_application": true
             }
           }
@@ -1242,6 +1397,149 @@
               "RefreshStatus"          : {"debuff": true, "value": -100, "modifier": "Percent"},
               "independent_application": true
             }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : {
+              "ApplyStatus": {"status_id": "heal_debuff_damage", "value": 0},
+              "conditional_modifiers"  : [
+                {
+                  "conditions": [
+                    { "StatusStacks": {"debuff": true} }
+                  ],
+                  "effects"   : [
+                    {
+                      "stat"    : { "StatusPower": {"status_id": "heal_debuff_damage"} },
+                      "modifier": "Flat",
+                      "value"   : 20
+                    }
+                  ]
+                }
+              ],
+              "independent_application": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "taunt"          : {
+    "max_level": 100,
+    "upgrades" : {
+      "power"               : {
+        "title"       : "Taunt Effects",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 2,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "taunt"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "taunt_refresh"       : {
+        "title"       : "Provocation",
+        "base_cost"   : 5,
+        "upgrade_cost": 5,
+        "max_level"   : 3,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"RefreshedCooldown": {}}, "modifier": "Flat" }
+          },
+          {
+            "value"        : 15,
+            "upgrade_value": 15,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "taunt"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "threat_speed"        : {
+        "title"       : "Threatening Face",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {"scope": "Global", "modifier": "More", "stat": "ThreatGain"}
+          }
+        ]
+      },
+      "armor_damage"        : {
+        "title"       : "Daunting Presence",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "scope"   : "Global",
+              "modifier": "Flat",
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Armor": {"damage_type": "Physical"} },
+                  "stat"      : { "StatusPower": {"status_id": "taunt"} },
+                  "is_extra"  : true,
+                  "skill_type": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "poison_vulnerability": {
+        "title"       : "Toxic Personality",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "vulnerability_poison", "value": 100} }
+          },
+          {
+            "value"        : 5,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "modifier": "Flat",
+              "scope"   : "Global",
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Armor": {"damage_type": "Poison"} },
+                  "stat"      : { "StatusPower": {"status_id": "vulnerability_poison"} },
+                  "is_extra"  : true,
+                  "skill_type": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "critical"            : {
+        "title"       : "Reckless Mockery",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "taunt_critical", "value": 100} }
           }
         ]
       }

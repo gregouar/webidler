@@ -40,7 +40,7 @@ pub fn init_item_specs_from_store(
 }
 
 pub fn create_item_specs(
-    base: ItemBase,
+    mut base: ItemBase,
     mut modifiers: ItemModifiers,
     gold_price: f64,
     // signature_key: &HmacKey,
@@ -49,6 +49,12 @@ pub fn create_item_specs(
 
     let effects: Vec<StatEffect> =
         (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
+
+    for effect in effects.iter() {
+        if let StatType::RemoveSlotUse(item_slot) = &effect.stat {
+            base.extra_slots.remove(item_slot);
+        }
+    }
 
     // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
     // TODO: compute triggers with local effects applied to it
@@ -318,18 +324,11 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
 pub fn make_weapon_skill(
     skills_store: &SkillsStore,
     item_slot: ItemSlot,
-    item_level: u16,
 ) -> Option<(String, BaseSkillSpecs)> {
     let skill_id = item_slot_to_skill_id(item_slot);
     let base_skill_specs = skills_store.get(skill_id).cloned()?;
 
-    Some((
-        skill_id.to_string(),
-        BaseSkillSpecs {
-            upgrade_cost: 10.0 + 0.5 * item_level as f64,
-            ..base_skill_specs
-        },
-    ))
+    Some((skill_id.to_string(), base_skill_specs))
 }
 
 fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {

@@ -14,7 +14,7 @@ pub struct BenedictionsCategory {
 
     pub price: f64,
     pub price_increase_factor: f64,
-    pub max_upgrade_level: Option<u64>,
+    pub max_upgrade_level: u64,
 
     pub benedictions: IndexMap<String, BenedictionSpecs>,
 }
@@ -30,7 +30,7 @@ pub struct BenedictionSpecs {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub enum BenedictionEffect {
-    StartingGold,
+    StartingGold, // TODO: Remove?
     StartingLevel,
     SkillSlots,
     StatEffect { stat: StatType, modifier: Modifier },

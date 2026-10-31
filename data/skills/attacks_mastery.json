@@ -161,12 +161,12 @@
             }
           },
           {
-            "value"        : -1,
-            "upgrade_value": 0,
+            "value"        : -0.5,
+            "upgrade_value":  0  ,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
-                  "stat"      : {"Speed": {}},
+                  "stat": {"Speed": {}},
                   "conditions": [
                     { "HasItem": {"item_slot": "Shield", "not": true} }
                   ]
@@ -177,12 +177,12 @@
             }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
-                  "stat"      : { "Damage": {"skill_type": "Attack"} },
+                  "stat": { "Damage": {"skill_type": "Attack"} },
                   "conditions": [
                     { "HasItem": {"item_slot": "Shield", "not": true} }
                   ]
@@ -307,7 +307,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConverter": {
@@ -335,7 +335,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConverter": {
@@ -470,7 +470,7 @@
         "effects"     : [
           {
             "value"        : 20,
-            "upgrade_value": 0,
+            "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
@@ -492,7 +492,7 @@
           },
           {
             "value"        : -1e+200,
-            "upgrade_value": 0,
+            "upgrade_value":  0     ,
             "StatEffect"   : {
               "stat"    : { "Damage": {"skill_type": "Attack", "is_hit": true} },
               "modifier": "More",
@@ -553,7 +553,7 @@
               "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_fire"} },
               "modifier": "Flat"
             },
-            "hidden"       : true
+            "hidden": true
           },
           {
             "value"        : 10,
@@ -562,7 +562,7 @@
               "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_storm"} },
               "modifier": "Flat"
             },
-            "hidden"       : true
+            "hidden": true
           }
         ]
       },
@@ -751,7 +751,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "TriggerEffectModifier": {
@@ -781,7 +781,7 @@
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : {"Damage": {}},
+                  "stat": {"Damage": {}},
                   "conditions": [
                     { "StatusStacks": {"status_id": "bleed"} }
                   ]
@@ -905,7 +905,7 @@
             }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "retaliate_vulnerability"} },
@@ -921,8 +921,8 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 { "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
@@ -995,8 +995,8 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 { "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
@@ -1027,8 +1027,8 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 {
@@ -1169,7 +1169,7 @@
             }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "double_strike_feint"} },
@@ -1262,7 +1262,7 @@
           },
           {
             "value"        : -100,
-            "upgrade_value": 0,
+            "upgrade_value":    0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
               "scope"   : "Global",
@@ -1279,7 +1279,7 @@
         "effects"     : [
           {
             "value"        : 50,
-            "upgrade_value": 0,
+            "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
               "scope"   : "Global",
