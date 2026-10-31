@@ -1239,7 +1239,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 8.0,
+        "value": 6.0,
         "ignore_quality": true
       },
       {
@@ -1318,7 +1318,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 70.0,
+        "value": 100.0,
         "ignore_quality": true
       }
     ],
@@ -1359,7 +1359,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value": 1.0
         }
       }
     ]
