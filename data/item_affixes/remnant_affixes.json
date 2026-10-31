@@ -134,7 +134,7 @@
         "item_level"  : 600,
         "effects"     : [
             {
-                "stat"          : {"Description": "Unlock Power Shards up to 150 extra Area Levels"},
+                "stat"          : {"Description2": "Unlock Power Shards up to 150 extra Area Levels"},
                 "modifier"      : "Flat",
                 "scope"         : "Global",
                 "value"         : 1,
