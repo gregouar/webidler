@@ -208,5 +208,34 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "bees": {
+        "name"      : "Bees",
+        "icon"      : "skills/bee.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_owner_effects" : false,
+                    "inherit_source_effects": true,
+                    "trigger_id"            : "bees",
+                    "target"                : "Me",
+                    "skill_type"            : "Spell",
+                    "OnTick"                : {"tick_interval": 5},
+                    "effects"               : [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Physical": [1, 2] }
+                            }
+                        }
+                    ],
+                    "modifiers": []
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
     }
 }

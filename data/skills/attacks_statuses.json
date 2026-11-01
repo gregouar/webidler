@@ -204,6 +204,43 @@
             }
         ]
     },
+    "blast_arrow"               : {
+        "name"      : "Explosive Charge",
+        "icon"      : "skills/blast_charge.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_source_effects": true,
+                    "trigger_id"            : "blast_arrow",
+                    "target"                : "SameTarget",
+                    "skill_shape"           : "Square4",
+                    "skill_type"            : "Attack",
+                    "OnDeath"               : "Me",
+                    "effects"               : [
+                        {
+                            "FlatDamage": { "damage": {"Fire": 0} },
+                            "ignore_stat_effects": [
+                                { "Damage": {"skill_type": "Attack", "damage_type": "Fire"} }
+                            ]
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Fire"} },
+                            "modifier": "Flat",
+                            "factor"  : 1.0,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
     "whirlwind_guard"           : {
         "name"      : "Deflecting Spin",
         "icon"      : "skills/whirlwind.svg",
