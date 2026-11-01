@@ -675,7 +675,7 @@ pub fn extend_triggers_from_skills_and_statuses(
                                 .iter()
                                 .map(|status_stack| status_stack.duration.get())
                                 .sum(),
-                            TriggerEffectModifierSource::TriggerStatusStack { ignore_initial } => {
+                            TriggerEffectModifierSource::TriggerStatusStacks { ignore_initial } => {
                                 status_stacks.len().saturating_sub(ignore_initial as usize) as f64
                             }
                             _ => 0.0,

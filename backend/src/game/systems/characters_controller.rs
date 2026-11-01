@@ -511,6 +511,7 @@ pub fn apply_status(
         debuff: status_specs.debuff,
         value,
         duration,
+        stacks: status_stacks.len(),
         is_evaded,
         is_max_stacks: status_stacks.len() >= max_stacks as usize,
         skill_id: skill_id.into(),

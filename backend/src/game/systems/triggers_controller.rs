@@ -181,6 +181,15 @@ pub fn apply_trigger_effects(
                         .as_ref()
                         .map(|status| status.duration.get())
                         .unwrap_or_default(),
+                    TriggerEffectModifierSource::TriggeringStatusStacks { ignore_initial } => {
+                        trigger_context
+                            .status_context
+                            .as_ref()
+                            .map(|status| {
+                                status.stacks.saturating_sub(*ignore_initial as usize) as f64
+                            })
+                            .unwrap_or_default()
+                    }
                     TriggerEffectModifierSource::TargetStatusValue {
                         status_filter,
                         skill_type,
@@ -221,7 +230,7 @@ pub fn apply_trigger_effects(
                         .unwrap_or_default(),
                     TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
                     TriggerEffectModifierSource::TriggerStatusValue => 0.0,
-                    TriggerEffectModifierSource::TriggerStatusStack { .. } => 0.0,
+                    TriggerEffectModifierSource::TriggerStatusStacks { .. } => 0.0,
                 };
 
                 modifier_effects.push(StatEffect {

@@ -195,6 +195,10 @@ pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     TriggeringStatusValue,
     TriggeringStatusDuration,
+    TriggeringStatusStacks {
+        #[serde(default)]
+        ignore_initial: bool,
+    },
     AreaLevel,
     TargetStatusValue {
         #[serde(flatten)]
@@ -216,7 +220,7 @@ pub enum TriggerEffectModifierSource {
     },
     TriggerStatusDuration,
     TriggerStatusValue,
-    TriggerStatusStack {
+    TriggerStatusStacks {
         #[serde(default)]
         ignore_initial: bool,
     },

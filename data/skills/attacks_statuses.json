@@ -208,7 +208,7 @@
         "name"      : "Explosive Charge",
         "icon"      : "skills/blast_charge.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 30,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -222,16 +222,17 @@
         "name"      : "Explosive Charge",
         "icon"      : "skills/blast_charge.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 30,
         "max_stacks": 5,
         "effects"   : [
             {
                 "Trigger" : {
-                    "inherit_source_effects": false,
-                    "inherit_owner_effects" : true,
+                    "inherit_source_effects": true,
+                    "inherit_owner_effects" : false,
                     "trigger_id"            : "blast_arrow",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
+                    "skill_range"           : "Distance",
                     "skill_type"            : "Attack",
                     "OnReceiveStatus"       : {"status_id": "blast_arrow", "is_max_stacks": true},
                     "effects"               : [
@@ -254,11 +255,12 @@
             },
             {
                 "Trigger" : {
-                    "inherit_source_effects": false,
-                    "inherit_owner_effects" : true,
+                    "inherit_source_effects": true,
+                    "inherit_owner_effects" : false,
                     "trigger_id"            : "blast_arrow",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
+                    "skill_range"           : "Distance",
                     "skill_type"            : "Attack",
                     "OnDeath"               : "Me",
                     "effects"               : [

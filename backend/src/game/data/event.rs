@@ -62,6 +62,7 @@ pub struct StatusEvent {
 
     pub value: ModifiableValue<NonNegative>,
     pub duration: ModifiableValue<NonNegative>,
+    pub stacks: usize,
 }
 
 #[derive(Debug, Clone)]

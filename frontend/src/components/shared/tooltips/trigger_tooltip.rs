@@ -335,6 +335,9 @@ pub fn trigger_modifier_source_str(
                 value_str
             )
         }
+        TriggerEffectModifierSource::TriggeringStatusStacks { ignore_initial: _ } => {
+            format!("{} Stacks", format_triggering_status_str(triggering_status))
+        }
         TriggerEffectModifierSource::TriggerStatusDuration => match trigger_status_name {
             Some(trigger_status_name) => format!("{} Duration", trigger_status_name),
             None => "Status Duration".to_string(),
@@ -343,7 +346,7 @@ pub fn trigger_modifier_source_str(
             Some(trigger_status_name) => format!("{} Value", trigger_status_name),
             None => "Status Value".to_string(),
         },
-        TriggerEffectModifierSource::TriggerStatusStack { ignore_initial: _ } => {
+        TriggerEffectModifierSource::TriggerStatusStacks { ignore_initial: _ } => {
             match trigger_status_name {
                 Some(trigger_status_name) => format!("{} Stacks", trigger_status_name),
                 None => "Status Stacks".to_string(),
