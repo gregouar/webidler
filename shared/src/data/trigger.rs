@@ -133,6 +133,8 @@ pub struct StatusTrigger {
     #[serde(default)]
     pub is_evaded: Option<bool>,
     #[serde(default)]
+    pub is_max_stacks: Option<bool>,
+    #[serde(default)]
     pub conditions: Vec<Condition>,
 }
 

@@ -470,12 +470,12 @@ pub fn apply_status(
     let try_apply = value.get() > 0.0;
     let mut applied = try_apply;
 
-    if try_apply {
-        let status_stacks = target_state
-            .statuses
-            .entry(status_id.clone())
-            .or_insert(Vec::with_capacity(max_stacks as usize));
+    let status_stacks = target_state
+        .statuses
+        .entry(status_id.clone())
+        .or_insert(Vec::with_capacity(max_stacks as usize));
 
+    if try_apply {
         if status_stacks.len() < max_stacks as usize {
             status_stacks.push(statuses_controller::initialize_status_state(
                 attacker, skill_type, *value, *duration, escalation,
@@ -512,6 +512,7 @@ pub fn apply_status(
         value,
         duration,
         is_evaded,
+        is_max_stacks: status_stacks.len() >= max_stacks as usize,
         skill_id: skill_id.into(),
         trigger_depth,
     }));

@@ -390,11 +390,18 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             format!("On {}Death", format_target_type(target_type))
         }
         EventTrigger::OnApplyStatus(status_trigger) => {
-            format!(
-                "On Applying {}{}",
-                format_status_trigger(status_trigger),
-                format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
-            )
+            if status_trigger.is_max_stacks == Some(true) {
+                format!(
+                    "On Reaching maximum Stacks of {}",
+                    format_status_trigger(status_trigger)
+                )
+            } else {
+                format!(
+                    "On Applying {}{}",
+                    format_status_trigger(status_trigger),
+                    format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
+                )
+            }
         }
         EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
             Some(true) => match (&status_trigger.skill_type, &status_trigger.status_filter) {
@@ -405,11 +412,20 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
                 }
                 _ => format!("On Evaded {}", format_status_trigger(status_trigger)),
             },
-            _ => match &status_trigger.skill_type {
-                Some(SkillType::Blessing) => "On Blessed".into(),
-                Some(SkillType::Curse) => "On Cursed".into(),
-                _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
-            },
+            _ => {
+                if status_trigger.is_max_stacks == Some(true) {
+                    format!(
+                        "On Reaching maximum Stacks of {}",
+                        format_status_trigger(status_trigger)
+                    )
+                } else {
+                    match &status_trigger.skill_type {
+                        Some(SkillType::Blessing) => "On Blessed".into(),
+                        Some(SkillType::Curse) => "On Cursed".into(),
+                        _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+                    }
+                }
+            }
         },
         EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
         EventTrigger::OnTick(tick_trigger) => {
@@ -559,7 +575,7 @@ fn format_restore_trigger(restore_trigger: &RestoreTrigger) -> String {
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
-        "On {}Enemy{} Kill",
+        "On Kill of {}Enemy{}",
         conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions, ""),
         conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions, ""),
     )

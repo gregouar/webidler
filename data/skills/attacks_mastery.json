@@ -1308,6 +1308,15 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "blast_arrow"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
           }
         ]
       },

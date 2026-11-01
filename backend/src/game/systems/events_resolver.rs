@@ -254,15 +254,17 @@ fn handle_status_event<'a>(
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
-            match trigger {
-                EventTrigger::OnApplyStatus(_) if status_event.source == character_id => {}
-                EventTrigger::OnReceiveStatus(_) if status_event.target == character_id => {}
-                _ => continue,
-            };
-
             let status_trigger = match trigger {
                 EventTrigger::OnApplyStatus(status_trigger)
-                | EventTrigger::OnReceiveStatus(status_trigger) => status_trigger,
+                    if status_event.source == character_id =>
+                {
+                    status_trigger
+                }
+                EventTrigger::OnReceiveStatus(status_trigger)
+                    if status_event.target == character_id =>
+                {
+                    status_trigger
+                }
                 _ => continue,
             };
 
@@ -295,6 +297,10 @@ fn handle_status_event<'a>(
                     status_event.debuff,
                 )
                 || !compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
+                || !compare_options(
+                    &status_trigger.is_max_stacks,
+                    &Some(status_event.is_max_stacks),
+                )
                 || status_trigger.conditions.iter().any(|condition| {
                     check_condition(
                         &master_store.statuses_store,

@@ -208,12 +208,54 @@
         "name"      : "Explosive Charge",
         "icon"      : "skills/blast_charge.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Description": "Explosive charges"}, "modifier": "Flat", "debuff": false },
+                "value"       : 1,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "blast_arrow_2"             : {
+        "name"      : "Explosive Charge",
+        "icon"      : "skills/blast_charge.svg",
+        "debuff"    : true,
+        "duration"  : 5,
         "max_stacks": 5,
         "effects"   : [
             {
                 "Trigger" : {
-                    "inherit_source_effects": true,
+                    "inherit_source_effects": false,
+                    "inherit_owner_effects" : true,
+                    "trigger_id"            : "blast_arrow",
+                    "target"                : "SameTarget",
+                    "skill_shape"           : "Square4",
+                    "skill_type"            : "Attack",
+                    "OnReceiveStatus"       : {"status_id": "blast_arrow", "is_max_stacks": true},
+                    "effects"               : [
+                        {
+                            "FlatDamage"         : { "damage": {"Fire": 0} },
+                            "ignore_stat_effects": []
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Fire"} },
+                            "modifier": "Flat",
+                            "factor"  : 1.0,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            },
+            {
+                "Trigger" : {
+                    "inherit_source_effects": false,
+                    "inherit_owner_effects" : true,
                     "trigger_id"            : "blast_arrow",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
@@ -221,10 +263,8 @@
                     "OnDeath"               : "Me",
                     "effects"               : [
                         {
-                            "FlatDamage": { "damage": {"Fire": 0} },
-                            "ignore_stat_effects": [
-                                { "Damage": {"skill_type": "Attack", "damage_type": "Fire"} }
-                            ]
+                            "FlatDamage"         : { "damage": {"Fire": 0} },
+                            "ignore_stat_effects": []
                         }
                     ],
                     "modifiers"             : [
