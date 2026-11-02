@@ -662,6 +662,22 @@ pub fn extend_triggers_from_skills_and_statuses(
             {
                 let mut trigger_effect = trigger_specs.trigger_effect.clone();
 
+                
+                let owner_effects = if *inherit_owner_effects {
+                    effects.iter()
+                } else {
+                    [].iter()
+                };
+                
+                // Mandatory to compute skill effects even if modifier_effects is empty to
+                // initialize trigger status with base values
+                triggers_updater::compute_trigger_specs_effects(
+                    statuses_store,
+                    &mut trigger_effect,
+                    owner_effects.clone(),
+                );
+
+                // Compute modifiers effects as a second step in case we added some from owner effects
                 let modifier_effects: Vec<_> = trigger_effect
                     .modifiers
                     .iter()
@@ -689,20 +705,13 @@ pub fn extend_triggers_from_skills_and_statuses(
                         })
                     })
                     .collect();
-
-                let combined_effects = modifier_effects.iter().chain(if *inherit_owner_effects {
-                    effects.iter()
-                } else {
-                    [].iter()
-                });
-
-                // Mandatory to compute skill effects even if modifier_effects is empty to
-                // initialize trigger status with base values
-                triggers_updater::compute_trigger_specs_effects(
-                    statuses_store,
-                    &mut trigger_effect,
-                    combined_effects.clone(),
-                );
+                if !modifier_effects.is_empty() {
+                    triggers_updater::compute_trigger_specs_effects(
+                        statuses_store,
+                        &mut trigger_effect,
+                        modifier_effects.iter(),
+                    );
+                }
 
                 character_specs.triggers.push(
                     trigger_specs.trigger.clone(),

@@ -148,7 +148,7 @@ fn format_status_trigger_group(
                 return None;
             };
 
-            if inherit_owner_effects
+            if (inherit_owner_effects || trigger_specs.trigger_effect.inherit_source_effects)
                 && let Some(trigger_effect) = character_triggers
                     .and_then(|triggers| triggers.get(&trigger_specs.trigger_effect.trigger_id))
             {

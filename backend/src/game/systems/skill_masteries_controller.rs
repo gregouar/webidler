@@ -90,6 +90,9 @@ pub fn sanitize_skill_masteries(
         .retain(|skill_id, _| skill_masteries_store.contains_key(skill_id));
 
     for (skill_id, mastery_state) in skill_masteries.masteries.iter_mut() {
+        if !mastery_state.experience.is_finite() {
+            mastery_state.experience = 1e300;
+        }
         if !validate_skill_mastery(skill_masteries_store, skill_id, mastery_state) {
             mastery_state.upgrades_bought.clear();
         }

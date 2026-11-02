@@ -58,6 +58,15 @@ pub fn format_triggers(
         .next()
         .expect("format_triggers requires at least one trigger");
 
+    if trigger
+        .description
+        .as_ref()
+        .map(|description| description.is_empty())
+        .unwrap_or_default()
+    {
+        return view! {}.into_any();
+    }
+
     let triggering_status = if let EventTrigger::OnApplyStatus(ref status_trigger) = trigger.trigger
     {
         Some(status_trigger)
@@ -137,6 +146,7 @@ pub fn format_triggers(
             </ul>
         </EffectLi>
     }
+    .into_any()
 }
 
 pub fn get_trigger_modifier_value(

@@ -1298,7 +1298,7 @@
   "blast_arrow"         : {
     "max_level": 100,
     "upgrades" : {
-      "damage": {
+      "damage"      : {
         "title"       : "Damage",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -1320,7 +1320,7 @@
           }
         ]
       },
-      "speed" : {
+      "speed"       : {
         "title"       : "Attack Speed",
         "base_cost"   : 1,
         "upgrade_cost": 1,
@@ -1336,7 +1336,7 @@
           }
         ]
       },
-      "stacks": {
+      "stacks"      : {
         "title"       : "Long Fuse",
         "base_cost"   : 2,
         "upgrade_cost": 2,
@@ -1347,6 +1347,52 @@
             "upgrade_value": 1,
             "StatEffect"   : {
               "stat"    : { "StatusStacks": {"status_id": "blast_charge"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "stack_damage": {
+        "title"       : "Compound Explosion",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 50,
+            "upgrade_value":  0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat": { "StatusPower": {"status_id": "blast_charge"} },
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "blast_charge"} }
+                  ]
+                }
+              },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "stack_crit"  : {
+        "title"       : "Critical Mass",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillConditionalModifier": {
+                  "stat": { "CritChance": {"skill_id": "blast_charge"} },
+                  "conditions": [
+                    { "StatusStacks": {"status_id": "blast_charge"} }
+                  ]
+                }
+              },
               "modifier": "Flat"
             }
           }

@@ -79,6 +79,20 @@ pub async fn tick(
         );
     }
 
+    control_entities(events_queue, game_data, master_store).await?;
+    update_monster_specs(game_data, master_store);
+    events_resolver::resolve_events(events_queue, game_data, master_store).await;
+    // Some effects need to chain before next tick (eg. retaliate bleed)
+    if !events_queue.is_empty() {
+        events_resolver::resolve_events(events_queue, game_data, master_store).await;
+    }
+    update_entities(events_queue, game_data, master_store, elapsed_time).await;
+
+    game_data.game_stats.elapsed_time += elapsed_time;
+    Ok(())
+}
+
+fn update_monster_specs(game_data: &mut GameInstanceData, master_store: &MasterStore) {
     if game_data
         .monster_states
         .iter()
@@ -105,17 +119,6 @@ pub async fn tick(
             }
         }
     }
-
-    control_entities(events_queue, game_data, master_store).await?;
-    events_resolver::resolve_events(events_queue, game_data, master_store).await;
-    // Some effects need to chain before next tick (eg. retaliate bleed)
-    if !events_queue.is_empty() {
-        events_resolver::resolve_events(events_queue, game_data, master_store).await;
-    }
-    update_entities(events_queue, game_data, master_store, elapsed_time).await;
-
-    game_data.game_stats.elapsed_time += elapsed_time;
-    Ok(())
 }
 
 async fn control_entities(
