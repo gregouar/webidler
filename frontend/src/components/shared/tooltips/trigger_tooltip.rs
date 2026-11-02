@@ -125,7 +125,7 @@ pub fn format_triggers(
                     {trigger_events} {shape_infos} {repeat_infos} {details_infos}":"
                 </EffectLi>
                 <EffectLi>
-                    <ul class="list-none xl:space-y-1">
+                    <ul class="list-none xl:space-y-0">
                         {trigger
                             .description
                             .map(|description| {

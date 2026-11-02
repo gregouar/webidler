@@ -1363,6 +1363,65 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "blast_charge"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "speed" : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "stacks": {
+        "title"       : "Long Fuse",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "blast_arrow"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "blast_arrow_3"       : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage": {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
               "stat"    : { "Damage": {"skill_id": "blast_arrow"} },
               "modifier": "More",
               "scope"   : "Global"

@@ -598,6 +598,9 @@ pub fn refresh_status_cooldown(
                 RestoreModifier::Flat => amount.into(),
                 RestoreModifier::Percent => status_state.max_duration * amount * 0.01,
             };
+            if status_state.duration.get() > status_state.max_duration.get() {
+                status_state.duration = status_state.max_duration;
+            }
             refreshed = true;
         }
     }

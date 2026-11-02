@@ -218,8 +218,8 @@
             }
         ]
     },
-    "blast_arrow_2"             : {
-        "name"      : "Explosive Charge",
+    "blast_charge"              : {
+        "name"      : "Blast Charge",
         "icon"      : "skills/blast_charge.svg",
         "debuff"    : true,
         "duration"  : 30,
@@ -229,16 +229,26 @@
                 "Trigger" : {
                     "inherit_source_effects": true,
                     "inherit_owner_effects" : false,
-                    "trigger_id"            : "blast_arrow",
+                    "trigger_id"            : "blast_charge",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
                     "skill_range"           : "Distance",
                     "skill_type"            : "Attack",
-                    "OnReceiveStatus"       : {"status_id": "blast_arrow", "is_max_stacks": true},
+                    "OnReceiveStatus"       : {"status_id": "blast_charge", "is_max_stacks": true},
                     "effects"               : [
                         {
-                            "FlatDamage"         : { "damage": {"Fire": 0} },
+                            "FlatDamage"         : { "crit_chance": 10, "crit_damage": 100, "damage": {"Fire": 0} },
                             "ignore_stat_effects": []
+                        },
+                        {
+                            "RefreshStatus"          : {
+                                "status_id"  : "blast_charge",
+                                "damage_type": null,
+                                "debuff"     : null,
+                                "value"      : -100.0,
+                                "modifier"   : "Percent"
+                            },
+                            "independent_application": true
                         }
                     ],
                     "modifiers"             : [
@@ -257,7 +267,7 @@
                 "Trigger" : {
                     "inherit_source_effects": true,
                     "inherit_owner_effects" : false,
-                    "trigger_id"            : "blast_arrow",
+                    "trigger_id"            : "blast_charge",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
                     "skill_range"           : "Distance",
@@ -265,7 +275,7 @@
                     "OnDeath"               : "Me",
                     "effects"               : [
                         {
-                            "FlatDamage"         : { "damage": {"Fire": 0} },
+                            "FlatDamage"         : { "crit_chance": 10, "crit_damage": 100, "damage": {"Fire": 0} },
                             "ignore_stat_effects": []
                         }
                     ],
