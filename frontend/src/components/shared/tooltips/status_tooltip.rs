@@ -86,7 +86,7 @@ pub fn format_status_effects(
     } else {
         Some(
             view! {
-                <ul>
+                <ul class="xl:space-y-1">
                     <EffectLi>{status_specs.name} " "{grant_str}":"</EffectLi>
                     {effect_lines
                         .into_iter()

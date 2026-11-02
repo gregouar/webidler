@@ -204,20 +204,6 @@
             }
         ]
     },
-    "blast_arrow"               : {
-        "name"      : "Explosive Charge",
-        "icon"      : "skills/blast_charge.svg",
-        "debuff"    : true,
-        "duration"  : 30,
-        "max_stacks": 5,
-        "effects"   : [
-            {
-                "StatModifier": { "stat": {"Description": "Explosive charges"}, "modifier": "Flat", "debuff": false },
-                "value"       : 1,
-                "modifier"    : "Flat"
-            }
-        ]
-    },
     "blast_charge"              : {
         "name"      : "Blast Charge",
         "icon"      : "skills/blast_charge.svg",
