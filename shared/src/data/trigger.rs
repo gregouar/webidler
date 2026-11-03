@@ -164,8 +164,8 @@ pub struct TriggerEffect {
     pub target: TriggerTarget,
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,
-    #[serde(default)]
-    pub inherit_source_effects: bool,
+    // #[serde(default)]
+    // pub inherit_source_effects: bool,
     #[serde(default)]
     pub trigger_propagate: bool, // If true, will reset trigger depth
 

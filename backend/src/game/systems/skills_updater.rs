@@ -1183,8 +1183,9 @@ fn compute_status_triggers_for_skill_effect<'a, 'b>(
         if let StatusEffectType::Trigger {
             trigger_specs,
             inherit_owner_effects,
+            inherit_player_effects,
         } = &status_effect.status_effect_type
-            && (*inherit_owner_effects || trigger_specs.trigger_effect.inherit_source_effects)
+            && (*inherit_owner_effects || *inherit_player_effects)
         {
             let mut trigger_effect = trigger_specs.trigger_effect.clone();
             triggers_updater::compute_trigger_specs_effects_with_extra(

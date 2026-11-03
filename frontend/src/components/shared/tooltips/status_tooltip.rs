@@ -143,12 +143,13 @@ fn format_status_trigger_group(
             let StatusEffectType::Trigger {
                 trigger_specs,
                 inherit_owner_effects,
+                inherit_player_effects,
             } = status_effect.status_effect_type
             else {
                 return None;
             };
 
-            if (inherit_owner_effects || trigger_specs.trigger_effect.inherit_source_effects)
+            if (inherit_owner_effects || inherit_player_effects)
                 && let Some(trigger_effect) = character_triggers
                     .and_then(|triggers| triggers.get(&trigger_specs.trigger_effect.trigger_id))
             {
@@ -333,8 +334,9 @@ fn format_status_effect_line(
         StatusEffectType::Trigger {
             trigger_specs,
             inherit_owner_effects,
+            inherit_player_effects,
         } => {
-            if inherit_owner_effects
+            if (inherit_owner_effects || inherit_player_effects)
                 && let Some(character_triggers) = character_triggers
                 && let Some(trigger_effect) =
                     character_triggers.get(&trigger_specs.trigger_effect.trigger_id)

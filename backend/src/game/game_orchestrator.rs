@@ -114,6 +114,7 @@ fn update_monster_specs(game_data: &mut GameInstanceData, master_store: &MasterS
                     base_specs,
                     monster_specs,
                     monster_state,
+                    &game_data.player_specs.read().character_specs.effects,
                     &game_data.area_threat,
                 );
             }

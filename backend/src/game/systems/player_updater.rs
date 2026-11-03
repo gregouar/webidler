@@ -203,6 +203,7 @@ pub fn update_player_specs(
         CharacterId::Player,
         &mut player_specs.character_specs,
         &player_state.character_state,
+        &[],
     );
 
     player_specs
@@ -345,7 +346,7 @@ fn compute_player_specs(
                     description: None,
                 }],
                 trigger_propagate: false,
-                inherit_source_effects: false,
+                // inherit_source_effects: false,
             },
             Some(CharacterId::Player),
         );

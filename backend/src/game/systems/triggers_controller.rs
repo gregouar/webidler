@@ -94,7 +94,10 @@ pub fn apply_trigger_effects(
         };
 
         let mut trigger_effects = trigger_effect.effects;
-        if !(trigger_effect.modifiers.is_empty() && !trigger_effect.inherit_source_effects) {
+        if !(
+            trigger_effect.modifiers.is_empty()
+            // && !trigger_effect.inherit_source_effects
+        ) {
             let mut modifier_effects =
                 Vec::with_capacity(trigger_effect.modifiers.len().saturating_mul(4));
             for modifier in &trigger_effect.modifiers {
@@ -241,15 +244,15 @@ pub fn apply_trigger_effects(
                 });
             }
 
-            let source_effects: &[StatEffect] = if trigger_effect.inherit_source_effects {
-                game_data
-                    .character_specs(trigger_context.source)
-                    .map(|character_specs| &character_specs.effects)
-                    .map(Vec::as_slice)
-                    .unwrap_or_default()
-            } else {
-                &[]
-            };
+            // let source_effects: &[StatEffect] = if trigger_effect.inherit_source_effects {
+            //     game_data
+            //         .character_specs(trigger_context.source)
+            //         .map(|character_specs| &character_specs.effects)
+            //         .map(Vec::as_slice)
+            //         .unwrap_or_default()
+            // } else {
+            //     &[]
+            // };
 
             for effect in &mut trigger_effects {
                 skills_updater::compute_skill_specs_effects(
@@ -257,7 +260,8 @@ pub fn apply_trigger_effects(
                     &trigger_effect.trigger_id,
                     trigger_effect.skill_type,
                     effect,
-                    modifier_effects.iter().chain(source_effects.iter()),
+                    modifier_effects.iter(),
+                    // modifier_effects.iter().chain(source_effects.iter()),
                 );
             }
         }
