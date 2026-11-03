@@ -23,29 +23,16 @@
         "effects"     : [
           {
             "value"        : 1,
-            "upgrade_value": 0,
+            "upgrade_value": 1,
             "StatEffect"   : {
-              "stat"    : {
-                "SkillTargetModifier": {
-                  "skill_type": null,
-                  "skill_id"  : "magic_missile",
-                  "range"     : null,
-                  "shape"     : null,
-                  "repeat"    : {"min_value": 2, "max_value": 2, "target": "Any"}
-                }
-              },
+              "stat"    : { "SkillRepeat": {"skill_id": "magic_missile"} },
               "modifier": "Flat"
             }
           },
           {
-            "value"        : 150,
-            "upgrade_value": 150,
+            "value"        : 100,
+            "upgrade_value": 100,
             "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
-          },
-          {
-            "value"        : 0,
-            "upgrade_value": 1,
-            "StatEffect"   : { "stat": {"SkillRepeat": {}}, "modifier": "Flat" }
           }
         ]
       },
@@ -75,16 +62,19 @@
           }
         ]
       },
-      "mana_cost"  : {
-        "title"       : "Cantrip",
-        "base_cost"   : 20,
+      "unblockable": {
+        "title"       : "Sniper",
+        "base_cost"   : 5,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : -1e200,
+            "value"        : 1,
             "upgrade_value": 0,
-            "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
+            "StatEffect"   : {
+              "stat"    : { "SkillEffectModifier": {"unblockable": true} },
+              "modifier": "Flat"
+            }
           }
         ]
       },

@@ -43,8 +43,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"} },
-                            "stat"  : { "Damage": {"damage_type": "Fire"    } }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Fire"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -56,8 +57,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"                  } },
-                            "stat"  : { "Damage": {"damage_type": "Storm",    "min_max": "Max"} }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -86,8 +88,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"} },
-                            "stat"  : { "Damage": {"damage_type": "Fire"    } }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Fire"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -116,8 +119,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"                  } },
-                            "stat"  : { "Damage": {"damage_type": "Storm",    "min_max": "Max"} }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"

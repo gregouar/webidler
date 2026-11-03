@@ -1246,7 +1246,7 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     if let StatType::StatConverter(specs) = &effect.stat
-        && compare_options(&specs.skill_type, &Some(skill_type))
+        && specs.skill_filter.is_match_with_skill(skill_type, skill_id)
     {
         return Some((specs.clone(), effect.modifier, effect.value));
     }
