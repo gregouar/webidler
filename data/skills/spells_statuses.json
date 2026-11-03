@@ -224,17 +224,21 @@
                     "OnTick"                : {"tick_interval": 5},
                     "effects"               : [
                         {
-                            "FlatDamage": {
-                                "damage": { "Physical": [2, 4] }
-                            }
+                            "FlatDamage": { "damage": {"Physical": 0} }
                         }
                     ],
                     "modifiers"             : [
                         {
-                            "stat"    : {"Damage": {}},
-                            "modifier": "More",
-                            "factor"  : 100.0,
-                            "source"  : { "TriggerStatusStacks": {"ignore_initial": true} }
+                            "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Min"} },
+                            "modifier": "Flat",
+                            "factor"  : 1.0,
+                            "source"  : "TriggerStatusValue"
+                        },
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Max"} },
+                            "modifier": "Flat",
+                            "factor"  : 2.0,
+                            "source"  : "TriggerStatusValue"
                         }
                     ]
                 },

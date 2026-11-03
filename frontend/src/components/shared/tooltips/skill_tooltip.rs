@@ -15,7 +15,7 @@ use shared::data::{
         RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{Matchable, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
+    stat_effect::{Matchable, MinMax, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
     trigger::{StatusTrigger, TriggerEffectModifier, TriggerEffectModifierSource, TriggerSpecs},
     values::NonNegative,
 };
@@ -446,6 +446,71 @@ pub fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
+fn format_damage_trigger_modifier(
+    damage_type: DamageType,
+    modifiers: Option<&[TriggerEffectModifier]>,
+    factor: Option<f64>,
+    damage_color: &'static str,
+    trigger_status_name: Option<&str>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    triggering_status: Option<&StatusTrigger>,
+) -> Option<impl IntoView + use<>> {
+    let modifier_for_bound = |bound| {
+        modifiers.unwrap_or_default().iter().find(|modifier| {
+            modifier.modifier == Modifier::Flat
+                && modifier.stat.is_match(&StatType::Damage {
+                    damage_type: Some(damage_type),
+                    skill_filter: Default::default(),
+                    min_max: Some(bound),
+                    is_hit: None,
+                })
+                && matches!(
+                    modifier.stat,
+                    StatType::Damage {
+                        min_max: Some(modifier_bound),
+                        ..
+                    } if modifier_bound == bound
+                )
+        })
+    };
+
+    if let (Some(min_modifier), Some(max_modifier)) = (
+        modifier_for_bound(MinMax::Min),
+        modifier_for_bound(MinMax::Max),
+    ) && let (Some(min_value), Some(max_value)) = (
+        get_trigger_modifier_value(min_modifier, factor, trigger_status_value),
+        get_trigger_modifier_value(max_modifier, factor, trigger_status_value),
+    ) {
+        return Some(
+            view! {
+                <span class=format!("font-semibold {damage_color}")>
+                    {format_min_max_f64(*min_value.min, *max_value.max)}
+                </span>
+            }
+            .into_any(),
+        );
+    }
+
+    format_trigger_modifier(
+        find_trigger_modifier(
+            StatType::Damage {
+                damage_type: Some(damage_type),
+                skill_filter: Default::default(),
+                min_max: None,
+                is_hit: None,
+            },
+            modifiers,
+        ),
+        " as",
+        factor,
+        Some(damage_color),
+        trigger_status_name,
+        trigger_status_value,
+        triggering_status,
+    )
+    .map(|view| view.into_any())
+}
+
 fn format_status_trigger_value(
     modifiers: Option<&[TriggerEffectModifier]>,
     prefix: &'static str,
@@ -569,19 +634,11 @@ pub fn format_skill_effect(
                     let value = damage.get(&damage_type).copied().unwrap_or_default();
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
-                    let trigger_modifier_str = format_trigger_modifier(
-                        find_trigger_modifier(
-                            StatType::Damage {
-                                damage_type: Some(damage_type),
-                                skill_filter: Default::default(),
-                                min_max: None,
-                                is_hit: None,
-                            },
-                            modifiers,
-                        ),
-                        " as",
+                    let trigger_modifier_str = format_damage_trigger_modifier(
+                        damage_type,
+                        modifiers,
                         damage_factors.get(&damage_type).copied(),
-                        Some(damage_color),
+                        damage_color,
                         trigger_status_name,
                         trigger_status_value,
                         triggering_status,

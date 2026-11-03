@@ -46,7 +46,7 @@ pub fn apply_trigger_effects(
     }
 
     for trigger_context in trigger_contexts.into_iter().take(100) {
-        tracing::warn!("{:#?}", trigger_context);
+        // tracing::warn!("{:#?}", trigger_context);
         let trigger_effect = trigger_context.owned_trigger.trigger_effect;
 
         if trigger_context.trigger_depth > 3 {
