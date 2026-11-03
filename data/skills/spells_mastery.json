@@ -1574,6 +1574,121 @@
             }
           }
         ]
+      },
+      "stacks": {
+        "title"       : "Infestation",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 20,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "bees"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "area"  : {
+        "title"       : "Swarm",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "SkillTargetModifier": {
+                  "skill_type": null,
+                  "skill_id"  : "summon_bees",
+                  "range"     : null,
+                  "shape"     : "Square4",
+                  "repeat"    : null
+                }
+              },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -1,
+            "upgrade_value":  0,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "bees"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "spread": {
+        "title"       : "Hive's Mind",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "OnKill"                : {
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id"  : "bees",
+                      "damage_type": null,
+                      "debuff"     : null,
+                      "skill_type" : null,
+                      "not"        : false
+                    }
+                  }
+                ]
+              },
+              "description": null,
+              "trigger_id" : "bees_spread",
+              "target"     : "Enemy",
+              "modifiers"             : [
+                {
+                  "stat"    : { "StatusPower": {"status_id": "bees"} },
+                  "modifier": "Flat",
+                  "factor"  : 1,
+                  "source"  : { "TargetStatusValue": {"status_id": "bees"} },
+                  "hidden"  : false
+                },
+                {
+                  "stat"    : { "StatusDuration": {"status_id": "bees"} },
+                  "modifier": "Flat",
+                  "factor"  : 1,
+                  "source"  : { "TargetStatusDuration": {"status_id": "bees"} },
+                  "hidden"  : false
+                }
+              ],
+              "inherit_source_effects": false,
+              "trigger_propagate"     : false,
+              "skill_type"            : "Other",
+              "skill_range"           : "Any",
+              "skill_shape"           : "Single",
+              "effects"               : [
+                {
+                  "ApplyStatus": {"value": 0, "duration": 0, "status_id": "bees"},
+                  "ignore_stat_effects"    : [
+                    {"StatusFaster": {}},
+                    {"StatusPower": {}},
+                    {"StatusDuration": {}},
+                    {"Damage": {}},
+                    {"StatusEscalation": {}}
+                  ],
+                  "conditional_modifiers"  : [],
+                  "independent_application": false,
+                  "optional_application"   : false,
+                  "description"            : "Inflict Bees for the remaining Duration"
+                }
+              ]
+            }
+          }
+        ]
       }
     }
   }
