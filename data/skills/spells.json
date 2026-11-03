@@ -1241,12 +1241,13 @@
     "upgrade_effects": [
       {
         "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": "bees",
+          "StatusPower": {
+            "status_id": "bees",
             "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
         "modifier": "More",

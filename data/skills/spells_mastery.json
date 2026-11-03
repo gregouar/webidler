@@ -19,7 +19,7 @@
         "title"       : "Twin Missiles",
         "base_cost"   : 10,
         "upgrade_cost": 10,
-        "max_level"   : 1,
+        "max_level"   : 3,
         "effects"     : [
           {
             "value"        : 1,
@@ -77,7 +77,7 @@
       },
       "mana_cost"  : {
         "title"       : "Cantrip",
-        "base_cost"   : 5,
+        "base_cost"   : 20,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
@@ -1563,9 +1563,8 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : {
-              "stat"    : { "Damage": {"skill_id": "bees"} },
-              "modifier": "More",
-              "scope"   : "Global"
+              "stat"    : { "StatusPower": {"status_id": "bees"} },
+              "modifier": "More"
             }
           }
         ]
