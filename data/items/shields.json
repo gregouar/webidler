@@ -113,7 +113,6 @@
         "trigger_id": "stunning_block",
         "target": "Source",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -677,6 +676,7 @@
           "debuff": null,
           "is_triggered": false,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
@@ -695,10 +695,10 @@
             },
             "modifier": "Flat",
             "factor": 1.0,
-            "source": "TriggeringStatusDuration"
+            "source": "TriggeringStatusDuration",
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Any",

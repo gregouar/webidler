@@ -8,21 +8,20 @@
         "effects"   : [
             {
                 "Trigger" : {
-                    "inherit_owner_effects" : true,
-                    "inherit_source_effects": false,
-                    "trigger_id"            : "spark",
-                    "target"                : "Enemy",
-                    "skill_type"            : "Spell",
-                    "skill_repeat"          : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
-                    "OnTick"                : {"tick_interval": 3},
-                    "effects"               : [
+                    "inherit_owner_effects": true,
+                    "trigger_id"           : "spark",
+                    "target"               : "Enemy",
+                    "skill_type"           : "Spell",
+                    "skill_repeat"         : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
+                    "OnTick"               : {"tick_interval": 3},
+                    "effects"              : [
                         {
                             "FlatDamage": {
                                 "damage": { "Storm": [0, 3] }
                             }
                         }
                     ],
-                    "modifiers"             : [
+                    "modifiers"            : [
                         {
                             "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark"} },
                             "modifier": "Flat",
@@ -218,8 +217,7 @@
         "effects"   : [
             {
                 "Trigger" : {
-                    "inherit_owner_effects" : false,
-                    "inherit_source_effects": true,
+                    "inherit_player_effects": true,
                     "trigger_id"            : "bees",
                     "target"                : "Me",
                     "skill_type"            : "Spell",

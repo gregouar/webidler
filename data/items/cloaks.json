@@ -191,7 +191,6 @@
         "trigger_id": "drink_storm",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -395,13 +394,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": true,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "backstab_cloak",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -906,10 +905,10 @@
                 "debuff": null,
                 "skill_type": null
               }
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Other",
         "skill_range": "Melee",

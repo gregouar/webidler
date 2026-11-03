@@ -374,7 +374,8 @@
           "Restore": {
             "restore_type": null,
             "skill_type": "Spell",
-            "skill_id": null
+            "skill_id": null,
+            "modifier_description": "Flat"
           }
         },
         "modifier": "Increased",
@@ -431,7 +432,6 @@
         "trigger_id": "signet_ring_unique",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
         "skill_range": "Melee",
@@ -471,13 +471,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": true,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "signet_ring_unique_mana",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
         "skill_range": "Melee",
@@ -559,7 +559,8 @@
             "Restore": {
               "restore_type": null,
               "skill_type": "Spell",
-              "skill_id": null
+              "skill_id": null,
+              "modifier_description": "Flat"
             }
           },
           "modifier": "Increased",
@@ -1300,7 +1301,6 @@
         "trigger_id": "witch_ring",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",

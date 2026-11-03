@@ -252,7 +252,6 @@
         "trigger_id": "rune_berserker",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -408,6 +407,7 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
@@ -426,7 +426,8 @@
             },
             "modifier": "Flat",
             "factor": 0.2,
-            "source": "TriggeringStatusValue"
+            "source": "TriggeringStatusValue",
+            "hidden": false
           },
           {
             "stat": {
@@ -440,10 +441,10 @@
             },
             "modifier": "Flat",
             "factor": 1.0,
-            "source": "TriggeringStatusDuration"
+            "source": "TriggeringStatusDuration",
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -471,21 +472,21 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusDuration": {
                   "status_id": null,
                   "damage_type": "Poison",
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -657,10 +658,10 @@
             "factor": 1.0,
             "source": {
               "HitDamage": "Storm"
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",

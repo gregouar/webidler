@@ -192,7 +192,6 @@
         "trigger_id": "bloodspiller",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
         "skill_range": "Melee",
@@ -539,10 +538,10 @@
             "factor": 0.5,
             "source": {
               "HitDamage": "Storm"
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1097,10 +1096,10 @@
             "factor": 0.2,
             "source": {
               "HitDamage": "Fire"
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Attack",
         "skill_range": "Melee",
@@ -1509,10 +1508,10 @@
             },
             "modifier": "Flat",
             "factor": 1.0,
-            "source": "HitCritDamage"
+            "source": "HitCritDamage",
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",

@@ -4354,7 +4354,6 @@
             "trigger_id": "legionnaire_stance",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
@@ -6965,7 +6964,6 @@
             "trigger_id": "cursed_mouth",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -7060,7 +7058,6 @@
             "trigger_id": "healing_aura",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Attack",
             "skill_range": "Melee",
@@ -7855,13 +7852,13 @@
               "debuff": null,
               "is_triggered": null,
               "is_evaded": false,
+              "is_max_stacks": null,
               "conditions": []
             },
             "description": null,
             "trigger_id": "pyromaniac",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -8659,7 +8656,6 @@
             "trigger_id": "elemental_conflux_storm",
             "target": "SameTarget",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -8709,7 +8705,6 @@
             "trigger_id": "elemental_conflux_poison",
             "target": "SameTarget",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -8751,13 +8746,13 @@
               "debuff": null,
               "is_triggered": null,
               "is_evaded": null,
+              "is_max_stacks": null,
               "conditions": []
             },
             "description": null,
             "trigger_id": "elemental_conflux_fire",
             "target": "SameTarget",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -10224,7 +10219,6 @@
             "trigger_id": "disciplined_strikes",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -10681,6 +10675,7 @@
               "debuff": null,
               "is_triggered": null,
               "is_evaded": false,
+              "is_max_stacks": null,
               "conditions": []
             },
             "description": null,
@@ -10699,10 +10694,10 @@
                 },
                 "modifier": "Flat",
                 "factor": 1.0,
-                "source": "TriggeringStatusDuration"
+                "source": "TriggeringStatusDuration",
+                "hidden": false
               }
             ],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
@@ -11530,10 +11525,10 @@
                 "factor": 0.3,
                 "source": {
                   "HitDamage": "Fire"
-                }
+                },
+                "hidden": false
               }
             ],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
@@ -11687,13 +11682,13 @@
               "debuff": null,
               "is_triggered": null,
               "is_evaded": null,
+              "is_max_stacks": null,
               "conditions": []
             },
             "description": null,
             "trigger_id": "chaotic_mind",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -12840,7 +12835,6 @@
             "trigger_id": "bonfire",
             "target": "Me",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Melee",
@@ -13124,10 +13118,10 @@
                 "factor": 0.5,
                 "source": {
                   "HitDamage": "Physical"
-                }
+                },
+                "hidden": false
               }
             ],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Attack",
             "skill_range": "Melee",
@@ -14045,7 +14039,8 @@
                     "debuff": null,
                     "skill_type": null
                   }
-                }
+                },
+                "hidden": false
               },
               {
                 "stat": {
@@ -14066,10 +14061,10 @@
                     "debuff": null,
                     "skill_type": null
                   }
-                }
+                },
+                "hidden": false
               }
             ],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
@@ -14097,6 +14092,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14112,15 +14116,6 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
                     }
                   },
                   {
@@ -14187,7 +14182,8 @@
                     "debuff": null,
                     "skill_type": null
                   }
-                }
+                },
+                "hidden": false
               },
               {
                 "stat": {
@@ -14208,10 +14204,10 @@
                     "debuff": null,
                     "skill_type": null
                   }
-                }
+                },
+                "hidden": false
               }
             ],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
@@ -14239,21 +14235,31 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -14266,17 +14272,7 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14329,7 +14325,8 @@
                     "debuff": null,
                     "skill_type": null
                   }
-                }
+                },
+                "hidden": false
               },
               {
                 "stat": {
@@ -14350,10 +14347,10 @@
                     "debuff": null,
                     "skill_type": null
                   }
-                }
+                },
+                "hidden": false
               }
             ],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Other",
             "skill_range": "Any",
@@ -14399,7 +14396,7 @@
                     }
                   },
                   {
-                    "StatusDuration": {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14408,7 +14405,7 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -15223,7 +15220,6 @@
             "trigger_id": "stunning_blow",
             "target": "SameTarget",
             "modifiers": [],
-            "inherit_source_effects": false,
             "trigger_propagate": false,
             "skill_type": "Attack",
             "skill_range": "Melee",

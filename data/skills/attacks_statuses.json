@@ -213,8 +213,8 @@
         "effects"   : [
             {
                 "Trigger" : {
-                    "inherit_source_effects": true,
-                    "inherit_owner_effects" : false,
+                    "inherit_player_effects": true,
+                    "trigger_propagate"     : true,
                     "trigger_id"            : "blast_charge",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
@@ -241,8 +241,8 @@
             },
             {
                 "Trigger" : {
-                    "inherit_source_effects": true,
-                    "inherit_owner_effects" : false,
+                    "inherit_player_effects": true,
+                    "trigger_propagate"     : true,
                     "trigger_id"            : "blast_charge",
                     "target"                : "SameTarget",
                     "skill_shape"           : "Square4",
@@ -269,14 +269,13 @@
             },
             {
                 "Trigger" : {
-                    "description"           : "",
-                    "inherit_source_effects": false,
-                    "inherit_owner_effects" : false,
-                    "trigger_id"            : "blast_charge_cleanup",
-                    "target"                : "SameTarget",
-                    "skill_type"            : "Other",
-                    "OnReceiveStatus"       : {"status_id": "blast_charge", "is_max_stacks": true},
-                    "effects"               : [
+                    "description"          : "",
+                    "inherit_owner_effects": false,
+                    "trigger_id"           : "blast_charge_cleanup",
+                    "target"               : "SameTarget",
+                    "skill_type"           : "Other",
+                    "OnReceiveStatus"      : {"status_id": "blast_charge", "is_max_stacks": true},
+                    "effects"              : [
                         {
                             "RefreshStatus"          : {
                                 "status_id"  : "blast_charge",

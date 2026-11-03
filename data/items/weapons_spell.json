@@ -161,7 +161,6 @@
         "trigger_id": "baguette_fromage",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Any",
