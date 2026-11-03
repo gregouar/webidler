@@ -700,15 +700,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusFaster": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Any",
@@ -738,6 +729,15 @@
               },
               {
                 "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusFaster": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
@@ -1243,7 +1243,7 @@
         "stat": {
           "Damage": {
             "skill_type": null,
-            "skill_id": "spark",
+            "skill_id": "bees",
             "damage_type": null,
             "min_max": null,
             "is_hit": null
@@ -1289,7 +1289,7 @@
             },
             "ApplyStatus": {
               "status_id": "bees",
-              "value": 100.0,
+              "value": 2.0,
               "value_factor": 1.0,
               "duration": null,
               "escalation": null,

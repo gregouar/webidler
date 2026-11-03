@@ -1307,15 +1307,17 @@
           {
             "value"        : 10,
             "upgrade_value": 10,
-            "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "blast_arrow"} },
+              "modifier": "More"
+            }
           },
           {
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : {
-              "stat"    : { "Damage": {"skill_id": "blast_charge"} },
-              "modifier": "More",
-              "scope"   : "Global"
+              "stat"    : { "StatusPower": {"status_id": "blast_charge"} },
+              "modifier": "More"
             }
           }
         ]
@@ -1386,14 +1388,14 @@
             "upgrade_value": 0,
             "StatEffect"   : {
               "stat"    : {
-                "SkillConditionalModifier": {
-                  "stat": { "CritChance": {"skill_id": "blast_charge"} },
-                  "conditions": [
-                    { "StatusStacks": {"status_id": "blast_charge"} }
-                  ]
+                "TriggerEffectModifier": {
+                  "stat"    : {"CritChance": {}},
+                  "skill_id": "blast_charge",
+                  "source"  : {"TriggerStatusStacks": {}}
                 }
               },
-              "modifier": "Flat"
+              "modifier": "Flat",
+              "scope"   : "Global"
             }
           }
         ]

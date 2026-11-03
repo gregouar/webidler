@@ -18,7 +18,7 @@
       "double"     : {
         "title"       : "Twin Missiles",
         "base_cost"   : 10,
-        "upgrade_cost": 0,
+        "upgrade_cost": 10,
         "max_level"   : 1,
         "effects"     : [
           {
@@ -38,9 +38,14 @@
             }
           },
           {
-            "value"        : 100,
-            "upgrade_value": 0,
+            "value"        : 150,
+            "upgrade_value": 150,
             "StatEffect"   : { "stat": {"ManaCost": {}}, "modifier": "More" }
+          },
+          {
+            "value"        : 0,
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"SkillRepeat": {}}, "modifier": "Flat" }
           }
         ]
       },
@@ -1561,6 +1566,22 @@
               "stat"    : { "Damage": {"skill_id": "bees"} },
               "modifier": "More",
               "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "speed" : {
+        "title"       : "Summon Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Spell"} },
+              "modifier": "Increased"
             }
           }
         ]

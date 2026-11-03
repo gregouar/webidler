@@ -298,7 +298,7 @@ pub fn trigger_modifier_source_str(
             skill_type,
         } => {
             format!(
-                "{} Stacks",
+                "{} Stack",
                 skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -346,7 +346,7 @@ pub fn trigger_modifier_source_str(
             )
         }
         TriggerEffectModifierSource::TriggeringStatusStacks { ignore_initial: _ } => {
-            format!("{} Stacks", format_triggering_status_str(triggering_status))
+            format!("{} Stack", format_triggering_status_str(triggering_status))
         }
         TriggerEffectModifierSource::TriggerStatusDuration => match trigger_status_name {
             Some(trigger_status_name) => format!("{} Duration", trigger_status_name),
@@ -358,8 +358,8 @@ pub fn trigger_modifier_source_str(
         },
         TriggerEffectModifierSource::TriggerStatusStacks { ignore_initial: _ } => {
             match trigger_status_name {
-                Some(trigger_status_name) => format!("{} Stacks", trigger_status_name),
-                None => "Status Stacks".to_string(),
+                Some(trigger_status_name) => format!("{} Stack", trigger_status_name),
+                None => "Stack".to_string(),
             }
         }
     }

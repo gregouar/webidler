@@ -225,11 +225,18 @@
                     "effects"               : [
                         {
                             "FlatDamage": {
-                                "damage": { "Physical": [1, 2] }
+                                "damage": { "Physical": [2, 4] }
                             }
                         }
                     ],
-                    "modifiers": []
+                    "modifiers"             : [
+                        {
+                            "stat"    : {"Damage": {}},
+                            "modifier": "More",
+                            "factor"  : 100.0,
+                            "source"  : { "TriggerStatusStacks": {"ignore_initial": true} }
+                        }
+                    ]
                 },
                 "value"   : 1,
                 "modifier": "Flat"
