@@ -1289,6 +1289,23 @@
     "ignore_stat_effects": [],
     "hidden": false
   },
+  "blast_charge": {
+    "name": "Blast Charge",
+    "icon": "",
+    "description": "",
+    "skill_type": "Attack",
+    "cooldown": 0.0,
+    "mana_cost": 0.0,
+    "required_item": null,
+    "upgrade_cost": 0.0,
+    "upgrade_effects": [],
+    "modifier_effects": [],
+    "targets": [],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": true
+  },
   "whirlwind": {
     "name": "Whirlwind",
     "icon": "skills/whirlwind.svg",

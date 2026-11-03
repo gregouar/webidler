@@ -1361,18 +1361,18 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : 50,
+            "value"        : 30,
             "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : {
-                "SkillConditionalModifier": {
-                  "stat": { "StatusPower": {"status_id": "blast_charge"} },
-                  "conditions": [
-                    { "StatusStacks": {"status_id": "blast_charge"} }
-                  ]
+                "TriggerEffectModifier": {
+                  "stat"    : {"Damage": {}},
+                  "skill_id": "blast_charge",
+                  "source"  : {"TriggerStatusStacks": {}}
                 }
               },
-              "modifier": "More"
+              "modifier": "More",
+              "scope"   : "Global"
             }
           }
         ]
@@ -1396,6 +1396,31 @@
               },
               "modifier": "Flat",
               "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "cluster"     : {
+        "title"       : "Cluster Bombs",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id"   : "blast_arrow_cluster",
+              "target"       : "SameTarget",
+              "skill_type"   : "Attack",
+              "skill_shape"  : "Contact",
+              "OnApplyStatus": {"status_id": "blast_charge", "is_triggered": false},
+              "effects"      : [
+                {
+                  "ApplyStatus": { "status_id": "blast_charge", "value": [5, 15] }
+                }
+              ],
+              "description": "Inflict Blast Charge"
             }
           }
         ]
