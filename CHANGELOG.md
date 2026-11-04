@@ -22,6 +22,8 @@ Content:
 Balance Changes:
 
 - Various Unique Items, Passives & Skill Masteries tweaks.
+- New Elemental Damage with Attacks affixes available on Weapons.
+- Increased Buffs Duration affixes are now available on Helmets as well.
 
 Fixes:
 

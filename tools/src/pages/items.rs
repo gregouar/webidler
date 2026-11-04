@@ -24,11 +24,10 @@ use shared::data::{
     modifier::Modifier,
     skill::{DamageType, SkillType},
     stat_effect::{
-        ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
-        compare_options,
+        DamageStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
+        ToDamageTypes, compare_options,
     },
 };
-use strum::IntoEnumIterator;
 
 use crate::{header::HeaderMenu, utils::json_editor::JsonEditor};
 
@@ -344,39 +343,16 @@ fn compute_weapon_specs(
             } if skill_filter.is_match(&StatSkillFilter {
                 skill_type: Some(SkillType::Attack),
                 ..Default::default()
-            }) && compare_options(is_hit, &Some(true)) =>
+            }) =>
             {
-                match damage_type {
-                    Some(damage_type) => {
-                        if compare_options(
-                            is_hit,
-                            &Some(!matches!(damage_type, DamageType::Poison)),
-                        ) {
-                            let value = weapon_specs.damage.entry(*damage_type).or_default();
-                            if let Some(MinMax::Min) | None = min_max {
-                                value.min.apply_effect(effect);
-                            }
-                            if let Some(MinMax::Max) | None = min_max {
-                                value.max.apply_effect(effect);
-                            }
+                for damage_type in damage_type.to_damage_types() {
+                    if compare_options(is_hit, &Some(!matches!(damage_type, DamageType::Poison))) {
+                        let value = weapon_specs.damage.entry(*damage_type).or_default();
+                        if let Some(MinMax::Min) | None = min_max {
+                            value.min.apply_effect(effect);
                         }
-                    }
-                    None => {
-                        for damage_type in DamageType::iter() {
-                            if !compare_options(
-                                is_hit,
-                                &Some(!matches!(damage_type, DamageType::Poison)),
-                            ) {
-                                continue;
-                            }
-
-                            let value = weapon_specs.damage.entry(damage_type).or_default();
-                            if let Some(MinMax::Min) | None = min_max {
-                                value.min.apply_effect(effect);
-                            }
-                            if let Some(MinMax::Max) | None = min_max {
-                                value.max.apply_effect(effect);
-                            }
+                        if let Some(MinMax::Max) | None = min_max {
+                            value.max.apply_effect(effect);
                         }
                     }
                 }
@@ -435,7 +411,7 @@ fn compute_armor_specs(
         .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
-            StatType::Armor(Some(ArmorStatType::Physical)) => {
+            StatType::Armor(Some(DamageStatType::Physical)) => {
                 armor_specs.armor.apply_effect(effect)
             }
             StatType::Block(Some(SkillType::Attack) | None) => {

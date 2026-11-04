@@ -1067,7 +1067,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                         Some(StatEffect {
                             stat: StatType::Damage {
                                 skill_filter,
-                                damage_type,
+                                damage_type: damage_type.into(),
                                 min_max: Some(MinMax::Max),
                                 is_hit,
                             },
@@ -1322,7 +1322,7 @@ pub fn apply_stat_effect_on_skill_effect(
                     is_hit,
                 } = &effect.stat
                     && skill_filter.is_match_with_skill(skill_type, skill_id)
-                    && compare_options(stat_damage_type, &Some(damage_type))
+                    && compare_options(stat_damage_type, &Some(damage_type.into()))
                     && compare_options(is_hit, &Some(true))
                 {
                     if compare_options(min_max, &Some(MinMax::Min)) {
@@ -1501,7 +1501,7 @@ pub fn apply_stat_effect_on_skill_effect(
                     is_hit,
                 } = &effect.stat
                     && skill_filter.is_match_with_skill(skill_type, skill_id)
-                    && compare_options(damage_type, &status_specs.damage_type)
+                    && compare_options(damage_type, &status_specs.damage_type.map(Into::into))
                     && compare_options(is_hit, &Some(false))
                 {
                     if compare_options(min_max, &Some(MinMax::Min)) {

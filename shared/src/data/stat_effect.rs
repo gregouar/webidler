@@ -1,7 +1,11 @@
-use std::collections::{BTreeMap, HashMap, hash_map};
+use std::{
+    collections::{BTreeMap, HashMap, hash_map},
+    slice::Iter,
+};
 
 use serde::{Deserialize, Serialize};
-use strum_macros::EnumIter;
+use strum::VariantArray as _;
+use strum_macros::{EnumIter, VariantArray};
 
 use crate::{
     data::{
@@ -33,6 +37,7 @@ use super::skill::SkillType;
     Ord,
     Default,
     EnumIter,
+    VariantArray,
 )]
 pub enum DamageType {
     #[default]
@@ -183,7 +188,7 @@ pub enum StatType {
     ItemAreaChance,
     ItemLevel,
     SkillLevel(#[serde(default)] StatSkillFilter),
-    Armor(Option<ArmorStatType>),
+    Armor(Option<DamageStatType>),
     DamageTaken {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -208,7 +213,7 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
-        damage_type: Option<DamageType>,
+        damage_type: Option<DamageStatType>,
         #[serde(default)]
         min_max: Option<MinMax>,
         #[serde(default)]
@@ -510,8 +515,8 @@ pub struct StatSkillRepeat {
     pub target: SkillRepeatTarget,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum ArmorStatType {
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum DamageStatType {
     Physical,
     Elemental,
     Fire,
@@ -519,24 +524,83 @@ pub enum ArmorStatType {
     Poison,
 }
 
-impl ArmorStatType {
+impl Matchable for DamageStatType {
+    fn is_match(&self, other: &Self) -> bool {
+        matches!(
+            (self, other),
+            (DamageStatType::Physical, DamageStatType::Physical)
+                | (
+                    DamageStatType::Fire | DamageStatType::Elemental,
+                    DamageStatType::Fire | DamageStatType::Elemental
+                )
+                | (
+                    DamageStatType::Poison | DamageStatType::Elemental,
+                    DamageStatType::Poison | DamageStatType::Elemental
+                )
+                | (
+                    DamageStatType::Storm | DamageStatType::Elemental,
+                    DamageStatType::Storm | DamageStatType::Elemental
+                )
+        )
+    }
+}
+
+pub trait ToDamageTypes {
+    fn to_damage_types(&self) -> Iter<'_, DamageType>;
+}
+
+impl DamageStatType {
     pub fn is_match(&self, damage_type: DamageType) -> bool {
         matches!(
             (self, damage_type),
-            (ArmorStatType::Physical, DamageType::Physical)
+            (DamageStatType::Physical, DamageType::Physical)
                 | (
-                    ArmorStatType::Fire | ArmorStatType::Elemental,
+                    DamageStatType::Fire | DamageStatType::Elemental,
                     DamageType::Fire
                 )
                 | (
-                    ArmorStatType::Poison | ArmorStatType::Elemental,
+                    DamageStatType::Poison | DamageStatType::Elemental,
                     DamageType::Poison
                 )
                 | (
-                    ArmorStatType::Storm | ArmorStatType::Elemental,
+                    DamageStatType::Storm | DamageStatType::Elemental,
                     DamageType::Storm
                 )
         )
+    }
+}
+
+impl ToDamageTypes for DamageStatType {
+    fn to_damage_types(&self) -> Iter<'_, DamageType> {
+        match self {
+            DamageStatType::Physical => [DamageType::Physical].iter(),
+            DamageStatType::Elemental => {
+                [DamageType::Fire, DamageType::Storm, DamageType::Poison].iter()
+            }
+            DamageStatType::Fire => [DamageType::Fire].iter(),
+            DamageStatType::Storm => [DamageType::Storm].iter(),
+            DamageStatType::Poison => [DamageType::Poison].iter(),
+        }
+    }
+}
+
+impl ToDamageTypes for Option<DamageStatType> {
+    fn to_damage_types(&self) -> Iter<'_, DamageType> {
+        match self {
+            Some(damage_type) => damage_type.to_damage_types(),
+            None => DamageType::VARIANTS.iter(),
+        }
+    }
+}
+
+impl Into<DamageStatType> for DamageType {
+    fn into(self) -> DamageStatType {
+        match self {
+            DamageType::Physical => DamageStatType::Physical,
+            DamageType::Fire => DamageStatType::Fire,
+            DamageType::Storm => DamageStatType::Storm,
+            DamageType::Poison => DamageStatType::Poison,
+        }
     }
 }
 

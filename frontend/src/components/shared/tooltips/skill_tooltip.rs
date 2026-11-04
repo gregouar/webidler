@@ -26,7 +26,8 @@ use crate::components::{
     shared::tooltips::{
         conditions_tooltip,
         effects_tooltip::{
-            self, damage_type_str, format_multiplier_stat_name, formatted_effects_list, min_max_str,
+            self, damage_stat_type_str, damage_type_str, format_multiplier_stat_name,
+            formatted_effects_list, min_max_str,
         },
         frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip, status_tooltip,
@@ -459,7 +460,7 @@ pub(super) fn format_damage_trigger_modifier(
         modifiers.unwrap_or_default().iter().find(|modifier| {
             modifier.modifier == Modifier::Flat
                 && modifier.stat.is_match(&StatType::Damage {
-                    damage_type: Some(damage_type),
+                    damage_type: Some(damage_type.into()),
                     skill_filter: Default::default(),
                     min_max: Some(bound),
                     is_hit: None,
@@ -483,9 +484,9 @@ pub(super) fn format_damage_trigger_modifier(
     ) {
         return Some(
             view! {
-                <span class=format!("font-semibold {damage_color}")>
-                    {format_min_max_f64(*min_value.min, *max_value.max)}
-                </span>
+                <span class=format!(
+                    "font-semibold {damage_color}",
+                )>{format_min_max_f64(*min_value.min, *max_value.max)}</span>
             }
             .into_any(),
         );
@@ -494,7 +495,7 @@ pub(super) fn format_damage_trigger_modifier(
     format_trigger_modifier(
         find_trigger_modifier(
             StatType::Damage {
-                damage_type: Some(damage_type),
+                damage_type: Some(damage_type.into()),
                 skill_filter: Default::default(),
                 min_max: None,
                 is_hit: None,
@@ -1138,8 +1139,9 @@ fn format_status_damage_modifier(skill_modifier: &ModifierEffect) -> Option<Stri
         return None;
     }
 
-    let status_id = status_filter.status_id.as_ref()?;
     let data_context: DataContext = expect_context();
+
+    let status_id = status_filter.status_id.as_ref()?;
     let statuses_specs = data_context.statuses_specs.read_untracked();
     let status_specs = statuses_specs.get(status_id)?;
     let damage_modifier = status_specs
@@ -1173,8 +1175,8 @@ fn format_status_damage_modifier(skill_modifier: &ModifierEffect) -> Option<Stri
         .or_else(|| required_item.slot.map(item_tooltip::item_slot_str))
         .unwrap_or("Item");
     let scaling = skill_modifier.factor * effect.value * damage_modifier.factor * 100.0;
-    let conversion = (source_damage_type != result_damage_type)
-        .then(|| format!(" as {}Damage", damage_type_str(*result_damage_type)));
+    let conversion = (*result_damage_type != source_damage_type.map(Into::into))
+        .then(|| format!(" as {}Damage", damage_stat_type_str(result_damage_type)));
 
     Some(format!(
         "{} Damage gains {}% of the equipped {}'s {}Damage{}",

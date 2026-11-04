@@ -76,7 +76,7 @@ fn add_hit_damage_kinds(
                         damage_type: modifier_damage_type,
                         ..
                     } if modifier_damage_type.is_none_or(|modifier_damage_type| {
-                        modifier_damage_type == damage_type
+                        modifier_damage_type.is_match(damage_type)
                     })
                 )
         });
@@ -132,11 +132,12 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                     add_hit_damage_kinds(&mut kinds, skill_type, effect, trigger_modifiers);
 
                     if let SkillEffectType::ApplyStatus {
-                            status_id,
-                            value,
-                            computed_status_triggers,
-                            ..
-                        } = &effect.effect_type {
+                        status_id,
+                        value,
+                        computed_status_triggers,
+                        ..
+                    } = &effect.effect_type
+                    {
                         if (value.min.get() > 0.0
                             || value.max.get() > 0.0
                             || !trigger_modifiers.is_empty())

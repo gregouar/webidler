@@ -11,8 +11,9 @@ use shared::data::{
     passive::PassiveNodeId,
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
-        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
-        StatSkillFilter, StatStatusFilter, StatType, StatusDamageType,
+        DamageStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect,
+        StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType, StatusDamageType,
+        ToDamageTypes,
     },
 };
 
@@ -71,16 +72,29 @@ pub fn min_max_str(min_max: Option<MinMax>) -> &'static str {
     }
 }
 
-pub fn armor_type_str(armor_type: &Option<ArmorStatType>) -> &'static str {
+pub fn armor_stat_type_str(armor_type: &Option<DamageStatType>) -> &'static str {
     match armor_type {
         Some(armor_type) => match armor_type {
-            ArmorStatType::Physical => "Physical Defense",
-            ArmorStatType::Fire => "Fire Defense",
-            ArmorStatType::Poison => "Toxic Defense",
-            ArmorStatType::Storm => "Storm Defense",
-            ArmorStatType::Elemental => "Elemental Defenses",
+            DamageStatType::Physical => "Physical Defense",
+            DamageStatType::Fire => "Fire Defense",
+            DamageStatType::Poison => "Toxic Defense",
+            DamageStatType::Storm => "Storm Defense",
+            DamageStatType::Elemental => "Elemental Defenses",
         },
         None => "All Defenses",
+    }
+}
+
+pub fn damage_stat_type_str(damage_type: &Option<DamageStatType>) -> &'static str {
+    match damage_type {
+        Some(damage_type) => match damage_type {
+            DamageStatType::Physical => "Physical ",
+            DamageStatType::Fire => "Fire ",
+            DamageStatType::Poison => "Toxic ",
+            DamageStatType::Storm => "Storm ",
+            DamageStatType::Elemental => "Elemental ",
+        },
+        None => "",
     }
 }
 
@@ -346,10 +360,8 @@ pub fn formatted_effects_list(
     let mut merged: Vec<String> = Vec::with_capacity(affix_effects.len());
 
     // This will be used to merge added min and added max damage together
-    let mut min_damage: IndexMap<(StatSkillFilter, Option<DamageType>, bool), f64> =
-        IndexMap::new();
-    let mut max_damage: IndexMap<(StatSkillFilter, Option<DamageType>, bool), f64> =
-        IndexMap::new();
+    let mut min_damage: IndexMap<(StatSkillFilter, DamageType, bool), f64> = IndexMap::new();
+    let mut max_damage: IndexMap<(StatSkillFilter, DamageType, bool), f64> = IndexMap::new();
 
     for effect in affix_effects.iter().rev() {
         match (effect.modifier, &effect.stat) {
@@ -362,10 +374,12 @@ pub fn formatted_effects_list(
                     is_hit: None,
                 },
             ) => {
-                min_damage.insert(
-                    (skill_filter.clone(), *damage_type, effect.value >= 0.0),
-                    effect.value,
-                );
+                for damage_type in damage_type.to_damage_types() {
+                    min_damage.insert(
+                        (skill_filter.clone(), *damage_type, effect.value >= 0.0),
+                        effect.value,
+                    );
+                }
             }
             (
                 Modifier::Flat,
@@ -376,10 +390,12 @@ pub fn formatted_effects_list(
                     is_hit: None,
                 },
             ) => {
-                max_damage.insert(
-                    (skill_filter.clone(), *damage_type, effect.value >= 0.0),
-                    effect.value,
-                );
+                for damage_type in damage_type.to_damage_types() {
+                    max_damage.insert(
+                        (skill_filter.clone(), *damage_type, effect.value >= 0.0),
+                        effect.value,
+                    );
+                }
             }
             _ => {
                 let formatted_stat = format_stat(effect);
@@ -392,8 +408,8 @@ pub fn formatted_effects_list(
 
     for (k, min_flat) in min_damage.iter() {
         let damage_type_name = match k.1 {
-            Some(DamageType::Poison) => "Poison ",
-            damage_type => damage_type_str(damage_type),
+            DamageType::Poison => "Poison ",
+            damage_type => damage_type_str(Some(damage_type)),
         };
         if let Some(max_flat) = max_damage.get(k) {
             let (skill_filter, _, positive) = k;
@@ -419,8 +435,8 @@ pub fn formatted_effects_list(
 
     for (k, max_flat) in max_damage.iter() {
         let damage_type_name = match k.1 {
-            Some(DamageType::Poison) => "Poison ",
-            damage_type => damage_type_str(damage_type),
+            DamageType::Poison => "Poison ",
+            damage_type => damage_type_str(Some(damage_type)),
         };
         if !min_damage.contains_key(k) {
             let (skill_filter, _, positive) = k;
@@ -525,7 +541,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::ManaCost { skill_filter } => {
             format!("{}Mana Cost", skill_filter_str(skill_filter, "", false))
         }
-        StatType::Armor(armor_type) => armor_type_str(armor_type).to_string(),
+        StatType::Armor(armor_type) => armor_stat_type_str(armor_type).to_string(),
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::TakeFromLifeBeforeMana => "Life spent instead of Mana".to_string(),
         StatType::Block(skill_type) => format!("{}Block Chance", skill_type_str(*skill_type)),
@@ -545,7 +561,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => format!(
             "{}{}{}Damage{}",
             min_max_str(*min_max),
-            damage_type_str(*damage_type),
+            damage_stat_type_str(damage_type),
             is_hit_str(is_hit),
             skill_filter_str(skill_filter, " with ", true),
         ),
@@ -798,7 +814,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::Armor(armor_type) => format!(
             "{} {}",
             format_adds_removes(value, false, ""),
-            armor_type_str(armor_type)
+            armor_stat_type_str(armor_type)
         ),
         StatType::TakeFromManaBeforeLife => {
             format!(
@@ -843,7 +859,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             "{} {}{}{}Damage{}",
             format_adds_removes(value, false, ""),
             min_max_str(*min_max),
-            damage_type_str(*damage_type),
+            damage_stat_type_str(damage_type),
             is_hit_str(is_hit),
             skill_filter_str(skill_filter, " to ", true)
         ),

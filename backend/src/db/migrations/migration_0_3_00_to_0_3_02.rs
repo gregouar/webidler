@@ -16,7 +16,7 @@ use shared::data::{
     passive::PassiveNodeId,
     skill::{DamageType, RestoreModifier, RestoreType, SkillType},
     stat_effect::{
-        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
+        DamageStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
         StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusFilter, StatType,
     },
     trigger::TriggerEffectModifierSource,
@@ -347,7 +347,7 @@ enum OldStatType {
     ItemAreaChance,
     ItemLevel,
     SkillLevel(#[serde(default)] StatSkillFilter),
-    Armor(Option<ArmorStatType>),
+    Armor(Option<DamageStatType>),
     DamageTaken {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -539,7 +539,7 @@ impl From<OldStatType> for StatType {
                 is_hit,
             } => Self::Damage {
                 skill_filter,
-                damage_type,
+                damage_type: damage_type.map(Into::into),
                 min_max,
                 is_hit,
             },

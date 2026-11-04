@@ -11,7 +11,8 @@ use shared::{
         player::{CharacterSpecs, PlayerInventory},
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{
-            EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType, compare_options,
+            EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType, ToDamageTypes,
+            compare_options,
         },
         trigger::TriggerEffectModifierSource,
     },
@@ -265,28 +266,15 @@ fn compute_character_specs(
             StatType::LifeRegen => character_attrs.life_regen.apply_effect(effect),
             StatType::Mana => character_attrs.max_mana.apply_effect(effect),
             StatType::ManaRegen => character_attrs.mana_regen.apply_effect(effect),
-            StatType::Armor(armor_type) => match armor_type {
-                Some(armor_type) => {
-                    for damage_type in DamageType::iter() {
-                        if armor_type.is_match(damage_type) {
-                            character_attrs
-                                .armor
-                                .entry(damage_type)
-                                .or_default()
-                                .apply_effect(effect)
-                        }
-                    }
+            StatType::Armor(armor_type) => {
+                for damage_type in armor_type.to_damage_types() {
+                    character_attrs
+                        .armor
+                        .entry(*damage_type)
+                        .or_default()
+                        .apply_effect(effect)
                 }
-                None => {
-                    for damage_type in DamageType::iter() {
-                        character_attrs
-                            .armor
-                            .entry(damage_type)
-                            .or_default()
-                            .apply_effect(effect)
-                    }
-                }
-            },
+            }
             StatType::TakeFromManaBeforeLife => character_attrs
                 .take_from_mana_before_life
                 .apply_effect(effect),
@@ -664,21 +652,18 @@ pub fn extend_triggers_from_skills_and_statuses(
             {
                 let mut trigger_effect = trigger_specs.trigger_effect.clone();
 
-                
                 let owner_effects = if *inherit_owner_effects {
                     effects.iter()
                 } else {
                     [].iter()
                 };
 
-                
-                
                 let player_effects = if *inherit_player_effects {
                     player_effects.iter()
                 } else {
                     [].iter()
                 };
-                
+
                 // Mandatory to compute skill effects even if modifier_effects is empty to
                 // initialize trigger status with base values
                 triggers_updater::compute_trigger_specs_effects(

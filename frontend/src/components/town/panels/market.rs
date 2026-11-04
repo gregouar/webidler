@@ -10,10 +10,10 @@ use shared::{
         item::{ItemCategory, ItemRarity},
         market::{MarketFilters, MarketItem, MarketOrderBy, MarketStatFilter},
         modifier::Modifier,
-        skill::{DamageType, RestoreType, SkillType},
+        skill::{RestoreType, SkillType},
         stash::{Stash, StashType},
         stat_effect::{
-            ArmorStatType, LuckyRollType, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
+            DamageStatType, LuckyRollType, StatSkillEffectType, StatSkillFilter, StatStatusFilter,
             StatType, StatusDamageType,
         },
     },
@@ -1460,13 +1460,17 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (StatType::Mana, Modifier::Increased),
         (StatType::Mana, Modifier::Flat),
         (StatType::ManaRegen, Modifier::Flat),
-        (StatType::Armor(Some(ArmorStatType::Fire)), Modifier::Flat),
-        (StatType::Armor(Some(ArmorStatType::Poison)), Modifier::Flat),
-        (StatType::Armor(Some(ArmorStatType::Storm)), Modifier::Flat),
+        (StatType::Armor(Some(DamageStatType::Fire)), Modifier::Flat),
         (
-            StatType::Armor(Some(ArmorStatType::Elemental)),
+            StatType::Armor(Some(DamageStatType::Poison)),
             Modifier::Flat,
         ),
+        (StatType::Armor(Some(DamageStatType::Storm)), Modifier::Flat),
+        // Stat is stored split in db/loot queue
+        // (
+        //     StatType::Armor(Some(DamageStatType::Elemental)),
+        //     Modifier::Flat,
+        // ),
         (StatType::Armor(None), Modifier::Increased),
         (StatType::Evade(None), Modifier::Flat),
         (
@@ -1529,7 +1533,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Physical),
+                damage_type: Some(DamageStatType::Physical),
                 min_max: None,
                 is_hit: None,
             },
@@ -1538,7 +1542,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Physical),
+                damage_type: Some(DamageStatType::Physical),
                 min_max: None,
                 is_hit: None,
             },
@@ -1547,7 +1551,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Fire),
+                damage_type: Some(DamageStatType::Fire),
                 min_max: None,
                 is_hit: None,
             },
@@ -1556,7 +1560,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Fire),
+                damage_type: Some(DamageStatType::Fire),
                 min_max: None,
                 is_hit: None,
             },
@@ -1565,7 +1569,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Poison),
+                damage_type: Some(DamageStatType::Poison),
                 min_max: None,
                 is_hit: None,
             },
@@ -1574,7 +1578,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Poison),
+                damage_type: Some(DamageStatType::Poison),
                 min_max: None,
                 is_hit: None,
             },
@@ -1583,7 +1587,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Storm),
+                damage_type: Some(DamageStatType::Storm),
                 min_max: None,
                 is_hit: None,
             },
@@ -1592,11 +1596,35 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         (
             StatType::Damage {
                 skill_filter: Default::default(),
-                damage_type: Some(DamageType::Storm),
+                damage_type: Some(DamageStatType::Storm),
                 min_max: None,
                 is_hit: None,
             },
             Modifier::Increased,
+        ),
+        (
+            StatType::Damage {
+                skill_filter: StatSkillFilter {
+                    skill_type: Some(SkillType::Attack),
+                    skill_id: None,
+                },
+                damage_type: Some(DamageStatType::Elemental),
+                min_max: None,
+                is_hit: None,
+            },
+            Modifier::More,
+        ),
+        (
+            StatType::StatusPower {
+                status_filter: StatStatusFilter {
+                    status_id: None,
+                    damage_type: Some(StatusDamageType::Any),
+                    debuff: None,
+                },
+                skill_filter: Default::default(),
+                min_max: None,
+            },
+            Modifier::More,
         ),
         (
             StatType::CritDamage(Default::default()),
@@ -1612,18 +1640,6 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
                 ..Default::default()
             }),
             Modifier::Increased,
-        ),
-        (
-            StatType::StatusPower {
-                status_filter: StatStatusFilter {
-                    status_id: None,
-                    damage_type: Some(StatusDamageType::Any),
-                    debuff: None,
-                },
-                skill_filter: Default::default(),
-                min_max: None,
-            },
-            Modifier::More,
         ),
         (
             StatType::StatusPower {

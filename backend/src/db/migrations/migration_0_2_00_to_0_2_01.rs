@@ -14,7 +14,7 @@ use shared::data::{
     passive::PassiveNodeId,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
-        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
+        DamageStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
         StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusFilter, StatType,
     },
     user::UserCharacterId,
@@ -367,7 +367,7 @@ pub enum OldStatType {
     ItemRarity,
     ItemLevel,
     SkillLevel(#[serde(default)] OldStatSkillFilter),
-    Armor(Option<ArmorStatType>),
+    Armor(Option<DamageStatType>),
     DamageResistance {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -510,7 +510,7 @@ impl From<OldStatType> for StatType {
                 is_hit,
             } => Damage {
                 skill_filter: skill_filter.into(),
-                damage_type,
+                damage_type: damage_type.map(Into::into),
                 min_max,
                 is_hit,
             },

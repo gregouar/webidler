@@ -9,7 +9,7 @@ use crate::data::{
     item_affix::{AffixEffect, AffixType},
     modifier::ModifiableValue,
     skill::DamageType,
-    stat_effect::{ArmorStatType, StatType},
+    stat_effect::{DamageStatType, StatType},
     trigger::TriggerSpecs,
     values::{NonNegative, Percent},
 };
@@ -346,13 +346,13 @@ impl ItemModifiers {
                 if split_elements
                     && matches!(
                         &effect.stat_effect.stat,
-                        StatType::Armor(Some(ArmorStatType::Elemental))
+                        StatType::Armor(Some(DamageStatType::Elemental))
                     )
                 {
                     for stat in [
-                        StatType::Armor(Some(ArmorStatType::Fire)),
-                        StatType::Armor(Some(ArmorStatType::Poison)),
-                        StatType::Armor(Some(ArmorStatType::Storm)),
+                        StatType::Armor(Some(DamageStatType::Fire)),
+                        StatType::Armor(Some(DamageStatType::Poison)),
+                        StatType::Armor(Some(DamageStatType::Storm)),
                     ] {
                         *effects_map
                             .0
