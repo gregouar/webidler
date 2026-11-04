@@ -727,12 +727,18 @@ pub struct StatConverterSpecs {
     pub uncapped: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatConverterSource {
     CritDamage,
     Damage {
         #[serde(default)]
         damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
+    },
+    StatusDuration {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         min_max: Option<MinMax>,
     },

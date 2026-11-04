@@ -173,8 +173,8 @@
         "modifier": "More",
         "scope": "Global",
         "value": [
-          300.0,
-          500.0
+          200.0,
+          400.0
         ],
         "ignore_quality": true
       }
@@ -195,17 +195,9 @@
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
-          },
+          "stat": "GoldFind",
           "modifier": "More",
-          "value": 20.0
+          "value": 100.0
         }
       }
     ]
@@ -348,6 +340,7 @@
             },
             "is_extra": false,
             "skill_type": null,
+            "skill_id": null,
             "uncapped": false
           }
         },
@@ -472,15 +465,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": "Poison",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
@@ -497,6 +481,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": "Poison",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
@@ -565,6 +558,7 @@
             },
             "is_extra": true,
             "skill_type": null,
+            "skill_id": null,
             "uncapped": false
           }
         },
@@ -674,13 +668,13 @@
         "effects": [
           {
             "success_chance": {
-              "value": 50.0,
+              "value": 30.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
               "status_id": "poison",
               "value": 0.0,
-              "value_factor": 1.0,
+              "value_factor": 0.3,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -763,6 +757,7 @@
             },
             "is_extra": true,
             "skill_type": null,
+            "skill_id": null,
             "uncapped": false
           }
         },
@@ -786,6 +781,7 @@
             },
             "is_extra": true,
             "skill_type": null,
+            "skill_id": null,
             "uncapped": false
           }
         },

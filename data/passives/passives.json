@@ -8485,29 +8485,28 @@
           },
           {
             "stat": {
-              "SkillConditionalModifier": {
+              "StatConverter": {
+                "source": {
+                  "StatusDuration": {
+                    "status_id": null,
+                    "damage_type": "Any",
+                    "debuff": null,
+                    "min_max": null
+                  }
+                },
                 "stat": {
                   "StatusEscalation": {
                     "status_id": null,
-                    "damage_type": "Poison",
+                    "damage_type": "Any",
                     "debuff": null,
                     "skill_type": null,
                     "skill_id": null
                   }
                 },
+                "is_extra": true,
                 "skill_type": null,
                 "skill_id": null,
-                "conditions": [
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": "Poison",
-                      "debuff": null,
-                      "skill_type": null,
-                      "use_max_duration": true
-                    }
-                  }
-                ]
+                "uncapped": false
               }
             },
             "modifier": "More",

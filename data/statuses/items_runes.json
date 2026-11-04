@@ -1,29 +1,28 @@
 {
     "berserker": {
-        "name": "Berserker",
-        "icon": "statuses/enrage.svg",
-        "debuff": false,
-        "duration": 5.0,
+        "name"      : "Berserker",
+        "icon"      : "statuses/enrage.svg",
+        "debuff"    : false,
+        "duration"  : 5.0,
         "max_stacks": 20,
-        "effects": [
+        "effects"   : [
             {
                 "StatModifier": {
-                    "stat": {
+                    "stat"    : {
                         "Damage": {
-                            "skill_type": null,
-                            "skill_id": null,
+                            "skill_type"       : null,
+                            "skill_id"         : null,
                             "skill_description": null,
-                            "damage_type": null,
-                            "min_max": null,
-                            "is_hit": null
-
+                            "damage_type"      : null,
+                            "min_max"          : null,
+                            "is_hit"           : null
                         }
                     },
                     "modifier": "More",
-                    "debuff": false
+                    "debuff"  : false
                 },
-                "value": 25.0,
-                "modifier": "Flat"
+                "value"       : 15.0,
+                "modifier"    : "Flat"
             }
         ]
     }

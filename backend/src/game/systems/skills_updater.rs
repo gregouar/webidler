@@ -980,7 +980,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
             (
-                stat_converter.source,
+                stat_converter.source.clone(),
                 stat_converter.stat.clone(),
                 *modifier,
             )
@@ -1082,6 +1082,53 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                             value: (amount.0 + amount.1),
                             bypass_ignore: true,
                         })
+                    }
+                }
+                (
+                    StatConverterSource::StatusDuration {
+                        status_filter,
+                        min_max,
+                    },
+                    SkillEffectType::ApplyStatus {
+                        status_id,
+                        duration,
+                        ..
+                    },
+                ) => {
+                    if let Some(duration) = duration
+                        && let Some(status_specs) = statuses_store.get(status_id)
+                        && status_filter.is_match_with_status(
+                            status_id,
+                            status_specs.damage_type,
+                            status_specs.debuff,
+                        )
+                    {
+                        let min_value = if let Some(MinMax::Min) | None = min_max {
+                            duration
+                                .min
+                                .convert_value(factor, specs.is_extra, false)
+                                .get()
+                        } else {
+                            0.0
+                        };
+                        let max_value = if let Some(MinMax::Max) | None = min_max {
+                            duration
+                                .max
+                                .convert_value(factor, specs.is_extra, false)
+                                .get()
+                        } else {
+                            0.0
+                        };
+
+                        Some(StatEffect {
+                            stat: (*specs.stat).clone(),
+                            modifier,
+                            value: (min_value + max_value)
+                                * if min_max == None { 50.0 } else { 100.0 },
+                            bypass_ignore: true,
+                        })
+                    } else {
+                        None
                     }
                 }
                 // (

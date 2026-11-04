@@ -473,7 +473,7 @@ fn compute_character_specs(
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _, _)| {
             (
-                stat_converter.source,
+                stat_converter.source.clone(),
                 stat_converter.stat.clone(),
                 *modifier,
             )
@@ -549,7 +549,9 @@ fn compute_character_specs(
                     })
                     .sum(),
 
-                StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => {
+                StatConverterSource::CritDamage
+                | StatConverterSource::Damage { .. }
+                | StatConverterSource::StatusDuration { .. } => {
                     continue;
                 }
             };
@@ -624,7 +626,9 @@ pub fn compute_stat_converter(
             })
             .sum(),
 
-        StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => 0.0,
+        StatConverterSource::CritDamage
+        | StatConverterSource::Damage { .. }
+        | StatConverterSource::StatusDuration { .. } => 0.0,
     }
 }
 

@@ -459,7 +459,7 @@ fn modify_player_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. }, // | StatConverterSource::DamageOverTime { .. }
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. } | StatConverterSource::StatusDuration{..}, // | StatConverterSource::DamageOverTime { .. }
                 ..
             })
             | StatType::SuccessChance { .. }

@@ -151,7 +151,7 @@ pub fn lucky_roll_str(roll_type: &LuckyRollType) -> String {
 }
 
 pub fn stat_converter_source_str(
-    stat_converter_source: StatConverterSource,
+    stat_converter_source: &StatConverterSource,
     uncapped: bool,
 ) -> String {
     let uncapped_str = if uncapped { "Uncapped " } else { "" };
@@ -163,8 +163,18 @@ pub fn stat_converter_source_str(
         } => {
             format!(
                 "{}Base {}Hit Damage",
-                min_max_str(min_max),
-                damage_type_str(damage_type)
+                min_max_str(*min_max),
+                damage_type_str(*damage_type)
+            )
+        }
+        StatConverterSource::StatusDuration {
+            status_filter,
+            min_max,
+        } => {
+            format!(
+                "{} {}Duration",
+                status_filter_str(&status_filter),
+                min_max_str(*min_max),
             )
         }
         // StatConverterSource::DamageOverTime {
@@ -185,18 +195,18 @@ pub fn stat_converter_source_str(
             format!(
                 "{}{}Block Chance",
                 uncapped_str,
-                skill_type_str(Some(skill_type))
+                skill_type_str(Some(*skill_type))
             )
         }
         StatConverterSource::Evade(damage_type) => {
             format!(
                 "{}{} Evade Chance",
                 uncapped_str,
-                damage_over_time_type_str(damage_type)
+                damage_over_time_type_str(*damage_type)
             )
         }
         StatConverterSource::Armor { damage_type } => {
-            format!("Global {}Defense", damage_type_str(damage_type))
+            format!("Global {}Defense", damage_type_str(*damage_type))
         }
     }
 }
@@ -462,25 +472,46 @@ pub fn format_stat(effect: &StatEffect) -> String {
         "".to_string()
         // "No Effect".to_string()
     } else if let StatType::StatConverter(stat_converter_specs) = &effect.stat {
-        let extra_str = match stat_converter_specs.is_extra {
-            true => "gained as",
-            false => "converted to",
-        };
-        let value = if let StatConverterSource::LifeRegen | StatConverterSource::ManaRegen =
-            stat_converter_specs.source
+        if let StatConverterSource::StatusDuration { .. } = &stat_converter_specs.source
+            && stat_converter_specs.is_extra
         {
-            effect.value * 10.0
+            format!(
+                "{} per second of {}",
+                format_stat(&StatEffect {
+                    stat: (*stat_converter_specs.stat).clone(),
+                    modifier: effect.modifier,
+                    value: effect.value,
+                    bypass_ignore: effect.bypass_ignore
+                }),
+                stat_converter_source_str(
+                    &stat_converter_specs.source,
+                    stat_converter_specs.uncapped
+                )
+            )
         } else {
-            effect.value
-        };
-        format!(
-            "{}% of {} {extra_str} {}{}{}",
-            format_flat_number(Some(value), false),
-            stat_converter_source_str(stat_converter_specs.source, stat_converter_specs.uncapped),
-            modifier_str(effect.modifier),
-            format_multiplier_stat_name(&stat_converter_specs.stat),
-            skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
-        )
+            let extra_str = match stat_converter_specs.is_extra {
+                true => "gained as",
+                false => "converted to",
+            };
+            let value = if let StatConverterSource::LifeRegen | StatConverterSource::ManaRegen =
+                stat_converter_specs.source
+            {
+                effect.value * 10.0
+            } else {
+                effect.value
+            };
+            format!(
+                "{}% of {} {extra_str} {}{}{}",
+                format_flat_number(Some(value), false),
+                stat_converter_source_str(
+                    &stat_converter_specs.source,
+                    stat_converter_specs.uncapped
+                ),
+                modifier_str(effect.modifier),
+                format_multiplier_stat_name(&stat_converter_specs.stat),
+                skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
+            )
+        }
     } else if let StatType::StatConditionalModifier {
         stat,
         conditions,
@@ -764,7 +795,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 format!(
                     "Gain {} as {}{}",
                     stat_converter_source_str(
-                        stat_converter_specs.source,
+                        &stat_converter_specs.source,
                         stat_converter_specs.uncapped
                     ),
                     format_multiplier_stat_name(&stat_converter_specs.stat),
@@ -774,7 +805,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 format!(
                     "Convert {} to {}{}",
                     stat_converter_source_str(
-                        stat_converter_specs.source,
+                        &stat_converter_specs.source,
                         stat_converter_specs.uncapped
                     ),
                     format_multiplier_stat_name(&stat_converter_specs.stat),
@@ -1084,7 +1115,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 "{}% of {} {extra_str} {}{}",
                 format_flat_number(value, false),
                 stat_converter_source_str(
-                    stat_converter_specs.source,
+                    &stat_converter_specs.source,
                     stat_converter_specs.uncapped
                 ),
                 format_multiplier_stat_name(&stat_converter_specs.stat),
