@@ -1124,7 +1124,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                             stat: (*specs.stat).clone(),
                             modifier,
                             value: (min_value + max_value)
-                                * if min_max == None { 50.0 } else { 100.0 },
+                                * if min_max.is_none() { 50.0 } else { 100.0 },
                             bypass_ignore: true,
                         })
                     } else {

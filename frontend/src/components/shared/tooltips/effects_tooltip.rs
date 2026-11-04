@@ -173,7 +173,7 @@ pub fn stat_converter_source_str(
         } => {
             format!(
                 "{} {}Duration",
-                status_filter_str(&status_filter),
+                status_filter_str(status_filter),
                 min_max_str(*min_max),
             )
         }
