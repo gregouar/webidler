@@ -1070,26 +1070,27 @@
           }
         ]
       },
-      "no_storm"         : {
-        "title"       : "Toxic Fallout",
-        "base_cost"   : 10,
-        "upgrade_cost": 2,
-        "max_level"   : 5,
+      "escalation"       : {
+        "title"       : "Half Life",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : -1e+200,
-            "upgrade_value":  0     ,
-            "StatEffect"   : {
-              "stat"    : { "Damage": {"damage_type": "Storm"} },
-              "modifier": "More"
-            }
-          },
-          {
             "value"        : 30,
-            "upgrade_value":  5,
+            "upgrade_value":  0,
             "StatEffect"   : {
-              "stat"    : { "StatusEscalation": {"status_id": "poison"} },
-              "modifier": "Flat"
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "StatusDuration": {"status_id": "poison"} },
+                  "stat"      : { "StatusEscalation": {"status_id": "poison"} },
+                  "is_extra"  : true,
+                  "skill_type": null,
+                  "skill_id"  : null,
+                  "uncapped"  : false
+                }
+              },
+              "modifier": "More"
             }
           }
         ]

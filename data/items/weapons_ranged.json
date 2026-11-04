@@ -510,7 +510,7 @@
     "triggers": [
       {
         "OnHit": {
-          "skill_type": null,
+          "skill_type": "Attack",
           "range": null,
           "is_crit": null,
           "is_blocked": null,
@@ -570,11 +570,11 @@
             "ignore_stat_effects": [
               {
                 "Damage": {
-                  "skill_type": null,
+                  "skill_type": "Attack",
                   "skill_id": null,
                   "damage_type": "Storm",
                   "min_max": null,
-                  "is_hit": null
+                  "is_hit": true
                 }
               }
             ],

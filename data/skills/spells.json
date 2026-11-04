@@ -709,17 +709,7 @@
                 }
               },
               {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
-                "StatusDuration": {
+                "StatusFaster": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
@@ -737,7 +727,17 @@
                 }
               },
               {
-                "StatusFaster": {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
@@ -923,7 +923,57 @@
             "independent_application": false,
             "optional_application": false,
             "description": null
-          },
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": [
+            "irradiate"
+          ],
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "irradiate_poison",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Storm"
+            },
+            "hidden": false
+          }
+        ],
+        "trigger_propagate": false,
+        "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
             "success_chance": {
               "value": 100.0,
@@ -931,10 +981,7 @@
             },
             "ApplyStatus": {
               "status_id": "poison",
-              "value": [
-                3.0,
-                5.0
-              ],
+              "value": 0.0,
               "value_factor": 1.0,
               "duration": null,
               "escalation": null,
@@ -942,7 +989,17 @@
               "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Spell",
+                  "skill_id": "irradiate",
+                  "damage_type": "Storm",
+                  "min_max": null,
+                  "is_hit": true
+                }
+              }
+            ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
@@ -951,7 +1008,6 @@
         ]
       }
     ],
-    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
     "hidden": false
