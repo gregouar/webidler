@@ -152,7 +152,12 @@
         "duration"   : 1.0,
         "max_stacks" : 50,
         "effects"    : [
-            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" },
+            {
+                "StatModifier": { "stat": {"Armor": null}, "modifier": "More", "debuff": true },
+                "value"       : 33,
+                "modifier"    : "Flat"
+            }
         ]
     }
 }
