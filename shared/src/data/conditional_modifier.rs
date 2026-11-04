@@ -37,6 +37,8 @@ pub enum Condition {
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        use_max_duration: bool,
     },
     Slowed,
     // StatusValue(Option<StatStatusType>),

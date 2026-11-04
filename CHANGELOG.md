@@ -21,9 +21,10 @@ Content:
 
 Balance Changes:
 
-- Various Unique Items, Passives & Skill Masteries tweaks.
 - New Elemental Damage with Attacks affixes available on Weapons.
 - Increased Buffs Duration affixes are now available on Helmets as well.
+- Terminal Illness Passive now do More Toxic Damage Escalation based on Duration but remove all Hit Damage.
+- Various Unique Items, Passives & Skill Masteries tweaks.
 
 Fixes:
 

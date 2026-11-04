@@ -160,6 +160,7 @@ pub fn check_condition(
         Condition::StatusDuration {
             status_filter,
             skill_type,
+            use_max_duration,
         } => character_state
             .statuses
             .iter()
@@ -173,7 +174,13 @@ pub fn check_condition(
             .filter(|status_state| {
                 skill_type.is_none_or(|skill_type| status_state.skill_type == skill_type)
             })
-            .map(|status_state| status_state.duration.get())
+            .map(|status_state| {
+                if *use_max_duration {
+                    status_state.max_duration.get()
+                } else {
+                    status_state.duration.get()
+                }
+            })
             .fold(0.0_f64, f64::max),
         Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
             let Some(status_specs) = statuses_store.get(status_id) else {

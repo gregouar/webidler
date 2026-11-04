@@ -120,8 +120,10 @@ pub fn format_skill_modifier_conditions_post(
             Condition::StatusDuration {
                 status_filter,
                 skill_type,
+                use_max_duration,
             } => Some(format!(
-                " per second of Duration of {}", // on them for SkillConditionalModifier ?
+                " per second of {}Duration of {}", // on them for SkillConditionalModifier ?
+                if *use_max_duration { "Maximum " } else { "" },
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
