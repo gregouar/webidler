@@ -292,7 +292,7 @@
         "debuff"     : true,
         "damage_type": "Poison",
         "avoidable"  : true,
-        "duration"   : 1.0,
+        "duration"   : 1.01,
         "max_stacks" : 20,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }

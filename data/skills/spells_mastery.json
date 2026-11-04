@@ -1560,10 +1560,10 @@
           {
             "value"        : 10,
             "upgrade_value": 10,
+            "hidden"       : true,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "bees_poison"} },
-              "modifier": "More",
-              "hidden"  : true
+              "modifier": "More"
             }
           }
         ]
@@ -1597,6 +1597,15 @@
               "stat"    : { "StatusStacks": {"status_id": "bees"} },
               "modifier": "Flat"
             }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "hidden"       : true,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "bees_poison"} },
+              "modifier": "Flat"
+            }
           }
         ]
       },
@@ -1627,6 +1636,15 @@
             "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : { "StatusDuration": {"status_id": "bees"} },
+              "modifier": "Flat"
+            }
+          },
+          {
+            "value"        : -1,
+            "upgrade_value": 0,
+            "hidden"       : true,
+            "StatEffect"   : {
+              "stat"    : { "StatusDuration": {"status_id": "bees_poison"} },
               "modifier": "Flat"
             }
           }
@@ -1693,6 +1711,65 @@
                   "independent_application": false,
                   "optional_application"   : false,
                   "description"            : "Inflict Bees for the remaining Duration"
+                }
+              ]
+            }
+          },
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "hidden"       : true,
+            "Trigger"      : {
+              "OnKill"                : {
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id"  : "bees_poison",
+                      "damage_type": null,
+                      "debuff"     : null,
+                      "skill_type" : null,
+                      "not"        : false
+                    }
+                  }
+                ]
+              },
+              "description": null,
+              "trigger_id" : "bees_spread",
+              "target"     : "Enemy",
+              "modifiers"             : [
+                {
+                  "stat"    : { "StatusPower": {"status_id": "bees_poison"} },
+                  "modifier": "Flat",
+                  "factor"  : 1,
+                  "source"  : { "TargetStatusValue": {"status_id": "bees_poison"} },
+                  "hidden"  : false
+                },
+                {
+                  "stat"    : { "StatusDuration": {"status_id": "bees_poison"} },
+                  "modifier": "Flat",
+                  "factor"  : 1,
+                  "source"  : { "TargetStatusDuration": {"status_id": "bees_poison"} },
+                  "hidden"  : false
+                }
+              ],
+              "inherit_source_effects": false,
+              "trigger_propagate"     : false,
+              "skill_type"            : "Other",
+              "skill_range"           : "Any",
+              "skill_shape"           : "Single",
+              "effects"               : [
+                {
+                  "ApplyStatus": {"value": 0, "duration": 0, "status_id": "bees_poison"},
+                  "ignore_stat_effects"    : [
+                    {"StatusFaster": {}},
+                    {"StatusPower": {}},
+                    {"StatusDuration": {}},
+                    {"Damage": {}},
+                    {"StatusEscalation": {}}
+                  ],
+                  "conditional_modifiers"  : [],
+                  "independent_application": false,
+                  "optional_application"   : false
                 }
               ]
             }
