@@ -64,7 +64,7 @@ pub fn format_triggers(
         .map(|description| description.is_empty())
         .unwrap_or_default()
     {
-        return view! {}.into_any();
+        return view! { "" }.into_any();
     }
 
     let triggering_status = if let EventTrigger::OnApplyStatus(ref status_trigger) = trigger.trigger

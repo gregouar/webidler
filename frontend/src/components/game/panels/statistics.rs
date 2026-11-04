@@ -131,49 +131,46 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                  trigger_modifiers: &[TriggerEffectModifier]| {
                     add_hit_damage_kinds(&mut kinds, skill_type, effect, trigger_modifiers);
 
-                    match &effect.effect_type {
-                        SkillEffectType::ApplyStatus {
+                    if let SkillEffectType::ApplyStatus {
                             status_id,
                             value,
                             computed_status_triggers,
                             ..
-                        } => {
-                            if (value.min.get() > 0.0
-                                || value.max.get() > 0.0
-                                || !trigger_modifiers.is_empty())
-                                && let Some(status_specs) = statuses_specs.get(status_id)
-                                && let Some(damage_type) = status_specs.damage_type
-                            {
-                                status_multipliers
-                                    .entry((skill_type, status_id.clone()))
-                                    .or_insert_with(|| {
-                                        compute_stats_effects_status_value(
-                                            &effects_map.read(),
-                                            &effect.ignore_stat_effects,
-                                            Some(source_id),
-                                            Some(skill_type),
-                                            status_id,
-                                            Some(damage_type),
-                                            status_specs.debuff,
-                                        )
-                                    });
-                            }
+                        } = &effect.effect_type {
+                        if (value.min.get() > 0.0
+                            || value.max.get() > 0.0
+                            || !trigger_modifiers.is_empty())
+                            && let Some(status_specs) = statuses_specs.get(status_id)
+                            && let Some(damage_type) = status_specs.damage_type
+                        {
+                            status_multipliers
+                                .entry((skill_type, status_id.clone()))
+                                .or_insert_with(|| {
+                                    compute_stats_effects_status_value(
+                                        &effects_map.read(),
+                                        &effect.ignore_stat_effects,
+                                        Some(source_id),
+                                        Some(skill_type),
+                                        status_id,
+                                        Some(damage_type),
+                                        status_specs.debuff,
+                                    )
+                                });
+                        }
 
-                            for trigger_effect in computed_status_triggers
-                                .iter()
-                                .flat_map(|triggers| triggers.values())
-                            {
-                                for trigger_effect_skill_effect in &trigger_effect.effects {
-                                    add_hit_damage_kinds(
-                                        &mut kinds,
-                                        trigger_effect.skill_type,
-                                        trigger_effect_skill_effect,
-                                        &trigger_effect.modifiers,
-                                    );
-                                }
+                        for trigger_effect in computed_status_triggers
+                            .iter()
+                            .flat_map(|triggers| triggers.values())
+                        {
+                            for trigger_effect_skill_effect in &trigger_effect.effects {
+                                add_hit_damage_kinds(
+                                    &mut kinds,
+                                    trigger_effect.skill_type,
+                                    trigger_effect_skill_effect,
+                                    &trigger_effect.modifiers,
+                                );
                             }
                         }
-                        _ => {}
                     }
                 };
 
