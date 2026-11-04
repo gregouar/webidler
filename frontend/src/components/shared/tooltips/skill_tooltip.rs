@@ -446,7 +446,7 @@ pub fn find_trigger_modifier(
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
 }
 
-fn format_damage_trigger_modifier(
+pub(super) fn format_damage_trigger_modifier(
     damage_type: DamageType,
     modifiers: Option<&[TriggerEffectModifier]>,
     factor: Option<f64>,
@@ -776,6 +776,7 @@ pub fn format_skill_effect(
                                 modifiers,
                                 // effects_map,
                                 computed_status_triggers.as_ref(),
+                                trigger_status_value,
                     );
 
                     if status_effects_str.is_none() {

@@ -1012,6 +1012,7 @@ fn format_mastery_upgrade_effect(
                     1,
                     None,
                     None,
+                    None,
                 )}
             }.into_any())
         },

@@ -607,6 +607,7 @@ fn StatusIcon(
                                 character_triggers
                                     .map(|character_triggers| character_triggers.read())
                                     .as_deref(),
+                                None,
                             )}
                         </div>
                     }

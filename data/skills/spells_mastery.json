@@ -341,13 +341,13 @@
       },
       "duration"    : {
         "title"       : "Duration",
-        "base_cost"   : 3,
-        "upgrade_cost": 3,
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 0.2,
-            "upgrade_value": 0.2,
+            "value"        : 0.3,
+            "upgrade_value": 0.3,
             "StatEffect"   : {
               "stat"    : { "StatusDuration": {"status_id": "spark"} },
               "modifier": "Flat"
@@ -1556,6 +1556,15 @@
               "stat"    : { "StatusPower": {"status_id": "bees"} },
               "modifier": "More"
             }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "bees_poison"} },
+              "modifier": "More",
+              "hidden"  : true
+            }
           }
         ]
       },
@@ -1687,6 +1696,19 @@
                 }
               ]
             }
+          }
+        ]
+      },
+      "toxic" : {
+        "title"       : "Dufour's Gland",
+        "base_cost"   : 5,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"          : 1,
+            "upgrade_value"  : 0,
+            "ReplaceStatusId": {"old_status_id": "bees", "new_status_id": "bees_poison"}
           }
         ]
       }

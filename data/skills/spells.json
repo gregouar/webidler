@@ -710,21 +710,21 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusEscalation": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -1290,7 +1290,7 @@
             },
             "ApplyStatus": {
               "status_id": "bees",
-              "value": 2.0,
+              "value": 100.0,
               "value_factor": 1.0,
               "duration": null,
               "escalation": null,

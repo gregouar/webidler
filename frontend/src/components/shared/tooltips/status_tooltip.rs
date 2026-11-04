@@ -6,7 +6,7 @@ use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
     modifier::{ModifiableValue, Modifier},
-    stat_effect::{StatEffect, StatType},
+    stat_effect::StatEffect,
     trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
@@ -14,8 +14,10 @@ use shared::data::{
 use crate::components::{
     shared::tooltips::{
         effects_tooltip,
-        skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
-        trigger_tooltip::{format_trigger, format_trigger_modifier, format_triggers},
+        skill_tooltip::{
+            EffectLi, damage_color, format_damage_trigger_modifier, format_min_max_f64,
+        },
+        trigger_tooltip::{format_trigger, format_triggers},
     },
     ui::number::format_number,
 };
@@ -28,6 +30,7 @@ pub fn format_status_effects(
     modifiers: Option<&[TriggerEffectModifier]>,
     // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
     // let value_factor = effects_map.map(|effects_map| {
     //     stats_computations::compute_stats_effects_status_value(
@@ -56,6 +59,7 @@ pub fn format_status_effects(
                     // effects_map,
                     character_triggers,
                     stacks,
+                    trigger_status_value,
                 )
                 .map(|line| line.into_any())
             } else {
@@ -177,6 +181,7 @@ fn format_status_effect_line(
     // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
     stacks: usize,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
     match status_effect.status_effect_type {
@@ -185,21 +190,13 @@ fn format_status_effect_line(
             armor_penetration,
         } => {
             let damage_color = damage_color(damage_type);
-            let trigger_modifier_damage_str = format_trigger_modifier(
-                find_trigger_modifier(
-                    StatType::Damage {
-                        damage_type: Some(damage_type),
-                        skill_filter: Default::default(),
-                        min_max: None,
-                        is_hit: None,
-                    },
-                    modifiers,
-                ),
-                " as",
+            let trigger_modifier_damage_str = format_damage_trigger_modifier(
+                damage_type,
+                modifiers,
                 value_factor,
-                Some(damage_color),
+                damage_color,
                 Some(status_name),
-                Some(skill_value),
+                trigger_status_value.or(Some(skill_value)),
                 None,
             );
 

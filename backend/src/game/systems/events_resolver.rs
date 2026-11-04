@@ -112,7 +112,7 @@ fn handle_tick_event<'a>(
             trigger_contexts.extend(owned_triggers.iter().cloned().map(|owned_trigger| {
                 TriggerContext {
                     owned_trigger,
-                    source: character_id,
+                    source: CharacterId::Player, // TODO?
                     target: character_id,
                     hit_context: None,
                     status_context: None,
