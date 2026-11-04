@@ -535,7 +535,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 1.0,
             "source": {
               "HitDamage": "Storm"
             },
@@ -554,7 +554,7 @@
         "effects": [
           {
             "success_chance": {
-              "value": 30.0,
+              "value": 50.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
@@ -1292,6 +1292,203 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "acid_bow": {
+    "name": "Karakasa",
+    "icon": "items/weapons_ranged/acid_bow.webp",
+    "description": "They will need more than an umbrella for what is to come...",
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 330,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": "Attack",
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Local",
+        "value": 25.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": null,
+            "damage_type": "Any",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          250.0
+        ],
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_ids": [
+            "rain_arrows"
+          ],
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "acid_bow",
+        "target": "SameTarget",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Attack",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "acid_rain",
+              "value": [
+                20.0,
+                30.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 2.5,
+      "damage": {
+        "Physical": [
+          27.0,
+          31.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      410,
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 7.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 7.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_id": "acid_rain",
+              "damage_type": null,
+              "debuff": null,
+              "skill_type": null,
+              "skill_id": null,
+              "min_max": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 5.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "StatusPower": {
+              "status_id": null,
+              "damage_type": "Any",
+              "debuff": null,
+              "skill_type": null,
+              "skill_id": null,
+              "min_max": null
+            }
+          },
+          "modifier": "More",
+          "value": 40.0
+        }
+      }
+    ]
+  },
   "weapon_ranged_8": {
     "name": "Arbalest",
     "icon": "items/weapons_ranged/arbalest.webp",
@@ -1435,7 +1632,8 @@
                   "status_id": "bleed",
                   "damage_type": null,
                   "debuff": null,
-                  "skill_type": null
+                  "skill_type": null,
+                  "use_max_duration": false
                 }
               }
             ]

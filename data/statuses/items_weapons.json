@@ -142,5 +142,17 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "acid_rain"            : {
+        "name"       : "Acid",
+        "icon"       : "statuses/acid.svg",
+        "debuff"     : true,
+        "damage_type": "Poison",
+        "avoidable"  : true,
+        "duration"   : 1.0,
+        "max_stacks" : 50,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
+        ]
     }
 }

@@ -12,6 +12,7 @@
     {"item_id": "yokai_sandals",       "weight":  4999                       },
     {"item_id": "weapon_2h_7",         "weight": 64000                       },
     {"item_id": "weapon_ranged_7",     "weight": 64000                       },
+    {"item_id": "acid_bow",            "weight":  4999                       },
     {"item_id": "weapon_spell_7",      "weight": 64000                       },
     {"item_id": "raven_feather",       "weight":  4999                       },
     {"item_id": "shield_7",            "weight": 64000                       },
