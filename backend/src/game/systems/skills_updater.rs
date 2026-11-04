@@ -1067,7 +1067,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                         Some(StatEffect {
                             stat: StatType::Damage {
                                 skill_filter,
-                                damage_type: damage_type.into(),
+                                damage_type,
                                 min_max: Some(MinMax::Max),
                                 is_hit,
                             },

@@ -593,9 +593,9 @@ impl ToDamageTypes for Option<DamageStatType> {
     }
 }
 
-impl Into<DamageStatType> for DamageType {
-    fn into(self) -> DamageStatType {
-        match self {
+impl From<DamageType> for DamageStatType {
+    fn from(val: DamageType) -> Self {
+        match val {
             DamageType::Physical => DamageStatType::Physical,
             DamageType::Fire => DamageStatType::Fire,
             DamageType::Storm => DamageStatType::Storm,
