@@ -211,7 +211,7 @@
                 "SkillTargetModifier": {
                   "skill_id": "chain_lightning",
                   "shape"   : "Cross",
-                  "repeat"  : {"min_value": 2, "max_value": 2, "target": "Same"}
+                  "repeat"  : {"min_value": 3, "max_value": 3, "target": "Same"}
                 }
               },
               "modifier": "Flat"
