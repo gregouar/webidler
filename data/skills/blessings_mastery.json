@@ -526,7 +526,7 @@
                                 {
                                     "stat"    : {"StatusPower": {}},
                                     "modifier": "Flat",
-                                    "factor"  : 5,
+                                    "factor"  : 2.5,
                                     "source"  : "RestoreValue"
                                 }
                             ]

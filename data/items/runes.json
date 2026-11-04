@@ -545,21 +545,29 @@
     "affixes": [
       {
         "stat": {
-          "StatConverter": {
-            "source": "MaxMana",
+          "StatConditionalModifier": {
             "stat": {
-              "Damage": {
+              "StatConverter": {
+                "source": "MaxMana",
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "is_extra": true,
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
+                "uncapped": false
               }
             },
-            "is_extra": true,
-            "skill_type": null,
-            "skill_id": null,
-            "uncapped": false
+            "conditions": [
+              "NotLowMana"
+            ],
+            "conditions_duration": 0
           }
         },
         "modifier": "More",
@@ -903,6 +911,102 @@
         }
       }
     ]
+  },
+  "rune_yellow_sign": {
+    "name": "The Yellow Sign",
+    "icon": "items/runes/rune_yellow_sign.webp",
+    "description": "Hastur claims your life in exchange for a glimpse of His power.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 40.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": "LifeRegen",
+            "conditions": [
+              "NotLowLife"
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": -1000.0,
+        "ignore_quality": true
+      }
+    ],
+    "triggers": [
+      {
+        "OnTick": {
+          "tick_interval": 10
+        },
+        "description": null,
+        "trigger_id": "yellow_sign",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "madness",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": {
+      "root_node": false
+    },
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   },
   "rune_edict_gold_attack": {
     "name": "Proof of Discipline",

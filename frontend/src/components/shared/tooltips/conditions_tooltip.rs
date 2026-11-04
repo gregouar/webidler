@@ -38,7 +38,9 @@ pub fn format_skill_modifier_conditions_pre(
             Condition::MaximumLife => "".into(),
             Condition::MaximumMana => "".into(),
             Condition::LowLife => "".into(),
+            Condition::NotLowLife => "".into(),
             Condition::LowMana => "".into(),
+            Condition::NotLowMana => "".into(),
             Condition::ThreatLevel => "".into(),
             Condition::HasItem { .. } => "".into(),
             // Condition::HasItem {
@@ -82,7 +84,9 @@ pub fn format_skill_modifier_conditions_post(
             Condition::MaximumLife => Some(" on Maximum Life".to_string()),
             Condition::MaximumMana => Some(" on Maximum Mana".to_string()),
             Condition::LowLife => Some(" on Low Life".to_string()),
+            Condition::NotLowLife => Some(" not on Low Life".to_string()),
             Condition::LowMana => Some(" on Low Mana".to_string()),
+            Condition::NotLowMana => Some(" not on Low Mana".to_string()),
             Condition::ThreatLevel => None,
             // Condition::HasItem { .. } => None,    
              Condition::HasItem {
@@ -137,7 +141,9 @@ pub fn format_skill_modifier_conditions_post(
             | Condition::MaximumLife
             | Condition::MaximumMana
             | Condition::LowLife
+            | Condition::NotLowLife
             | Condition::LowMana
+            | Condition::NotLowMana
             | Condition::HasItem { .. } => None,
             Condition::ThreatLevel => Some(" per Threat Level".into()),
         })

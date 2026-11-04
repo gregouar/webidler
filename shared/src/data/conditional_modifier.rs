@@ -46,7 +46,9 @@ pub enum Condition {
     MaximumLife,
     MaximumMana,
     LowLife,
+    NotLowLife,
     LowMana,
+    NotLowMana,
     ThreatLevel,
     HasItem {
         #[serde(default)]

@@ -207,8 +207,14 @@ pub fn check_condition(
         Condition::LowLife => {
             (character_state.life.get() <= character_attrs.max_life.get() * 0.5) as usize as f64
         }
+        Condition::NotLowLife => {
+            (character_state.life.get() > character_attrs.max_life.get() * 0.5) as usize as f64
+        }
         Condition::LowMana => {
             (character_state.mana.get() <= character_attrs.max_mana.get() * 0.5) as usize as f64
+        }
+        Condition::NotLowMana => {
+            (character_state.mana.get() > character_attrs.max_mana.get() * 0.5) as usize as f64
         }
         Condition::ThreatLevel => area_threat.threat_level as f64,
         Condition::HasItem {
