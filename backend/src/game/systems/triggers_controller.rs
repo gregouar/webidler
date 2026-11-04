@@ -74,7 +74,7 @@ pub fn apply_trigger_effects(
         let (target_id, attacker) = match trigger_effect.target {
             TriggerTarget::SameTarget => (trigger_context.target, trigger_context.source),
             TriggerTarget::Source => (trigger_context.source, trigger_context.target),
-            TriggerTarget::Me => (owner_id, owner_id), // TODO: Fix repeated effect against me for bees
+            TriggerTarget::Me => (owner_id, trigger_context.source),
             TriggerTarget::Enemy => (
                 match owner_id {
                     CharacterId::Player => CharacterId::Monster(

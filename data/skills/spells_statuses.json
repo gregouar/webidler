@@ -232,13 +232,13 @@
                         {
                             "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Min"} },
                             "modifier": "Flat",
-                            "factor"  : 0.02,
+                            "factor"  : 0.01,
                             "source"  : "TriggerStatusValue"
                         },
                         {
                             "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Max"} },
                             "modifier": "Flat",
-                            "factor"  : 0.04,
+                            "factor"  : 0.02,
                             "source"  : "TriggerStatusValue"
                         }
                     ]
@@ -292,7 +292,7 @@
         "debuff"     : true,
         "damage_type": "Poison",
         "avoidable"  : true,
-        "duration"   : 1.01,
+        "duration"   : 1,
         "max_stacks" : 20,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }

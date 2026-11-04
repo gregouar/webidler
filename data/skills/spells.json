@@ -1,255 +1,351 @@
 {
-  "magic_missile"  : {
-    "name"               : "Magic Missile",
-    "icon"               : "skills/magic_missile.svg",
-    "description"        : "A quick spell that fires a bolt of energy at a random enemy.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 2.0,
-    "mana_cost"          : 1.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 20.0,
-    "upgrade_effects"    : [
+  "magic_missile": {
+    "name": "Magic Missile",
+    "icon": "skills/magic_missile.svg",
+    "description": "A quick spell that fires a bolt of energy at a random enemy.",
+    "skill_type": "Spell",
+    "cooldown": 2.0,
+    "mana_cost": 1.0,
+    "required_item": null,
+    "upgrade_cost": 20.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Any",
+        "range": "Any",
         "target_type": "Enemy",
-        "shape"      : "Single",
+        "shape": "Single",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Any", "repeat_cooldown": 0.0},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Any",
+          "repeat_cooldown": 0.0
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "FlatDamage"             : {
-              "damage"           : { "Storm": [0.0, 12.0] },
-              "damage_factors"   : {},
-              "crit_chance"      : {"value": 5.0, "lucky_chance": 0.0},
-              "crit_damage"      : 100.0,
-              "unblockable"      : false,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  12.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 5.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 100.0,
+              "unblockable": false,
               "armor_penetration": 0.0
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
   "chain_lightning": {
-    "name"               : "Chain Lightning",
-    "icon"               : "skills/chain_lightning.svg",
-    "description"        : "A powerful spell that hit randomly multiple enemies.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 4.0,
-    "mana_cost"          : 6.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+    "name": "Chain Lightning",
+    "icon": "skills/chain_lightning.svg",
+    "description": "A powerful spell that hit randomly multiple enemies.",
+    "skill_type": "Spell",
+    "cooldown": 4.0,
+    "mana_cost": 6.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Any",
+        "range": "Any",
         "target_type": "Enemy",
-        "shape"      : "Single",
+        "shape": "Single",
         "target_dead": false,
-        "repeat"     : {"value": 3, "target": "Different", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 3,
+          "target": "Different",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "FlatDamage"             : {
-              "damage"           : { "Storm": [0.0, 30.0] },
-              "damage_factors"   : {},
-              "crit_chance"      : {"value": 5.0, "lucky_chance": 0.0},
-              "crit_damage"      : 100.0,
-              "unblockable"      : false,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  30.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 5.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 100.0,
+              "unblockable": false,
               "armor_penetration": 0.0
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "blizzard"       : {
-    "name"               : "Blizzard",
-    "icon"               : "skills/blizzard.svg",
-    "description"        : "Summon a mighty storm that repeatedly hit enemies.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 7.0,
-    "mana_cost"          : 10.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "blizzard": {
+    "name": "Blizzard",
+    "icon": "skills/blizzard.svg",
+    "description": "Summon a mighty storm that repeatedly hit enemies.",
+    "skill_type": "Spell",
+    "cooldown": 7.0,
+    "mana_cost": 10.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Any",
+        "range": "Any",
         "target_type": "Enemy",
-        "shape"      : "Square4",
+        "shape": "Square4",
         "target_dead": false,
-        "repeat"     : {"value": 5, "target": "Any", "repeat_cooldown": 0.5},
-        "effects"    : [
+        "repeat": {
+          "value": 5,
+          "target": "Any",
+          "repeat_cooldown": 0.5
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "FlatDamage"             : {
-              "damage"           : { "Storm": [0.0, 5.0] },
-              "damage_factors"   : {},
-              "crit_chance"      : {"value": 0.0, "lucky_chance": 0.0},
-              "crit_damage"      : 0.0,
-              "unblockable"      : false,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  5.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
               "armor_penetration": 0.0
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "spark"          : {
-    "name"               : "Spark",
-    "icon"               : "skills/spark.svg",
-    "description"        : "Imbue yourself with electricity to electrocute a random foe on a regular basis.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 3.0,
-    "mana_cost"          : 5.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "spark": {
+    "name": "Spark",
+    "icon": "skills/spark.svg",
+    "description": "Imbue yourself with electricity to electrocute a random foe on a regular basis.",
+    "skill_type": "Spell",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": "spark", "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "spark",
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Global",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Melee",
+        "range": "Melee",
         "target_type": "Me",
-        "shape"      : "Single",
+        "shape": "Single",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "spark",
-              "value"                : 1.0,
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "spark",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "fireball"       : {
+  "fireball": {
     "name": "Fireball",
     "icon": "skills/fireball.svg",
     "description": "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",
@@ -260,48 +356,74 @@
     "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
     "targets": [
       {
-        "range"      : "Distance",
+        "range": "Distance",
         "target_type": "Enemy",
-        "shape"      : "Square4",
+        "shape": "Square4",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Any", "repeat_cooldown": 0.5},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Any",
+          "repeat_cooldown": 0.5
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "FlatDamage"             : {
-              "damage"           : { "Fire": [5.0, 15.0] },
-              "damage_factors"   : {},
-              "crit_chance"      : {"value": 0.0, "lucky_chance": 0.0},
-              "crit_damage"      : 0.0,
-              "unblockable"      : false,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Fire": [
+                  5.0,
+                  15.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
               "armor_penetration": 0.0
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -311,279 +433,333 @@
     "ignore_stat_effects": [],
     "hidden": false
   },
-  "burning_ray"    : {
-    "name"               : "Burning Ray",
-    "icon"               : "skills/burning_ray.svg",
-    "description"        : "Release a horizontal beam of fire that burns enemies over time.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 3.0,
-    "mana_cost"          : 5.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "burning_ray": {
+    "name": "Burning Ray",
+    "icon": "skills/burning_ray.svg",
+    "description": "Release a horizontal beam of fire that burns enemies over time.",
+    "skill_type": "Spell",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Distance",
+        "range": "Distance",
         "target_type": "Enemy",
-        "shape"      : "Horizontal3",
+        "shape": "Horizontal3",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "burn",
-              "value"                : [2.0, 5.0],
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "burn",
+              "value": [
+                2.0,
+                5.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "righteous_fire" : {
-    "name"               : "Righteous Fire",
-    "icon"               : "skills/righteous_fire.svg",
-    "description"        : "Remove your pants and burn everything, including yourself.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 1.5,
-    "mana_cost"          : 2.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "righteous_fire": {
+    "name": "Righteous Fire",
+    "icon": "skills/righteous_fire.svg",
+    "description": "Remove your pants and burn everything, including yourself.",
+    "skill_type": "Spell",
+    "cooldown": 1.5,
+    "mana_cost": 2.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "righteous_fire",
+            "status_id": "righteous_fire",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "unrighteous_fire",
+            "status_id": "unrighteous_fire",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : true
+        "hidden": true
       },
       {
-        "stat"         : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "righteous_fire_self",
+            "status_id": "righteous_fire_self",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"     : "Increased",
-        "value"        : 20.0,
+        "modifier": "Increased",
+        "value": 20.0,
         "bypass_ignore": true,
-        "scope"        : "Local",
-        "description"  : null,
-        "hidden"       : false
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       },
       {
-        "stat"         : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "unrighteous_fire_self",
+            "status_id": "unrighteous_fire_self",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"     : "Increased",
-        "value"        : 20.0,
+        "modifier": "Increased",
+        "value": 20.0,
         "bypass_ignore": true,
-        "scope"        : "Local",
-        "description"  : null,
-        "hidden"       : true
+        "scope": "Local",
+        "description": null,
+        "hidden": true
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
-    "modifier_effects"   : [
+    "modifier_effects": [
       {
         "effects": [
           {
-            "stat"         : {
-              "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
             },
-            "modifier"     : "More",
-            "value"        : 1.0,
+            "modifier": "More",
+            "value": 1.0,
             "bypass_ignore": true
           }
         ],
-        "source" : {"CharacterStats": "MaxLife"},
-        "factor" : 1.0,
-        "hidden" : false
+        "source": {
+          "CharacterStats": "MaxLife"
+        },
+        "factor": 1.0,
+        "hidden": false
       }
     ],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Melee",
+        "range": "Melee",
         "target_type": "Enemy",
-        "shape"      : "Vertical2",
+        "shape": "Vertical2",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "righteous_fire",
-              "value"                : 100.0,
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "righteous_fire",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       },
       {
-        "range"      : "Melee",
+        "range": "Melee",
         "target_type": "Me",
-        "shape"      : "Single",
+        "shape": "Single",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "righteous_fire_self",
-              "value"                : 100.0,
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "righteous_fire_self",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
               {
                 "StatusPower": {
-                  "status_id"  : null,
+                  "status_id": null,
                   "damage_type": "Any",
-                  "debuff"     : null,
-                  "skill_type" : null,
-                  "skill_id"   : null,
-                  "min_max"    : null
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
                 "StatusEscalation": {
-                  "status_id"  : null,
+                  "status_id": null,
                   "damage_type": "Any",
-                  "debuff"     : null,
-                  "skill_type" : null,
-                  "skill_id"   : null
-                }
-              },
-              {
-                "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
-              },
-              {
-                "StatusDuration": {
-                  "status_id"  : null,
-                  "damage_type": "Any",
-                  "debuff"     : null,
-                  "skill_type" : null,
-                  "skill_id"   : null
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
                 "StatusFaster": {
-                  "status_id"  : null,
+                  "status_id": null,
                   "damage_type": "Any",
-                  "debuff"     : null,
-                  "skill_type" : null,
-                  "skill_id"   : null
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
-            "conditional_modifiers"  : [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "poison_cloud"   : {
+  "poison_cloud": {
     "name": "Poison Cloud",
     "icon": "skills/poison_cloud.svg",
     "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
@@ -594,50 +770,71 @@
     "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
     "targets": [
       {
-        "range"      : "Distance",
+        "range": "Distance",
         "target_type": "Enemy",
-        "shape"      : "All",
+        "shape": "All",
         "target_dead": false,
-        "repeat"     : {"value": 2, "target": "Any", "repeat_cooldown": 1.0},
-        "effects"    : [
+        "repeat": {
+          "value": 2,
+          "target": "Any",
+          "repeat_cooldown": 1.0
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "poison",
-              "value"                : [4.0, 8.0],
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "poison",
+              "value": [
+                4.0,
+                8.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -647,7 +844,7 @@
     "ignore_stat_effects": [],
     "hidden": false
   },
-  "irradiate"      : {
+  "irradiate": {
     "name": "Irradiate",
     "icon": "skills/irradiate.svg",
     "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time.",
@@ -658,66 +855,98 @@
     "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
     "targets": [
       {
-        "range"      : "Any",
+        "range": "Any",
         "target_type": "Enemy",
-        "shape"      : "Vertical2",
+        "shape": "Vertical2",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "FlatDamage"             : {
-              "damage"           : { "Storm": [0.0, 10.0] },
-              "damage_factors"   : {},
-              "crit_chance"      : {"value": 0.0, "lucky_chance": 0.0},
-              "crit_damage"      : 0.0,
-              "unblockable"      : false,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  10.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
               "armor_penetration": 0.0
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           },
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "poison",
-              "value"                : [3.0, 5.0],
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "poison",
+              "value": [
+                3.0,
+                5.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
@@ -727,62 +956,88 @@
     "ignore_stat_effects": [],
     "hidden": false
   },
-  "voodoo_doll"    : {
-    "name"               : "Voodoo Doll",
-    "icon"               : "skills/voodoo.svg",
-    "description"        : "Stab your Voodoo Doll to inflict physical pain to all enemies.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 1.2,
-    "mana_cost"          : 2.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "voodoo_doll": {
+    "name": "Voodoo Doll",
+    "icon": "skills/voodoo.svg",
+    "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
+    "skill_type": "Spell",
+    "cooldown": 1.2,
+    "mana_cost": 2.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Local",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Distance",
+        "range": "Distance",
         "target_type": "Enemy",
-        "shape"      : "All",
+        "shape": "All",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "FlatDamage"             : {
-              "damage"           : {"Physical": 1.0},
-              "damage_factors"   : {},
-              "crit_chance"      : {"value": 0.0, "lucky_chance": 0.0},
-              "crit_damage"      : 0.0,
-              "unblockable"      : false,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Physical": 1.0
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
               "armor_penetration": 0.0
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           },
           {
-            "success_chance": {"value": 0.0, "lucky_chance": 0.0},
+            "success_chance": {
+              "value": 0.0,
+              "lucky_chance": 0.0
+            },
             "Kill": null,
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -793,147 +1048,188 @@
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "heal"           : {
-    "name"               : "Heal",
-    "icon"               : "skills/heal.svg",
-    "description"        : "Restore a portion of your life with this simple yet effective healing spell.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 12.0,
-    "mana_cost"          : 10.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "heal": {
+    "name": "Heal",
+    "icon": "skills/heal.svg",
+    "description": "Restore a portion of your life with this simple yet effective healing spell.",
+    "skill_type": "Spell",
+    "cooldown": 12.0,
+    "mana_cost": 10.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
-          "Restore": {"restore_type": "Life", "skill_type": null, "skill_id": null, "modifier_description": "Flat"}
+        "stat": {
+          "Restore": {
+            "restore_type": "Life",
+            "skill_type": null,
+            "skill_id": null,
+            "modifier_description": "Flat"
+          }
         },
-        "modifier"   : "Flat",
-        "value"      : 5.0,
-        "scope"      : "Local",
+        "modifier": "Flat",
+        "value": 5.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Melee",
+        "range": "Melee",
         "target_type": "Me",
-        "shape"      : "Single",
+        "shape": "Single",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
-            "Restore"                : {"restore_type": "Life", "value": 25.0, "modifier": "Flat"},
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "Restore": {
+              "restore_type": "Life",
+              "value": 25.0,
+              "modifier": "Flat"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "taunt"          : {
-    "name"               : "Taunt",
-    "icon"               : "skills/taunt.svg",
-    "description"        : "Taunt enemies to attack you faster, at the cost of taking more damage.",
-    "skill_type"         : "Spell",
-    "cooldown"           : 3.0,
-    "mana_cost"          : 5.0,
-    "required_item"      : null,
-    "upgrade_cost"       : 50.0,
-    "upgrade_effects"    : [
+  "taunt": {
+    "name": "Taunt",
+    "icon": "skills/taunt.svg",
+    "description": "Taunt enemies to attack you faster, at the cost of taking more damage.",
+    "skill_type": "Spell",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "stat"       : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "taunt",
+            "status_id": "taunt",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"   : "Flat",
-        "value"      : 2.0,
-        "scope"      : "Local",
+        "modifier": "Flat",
+        "value": 2.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
-    "targets"            : [
+    "targets": [
       {
-        "range"      : "Distance",
+        "range": "Distance",
         "target_type": "Enemy",
-        "shape"      : "All",
+        "shape": "All",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
-            "RefreshCooldown"        : {"skill_type": null, "skill_id": null, "value": 2.0, "modifier": "Flat"},
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshCooldown": {
+              "skill_type": null,
+              "skill_id": null,
+              "value": 2.0,
+              "modifier": "Flat"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           },
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "taunt",
-              "value"                : 20.0,
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "taunt",
+              "value": 20.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "triggers"           : [],
+    "triggers": [],
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "hidden"             : false
+    "hidden": false
   },
-  "summon_bees"    : {
+  "summon_bees": {
     "name": "Summon Bees",
     "icon": "skills/bee.svg",
     "description": "Summon a swarm of bees onto enemies, stinging them repeatedly for the duration of the spell.",
@@ -944,74 +1240,86 @@
     "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"       : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "bees",
+            "status_id": "bees",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Global",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       },
       {
-        "stat"       : {
+        "stat": {
           "StatusPower": {
-            "status_id"  : "bees_poison",
+            "status_id": "bees_poison",
             "damage_type": null,
-            "debuff"     : null,
-            "skill_type" : null,
-            "skill_id"   : null,
-            "min_max"    : null
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
           }
         },
-        "modifier"   : "More",
-        "value"      : 30.0,
-        "scope"      : "Global",
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
         "description": null,
-        "hidden"     : true
+        "hidden": true
       },
       {
-        "stat"       : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"   : "Increased",
-        "value"      : 1.0,
-        "scope"      : "Local",
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
         "description": null,
-        "hidden"     : false
+        "hidden": false
       }
     ],
     "modifier_effects": [],
     "targets": [
       {
-        "range"      : "Any",
+        "range": "Any",
         "target_type": "Enemy",
-        "shape"      : "Horizontal2",
+        "shape": "Horizontal2",
         "target_dead": false,
-        "repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
-        "effects"    : [
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
           {
-            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
-            "ApplyStatus"            : {
-              "status_id"            : "bees",
-              "value"                : 100.0,
-              "value_factor"         : 1.0,
-              "duration"             : null,
-              "escalation"           : null,
-              "max_stacks"           : null,
-              "avoidable"            : null,
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "bees",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects"    : [],
-            "conditional_modifiers"  : [],
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
             "independent_application": false,
-            "optional_application"   : false,
-            "description"            : null
+            "optional_application": false,
+            "description": null
           }
         ]
       }
