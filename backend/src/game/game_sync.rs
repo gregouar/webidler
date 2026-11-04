@@ -72,6 +72,11 @@ pub async fn sync_update_game(
         auto_skills: game_data.player_controller.auto_skills.sync(),
         player_resources: game_data.player_resources.sync(),
         player_stamina: game_data.player_stamina,
+        // monster_specs: if game_data.tick_number.is_multiple_of(10) {
+        //     Some(game_data.monster_specs.clone())
+        // } else {
+        //     None
+        // },
         monster_specs: game_data.monster_base_specs.sync(),
         monster_states: game_data.monster_states.clone(),
         queued_loot: game_data.queued_loot.sync(),

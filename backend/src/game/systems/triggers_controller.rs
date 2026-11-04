@@ -74,7 +74,7 @@ pub fn apply_trigger_effects(
         let (target_id, attacker) = match trigger_effect.target {
             TriggerTarget::SameTarget => (trigger_context.target, trigger_context.source),
             TriggerTarget::Source => (trigger_context.source, trigger_context.target),
-            TriggerTarget::Me => (owner_id, owner_id),
+            TriggerTarget::Me => (owner_id, trigger_context.source),
             TriggerTarget::Enemy => (
                 match owner_id {
                     CharacterId::Player => CharacterId::Monster(
@@ -94,7 +94,10 @@ pub fn apply_trigger_effects(
         };
 
         let mut trigger_effects = trigger_effect.effects;
-        if !(trigger_effect.modifiers.is_empty() && !trigger_effect.inherit_source_effects) {
+        if !(
+            trigger_effect.modifiers.is_empty()
+            // && !trigger_effect.inherit_source_effects
+        ) {
             let mut modifier_effects =
                 Vec::with_capacity(trigger_effect.modifiers.len().saturating_mul(4));
             for modifier in &trigger_effect.modifiers {
@@ -181,6 +184,15 @@ pub fn apply_trigger_effects(
                         .as_ref()
                         .map(|status| status.duration.get())
                         .unwrap_or_default(),
+                    TriggerEffectModifierSource::TriggeringStatusStacks { ignore_initial } => {
+                        trigger_context
+                            .status_context
+                            .as_ref()
+                            .map(|status| {
+                                status.stacks.saturating_sub(*ignore_initial as usize) as f64
+                            })
+                            .unwrap_or_default()
+                    }
                     TriggerEffectModifierSource::TargetStatusValue {
                         status_filter,
                         skill_type,
@@ -221,7 +233,7 @@ pub fn apply_trigger_effects(
                         .unwrap_or_default(),
                     TriggerEffectModifierSource::TriggerStatusDuration => 0.0,
                     TriggerEffectModifierSource::TriggerStatusValue => 0.0,
-                    TriggerEffectModifierSource::TriggerStatusStack { .. } => 0.0,
+                    TriggerEffectModifierSource::TriggerStatusStacks { .. } => 0.0,
                 };
 
                 modifier_effects.push(StatEffect {
@@ -232,15 +244,15 @@ pub fn apply_trigger_effects(
                 });
             }
 
-            let source_effects: &[StatEffect] = if trigger_effect.inherit_source_effects {
-                game_data
-                    .character_specs(trigger_context.source)
-                    .map(|character_specs| &character_specs.effects)
-                    .map(Vec::as_slice)
-                    .unwrap_or_default()
-            } else {
-                &[]
-            };
+            // let source_effects: &[StatEffect] = if trigger_effect.inherit_source_effects {
+            //     game_data
+            //         .character_specs(trigger_context.source)
+            //         .map(|character_specs| &character_specs.effects)
+            //         .map(Vec::as_slice)
+            //         .unwrap_or_default()
+            // } else {
+            //     &[]
+            // };
 
             for effect in &mut trigger_effects {
                 skills_updater::compute_skill_specs_effects(
@@ -248,7 +260,8 @@ pub fn apply_trigger_effects(
                     &trigger_effect.trigger_id,
                     trigger_effect.skill_type,
                     effect,
-                    modifier_effects.iter().chain(source_effects.iter()),
+                    modifier_effects.iter(),
+                    // modifier_effects.iter().chain(source_effects.iter()),
                 );
             }
         }

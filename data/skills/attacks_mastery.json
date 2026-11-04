@@ -1295,6 +1295,138 @@
       }
     }
   },
+  "blast_arrow"         : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"      : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "blast_arrow"} },
+              "modifier": "More"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "blast_charge"} },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "speed"       : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "stacks"      : {
+        "title"       : "Long Fuse",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "blast_charge"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "stack_damage": {
+        "title"       : "Compound Explosion",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 50,
+            "upgrade_value":  0,
+            "StatEffect"   : {
+              "stat"    : {
+                "TriggerEffectModifier": {
+                  "stat"    : {"Damage": {}},
+                  "skill_id": "blast_charge",
+                  "source"  : {"TriggerStatusStacks": {}}
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "stack_crit"  : {
+        "title"       : "Critical Mass",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "TriggerEffectModifier": {
+                  "stat"    : {"CritChance": {}},
+                  "skill_id": "blast_charge",
+                  "source"  : {"TriggerStatusStacks": {}}
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "cluster"     : {
+        "title"       : "Cluster Bombs",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id"   : "blast_arrow_cluster",
+              "target"       : "SameTarget",
+              "skill_type"   : "Attack",
+              "skill_shape"  : "Contact",
+              "OnApplyStatus": {"status_id": "blast_charge", "is_triggered": false},
+              "effects"      : [
+                {
+                  "ApplyStatus": { "status_id": "blast_charge", "value": [5, 15] }
+                }
+              ],
+              "description": "Inflict Blast Charge"
+            }
+          }
+        ]
+      }
+    }
+  },
   "whirlwind"           : {
     "max_level": 100,
     "upgrades" : {

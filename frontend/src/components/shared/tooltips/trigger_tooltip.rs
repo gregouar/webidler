@@ -58,6 +58,15 @@ pub fn format_triggers(
         .next()
         .expect("format_triggers requires at least one trigger");
 
+    if trigger
+        .description
+        .as_ref()
+        .map(|description| description.is_empty())
+        .unwrap_or_default()
+    {
+        return view! { "" }.into_any();
+    }
+
     let triggering_status = if let EventTrigger::OnApplyStatus(ref status_trigger) = trigger.trigger
     {
         Some(status_trigger)
@@ -125,7 +134,7 @@ pub fn format_triggers(
                     {trigger_events} {shape_infos} {repeat_infos} {details_infos}":"
                 </EffectLi>
                 <EffectLi>
-                    <ul class="list-none xl:space-y-1">
+                    <ul class="list-none xl:space-y-0">
                         {trigger
                             .description
                             .map(|description| {
@@ -137,6 +146,7 @@ pub fn format_triggers(
             </ul>
         </EffectLi>
     }
+    .into_any()
 }
 
 pub fn get_trigger_modifier_value(
@@ -288,7 +298,7 @@ pub fn trigger_modifier_source_str(
             skill_type,
         } => {
             format!(
-                "{} Stacks",
+                "{} Stack",
                 skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -335,6 +345,9 @@ pub fn trigger_modifier_source_str(
                 value_str
             )
         }
+        TriggerEffectModifierSource::TriggeringStatusStacks { ignore_initial: _ } => {
+            format!("{} Stack", format_triggering_status_str(triggering_status))
+        }
         TriggerEffectModifierSource::TriggerStatusDuration => match trigger_status_name {
             Some(trigger_status_name) => format!("{} Duration", trigger_status_name),
             None => "Status Duration".to_string(),
@@ -343,10 +356,10 @@ pub fn trigger_modifier_source_str(
             Some(trigger_status_name) => format!("{} Value", trigger_status_name),
             None => "Status Value".to_string(),
         },
-        TriggerEffectModifierSource::TriggerStatusStack { ignore_initial: _ } => {
+        TriggerEffectModifierSource::TriggerStatusStacks { ignore_initial: _ } => {
             match trigger_status_name {
-                Some(trigger_status_name) => format!("{} Stacks", trigger_status_name),
-                None => "Status Stacks".to_string(),
+                Some(trigger_status_name) => format!("{} Stack", trigger_status_name),
+                None => "Stack".to_string(),
             }
         }
     }
@@ -390,11 +403,18 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             format!("On {}Death", format_target_type(target_type))
         }
         EventTrigger::OnApplyStatus(status_trigger) => {
-            format!(
-                "On Applying {}{}",
-                format_status_trigger(status_trigger),
-                format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
-            )
+            if status_trigger.is_max_stacks == Some(true) {
+                format!(
+                    "On Reaching maximum Stacks of {}",
+                    format_status_trigger(status_trigger)
+                )
+            } else {
+                format!(
+                    "On Applying {}{}",
+                    format_status_trigger(status_trigger),
+                    format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
+                )
+            }
         }
         EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
             Some(true) => match (&status_trigger.skill_type, &status_trigger.status_filter) {
@@ -405,11 +425,20 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
                 }
                 _ => format!("On Evaded {}", format_status_trigger(status_trigger)),
             },
-            _ => match &status_trigger.skill_type {
-                Some(SkillType::Blessing) => "On Blessed".into(),
-                Some(SkillType::Curse) => "On Cursed".into(),
-                _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
-            },
+            _ => {
+                if status_trigger.is_max_stacks == Some(true) {
+                    format!(
+                        "On Reaching maximum Stacks of {}",
+                        format_status_trigger(status_trigger)
+                    )
+                } else {
+                    match &status_trigger.skill_type {
+                        Some(SkillType::Blessing) => "On Blessed".into(),
+                        Some(SkillType::Curse) => "On Cursed".into(),
+                        _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+                    }
+                }
+            }
         },
         EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
         EventTrigger::OnTick(tick_trigger) => {
@@ -559,7 +588,7 @@ fn format_restore_trigger(restore_trigger: &RestoreTrigger) -> String {
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
-        "On {}Enemy{} Kill",
+        "On Kill of {}Enemy{}",
         conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions, ""),
         conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions, ""),
     )

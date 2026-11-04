@@ -99,6 +99,8 @@ pub enum StatusEffectType {
         trigger_specs: Box<TriggerSpecs>,
         #[serde(default)]
         inherit_owner_effects: bool,
+        #[serde(default)]
+        inherit_player_effects: bool,
     },
 }
 

@@ -133,6 +133,8 @@ pub struct StatusTrigger {
     #[serde(default)]
     pub is_evaded: Option<bool>,
     #[serde(default)]
+    pub is_max_stacks: Option<bool>,
+    #[serde(default)]
     pub conditions: Vec<Condition>,
 }
 
@@ -162,8 +164,8 @@ pub struct TriggerEffect {
     pub target: TriggerTarget,
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,
-    #[serde(default)]
-    pub inherit_source_effects: bool,
+    // #[serde(default)]
+    // pub inherit_source_effects: bool,
     #[serde(default)]
     pub trigger_propagate: bool, // If true, will reset trigger depth
 
@@ -193,6 +195,10 @@ pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
     TriggeringStatusValue,
     TriggeringStatusDuration,
+    TriggeringStatusStacks {
+        #[serde(default)]
+        ignore_initial: bool,
+    },
     AreaLevel,
     TargetStatusValue {
         #[serde(flatten)]
@@ -214,7 +220,7 @@ pub enum TriggerEffectModifierSource {
     },
     TriggerStatusDuration,
     TriggerStatusValue,
-    TriggerStatusStack {
+    TriggerStatusStacks {
         #[serde(default)]
         ignore_initial: bool,
     },

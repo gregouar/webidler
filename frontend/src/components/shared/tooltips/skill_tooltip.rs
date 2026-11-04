@@ -5,6 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::{Chance, ChanceRange},
+    character_status::StatusEffectType,
     conditional_modifier::ConditionalModifier,
     item::{SkillRange, SkillShape},
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
@@ -14,8 +15,8 @@ use shared::data::{
         RestoreType, SkillEffect, SkillEffectType, SkillRepeat, SkillRepeatTarget, SkillSpecs,
         SkillTargetsGroup, SkillType, TargetType,
     },
-    stat_effect::{Matchable, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
-    trigger::{StatusTrigger, TriggerEffectModifier, TriggerSpecs},
+    stat_effect::{Matchable, MinMax, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
+    trigger::{StatusTrigger, TriggerEffectModifier, TriggerEffectModifierSource, TriggerSpecs},
     values::NonNegative,
 };
 use strum::IntoEnumIterator;
@@ -389,15 +390,18 @@ pub fn format_target(
         .effects
         .into_iter()
         .map(|skill_effect| {
-            format_skill_effect(
-                skill_effect,
-                targets_group.target_type == TargetType::Me,
-                None,
-                // effects_map,
-                None,
-                None,
-                None,
-            )
+            view! {
+                <div class="xl:space-y-0">
+                    {format_skill_effect(
+                        skill_effect,
+                        targets_group.target_type == TargetType::Me,
+                        None,
+                        None,
+                        None,
+                        None,
+                    )}
+                </div>
+            }
         })
         .collect::<Vec<_>>();
 
@@ -440,6 +444,71 @@ pub fn find_trigger_modifier(
         .unwrap_or_default()
         .iter()
         .find(|modifier| modifier.stat.is_match(&stat) && modifier.modifier == Modifier::Flat)
+}
+
+pub(super) fn format_damage_trigger_modifier(
+    damage_type: DamageType,
+    modifiers: Option<&[TriggerEffectModifier]>,
+    factor: Option<f64>,
+    damage_color: &'static str,
+    trigger_status_name: Option<&str>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    triggering_status: Option<&StatusTrigger>,
+) -> Option<impl IntoView + use<>> {
+    let modifier_for_bound = |bound| {
+        modifiers.unwrap_or_default().iter().find(|modifier| {
+            modifier.modifier == Modifier::Flat
+                && modifier.stat.is_match(&StatType::Damage {
+                    damage_type: Some(damage_type),
+                    skill_filter: Default::default(),
+                    min_max: Some(bound),
+                    is_hit: None,
+                })
+                && matches!(
+                    modifier.stat,
+                    StatType::Damage {
+                        min_max: Some(modifier_bound),
+                        ..
+                    } if modifier_bound == bound
+                )
+        })
+    };
+
+    if let (Some(min_modifier), Some(max_modifier)) = (
+        modifier_for_bound(MinMax::Min),
+        modifier_for_bound(MinMax::Max),
+    ) && let (Some(min_value), Some(max_value)) = (
+        get_trigger_modifier_value(min_modifier, factor, trigger_status_value),
+        get_trigger_modifier_value(max_modifier, factor, trigger_status_value),
+    ) {
+        return Some(
+            view! {
+                <span class=format!("font-semibold {damage_color}")>
+                    {format_min_max_f64(*min_value.min, *max_value.max)}
+                </span>
+            }
+            .into_any(),
+        );
+    }
+
+    format_trigger_modifier(
+        find_trigger_modifier(
+            StatType::Damage {
+                damage_type: Some(damage_type),
+                skill_filter: Default::default(),
+                min_max: None,
+                is_hit: None,
+            },
+            modifiers,
+        ),
+        " as",
+        factor,
+        Some(damage_color),
+        trigger_status_name,
+        trigger_status_value,
+        triggering_status,
+    )
+    .map(|view| view.into_any())
 }
 
 fn format_status_trigger_value(
@@ -565,19 +634,11 @@ pub fn format_skill_effect(
                     let value = damage.get(&damage_type).copied().unwrap_or_default();
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
-                    let trigger_modifier_str = format_trigger_modifier(
-                        find_trigger_modifier(
-                            StatType::Damage {
-                                damage_type: Some(damage_type),
-                                skill_filter: Default::default(),
-                                min_max: None,
-                                is_hit: None,
-                            },
-                            modifiers,
-                        ),
-                        " as",
+                    let trigger_modifier_str = format_damage_trigger_modifier(
+                        damage_type,
+                        modifiers,
                         damage_factors.get(&damage_type).copied(),
-                        Some(damage_color),
+                        damage_color,
                         trigger_status_name,
                         trigger_status_value,
                         triggering_status,
@@ -715,6 +776,7 @@ pub fn format_skill_effect(
                                 modifiers,
                                 // effects_map,
                                 computed_status_triggers.as_ref(),
+                                trigger_status_value,
                     );
 
                     if status_effects_str.is_none() {
@@ -997,6 +1059,10 @@ pub fn EffectLi(
 }
 
 pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
+    if let Some(description) = format_status_damage_modifier(&skill_modifier) {
+        return view! { <EffectLi>{description}</EffectLi> }.into_any();
+    }
+
     let source_description = match skill_modifier.source {
         ModifierEffectSource::ItemStats {
             required_item,
@@ -1046,6 +1112,78 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
         <EffectLi>{source_description}</EffectLi>
         {effects}
     }
+    .into_any()
+}
+
+fn format_status_damage_modifier(skill_modifier: &ModifierEffect) -> Option<String> {
+    let ModifierEffectSource::ItemStats {
+        required_item,
+        item_stats:
+            ItemStatsSource::Damage {
+                damage_type: source_damage_type,
+                ..
+            },
+    } = &skill_modifier.source
+    else {
+        return None;
+    };
+
+    let [effect] = skill_modifier.effects.as_slice() else {
+        return None;
+    };
+    let StatType::StatusPower { status_filter, .. } = &effect.stat else {
+        return None;
+    };
+    if effect.modifier != Modifier::Flat {
+        return None;
+    }
+
+    let status_id = status_filter.status_id.as_ref()?;
+    let data_context: DataContext = expect_context();
+    let statuses_specs = data_context.statuses_specs.read_untracked();
+    let status_specs = statuses_specs.get(status_id)?;
+    let damage_modifier = status_specs
+        .effects
+        .iter()
+        .filter_map(|status_effect| match &status_effect.status_effect_type {
+            StatusEffectType::Trigger { trigger_specs, .. } => Some(&trigger_specs.trigger_effect),
+            _ => None,
+        })
+        .flat_map(|trigger_effect| trigger_effect.modifiers.iter())
+        .find(|modifier| {
+            !modifier.hidden
+                && modifier.modifier == Modifier::Flat
+                && matches!(
+                    &modifier.source,
+                    TriggerEffectModifierSource::TriggerStatusValue
+                )
+                && matches!(&modifier.stat, StatType::Damage { .. })
+        })?;
+    let StatType::Damage {
+        damage_type: result_damage_type,
+        ..
+    } = &damage_modifier.stat
+    else {
+        return None;
+    };
+
+    let item_name = required_item
+        .category
+        .map(item_tooltip::item_category_str)
+        .or_else(|| required_item.slot.map(item_tooltip::item_slot_str))
+        .unwrap_or("Item");
+    let scaling = skill_modifier.factor * effect.value * damage_modifier.factor * 100.0;
+    let conversion = (source_damage_type != result_damage_type)
+        .then(|| format!(" as {}Damage", damage_type_str(*result_damage_type)));
+
+    Some(format!(
+        "{} Damage gains {}% of the equipped {}'s {}Damage{}",
+        status_specs.name,
+        format_number(scaling),
+        item_name,
+        damage_type_str(*source_damage_type),
+        conversion.unwrap_or_default(),
+    ))
 }
 
 fn format_conditional_modifier(conditional_modifier: ConditionalModifier) -> impl IntoView {

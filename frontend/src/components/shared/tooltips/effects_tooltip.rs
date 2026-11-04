@@ -458,11 +458,12 @@ pub fn format_stat(effect: &StatEffect) -> String {
             effect.value
         };
         format!(
-            "{}% of {} {extra_str} {}{}",
+            "{}% of {} {extra_str} {}{}{}",
             format_flat_number(Some(value), false),
             stat_converter_source_str(stat_converter_specs.source, stat_converter_specs.uncapped),
             modifier_str(effect.modifier),
-            format_multiplier_stat_name(&stat_converter_specs.stat)
+            format_multiplier_stat_name(&stat_converter_specs.stat),
+            skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
         )
     } else if let StatType::StatConditionalModifier {
         stat,
@@ -745,21 +746,23 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::StatConverter(stat_converter_specs) => {
             if stat_converter_specs.is_extra {
                 format!(
-                    "Gain {} as {}",
+                    "Gain {} as {}{}",
                     stat_converter_source_str(
                         stat_converter_specs.source,
                         stat_converter_specs.uncapped
                     ),
-                    format_multiplier_stat_name(&stat_converter_specs.stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat),
+                    skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
                 )
             } else {
                 format!(
-                    "Convert {} to {}",
+                    "Convert {} to {}{}",
                     stat_converter_source_str(
                         stat_converter_specs.source,
                         stat_converter_specs.uncapped
                     ),
-                    format_multiplier_stat_name(&stat_converter_specs.stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat),
+                    skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
                 )
             }
         }
@@ -1062,13 +1065,14 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 false => "converted to",
             };
             format!(
-                "{}% of {} {extra_str} {}",
+                "{}% of {} {extra_str} {}{}",
                 format_flat_number(value, false),
                 stat_converter_source_str(
                     stat_converter_specs.source,
                     stat_converter_specs.uncapped
                 ),
-                format_multiplier_stat_name(&stat_converter_specs.stat)
+                format_multiplier_stat_name(&stat_converter_specs.stat),
+                skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
             )
         }
         StatType::SuccessChance {

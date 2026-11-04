@@ -657,8 +657,8 @@ pub struct StatConverterSpecs {
 
     #[serde(default)]
     pub is_extra: bool,
-    #[serde(default)]
-    pub skill_type: Option<SkillType>,
+    #[serde(flatten)]
+    pub skill_filter: StatSkillFilter,
     #[serde(default)]
     pub uncapped: bool,
 }

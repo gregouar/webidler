@@ -6,7 +6,7 @@ use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
     modifier::{ModifiableValue, Modifier},
-    stat_effect::{StatEffect, StatType},
+    stat_effect::StatEffect,
     trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
     values::NonNegative,
 };
@@ -14,8 +14,10 @@ use shared::data::{
 use crate::components::{
     shared::tooltips::{
         effects_tooltip,
-        skill_tooltip::{EffectLi, damage_color, find_trigger_modifier, format_min_max_f64},
-        trigger_tooltip::{format_trigger, format_trigger_modifier},
+        skill_tooltip::{
+            EffectLi, damage_color, format_damage_trigger_modifier, format_min_max_f64,
+        },
+        trigger_tooltip::{format_trigger, format_triggers},
     },
     ui::number::format_number,
 };
@@ -28,6 +30,7 @@ pub fn format_status_effects(
     modifiers: Option<&[TriggerEffectModifier]>,
     // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
     // let value_factor = effects_map.map(|effects_map| {
     //     stats_computations::compute_stats_effects_status_value(
@@ -40,21 +43,36 @@ pub fn format_status_effects(
     //     )
     // });
 
-    let effect_lines = status_specs
-        .effects
-        .iter()
-        .cloned()
-        .filter_map(|status_effect| {
-            format_status_effect_line(
-                &status_specs.name,
-                status_effect,
-                value,
-                value_factor,
-                modifiers,
-                // effects_map,
-                character_triggers,
-                stacks,
-            )
+    let effect_lines = group_status_triggers_by_id(status_specs.effects.clone())
+        .into_iter()
+        .filter_map(|status_effects| {
+            if status_effects.len() == 1 {
+                format_status_effect_line(
+                    &status_specs.name,
+                    status_effects
+                        .into_iter()
+                        .next()
+                        .expect("group is not empty"),
+                    value,
+                    value_factor,
+                    modifiers,
+                    // effects_map,
+                    character_triggers,
+                    stacks,
+                    trigger_status_value,
+                )
+                .map(|line| line.into_any())
+            } else {
+                format_status_trigger_group(
+                    &status_specs.name,
+                    status_effects,
+                    value,
+                    modifiers,
+                    character_triggers,
+                    stacks,
+                )
+                .map(|line| line.into_any())
+            }
         })
         .collect::<Vec<_>>();
 
@@ -72,7 +90,7 @@ pub fn format_status_effects(
     } else {
         Some(
             view! {
-                <ul>
+                <ul class="xl:space-y-1">
                     <EffectLi>{status_specs.name} " "{grant_str}":"</EffectLi>
                     {effect_lines
                         .into_iter()
@@ -85,6 +103,74 @@ pub fn format_status_effects(
     }
 }
 
+fn group_status_triggers_by_id(status_effects: Vec<StatusEffect>) -> Vec<Vec<StatusEffect>> {
+    let mut groups: Vec<Vec<StatusEffect>> = Vec::new();
+
+    for status_effect in status_effects {
+        let StatusEffectType::Trigger { trigger_specs, .. } = &status_effect.status_effect_type
+        else {
+            groups.push(vec![status_effect]);
+            continue;
+        };
+
+        let trigger_id = &trigger_specs.trigger_effect.trigger_id;
+        if let Some(group) = groups.iter_mut().find(|group| {
+            group.first().is_some_and(|grouped_effect| {
+                matches!(
+                    &grouped_effect.status_effect_type,
+                    StatusEffectType::Trigger { trigger_specs, .. }
+                        if trigger_specs.trigger_effect.trigger_id == *trigger_id
+                )
+            })
+        }) {
+            group.push(status_effect);
+        } else {
+            groups.push(vec![status_effect]);
+        }
+    }
+
+    groups
+}
+
+fn format_status_trigger_group(
+    status_name: &str,
+    status_effects: Vec<StatusEffect>,
+    skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
+    modifiers: Option<&[TriggerEffectModifier]>,
+    character_triggers: Option<&HashMap<String, TriggerEffect>>,
+    stacks: usize,
+) -> Option<impl IntoView + use<>> {
+    let triggers = status_effects
+        .into_iter()
+        .filter_map(|status_effect| {
+            let value = computed_status_effect_value(&status_effect, skill_value, stacks);
+            let StatusEffectType::Trigger {
+                trigger_specs,
+                inherit_owner_effects,
+                inherit_player_effects,
+            } = status_effect.status_effect_type
+            else {
+                return None;
+            };
+
+            if (inherit_owner_effects || inherit_player_effects)
+                && let Some(trigger_effect) = character_triggers
+                    .and_then(|triggers| triggers.get(&trigger_specs.trigger_effect.trigger_id))
+            {
+                return Some(TriggerSpecs {
+                    trigger_effect: trigger_effect.clone(),
+                    ..*trigger_specs
+                });
+            }
+
+            (value != (0.0, 0.0) || modifiers.is_some()).then_some(*trigger_specs)
+        })
+        .collect::<Vec<_>>();
+
+    (!triggers.is_empty())
+        .then(|| format_triggers(triggers, false, Some(status_name), Some(skill_value)))
+}
+
 #[allow(clippy::too_many_arguments)]
 fn format_status_effect_line(
     status_name: &str,
@@ -95,6 +181,7 @@ fn format_status_effect_line(
     // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
     stacks: usize,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
     match status_effect.status_effect_type {
@@ -103,21 +190,13 @@ fn format_status_effect_line(
             armor_penetration,
         } => {
             let damage_color = damage_color(damage_type);
-            let trigger_modifier_damage_str = format_trigger_modifier(
-                find_trigger_modifier(
-                    StatType::Damage {
-                        damage_type: Some(damage_type),
-                        skill_filter: Default::default(),
-                        min_max: None,
-                        is_hit: None,
-                    },
-                    modifiers,
-                ),
-                " as",
+            let trigger_modifier_damage_str = format_damage_trigger_modifier(
+                damage_type,
+                modifiers,
                 value_factor,
-                Some(damage_color),
+                damage_color,
                 Some(status_name),
-                Some(skill_value),
+                trigger_status_value.or(Some(skill_value)),
                 None,
             );
 
@@ -252,8 +331,9 @@ fn format_status_effect_line(
         StatusEffectType::Trigger {
             trigger_specs,
             inherit_owner_effects,
+            inherit_player_effects,
         } => {
-            if inherit_owner_effects
+            if (inherit_owner_effects || inherit_player_effects)
                 && let Some(character_triggers) = character_triggers
                 && let Some(trigger_effect) =
                     character_triggers.get(&trigger_specs.trigger_effect.trigger_id)

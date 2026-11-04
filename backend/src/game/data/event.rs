@@ -58,8 +58,11 @@ pub struct StatusEvent {
     pub skill_type: SkillType,
 
     pub is_evaded: bool,
+    pub is_max_stacks: bool,
+
     pub value: ModifiableValue<NonNegative>,
     pub duration: ModifiableValue<NonNegative>,
+    pub stacks: usize,
 }
 
 #[derive(Debug, Clone)]

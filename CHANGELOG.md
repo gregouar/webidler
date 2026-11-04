@@ -11,9 +11,13 @@ Features:
 
 Content:
 
-- New Areas: Grim Frontier and Eldritch Depths.
+- New Areas: Grim Frontier and Eldritch Depths, concluding the campaign.
 - New Skill: Taunt, which partially refresh Enemy Skill Cooldowns at the cost of taking more damage.
 - New Skill: Spark, imbue yourself with electricity to repeatedly shock enemies.
+- New Skill: Summon Bees, and they'll scream NO! NOT THE BEES!
+- New Skill: Blast Arrow, stack explosive charges on your enemies and watch them go BOOM.
+- 8 new Unique Items, 2 new Unique Edicts and 1 new Unique Rune.
+- A new Benediction in the Temple.
 
 Balance Changes:
 

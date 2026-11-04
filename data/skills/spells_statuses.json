@@ -3,31 +3,30 @@
         "name"      : "Sparking",
         "icon"      : "skills/spark.svg",
         "debuff"    : false,
-        "duration"  : 2,
+        "duration"  : 3,
         "max_stacks": 5,
         "effects"   : [
             {
                 "Trigger" : {
-                    "inherit_owner_effects" : true,
-                    "inherit_source_effects": false,
-                    "trigger_id"            : "spark",
-                    "target"                : "Enemy",
-                    "skill_type"            : "Spell",
-                    "skill_repeat"          : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
-                    "OnTick"                : {"tick_interval": 3},
-                    "effects"               : [
+                    "inherit_owner_effects": true,
+                    "trigger_id"           : "spark",
+                    "target"               : "Enemy",
+                    "skill_type"           : "Spell",
+                    "skill_repeat"         : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
+                    "OnTick"               : {"tick_interval": 3},
+                    "effects"              : [
                         {
                             "FlatDamage": {
                                 "damage": { "Storm": [0, 3] }
                             }
                         }
                     ],
-                    "modifiers"             : [
+                    "modifiers"            : [
                         {
                             "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark"} },
                             "modifier": "Flat",
                             "factor"  : 1,
-                            "source"  : { "TriggerStatusStack": {"ignore_initial": true} },
+                            "source"  : { "TriggerStatusStacks": {"ignore_initial": true} },
                             "hidden"  : true
                         }
                     ]
@@ -207,6 +206,96 @@
                 "value"       : 10.0,
                 "modifier"    : "Flat"
             }
+        ]
+    },
+    "bees": {
+        "name"      : "Bees",
+        "icon"      : "skills/bee.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_player_effects": true,
+                    "trigger_id"            : "bees",
+                    "target"                : "Me",
+                    "skill_type"            : "Spell",
+                    "trigger_propagate"     : true,
+                    "OnTick"                : {"tick_interval": 5},
+                    "effects"               : [
+                        {
+                            "FlatDamage": { "damage": {"Physical": 0} }
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Min"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.01,
+                            "source"  : "TriggerStatusValue"
+                        },
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Max"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.02,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "bees_poison": {
+        "name"      : "Stinging Bees",
+        "icon"      : "skills/bee.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_player_effects": true,
+                    "trigger_id"            : "bees",
+                    "target"                : "Me",
+                    "skill_type"            : "Spell",
+                    "trigger_propagate"     : true,
+                    "OnTick"                : {"tick_interval": 5},
+                    "effects"               : [
+                        { "ApplyStatus": {"status_id": "bees_poison_damage", "value": 0} }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Poison", "min_max": "Min"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.02,
+                            "source"  : "TriggerStatusValue"
+                        },
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Poison", "min_max": "Max"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.04,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "bees_poison_damage": {
+        "name"       : "Stung",
+        "icon"       : "statuses/poison.svg",
+        "debuff"     : true,
+        "damage_type": "Poison",
+        "avoidable"  : true,
+        "duration"   : 1,
+        "max_stacks" : 20,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
         ]
     }
 }
