@@ -835,7 +835,7 @@
     "armor_specs": null,
     "rune_specs": {"root_node": false},
     "map_specs": null,
-    "is_unique": true,
+    "ignore_quality": true,
     "upgrade_levels": [50, 100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
@@ -871,7 +871,7 @@
     "armor_specs": null,
     "rune_specs": {"root_node": false},
     "map_specs": null,
-    "is_unique": true,
+    "ignore_quality": true,
     "upgrade_levels": [50, 100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
