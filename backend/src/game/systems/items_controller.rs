@@ -1,5 +1,5 @@
 use shared::{
-    constants::{MAX_POWER_SHARD_LEVEL_BASE, POWER_SHARD_LEVELS_NEEDED},
+    constants::{MAX_POWER_SHARD_LEVEL_BASE, MAX_TEMPERED_ITEM_QUALITY, POWER_SHARD_LEVELS_NEEDED},
     data::{
         area::AreaLevel,
         item::{
@@ -17,7 +17,10 @@ use shared::{
 };
 
 use crate::{
-    game::data::{items_store::ItemsStore, master_store::SkillsStore},
+    game::{
+        data::{items_store::ItemsStore, master_store::SkillsStore},
+        utils::rng,
+    },
     rest::AppError,
 };
 
@@ -249,32 +252,6 @@ fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) 
                         .unwrap_or_default(),
                 }
             }));
-
-        // item_modifiers.affixes.push(ItemAffix {
-        //     name: "Empowered".into(),
-        //     family: "empowered".into(),
-        //     tags: Default::default(),
-        //     affix_type: AffixType::Upgrade,
-        //     tier: item_modifiers.upgrade_level,
-        //     effects: base
-        //         .upgrade_effects
-        //         .iter()
-        //         .cloned()
-        //         .map(|upgrade_effect| AffixEffect {
-        //             scope: upgrade_effect.scope,
-        //             stat_effect: StatEffect {
-        //                 value: upgrade_effect.stat_effect.value
-        //                     * item_modifiers.upgrade_level as f64,
-        //                 ..upgrade_effect.stat_effect
-        //             },
-        //         })
-        //         .collect(),
-        //     item_level: base
-        //         .upgrade_levels
-        //         .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-        //         .copied()
-        //         .unwrap_or_default(),
-        // });
     }
 }
 
@@ -294,6 +271,55 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
 
     Ok(create_item_specs(item.base.clone(), item_modifiers, 0.0))
+}
+
+pub fn temper_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+    if item.base.ignore_quality {
+        return Err(AppError::UserError("that item cannot have quality".into()));
+    }
+    if !item.modifiers.quality.is_finite() || item.modifiers.quality < 0.0 {
+        return Err(AppError::UserError("invalid item quality".into()));
+    }
+    if item.modifiers.quality >= MAX_TEMPERED_ITEM_QUALITY {
+        return Err(AppError::UserError(
+            "maximum tempered quality reached for that item".into(),
+        ));
+    }
+
+    let quality_increase = rng::random_range(1_u8..=5).ok_or(AppError::UserError(
+        "failed to roll tempering quality".into(),
+    ))?;
+
+    // TODO: Change later when modifiers will carry normalized base values...
+
+    let old_quality = item.modifiers.quality;
+    let new_quality = (old_quality + f32::from(quality_increase)).min(MAX_TEMPERED_ITEM_QUALITY);
+    let mut item_modifiers = item.modifiers.clone();
+    item_modifiers.quality = new_quality;
+
+    let old_quality_factor = 1.0 + f64::from(old_quality) * 0.01;
+    let new_quality_factor = 1.0 + f64::from(new_quality) * 0.01;
+    let mut base_affixes = item_modifiers
+        .affixes
+        .iter_mut()
+        .filter(|affix| affix.affix_type == AffixType::Unique);
+    for blueprint in &item.base.affixes {
+        let Some(affix) = base_affixes.next() else {
+            break;
+        };
+        if !blueprint.ignore_quality {
+            for effect in affix.effects.iter_mut() {
+                effect.stat_effect.value =
+                    effect.stat_effect.value / old_quality_factor * new_quality_factor;
+            }
+        }
+    }
+
+    Ok(create_item_specs(
+        item.base.clone(),
+        item_modifiers,
+        item.gold_price,
+    ))
 }
 
 pub fn make_weapon_skill(

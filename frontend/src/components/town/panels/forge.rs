@@ -10,7 +10,8 @@ use shared::{
     },
     http::client::{
         ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
-        ForgeUpgradeRequest, GambleItemRequest, InventoryDeleteRequest, InventorySortRequest,
+        ForgeTemperRequest, ForgeUpgradeRequest, GambleItemRequest, InventoryDeleteRequest,
+        InventorySortRequest,
     },
 };
 use std::sync::Arc;
@@ -43,6 +44,7 @@ use crate::components::{
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum ForgeTab {
     Affix,
+    Temper,
     Sacrifice,
     Imbue,
     Gamble,
@@ -121,6 +123,15 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
+                                active_tab.get() == ForgeTab::Temper
+                            })
+                            on:click=move |_| { switch_tab(ForgeTab::Temper) }
+                            class:py-3
+                        >
+                            <div class="mx-1">"Temper"</div>
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
                                 active_tab.get() == ForgeTab::Sacrifice
                             })
                             on:click=move |_| { switch_tab(ForgeTab::Sacrifice) }
@@ -169,9 +180,13 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                     <CardInset class="w-full" pad=false>
 
                         {move || match active_tab.get() {
-                            ForgeTab::Affix | ForgeTab::UniqueUpgrade | ForgeTab::Sacrifice => {
+                            ForgeTab::Affix
+                            | ForgeTab::Temper
+                            | ForgeTab::UniqueUpgrade
+                            | ForgeTab::Sacrifice => {
                                 let eligibility = match active_tab.get() {
                                     ForgeTab::Affix => InventoryItemEligibility::NonUnique,
+                                    ForgeTab::Temper => InventoryItemEligibility::Quality,
                                     ForgeTab::UniqueUpgrade => InventoryItemEligibility::Unique,
                                     ForgeTab::Sacrifice => InventoryItemEligibility::Sacrifice,
                                     _ => InventoryItemEligibility::Any,
@@ -216,6 +231,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             ForgeTab::Affix => {
                                 view! { <ForgeAffixDetails selected_item /> }.into_any()
                             }
+                            ForgeTab::Temper => view! { <TemperDetails selected_item /> }.into_any(),
                             ForgeTab::Sacrifice => {
                                 view! { <SacrificeDetails selected_item /> }.into_any()
                             }
@@ -544,7 +560,12 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardInsetTitle>"Forge Item"</CardInsetTitle>
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Forge Item"
+                    <HelpTooltip text="Add or remove Affixes from non-Unique Items. Items can have up to 2 Prefixes and 2 Suffixes, but cannot have 2 Prefixes without at least 1 Suffix, or 2 Suffixes without at least 1 Prefix." />
+                </span>
+            </CardInsetTitle>
 
             <div class="flex flex-col">
                 <span class="text-pink-400 font-bold text-sm xl:text-base">
@@ -742,6 +763,134 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 </div>
 
             </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn TemperDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let backend: BackendClient = expect_context();
+    let town_context: TownContext = expect_context();
+    let toaster: Toasts = expect_context();
+    let tempering = RwSignal::new(false);
+    let temper_result = RwSignal::new(None::<f32>);
+    let selected_item_index = RwSignal::new(None::<usize>);
+
+    Effect::new(move || {
+        let current_index = selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(item) => Some(item.index),
+            _ => None,
+        });
+        if current_index != selected_item_index.get_untracked() {
+            selected_item_index.set(current_index);
+            temper_result.set(None);
+        }
+    });
+
+    let temper_price = move || {
+        selected_item.with(|selected_item| match selected_item {
+            SelectedItem::InMarket(item) => computations::temper_item_price(&item.item_specs),
+            _ => None,
+        })
+    };
+
+    let do_temper = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move || {
+            if tempering.get_untracked() {
+                return;
+            }
+            if let SelectedItem::InMarket(item) = selected_item.get() {
+                tempering.set(true);
+                temper_result.set(None);
+                spawn_local(async move {
+                    match backend
+                        .forge_temper(&ForgeTemperRequest {
+                            character_id,
+                            item_index: item.index as u32,
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            let updated_item_specs =
+                                response.inventory.bag.get(item.index).cloned();
+
+                            if let Some(updated_item_specs) = updated_item_specs {
+                                temper_result.set(Some(
+                                    updated_item_specs.modifiers.quality
+                                        - item.item_specs.modifiers.quality,
+                                ));
+                                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
+                                    item_specs: Arc::new(updated_item_specs),
+                                    ..item
+                                }));
+                            }
+
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.write().resource_gems = response.resource_gems;
+                        }
+                        Err(error) => show_toast(
+                            toaster,
+                            format!("Failed to temper item: {error}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                    tempering.set(false);
+                });
+            }
+        }
+    };
+
+    view! {
+        <div class="flex h-full w-full flex-col justify-between">
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Temper Item"
+                    <HelpTooltip text="Add Quality to an Item, up to a maximum of 50%." />
+                </span>
+            </CardInsetTitle>
+
+            <div class="flex flex-col gap-2">
+                <ItemDetails selected_item show_affixes=true />
+                <div class="min-h-[1.5em] text-center text-sm font-semibold text-zinc-400 xl:text-base">
+                    {move || {
+                        temper_result.get().map(|quality| format!("+{quality:.0}% Quality"))
+                    }}
+                </div>
+            </div>
+
+            <MenuButton
+                on:click=move |_| do_temper()
+                disabled=Signal::derive(move || {
+                    tempering.get()
+                        || temper_price()
+                            .is_none_or(|price| {
+                                price > town_context.character.read().resource_gems
+                            })
+                })
+            >
+                <div class="flex h-[2em] w-full items-center justify-center gap-1 text-zinc-400">
+                    {move || {
+                        if selected_item.read().is_empty() {
+                            view! { "Select an Item to Temper" }.into_any()
+                        } else {
+                            match temper_price() {
+                                Some(price) => {
+                                    view! {
+                                        "Add "
+                                        <span class="text-white font-bold">"1-5% Quality"</span>
+                                        " for "
+                                        <span class="font-bold text-fuchsia-300">{price}</span>
+                                        <GemsIcon />
+                                    }
+                                        .into_any()
+                                }
+                                None => view! { "Item has reached Maximum Quality" }.into_any(),
+                            }
+                        }
+                    }}
+                </div>
+            </MenuButton>
         </div>
     }
 }
@@ -1309,7 +1458,12 @@ pub fn GambleDetails(
 
     view! {
         <div class="w-full h-full flex flex-col justify-between relative">
-            <CardInsetTitle>"Gamble"</CardInsetTitle>
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Gamble"
+                    <HelpTooltip text="Purchase a random Rare Item with 4 guaranteed Affixes and the highest available Base Level." />
+                </span>
+            </CardInsetTitle>
 
             <div class="flex flex-col w-full">
                 // <div class="w-full flex items-center justify-center text-sm xl:text-base text-amber-400 font-bold gap-2">

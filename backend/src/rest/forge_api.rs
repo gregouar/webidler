@@ -8,11 +8,11 @@ use shared::{
     http::{
         client::{
             ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
-            ForgeUpgradeRequest, GambleItemRequest,
+            ForgeTemperRequest, ForgeUpgradeRequest, GambleItemRequest,
         },
         server::{
-            ForgeAffixResponse, ForgeImbueResponse, ForgeSacrificeResponse, ForgeUpgradeResponse,
-            GambleItemResponse,
+            ForgeAffixResponse, ForgeImbueResponse, ForgeSacrificeResponse, ForgeTemperResponse,
+            ForgeUpgradeResponse, GambleItemResponse,
         },
     },
 };
@@ -38,6 +38,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
     Router::new()
         .route("/forge/affix", post(post_affix))
         .route("/forge/upgrade", post(post_upgrade))
+        .route("/forge/temper", post(post_temper))
         .route("/forge/sacrifice", post(post_sacrifice))
         .route("/forge/imbue", post(post_imbue))
         .route("/forge/gamble", post(post_gamble))
@@ -46,6 +47,66 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
             auth::authorization_middleware,
         ))
 }
+
+pub async fn post_temper(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<ForgeTemperRequest>,
+) -> Result<Json<ForgeTemperResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let character = db::characters::read_character(&mut *tx, &payload.character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, &user)?;
+    verify_character_in_town(&character)?;
+
+    let (inventory_data, _, _, _) =
+        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
+            .await?
+            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
+
+    let mut inventory =
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
+    let item = inventory
+        .bag
+        .get_mut(payload.item_index as usize)
+        .ok_or(AppError::NotFound)?;
+
+    let price = computations::temper_item_price(item).ok_or(AppError::UserError(
+        "item cannot be tempered further".into(),
+    ))?;
+
+    let character_resources = db::characters::update_character_resources(
+        &mut *tx,
+        &payload.character_id,
+        -price,
+        0.0,
+        0.0,
+        0.0,
+    )
+    .await?;
+
+    if character_resources.resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".into()));
+    }
+
+    *item = items_controller::temper_item(item)?;
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+
+    tx.commit().await?;
+
+    Ok(Json(ForgeTemperResponse {
+        resource_gems: character_resources.resource_gems,
+        inventory,
+    }))
+}
+
 pub async fn post_affix(
     State(db_pool): State<db::DbPool>,
     State(master_store): State<MasterStore>,

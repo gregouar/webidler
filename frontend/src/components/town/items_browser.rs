@@ -59,6 +59,7 @@ pub struct SelectedMarketItem {
 #[derive(Clone, Copy)]
 pub enum InventoryItemEligibility {
     Any,
+    Quality,
     Unique,
     NonUnique,
     Sacrifice,
@@ -68,6 +69,7 @@ pub enum InventoryItemEligibility {
 fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibility) -> bool {
     match eligibility {
         InventoryItemEligibility::Any => true,
+        InventoryItemEligibility::Quality => !item.base.ignore_quality,
         InventoryItemEligibility::Unique => item.base.rarity == ItemRarity::Unique,
         InventoryItemEligibility::NonUnique => {
             item.base.rarity != ItemRarity::Unique
