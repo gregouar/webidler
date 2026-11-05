@@ -1244,12 +1244,12 @@
       "big_arrows" : {
         "title"       : "Meteor Shower",
         "base_cost"   : 10,
-        "upgrade_cost": 1,
-        "max_level"   : 10,
+        "upgrade_cost": 5,
+        "max_level"   : 5,
         "effects"     : [
           {
-            "value"        : 65,
-            "upgrade_value": 15,
+            "value"        : 100,
+            "upgrade_value": 50,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           },
           {
@@ -1261,7 +1261,7 @@
             }
           },
           {
-            "value"        : -100,
+            "value"        : -185,
             "upgrade_value":    0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
@@ -1287,7 +1287,7 @@
             }
           },
           {
-            "value"        : -33,
+            "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }

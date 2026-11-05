@@ -799,23 +799,23 @@
       },
       "area"            : {
         "title"       : "Conflagration",
-        "base_cost"   : 10,
+        "base_cost"   : 5,
         "upgrade_cost": 0,
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : -100,
-            "upgrade_value":    0,
+            "value"        : 50,
+            "upgrade_value":  0,
             "StatEffect"   : {
-              "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
+              "stat"    : { "StatusPower": {"status_id": "righteous_fire_self"} },
               "modifier": "More"
             }
           },
           {
-            "value"        : -100,
-            "upgrade_value":    0,
+            "value"        : 50,
+            "upgrade_value":  0,
             "StatEffect"   : {
-              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
+              "stat"    : { "StatusPower": {"status_id": "unrighteous_fire_self"} },
               "modifier": "More"
             },
             "hidden": true
