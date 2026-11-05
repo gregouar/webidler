@@ -228,7 +228,6 @@ async fn get_me(
     }))
 }
 
-// TODO: Move somewhere else, have proper cosmetic system
 async fn crucible_badge(db_pool: &db::DbPool, user_id: UserId) -> Option<&'static str> {
     let top_three_standard = db::leaderboard::get_area_leaderboard(
         db_pool,

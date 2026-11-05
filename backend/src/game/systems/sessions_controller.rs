@@ -173,12 +173,12 @@ async fn new_game_instance(
         &mut player_skill_masteries,
     );
 
-    let mut player_resources = PlayerResources::default();
-    player_resources.gold += benedictions_controller::find_benediction_value(
-        &master_store.benedictions_store,
-        &player_benedictions,
-        &BenedictionEffect::StartingGold,
-    );
+    let player_resources = PlayerResources::default();
+    // player_resources.gold += benedictions_controller::find_benediction_value(
+    //     &master_store.benedictions_store,
+    //     &player_benedictions,
+    //     &BenedictionEffect::StartingGold,
+    // );
     let extra_level = benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,
         &player_benedictions,

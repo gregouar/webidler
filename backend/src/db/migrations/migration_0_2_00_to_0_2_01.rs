@@ -472,7 +472,6 @@ pub enum OldStatType {
     },
     StatConverter(OldStatConverterSpecs),
     SkillTargetModifier {
-        // TODO: More control and options?
         #[serde(flatten)]
         skill_filter: OldStatSkillFilter,
         #[serde(default)]
@@ -657,7 +656,6 @@ pub enum OldStatStatusType {
         #[serde(default)]
         trigger_id: Option<String>,
 
-        // TODO: This is awful....
         #[serde(default)]
         trigger_description: Option<String>,
     },
@@ -861,7 +859,7 @@ pub struct OldStatSkillFilter {
 
     #[serde(default)]
     pub skill_id: Option<String>,
-    // TODO: This is awful....
+
     #[serde(default)]
     pub skill_description: Option<String>,
 }

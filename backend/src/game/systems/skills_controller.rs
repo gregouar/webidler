@@ -679,7 +679,6 @@ fn repeat_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
-    // TODO: Check cooldown
     if repeated_skill_effect
         .targets_group
         .repeat

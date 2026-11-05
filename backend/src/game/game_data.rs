@@ -98,9 +98,8 @@ pub struct SavedGameData {
     max_area_level: AreaLevel,
     player_stamina: Duration,
 
-    // TODO: Rename to grind
-    end_quest: bool,
-    quest_rewards: Option<GrindRewards>,
+    end_grind: bool,
+    grind_rewards: Option<GrindRewards>,
     #[serde(default)]
     quest_completed: bool,
 }
@@ -273,8 +272,8 @@ impl GameInstanceData {
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
             auto_progress: self.area_state.read().auto_progress,
-            end_quest: self.end_grind,
-            quest_rewards: self.grind_rewards.read().clone(),
+            end_grind: self.end_grind,
+            grind_rewards: self.grind_rewards.read().clone(),
             quest_completed: self.quest_completed,
         })?)
     }
@@ -303,8 +302,8 @@ impl GameInstanceData {
             game_stats,
             last_champion_spawn,
             auto_progress,
-            end_quest,
-            quest_rewards,
+            end_grind: end_quest,
+            grind_rewards: quest_rewards,
             quest_completed,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 

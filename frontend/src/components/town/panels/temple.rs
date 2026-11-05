@@ -22,7 +22,6 @@ use crate::components::{
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
         list_row::MenuListRow,
         menu_panel::MenuPanel,
-        number::format_number,
         toast::*,
     },
 };
@@ -608,7 +607,7 @@ fn BenedictionRow(
 
 pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> String {
     match benediction_effect {
-        BenedictionEffect::StartingGold => "Starting Gold".to_string(),
+        // BenedictionEffect::StartingGold => "Starting Gold".to_string(),
         BenedictionEffect::StartingLevel => "Starting Level".to_string(),
         BenedictionEffect::SkillSlots => "Skill Slots".to_string(),
         BenedictionEffect::StatEffect { stat, .. } => {
@@ -636,16 +635,16 @@ pub fn EffectDescription(
                 }
                 value()
                     .map(|value| match benediction_specs.effect.clone() {
-                        BenedictionEffect::StartingGold => {
-
-                            view! {
-                                {effects_tooltip::effect_li(
-                                    format!("+{} Starting Gold", format_number(value)),
-                                )}
-                            }
-                                .into_any()
-                        }
                         BenedictionEffect::StartingLevel => {
+                            // BenedictionEffect::StartingGold => {
+
+                            // view! {
+                            // {effects_tooltip::effect_li(
+                            // format!("+{} Starting Gold", format_number(value)),
+                            // )}
+                            // }
+                            // .into_any()
+                            // }
                             view! {
                                 {effects_tooltip::effect_li(
                                     format!("+{:0} Starting Player Level", value),

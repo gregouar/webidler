@@ -165,7 +165,6 @@ impl From<ItemSlot> for usize {
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter, PartialOrd, Ord,
 )]
-// TODO: add others
 pub enum ItemCategory {
     // Major categories:
     Armor,
@@ -260,9 +259,6 @@ pub struct ItemSpecs {
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
     pub map_specs: Option<MapSpecs>,
-
-    // Deprecated, to be removed later
-    pub old_game: bool,
 
     #[serde(default)]
     pub required_level: AreaLevel,

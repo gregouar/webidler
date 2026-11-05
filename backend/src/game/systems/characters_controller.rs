@@ -294,16 +294,6 @@ pub fn resuscitate_character(target: &mut Target) -> bool {
     target_state.is_alive = true;
     target_state.life = target_specs.character_attrs.max_life.get().into();
     target_state.resurrected = true;
-
-    // TODO: Check if we needed that?
-    // target_state
-    //     .statuses
-    //     .unique_statuses
-    //     .retain(|_, (_, status_state)| status_state.duration.is_none());
-    // target_state
-    //     .statuses
-    //     .cumulative_statuses
-    //     .retain(|(_, status_state)| status_state.duration.is_none());
     target_state.statuses.clear();
 
     true

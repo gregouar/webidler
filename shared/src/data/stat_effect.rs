@@ -686,7 +686,6 @@ pub enum LuckyRollType {
     // Restore,
     // StatusDuration,
     // StatusValue,
-    // TODO: could add others
 }
 
 impl Matchable for LuckyRollType {

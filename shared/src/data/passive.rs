@@ -64,7 +64,6 @@ pub struct PassiveNodeSpecs {
     #[serde(default)]
     pub root_node: bool,
 
-    // TODO: Replace by Asset uri?
     pub node_type: PassiveNodeType,
 
     #[serde(default)]
@@ -78,7 +77,6 @@ pub struct PassiveNodeSpecs {
     pub upgrade_effects: Vec<StatEffect>,
     #[serde(default)]
     pub max_upgrade_level: Option<u8>,
-    // TODO: unlocked & ascend costs?
     #[serde(default)]
     pub socket: bool,
     #[serde(default)]

@@ -57,7 +57,6 @@ pub fn create_item_specs(
         }
     }
 
-    // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
     // TODO: compute triggers with local effects applied to it
 
     ItemSpecs {
@@ -84,7 +83,6 @@ pub fn create_item_specs(
             .map(|map_specs| compute_map_specs(map_specs, &modifiers)),
         base,
         modifiers,
-        old_game: true,
         gold_price,
         // signature: Default::default(),
     }

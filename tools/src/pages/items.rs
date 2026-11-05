@@ -268,7 +268,7 @@ fn ItemPreview(
                     quality: 0.0,
                     upgrade_level: upgrade_level.get().unwrap_or_default(),
                 };
-                Arc::new(create_item_specs(item_base, modifiers, true))
+                Arc::new(create_item_specs(item_base, modifiers))
             })
     };
     view! {
@@ -282,11 +282,7 @@ fn ItemPreview(
     }
 }
 
-pub fn create_item_specs(
-    base: ItemBase,
-    mut modifiers: ItemModifiers,
-    old_game: bool,
-) -> ItemSpecs {
+pub fn create_item_specs(base: ItemBase, mut modifiers: ItemModifiers) -> ItemSpecs {
     compute_upgrade_effects(&base, &mut modifiers);
 
     let effects: Vec<StatEffect> =
@@ -310,7 +306,6 @@ pub fn create_item_specs(
         map_specs: base.map_specs.clone(),
         base,
         modifiers,
-        old_game,
         gold_price: 0.0,
     }
 }
