@@ -610,9 +610,9 @@ pub fn EditRule(
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="req_item_level"
-                        label="Required Level:"
+                        label="Required Base Level:"
                         input_type="number"
-                        placeholder="Enter required level"
+                        placeholder="Enter required base level"
                         bind=req_item_level
                     />
 

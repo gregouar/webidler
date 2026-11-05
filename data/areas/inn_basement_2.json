@@ -28,7 +28,7 @@
   ],
   "waves"      : [
     {
-      "weight": 1000,
+      "weight": 10000,
       "spawns": [
         { "monster": "regular_patron_1.json", "quantity": [1, 2] },
         { "monster": "regular_patron_2.json", "quantity": [1, 2] },

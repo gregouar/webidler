@@ -1,7 +1,5 @@
-use strum::IntoEnumIterator;
-
 use shared::{
-    constants::{MAX_POWER_SHARD_LEVEL_BASE, POWER_SHARD_LEVELS_NEEDED},
+    constants::{MAX_POWER_SHARD_LEVEL_BASE, MAX_TEMPERED_ITEM_QUALITY, POWER_SHARD_LEVELS_NEEDED},
     data::{
         area::AreaLevel,
         item::{
@@ -12,14 +10,17 @@ use shared::{
         modifier::Modifier,
         skill::{BaseSkillSpecs, DamageType, SkillType},
         stat_effect::{
-            ArmorStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter, StatType,
-            compare_options,
+            DamageStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter,
+            StatType, ToDamageTypes, compare_options,
         },
     },
 };
 
 use crate::{
-    game::data::{items_store::ItemsStore, master_store::SkillsStore},
+    game::{
+        data::{items_store::ItemsStore, master_store::SkillsStore},
+        utils::rng,
+    },
     rest::AppError,
 };
 
@@ -40,7 +41,7 @@ pub fn init_item_specs_from_store(
 }
 
 pub fn create_item_specs(
-    base: ItemBase,
+    mut base: ItemBase,
     mut modifiers: ItemModifiers,
     gold_price: f64,
     // signature_key: &HmacKey,
@@ -50,7 +51,12 @@ pub fn create_item_specs(
     let effects: Vec<StatEffect> =
         (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
 
-    // TODO: convert local StatType::LifeOnHit(hit_trigger) to item linked trigger
+    for effect in effects.iter() {
+        if let StatType::RemoveSlotUse(item_slot) = &effect.stat {
+            base.extra_slots.remove(item_slot);
+        }
+    }
+
     // TODO: compute triggers with local effects applied to it
 
     ItemSpecs {
@@ -77,7 +83,6 @@ pub fn create_item_specs(
             .map(|map_specs| compute_map_specs(map_specs, &modifiers)),
         base,
         modifiers,
-        old_game: true,
         gold_price,
         // signature: Default::default(),
     }
@@ -119,37 +124,14 @@ fn compute_weapon_specs(
                 ..Default::default()
             }) =>
             {
-                match damage_type {
-                    Some(damage_type) => {
-                        if compare_options(
-                            is_hit,
-                            &Some(!matches!(damage_type, DamageType::Poison)),
-                        ) {
-                            let value = weapon_specs.damage.entry(*damage_type).or_default();
-                            if let Some(MinMax::Min) | None = min_max {
-                                value.min.apply_effect(effect);
-                            }
-                            if let Some(MinMax::Max) | None = min_max {
-                                value.max.apply_effect(effect);
-                            }
+                for damage_type in damage_type.to_damage_types() {
+                    if compare_options(is_hit, &Some(!matches!(damage_type, DamageType::Poison))) {
+                        let value = weapon_specs.damage.entry(*damage_type).or_default();
+                        if let Some(MinMax::Min) | None = min_max {
+                            value.min.apply_effect(effect);
                         }
-                    }
-                    None => {
-                        for damage_type in DamageType::iter() {
-                            if !compare_options(
-                                is_hit,
-                                &Some(!matches!(damage_type, DamageType::Poison)),
-                            ) {
-                                continue;
-                            }
-
-                            let value = weapon_specs.damage.entry(damage_type).or_default();
-                            if let Some(MinMax::Min) | None = min_max {
-                                value.min.apply_effect(effect);
-                            }
-                            if let Some(MinMax::Max) | None = min_max {
-                                value.max.apply_effect(effect);
-                            }
+                        if let Some(MinMax::Max) | None = min_max {
+                            value.max.apply_effect(effect);
                         }
                     }
                 }
@@ -208,7 +190,7 @@ fn compute_armor_specs(
         .apply_modifier(quality as f64, Modifier::More);
     for effect in effects {
         match effect.stat {
-            StatType::Armor(Some(ArmorStatType::Physical)) => {
+            StatType::Armor(Some(DamageStatType::Physical)) => {
                 armor_specs.armor.apply_effect(effect)
             }
             StatType::Block(Some(SkillType::Attack) | None) => {
@@ -268,32 +250,6 @@ fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) 
                         .unwrap_or_default(),
                 }
             }));
-
-        // item_modifiers.affixes.push(ItemAffix {
-        //     name: "Empowered".into(),
-        //     family: "empowered".into(),
-        //     tags: Default::default(),
-        //     affix_type: AffixType::Upgrade,
-        //     tier: item_modifiers.upgrade_level,
-        //     effects: base
-        //         .upgrade_effects
-        //         .iter()
-        //         .cloned()
-        //         .map(|upgrade_effect| AffixEffect {
-        //             scope: upgrade_effect.scope,
-        //             stat_effect: StatEffect {
-        //                 value: upgrade_effect.stat_effect.value
-        //                     * item_modifiers.upgrade_level as f64,
-        //                 ..upgrade_effect.stat_effect
-        //             },
-        //         })
-        //         .collect(),
-        //     item_level: base
-        //         .upgrade_levels
-        //         .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-        //         .copied()
-        //         .unwrap_or_default(),
-        // });
     }
 }
 
@@ -315,21 +271,63 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     Ok(create_item_specs(item.base.clone(), item_modifiers, 0.0))
 }
 
+pub fn temper_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+    if item.base.ignore_quality {
+        return Err(AppError::UserError("that item cannot have quality".into()));
+    }
+    if !item.modifiers.quality.is_finite() || item.modifiers.quality < 0.0 {
+        return Err(AppError::UserError("invalid item quality".into()));
+    }
+    if item.modifiers.quality >= MAX_TEMPERED_ITEM_QUALITY {
+        return Err(AppError::UserError(
+            "maximum tempered quality reached for that item".into(),
+        ));
+    }
+
+    let quality_increase = rng::random_range(1_u8..=5).ok_or(AppError::UserError(
+        "failed to roll tempering quality".into(),
+    ))?;
+
+    // TODO: Change later when modifiers will carry normalized base values...
+
+    let old_quality = item.modifiers.quality;
+    let new_quality = (old_quality + f32::from(quality_increase)).min(MAX_TEMPERED_ITEM_QUALITY);
+    let mut item_modifiers = item.modifiers.clone();
+    item_modifiers.quality = new_quality;
+
+    let old_quality_factor = 1.0 + f64::from(old_quality) * 0.01;
+    let new_quality_factor = 1.0 + f64::from(new_quality) * 0.01;
+    let mut base_affixes = item_modifiers
+        .affixes
+        .iter_mut()
+        .filter(|affix| affix.affix_type == AffixType::Unique);
+    for blueprint in &item.base.affixes {
+        let Some(affix) = base_affixes.next() else {
+            break;
+        };
+        if !blueprint.ignore_quality {
+            for effect in affix.effects.iter_mut() {
+                effect.stat_effect.value =
+                    effect.stat_effect.value / old_quality_factor * new_quality_factor;
+            }
+        }
+    }
+
+    Ok(create_item_specs(
+        item.base.clone(),
+        item_modifiers,
+        item.gold_price,
+    ))
+}
+
 pub fn make_weapon_skill(
     skills_store: &SkillsStore,
     item_slot: ItemSlot,
-    item_level: u16,
 ) -> Option<(String, BaseSkillSpecs)> {
     let skill_id = item_slot_to_skill_id(item_slot);
     let base_skill_specs = skills_store.get(skill_id).cloned()?;
 
-    Some((
-        skill_id.to_string(),
-        BaseSkillSpecs {
-            upgrade_cost: 10.0 + 0.5 * item_level as f64,
-            ..base_skill_specs
-        },
-    ))
+    Some((skill_id.to_string(), base_skill_specs))
 }
 
 fn item_slot_to_skill_id(item_slot: ItemSlot) -> &'static str {

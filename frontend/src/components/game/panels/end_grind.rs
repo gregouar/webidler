@@ -788,7 +788,7 @@ fn ItemRewardBackface(
 
 fn predicted_item_rewards_amount(area_level: u16, training: bool, reward_slots: u8) -> u8 {
     if area_level >= ITEM_REWARDS_MIN_LEVEL && !training {
-        reward_slots
+        reward_slots.min(4)
     } else {
         0
     }

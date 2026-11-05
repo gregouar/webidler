@@ -6,9 +6,9 @@
         "damage_type": "Physical",
         "avoidable"  : true,
         "duration"   : 2,
-        "max_stacks" : 3,
+        "max_stacks" : 10,
         "effects"    : [
-            { "DamageOverTime": {"damage_type": "Physical", "armor_penetration": 100}, "value": 2, "modifier": "Flat" }
+            { "DamageOverTime": {"damage_type": "Physical", "armor_penetration": 100}, "value": 1, "modifier": "Flat" }
         ]
     }
 }

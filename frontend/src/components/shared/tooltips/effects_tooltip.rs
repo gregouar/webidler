@@ -5,19 +5,22 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     chance::ChanceRange,
     character_status::{StatusEffectType, StatusModifier},
+    item::ItemSlot,
     item_affix::AffixEffectScope,
     modifier::Modifier,
+    passive::PassiveNodeId,
     skill::{DamageType, SkillRepeat, SkillType},
     stat_effect::{
-        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect, StatSkillEffectType,
-        StatSkillFilter, StatStatusFilter, StatType, StatusDamageType,
+        DamageStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect,
+        StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType, StatusDamageType,
+        ToDamageTypes,
     },
 };
 
 use crate::components::{
     data_context::DataContext,
     shared::tooltips::{
-        conditions_tooltip,
+        conditions_tooltip, item_tooltip,
         skill_tooltip::{
             self, restore_type_str, skill_filter_str, skill_type_str, skills_type_str,
         },
@@ -69,16 +72,29 @@ pub fn min_max_str(min_max: Option<MinMax>) -> &'static str {
     }
 }
 
-pub fn armor_type_str(armor_type: &Option<ArmorStatType>) -> &'static str {
+pub fn armor_stat_type_str(armor_type: &Option<DamageStatType>) -> &'static str {
     match armor_type {
         Some(armor_type) => match armor_type {
-            ArmorStatType::Physical => "Physical Defense",
-            ArmorStatType::Fire => "Fire Defense",
-            ArmorStatType::Poison => "Toxic Defense",
-            ArmorStatType::Storm => "Storm Defense",
-            ArmorStatType::Elemental => "Elemental Defenses",
+            DamageStatType::Physical => "Physical Defense",
+            DamageStatType::Fire => "Fire Defense",
+            DamageStatType::Poison => "Toxic Defense",
+            DamageStatType::Storm => "Storm Defense",
+            DamageStatType::Elemental => "Elemental Defenses",
         },
         None => "All Defenses",
+    }
+}
+
+pub fn damage_stat_type_str(damage_type: &Option<DamageStatType>) -> &'static str {
+    match damage_type {
+        Some(damage_type) => match damage_type {
+            DamageStatType::Physical => "Physical ",
+            DamageStatType::Fire => "Fire ",
+            DamageStatType::Poison => "Toxic ",
+            DamageStatType::Storm => "Storm ",
+            DamageStatType::Elemental => "Elemental ",
+        },
+        None => "",
     }
 }
 
@@ -135,7 +151,7 @@ pub fn lucky_roll_str(roll_type: &LuckyRollType) -> String {
 }
 
 pub fn stat_converter_source_str(
-    stat_converter_source: StatConverterSource,
+    stat_converter_source: &StatConverterSource,
     uncapped: bool,
 ) -> String {
     let uncapped_str = if uncapped { "Uncapped " } else { "" };
@@ -147,8 +163,18 @@ pub fn stat_converter_source_str(
         } => {
             format!(
                 "{}Base {}Hit Damage",
-                min_max_str(min_max),
-                damage_type_str(damage_type)
+                min_max_str(*min_max),
+                damage_type_str(*damage_type)
+            )
+        }
+        StatConverterSource::StatusDuration {
+            status_filter,
+            min_max,
+        } => {
+            format!(
+                "{} {}Duration",
+                status_filter_str(status_filter),
+                min_max_str(*min_max),
             )
         }
         // StatConverterSource::DamageOverTime {
@@ -169,18 +195,18 @@ pub fn stat_converter_source_str(
             format!(
                 "{}{}Block Chance",
                 uncapped_str,
-                skill_type_str(Some(skill_type))
+                skill_type_str(Some(*skill_type))
             )
         }
         StatConverterSource::Evade(damage_type) => {
             format!(
                 "{}{} Evade Chance",
                 uncapped_str,
-                damage_over_time_type_str(damage_type)
+                damage_over_time_type_str(*damage_type)
             )
         }
         StatConverterSource::Armor { damage_type } => {
-            format!("Global {}Defense", damage_type_str(damage_type))
+            format!("Global {}Defense", damage_type_str(*damage_type))
         }
     }
 }
@@ -344,10 +370,8 @@ pub fn formatted_effects_list(
     let mut merged: Vec<String> = Vec::with_capacity(affix_effects.len());
 
     // This will be used to merge added min and added max damage together
-    let mut min_damage: IndexMap<(StatSkillFilter, Option<DamageType>, bool), f64> =
-        IndexMap::new();
-    let mut max_damage: IndexMap<(StatSkillFilter, Option<DamageType>, bool), f64> =
-        IndexMap::new();
+    let mut min_damage: IndexMap<(StatSkillFilter, DamageType, bool), f64> = IndexMap::new();
+    let mut max_damage: IndexMap<(StatSkillFilter, DamageType, bool), f64> = IndexMap::new();
 
     for effect in affix_effects.iter().rev() {
         match (effect.modifier, &effect.stat) {
@@ -360,10 +384,12 @@ pub fn formatted_effects_list(
                     is_hit: None,
                 },
             ) => {
-                min_damage.insert(
-                    (skill_filter.clone(), *damage_type, effect.value >= 0.0),
-                    effect.value,
-                );
+                for damage_type in damage_type.to_damage_types() {
+                    min_damage.insert(
+                        (skill_filter.clone(), *damage_type, effect.value >= 0.0),
+                        effect.value,
+                    );
+                }
             }
             (
                 Modifier::Flat,
@@ -374,10 +400,12 @@ pub fn formatted_effects_list(
                     is_hit: None,
                 },
             ) => {
-                max_damage.insert(
-                    (skill_filter.clone(), *damage_type, effect.value >= 0.0),
-                    effect.value,
-                );
+                for damage_type in damage_type.to_damage_types() {
+                    max_damage.insert(
+                        (skill_filter.clone(), *damage_type, effect.value >= 0.0),
+                        effect.value,
+                    );
+                }
             }
             _ => {
                 let formatted_stat = format_stat(effect);
@@ -390,8 +418,8 @@ pub fn formatted_effects_list(
 
     for (k, min_flat) in min_damage.iter() {
         let damage_type_name = match k.1 {
-            Some(DamageType::Poison) => "Poison ",
-            damage_type => damage_type_str(damage_type),
+            DamageType::Poison => "Poison ",
+            damage_type => damage_type_str(Some(damage_type)),
         };
         if let Some(max_flat) = max_damage.get(k) {
             let (skill_filter, _, positive) = k;
@@ -417,8 +445,8 @@ pub fn formatted_effects_list(
 
     for (k, max_flat) in max_damage.iter() {
         let damage_type_name = match k.1 {
-            Some(DamageType::Poison) => "Poison ",
-            damage_type => damage_type_str(damage_type),
+            DamageType::Poison => "Poison ",
+            damage_type => damage_type_str(Some(damage_type)),
         };
         if !min_damage.contains_key(k) {
             let (skill_filter, _, positive) = k;
@@ -444,16 +472,63 @@ pub fn format_stat(effect: &StatEffect) -> String {
         "".to_string()
         // "No Effect".to_string()
     } else if let StatType::StatConverter(stat_converter_specs) = &effect.stat {
-        let extra_str = match stat_converter_specs.is_extra {
-            true => "gained as",
-            false => "converted to",
-        };
+        if let StatConverterSource::StatusDuration { .. } = &stat_converter_specs.source
+            && stat_converter_specs.is_extra
+        {
+            format!(
+                "{} per second of {}",
+                format_stat(&StatEffect {
+                    stat: (*stat_converter_specs.stat).clone(),
+                    modifier: effect.modifier,
+                    value: effect.value,
+                    bypass_ignore: effect.bypass_ignore
+                }),
+                stat_converter_source_str(
+                    &stat_converter_specs.source,
+                    stat_converter_specs.uncapped
+                )
+            )
+        } else {
+            let extra_str = match stat_converter_specs.is_extra {
+                true => "gained as",
+                false => "converted to",
+            };
+            let value = if let StatConverterSource::LifeRegen | StatConverterSource::ManaRegen =
+                stat_converter_specs.source
+            {
+                effect.value * 10.0
+            } else {
+                effect.value
+            };
+            format!(
+                "{}% of {} {extra_str} {}{}{}",
+                format_flat_number(Some(value), false),
+                stat_converter_source_str(
+                    &stat_converter_specs.source,
+                    stat_converter_specs.uncapped
+                ),
+                modifier_str(effect.modifier),
+                format_multiplier_stat_name(&stat_converter_specs.stat),
+                skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
+            )
+        }
+    } else if let StatType::StatConditionalModifier {
+        stat,
+        conditions,
+        conditions_duration,
+    } = &effect.stat
+    {
         format!(
-            "{}% of {} {extra_str} {}{}",
-            format_flat_number(Some(effect.value), false),
-            stat_converter_source_str(stat_converter_specs.source, stat_converter_specs.uncapped),
-            modifier_str(effect.modifier),
-            format_multiplier_stat_name(&stat_converter_specs.stat)
+            "{} {}{}{}",
+            format_stat(&StatEffect {
+                stat: *stat.clone(),
+                modifier: effect.modifier,
+                value: effect.value,
+                bypass_ignore: effect.bypass_ignore
+            }),
+            conditions_tooltip::format_skill_modifier_conditions_pre(conditions, "when "),
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
+            conditions_tooltip::format_conditions_duration(*conditions_duration),
         )
     } else {
         match effect.modifier {
@@ -472,6 +547,13 @@ pub fn modifier_str(modifier: Modifier) -> &'static str {
 }
 
 pub fn format_multiplier_stat(effect: &StatEffect) -> String {
+    if let StatType::CritDamageTaken { skill_type } = effect.stat
+        && effect.modifier == Modifier::More
+        && effect.value < -1e200
+    {
+        return format!("Immune to {}Critical Hits", skill_type_str(skill_type));
+    }
+
     format!(
         "{} {}",
         format_effect_value(effect),
@@ -482,6 +564,7 @@ pub fn format_multiplier_stat(effect: &StatEffect) -> String {
 
 pub fn format_multiplier_stat_name(stat: &StatType) -> String {
     match stat {
+        StatType::MaxPlayerLevel => "Maximum Player Level".to_string(),
         StatType::Life => "Maximum Life".to_string(),
         StatType::LifeRegen => "Life Regeneration".to_string(),
         StatType::Mana => "Maximum Mana".to_string(),
@@ -489,7 +572,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::ManaCost { skill_filter } => {
             format!("{}Mana Cost", skill_filter_str(skill_filter, "", false))
         }
-        StatType::Armor(armor_type) => armor_type_str(armor_type).to_string(),
+        StatType::Armor(armor_type) => armor_stat_type_str(armor_type).to_string(),
         StatType::TakeFromManaBeforeLife => "Damage taken from Mana before Life".to_string(),
         StatType::TakeFromLifeBeforeMana => "Life spent instead of Mana".to_string(),
         StatType::Block(skill_type) => format!("{}Block Chance", skill_type_str(*skill_type)),
@@ -509,7 +592,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         } => format!(
             "{}{}{}Damage{}",
             min_max_str(*min_max),
-            damage_type_str(*damage_type),
+            damage_stat_type_str(damage_type),
             is_hit_str(is_hit),
             skill_filter_str(skill_filter, " with ", true),
         ),
@@ -643,6 +726,9 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             damage_type_str(*damage_type),
             skill_type_str(*skill_type)
         ),
+        StatType::CritDamageTaken { skill_type } => {
+            format!("{}Critical Hit Damage Taken", skill_type_str(*skill_type))
+        }
         StatType::ThreatGain => "Threat Gain".into(),
         StatType::Lucky {
             skill_filter,
@@ -659,6 +745,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             "Chance to {}{}",
             stat_skill_effect_type_str(effect_type.as_ref()),
             skill_filter_str(skill_filter, " with ", true),
+        ),
+        StatType::RefreshedCooldown { skill_filter } => format!(
+            "Refreshed Cooldown{}",
+            skill_filter_str(skill_filter, " with ", true)
         ),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
@@ -703,24 +793,28 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::StatConverter(stat_converter_specs) => {
             if stat_converter_specs.is_extra {
                 format!(
-                    "Gain {} as {}",
+                    "Gain {} as {}{}",
                     stat_converter_source_str(
-                        stat_converter_specs.source,
+                        &stat_converter_specs.source,
                         stat_converter_specs.uncapped
                     ),
-                    format_multiplier_stat_name(&stat_converter_specs.stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat),
+                    skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
                 )
             } else {
                 format!(
-                    "Convert {} to {}",
+                    "Convert {} to {}{}",
                     stat_converter_source_str(
-                        stat_converter_specs.source,
+                        &stat_converter_specs.source,
                         stat_converter_specs.uncapped
                     ),
-                    format_multiplier_stat_name(&stat_converter_specs.stat)
+                    format_multiplier_stat_name(&stat_converter_specs.stat),
+                    skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
                 )
             }
         }
+        StatType::AllocatePassive(_) => "XXX".into(),
+        StatType::RemoveSlotUse(_) => "XXX".into(),
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -729,6 +823,10 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
     match stat {
+        StatType::MaxPlayerLevel => format!(
+            "{} Maximum Player Level",
+            format_adds_removes(value, false, "")
+        ),
         StatType::Life => format!("{} Maximum Life", format_adds_removes(value, false, "")),
         StatType::LifeRegen => format!(
             "{} Life Regeneration per second",
@@ -747,7 +845,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::Armor(armor_type) => format!(
             "{} {}",
             format_adds_removes(value, false, ""),
-            armor_type_str(armor_type)
+            armor_stat_type_str(armor_type)
         ),
         StatType::TakeFromManaBeforeLife => {
             format!(
@@ -792,7 +890,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             "{} {}{}{}Damage{}",
             format_adds_removes(value, false, ""),
             min_max_str(*min_max),
-            damage_type_str(*damage_type),
+            damage_stat_type_str(damage_type),
             is_hit_str(is_hit),
             skill_filter_str(skill_filter, " to ", true)
         ),
@@ -986,6 +1084,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 skill_type_str(*skill_type)
             )
         }
+        StatType::CritDamageTaken { skill_type } => format!(
+            "{} extra {}Critical Hit Damage Taken",
+            format_flat_number(value, false),
+            skill_type_str(*skill_type)
+        ),
         StatType::Lucky {
             skill_filter,
             roll_type,
@@ -1009,13 +1112,14 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 false => "converted to",
             };
             format!(
-                "{}% of {} {extra_str} {}",
+                "{}% of {} {extra_str} {}{}",
                 format_flat_number(value, false),
                 stat_converter_source_str(
-                    stat_converter_specs.source,
+                    &stat_converter_specs.source,
                     stat_converter_specs.uncapped
                 ),
-                format_multiplier_stat_name(&stat_converter_specs.stat)
+                format_multiplier_stat_name(&stat_converter_specs.stat),
+                skill_filter_str(&stat_converter_specs.skill_filter, " with ", true),
             )
         }
         StatType::SuccessChance {
@@ -1043,6 +1147,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     skill_filter_str(skill_filter, " with ", true),
                 )
             }
+        }
+        StatType::RefreshedCooldown { skill_filter } => {
+            format!(
+                "{} seconds to Refreshed Cooldown{}",
+                format_adds_removes(value, true, ""),
+                skill_filter_str(skill_filter, " with ", true)
+            )
         }
         StatType::SkillLevel(skill_filter) => {
             let mut r = format!(
@@ -1168,6 +1279,16 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             conditions_tooltip::format_skill_modifier_conditions_post(conditions, "while"),
             conditions_tooltip::format_conditions_duration(*conditions_duration),
         ),
+        StatType::AllocatePassive(passive_id) => {
+            format!("Allocate {} Passive", format_passive_str(passive_id))
+        }
+        StatType::RemoveSlotUse(item_slot) => {
+            if let ItemSlot::Shield = item_slot {
+                "Can be wielded One Handed".into()
+            } else {
+                format!("Don't use {} slot", item_tooltip::item_slot_str(*item_slot))
+            }
+        }
         StatType::Description(description) | StatType::Description2(description) => {
             description.clone()
         }
@@ -1211,7 +1332,7 @@ fn format_status_power(
 ) -> String {
     let data_context: DataContext = expect_context();
     if let Some(status_id) = &status_filter.status_id
-        && let Some(status_specs) = data_context.statuses_specs.read().get(status_id)
+        && let Some(status_specs) = data_context.statuses_specs.read_untracked().get(status_id)
     {
         let mut effects_str = Vec::new();
         let mut stop = false;
@@ -1275,4 +1396,18 @@ fn format_status_power(
         skill_filter_str(skill_filter, "", false),
         status_type_value_str(status_filter)
     )
+}
+
+fn format_passive_str(passive_id: &PassiveNodeId) -> String {
+    let data_context: DataContext = expect_context();
+    if passive_id.is_nil() {
+        return "Socketed".to_string();
+    }
+    data_context
+        .passives_tree_specs
+        .read_untracked()
+        .nodes
+        .get(passive_id)
+        .map(|passive_specs| passive_specs.name.clone())
+        .unwrap_or(passive_id.to_string())
 }

@@ -27,7 +27,7 @@ pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.10; // X10 every 10 levels
 pub const SKILL_COST_INCREASE_FACTOR: f64 = LOG10_2; // X2 every level
 pub const XP_INCREASE_FACTOR: f64 = 0.40;
 
-pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X10 every 200 levels
+pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.003; // X10 every about 300 levels
 pub const SKILL_MASTERY_BASE_COST: f64 = 10_000.0;
 pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
 
@@ -45,6 +45,7 @@ pub const POWER_LEVEL_LEADERBOARD_AREA_ID: &str = "power_level";
 
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
 pub const MAX_ITEM_QUALITY: f32 = 25.0;
+pub const MAX_TEMPERED_ITEM_QUALITY: f32 = 50.0;
 
 pub const THREAT_COOLDOWN: f64 = 20.0;
 pub const THREAT_BOSS_COOLDOWN: f64 = 60.0;

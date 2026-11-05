@@ -88,21 +88,31 @@ fn generate_end_grind_rewards(
 ) -> GrindRewards {
     let area_level = game_data.area_state.read().max_area_level;
 
-    // Up to 2 rewards are edict, only 1 if only 2 rewards available.
     let rewards_amount = if area_level >= ITEM_REWARDS_MIN_LEVEL && !game_data.area_specs.training {
         game_data.area_specs.reward_slots
     } else {
         0
     };
 
+    // Up to 4 rewards max, with rare one first; first 2 rewards are always normal
+    let (amount_normal_rewards, amount_rare_rewards) = if rewards_amount >= 6 {
+        (0, 4)
+    } else if rewards_amount == 5 {
+        (1, 3)
+    } else if rewards_amount >= 2 {
+        (2, rewards_amount - 2)
+    } else {
+        (rewards_amount, 0)
+    };
+
+    // // Up to 2 rewards are edict, only 1 if only 2 rewards available.
     let amount_map_rewards = if area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
         if rewards_amount > 2 { 2 } else { 1 }
     } else {
         0
-    };
-
-    let amount_normal_rewards = (2 - amount_map_rewards).min(rewards_amount);
-    let amount_rare_rewards = rewards_amount - amount_normal_rewards - amount_map_rewards;
+    }
+    .min(amount_normal_rewards);
+    let amount_normal_rewards = amount_normal_rewards - amount_map_rewards;
 
     let item_level = area_level
         .saturating_add(*game_data.area_specs.item_level_modifier)

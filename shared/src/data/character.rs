@@ -123,6 +123,8 @@ pub struct CharacterAttrs {
     // pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
     #[serde(default)]
     pub damage_taken: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
+    #[serde(default)]
+    pub crit_damage_taken: HashMap<SkillType, ModifiableValue<f64>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -372,7 +372,6 @@
 //         conditions: Vec<OldCondition>,
 //     },
 //     SkillTargetModifier {
-//         // TODO: More control and options?
 //         #[serde(default)]
 //         skill_type: Option<SkillType>,
 //         #[serde(default)]

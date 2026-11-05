@@ -10,6 +10,7 @@ use crate::{
         character_status::StatusId,
         conditional_modifier::{Condition, ConditionalModifier},
         item::{ItemCategory, ItemSpecs},
+        item_affix::AffixEffectScope,
         modifier::ModifiableValue,
         stat_effect::{
             Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
@@ -67,6 +68,8 @@ pub struct BaseSkillSpecs {
 pub struct SkillUpgradeEffect {
     #[serde(flatten)]
     pub stat_effect: StatEffect,
+    #[serde(default)]
+    pub scope: AffixEffectScope,
     #[serde(default)]
     pub description: Option<String>,
     #[serde(default)]

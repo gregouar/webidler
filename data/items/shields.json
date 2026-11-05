@@ -113,11 +113,15 @@
         "trigger_id": "stunning_block",
         "target": "Source",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -553,16 +557,6 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Armor": "Physical"
-          },
-          "modifier": "Increased",
-          "value": 20.0
-        }
-      },
-      {
-        "scope": "Local",
-        "stat_effect": {
-          "stat": {
             "Block": null
           },
           "modifier": "Flat",
@@ -672,6 +666,7 @@
           "debuff": null,
           "is_triggered": false,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
@@ -690,21 +685,19 @@
             },
             "modifier": "Flat",
             "factor": 1.0,
-            "source": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": "Curse"
-              }
-            }
+            "source": "TriggeringStatusDuration",
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Any",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {

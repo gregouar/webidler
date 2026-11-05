@@ -9,6 +9,7 @@ use crate::{
     data::{
         area::{AreaLevel, AreaState},
         item::{ItemRarity, ItemSpecs},
+        item_affix::{AffixType, ItemAffix},
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
@@ -128,6 +129,22 @@ pub fn gamble_price(item_level: AreaLevel) -> f64 {
     (item_level as f64 / 20.0).floor() + 10.0
 }
 
+pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
+    (affixes
+        .iter()
+        .filter(|affix| {
+            matches!(
+                affix.affix_type,
+                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+            )
+        })
+        .map(|affix| affix.item_level as f64)
+        .max_by(|a, b| a.total_cmp(b))
+        .unwrap_or_default()
+        / 5.0)
+        .round()
+}
+
 pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
     if is_ssf && item_rarity == ItemRarity::Unique {
         (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
@@ -156,4 +173,13 @@ pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
             (*next_upgrade_level <= item_specs.modifiers.level)
                 .then_some((*next_upgrade_level / 2 + item_specs.base.min_area_level) as f64)
         })
+}
+
+pub fn temper_item_price(item_specs: &ItemSpecs) -> Option<f64> {
+    let quality = item_specs
+        .modifiers
+        .quality
+        .clamp(0.0, constants::MAX_TEMPERED_ITEM_QUALITY);
+    (!item_specs.base.ignore_quality && quality < constants::MAX_TEMPERED_ITEM_QUALITY)
+        .then(|| ((f64::from(quality) / 5.0).floor() + 1.0).powi(2))
 }

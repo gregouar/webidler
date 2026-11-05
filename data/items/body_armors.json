@@ -117,7 +117,8 @@
           "Restore": {
             "restore_type": "Life",
             "skill_type": null,
-            "skill_id": null
+            "skill_id": null,
+            "modifier_description": "Flat"
           }
         },
         "modifier": "Increased",
@@ -656,13 +657,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "breastplate_unique",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1016,13 +1017,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "solar_armor",
         "target": "Enemy",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Blessing",
         "skill_range": "Any",

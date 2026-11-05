@@ -14,7 +14,7 @@ pub struct BenedictionsCategory {
 
     pub price: f64,
     pub price_increase_factor: f64,
-    pub max_upgrade_level: Option<u64>,
+    pub max_upgrade_level: u64,
 
     pub benedictions: IndexMap<String, BenedictionSpecs>,
 }
@@ -30,7 +30,7 @@ pub struct BenedictionSpecs {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, PartialOrd, Eq, Ord)]
 pub enum BenedictionEffect {
-    StartingGold,
+    // StartingGold, // TODO: Remove?
     StartingLevel,
     SkillSlots,
     StatEffect { stat: StatType, modifier: Modifier },
@@ -68,7 +68,6 @@ impl BenedictionSpecs {
         }
 
         match self.upgrade_modifier {
-            // TODO
             Modifier::Increased | Modifier::More => {
                 let exponent = upgrade_level.saturating_sub(1) as i32;
                 value *= (1.0 + self.upgrade_value * 0.01).powi(exponent);

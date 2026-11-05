@@ -9,7 +9,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 1,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 2 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 1 }
     ]
   },
   {
@@ -22,7 +22,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 100,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 3 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 2 }
     ]
   },
   {
@@ -35,7 +35,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 200,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 4 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 3 }
     ]
   },
   {
@@ -48,7 +48,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 300,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 5 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 4 }
     ]
   },
   {
@@ -61,7 +61,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 400,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 6 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 5 }
     ]
   },
   {
@@ -74,7 +74,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 500,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 7 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 6 }
     ]
   },
   {
@@ -87,7 +87,7 @@
     "restrictions": ["Amulet"],
     "item_level"  : 600,
     "effects"     : [
-      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 8 }
+      { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 7 }
     ]
   }
 ]

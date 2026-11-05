@@ -14,7 +14,7 @@ use shared::data::{
     passive::PassiveNodeId,
     skill::{DamageType, RestoreType, SkillType},
     stat_effect::{
-        ArmorStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
+        DamageStatType, LuckyRollType, MinMax, StatConverterSource, StatConverterSpecs, StatEffect,
         StatSkillEffectType, StatSkillFilter, StatSkillRepeat, StatStatusFilter, StatType,
     },
     user::UserCharacterId,
@@ -68,6 +68,7 @@ async fn migrate_character_data(
             passives_data,
             benedictions_data,
             skill_masteries_data,
+            pets_data,
             created_at,
             updated_at
          FROM characters_data
@@ -366,7 +367,7 @@ pub enum OldStatType {
     ItemRarity,
     ItemLevel,
     SkillLevel(#[serde(default)] OldStatSkillFilter),
-    Armor(Option<ArmorStatType>),
+    Armor(Option<DamageStatType>),
     DamageResistance {
         #[serde(default)]
         skill_type: Option<SkillType>,
@@ -471,7 +472,6 @@ pub enum OldStatType {
     },
     StatConverter(OldStatConverterSpecs),
     SkillTargetModifier {
-        // TODO: More control and options?
         #[serde(flatten)]
         skill_filter: OldStatSkillFilter,
         #[serde(default)]
@@ -509,7 +509,7 @@ impl From<OldStatType> for StatType {
                 is_hit,
             } => Damage {
                 skill_filter: skill_filter.into(),
-                damage_type,
+                damage_type: damage_type.map(Into::into),
                 min_max,
                 is_hit,
             },
@@ -656,7 +656,6 @@ pub enum OldStatStatusType {
         #[serde(default)]
         trigger_id: Option<String>,
 
-        // TODO: This is awful....
         #[serde(default)]
         trigger_description: Option<String>,
     },
@@ -758,7 +757,10 @@ impl From<OldStatConverterSpecs> for StatConverterSpecs {
             source: value.source,
             stat: Box::new((*value.stat).into()),
             is_extra: value.is_extra,
-            skill_type: value.skill_type,
+            skill_filter: StatSkillFilter {
+                skill_type: value.skill_type,
+                skill_id: None,
+            },
             uncapped: false,
         }
     }
@@ -839,6 +841,7 @@ impl From<OldCondition> for Condition {
             } => StatusStacks {
                 status_filter: status_type_to_status_filter(status_type),
                 skill_type,
+                min_stacks: 0,
             },
             OldCondition::MaximumLife => MaximumLife,
             OldCondition::MaximumMana => MaximumMana,
@@ -856,7 +859,7 @@ pub struct OldStatSkillFilter {
 
     #[serde(default)]
     pub skill_id: Option<String>,
-    // TODO: This is awful....
+
     #[serde(default)]
     pub skill_description: Option<String>,
 }

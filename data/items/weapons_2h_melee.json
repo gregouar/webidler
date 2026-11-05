@@ -207,7 +207,6 @@
         "trigger_id": "sootreaver_burn_refresh",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -460,7 +459,6 @@
         "trigger_id": "oversized_axe",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1227,11 +1225,11 @@
             "modifier": "Flat",
             "factor": 0.1,
             "source": {
-              "HitDamage": null
-            }
+              "HitDamage": "Physical"
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Attack",
         "skill_range": "Any",
@@ -1262,7 +1260,7 @@
             },
             "ignore_stat_effects": [
               {
-                "CritDamage": {
+                "CritChance": {
                   "skill_type": null,
                   "skill_id": null
                 }
@@ -1277,7 +1275,7 @@
                 }
               },
               {
-                "CritChance": {
+                "CritDamage": {
                   "skill_type": null,
                   "skill_id": null
                 }
@@ -1782,16 +1780,16 @@
             "modifier": "Flat",
             "factor": 0.5,
             "source": {
-              "StatusValue": {
+              "TargetStatusValue": {
                 "status_id": "open_wound",
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null
               }
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Other",
         "skill_range": "Melee",

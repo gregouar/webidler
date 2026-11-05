@@ -1,4 +1,5 @@
 use anyhow::Result;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, time::Duration};
 
@@ -66,11 +67,14 @@ pub struct GameInstanceData {
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
+    pub user_achievements: HashMap<String, DateTime<Utc>>,
 
     pub end_grind: bool, // Initiate end, generate rewards
     pub grind_rewards: LazySyncer<Option<GrindRewards>>,
     pub terminate_grind: bool, // Actually close the grind
     pub quest_completed: bool, // Was the quest already completed in a PREVIOUS grind
+
+    pub tick_number: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -94,9 +98,8 @@ pub struct SavedGameData {
     max_area_level: AreaLevel,
     player_stamina: Duration,
 
-    // TODO: Rename to grind
-    end_quest: bool,
-    quest_rewards: Option<GrindRewards>,
+    end_grind: bool,
+    grind_rewards: Option<GrindRewards>,
     #[serde(default)]
     quest_completed: bool,
 }
@@ -126,6 +129,7 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
         mut player_stamina: Duration,
         player_controller: PlayerController,
+        user_achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
             .area_blueprints_store
@@ -237,11 +241,14 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
+            user_achievements,
 
             end_grind: false,
             grind_rewards: LazySyncer::new(None),
             terminate_grind: false,
             quest_completed,
+
+            tick_number: 0,
         })
     }
 
@@ -265,13 +272,17 @@ impl GameInstanceData {
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
             auto_progress: self.area_state.read().auto_progress,
-            end_quest: self.end_grind,
-            quest_rewards: self.grind_rewards.read().clone(),
+            end_grind: self.end_grind,
+            grind_rewards: self.grind_rewards.read().clone(),
             quest_completed: self.quest_completed,
         })?)
     }
 
-    pub fn from_bytes(master_store: &master_store::MasterStore, bytes: &[u8]) -> Result<Self> {
+    pub fn from_bytes(
+        master_store: &master_store::MasterStore,
+        bytes: &[u8],
+        user_achievements: HashMap<String, DateTime<Utc>>,
+    ) -> Result<Self> {
         let SavedGameData {
             realm_id,
             area_id,
@@ -291,8 +302,8 @@ impl GameInstanceData {
             game_stats,
             last_champion_spawn,
             auto_progress,
-            end_quest,
-            quest_rewards,
+            end_grind: end_quest,
+            grind_rewards: quest_rewards,
             quest_completed,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
@@ -311,6 +322,7 @@ impl GameInstanceData {
             player_inventory,
             player_stamina,
             player_controller,
+            user_achievements,
         )?;
 
         s.area_state.mutate().area_level = area_level;

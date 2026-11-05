@@ -30,7 +30,7 @@ use crate::{
         data::inventory_data::inventory_data_to_player_inventory,
         systems::{inventory_controller, stashes_controller},
     },
-    rest::utils::{verify_character_in_town, verify_character_user, verify_not_ssf},
+    rest::utils::{MsgPack, verify_character_in_town, verify_character_user, verify_not_ssf},
 };
 
 use super::AppError;
@@ -204,7 +204,7 @@ pub async fn post_get_stash_items(
     Extension(user): Extension<User>,
     Path(stash_id): Path<StashId>,
     Json(payload): Json<GetStashItemsRequest>,
-) -> Result<Json<GetStashItemsResponse>, AppError> {
+) -> Result<MsgPack<GetStashItemsResponse>, AppError> {
     let stash = db::stashes::get_stash(&db_pool, &stash_id)
         .await?
         .ok_or(AppError::NotFound)?;
@@ -225,7 +225,7 @@ pub async fn post_get_stash_items(
             .then_with(|| a.stash_item_id.cmp(&b.stash_item_id))
     });
 
-    Ok(Json(GetStashItemsResponse { items }))
+    Ok(MsgPack(GetStashItemsResponse { items }))
 }
 
 // pub async fn post_browse_stash(

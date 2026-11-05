@@ -43,8 +43,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"} },
-                            "stat"  : { "Damage": {"damage_type": "Fire"    } }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Fire"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -56,8 +57,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"                  } },
-                            "stat"  : { "Damage": {"damage_type": "Storm",    "min_max": "Max"} }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -86,8 +88,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"} },
-                            "stat"  : { "Damage": {"damage_type": "Fire"    } }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Fire"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -116,8 +119,9 @@
                 "StatModifier": {
                     "stat"    : {
                         "StatConverter": {
-                            "source": { "Damage": {"damage_type": "Physical"                  } },
-                            "stat"  : { "Damage": {"damage_type": "Storm",    "min_max": "Max"} }
+                            "source"    : { "Damage": {"damage_type": "Physical"} },
+                            "stat"      : { "Damage": {"damage_type": "Storm", "min_max": "Max"} },
+                            "skill_type": "Attack"
                         }
                     },
                     "modifier": "Flat"
@@ -201,6 +205,96 @@
                 },
                 "value"       : 100,
                 "modifier"    : "Percent"
+            }
+        ]
+    },
+    "blast_charge"              : {
+        "name"      : "Blast Charge",
+        "icon"      : "skills/blast_charge.svg",
+        "debuff"    : true,
+        "duration"  : 30,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_player_effects": true,
+                    "trigger_propagate"     : true,
+                    "trigger_id"            : "blast_charge",
+                    "target"                : "SameTarget",
+                    "skill_shape"           : "Square4",
+                    "skill_range"           : "Distance",
+                    "skill_type"            : "Attack",
+                    "OnReceiveStatus"       : {"status_id": "blast_charge", "is_max_stacks": true},
+                    "effects"               : [
+                        {
+                            "FlatDamage"         : { "crit_chance": 10, "crit_damage": 100, "damage": {"Fire": 0} },
+                            "ignore_stat_effects": []
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Fire"} },
+                            "modifier": "Flat",
+                            "factor"  : 1.0,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            },
+            {
+                "Trigger" : {
+                    "inherit_player_effects": true,
+                    "trigger_propagate"     : true,
+                    "trigger_id"            : "blast_charge",
+                    "target"                : "SameTarget",
+                    "skill_shape"           : "Square4",
+                    "skill_range"           : "Distance",
+                    "skill_type"            : "Attack",
+                    "OnDeath"               : "Me",
+                    "effects"               : [
+                        {
+                            "FlatDamage"         : { "crit_chance": 10, "crit_damage": 100, "damage": {"Fire": 0} },
+                            "ignore_stat_effects": []
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Fire"} },
+                            "modifier": "Flat",
+                            "factor"  : 1.0,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            },
+            {
+                "Trigger" : {
+                    "description"          : "",
+                    "inherit_owner_effects": false,
+                    "trigger_id"           : "blast_charge_cleanup",
+                    "target"               : "SameTarget",
+                    "skill_type"           : "Other",
+                    "OnReceiveStatus"      : {"status_id": "blast_charge", "is_max_stacks": true},
+                    "effects"              : [
+                        {
+                            "RefreshStatus"          : {
+                                "status_id"  : "blast_charge",
+                                "damage_type": null,
+                                "debuff"     : null,
+                                "value"      : -100.0,
+                                "modifier"   : "Percent"
+                            },
+                            "independent_application": true
+                        }
+                    ],
+                    "modifiers": []
+                },
+                "value"   : 1,
+                "modifier": "Flat"
             }
         ]
     },

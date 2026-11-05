@@ -1,7 +1,12 @@
 use anyhow::Result;
 
 use shared::{
-    data::{passive::PurchasedNodes, user::UserCharacterId},
+    data::{
+        cosmetics::CharacterCosmetics,
+        passive::PurchasedNodes,
+        pets::PlayerPets,
+        user::{UserCharacterId, UserUnlocks},
+    },
     messages::server::{InitGameMessage, SyncGameStateMessage},
 };
 
@@ -14,12 +19,17 @@ pub async fn sync_init_game(
     character_id: &UserCharacterId,
     game_data: &mut GameInstanceData,
     passives_tree_build: PurchasedNodes,
+    character_cosmetics: CharacterCosmetics,
+    user_unlocks: UserUnlocks,
+    player_pets: PlayerPets,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
         .send(
             &InitGameMessage {
                 character_id: *character_id,
+                character_cosmetics,
+                user_unlocks,
                 realm: game_data.realm,
                 area_id: game_data.area_id.clone(),
                 map_item: game_data.map_item.clone(),
@@ -33,6 +43,7 @@ pub async fn sync_init_game(
                 skill_mastery_skill_specs: game_data.skill_mastery_skill_specs.clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
+                player_pets,
                 auto_skills: game_data.player_controller.auto_skills.read().clone(),
             }
             .into(),
@@ -61,6 +72,11 @@ pub async fn sync_update_game(
         auto_skills: game_data.player_controller.auto_skills.sync(),
         player_resources: game_data.player_resources.sync(),
         player_stamina: game_data.player_stamina,
+        // monster_specs: if game_data.tick_number.is_multiple_of(10) {
+        //     Some(game_data.monster_specs.clone())
+        // } else {
+        //     None
+        // },
         monster_specs: game_data.monster_base_specs.sync(),
         monster_states: game_data.monster_states.clone(),
         queued_loot: game_data.queued_loot.sync(),

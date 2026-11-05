@@ -1,0 +1,145 @@
+[
+    {
+        "name"        : "Slippery",
+        "family"      : "remnant_affix",
+        "tags"        : ["Armor", "Stealth", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Boots", "Accessory"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {
+                    "Lucky": { "skill_type": null, "skill_id": null, "roll_type": {"Evade": null} }
+                },
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 100.0,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Balanced",
+        "family"      : "remnant_affix",
+        "tags"        : ["Attack", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["MeleeWeapon2H"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"RemoveSlotUse": "Shield"},
+                "modifier"      : "Flat",
+                "scope"         : "Local",
+                "value"         : 1,
+                "ignore_quality": true
+            },
+            { "stat": {"Damage": {}}, "modifier": "More", "scope": "Local", "value": -43, "ignore_quality": true }
+        ]
+    },
+    {
+        "name"        : "Unwavering",
+        "family"      : "remnant_affix",
+        "tags"        : ["Armor", "Critical", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Helmet", "Body"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"CritDamageTaken": {}},
+                "modifier"      : "More",
+                "scope"         : "Global",
+                "value"         : -1e300,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Armored",
+        "family"      : "remnant_affix",
+        "tags"        : ["Armor", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Amulet", "Shield"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"Armor": null},
+                "modifier"      : "More",
+                "scope"         : "Global",
+                "value"         : [20, 30],
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Flickering",
+        "family"      : "remnant_affix",
+        "tags"        : ["Attack", "Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["MeleeWeapon1H"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {
+                    "SkillTargetModifier": {
+                        "skill_id": "weapon_skill",
+                        "range"   : "Any",
+                        "repeat"  : {"min_value": 2, "max_value": 3, "target": "Any"}
+                    }
+                },
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Innate",
+        "family"      : "remnant_affix",
+        "tags"        : ["Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Rune"],
+        "item_level"  : 600,
+        "effects"     : [
+            {"stat": "MaxPlayerLevel", "modifier": "Flat", "scope": "Global", "value": -1, "ignore_quality": true},
+            {
+                "stat"          : {"AllocatePassive": "00000000-0000-0000-0000-000000000000"},
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
+    },
+    {
+        "name"        : "Sharding",
+        "family"      : "remnant_affix",
+        "tags"        : ["Unique"],
+        "affix_type"  : "Soul",
+        "tier"        : 10,
+        "weight"      : 100,
+        "restrictions": ["Map"],
+        "item_level"  : 600,
+        "effects"     : [
+            {
+                "stat"          : {"Description2": "Unlock Power Shards up to 150 extra Area Levels"},
+                "modifier"      : "Flat",
+                "scope"         : "Global",
+                "value"         : 1,
+                "ignore_quality": true
+            }
+        ]
+    }
+]

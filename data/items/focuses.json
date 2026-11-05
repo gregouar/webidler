@@ -155,7 +155,6 @@
         "trigger_id": "vile_codex",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -606,10 +605,10 @@
             "factor": 0.5,
             "source": {
               "HitDamage": "Physical"
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
         "skill_range": "Melee",
@@ -865,13 +864,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "treasure_idol",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -899,6 +898,25 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
+                }
+              },
+              {
                 "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
@@ -914,25 +932,6 @@
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],

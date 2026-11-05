@@ -9,7 +9,7 @@ use crate::data::{
     item_affix::{AffixEffect, AffixType},
     modifier::ModifiableValue,
     skill::DamageType,
-    stat_effect::{ArmorStatType, StatType},
+    stat_effect::{DamageStatType, StatType},
     trigger::TriggerSpecs,
     values::{NonNegative, Percent},
 };
@@ -78,11 +78,16 @@ impl InventorySortType {
     pub fn compare(self, a: &ItemSpecs, b: &ItemSpecs) -> std::cmp::Ordering {
         let rarity = || b.modifiers.rarity.cmp(&a.modifiers.rarity);
         let category = || {
-            a.base
-                .categories
-                .iter()
-                .next_back()
-                .cmp(&b.base.categories.iter().next_back())
+            let sort_category = |item: &ItemSpecs| {
+                let mut categories = item.base.categories.iter().rev().copied();
+                let category = categories.next();
+                let soul_category = (category == Some(ItemCategory::Soul))
+                    .then(|| categories.next())
+                    .flatten();
+                (category, soul_category)
+            };
+            sort_category(a)
+                .cmp(&sort_category(b))
                 .then_with(|| a.base.slot.cmp(&b.base.slot))
         };
         let level = || b.required_level.cmp(&a.required_level);
@@ -160,7 +165,6 @@ impl From<ItemSlot> for usize {
 #[derive(
     Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter, PartialOrd, Ord,
 )]
-// TODO: add others
 pub enum ItemCategory {
     // Major categories:
     Armor,
@@ -185,6 +189,8 @@ pub enum ItemCategory {
     // Other categories:
     Map,
     Rune,
+    Soul,
+    Remnant,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
@@ -253,9 +259,6 @@ pub struct ItemSpecs {
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
     pub map_specs: Option<MapSpecs>,
-
-    // Deprecated, to be removed later
-    pub old_game: bool,
 
     #[serde(default)]
     pub required_level: AreaLevel,
@@ -339,13 +342,13 @@ impl ItemModifiers {
                 if split_elements
                     && matches!(
                         &effect.stat_effect.stat,
-                        StatType::Armor(Some(ArmorStatType::Elemental))
+                        StatType::Armor(Some(DamageStatType::Elemental))
                     )
                 {
                     for stat in [
-                        StatType::Armor(Some(ArmorStatType::Fire)),
-                        StatType::Armor(Some(ArmorStatType::Poison)),
-                        StatType::Armor(Some(ArmorStatType::Storm)),
+                        StatType::Armor(Some(DamageStatType::Fire)),
+                        StatType::Armor(Some(DamageStatType::Poison)),
+                        StatType::Armor(Some(DamageStatType::Storm)),
                     ] {
                         *effects_map
                             .0
@@ -390,5 +393,14 @@ impl ItemModifiers {
             .iter()
             .map(|affix| affix.family.clone())
             .collect()
+    }
+
+    /// A soul affix can replace another of the same family, but not be added on an item with
+    /// other affixes of the same family.
+    pub fn can_replace_soul_affix(&self, soul_affix: &ItemAffix) -> bool {
+        !self
+            .affixes
+            .iter()
+            .any(|affix| affix.affix_type != AffixType::Soul && affix.family == soul_affix.family)
     }
 }

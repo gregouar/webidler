@@ -73,16 +73,11 @@ pub fn reset_skills(skills_states: &mut [SkillState]) {
         skill_state.just_triggered = false;
     }
 }
-#[allow(clippy::too_many_arguments)]
-pub fn update_skill_specs(
-    statuses_store: &StatusesStore,
+
+pub fn init_skill_specs(
     skill_id: String,
     base_skill_specs: &BaseSkillSpecs,
-    upgrade_level: u16,
     effects: &[StatEffect],
-    character_attrs: &CharacterAttrs,
-    inventory: Option<&PlayerInventory>,
-    skill_mastery: Option<(&SkillMasterySpecs, &SkillMasteryState)>,
 ) -> SkillSpecs {
     let level_modifier = effects
         .iter()
@@ -98,7 +93,7 @@ pub fn update_skill_specs(
         })
         .sum();
 
-    let mut skill_specs = SkillSpecs {
+    SkillSpecs {
         skill_id,
         name: base_skill_specs.name.clone(),
         icon: base_skill_specs.icon.clone(),
@@ -113,8 +108,20 @@ pub fn update_skill_specs(
         usable: true,
         extra_modifier_effects: Default::default(),
         auto_use_conditions: base_skill_specs.auto_use_conditions.clone(),
-    };
+    }
+}
 
+#[allow(clippy::too_many_arguments)]
+pub fn update_skill_specs(
+    statuses_store: &StatusesStore,
+    mut skill_specs: SkillSpecs,
+    base_skill_specs: &BaseSkillSpecs,
+    upgrade_level: u16,
+    effects: &[StatEffect],
+    character_attrs: &CharacterAttrs,
+    inventory: Option<&PlayerInventory>,
+    skill_mastery: Option<(&SkillMasterySpecs, &SkillMasteryState)>,
+) -> SkillSpecs {
     let mut local_effects = if let Some((skill_mastery_specs, skill_mastery_state)) = skill_mastery
     {
         skill_masteries_controller::apply_skill_mastery(
@@ -129,24 +136,23 @@ pub fn update_skill_specs(
 
     skill_specs.targets = apply_weapon_effects(skill_specs.targets, inventory);
 
-    local_effects.extend(
-        EffectsMap::combine_all(
-            std::iter::once(compute_skill_upgrade_effects(
-                base_skill_specs,
-                upgrade_level.saturating_add(skill_specs.level_modifier),
-            ))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                &base_skill_specs.modifier_effects,
-                character_attrs,
-                inventory,
-            )))
-            .chain(std::iter::once(compute_skill_modifier_effects(
-                &skill_specs.extra_modifier_effects,
-                character_attrs,
-                inventory,
-            ))),
-        ),
-    );
+    local_effects.extend(EffectsMap::combine_all(
+        std::iter::once(compute_skill_upgrade_effects(
+            base_skill_specs,
+            upgrade_level.saturating_add(skill_specs.level_modifier),
+            AffixEffectScope::Local,
+        ))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &base_skill_specs.modifier_effects,
+            character_attrs,
+            inventory,
+        )))
+        .chain(std::iter::once(compute_skill_modifier_effects(
+            &skill_specs.extra_modifier_effects,
+            character_attrs,
+            inventory,
+        ))),
+    ));
 
     apply_effects_to_skill_specs(
         statuses_store,
@@ -355,7 +361,7 @@ pub fn compute_skill_mastery_skill_specs_for_skill(
 
     Some(update_skill_specs(
         statuses_store,
-        skill_id.to_string(),
+        init_skill_specs(skill_id.to_string(), base_skill_specs, &global_stat_effects),
         base_skill_specs,
         1,
         &global_stat_effects,
@@ -567,12 +573,18 @@ pub fn apply_effects_to_skill_specs<'a>(
     }
 }
 
-pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u16) -> EffectsMap {
+pub fn compute_skill_upgrade_effects(
+    base_skill_specs: &BaseSkillSpecs,
+    level: u16,
+    scope: AffixEffectScope,
+) -> EffectsMap {
     let level = level as f64 - 1.0;
 
-    base_skill_specs.upgrade_effects.iter().fold(
-        EffectsMap::default(),
-        |mut effects_map, effect| {
+    base_skill_specs
+        .upgrade_effects
+        .iter()
+        .filter(|effect| effect.scope == scope)
+        .fold(EffectsMap::default(), |mut effects_map, effect| {
             *effects_map
                 .0
                 .entry((
@@ -587,8 +599,42 @@ pub fn compute_skill_upgrade_effects(base_skill_specs: &BaseSkillSpecs, level: u
                 _ => effect.stat_effect.value * level,
             };
             effects_map
-        },
-    )
+        })
+}
+
+#[derive(Clone, Copy)]
+enum FactorType {
+    Single(f64),
+    MinMax(f64, f64),
+}
+
+impl Default for FactorType {
+    fn default() -> Self {
+        FactorType::Single(0.0)
+    }
+}
+
+impl FactorType {
+    fn is_non_zero(self) -> bool {
+        match self {
+            FactorType::Single(v) => v > 0.0,
+            FactorType::MinMax(_, max) => max > 0.0,
+        }
+    }
+
+    fn multiply(self, value: f64) -> Self {
+        match self {
+            FactorType::Single(v) => FactorType::Single(v * value),
+            FactorType::MinMax(min, max) => FactorType::MinMax(min * value, max * value),
+        }
+    }
+
+    fn average(self) -> f64 {
+        match self {
+            FactorType::Single(v) => v,
+            FactorType::MinMax(min, max) => (min + max) * 0.5,
+        }
+    }
 }
 
 fn compute_skill_modifier_effects(
@@ -611,25 +657,37 @@ fn compute_skill_modifier_effects(
                 .flat_map(|inv| inv.equipped_items())
                 .filter_map(move |(item_slot, item_specs)| {
                     let mut modifier_effect = modifier_effect.clone();
-                    let base = if required_item.is_match(item_slot, item_specs) {
+                    // if let ItemStatsSource::Damage {
+                    //     damage_type,
+                    //     min_max: None,
+                    // } = item_stats
+                    //     && let Some(weapon_specs) = &item_specs.weapon_specs
+                    //     && let StatType::StatusPower { .. } = modifier_effect.effects
+                    // {
+                    //     return Some();
+                    // }
+
+                    let base_factor = if required_item.is_match(item_slot, item_specs) {
                         match (
                             item_stats,
                             &item_specs.weapon_specs,
                             &item_specs.armor_specs,
                         ) {
-                            (ItemStatsSource::Equipped, _, _) => 1.0,
-                            (ItemStatsSource::Armor, _, Some(armor_specs)) => *armor_specs.armor,
+                            (ItemStatsSource::Equipped, _, _) => FactorType::Single(1.0),
+                            (ItemStatsSource::Armor, _, Some(armor_specs)) => {
+                                FactorType::Single(*armor_specs.armor)
+                            }
                             (ItemStatsSource::Block, _, Some(armor_specs)) => {
-                                armor_specs.block.get() as f64
+                                FactorType::Single(armor_specs.block.get() as f64)
                             }
                             (ItemStatsSource::Cooldown, Some(weapon_specs), _) => {
-                                weapon_specs.cooldown.get()
+                                FactorType::Single(weapon_specs.cooldown.get())
                             }
                             (ItemStatsSource::CritChance, Some(weapon_specs), _) => {
-                                weapon_specs.crit_chance.value.get() as f64
+                                FactorType::Single(weapon_specs.crit_chance.value.get() as f64)
                             }
                             (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
-                                *weapon_specs.crit_damage
+                                FactorType::Single(*weapon_specs.crit_damage)
                             }
                             (
                                 ItemStatsSource::Damage {
@@ -644,21 +702,25 @@ fn compute_skill_modifier_effects(
                                         .damage
                                         .get(dmg_type)
                                         .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min.get(),
-                                            Some(MinMax::Max) => d.max.get(),
-                                            None => (d.min.get() + d.max.get()) * 0.5,
+                                            Some(MinMax::Min) => FactorType::Single(d.min.get()),
+                                            Some(MinMax::Max) => FactorType::Single(d.max.get()),
+                                            None => FactorType::MinMax(d.min.get(), d.max.get()),
+                                            // None => (d.min.get() + d.max.get()) * 0.5,
                                         })
                                         .unwrap_or_default()
                                 } else {
-                                    weapon_specs
-                                        .damage
-                                        .values()
-                                        .map(|d| match min_max {
-                                            Some(MinMax::Min) => d.min.get(),
-                                            Some(MinMax::Max) => d.max.get(),
-                                            None => (d.min.get() + d.max.get()) * 0.5,
-                                        })
-                                        .sum()
+                                    match min_max {
+                                        Some(MinMax::Min) => FactorType::Single(
+                                            weapon_specs.damage.values().map(|d| d.min.get()).sum(),
+                                        ),
+                                        Some(MinMax::Max) => FactorType::Single(
+                                            weapon_specs.damage.values().map(|d| d.max.get()).sum(),
+                                        ),
+                                        None => FactorType::MinMax(
+                                            weapon_specs.damage.values().map(|d| d.min.get()).sum(),
+                                            weapon_specs.damage.values().map(|d| d.max.get()).sum(),
+                                        ),
+                                    }
                                 }
                             }
                             (ItemStatsSource::Target, Some(weapon_specs), _) => {
@@ -670,16 +732,16 @@ fn compute_skill_modifier_effects(
                                         *shape = Some(weapon_specs.shape);
                                     }
                                 }
-                                1.0
+                                FactorType::Single(1.0)
                             }
-                            _ => 0.0,
+                            _ => Default::default(),
                         }
                     } else {
-                        0.0
+                        Default::default()
                     };
 
-                    if base > 0.0 {
-                        let factor = modifier_effect.factor * base;
+                    if base_factor.is_non_zero() {
+                        let factor = base_factor.multiply(modifier_effect.factor);
                         Some((modifier_effect, factor))
                     } else {
                         None
@@ -694,15 +756,33 @@ fn compute_skill_modifier_effects(
             ModifierEffectSource::ItemStats { .. } => None,
             ModifierEffectSource::CharacterStats(stat_converter) => Some((
                 me.clone(),
-                me.factor
-                    * characters_updater::compute_stat_converter(
-                        character_attrs,
-                        stat_converter,
-                        false,
-                    ),
+                FactorType::Single(
+                    me.factor
+                        * characters_updater::compute_stat_converter(
+                            character_attrs,
+                            stat_converter,
+                            false,
+                        ),
+                ),
             )),
         })
         .collect();
+
+    // item_sources
+    //     .iter()
+    //     .chain(non_item_sources.iter())
+    //     .flat_map(|(modifier_effect, factor)| {
+    //         modifier_effect.effects.iter().map(move |effect| {
+    //             (
+    //                 (effect.stat.clone(), effect.modifier, effect.bypass_ignore),
+    //                 effect.value * factor,
+    //             )
+    //         })
+    //     })
+    //     .fold(EffectsMap::default(), |mut map, (key, val)| {
+    //         *map.0.entry(key).or_default() += val;
+    //         map
+    //     })
 
     item_sources
         .iter()
@@ -711,12 +791,82 @@ fn compute_skill_modifier_effects(
             modifier_effect.effects.iter().map(move |effect| {
                 (
                     (effect.stat.clone(), effect.modifier, effect.bypass_ignore),
-                    effect.value * factor,
+                    effect.value,
+                    factor,
                 )
             })
         })
-        .fold(EffectsMap::default(), |mut map, (key, val)| {
-            *map.0.entry(key).or_default() += val;
+        .fold(EffectsMap::default(), |mut map, (key, val, factor)| {
+            match (&key.0, factor) {
+                (
+                    StatType::Damage {
+                        min_max: None,
+                        skill_filter,
+                        damage_type,
+                        is_hit,
+                    },
+                    FactorType::MinMax(min_factor, max_factor),
+                ) => {
+                    *map.0
+                        .entry((
+                            StatType::Damage {
+                                min_max: Some(MinMax::Min),
+                                skill_filter: skill_filter.clone(),
+                                damage_type: *damage_type,
+                                is_hit: *is_hit,
+                            },
+                            key.1,
+                            key.2,
+                        ))
+                        .or_default() += val * min_factor;
+                    *map.0
+                        .entry((
+                            StatType::Damage {
+                                min_max: Some(MinMax::Max),
+                                skill_filter: skill_filter.clone(),
+                                damage_type: *damage_type,
+                                is_hit: *is_hit,
+                            },
+                            key.1,
+                            key.2,
+                        ))
+                        .or_default() += val * max_factor;
+                }
+                (
+                    StatType::StatusPower {
+                        min_max: None,
+                        skill_filter,
+                        status_filter,
+                    },
+                    FactorType::MinMax(min_factor, max_factor),
+                ) => {
+                    *map.0
+                        .entry((
+                            StatType::StatusPower {
+                                min_max: Some(MinMax::Min),
+                                skill_filter: skill_filter.clone(),
+                                status_filter: status_filter.clone(),
+                            },
+                            key.1,
+                            key.2,
+                        ))
+                        .or_default() += val * min_factor;
+                    *map.0
+                        .entry((
+                            StatType::StatusPower {
+                                min_max: Some(MinMax::Max),
+                                skill_filter: skill_filter.clone(),
+                                status_filter: status_filter.clone(),
+                            },
+                            key.1,
+                            key.2,
+                        ))
+                        .or_default() += val * max_factor;
+                }
+                _ => {
+                    *map.0.entry(key).or_default() += val * factor.average();
+                }
+            }
             map
         })
 }
@@ -830,7 +980,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _)| {
             (
-                stat_converter.source,
+                stat_converter.source.clone(),
                 stat_converter.stat.clone(),
                 *modifier,
             )
@@ -934,6 +1084,53 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                         })
                     }
                 }
+                (
+                    StatConverterSource::StatusDuration {
+                        status_filter,
+                        min_max,
+                    },
+                    SkillEffectType::ApplyStatus {
+                        status_id,
+                        duration,
+                        ..
+                    },
+                ) => {
+                    if let Some(duration) = duration
+                        && let Some(status_specs) = statuses_store.get(status_id)
+                        && status_filter.is_match_with_status(
+                            status_id,
+                            status_specs.damage_type,
+                            status_specs.debuff,
+                        )
+                    {
+                        let min_value = if let Some(MinMax::Min) | None = min_max {
+                            duration
+                                .min
+                                .convert_value(factor, specs.is_extra, false)
+                                .get()
+                        } else {
+                            0.0
+                        };
+                        let max_value = if let Some(MinMax::Max) | None = min_max {
+                            duration
+                                .max
+                                .convert_value(factor, specs.is_extra, false)
+                                .get()
+                        } else {
+                            0.0
+                        };
+
+                        Some(StatEffect {
+                            stat: (*specs.stat).clone(),
+                            modifier,
+                            value: (min_value + max_value)
+                                * if min_max.is_none() { 50.0 } else { 100.0 },
+                            bypass_ignore: true,
+                        })
+                    } else {
+                        None
+                    }
+                }
                 // (
                 //     StatConverterSource::DamageOverTime {
                 //         damage_type,
@@ -1032,8 +1229,10 @@ fn compute_status_triggers_for_skill_effect<'a, 'b>(
     for status_effect in status_specs.effects.iter() {
         if let StatusEffectType::Trigger {
             trigger_specs,
-            inherit_owner_effects: true,
+            inherit_owner_effects,
+            inherit_player_effects,
         } = &status_effect.status_effect_type
+            && (*inherit_owner_effects || *inherit_player_effects)
         {
             let mut trigger_effect = trigger_specs.trigger_effect.clone();
             triggers_updater::compute_trigger_specs_effects_with_extra(
@@ -1094,7 +1293,7 @@ pub fn apply_stat_effect_on_skill_effect(
     }
 
     if let StatType::StatConverter(specs) = &effect.stat
-        && compare_options(&specs.skill_type, &Some(skill_type))
+        && specs.skill_filter.is_match_with_skill(skill_type, skill_id)
     {
         return Some((specs.clone(), effect.modifier, effect.value));
     }
@@ -1170,7 +1369,7 @@ pub fn apply_stat_effect_on_skill_effect(
                     is_hit,
                 } = &effect.stat
                     && skill_filter.is_match_with_skill(skill_type, skill_id)
-                    && compare_options(stat_damage_type, &Some(damage_type))
+                    && compare_options(stat_damage_type, &Some(damage_type.into()))
                     && compare_options(is_hit, &Some(true))
                 {
                     if compare_options(min_max, &Some(MinMax::Min)) {
@@ -1349,7 +1548,7 @@ pub fn apply_stat_effect_on_skill_effect(
                     is_hit,
                 } = &effect.stat
                     && skill_filter.is_match_with_skill(skill_type, skill_id)
-                    && compare_options(damage_type, &status_specs.damage_type)
+                    && compare_options(damage_type, &status_specs.damage_type.map(Into::into))
                     && compare_options(is_hit, &Some(false))
                 {
                     if compare_options(min_max, &Some(MinMax::Min)) {
@@ -1406,9 +1605,16 @@ pub fn apply_stat_effect_on_skill_effect(
         SkillEffectType::Kill => {}
         SkillEffectType::RefreshCooldown {
             skill_filter: _,
-            value: _,
+            value,
             modifier: _,
-        } => {}
+        } => {
+            if let StatType::RefreshedCooldown { skill_filter } = &effect.stat
+                && skill_filter.is_match_with_skill(skill_type, skill_id)
+            {
+                value.min.apply_effect(effect);
+                value.max.apply_effect(effect);
+            }
+        }
     }
 
     None
