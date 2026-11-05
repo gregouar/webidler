@@ -7,7 +7,7 @@ use shared::data::{
 };
 
 use crate::game::{
-    data::items_store::ItemsStore,
+    data::master_store::MasterStore,
     systems::{inventory_controller, items_controller::init_item_specs_from_store},
 };
 
@@ -22,7 +22,7 @@ pub struct InventoryData {
 }
 
 pub fn inventory_data_to_player_inventory(
-    items_store: &ItemsStore,
+    master_store: &MasterStore,
     inventory_data: InventoryData,
 ) -> PlayerInventory {
     let mut player_inventory = PlayerInventory {
@@ -30,7 +30,13 @@ pub fn inventory_data_to_player_inventory(
         bag: inventory_data
             .bag
             .into_iter()
-            .filter_map(|item_modifiers| init_item_specs_from_store(items_store, item_modifiers))
+            .filter_map(|item_modifiers| {
+                init_item_specs_from_store(
+                    &master_store.items_store,
+                    &master_store.item_affixes_table,
+                    item_modifiers,
+                )
+            })
             .collect(),
         max_bag_size: inventory_data.max_bag_size,
         sheathed: inventory_data.sheathed,
@@ -39,7 +45,13 @@ pub fn inventory_data_to_player_inventory(
     for item_specs in inventory_data
         .equipped
         .into_values()
-        .filter_map(|item_modifiers| init_item_specs_from_store(items_store, item_modifiers))
+        .filter_map(|item_modifiers| {
+            init_item_specs_from_store(
+                &master_store.items_store,
+                &master_store.item_affixes_table,
+                item_modifiers,
+            )
+        })
     {
         let _ = inventory_controller::equip_item(&mut player_inventory, item_specs);
     }

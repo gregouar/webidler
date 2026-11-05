@@ -141,8 +141,7 @@ pub async fn store_item<'c>(
             .iter()
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
-        item.modifiers
-            .aggregate_effects(AffixEffectScope::Global, true)
+        item.aggregate_effects(AffixEffectScope::Global, true)
             .0
             .into_iter()
             .filter_map(|((stat_type, modifier, _), stat_value)| {
