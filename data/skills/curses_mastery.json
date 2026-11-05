@@ -585,13 +585,29 @@
                                 { "ApplyStatus": {"status_id": "curse_vampirism_damage", "value": 1} }
                             ]
                         }
+                    },
+                    {
+                        "value"        : -10,
+                        "upgrade_value":   0,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat": "LifeRegen",
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_vampirism"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Flat",
+                            "scope"   : "Global"
+                        }
                     }
                 ]
             },
             "damage_bleed": {
                 "title"       : "Bloodlust",
-                "base_cost"   : 5,
-                "upgrade_cost": 5,
+                "base_cost"   : 3,
+                "upgrade_cost": 3,
                 "max_level"   : 10,
                 "effects"     : [
                     {
@@ -616,6 +632,22 @@
                                 }
                             },
                             "modifier": "More",
+                            "scope"   : "Global"
+                        }
+                    },
+                    {
+                        "value"        : -10,
+                        "upgrade_value":   0,
+                        "StatEffect"   : {
+                            "stat"    : {
+                                "StatConditionalModifier": {
+                                    "stat": "LifeRegen",
+                                    "conditions": [
+                                        { "HasStatus": {"status_id": "curse_vampirism"} }
+                                    ]
+                                }
+                            },
+                            "modifier": "Flat",
                             "scope"   : "Global"
                         }
                     }
