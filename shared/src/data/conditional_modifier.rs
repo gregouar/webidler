@@ -31,6 +31,8 @@ pub enum Condition {
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        min_stacks: u8,
     },
     StatusDuration {
         #[serde(flatten)]

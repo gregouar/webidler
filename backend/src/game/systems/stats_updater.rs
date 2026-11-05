@@ -130,33 +130,41 @@ pub fn check_condition(
         Condition::StatusStacks {
             status_filter,
             skill_type,
-        } => character_state
-            .statuses
-            .iter()
-            .map(|(status_id, status_states)| {
-                let Some(status_specs) = statuses_store.get(status_id) else {
-                    return 0;
-                };
-                if status_filter.is_match_with_status(
-                    status_id,
-                    status_specs.damage_type,
-                    status_specs.debuff,
-                ) {
-                    skill_type
-                        .map(|skill_type| {
-                            status_states
-                                .iter()
-                                .map(|status_state| {
-                                    (status_state.skill_type == skill_type) as usize
-                                })
-                                .sum()
-                        })
-                        .unwrap_or(status_states.len())
-                } else {
-                    0
-                }
-            })
-            .sum::<usize>() as f64,
+            min_stacks,
+        } => {
+            let stacks = character_state
+                .statuses
+                .iter()
+                .map(|(status_id, status_states)| {
+                    let Some(status_specs) = statuses_store.get(status_id) else {
+                        return 0;
+                    };
+                    if status_filter.is_match_with_status(
+                        status_id,
+                        status_specs.damage_type,
+                        status_specs.debuff,
+                    ) {
+                        skill_type
+                            .map(|skill_type| {
+                                status_states
+                                    .iter()
+                                    .map(|status_state| {
+                                        (status_state.skill_type == skill_type) as usize
+                                    })
+                                    .sum()
+                            })
+                            .unwrap_or(status_states.len())
+                    } else {
+                        0
+                    }
+                })
+                .sum::<usize>();
+            if stacks >= *min_stacks as usize {
+                stacks as f64
+            } else {
+                0.0
+            }
+        }
         Condition::StatusDuration {
             status_filter,
             skill_type,

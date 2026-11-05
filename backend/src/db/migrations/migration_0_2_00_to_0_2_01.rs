@@ -843,6 +843,7 @@ impl From<OldCondition> for Condition {
             } => StatusStacks {
                 status_filter: status_type_to_status_filter(status_type),
                 skill_type,
+                min_stacks: 0,
             },
             OldCondition::MaximumLife => MaximumLife,
             OldCondition::MaximumMana => MaximumMana,

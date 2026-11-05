@@ -110,8 +110,9 @@ pub fn format_skill_modifier_conditions_post(
             Condition::StatusStacks {
                 status_filter,
                 skill_type,
+                min_stacks,
             } => Some(format!(
-                " per Stack of {}", // on them for SkillConditionalModifier ?
+                " per Stack of {}{}", // on them for SkillConditionalModifier ?
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -120,6 +121,11 @@ pub fn format_skill_modifier_conditions_post(
                     status_filter,
                     false
                 ),
+                if *min_stacks > 0 {
+                    format!(" if it has {min_stacks} or more")
+                } else {
+                    "".to_string()
+                }
             )),
             Condition::StatusDuration {
                 status_filter,
