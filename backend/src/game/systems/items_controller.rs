@@ -252,32 +252,6 @@ fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) 
                         .unwrap_or_default(),
                 }
             }));
-
-        // item_modifiers.affixes.push(ItemAffix {
-        //     name: "Empowered".into(),
-        //     family: "empowered".into(),
-        //     tags: Default::default(),
-        //     affix_type: AffixType::Upgrade,
-        //     tier: item_modifiers.upgrade_level,
-        //     effects: base
-        //         .upgrade_effects
-        //         .iter()
-        //         .cloned()
-        //         .map(|upgrade_effect| AffixEffect {
-        //             scope: upgrade_effect.scope,
-        //             stat_effect: StatEffect {
-        //                 value: upgrade_effect.stat_effect.value
-        //                     * item_modifiers.upgrade_level as f64,
-        //                 ..upgrade_effect.stat_effect
-        //             },
-        //         })
-        //         .collect(),
-        //     item_level: base
-        //         .upgrade_levels
-        //         .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-        //         .copied()
-        //         .unwrap_or_default(),
-        // });
     }
 }
 
@@ -315,6 +289,8 @@ pub fn temper_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     let quality_increase = rng::random_range(1_u8..=5).ok_or(AppError::UserError(
         "failed to roll tempering quality".into(),
     ))?;
+
+    // TODO: Change later when modifiers will carry normalized base values...
 
     let old_quality = item.modifiers.quality;
     let new_quality = (old_quality + f32::from(quality_increase)).min(MAX_TEMPERED_ITEM_QUALITY);
