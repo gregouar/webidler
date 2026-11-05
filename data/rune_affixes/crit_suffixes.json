@@ -1,182 +1,132 @@
-[
-  {
-    "name": "of Aim",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 3, 5 ]
-      }
+{
+  "rune_inc_crit_chance_t1" : {
+    "name"        : "of Aim",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 1,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [3, 5] }
     ]
   },
-  {
-    "name": "of Rigor",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 7, 10 ]
-      }
+  "rune_inc_crit_chance_t2" : {
+    "name"        : "of Rigor",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 100,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [7, 10] }
     ]
   },
-  {
-    "name": "of Accuracy",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 200,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 13, 15 ]
-      }
+  "rune_inc_crit_chance_t3" : {
+    "name"        : "of Accuracy",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 200,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [13, 15] }
     ]
   },
-  {
-    "name": "of Efficiency",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 300,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 17, 20 ]
-      }
+  "rune_inc_crit_chance_t4" : {
+    "name"        : "of Efficiency",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 300,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [17, 20] }
     ]
   },
-  {
-    "name": "of Precision",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 400,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 23, 25 ]
-      }
+  "rune_inc_crit_chance_t5" : {
+    "name"        : "of Precision",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 400,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [23, 25] }
     ]
   },
-  {
-    "name": "of Incisiveness",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "Rune" ],
-    "item_level": 500,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 27, 30 ]
-      }
+  "rune_inc_crit_chance_t6" : {
+    "name"        : "of Incisiveness",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["Rune"],
+    "item_level"  : 500,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [27, 30] }
     ]
   },
-  {
-    "name": "of Exactitude",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "Rune" ],
-    "item_level": 600,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 33, 35 ]
-      }
+  "rune_inc_crit_chance_t7" : {
+    "name"        : "of Exactitude",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["Rune"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [33, 35] }
     ]
   },
-  {
-    "name": "of Meticulousness",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 8,
-    "weight": 400,
-    "restrictions": [ "Rune" ],
-    "item_level": 700,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 37, 40 ]
-      }
+  "rune_inc_crit_chance_t8" : {
+    "name"        : "of Meticulousness",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["Rune"],
+    "item_level"  : 700,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [37, 40] }
     ]
   },
-  {
-    "name": "of Certainty",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 9,
-    "weight": 200,
-    "restrictions": [ "Rune" ],
-    "item_level": 800,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 43, 45 ]
-      }
+  "rune_inc_crit_chance_t9" : {
+    "name"        : "of Certainty",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["Rune"],
+    "item_level"  : 800,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [43, 45] }
     ]
   },
-  {
-    "name": "of Perfection",
-    "family": "inc_crit_chance",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Suffix",
-    "tier": 10,
-    "weight": 100,
-    "restrictions": [ "Rune" ],
-    "item_level": 900,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritChance": { } },
-        "modifier": "Increased",
-        "value": [ 47, 50 ]
-      }
+  "rune_inc_crit_chance_t10": {
+    "name"        : "of Perfection",
+    "family"      : "inc_crit_chance",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Suffix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Rune"],
+    "item_level"  : 900,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [47, 50] }
     ]
   }
-]
+}

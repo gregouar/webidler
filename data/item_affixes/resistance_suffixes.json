@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_add_fire_res_t1"   : {
     "name"        : "of Emberscreen",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [25, 45] }
     ]
   },
-  {
+  "item_add_fire_res_t2"   : {
     "name"        : "of Emberfoil",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [55, 70] }
     ]
   },
-  {
+  "item_add_fire_res_t3"   : {
     "name"        : "of Emberguard",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [80, 95] }
     ]
   },
-  {
+  "item_add_fire_res_t4"   : {
     "name"        : "of Embershield",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [105, 120] }
     ]
   },
-  {
+  "item_add_fire_res_t5"   : {
     "name"        : "of Emberveil",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [130, 145] }
     ]
   },
-  {
+  "item_add_fire_res_t6"   : {
     "name"        : "of Emberward",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [155, 170] }
     ]
   },
-  {
+  "item_add_fire_res_t7"   : {
     "name"        : "of Embermantle",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [180, 195] }
     ]
   },
-  {
+  "item_add_fire_res_t8"   : {
     "name"        : "of Emberscale",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [205, 220] }
     ]
   },
-  {
+  "item_add_fire_res_t9"   : {
     "name"        : "of Embermail",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [230, 250] }
     ]
   },
-  {
+  "item_add_fire_res_t10"  : {
     "name"        : "of Emberplate",
     "family"      : "add_fire_res",
     "tags"        : ["Fire", "Armor"],
@@ -129,7 +129,7 @@
       { "scope": "Global", "stat": {"Armor": "Fire"}, "modifier": "Flat", "value": [260, 300] }
     ]
   },
-  {
+  "item_add_poison_res_t1" : {
     "name"        : "of Venomscreen",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -142,7 +142,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [25, 45] }
     ]
   },
-  {
+  "item_add_poison_res_t2" : {
     "name"        : "of Venomfoil",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -155,7 +155,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [55, 70] }
     ]
   },
-  {
+  "item_add_poison_res_t3" : {
     "name"        : "of Venomguard",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -168,7 +168,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [80, 95] }
     ]
   },
-  {
+  "item_add_poison_res_t4" : {
     "name"        : "of Venomshield",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -181,7 +181,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [105, 120] }
     ]
   },
-  {
+  "item_add_poison_res_t5" : {
     "name"        : "of Venomveil",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -194,7 +194,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [130, 145] }
     ]
   },
-  {
+  "item_add_poison_res_t6" : {
     "name"        : "of Venomward",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -207,7 +207,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [155, 170] }
     ]
   },
-  {
+  "item_add_poison_res_t7" : {
     "name"        : "of Venommantle",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -220,7 +220,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [180, 195] }
     ]
   },
-  {
+  "item_add_poison_res_t8" : {
     "name"        : "of Venomscale",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -233,7 +233,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [205, 220] }
     ]
   },
-  {
+  "item_add_poison_res_t9" : {
     "name"        : "of Venommail",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -246,7 +246,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [230, 250] }
     ]
   },
-  {
+  "item_add_poison_res_t10": {
     "name"        : "of Venomplate",
     "family"      : "add_poison_res",
     "tags"        : ["Poison", "Armor"],
@@ -259,7 +259,7 @@
       { "scope": "Global", "stat": {"Armor": "Poison"}, "modifier": "Flat", "value": [260, 300] }
     ]
   },
-  {
+  "item_add_storm_res_t1"  : {
     "name"        : "of Tempestscreen",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -272,7 +272,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [25, 45] }
     ]
   },
-  {
+  "item_add_storm_res_t2"  : {
     "name"        : "of Tempestfoil",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -285,7 +285,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [55, 70] }
     ]
   },
-  {
+  "item_add_storm_res_t3"  : {
     "name"        : "of Tempestguard",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -298,7 +298,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [80, 95] }
     ]
   },
-  {
+  "item_add_storm_res_t4"  : {
     "name"        : "of Tempestshield",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -311,7 +311,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [105, 120] }
     ]
   },
-  {
+  "item_add_storm_res_t5"  : {
     "name"        : "of Tempestveil",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -324,7 +324,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [130, 145] }
     ]
   },
-  {
+  "item_add_storm_res_t6"  : {
     "name"        : "of Tempestward",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -337,7 +337,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [155, 170] }
     ]
   },
-  {
+  "item_add_storm_res_t7"  : {
     "name"        : "of Tempestmantle",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -350,7 +350,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [180, 195] }
     ]
   },
-  {
+  "item_add_storm_res_t8"  : {
     "name"        : "of Tempestscale",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -363,7 +363,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [205, 220] }
     ]
   },
-  {
+  "item_add_storm_res_t9"  : {
     "name"        : "of Tempestmail",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -376,7 +376,7 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [230, 250] }
     ]
   },
-  {
+  "item_add_storm_res_t10" : {
     "name"        : "of Tempestplate",
     "family"      : "add_storm_res",
     "tags"        : ["Storm", "Armor"],
@@ -389,4 +389,4 @@
       { "scope": "Global", "stat": {"Armor": "Storm"}, "modifier": "Flat", "value": [260, 300] }
     ]
   }
-]
+}

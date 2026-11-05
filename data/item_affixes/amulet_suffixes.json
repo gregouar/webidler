@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_add_skill_level_t1": {
     "name"        : "of Talent",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 1 }
     ]
   },
-  {
+  "item_add_skill_level_t2": {
     "name"        : "of Proficiency",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 2 }
     ]
   },
-  {
+  "item_add_skill_level_t3": {
     "name"        : "of Expertise",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 3 }
     ]
   },
-  {
+  "item_add_skill_level_t4": {
     "name"        : "of Mastery",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 4 }
     ]
   },
-  {
+  "item_add_skill_level_t5": {
     "name"        : "of Omniscience",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 5 }
     ]
   },
-  {
+  "item_add_skill_level_t6": {
     "name"        : "of Transcendence",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 6 }
     ]
   },
-  {
+  "item_add_skill_level_t7": {
     "name"        : "of Godhood",
     "family"      : "add_skill_level",
     "tags"        : ["Skill"],
@@ -90,4 +90,4 @@
       { "scope": "Global", "stat": {"SkillLevel": {}}, "modifier": "Flat", "value": 7 }
     ]
   }
-]
+}

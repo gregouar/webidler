@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_buff_duration_t1" : {
     "name"        : "of Prayer",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t2" : {
     "name"        : "of Worship",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t3" : {
     "name"        : "of Devotion",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t4" : {
     "name"        : "of Faith",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t5" : {
     "name"        : "of Grace",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t6" : {
     "name"        : "of Blessing",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t7" : {
     "name"        : "of Benediction",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t8" : {
     "name"        : "of Consecration",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t9" : {
     "name"        : "of Divinity",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "item_inc_buff_duration_t10": {
     "name"        : "of Apotheosis",
     "family"      : "inc_buff_duration",
     "tags"        : ["Status"],
@@ -179,4 +179,4 @@
       }
     ]
   }
-]
+}

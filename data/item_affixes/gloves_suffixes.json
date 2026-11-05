@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_action_speed_t1" : {
     "name"        : "of Dexterity",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [2, 4] }
     ]
   },
-  {
+  "item_inc_action_speed_t2" : {
     "name"        : "of Gesticulation",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [5, 6] }
     ]
   },
-  {
+  "item_inc_action_speed_t3" : {
     "name"        : "of Action",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [7, 8] }
     ]
   },
-  {
+  "item_inc_action_speed_t4" : {
     "name"        : "of Alacrity",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [9, 10] }
     ]
   },
-  {
+  "item_inc_action_speed_t5" : {
     "name"        : "of Coordination",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [11, 12] }
     ]
   },
-  {
+  "item_inc_action_speed_t6" : {
     "name"        : "of Reflexes",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [13, 14] }
     ]
   },
-  {
+  "item_inc_action_speed_t7" : {
     "name"        : "of Motion",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [15, 16] }
     ]
   },
-  {
+  "item_inc_action_speed_t8" : {
     "name"        : "of Execution",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [17, 18] }
     ]
   },
-  {
+  "item_inc_action_speed_t9" : {
     "name"        : "of Reaction",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [19, 20] }
     ]
   },
-  {
+  "item_inc_action_speed_t10": {
     "name"        : "of Premonition",
     "family"      : "inc_action_speed",
     "tags"        : ["Speed"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": {"Speed": {}}, "modifier": "Increased", "value": [21, 22] }
     ]
   }
-]
+}
