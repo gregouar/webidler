@@ -81,6 +81,8 @@ pub struct PassiveNodeSpecs {
     // TODO: unlocked & ascend costs?
     #[serde(default)]
     pub socket: bool,
+    #[serde(default)]
+    pub upgrade_extra_cost: u16,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
@@ -120,7 +122,7 @@ impl PassiveNodeSpecs {
     }
 
     pub fn next_ascend_cost(&self, level: u8) -> u16 {
-        (level as u16) / 2 + 1
+        self.upgrade_extra_cost + (level as u16) / 2 + 1
     }
 
     pub fn total_ascend_cost(&self, level: u8) -> u16 {

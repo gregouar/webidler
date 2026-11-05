@@ -833,6 +833,13 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         node_specs.write().locked = node_locked.get();
     });
 
+    let node_upgrade_cost = RwSignal::new(Some(node_specs.read_untracked().upgrade_extra_cost));
+    Effect::new(move || {
+        if let Some(upgrade_cost) = node_upgrade_cost.get() {
+            node_specs.write().upgrade_extra_cost = upgrade_cost;
+        }
+    });
+
     let node_socket = RwSignal::new(node_specs.read_untracked().socket);
     Effect::new(move || {
         node_specs.write().socket = node_socket.get();
@@ -918,12 +925,20 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                     </label>
                 </div>
             </div>
-            <ValidatedInput
-                label="Max Level"
-                id="max_level"
-                input_type="number"
-                bind=node_max_level
-            />
+            <div class="flex justify-between gap-2 w-full">
+                <ValidatedInput
+                    label="Max Level"
+                    id="max_level"
+                    input_type="number"
+                    bind=node_max_level
+                />
+                <ValidatedInput
+                    label="Upgrade Cost"
+                    id="upgrade_cost"
+                    input_type="number"
+                    bind=node_upgrade_cost
+                />
+            </div>
             <JsonEditor label="Effects" value=node_effects h_size="h-96" />
             <JsonEditor label="Upgrade Effects" value=node_upgrades h_size="h-96" />
             <JsonEditor label="Triggers" value=node_triggers h_size="h-96" />
