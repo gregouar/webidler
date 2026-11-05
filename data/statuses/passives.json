@@ -185,7 +185,7 @@
     "effects"   : [
       {
         "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
-        "value"       : 60,
+        "value"       : 50,
         "modifier"    : "Percent"
       },
       {

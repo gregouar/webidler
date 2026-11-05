@@ -880,6 +880,60 @@
         "scope": "Global",
         "value": 1.0,
         "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": "LifeRegen",
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": "curse_vampirism",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": -10.0,
+        "ignore_quality": true
+      },
+      {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "StatusEscalation": {
+                "status_id": "bleed",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "conditions": [
+              {
+                "HasStatus": {
+                  "status_id": "curse_vampirism",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "not": false
+                }
+              }
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 25.0,
+        "ignore_quality": true
       }
     ],
     "triggers": [],

@@ -1019,8 +1019,8 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -1030,8 +1030,8 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -1637,8 +1637,8 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Increased",
-            "value": 4.0
+            "modifier": "Flat",
+            "value": 50.0
           },
           {
             "stat": "LifeRegen",
@@ -1651,8 +1651,8 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Increased",
-            "value": 2.0
+            "modifier": "Flat",
+            "value": 20.0
           },
           {
             "stat": "LifeRegen",
@@ -3037,15 +3037,15 @@
         "effects": [
           {
             "stat": "Life",
-            "modifier": "Flat",
-            "value": 20.0
+            "modifier": "More",
+            "value": 5.0
           },
           {
             "stat": {
               "Armor": null
             },
             "modifier": "Increased",
-            "value": 10.0
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -3053,15 +3053,15 @@
         "upgrade_effects": [
           {
             "stat": "Life",
-            "modifier": "Flat",
-            "value": 10.0
+            "modifier": "More",
+            "value": 4.0
           },
           {
             "stat": {
               "Armor": null
             },
             "modifier": "Increased",
-            "value": 5.0
+            "value": 15.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5916,7 +5916,7 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 25.0
           },
           {
             "stat": {
@@ -5980,7 +5980,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {
@@ -6689,6 +6689,27 @@
             },
             "modifier": "More",
             "value": 10.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Spell",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "NotLowMana"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -6711,6 +6732,27 @@
             },
             "modifier": "More",
             "value": 8.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Spell",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "NotLowMana"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 16.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9633,6 +9675,27 @@
             },
             "modifier": "More",
             "value": 10.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -9655,6 +9718,27 @@
             },
             "modifier": "More",
             "value": 8.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "value": 16.0
           }
         ],
         "max_upgrade_level": 5,
@@ -9730,8 +9814,8 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -9741,8 +9825,8 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10670,8 +10754,8 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -10681,8 +10765,8 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -10746,8 +10830,8 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -10757,8 +10841,8 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -11719,8 +11803,8 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -11730,8 +11814,8 @@
             "stat": {
               "Armor": "Poison"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12047,7 +12131,7 @@
             "effects": [
               {
                 "success_chance": {
-                  "value": 40.0,
+                  "value": 30.0,
                   "lucky_chance": 0.0
                 },
                 "ApplyStatus": {
@@ -12204,8 +12288,8 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -12215,8 +12299,8 @@
             "stat": {
               "Armor": "Physical"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12878,8 +12962,8 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -12889,8 +12973,8 @@
             "stat": {
               "Armor": "Storm"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -13953,8 +14037,8 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Increased",
-            "value": 25.0
+            "modifier": "Flat",
+            "value": 100.0
           }
         ],
         "triggers": [],
@@ -13964,8 +14048,8 @@
             "stat": {
               "Armor": "Fire"
             },
-            "modifier": "Increased",
-            "value": 15.0
+            "modifier": "Flat",
+            "value": 50.0
           }
         ],
         "max_upgrade_level": 5,
@@ -14987,7 +15071,7 @@
               }
             },
             "modifier": "More",
-            "value": 50.0
+            "value": 100.0
           }
         ],
         "max_upgrade_level": 2,
@@ -16196,12 +16280,12 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 6.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 4.0
+            "value": 6.0
           }
         ],
         "triggers": [],
@@ -16210,12 +16294,12 @@
           {
             "stat": "LifeRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 3.0
           },
           {
             "stat": "ManaRegen",
             "modifier": "Flat",
-            "value": 2.0
+            "value": 3.0
           }
         ],
         "max_upgrade_level": 5,
@@ -17213,7 +17297,7 @@
               }
             },
             "modifier": "More",
-            "value": 30.0
+            "value": 25.0
           },
           {
             "stat": {
@@ -17277,7 +17361,7 @@
               }
             },
             "modifier": "More",
-            "value": 20.0
+            "value": 15.0
           },
           {
             "stat": {

@@ -1215,7 +1215,7 @@
         "effects": [
           {
             "success_chance": {
-              "value": 20.0,
+              "value": 10.0,
               "lucky_chance": 0.0
             },
             "ApplyStatus": {
