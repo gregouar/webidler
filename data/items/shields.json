@@ -557,16 +557,6 @@
         "scope": "Local",
         "stat_effect": {
           "stat": {
-            "Armor": "Physical"
-          },
-          "modifier": "Increased",
-          "value": 20.0
-        }
-      },
-      {
-        "scope": "Local",
-        "stat_effect": {
-          "stat": {
             "Block": null
           },
           "modifier": "Flat",
@@ -726,15 +716,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -742,6 +723,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
