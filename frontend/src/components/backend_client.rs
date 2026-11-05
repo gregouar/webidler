@@ -14,30 +14,31 @@ use shared::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyBenedictionsRequest,
             BuyMarketItemRequest, CreateCharacterRequest, EditMarketItemRequest,
             ExchangeGemsStashRequest, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
-            ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest, GetStashItemsRequest,
-            InventoryDeleteRequest, InventoryEquipRequest, InventorySortRequest,
-            InventoryUnequipRequest, RejectMarketItemRequest, ResetPasswordRequest,
-            SaveFavoriteSkillsRequest, SavePassivesRequest, SaveSkillMasteryUpgradesRequest,
-            SellMarketItemRequest, SignInRequest, SignUpRequest, SocketPassiveRequest,
-            StoreStashItemRequest, TakeStashItemRequest, UpdateAccountRequest,
-            UpdateCharacterPetsRequest, UpdateCharacterRequest, UpgradeStashRequest,
+            ForgeTemperRequest, ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest,
+            GetStashItemsRequest, InventoryDeleteRequest, InventoryEquipRequest,
+            InventorySortRequest, InventoryUnequipRequest, RejectMarketItemRequest,
+            ResetPasswordRequest, SaveFavoriteSkillsRequest, SavePassivesRequest,
+            SaveSkillMasteryUpgradesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
+            SocketPassiveRequest, StoreStashItemRequest, TakeStashItemRequest,
+            UpdateAccountRequest, UpdateCharacterPetsRequest, UpdateCharacterRequest,
+            UpgradeStashRequest,
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
             BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
             DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeImbueResponse,
-            ForgeSacrificeResponse, ForgeUpgradeResponse, ForgotPasswordResponse,
-            GambleItemResponse, GetAccountUserUnlocksResponse, GetCharacterDetailsResponse,
-            GetDiscordInviteResponse, GetMarketStashItemsResponse, GetMasterDataResponse,
-            GetStashItemsResponse, GetUserCharactersResponse, GetUserDetailsResponse,
-            InventoryDeleteResponse, InventoryEquipResponse, InventorySortResponse,
-            InventoryUnequipResponse, LeaderboardResponse, NewsResponse, PlayersCountResponse,
-            ReconcileAchievementsResponse, RejectMarketItemResponse, ResetPasswordResponse,
-            SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
-            SellMarketItemResponse, SignInResponse, SignUpResponse, SocketPassiveResponse,
-            StoreStashItemResponse, TakeStashItemResponse, UpdateAccountResponse,
-            UpdateCharacterPetsResponse, UpgradeStashResponse,
+            ForgeSacrificeResponse, ForgeTemperResponse, ForgeUpgradeResponse,
+            ForgotPasswordResponse, GambleItemResponse, GetAccountUserUnlocksResponse,
+            GetCharacterDetailsResponse, GetDiscordInviteResponse, GetMarketStashItemsResponse,
+            GetMasterDataResponse, GetStashItemsResponse, GetUserCharactersResponse,
+            GetUserDetailsResponse, InventoryDeleteResponse, InventoryEquipResponse,
+            InventorySortResponse, InventoryUnequipResponse, LeaderboardResponse, NewsResponse,
+            PlayersCountResponse, ReconcileAchievementsResponse, RejectMarketItemResponse,
+            ResetPasswordResponse, SaveFavoriteSkillsResponse, SavePassivesResponse,
+            SaveSkillMasteryUpgradesResponse, SellMarketItemResponse, SignInResponse,
+            SignUpResponse, SocketPassiveResponse, StoreStashItemResponse, TakeStashItemResponse,
+            UpdateAccountResponse, UpdateCharacterPetsResponse, UpgradeStashResponse,
         },
     },
 };
@@ -417,6 +418,13 @@ impl BackendClient {
         request: &ForgeUpgradeRequest,
     ) -> Result<ForgeUpgradeResponse, BackendError> {
         self.post_auth("forge/upgrade", request).await
+    }
+
+    pub async fn forge_temper(
+        &self,
+        request: &ForgeTemperRequest,
+    ) -> Result<ForgeTemperResponse, BackendError> {
+        self.post_auth("forge/temper", request).await
     }
 
     pub async fn forge_sacrifice(

@@ -174,3 +174,12 @@ pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
                 .then_some((*next_upgrade_level / 2 + item_specs.base.min_area_level) as f64)
         })
 }
+
+pub fn temper_item_price(item_specs: &ItemSpecs) -> Option<f64> {
+    let quality = item_specs
+        .modifiers
+        .quality
+        .clamp(0.0, constants::MAX_TEMPERED_ITEM_QUALITY);
+    (!item_specs.base.ignore_quality && quality < constants::MAX_TEMPERED_ITEM_QUALITY)
+        .then(|| ((f64::from(quality) / 5.0).floor() + 1.0).powi(2))
+}
