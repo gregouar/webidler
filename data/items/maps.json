@@ -10,7 +10,7 @@
     ],
     "min_area_level": 100,
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -39,7 +39,7 @@
     ],
     "min_area_level": 300,
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -68,7 +68,7 @@
     ],
     "min_area_level": 600,
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -97,15 +97,15 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "GemsFind",
         "modifier": "Increased",
         "scope": "Global",
         "value": 1000.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": null
         },
@@ -114,7 +114,7 @@
         "value": 500.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Block": "Attack"
         },
@@ -123,7 +123,7 @@
         "value": 50.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -152,8 +152,8 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Meet Regular Patrons"
         },
@@ -162,7 +162,7 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -172,21 +172,21 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 10.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -265,8 +265,8 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Enemies Drop no Item"
         },
@@ -275,21 +275,21 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
         "value": 500.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -386,8 +386,8 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Speed": {
             "skill_type": null,
@@ -399,14 +399,14 @@
         "value": 300.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -416,7 +416,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -447,8 +447,8 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "May drop Cursed Treasures"
         },
@@ -457,7 +457,7 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -467,21 +467,21 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 30.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Local",
         "value": 500.0,
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -496,7 +496,7 @@
         "value": 100.0,
         "ignore_quality": true
       },
-      {
+      "unique_6": {
         "stat": {
           "StatusPower": {
             "status_id": null,
@@ -512,7 +512,7 @@
         "value": 100.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -593,8 +593,8 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "The Desert is Invaded by Mummies"
         },
@@ -603,7 +603,7 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "DamageTaken": {
             "skill_type": null,
@@ -615,21 +615,21 @@
         "value": 100.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Local",
         "value": 50.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 50.0,
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -639,7 +639,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -668,8 +668,8 @@
     ],
     "min_area_level": 500,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "The Spider Witch has finished her ritual..."
         },
@@ -678,21 +678,21 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 100.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
         "value": 90.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -702,7 +702,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -781,22 +781,22 @@
     ],
     "min_area_level": 600,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "ItemAreaChance",
         "modifier": "Increased",
         "scope": "Local",
         "value": 2000.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
         "value": 80.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -806,7 +806,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -835,8 +835,8 @@
     ],
     "min_area_level": 600,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Contains no Boss"
         },
@@ -845,14 +845,14 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "GoldFind",
         "modifier": "Increased",
         "scope": "Local",
         "value": -1e200,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -881,8 +881,8 @@
     ],
     "min_area_level": 700,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Reward with an Eldritch Soul"
         },
@@ -891,21 +891,21 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 190.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
         "value": 140.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -915,7 +915,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,

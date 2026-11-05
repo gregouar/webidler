@@ -11,7 +11,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -36,8 +36,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Fire"
         },
@@ -49,7 +49,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "DamageTaken": {
             "skill_type": null,
@@ -61,7 +61,7 @@
         "value": -100.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -79,7 +79,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "Life",
         "modifier": "Flat",
         "scope": "Global",
@@ -89,7 +89,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -153,7 +153,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -183,8 +183,8 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Cannot use a Weapon"
         },
@@ -193,7 +193,7 @@
         "value": 1.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Speed": {
             "skill_type": "Attack",
@@ -208,7 +208,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Life",
@@ -223,7 +223,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -233,7 +233,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -399,7 +399,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -424,7 +424,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -449,8 +449,8 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Poison"
         },
@@ -462,7 +462,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -477,7 +477,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "SuccessChance": {
             "skill_type": null,
@@ -498,7 +498,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Mana",
@@ -513,7 +513,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -523,7 +523,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_6": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -533,7 +533,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -634,7 +634,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -659,8 +659,8 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -675,7 +675,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "SuccessChance": {
             "skill_type": null,
@@ -696,7 +696,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Speed": {
             "skill_type": null,
@@ -711,7 +711,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -721,7 +721,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -850,7 +850,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -875,8 +875,8 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Fire"
         },
@@ -888,7 +888,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Storm"
         },
@@ -900,7 +900,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "SkillConditionalModifier": {
             "stat": {
@@ -932,7 +932,7 @@
         "value": 100.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -1078,7 +1078,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1103,7 +1103,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1128,8 +1128,8 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
@@ -1139,7 +1139,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Poison"
         },
@@ -1151,7 +1151,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatConditionalModifier": {
             "stat": "LifeRegen",
@@ -1174,7 +1174,7 @@
         "value": 50.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "DamageTaken": {
             "skill_type": null,
@@ -1186,7 +1186,7 @@
         "value": 100.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnReceiveStatus": {
@@ -1292,7 +1292,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1317,7 +1317,7 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {

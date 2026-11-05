@@ -11,7 +11,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -36,8 +36,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -46,7 +46,7 @@
         "value": -1e300,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "SkillLevel": {
             "skill_type": null,
@@ -61,7 +61,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -86,7 +86,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -111,8 +111,8 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Restore": {
             "restore_type": "Life",
@@ -129,7 +129,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "LifeRegen",
         "modifier": "Increased",
         "scope": "Global",
@@ -139,7 +139,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Global",
@@ -149,7 +149,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Armor": "Poison"
         },
@@ -161,7 +161,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
@@ -171,7 +171,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -242,7 +242,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -267,7 +267,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -292,8 +292,8 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -302,7 +302,7 @@
         "value": -1e300,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Block": "Attack"
         },
@@ -314,7 +314,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Block": "Spell"
         },
@@ -326,7 +326,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Evade": null
         },
@@ -338,7 +338,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": "ManaRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -348,7 +348,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_6": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -358,7 +358,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -407,7 +407,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -432,22 +432,22 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "LifeRegen",
         "modifier": "More",
         "scope": "Global",
         "value": -1e300,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "Life",
         "modifier": "Flat",
         "scope": "Global",
         "value": 500.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Armor": "Physical"
         },
@@ -459,7 +459,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Armor": "Storm"
         },
@@ -471,7 +471,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": {
           "Armor": "Fire"
         },
@@ -483,7 +483,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_6": {
         "stat": {
           "Armor": "Poison"
         },
@@ -495,7 +495,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -577,7 +577,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -602,8 +602,8 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -615,7 +615,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Fire"
         },
@@ -627,7 +627,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Global",
@@ -637,7 +637,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -647,7 +647,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -763,7 +763,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -788,8 +788,8 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -798,7 +798,7 @@
         "value": -100.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "StatusDuration": {
             "status_id": "focus",
@@ -813,7 +813,7 @@
         "value": 40.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatConditionalModifier": {
             "stat": {
@@ -840,7 +840,7 @@
         "value": -10.0,
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "StatConditionalModifier": {
             "stat": "LifeRegen",
@@ -862,14 +862,14 @@
         "value": 5.0,
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
         "value": -50.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -925,7 +925,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -950,8 +950,8 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -960,7 +960,7 @@
         "value": 200.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Elemental"
         },
@@ -969,7 +969,7 @@
         "value": 250.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatusDuration": {
             "status_id": null,
@@ -987,7 +987,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "ManaRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -997,7 +997,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -1007,7 +1007,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnReceiveStatus": {
@@ -1121,7 +1121,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1146,7 +1146,7 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {

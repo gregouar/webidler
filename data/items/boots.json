@@ -11,7 +11,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -36,7 +36,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -61,8 +61,8 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -72,14 +72,14 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "MovementSpeed",
         "modifier": "Increased",
         "scope": "Global",
         "value": 20.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Armor": "Storm"
         },
@@ -91,7 +91,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
@@ -101,7 +101,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -210,7 +210,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -235,8 +235,8 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Poison"
         },
@@ -248,7 +248,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Life",
@@ -260,7 +260,7 @@
         "value": 5.0,
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "Life",
         "modifier": "Flat",
         "scope": "Global",
@@ -270,14 +270,14 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": "MovementSpeed",
         "modifier": "Increased",
         "scope": "Global",
         "value": 25.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -401,7 +401,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -426,8 +426,8 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -437,7 +437,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -583,7 +583,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -608,15 +608,15 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "MovementSpeed",
         "modifier": "Increased",
         "scope": "Global",
         "value": 50.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -804,7 +804,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -829,8 +829,8 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Storm"
         },
@@ -842,7 +842,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "Life",
         "modifier": "Flat",
         "scope": "Global",
@@ -852,7 +852,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
@@ -862,7 +862,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -874,7 +874,7 @@
         "value": 5.0,
         "ignore_quality": true
       },
-      {
+      "unique_5": {
         "stat": {
           "StatusStacks": {
             "status_id": "blizzard_vulnerability",
@@ -889,7 +889,7 @@
         "value": 5.0,
         "ignore_quality": true
       },
-      {
+      "unique_6": {
         "stat": {
           "StatusResistance": {
             "status_id": "chill",
@@ -901,7 +901,7 @@
         "value": 100.0,
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -1008,15 +1008,15 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "MovementSpeed",
         "modifier": "Increased",
         "scope": "Global",
         "value": 20.0,
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Storm"
         },
@@ -1028,7 +1028,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Armor": "Poison"
         },
@@ -1040,7 +1040,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_4": {
         "stat": {
           "StatusDuration": {
             "status_id": null,
@@ -1058,7 +1058,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -1176,7 +1176,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1201,8 +1201,8 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Evade": null
         },
@@ -1214,7 +1214,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_2": {
         "stat": "MovementSpeed",
         "modifier": "Increased",
         "scope": "Global",
@@ -1224,7 +1224,7 @@
         ],
         "ignore_quality": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Armor": "Storm"
         },
@@ -1236,7 +1236,7 @@
         ],
         "ignore_quality": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -1338,7 +1338,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1363,7 +1363,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1388,7 +1388,7 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
