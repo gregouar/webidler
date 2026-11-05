@@ -9,13 +9,7 @@
     "min_area_level" : 0,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 20.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 20.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -36,13 +30,7 @@
     "min_area_level" : 40,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 40.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 40.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -63,24 +51,18 @@
     "min_area_level" : 50,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 40.0,
-        "ignore_quality": false
-      },
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 40.0, "is_unique": false},
       "unique_1"      : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [40.0, 80.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [40.0, 80.0],
+        "is_unique": true
       },
       "unique_2"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusPower": {
             "status_id"  : null,
             "damage_type": "Fire",
@@ -90,13 +72,13 @@
             "min_max"    : null
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [40.0, 80.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [40.0, 80.0],
+        "is_unique": true
       },
       "unique_3"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusDuration": {
             "status_id"  : "burn",
             "damage_type": null,
@@ -105,13 +87,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_4"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusStacks": {
             "status_id"  : "burn",
             "damage_type": null,
@@ -120,37 +102,37 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : 25.0,
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : 25.0,
+        "is_unique": true
       },
       "unique_5"      : {
-        "stat"          : {
+        "stat"     : {
           "SuccessChance": {
             "skill_type" : null,
             "skill_id"   : null,
             "effect_type": { "ApplyStatus": {"status_id": "burn", "debuff": null} }
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [30.0, 50.0],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [30.0, 50.0],
+        "is_unique": true
       },
       "unique_6"      : {
-        "stat"          : "ManaRegen",
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [5.0, 10.0],
-        "ignore_quality": true
+        "stat"     : "ManaRegen",
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [5.0, 10.0],
+        "is_unique": true
       },
       "unique_7"      : {
-        "stat"          : "LifeRegen",
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [-20.0, -10.0],
-        "ignore_quality": true
+        "stat"     : "LifeRegen",
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [-20.0, -10.0],
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -201,13 +183,7 @@
     "min_area_level" : 90,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 60.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 60.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -228,42 +204,36 @@
     "min_area_level" : 100,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 60.0,
-        "ignore_quality": false
-      },
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 60.0, "is_unique": false},
       "unique_1"      : {
-        "stat"          : { "CritChance": {"skill_type": null, "skill_id": null} },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 5.0,
-        "ignore_quality": true
+        "stat"     : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 5.0,
+        "is_unique": true
       },
       "unique_2"      : {
-        "stat"          : { "CritDamage": {"skill_type": null, "skill_id": null} },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [50.0, 150.0],
-        "ignore_quality": true
+        "stat"     : { "CritDamage": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [50.0, 150.0],
+        "is_unique": true
       },
       "unique_3"      : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Storm", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [50.0, 100.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [50.0, 100.0],
+        "is_unique": true
       },
       "unique_4"      : {
-        "stat"          : {"Armor": "Storm"},
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [80.0, 125.0],
-        "ignore_quality": true
+        "stat"     : {"Armor": "Storm"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [80.0, 125.0],
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -309,13 +279,7 @@
     "min_area_level" : 140,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 80.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 80.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -336,15 +300,9 @@
     "min_area_level" : 150,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 80.0,
-        "ignore_quality": false
-      },
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 80.0, "is_unique": false},
       "unique_1"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusStacks": {
             "status_id"  : "bleed",
             "damage_type": null,
@@ -353,22 +311,22 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 1.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
       },
       "unique_2"      : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Physical", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [100.0, 150.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [100.0, 150.0],
+        "is_unique": true
       },
       "unique_3"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusPower": {
             "status_id"  : "bleed",
             "damage_type": null,
@@ -378,10 +336,10 @@
             "min_max"    : null
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [100.0, 150.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [100.0, 150.0],
+        "is_unique": true
       }
     },
     "triggers"       : [
@@ -497,13 +455,7 @@
     "min_area_level" : 190,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 100.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 100.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -524,27 +476,27 @@
     "min_area_level" : 200,
     "rarity"         : "Unique",
     "affixes"        : {
-      "unique_1": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 100.0, "ignore_quality": false},
+      "unique_1": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 100.0, "is_unique": false},
       "unique_2": {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": true}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : -1e300,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : -1e300,
+        "is_unique": true
       },
       "unique_3": {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [200.0, 300.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [200.0, 300.0],
+        "is_unique": true
       },
       "unique_4": {
-        "stat"          : {
+        "stat"     : {
           "StatusEscalation": {
             "status_id"  : "poison",
             "damage_type": null,
@@ -553,17 +505,17 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 30.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 30.0,
+        "is_unique": true
       },
       "unique_5": {
-        "stat"          : "Mana",
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [15.0, 20.0],
-        "ignore_quality": true
+        "stat"     : "Mana",
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [15.0, 20.0],
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -598,13 +550,7 @@
     "min_area_level" : 250,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 120.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 120.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -625,9 +571,9 @@
     "min_area_level" : 260,
     "rarity"         : "Unique",
     "affixes"        : {
-      "unique_1": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 120.0, "ignore_quality": false},
+      "unique_1": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 120.0, "is_unique": false},
       "unique_2": {
-        "stat"          : {
+        "stat"     : {
           "StatusDuration": {
             "status_id"  : null,
             "damage_type": null,
@@ -636,13 +582,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_3": {
-        "stat"          : {
+        "stat"     : {
           "StatConditionalModifier": {
             "stat"               : {
               "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
@@ -661,13 +607,13 @@
             "conditions_duration": 0
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [200.0, 300.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [200.0, 300.0],
+        "is_unique": true
       },
       "unique_4": {
-        "stat"          : {
+        "stat"     : {
           "StatConditionalModifier": {
             "stat"               : {
               "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
@@ -686,13 +632,13 @@
             "conditions_duration": 0
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : -100.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : -100.0,
+        "is_unique": true
       },
       "unique_5": {
-        "stat"          : {
+        "stat"     : {
           "SkillConditionalModifier": {
             "stat"      : {
               "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
@@ -712,17 +658,17 @@
             ]
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [150.0, 200.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [150.0, 200.0],
+        "is_unique": true
       },
       "unique_6": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [150.0, 200.0],
-        "ignore_quality": true
+        "stat"     : "GoldFind",
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [150.0, 200.0],
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -799,13 +745,7 @@
     "min_area_level" : 320,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 140.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 140.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -827,38 +767,38 @@
     "rarity"         : "Unique",
     "affixes"        : {
       "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 140.0,
-        "ignore_quality": false
+        "stat"     : "GoldFind",
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 140.0,
+        "is_unique": false
       },
-      "unique_1": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 100.0, "ignore_quality": true},
+      "unique_1"      : {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 100.0, "is_unique": true},
       "unique_2"      : {
-        "stat"          : { "ManaCost": {"skill_type": null, "skill_id": null} },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 50.0,
-        "ignore_quality": true
+        "stat"     : { "ManaCost": {"skill_type": null, "skill_id": null} },
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 50.0,
+        "is_unique": true
       },
       "unique_3"      : {
-        "stat"          : { "SkillLevel": {"skill_type": null, "skill_id": null} },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 5.0,
-        "ignore_quality": true
+        "stat"     : { "SkillLevel": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 5.0,
+        "is_unique": true
       },
       "unique_4"      : {
-        "stat"          : {
+        "stat"     : {
           "StatConditionalModifier": { "stat": "ManaRegen", "conditions": ["LowMana"], "conditions_duration": 0 }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : 100.0,
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : 100.0,
+        "is_unique": true
       },
       "unique_5"      : {
-        "stat"          : {
+        "stat"     : {
           "StatConditionalModifier": {
             "stat"               : {
               "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
@@ -867,10 +807,10 @@
             "conditions_duration": 20
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [200.0, 250.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [200.0, 250.0],
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -911,13 +851,7 @@
     "min_area_level" : 400,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 160.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 160.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -939,14 +873,14 @@
     "rarity": "Unique",
     "affixes": {
       "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 160.0,
-        "ignore_quality": false
+        "stat"     : "GoldFind",
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 160.0,
+        "is_unique": false
       },
       "unique_1"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusFaster": {
             "status_id"  : null,
             "damage_type": "Any",
@@ -955,13 +889,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 100.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 100.0,
+        "is_unique": true
       },
       "unique_2"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusEscalation": {
             "status_id"  : null,
             "damage_type": "Any",
@@ -970,13 +904,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 100.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 100.0,
+        "is_unique": true
       },
       "unique_3"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusDuration": {
             "status_id"  : null,
             "damage_type": null,
@@ -985,13 +919,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : -50.0,
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : -50.0,
+        "is_unique": true
       },
       "unique_4"      : {
-        "stat"          : {
+        "stat"     : {
           "StatusPower": {
             "status_id"  : null,
             "damage_type": "Any",
@@ -1001,17 +935,17 @@
             "min_max"    : null
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [300.0, 400.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [300.0, 400.0],
+        "is_unique": true
       },
       "unique_5"      : {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [400.0, 600.0],
-        "ignore_quality": false
+        "stat"     : "GoldFind",
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [400.0, 600.0],
+        "is_unique": false
       }
     },
     "triggers": [],
@@ -1052,13 +986,7 @@
     "min_area_level" : 490,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 180.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 180.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -1079,13 +1007,7 @@
     "min_area_level" : 590,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_gold_find": {
-        "stat"          : "GoldFind",
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 200.0,
-        "ignore_quality": false
-      }
+      "base_gold_find": {"stat": "GoldFind", "modifier": "More", "scope": "Global", "value": 200.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,

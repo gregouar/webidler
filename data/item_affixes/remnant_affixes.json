@@ -10,13 +10,12 @@
     "item_level"  : 600,
     "effects"     : [
       {
-        "stat"          : {
+        "stat"    : {
           "Lucky": { "skill_type": null, "skill_id": null, "roll_type": {"Evade": null} }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 100.0,
-        "ignore_quality": true
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100.0
       }
     ]
   },
@@ -30,14 +29,8 @@
     "restrictions": ["MeleeWeapon2H"],
     "item_level"  : 600,
     "effects"     : [
-      {
-        "stat"          : {"RemoveSlotUse": "Shield"},
-        "modifier"      : "Flat",
-        "scope"         : "Local",
-        "value"         : 1,
-        "ignore_quality": true
-      },
-      { "stat": {"Damage": {}}, "modifier": "More", "scope": "Local", "value": -43, "ignore_quality": true }
+      { "stat": {"RemoveSlotUse": "Shield"              }, "modifier": "Flat", "scope": "Local", "value":   1 },
+      { "stat": {                           "Damage": {}}, "modifier": "More", "scope": "Local", "value": -43 }
     ]
   },
   "remnant_crit_immune"  : {
@@ -50,13 +43,7 @@
     "restrictions": ["Helmet", "Body"],
     "item_level"  : 600,
     "effects"     : [
-      {
-        "stat"          : {"CritDamageTaken": {}},
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : -1e300,
-        "ignore_quality": true
-      }
+      { "stat": {"CritDamageTaken": {}}, "modifier": "More", "scope": "Global", "value": -1e300 }
     ]
   },
   "remnant_more_armor"   : {
@@ -69,7 +56,7 @@
     "restrictions": ["Amulet", "Shield"],
     "item_level"  : 600,
     "effects"     : [
-      { "stat": {"Armor": null}, "modifier": "More", "scope": "Global", "value": [20, 30], "ignore_quality": true }
+      { "stat": {"Armor": null}, "modifier": "More", "scope": "Global", "value": [20, 30] }
     ]
   },
   "remnant_1h_multi"     : {
@@ -83,17 +70,16 @@
     "item_level"  : 600,
     "effects"     : [
       {
-        "stat"          : {
+        "stat"    : {
           "SkillTargetModifier": {
             "skill_id": "weapon_skill",
             "range"   : "Any",
             "repeat"  : {"min_value": 2, "max_value": 3, "target": "Any"}
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 1,
-        "ignore_quality": true
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
       }
     ]
   },
@@ -107,13 +93,12 @@
     "restrictions": ["Rune"],
     "item_level"  : 600,
     "effects"     : [
-      {"stat": "MaxPlayerLevel", "modifier": "Flat", "scope": "Global", "value": -1, "ignore_quality": true},
+      {"stat": "MaxPlayerLevel", "modifier": "Flat", "scope": "Global", "value": -1},
       {
-        "stat"          : {"AllocatePassive": "00000000-0000-0000-0000-000000000000"},
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 1,
-        "ignore_quality": true
+        "stat"    : {"AllocatePassive": "00000000-0000-0000-0000-000000000000"},
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
       }
     ]
   },
@@ -128,11 +113,10 @@
     "item_level"  : 600,
     "effects"     : [
       {
-        "stat"          : {"Description2": "Unlock Power Shards up to 150 extra Area Levels"},
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 1,
-        "ignore_quality": true
+        "stat"    : {"Description2": "Unlock Power Shards up to 150 extra Area Levels"},
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
       }
     ]
   }

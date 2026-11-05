@@ -9,7 +9,7 @@
     "min_area_level" : 0,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 20.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 20.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -30,7 +30,7 @@
     "min_area_level" : 40,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 30.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 30.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -51,18 +51,18 @@
     "min_area_level" : 50,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "ignore_quality": false},
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "is_unique": false},
       "unique_1" : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_2" : {
-        "stat"          : {
+        "stat"     : {
           "StatusPower": {
             "status_id"  : null,
             "damage_type": null,
@@ -72,24 +72,24 @@
             "min_max"    : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_3" : {
-        "stat"          : "ManaRegen",
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [3.0, 5.0],
-        "ignore_quality": true
+        "stat"     : "ManaRegen",
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [3.0, 5.0],
+        "is_unique": true
       },
       "unique_4" : {
-        "stat"          : {"Armor": "Poison"},
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "stat"     : {"Armor": "Poison"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       }
     },
     "triggers"       : [
@@ -180,7 +180,7 @@
     "min_area_level" : 90,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -201,39 +201,39 @@
     "min_area_level" : 100,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "ignore_quality": false},
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 40.0, "is_unique": false},
       "unique_1" : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Fire", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [80.0, 120.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [80.0, 120.0],
+        "is_unique": true
       },
       "unique_2" : {
-        "stat"          : { "CritChance": {"skill_type": "Spell", "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "stat"     : { "CritChance": {"skill_type": "Spell", "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_3" : {
-        "stat"          : { "CritDamage": {"skill_type": "Spell", "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [50.0, 100.0],
-        "ignore_quality": true
+        "stat"     : { "CritDamage": {"skill_type": "Spell", "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [50.0, 100.0],
+        "is_unique": true
       },
       "unique_4" : {
-        "stat"          : {"Armor": "Fire"},
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [100.0, 140.0],
-        "ignore_quality": true
+        "stat"     : {"Armor": "Fire"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [100.0, 140.0],
+        "is_unique": true
       },
       "unique_5" : {
-        "stat"          : {
+        "stat"     : {
           "SkillTargetModifier": {
             "skill_type": null,
             "skill_id"  : "fireball",
@@ -242,10 +242,10 @@
             "repeat"    : {"min_value": 2, "max_value": 2, "target": "Any"}
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 1.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -299,7 +299,7 @@
     "min_area_level" : 140,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 50.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 50.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -320,25 +320,25 @@
     "min_area_level" : 150,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 50.0, "ignore_quality": false},
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 50.0, "is_unique": false},
       "unique_1" : {
-        "stat"          : {"Armor": "Poison"},
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [100.0, 150.0],
-        "ignore_quality": true
+        "stat"     : {"Armor": "Poison"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [100.0, 150.0],
+        "is_unique": true
       },
       "unique_2" : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Physical", "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [120.0, 160.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [120.0, 160.0],
+        "is_unique": true
       },
       "unique_3" : {
-        "stat"          : {
+        "stat"     : {
           "StatusDuration": {
             "status_id"  : null,
             "damage_type": null,
@@ -347,13 +347,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_4" : {
-        "stat"          : {
+        "stat"     : {
           "StatusEscalation": {
             "status_id"  : "bleed",
             "damage_type": null,
@@ -362,10 +362,10 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 50.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 50.0,
+        "is_unique": true
       }
     },
     "triggers"       : [
@@ -482,7 +482,7 @@
     "min_area_level" : 190,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 60.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 60.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -503,23 +503,23 @@
     "min_area_level" : 200,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 60.0, "ignore_quality": false},
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 60.0, "is_unique": false},
       "unique_1" : {
-        "stat"          : "Mana",
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [12.0, 16.0],
-        "ignore_quality": true
+        "stat"     : "Mana",
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [12.0, 16.0],
+        "is_unique": true
       },
       "unique_2" : {
-        "stat"          : "ManaRegen",
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : [8.0, 12.0],
-        "ignore_quality": true
+        "stat"     : "ManaRegen",
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [8.0, 12.0],
+        "is_unique": true
       },
       "unique_3" : {
-        "stat"          : {
+        "stat"     : {
           "StatusDuration": {
             "status_id"  : null,
             "damage_type": "Poison",
@@ -528,13 +528,13 @@
             "skill_id"   : null
           }
         },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [40.0, 60.0],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
       "unique_4" : {
-        "stat"          : {
+        "stat"     : {
           "StatConditionalModifier": {
             "stat"               : {
               "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
@@ -543,13 +543,13 @@
             "conditions_duration": 0
           }
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : 400.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 400.0,
+        "is_unique": true
       },
       "unique_5" : {
-        "stat"          : {
+        "stat"     : {
           "StatConditionalModifier": {
             "stat"               : {
               "SuccessChance": {
@@ -562,10 +562,10 @@
             "conditions_duration": 0
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : -10000.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : -10000.0,
+        "is_unique": true
       }
     },
     "triggers"       : [
@@ -684,7 +684,7 @@
     "min_area_level" : 250,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 70.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 70.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -705,51 +705,51 @@
     "min_area_level" : 260,
     "rarity"         : "Unique",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 70.0, "ignore_quality": false},
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 70.0, "is_unique": false},
       "unique_1" : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": "Max", "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [100.0, 200.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [100.0, 200.0],
+        "is_unique": true
       },
       "unique_2" : {
-        "stat"          : {
+        "stat"     : {
           "Damage": {"skill_type": "Spell", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [200.0, 240.0],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [200.0, 240.0],
+        "is_unique": true
       },
       "unique_3" : {
-        "stat"          : { "CritChance": {"skill_type": null, "skill_id": null} },
-        "modifier"      : "Increased",
-        "scope"         : "Global",
-        "value"         : [60.0, 80.0],
-        "ignore_quality": true
+        "stat"     : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [60.0, 80.0],
+        "is_unique": true
       },
       "unique_4" : {
-        "stat"          : { "CritDamage": {"skill_type": null, "skill_id": null} },
-        "modifier"      : "More",
-        "scope"         : "Global",
-        "value"         : [50.0, 100.0],
-        "ignore_quality": true
+        "stat"     : { "CritDamage": {"skill_type": null, "skill_id": null} },
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [50.0, 100.0],
+        "is_unique": true
       },
       "unique_5" : {
-        "stat"          : {
+        "stat"     : {
           "Lucky": {
             "skill_type": null,
             "skill_id"  : null,
             "roll_type" : { "Damage": {"damage_type": null} }
           }
         },
-        "modifier"      : "Flat",
-        "scope"         : "Global",
-        "value"         : 100.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 100.0,
+        "is_unique": true
       }
     },
     "triggers"       : [],
@@ -793,7 +793,7 @@
     "min_area_level" : 320,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 80.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 80.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -814,7 +814,7 @@
     "min_area_level" : 400,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 90.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 90.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -835,7 +835,7 @@
     "min_area_level" : 490,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 100.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 100.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
@@ -856,7 +856,7 @@
     "min_area_level" : 590,
     "rarity"         : "Normal",
     "affixes"        : {
-      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 120.0, "ignore_quality": false}
+      "base_mana": {"stat": "Mana", "modifier": "Flat", "scope": "Global", "value": 120.0, "is_unique": false}
     },
     "triggers"       : [],
     "weapon_specs"   : null,
