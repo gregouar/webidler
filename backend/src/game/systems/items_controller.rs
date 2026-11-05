@@ -307,11 +307,11 @@ pub fn temper_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
         let Some(affix) = base_affixes.next() else {
             break;
         };
-        if !blueprint.ignore_quality
-            && let Some(effect) = affix.effects.first_mut()
-        {
-            effect.stat_effect.value =
-                effect.stat_effect.value / old_quality_factor * new_quality_factor;
+        if !blueprint.ignore_quality {
+            for effect in affix.effects.iter_mut() {
+                effect.stat_effect.value =
+                    effect.stat_effect.value / old_quality_factor * new_quality_factor;
+            }
         }
     }
 
