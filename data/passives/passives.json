@@ -10611,7 +10611,7 @@
         "socket": false
       },
       "9b258aaf-2dbc-428c-a844-e50a402520e1": {
-        "name": "Poison Toxic ",
+        "name": "Toxic Damage",
         "icon": "passives/scorpion_tail.svg",
         "x": 5.0,
         "y": -190.0,
@@ -14233,6 +14233,24 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14240,15 +14258,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -14262,15 +14271,6 @@
                   },
                   {
                     "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14376,25 +14376,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14419,6 +14400,25 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
                     }
                   }
                 ],

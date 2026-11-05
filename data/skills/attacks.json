@@ -1018,6 +1018,22 @@
       },
       {
         "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "acid_rain",
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
+        "description": null,
+        "hidden": true
+      },
+      {
+        "stat": {
           "ManaCost": {
             "skill_type": null,
             "skill_id": null

@@ -1193,6 +1193,16 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "hidden"       : true,
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "acid_rain"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
           }
         ]
       },
@@ -1253,6 +1263,16 @@
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           },
           {
+            "hidden"       : true,
+            "value"        : 100,
+            "upgrade_value": 50,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "acid_rain"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          },
+          {
             "value"        : 1,
             "upgrade_value": 0,
             "StatEffect"   : {
@@ -1290,6 +1310,16 @@
             "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "hidden"       : true,
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "acid_rain"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
           }
         ]
       }

@@ -157,6 +157,11 @@
                 "StatModifier": { "stat": {"Armor": null}, "modifier": "More", "debuff": true },
                 "value"       : 33,
                 "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 10,
+                "modifier"    : "Flat"
             }
         ]
     }

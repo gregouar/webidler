@@ -1355,7 +1355,7 @@
           "conditions": []
         },
         "description": null,
-        "trigger_id": "acid_bow",
+        "trigger_id": "acid_rain",
         "target": "SameTarget",
         "modifiers": [],
         "trigger_propagate": false,
