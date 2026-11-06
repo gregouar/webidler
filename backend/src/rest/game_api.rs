@@ -36,7 +36,7 @@ use crate::{
             skill_masteries_controller, skills_updater,
         },
     },
-    rest::utils::{verify_character_in_town, verify_character_user},
+    rest::utils::{MsgPack, verify_character_in_town, verify_character_user},
 };
 
 use super::AppError;
@@ -67,8 +67,8 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
 
 pub async fn get_master_data(
     State(master_store): State<MasterStore>,
-) -> Result<Json<GetMasterDataResponse>, AppError> {
-    Ok(Json(GetMasterDataResponse {
+) -> Result<MsgPack<GetMasterDataResponse>, AppError> {
+    Ok(MsgPack(GetMasterDataResponse {
         areas: master_store
             .area_blueprints_store
             .iter()
@@ -86,6 +86,8 @@ pub async fn get_master_data(
             .cloned()
             .unwrap_or_default(),
         benedictions_specs: master_store.benedictions_store.as_ref().clone(),
+        item_bases: master_store.items_store.items.clone(),
+        item_affixes: master_store.items_store.affixes_table.clone(),
     }))
 }
 

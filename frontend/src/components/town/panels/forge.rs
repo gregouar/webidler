@@ -18,6 +18,7 @@ use std::sync::Arc;
 
 use crate::components::{
     backend_client::BackendClient,
+    data_context::DataContext,
     shared::{
         bag_grid::BagSortButton, inventory::loot_filter_category_to_str, resources::GemsIcon,
     },
@@ -1082,6 +1083,7 @@ pub fn ImbueDetails(
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
     let toaster: Toasts = expect_context();
+    let data_context: DataContext = expect_context();
 
     let compatible = move || {
         selected_item.with(|selected_item| {
@@ -1091,11 +1093,20 @@ pub fn ImbueDetails(
                         .base
                         .categories
                         .is_superset(&item.item_specs.base.categories)
-                        && soul
-                            .item_specs
-                            .affixes
-                            .first()
-                            .is_some_and(|affix| item.item_specs.can_replace_soul_affix(affix))
+                        && soul.item_specs.affixes.first().is_some_and(|soul_affix| {
+                            !item.item_specs.affixes.iter().any(|affix| {
+                                let item_affixes = data_context.item_affixes.read_untracked();
+                                let affix_family =
+                                    item_affixes.get(&affix.affix_id).map(|a| &a.family);
+                                let soul_affix_family =
+                                    item_affixes.get(&soul_affix.affix_id).map(|a| &a.family);
+
+                                affix.affix_type != AffixType::Soul
+                                    && !(affix_family.is_some()
+                                        && soul_affix_family.is_some()
+                                        && soul_affix_family == affix_family)
+                            })
+                        })
                 }
                 _ => false,
             })

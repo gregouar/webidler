@@ -777,6 +777,8 @@ pub fn formatted_affixes_list(
     affixes: &[ItemAffix],
     affix_type: AffixType,
 ) -> Vec<impl IntoView + use<>> {
+    let data_context: DataContext = expect_context();
+    let item_affixes = data_context.item_affixes.read_untracked();
     affixes
         .iter()
         .filter(|affix| affix.affix_type == affix_type)
@@ -794,7 +796,11 @@ pub fn formatted_affixes_list(
                 }
                 .into_any(),
                 _ => {
-                    let mut tags: Vec<_> = affix.tags.iter().collect();
+                    // TODO: Base Item Unique Affix for Unique Souls
+                    let base_affix = item_affixes.get(&affix.affix_id);
+                    let mut tags: Vec<_> = base_affix
+                        .map(|base_affix| base_affix.tags.iter().collect())
+                        .unwrap_or(Vec::new());
                     tags.sort();
                     let tags: Vec<_> = tags
                         .into_iter()
@@ -808,8 +814,13 @@ pub fn formatted_affixes_list(
                             "text-zinc-400 text-xs -mb-1"
                         }>
                             {affix_type_str(affix.affix_type)}" "
-                            <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
-                            {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}
+                            <span class="italic">
+                                "‘"
+                                {base_affix
+                                    .map(|base_affix| base_affix.name.clone())
+                                    .unwrap_or("Affix".to_string())}"’"
+                            </span> "  (Level: " {affix.item_level}") – " {scope_str(scope)}
+                            " – "{tags.join(", ")}
                         </li>
                     }
                     .into_any()

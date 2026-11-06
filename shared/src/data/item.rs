@@ -353,13 +353,13 @@ impl ItemModifiers {
     }
 }
 
-impl ItemSpecs {
-    /// A soul affix can replace another of the same family, but not be added on an item with
-    /// other affixes of the same family.
-    pub fn can_replace_soul_affix(&self, soul_affix: &ItemAffix) -> bool {
-        !self
-            .affixes
-            .iter()
-            .any(|affix| affix.affix_type != AffixType::Soul && affix.family == soul_affix.family)
-    }
-}
+// impl ItemSpecs {
+//     /// A soul affix can replace another of the same family, but not be added on an item with
+//     /// other affixes of the same family.
+//     pub fn can_replace_soul_affix(&self, soul_affix: &ItemAffix) -> bool {
+//         !self
+//             .affixes
+//             .iter()
+//             .any(|affix| affix.affix_type != AffixType::Soul && affix.family == soul_affix.family)
+//     }
+// }

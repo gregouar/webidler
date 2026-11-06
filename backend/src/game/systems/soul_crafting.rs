@@ -1,6 +1,6 @@
 use shared::data::{
     item::{AffixRoll, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
-    item_affix::{AffixTag, AffixType},
+    item_affix::AffixType,
 };
 
 use crate::{
@@ -28,15 +28,29 @@ pub fn can_imbue(item: &ItemSpecs) -> bool {
         && !item.base.categories.contains(&ItemCategory::Remnant)
 }
 
-pub fn is_compatible_soul(item: &ItemSpecs, soul: &ItemSpecs) -> bool {
+pub fn is_compatible_soul(items_store: &ItemsStore, item: &ItemSpecs, soul: &ItemSpecs) -> bool {
     can_imbue(item)
         && soul.base.categories.contains(&ItemCategory::Soul)
         && soul.base.categories.is_superset(&item.base.categories)
         && soul.affixes.len() == 1
-        && soul
-            .affixes
-            .first()
-            .is_some_and(|affix| item.can_replace_soul_affix(affix))
+        && soul.affixes.first().is_some_and(|soul_affix| {
+            !item.affixes.iter().any(|affix| {
+                let affix_family = items_store
+                    .affixes_table
+                    .get(&affix.affix_id)
+                    .map(|a| &a.family);
+                let soul_affix_family = items_store
+                    .affixes_table
+                    .get(&soul_affix.affix_id)
+                    .map(|a| &a.family);
+
+                affix.affix_type != AffixType::Soul
+                    && !(affix_family.is_some()
+                        && soul_affix_family.is_some()
+                        && soul_affix_family == affix_family)
+            })
+        })
+    // .is_some_and(|affix| item.can_replace_soul_affix(affix))
 }
 
 pub fn sacrifice(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
@@ -69,6 +83,17 @@ pub fn sacrifice(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs
         })
         .ok_or(AppError::NotFound)?;
 
+    // let base_affix = affix_roll
+    //     .base_item_id
+    //     .as_ref()
+    //     .and_then(|base_item_id| items_store.items.get(base_item_id))
+    //     .and_then(|base_item| base_item.affixes.get(&affix_roll.affix_id));
+
+    let base_item = affix_roll
+        .base_item_id
+        .as_ref()
+        .and_then(|base_item_id| items_store.items.get(base_item_id));
+
     let mut soul_categories = item.base.categories.clone();
     soul_categories.remove(&ItemCategory::Remnant);
     let soul_item_id =
@@ -79,17 +104,17 @@ pub fn sacrifice(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs
                 "no Soul base exists for this item category".to_string(),
             ))?;
 
-    let is_unique_soul = affix.tags.contains(&AffixTag::Unique);
     let soul_item = items_controller::init_item_specs_from_store(
         items_store,
         ItemModifiers {
             base_item_id: soul_item_id.clone(),
-            name: if is_unique_soul {
-                format!("{} Soul", affix.name)
-            } else {
-                format!("{} Soul", item.modifiers.name)
-            },
-            rarity: if is_unique_soul {
+            name: format!(
+                "{} Soul",
+                base_item
+                    .map(|base_item| &base_item.name)
+                    .unwrap_or(&item.modifiers.name)
+            ),
+            rarity: if base_item.is_some() {
                 ItemRarity::Unique
             } else {
                 ItemRarity::Masterwork
@@ -113,7 +138,7 @@ pub fn imbue(
     item: &ItemSpecs,
     soul: &ItemSpecs,
 ) -> Result<ItemSpecs, AppError> {
-    if !is_compatible_soul(item, soul) {
+    if !is_compatible_soul(items_store, item, soul) {
         return Err(AppError::UserError(
             "Item and Soul are not compatible".to_string(),
         ));

@@ -8,6 +8,8 @@ use shared::data::{
     area::AreaSpecs,
     character_status::{StatusId, StatusSpecs},
     cosmetics::CosmeticType,
+    item::ItemBase,
+    item_affix::ItemAffixBlueprint,
     passive::PassivesTreeSpecs,
     pets::PetSpecs,
     skill::BaseSkillSpecs,
@@ -28,6 +30,8 @@ pub struct DataContext {
     pub achievements: RwSignal<IndexMap<String, AchievementSpecs>>,
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
+    pub item_bases: RwSignal<HashMap<String, ItemBase>>,
+    pub item_affixes: RwSignal<HashMap<String, ItemAffixBlueprint>>,
 
     load_lock: StoredValue<Arc<Mutex<()>>>,
     loaded: RwSignal<bool>,
@@ -44,6 +48,8 @@ pub fn provide_data_context() {
         achievements: RwSignal::new(Default::default()),
         passives_tree_specs: RwSignal::new(Default::default()),
         benedictions_specs: RwSignal::new(Default::default()),
+        item_bases: RwSignal::new(Default::default()),
+        item_affixes: RwSignal::new(Default::default()),
         load_lock: StoredValue::new(Arc::new(Mutex::new(()))),
         loaded: RwSignal::new(false),
     });
@@ -70,6 +76,8 @@ impl DataContext {
         self.achievements.set(data.achievements);
         self.passives_tree_specs.set(data.passives_tree_specs);
         self.benedictions_specs.set(data.benedictions_specs);
+        self.item_bases.set(data.item_bases);
+        self.item_affixes.set(data.item_affixes);
 
         self.loaded.set(true);
 

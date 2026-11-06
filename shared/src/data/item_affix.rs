@@ -97,18 +97,9 @@ pub struct ItemAffix {
     pub base_item_id: Option<String>,
     pub affix_id: String,
 
-    // TODO: Remove and use data store
-    pub name: String,
-    pub family: String,
-    pub tags: BTreeSet<AffixTag>,
-
-    // TODO: Remove and use data store
-    pub affix_type: AffixType,
-    pub tier: u8,
     pub item_level: AreaLevel,
-
+    pub affix_type: AffixType,
     pub effects: Vec<AffixEffect>,
-    // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

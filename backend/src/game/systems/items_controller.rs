@@ -6,9 +6,7 @@ use shared::{
             ArmorSpecs, ItemBase, ItemModifiers, ItemRarity, ItemSlot, ItemSpecs, MapSpecs,
             WeaponSpecs,
         },
-        item_affix::{
-            AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects,
-        },
+        item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix, aggregate_effects},
         modifier::Modifier,
         skill::{BaseSkillSpecs, DamageType, SkillType},
         stat_effect::{
@@ -119,15 +117,7 @@ pub fn compute_affixes(
                 return Some(ItemAffix {
                     base_item_id: roll.base_item_id.clone(),
                     affix_id: roll.affix_id.clone(),
-                    name: source_base.name.clone(),
-                    family: source_base.name.clone(),
-                    tags: effect
-                        .is_unique
-                        .then_some(AffixTag::Unique)
-                        .into_iter()
-                        .collect(),
                     affix_type: roll.affix_type,
-                    tier: 0,
                     effects: vec![compute_affix_effect(
                         &effect.effect,
                         roll.value,
@@ -148,11 +138,7 @@ pub fn compute_affixes(
             Some(ItemAffix {
                 base_item_id: None,
                 affix_id: roll.affix_id.clone(),
-                name: blueprint.name.clone(),
-                family: blueprint.family.clone(),
-                tags: blueprint.tags.clone(),
                 affix_type: roll.affix_type,
-                tier: blueprint.tier,
                 effects: blueprint
                     .effects
                     .iter()
@@ -319,11 +305,7 @@ fn compute_upgrade_affix(base: &ItemBase, item_modifiers: &ItemModifiers) -> Opt
     (item_modifiers.upgrade_level > 0 && !base.upgrade_effects.is_empty()).then(|| ItemAffix {
         base_item_id: None,
         affix_id: "empowered".into(),
-        name: "Empowered".into(),
-        family: "empowered".into(),
-        tags: Default::default(),
         affix_type: AffixType::Upgrade,
-        tier: item_modifiers.upgrade_level,
         effects: base
             .upgrade_effects
             .iter()
