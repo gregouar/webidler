@@ -236,7 +236,7 @@ pub async fn post_imbue(
         .bag
         .get_mut(item_index)
         .ok_or(AppError::NotFound)?;
-    *item = soul_crafting::imbue(&master_store.items_store, item, soul)?;
+    *item = soul_crafting::imbue(&master_store.items_store, item, &soul)?;
 
     inventory.bag.remove(soul_index);
 
