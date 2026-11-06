@@ -4,7 +4,7 @@ use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
     item::ItemSpecs,
-    item_affix::AffixEffectScope,
+    item_affix::{AffixEffectScope, aggregate_effects},
     market::MarketFilters,
     modifier::invert_formatted_effect_value,
     realms::RealmId,
@@ -141,7 +141,7 @@ pub async fn store_item<'c>(
             .iter()
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
-        item.aggregate_effects(AffixEffectScope::Global, true)
+        aggregate_effects(&item.affixes, AffixEffectScope::Global, true)
             .0
             .into_iter()
             .filter_map(|((stat_type, modifier, _), stat_value)| {

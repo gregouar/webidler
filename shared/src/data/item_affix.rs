@@ -2,7 +2,11 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
 
 use crate::{
-    data::{chance::ChanceRange, modifier::Modifier},
+    data::{
+        chance::ChanceRange,
+        modifier::Modifier,
+        stat_effect::{DamageStatType, EffectsMap},
+    },
     serde_utils::is_false,
 };
 
@@ -111,4 +115,49 @@ pub struct ItemAffix {
 pub struct AffixEffect {
     pub scope: AffixEffectScope,
     pub stat_effect: StatEffect,
+}
+
+pub fn aggregate_effects(
+    affixes: &[ItemAffix],
+    scope: AffixEffectScope,
+    split_elements: bool,
+) -> EffectsMap {
+    affixes
+        .iter()
+        .flat_map(|affix| affix.effects.iter())
+        .filter(|e| e.scope == scope)
+        .fold(EffectsMap::default(), |mut effects_map, effect| {
+            if split_elements
+                && matches!(
+                    &effect.stat_effect.stat,
+                    StatType::Armor(Some(DamageStatType::Elemental))
+                )
+            {
+                for stat in [
+                    StatType::Armor(Some(DamageStatType::Fire)),
+                    StatType::Armor(Some(DamageStatType::Poison)),
+                    StatType::Armor(Some(DamageStatType::Storm)),
+                ] {
+                    *effects_map
+                        .0
+                        .entry((
+                            stat,
+                            effect.stat_effect.modifier,
+                            effect.stat_effect.bypass_ignore,
+                        ))
+                        .or_default() += effect.stat_effect.value;
+                }
+            } else {
+                *effects_map
+                    .0
+                    .entry((
+                        effect.stat_effect.stat.clone(),
+                        effect.stat_effect.modifier,
+                        effect.stat_effect.bypass_ignore,
+                    ))
+                    .or_default() += effect.stat_effect.value;
+            }
+
+            effects_map
+        })
 }

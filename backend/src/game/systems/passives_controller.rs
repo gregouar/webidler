@@ -6,7 +6,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         modifier::Modifier,
         passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
         player::PlayerResources,
@@ -85,7 +85,7 @@ pub fn compute_passives_tree_specs(
             node_specs.name = item_specs.modifiers.name.clone();
 
             let mut effects: Vec<_> =
-                (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into(); // TODO: Better copy, don't aggregate?
+                (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into(); // TODO: Better copy, don't aggregate?
 
             for effect in effects.iter_mut() {
                 if let StatType::AllocatePassive(passive_id) = &mut effect.stat
@@ -113,7 +113,7 @@ pub fn generate_allocated_sockets_effects(
     let mut returned_effects = Vec::new();
     for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
         let effects: Vec<_> =
-            (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into();
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into();
         for effect in effects.iter() {
             if let StatType::AllocatePassive(passive_id) = &effect.stat
                 && passive_id.is_nil()

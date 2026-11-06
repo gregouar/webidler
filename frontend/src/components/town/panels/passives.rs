@@ -8,7 +8,7 @@ use std::{
 use shared::{
     constants::DEFAULT_MAX_LEVEL,
     data::{
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         passive::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
             PassivesTreeSpecs, PurchasedNodes,
@@ -799,7 +799,7 @@ fn PassiveSkillTree(
         for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
             let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
             node_specs.effects =
-                (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into();
+                (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into();
             node_specs.triggers = item_specs.base.triggers.clone();
         }
         passives_tree_specs
@@ -891,7 +891,8 @@ fn AscendNode(
                 let mut node_specs = node_specs.clone();
                 node_specs.icon = item_specs.base.icon.clone();
                 node_specs.effects =
-                    (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into(); // TODO: Better copy, don't aggregate?
+                    (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false))
+                        .into(); // TODO: Better copy, don't aggregate?
                 node_specs.triggers = item_specs.base.triggers.clone();
                 node_specs.root_node |= item_specs
                     .base

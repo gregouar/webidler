@@ -3,7 +3,7 @@ use shared::{
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
         item::ItemSpecs,
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         modifier::ModifiableValue,
         stat_effect::{EffectsMap, StatType},
     },
@@ -73,9 +73,16 @@ pub fn init_area_specs(
         }
 
         EffectsMap::combine_all(
-            std::iter::once(map_item.aggregate_effects(AffixEffectScope::Local, false)).chain(
-                std::iter::once(map_item.aggregate_effects(AffixEffectScope::Global, false)),
-            ),
+            std::iter::once(aggregate_effects(
+                &map_item.affixes,
+                AffixEffectScope::Local,
+                false,
+            ))
+            .chain(std::iter::once(aggregate_effects(
+                &map_item.affixes,
+                AffixEffectScope::Global,
+                false,
+            ))),
         )
     } else {
         Default::default()

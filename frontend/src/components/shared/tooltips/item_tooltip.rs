@@ -6,7 +6,7 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     area::AreaLevel,
     item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
-    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects},
     skill::DamageType,
 };
 
@@ -133,10 +133,10 @@ pub fn ItemTooltipContent(
         )
     } else {
         let mut effects = effects_tooltip::formatted_effects_list(
-            (&item_specs.aggregate_effects(AffixEffectScope::Local, false)).into(),
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Local, false)).into(),
         );
         effects.extend(effects_tooltip::formatted_effects_list(
-            (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into(),
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into(),
         ));
         (!effects.is_empty(), view! { {effects} }.into_any())
     };

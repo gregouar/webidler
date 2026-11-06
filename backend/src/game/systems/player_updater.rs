@@ -7,7 +7,7 @@ use shared::{
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
         item::{SkillRange, SkillShape},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
         player::{PlayerBaseSpecs, PlayerInventory, PlayerSpecs, PlayerState},
@@ -125,8 +125,7 @@ pub fn update_player_specs(
         player_inventory
             .equipped_items()
             .flat_map(|(_, i)| {
-                i.aggregate_effects(AffixEffectScope::Global, false)
-                    .into_iter()
+                aggregate_effects(&i.affixes, AffixEffectScope::Global, false).into_iter()
             })
             .collect(),
         skill_masteries_controller::generate_player_stat_effects(

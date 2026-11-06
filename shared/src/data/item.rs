@@ -10,7 +10,6 @@ use crate::{
         item_affix::{AffixEffect, AffixType},
         modifier::ModifiableValue,
         skill::DamageType,
-        stat_effect::{DamageStatType, StatType},
         trigger::TriggerSpecs,
         values::{NonNegative, Percent},
     },
@@ -20,8 +19,8 @@ use crate::{
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
     area::AreaLevel,
-    item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
-    stat_effect::{DamageMap, EffectsMap},
+    item_affix::{AffixEffectBlueprint, ItemAffix},
+    stat_effect::DamageMap,
 };
 
 // pub type ItemSignature = [u8; 32];
@@ -339,47 +338,6 @@ pub struct MapSpecs {
 }
 
 impl ItemSpecs {
-    pub fn aggregate_effects(&self, scope: AffixEffectScope, split_elements: bool) -> EffectsMap {
-        self.affixes
-            .iter()
-            .flat_map(|affix| affix.effects.iter())
-            .filter(|e| e.scope == scope)
-            .fold(EffectsMap::default(), |mut effects_map, effect| {
-                if split_elements
-                    && matches!(
-                        &effect.stat_effect.stat,
-                        StatType::Armor(Some(DamageStatType::Elemental))
-                    )
-                {
-                    for stat in [
-                        StatType::Armor(Some(DamageStatType::Fire)),
-                        StatType::Armor(Some(DamageStatType::Poison)),
-                        StatType::Armor(Some(DamageStatType::Storm)),
-                    ] {
-                        *effects_map
-                            .0
-                            .entry((
-                                stat,
-                                effect.stat_effect.modifier,
-                                effect.stat_effect.bypass_ignore,
-                            ))
-                            .or_default() += effect.stat_effect.value;
-                    }
-                } else {
-                    *effects_map
-                        .0
-                        .entry((
-                            effect.stat_effect.stat.clone(),
-                            effect.stat_effect.modifier,
-                            effect.stat_effect.bypass_ignore,
-                        ))
-                        .or_default() += effect.stat_effect.value;
-                }
-
-                effects_map
-            })
-    }
-
     pub fn count_affixes(&self, affix_type: AffixType) -> usize {
         self.affixes
             .iter()
