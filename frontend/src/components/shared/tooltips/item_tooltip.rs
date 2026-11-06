@@ -6,7 +6,7 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     area::AreaLevel,
     item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
-    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects},
     skill::DamageType,
 };
 
@@ -67,17 +67,18 @@ pub fn ItemTooltipContent(
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
     let (has_effects, effects) = if show_affixes {
-        let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
-        let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
-        let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
-        let upgrade_affixes =
-            formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
-        let soul_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Soul);
+        let base_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Base);
+        let unique_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Unique);
+        let prefixes = formatted_affixes_list(&item_specs.affixes, AffixType::Prefix);
+        let suffixes = formatted_affixes_list(&item_specs.affixes, AffixType::Suffix);
+        let upgrade_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Upgrade);
+        let soul_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Soul);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
             !base_affixes.is_empty()
                 || !prefixes.is_empty()
                 || !suffixes.is_empty()
+                || !unique_affixes.is_empty()
                 || !upgrade_affixes.is_empty()
                 || !soul_affixes.is_empty(),
             view! {
@@ -108,6 +109,7 @@ pub fn ItemTooltipContent(
                             {suffixes}
                         }
                     })}
+                {(!unique_affixes.is_empty()).then(|| view! { {unique_affixes} })}
                 {(!upgrade_affixes.is_empty())
                     .then(|| {
                         view! {
@@ -131,16 +133,10 @@ pub fn ItemTooltipContent(
         )
     } else {
         let mut effects = effects_tooltip::formatted_effects_list(
-            (&item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Local, false))
-                .into(),
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Local, false)).into(),
         );
         effects.extend(effects_tooltip::formatted_effects_list(
-            (&item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Global, false))
-                .into(),
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into(),
         ));
         (!effects.is_empty(), view! { {effects} }.into_any())
     };
@@ -791,7 +787,7 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique | AffixType::Upgrade => view! {
+                AffixType::Base | AffixType::Unique | AffixType::Upgrade => view! {
                     <li class="text-zinc-400 text-xs -mb-1">
                         {affix_type_str(affix.affix_type)}" – "{scope_str(scope)}
                     </li>
@@ -835,11 +831,12 @@ pub fn formatted_affixes_list(
 
 fn affix_type_str(affix_type: AffixType) -> &'static str {
     match affix_type {
+        AffixType::Base => "Base affix",
         AffixType::Prefix => "Prefix",
         AffixType::Suffix => "Suffix",
-        AffixType::Unique => "Base affix",
-        AffixType::Upgrade => "Empowering affix",
         AffixType::Soul => "Soul affix",
+        AffixType::Unique => "Unique affix",
+        AffixType::Upgrade => "Empowering affix",
     }
 }
 

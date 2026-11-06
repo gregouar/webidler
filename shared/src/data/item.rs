@@ -1,24 +1,26 @@
-use std::collections::{BTreeSet, HashSet};
-
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use std::collections::BTreeSet;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
-use crate::data::{
-    chance::Chance,
-    item_affix::{AffixEffect, AffixType},
-    modifier::ModifiableValue,
-    skill::DamageType,
-    stat_effect::{DamageStatType, StatType},
-    trigger::TriggerSpecs,
-    values::{NonNegative, Percent},
+use crate::{
+    data::{
+        chance::Chance,
+        item_affix::{AffixEffect, AffixType},
+        modifier::ModifiableValue,
+        skill::DamageType,
+        trigger::TriggerSpecs,
+        values::{NonNegative, Percent},
+    },
+    serde_utils::default_true,
 };
 
 pub use super::skill::{SkillRange, SkillShape};
 use super::{
     area::AreaLevel,
-    item_affix::{AffixEffectBlueprint, AffixEffectScope, ItemAffix},
-    stat_effect::{DamageMap, EffectsMap},
+    item_affix::{AffixEffectBlueprint, ItemAffix},
+    stat_effect::DamageMap,
 };
 
 // pub type ItemSignature = [u8; 32];
@@ -64,15 +66,6 @@ impl InventorySortType {
             Self::ItemBase => Self::Rarity,
         }
     }
-
-    // pub fn label(self) -> &'static str {
-    //     match self {
-    //         Self::Rarity => "Rarity",
-    //         Self::ItemType => "Category",
-    //         Self::ItemLevel => "Level",
-    //         Self::ItemBase => "Item base",
-    //     }
-    // }
 
     /// The same ordering is used for bags and full stash contents.
     pub fn compare(self, a: &ItemSpecs, b: &ItemSpecs) -> std::cmp::Ordering {
@@ -211,7 +204,7 @@ pub struct ItemBase {
     #[serde(default)]
     pub rarity: ItemRarity,
     #[serde(default)]
-    pub affixes: Vec<AffixEffectBlueprint>,
+    pub affixes: IndexMap<String, ItemAffixEffectBlueprint>,
     #[serde(default)]
     pub triggers: Vec<TriggerSpecs>,
 
@@ -234,20 +227,32 @@ pub struct ItemBase {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct ItemAffixEffectBlueprint {
+    #[serde(flatten)]
+    pub effect: AffixEffectBlueprint,
+
+    #[serde(default = "default_true")]
+    pub is_unique: bool,
+}
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemModifiers {
     pub base_item_id: String,
     pub name: String,
 
     pub rarity: ItemRarity,
     pub level: AreaLevel,
-
-    pub affixes: Vec<ItemAffix>,
-
-    #[serde(default)]
     pub quality: f32,
-
-    #[serde(default)]
     pub upgrade_level: u8,
+
+    pub affixes: Vec<AffixRoll>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AffixRoll {
+    pub affix_type: AffixType,
+    pub base_item_id: Option<String>,
+    pub affix_id: String,
+    pub value: u8,
 }
 
 // #[cfg(feature = "modifiable")]
@@ -256,16 +261,16 @@ pub struct ItemSpecs {
     pub base: ItemBase,
     pub modifiers: ItemModifiers,
 
+    pub affixes: Vec<ItemAffix>,
+
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
     pub map_specs: Option<MapSpecs>,
 
-    #[serde(default)]
     pub required_level: AreaLevel,
+    pub gold_price: f64,
     // #[serde(default)]
     // pub signature: ItemSignature,
-    #[serde(default)]
-    pub gold_price: f64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
@@ -333,68 +338,22 @@ pub struct MapSpecs {
 }
 
 impl ItemModifiers {
-    pub fn aggregate_effects(&self, scope: AffixEffectScope, split_elements: bool) -> EffectsMap {
-        self.affixes
-            .iter()
-            .flat_map(|affix| affix.effects.iter())
-            .filter(|e| e.scope == scope)
-            .fold(EffectsMap::default(), |mut effects_map, effect| {
-                if split_elements
-                    && matches!(
-                        &effect.stat_effect.stat,
-                        StatType::Armor(Some(DamageStatType::Elemental))
-                    )
-                {
-                    for stat in [
-                        StatType::Armor(Some(DamageStatType::Fire)),
-                        StatType::Armor(Some(DamageStatType::Poison)),
-                        StatType::Armor(Some(DamageStatType::Storm)),
-                    ] {
-                        *effects_map
-                            .0
-                            .entry((
-                                stat,
-                                effect.stat_effect.modifier,
-                                effect.stat_effect.bypass_ignore,
-                            ))
-                            .or_default() += effect.stat_effect.value;
-                    }
-                } else {
-                    *effects_map
-                        .0
-                        .entry((
-                            effect.stat_effect.stat.clone(),
-                            effect.stat_effect.modifier,
-                            effect.stat_effect.bypass_ignore,
-                        ))
-                        .or_default() += effect.stat_effect.value;
-                }
-
-                effects_map
-            })
-    }
-
     pub fn count_affixes(&self, affix_type: AffixType) -> usize {
         self.affixes
             .iter()
-            .filter(|affix| affix_type == affix.affix_type)
+            .filter(|affix| affix.affix_type == affix_type)
             .count()
     }
 
-    pub fn count_nonunique_affixes(&self) -> usize {
+    pub fn count_presuffixes(&self) -> usize {
         self.affixes
             .iter()
             .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
             .count()
     }
+}
 
-    pub fn get_families(&self) -> HashSet<String> {
-        self.affixes
-            .iter()
-            .map(|affix| affix.family.clone())
-            .collect()
-    }
-
+impl ItemSpecs {
     /// A soul affix can replace another of the same family, but not be added on an item with
     /// other affixes of the same family.
     pub fn can_replace_soul_affix(&self, soul_affix: &ItemAffix) -> bool {

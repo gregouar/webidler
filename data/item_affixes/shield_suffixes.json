@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_add_block_local_t1" : {
     "name"        : "of Deflection",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -12,7 +12,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 1 }
     ]
   },
-  {
+  "item_add_block_local_t2" : {
     "name"        : "of Interception",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -25,7 +25,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 2 }
     ]
   },
-  {
+  "item_add_block_local_t3" : {
     "name"        : "of Protection",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -38,7 +38,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 3 }
     ]
   },
-  {
+  "item_add_block_local_t4" : {
     "name"        : "of Guarding",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -51,7 +51,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 4 }
     ]
   },
-  {
+  "item_add_block_local_t5" : {
     "name"        : "of Shielding",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -64,7 +64,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 5 }
     ]
   },
-  {
+  "item_add_block_local_t6" : {
     "name"        : "of Fortitude",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -77,7 +77,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 6 }
     ]
   },
-  {
+  "item_add_block_local_t7" : {
     "name"        : "of Vigilance",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -90,7 +90,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 7 }
     ]
   },
-  {
+  "item_add_block_local_t8" : {
     "name"        : "of Preservation",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -103,7 +103,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 8 }
     ]
   },
-  {
+  "item_add_block_local_t9" : {
     "name"        : "of Safeguarding",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -116,7 +116,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 9 }
     ]
   },
-  {
+  "item_add_block_local_t10": {
     "name"        : "of Impregnability",
     "family"      : "add_block",
     "tags"        : ["Physical", "Armor"],
@@ -129,7 +129,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Flat", "value": 10 }
     ]
   },
-  {
+  "item_inc_block_t1"       : {
     "name"        : "of Film",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -142,7 +142,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [10, 13] }
     ]
   },
-  {
+  "item_inc_block_t2"       : {
     "name"        : "of Oil",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -155,7 +155,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [16, 18] }
     ]
   },
-  {
+  "item_inc_block_t3"       : {
     "name"        : "of Grease",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -168,7 +168,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [21, 23] }
     ]
   },
-  {
+  "item_inc_block_t4"       : {
     "name"        : "of Coating",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -181,7 +181,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [26, 28] }
     ]
   },
-  {
+  "item_inc_block_t5"       : {
     "name"        : "of Sheen",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -194,7 +194,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [31, 33] }
     ]
   },
-  {
+  "item_inc_block_t6"       : {
     "name"        : "of Polish",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -207,7 +207,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [36, 38] }
     ]
   },
-  {
+  "item_inc_block_t7"       : {
     "name"        : "of Lacquer",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -220,7 +220,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [41, 43] }
     ]
   },
-  {
+  "item_inc_block_t8"       : {
     "name"        : "of Glaze",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -233,7 +233,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [46, 48] }
     ]
   },
-  {
+  "item_inc_block_t9"       : {
     "name"        : "of Varnish",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -246,7 +246,7 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [51, 53] }
     ]
   },
-  {
+  "item_inc_block_t10"      : {
     "name"        : "of Enamel",
     "family"      : "inc_block",
     "tags"        : ["Physical", "Armor"],
@@ -259,4 +259,4 @@
       { "scope": "Local", "stat": {"Block": null}, "modifier": "Increased", "value": [56, 60] }
     ]
   }
-]
+}

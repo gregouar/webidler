@@ -164,6 +164,7 @@ pub async fn post_socket_passive(
 
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
     let mut ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 

@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashSet};
+use std::collections::HashSet;
 
 use shared::{
     computations,
@@ -7,17 +7,14 @@ use shared::{
         area::AreaLevel,
         chance::ChanceRange,
         forge::MAX_AFFIXES,
-        item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
-        item_affix::{
-            AffixEffect, AffixEffectBlueprint, AffixTag, AffixType, ItemAffix, ItemAffixBlueprint,
-        },
-        stat_effect::StatEffect,
+        item::{AffixRoll, ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
+        item_affix::AffixType,
     },
 };
 
 use crate::game::{
     data::{
-        items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
+        items_store::{ItemAffixesTable, ItemsStore},
         loot_table::{LootTable, LootTableEntry, RarityWeights},
     },
     utils::rng::{self, RandomWeighted, Rollable, flip_coin},
@@ -61,9 +58,6 @@ pub const MAP_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
 pub fn generate_loot(
     loot_table: &LootTable,
     items_store: &ItemsStore,
-    affixes_table: &ItemAffixesTable,
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
     loot_template: &GenerateLootTemplate,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
@@ -78,9 +72,6 @@ pub fn generate_loot(
     roll_item(
         loot_table,
         items_store,
-        affixes_table,
-        adjectives_table,
-        nouns_table,
         loot_template,
         level,
         power_level_modifier,
@@ -107,9 +98,6 @@ fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
 pub fn roll_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,
-    affixes_table: &ItemAffixesTable,
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
     loot_template: &GenerateLootTemplate,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
@@ -132,14 +120,12 @@ pub fn roll_item(
             ItemRarity::Unique
         };
         roll_item_stats(
+            items_store,
             base_item_id,
             base,
             rarity,
             level,
             power_level_modifier,
-            affixes_table,
-            adjectives_table,
-            nouns_table,
             loot_template.max_affixes,
             gold_find,
             // &items_store.signature_key,
@@ -149,14 +135,12 @@ pub fn roll_item(
 
 #[allow(clippy::too_many_arguments)]
 pub fn roll_item_stats(
+    items_store: &ItemsStore,
     base_item_id: String,
     base: ItemBase,
     rarity: ItemRarity,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
-    affixes_table: &ItemAffixesTable,
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
     max_affixes: bool,
     gold_find: f64,
     // signature_key: &HmacSignature,
@@ -167,6 +151,7 @@ pub fn roll_item_stats(
         roll_quality(base.min_area_level, level)
     };
 
+    let affixes = roll_base_affixes(&base_item_id, &base);
     let mut modifiers = ItemModifiers {
         base_item_id,
         name: base.name.clone(),
@@ -176,15 +161,14 @@ pub fn roll_item_stats(
         },
         level,
         quality,
-        affixes: roll_unique_affixes(&base, quality),
+        affixes,
         upgrade_level: 0,
     };
 
     let affixes_amount = if max_affixes {
         match rarity {
             ItemRarity::Magic => 2,
-            ItemRarity::Rare => 4,
-            ItemRarity::Masterwork => 5,
+            ItemRarity::Rare | ItemRarity::Masterwork => 4,
             _ => 0,
         }
     } else {
@@ -205,25 +189,11 @@ pub fn roll_item_stats(
     };
 
     for _ in 0..affixes_amount {
-        add_affix(
-            &base,
-            &mut modifiers,
-            None,
-            affixes_table,
-            adjectives_table,
-            nouns_table,
-        );
+        add_affix(items_store, &base, &mut modifiers, None);
     }
 
     if rarity == ItemRarity::Masterwork {
-        add_affix(
-            &base,
-            &mut modifiers,
-            Some(AffixType::Soul),
-            affixes_table,
-            adjectives_table,
-            nouns_table,
-        );
+        add_affix(items_store, &base, &mut modifiers, Some(AffixType::Soul));
     }
 
     let gold_price = computations::item_gold_price(
@@ -232,7 +202,7 @@ pub fn roll_item_stats(
     ) * gold_find
         * 0.01;
 
-    items_controller::create_item_specs(base, modifiers, gold_price)
+    items_controller::create_item_specs(items_store, base, modifiers, gold_price)
 }
 
 fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
@@ -254,7 +224,7 @@ fn roll_base_item(
         .entries
         .iter()
         .filter(|l| {
-            let Some(item_specs) = items_store.content.get(&l.item_id) else {
+            let Some(item_specs) = items_store.items.get(&l.item_id) else {
                 return false;
             };
             area_level >= l.min_area_level.unwrap_or(item_specs.min_area_level)
@@ -276,7 +246,7 @@ fn roll_base_item(
             .iter()
             .filter(|l| {
                 items_store
-                    .content
+                    .items
                     .get(&l.item_id)
                     .map(|base| base.rarity == ItemRarity::Unique)
                     .unwrap_or_default()
@@ -293,7 +263,7 @@ fn roll_base_item(
             .into_iter()
             .filter(|l| {
                 items_store
-                    .content
+                    .items
                     .get(&l.item_id)
                     .map(|base| base.rarity != ItemRarity::Unique)
                     .unwrap_or_default()
@@ -306,7 +276,7 @@ fn roll_base_item(
             .iter()
             .map(|l| {
                 items_store
-                    .content
+                    .items
                     .get(&l.item_id)
                     .filter(|base| !base.categories.contains(&ItemCategory::Remnant))
                     .map(|base| base.min_area_level)
@@ -318,7 +288,7 @@ fn roll_base_item(
             .into_iter()
             .filter(|l| {
                 items_store
-                    .content
+                    .items
                     .get(&l.item_id)
                     .map(|base| base.min_area_level >= max_level)
                     .unwrap_or_default()
@@ -334,53 +304,37 @@ fn roll_base_item(
 
     rng::random_weighted_pick(&items_available).and_then(|loot_entry| {
         items_store
-            .content
+            .items
             .get(&loot_entry.item_id)
             .cloned()
             .map(|item_base| (loot_entry.item_id.clone(), item_base))
     })
 }
 
-fn roll_unique_affixes(base_item: &ItemBase, quality: f32) -> Vec<ItemAffix> {
+pub fn roll_base_affixes(base_item_id: &str, base_item: &ItemBase) -> Vec<AffixRoll> {
     base_item
         .affixes
         .iter()
-        .map(|e: &AffixEffectBlueprint| {
-            let quality_factor = 1.0
-                + if e.ignore_quality {
-                    0.0
-                } else {
-                    quality as f64 * 0.01
-                };
-            let mut effect = roll_affix_effect(e);
-            effect.stat_effect.value *= quality_factor;
-
-            let affix_type = if base_item.categories.contains(&ItemCategory::Soul) {
+        .map(|(effect_id, effect_blueprint)| AffixRoll {
+            affix_type: if base_item.categories.contains(&ItemCategory::Soul) {
                 AffixType::Soul
-            } else {
+            } else if effect_blueprint.is_unique {
                 AffixType::Unique
-            };
-
-            ItemAffix {
-                name: base_item.name.clone(),
-                family: base_item.name.clone(),
-                tags: BTreeSet::from([AffixTag::Unique]),
-                affix_type,
-                tier: 0,
-                item_level: base_item.min_area_level,
-                effects: vec![effect],
-            }
+            } else {
+                AffixType::Base
+            },
+            base_item_id: Some(base_item_id.to_string()),
+            affix_id: effect_id.clone(),
+            value: roll_affix_value(),
         })
         .collect()
 }
 
 pub fn add_affix(
+    items_store: &ItemsStore,
     base: &ItemBase,
     modifiers: &mut ItemModifiers,
     affix_type: Option<AffixType>,
-    affixes_table: &ItemAffixesTable,
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
 ) -> bool {
     if base.rarity == ItemRarity::Unique || base.categories.contains(&ItemCategory::Soul) {
         return false;
@@ -422,35 +376,33 @@ pub fn add_affix(
         }
     };
 
-    if let Some(affix) = roll_affix(
+    if let Some((affix_id, value)) = roll_affix(
         base,
         modifiers.level,
         affix_type,
-        &mut modifiers.get_families(),
-        affixes_table,
+        get_families(&items_store.affixes_table, modifiers),
+        &items_store.affixes_table,
     ) {
-        modifiers.affixes.push(affix);
+        modifiers.affixes.push(AffixRoll {
+            affix_type,
+            base_item_id: None,
+            affix_id,
+            value,
+        });
     } else {
         return false;
     }
 
     let affixes_amount = prefixes_amount + suffixes_amount + 1;
-    update_rarity(
-        base,
-        modifiers,
-        affixes_amount,
-        adjectives_table,
-        nouns_table,
-    );
+    update_rarity(items_store, base, modifiers, affixes_amount);
 
     true
 }
 
 pub fn remove_affix(
+    items_store: &ItemsStore,
     base: &ItemBase,
     modifiers: &mut ItemModifiers,
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
 ) -> bool {
     if base.rarity == ItemRarity::Unique {
         return false;
@@ -476,7 +428,7 @@ pub fn remove_affix(
     let affixes_amount = match affix_type {
         AffixType::Prefix => prefixes_amount,
         AffixType::Suffix => suffixes_amount,
-        AffixType::Unique | AffixType::Upgrade | AffixType::Soul => 0,
+        AffixType::Base | AffixType::Unique | AffixType::Upgrade | AffixType::Soul => 0,
     };
 
     let affix_subindex = rng::random_range(0..affixes_amount).unwrap_or_default();
@@ -493,23 +445,16 @@ pub fn remove_affix(
     modifiers.affixes.remove(affix_index);
 
     let affixes_amount = prefixes_amount + suffixes_amount - 1;
-    update_rarity(
-        base,
-        modifiers,
-        affixes_amount,
-        adjectives_table,
-        nouns_table,
-    );
+    update_rarity(items_store, base, modifiers, affixes_amount);
 
     true
 }
 
 fn update_rarity(
+    items_store: &ItemsStore,
     base: &ItemBase,
     modifiers: &mut ItemModifiers,
     affixes_amount: usize,
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
 ) {
     let new_rarity = if modifiers.count_affixes(AffixType::Soul) > 0 {
         ItemRarity::Masterwork
@@ -521,24 +466,19 @@ fn update_rarity(
         ItemRarity::Normal
     };
 
-    if new_rarity != modifiers.rarity
+    if (new_rarity != modifiers.rarity
         && new_rarity != ItemRarity::Masterwork
-        && modifiers.rarity != ItemRarity::Masterwork
+        && modifiers.rarity != ItemRarity::Masterwork)
+        || new_rarity == ItemRarity::Magic
     {
-        modifiers.name = generate_name(
-            base,
-            new_rarity,
-            &modifiers.affixes,
-            adjectives_table,
-            nouns_table,
-        );
+        modifiers.name = generate_name(items_store, base, new_rarity, &modifiers.affixes);
     }
 
     modifiers.rarity = new_rarity;
 }
 
 struct TweakedItemAffixBlueprint<'a> {
-    affix_blueprint: &'a ItemAffixBlueprint,
+    affix_id: &'a str,
     weight: u64,
 }
 
@@ -552,12 +492,12 @@ fn roll_affix(
     base_item: &ItemBase,
     area_level: AreaLevel,
     affix_type: AffixType,
-    families_in_use: &mut HashSet<String>,
+    families_in_use: HashSet<String>,
     affixes_table: &ItemAffixesTable,
-) -> Option<ItemAffix> {
+) -> Option<(String, u8)> {
     let available_affixes: Vec<_> = affixes_table
         .iter()
-        .filter(|a| {
+        .filter(|(_, a)| {
             a.restrictions
                 .as_ref()
                 .map(|r| !r.is_disjoint(&base_item.categories))
@@ -566,33 +506,18 @@ fn roll_affix(
                 && a.affix_type == affix_type
                 && !families_in_use.contains(&a.family)
         })
-        .map(|affix_blueprint| TweakedItemAffixBlueprint {
+        .map(|(affix_id, affix_blueprint)| TweakedItemAffixBlueprint {
+            affix_id,
             weight: tweak_affix_weight(
                 affix_blueprint.weight,
                 affix_blueprint.item_level,
                 area_level,
             ),
-            affix_blueprint,
         })
         .collect();
 
-    rng::random_weighted_pick(&available_affixes).map(|a| {
-        families_in_use.insert(a.affix_blueprint.family.clone());
-        ItemAffix {
-            name: a.affix_blueprint.name.clone(),
-            family: a.affix_blueprint.family.clone(),
-            tags: a.affix_blueprint.tags.clone(),
-            affix_type,
-            tier: a.affix_blueprint.tier,
-            item_level: a.affix_blueprint.item_level,
-            effects: a
-                .affix_blueprint
-                .effects
-                .iter()
-                .map(roll_affix_effect)
-                .collect(),
-        }
-    })
+    rng::random_weighted_pick(&available_affixes)
+        .map(|a| (a.affix_id.to_string(), roll_affix_value()))
 }
 
 fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaLevel) -> u64 {
@@ -601,53 +526,53 @@ fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaL
     (base_weight as f64 * factor) as u64
 }
 
-fn roll_affix_effect(effect_blueprint: &AffixEffectBlueprint) -> AffixEffect {
-    AffixEffect {
-        stat_effect: StatEffect {
-            stat: effect_blueprint.stat.clone(),
-            modifier: effect_blueprint.modifier,
-            value: effect_blueprint.value.roll().round(),
-            bypass_ignore: effect_blueprint.bypass_ignore,
-            // ignore_quality: effect_blueprint.ignore_quality,
-        },
-        scope: effect_blueprint.scope,
-    }
+fn roll_affix_value() -> u8 {
+    rng::random_range(0..=100).unwrap_or(50) as u8
+}
+
+fn get_families(affixes_table: &ItemAffixesTable, modifiers: &ItemModifiers) -> HashSet<String> {
+    modifiers
+        .affixes
+        .iter()
+        .filter(|affix| affix.base_item_id.is_none())
+        .filter_map(|affix| affixes_table.get(&affix.affix_id))
+        .map(|affix| affix.family.clone())
+        .collect()
 }
 
 pub fn generate_name(
+    items_store: &ItemsStore,
     base: &ItemBase,
     rarity: ItemRarity,
-    affixes: &[ItemAffix],
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
+    affixes: &[AffixRoll],
 ) -> String {
     match rarity {
-        ItemRarity::Magic => generate_magic_name(base, affixes),
-        ItemRarity::Rare => generate_rare_name(base, affixes, adjectives_table, nouns_table),
+        ItemRarity::Magic => generate_magic_name(items_store, base, affixes),
+        ItemRarity::Rare => generate_rare_name(items_store, base, affixes),
         _ => base.name.clone(),
     }
 }
 
-fn generate_magic_name(base: &ItemBase, affixes: &[ItemAffix]) -> String {
+fn generate_magic_name(items_store: &ItemsStore, base: &ItemBase, affixes: &[AffixRoll]) -> String {
     let mut name = base.name.clone();
 
-    let prefixes: Vec<_> = affixes
+    if let Some(prefix_name) = affixes
         .iter()
-        .filter(|a| a.affix_type == AffixType::Prefix)
-        .collect();
-
-    if prefixes.len() == 1 {
-        name = format!("{} {}", prefixes[0].name, name);
+        .find(|a| a.affix_type == AffixType::Prefix)
+        .and_then(|a| items_store.affixes_table.get(&a.affix_id))
+        .map(|a| &a.name)
+    {
+        name = format!("{} {}", prefix_name, name);
     }
 
-    let suffixes: Vec<_> = affixes
+    if let Some(suffix_name) = affixes
         .iter()
-        .filter(|a| a.affix_type == AffixType::Suffix)
-        .collect();
-
-    if suffixes.len() == 1 {
-        name = format!("{} {}", name, suffixes[0].name);
-    };
+        .find(|a| a.affix_type == AffixType::Suffix)
+        .and_then(|a| items_store.affixes_table.get(&a.affix_id))
+        .map(|a| &a.name)
+    {
+        name = format!("{} {}", name, suffix_name);
+    }
 
     name
 }
@@ -663,18 +588,15 @@ impl rng::RandomWeighted for WeightedNamePart<'_> {
     }
 }
 
-fn generate_rare_name(
-    base: &ItemBase,
-    affixes: &[ItemAffix],
-    adjectives_table: &ItemAdjectivesTable,
-    nouns_table: &ItemNounsTable,
-) -> String {
+fn generate_rare_name(items_store: &ItemsStore, base: &ItemBase, affixes: &[AffixRoll]) -> String {
     let tags: HashSet<_> = affixes
         .iter()
+        .filter_map(|a| items_store.affixes_table.get(&a.affix_id))
         .flat_map(|a| a.tags.iter().copied())
         .collect();
 
-    let available_adjectives: Vec<_> = adjectives_table
+    let available_adjectives: Vec<_> = items_store
+        .adjectives_table
         .iter()
         .filter(|part| part.tags.is_subset(&tags))
         .map(|part| WeightedNamePart {
@@ -683,7 +605,8 @@ fn generate_rare_name(
         })
         .collect();
 
-    let available_nouns: Vec<_> = nouns_table
+    let available_nouns: Vec<_> = items_store
+        .nouns_table
         .iter()
         .map(|part| WeightedNamePart {
             text: &part.text,

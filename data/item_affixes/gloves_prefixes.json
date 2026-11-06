@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_status_success_chance_t1" : {
     "name"        : "Tactile",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -10,7 +10,7 @@
     "item_level"  : 1,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -21,7 +21,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t2" : {
     "name"        : "Grasping",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -32,7 +32,7 @@
     "item_level"  : 50,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -43,7 +43,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t3" : {
     "name"        : "Clutching",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -54,7 +54,7 @@
     "item_level"  : 100,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -65,7 +65,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t4" : {
     "name"        : "Stamping",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -76,7 +76,7 @@
     "item_level"  : 150,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -87,7 +87,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t5" : {
     "name"        : "Marking",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -98,7 +98,7 @@
     "item_level"  : 200,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -109,7 +109,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t6" : {
     "name"        : "Etching",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -120,7 +120,7 @@
     "item_level"  : 260,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -131,7 +131,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t7" : {
     "name"        : "Engraving",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -142,7 +142,7 @@
     "item_level"  : 330,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -153,7 +153,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t8" : {
     "name"        : "Branding",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -164,7 +164,7 @@
     "item_level"  : 410,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -175,7 +175,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t9" : {
     "name"        : "Constraining",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -186,7 +186,7 @@
     "item_level"  : 500,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -197,7 +197,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_success_chance_t10": {
     "name"        : "Afflicting",
     "family"      : "inc_status_success_chance",
     "tags"        : ["Status"],
@@ -208,7 +208,7 @@
     "item_level"  : 600,
     "effects"     : [
       {
-        "scope"   : "Global",
+        "scope": "Global",
         "stat"    : {
           "SuccessChance": {
             "effect_type": { "ApplyStatus": {"debuff": true} }
@@ -219,4 +219,4 @@
       }
     ]
   }
-]
+}

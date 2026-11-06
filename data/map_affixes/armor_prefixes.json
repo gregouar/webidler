@@ -1,7 +1,7 @@
-[
-  {
+{
+  "map_inc_armor_t1": {
     "name"        : "Tough",
-    "family"      : "add_armor",
+    "family"      : "inc_armor",
     "tags"        : ["Armor"],
     "affix_type"  : "Prefix",
     "tier"        : 1,
@@ -15,7 +15,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  4 }
     ]
   },
-  {
+  "map_inc_armor_t2": {
     "name"        : "Sturdy",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -31,7 +31,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":   8 }
     ]
   },
-  {
+  "map_inc_armor_t3": {
     "name"        : "Reinforcing",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -47,7 +47,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  12 }
     ]
   },
-  {
+  "map_inc_armor_t4": {
     "name"        : "Bulwarked",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -63,7 +63,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  16 }
     ]
   },
-  {
+  "map_inc_armor_t5": {
     "name"        : "Protective",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -79,7 +79,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  20 }
     ]
   },
-  {
+  "map_inc_armor_t6": {
     "name"        : "Defensive",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -95,7 +95,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  24 }
     ]
   },
-  {
+  "map_inc_armor_t7": {
     "name"        : "Guardian",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -111,7 +111,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  28 }
     ]
   },
-  {
+  "map_inc_armor_t8": {
     "name"        : "Sentinel",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -127,7 +127,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  32 }
     ]
   },
-  {
+  "map_inc_armor_t9": {
     "name"        : "Bastion",
     "family"      : "inc_armor",
     "tags"        : ["Armor"],
@@ -143,4 +143,4 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  40 }
     ]
   }
-]
+}

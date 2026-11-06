@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_spell_speed_2_t1"     : {
     "name"        : "of the Vocalist",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t2"     : {
     "name"        : "of the Caroler",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t3"     : {
     "name"        : "of the Singer",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t4"     : {
     "name"        : "of the Chantress",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t5"     : {
     "name"        : "of the Maestro",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t6"     : {
     "name"        : "of the Virtuoso",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t7"     : {
     "name"        : "of the Conductor",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t8"     : {
     "name"        : "of the Sinfonietta",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t9"     : {
     "name"        : "of the Orchestra",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_2_t10"    : {
     "name"        : "of the Symphony",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -179,7 +179,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t1" : {
     "name"        : "of Fluctuation",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -197,7 +197,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t2" : {
     "name"        : "of Mutability",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -215,7 +215,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t3" : {
     "name"        : "of Flux",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -233,7 +233,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t4" : {
     "name"        : "of Instability",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -251,7 +251,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t5" : {
     "name"        : "of Chaos",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -269,7 +269,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t6" : {
     "name"        : "of Turbulence",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -287,7 +287,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t7" : {
     "name"        : "of Aberration",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -305,7 +305,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t8" : {
     "name"        : "of Uncertainty",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -323,7 +323,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t9" : {
     "name"        : "of Anomaly",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -341,7 +341,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_crit_chance_t10": {
     "name"        : "of Pandemonium",
     "family"      : "inc_spell_crit_chance",
     "tags"        : ["Spell", "Critical"],
@@ -359,4 +359,4 @@
       }
     ]
   }
-]
+}

@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_inc_life_t1": {
     "name"        : "Hefty",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -14,7 +14,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  4}
     ]
   },
-  {
+  "map_inc_life_t2": {
     "name"        : "Robust",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -29,7 +29,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   8}
     ]
   },
-  {
+  "map_inc_life_t3": {
     "name"        : "Stout",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -44,7 +44,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  12}
     ]
   },
-  {
+  "map_inc_life_t4": {
     "name"        : "Beefy",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -59,7 +59,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  16}
     ]
   },
-  {
+  "map_inc_life_t5": {
     "name"        : "Endurant",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -74,7 +74,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  20}
     ]
   },
-  {
+  "map_inc_life_t6": {
     "name"        : "Hulking",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -89,7 +89,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  24}
     ]
   },
-  {
+  "map_inc_life_t7": {
     "name"        : "Resistant",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -104,7 +104,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   28}
     ]
   },
-  {
+  "map_inc_life_t8": {
     "name"        : "Tenacious",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -119,7 +119,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   32}
     ]
   },
-  {
+  "map_inc_life_t9": {
     "name"        : "Resilient",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -134,4 +134,4 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":   40}
     ]
   }
-]
+}

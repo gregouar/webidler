@@ -313,23 +313,16 @@ pub fn new_player_inventory(master_store: &MasterStore) -> PlayerInventory {
         ..Default::default()
     };
     let base_weapon_id = "dagger".to_string();
-    if let Some(base_weapon) = master_store
-        .items_store
-        .content
-        .get(&base_weapon_id)
-        .cloned()
-    {
+    if let Some(base_weapon) = master_store.items_store.items.get(&base_weapon_id).cloned() {
         let _ = inventory_controller::equip_item(
             &mut player_inventory,
             loot_generator::roll_item_stats(
+                &master_store.items_store,
                 base_weapon_id,
                 base_weapon,
                 ItemRarity::Normal,
                 0,
                 0,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 false,
                 0.0,
             ),

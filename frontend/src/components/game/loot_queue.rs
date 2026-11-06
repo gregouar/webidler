@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         loot::{LootState, QueuedLoot},
         modifier::invert_formatted_effect_value,
         player::EquippedSlot,
@@ -434,12 +434,10 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     if req_affix_level
         .map(|req_affix_level| !match rule_type {
             FilterRuleType::Pickup => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .any(|affix| affix.item_level >= req_affix_level),
             FilterRuleType::Sell => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .all(|affix| affix.item_level <= req_affix_level),
@@ -656,10 +654,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return false;
     }
 
-    let effects = item_specs
-        .modifiers
-        .aggregate_effects(AffixEffectScope::Global, true)
-        .0;
+    let effects = aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, true).0;
     for stat_filter in stat_filters.iter() {
         if let Some(((stat_type, stat_modifier), stat_value, stat_excluded)) = stat_filter.as_ref()
         {

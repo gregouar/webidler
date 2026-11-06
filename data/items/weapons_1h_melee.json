@@ -1,2274 +1,1597 @@
 {
-  "dagger": {
-    "name": "Dagger",
-    "icon": "items/weapons_1h/dagger.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 0,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          2.0,
-          4.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "dagger"           : {
+    "name"           : "Dagger",
+    "icon"           : "items/weapons_1h/dagger.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 0,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [2.0, 4.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "dagger_unique": {
+  "dagger_unique"    : {
     "name": "Onions Slicer",
     "icon": "items/weapons_1h/onions_slicer.webp",
     "description": "Forged in myth and honed in the kitchens of legend, this knife once sliced onions so fast it brought tears to gods and mortals alike.",
     "slot": "Weapon",
     "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
+    "categories": ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
     "min_area_level": 0,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
-        "ignore_quality": true
+    "affixes": {
+      "unique_1": {
+        "stat"     : { "Speed": {"skill_type": "Attack", "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : 100.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": "Max",
-            "is_hit": null
-          }
+      "unique_2": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Physical", "min_max": "Max", "is_hit": null}
         },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          8.0,
-          10.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : [8.0, 10.0],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          2.0,
-          4.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [2.0, 4.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
     "armor_specs": null,
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [
-      50,
-      100,
-      150,
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "upgrade_levels": [50, 100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
-            "SkillLevel": {
-              "skill_type": null,
-              "skill_id": "weapon_skill"
-            }
-          },
+          "stat"    : { "SkillLevel": {"skill_type": null, "skill_id": "weapon_skill"} },
           "modifier": "Flat",
-          "value": 1.0
+          "value"   : 1.0
         }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
-            "SkillLevel": {
-              "skill_type": null,
-              "skill_id": "double_strike"
-            }
-          },
+          "stat"    : { "SkillLevel": {"skill_type": null, "skill_id": "double_strike"} },
           "modifier": "Flat",
-          "value": 1.0
+          "value"   : 1.0
         }
       }
     ]
   },
-  "poop_knife": {
-    "name": "The Poop Knife",
-    "icon": "items/weapons_1h/poop_knife.webp",
-    "description": "Forgotten by an old patron, still used by the cook.",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 5,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Min",
-            "is_hit": null
-          }
+  "poop_knife"       : {
+    "name"           : "The Poop Knife",
+    "icon"           : "items/weapons_1h/poop_knife.webp",
+    "description"    : "Forgotten by an old patron, still used by the cook.",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 5,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Min", "is_hit": null}
         },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 4.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 4.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Max",
-            "is_hit": null
-          }
+      "unique_2": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Max", "is_hit": null}
         },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 4.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 4.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+      "unique_3": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          20.0,
-          40.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [20.0, 40.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          5.0,
-          10.0
-        ],
-        "ignore_quality": true
+      "unique_4": {
+        "stat"     : { "Speed": {"skill_type": "Attack", "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [5.0, 10.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_5": {
+        "stat"     : {
           "SkillConditionalModifier": {
-            "stat": {
+            "stat"      : {
               "StatusPower": {
-                "status_id": "poison",
+                "status_id"  : "poison",
                 "damage_type": null,
-                "debuff": null,
-                "skill_type": "Attack",
-                "skill_id": null,
-                "min_max": null
+                "debuff"     : null,
+                "skill_type" : "Attack",
+                "skill_id"   : null,
+                "min_max"    : null
               }
             },
             "skill_type": null,
-            "skill_id": null,
+            "skill_id"  : null,
             "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "open_wound",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null
-                }
-              }
+              { "StatusStacks": {"status_id": "open_wound", "damage_type": null, "debuff": null, "skill_type": null} }
             ]
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 50.0,
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          2.0,
-          4.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [2.0, 4.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      50,
-      100,
-      150,
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [50, 100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Poison",
-              "min_max": "Min",
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Min", "is_hit": null}
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Poison",
-              "min_max": "Max",
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Max", "is_hit": null}
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "Increased",
-          "value": 35.0
+          "value"   : 35.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Speed": {
-              "skill_type": "Attack",
-              "skill_id": null
-            }
-          },
+          "stat"    : { "Speed": {"skill_type": "Attack", "skill_id": null} },
           "modifier": "Increased",
-          "value": 3.0
+          "value"   : 3.0
         }
       }
     ]
   },
-  "shortsword": {
-    "name": "Shortsword",
-    "icon": "items/weapons_1h/shortsword.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 40,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          4.0,
-          7.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "shortsword"       : {
+    "name"           : "Shortsword",
+    "icon"           : "items/weapons_1h/shortsword.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 40,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [4.0, 7.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
   "shortsword_unique": {
-    "name": "Broken Trophy",
-    "icon": "items/weapons_1h/broken_trophy.webp",
-    "description": "A kind remembrance of a foe you'd rather drink to forget...",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 50,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+    "name"           : "Broken Trophy",
+    "icon"           : "items/weapons_1h/broken_trophy.webp",
+    "description"    : "A kind remembrance of a foe you'd rather drink to forget...",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 50,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          50.0,
-          100.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [50.0, 100.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
-        "ignore_quality": true
+      "unique_2": {
+        "stat"     : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 5.0,
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_3": {
+        "stat"         : {
           "StatusPower": {
-            "status_id": "open_wound",
+            "status_id"  : "open_wound",
             "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+            "debuff"     : null,
+            "skill_type" : null,
+            "skill_id"   : null,
+            "min_max"    : null
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true,
+        "modifier"     : "More",
+        "scope"        : "Global",
+        "value"        : 100.0,
+        "is_unique"    : true,
         "bypass_ignore": true
       },
-      {
-        "stat": {
+      "unique_4": {
+        "stat"     : {
           "SuccessChance": {
-            "skill_type": null,
-            "skill_id": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_id": "open_wound",
-                "debuff": null
-              }
-            }
+            "skill_type" : null,
+            "skill_id"   : null,
+            "effect_type": { "ApplyStatus": {"status_id": "open_wound", "debuff": null} }
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 50.0,
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_5": {
+        "stat"     : {
           "SkillConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"      : {
+              "Damage": {"skill_type": "Attack", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
             "skill_type": null,
-            "skill_id": null,
+            "skill_id"  : null,
             "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "open_wound",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null
-                }
-              }
+              { "StatusStacks": {"status_id": "open_wound", "damage_type": null, "debuff": null, "skill_type": null} }
             ]
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 20.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 20.0,
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          4.0,
-          7.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [4.0, 7.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      100,
-      150,
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [100, 150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "Increased",
-          "value": 35.0
+          "value"   : 35.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "CritChance": {
-              "skill_type": null,
-              "skill_id": null
-            }
-          },
+          "stat"    : { "CritChance": {"skill_type": null, "skill_id": null} },
           "modifier": "Flat",
-          "value": 1.0
+          "value"   : 1.0
         }
       }
     ]
   },
-  "hand_axe": {
-    "name": "Hand Axe",
-    "icon": "items/weapons_1h/hand_axe.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 90,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          6.0,
-          10.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "hand_axe"         : {
+    "name"           : "Hand Axe",
+    "icon"           : "items/weapons_1h/hand_axe.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 90,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [6.0, 10.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "handaxe_unique": {
-    "name": "Fang of the Widow",
-    "icon": "items/weapons_1h/hand_axe_spider.webp",
-    "description": "Its edge drips with the venom of a thousand silenced hearts.",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 100,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Min",
-            "is_hit": null
-          }
+  "handaxe_unique"   : {
+    "name"           : "Fang of the Widow",
+    "icon"           : "items/weapons_1h/hand_axe_spider.webp",
+    "description"    : "Its edge drips with the venom of a thousand silenced hearts.",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 100,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Min", "is_hit": null}
         },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 6.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 6.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Max",
-            "is_hit": null
-          }
+      "unique_2": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Max", "is_hit": null}
         },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 12.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 12.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
+      "unique_3": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Physical", "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": -400.0,
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : -400.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
-          }
+      "unique_4": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [100.0, 150.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_5": {
+        "stat"     : {
           "StatusDuration": {
-            "status_id": "poison",
+            "status_id"  : "poison",
             "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+            "debuff"     : null,
+            "skill_type" : null,
+            "skill_id"   : null
           }
         },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          40.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [20.0, 40.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Mana",
-            "skill_type": "Attack"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          1.0,
-          2.0
-        ],
-        "ignore_quality": true
+      "unique_6": {
+        "stat"     : { "RestoreOnHit": {"restore_type": "Mana", "skill_type": "Attack"} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [1.0, 2.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Life",
-            "skill_type": "Attack"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          1.0,
-          2.0
-        ],
-        "ignore_quality": true
+      "unique_7": {
+        "stat"     : { "RestoreOnHit": {"restore_type": "Life", "skill_type": "Attack"} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [1.0, 2.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_8": {
+        "stat"     : {
           "SkillConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"      : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
             "skill_type": null,
-            "skill_id": null,
+            "skill_id"  : null,
             "conditions": [
               {
                 "HasStatus": {
-                  "status_id": "sickening_concoction",
+                  "status_id"  : "sickening_concoction",
                   "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "not": false
+                  "debuff"     : null,
+                  "skill_type" : null,
+                  "not"        : false
                 }
               }
             ]
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 100.0,
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          6.0,
-          10.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [6.0, 10.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      150,
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [150, 200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Poison",
-              "min_max": "Min",
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Min", "is_hit": null}
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Poison",
-              "min_max": "Max",
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": "Max", "is_hit": null}
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": "Poison",
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": "Poison", "min_max": null, "is_hit": null}
           },
           "modifier": "Increased",
-          "value": 40.0
+          "value"   : 40.0
         }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "SkillConditionalModifier": {
-              "stat": {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
+              "stat"      : {
+                "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
               },
               "skill_type": null,
-              "skill_id": null,
+              "skill_id"  : null,
               "conditions": [
                 {
                   "HasStatus": {
-                    "status_id": "sickening_concoction",
+                    "status_id"  : "sickening_concoction",
                     "damage_type": null,
-                    "debuff": null,
-                    "skill_type": null,
-                    "not": false
+                    "debuff"     : null,
+                    "skill_type" : null,
+                    "not"        : false
                   }
                 }
               ]
             }
           },
           "modifier": "More",
-          "value": 40.0
+          "value"   : 40.0
         }
       }
     ]
   },
-  "militia_sword": {
-    "name": "Militia Sword",
-    "icon": "items/weapons_1h/longsword.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 140,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          8.0,
-          13.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "militia_sword"    : {
+    "name"           : "Militia Sword",
+    "icon"           : "items/weapons_1h/longsword.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 140,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [8.0, 13.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "mosquito_sword": {
-    "name": "Bloody Proboscis",
-    "icon": "items/weapons_1h/mosquito_sword.webp",
-    "description": "Will suck you dry.",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 150,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          10.0,
-          20.0
-        ],
-        "ignore_quality": true
+  "mosquito_sword"   : {
+    "name"           : "Bloody Proboscis",
+    "icon"           : "items/weapons_1h/mosquito_sword.webp",
+    "description"    : "Will suck you dry.",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 150,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : { "Speed": {"skill_type": "Attack", "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [10.0, 20.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+      "unique_2": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [100.0, 150.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
-        "ignore_quality": true
+      "unique_3": {
+        "stat"     : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 5.0,
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_4": {
+        "stat"     : {
           "StatusPower": {
-            "status_id": null,
+            "status_id"  : null,
             "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+            "debuff"     : null,
+            "skill_type" : null,
+            "skill_id"   : null,
+            "min_max"    : null
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [100.0, 150.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Mana",
-            "skill_type": "Attack"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          4.0,
-          7.0
-        ],
-        "ignore_quality": true
+      "unique_5": {
+        "stat"     : { "RestoreOnHit": {"restore_type": "Mana", "skill_type": "Attack"} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : [4.0, 7.0],
+        "is_unique": true
       }
-    ],
-    "triggers": [
+    },
+    "triggers"       : [
       {
-        "OnHit": {
-          "skill_type": "Attack",
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": true,
+        "OnHit"            : {
+          "skill_type"  : "Attack",
+          "range"       : null,
+          "is_crit"     : null,
+          "is_blocked"  : null,
+          "is_hurt"     : true,
           "is_triggered": false,
-          "damage_type": null,
-          "skill_ids": [
-            "weapon_skill",
-            "double_strike"
-          ],
-          "conditions": []
+          "damage_type" : null,
+          "skill_ids"   : ["weapon_skill", "double_strike"],
+          "conditions"  : []
         },
-        "description": null,
-        "trigger_id": "mosquito_sword_buff",
-        "target": "Me",
-        "modifiers": [],
+        "description"      : null,
+        "trigger_id"       : "mosquito_sword_buff",
+        "target"           : "Me",
+        "modifiers"        : [],
         "trigger_propagate": false,
-        "skill_type": "Other",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
-        "skill_repeat": {
-          "value": 1,
-          "target": "Same",
-          "repeat_cooldown": 0.3
-        },
-        "effects": [
+        "skill_type"       : "Other",
+        "skill_range"      : "Melee",
+        "skill_shape"      : "Single",
+        "skill_repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
+        "effects"          : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "mosquito_sword_buff",
-              "value": 1.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "mosquito_sword_buff",
+              "value"                : 1.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       },
       {
-        "OnHit": {
-          "skill_type": "Attack",
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": true,
+        "OnHit"            : {
+          "skill_type"  : "Attack",
+          "range"       : null,
+          "is_crit"     : null,
+          "is_blocked"  : null,
+          "is_hurt"     : true,
           "is_triggered": false,
-          "damage_type": null,
-          "skill_ids": [
-            "weapon_skill",
-            "double_strike"
-          ],
-          "conditions": []
+          "damage_type" : null,
+          "skill_ids"   : ["weapon_skill", "double_strike"],
+          "conditions"  : []
         },
-        "description": null,
-        "trigger_id": "mosquito_sword_debuff",
-        "target": "SameTarget",
-        "modifiers": [],
+        "description"      : null,
+        "trigger_id"       : "mosquito_sword_debuff",
+        "target"           : "SameTarget",
+        "modifiers"        : [],
         "trigger_propagate": false,
-        "skill_type": "Other",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
-        "skill_repeat": {
-          "value": 1,
-          "target": "Same",
-          "repeat_cooldown": 0.3
-        },
-        "effects": [
+        "skill_type"       : "Other",
+        "skill_range"      : "Melee",
+        "skill_shape"      : "Single",
+        "skill_repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
+        "effects"          : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "mosquito_sword_debuff",
-              "value": 1.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "mosquito_sword_debuff",
+              "value"                : 1.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       }
     ],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          8.0,
-          13.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [8.0, 13.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      200,
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [200, 260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "Increased",
-          "value": 30.0
+          "value"   : 30.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Speed": {
-              "skill_type": "Attack",
-              "skill_id": null
-            }
-          },
+          "stat"    : { "Speed": {"skill_type": "Attack", "skill_id": null} },
           "modifier": "Increased",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "StatusPower": {
-              "status_id": null,
+              "status_id"  : null,
               "damage_type": "Any",
-              "debuff": null,
-              "skill_type": null,
-              "skill_id": null,
-              "min_max": null
+              "debuff"     : null,
+              "skill_type" : null,
+              "skill_id"   : null,
+              "min_max"    : null
             }
           },
           "modifier": "More",
-          "value": 35.0
+          "value"   : 35.0
         }
       }
     ]
   },
-  "spiked_mace": {
-    "name": "Spiked Mace",
-    "icon": "items/weapons_1h/spiked_mace.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 190,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          10.0,
-          16.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "spiked_mace"      : {
+    "name"           : "Spiked Mace",
+    "icon"           : "items/weapons_1h/spiked_mace.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 190,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [10.0, 16.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "weapon_shield": {
-    "name": "The Punshield",
-    "icon": "items/weapons_1h/weapon_shield.webp",
-    "description": "The best offense is a good defense.",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 200,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Description": "Do only 1 Damage"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
-        "ignore_quality": true
+  "weapon_shield"    : {
+    "name"           : "The Punshield",
+    "icon"           : "items/weapons_1h/weapon_shield.webp",
+    "description"    : "The best offense is a good defense.",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 200,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"Description": "Do only 1 Damage"},
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 1.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
-        "ignore_quality": true
+      "unique_2": {
+        "stat"     : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : 100.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Block": null
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          30.0,
-          50.0
-        ],
-        "ignore_quality": true
+      "unique_3": {
+        "stat"     : {"Block": null},
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [30.0, 50.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_4": {
+        "stat"     : {
           "StatConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"               : {
+              "Damage": {"skill_type": "Attack", "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
-            "conditions": [
-              {
-                "HasItem": {
-                  "item_slot": null,
-                  "item_category": "Shield",
-                  "not": false
-                }
-              }
+            "conditions"         : [
+              { "HasItem": {"item_slot": null, "item_category": "Shield", "not": false} }
             ],
             "conditions_duration": 0
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          120.0,
-          160.0
-        ],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [120.0, 160.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "SkillRepeat": {
-            "skill_type": null,
-            "skill_id": "retaliate"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
+      "unique_5": {
+        "stat"     : { "SkillRepeat": {"skill_type": null, "skill_id": "retaliate"} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "SkillRepeat": {
-            "skill_type": null,
-            "skill_id": "shield_bash"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
+      "unique_6": {
+        "stat"     : { "SkillRepeat": {"skill_type": null, "skill_id": "shield_bash"} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": 1.0
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : {"Physical": 1.0},
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": {
-      "armor": 100.0,
-      "block": 15.0
-    },
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      260,
-      330,
-      410,
-      500,
-      600
-    ],
+    "armor_specs"    : {"armor": 100.0, "block": 15.0},
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [260, 330, 410, 500, 600],
     "upgrade_effects": [
       {
-        "scope": "Local",
-        "stat_effect": {
-          "stat": {
-            "Armor": "Physical"
-          },
-          "modifier": "Flat",
-          "value": 20.0
-        }
+        "scope"      : "Local",
+        "stat_effect": { "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": 20.0 }
       },
       {
-        "scope": "Local",
-        "stat_effect": {
-          "stat": {
-            "Block": null
-          },
-          "modifier": "Increased",
-          "value": 10.0
-        }
+        "scope"      : "Local",
+        "stat_effect": { "stat": {"Block": null}, "modifier": "Increased", "value": 10.0 }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "StatConditionalModifier": {
-              "stat": {
+              "stat"               : {
                 "Damage": {
-                  "skill_type": "Attack",
-                  "skill_id": null,
+                  "skill_type" : "Attack",
+                  "skill_id"   : null,
                   "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
+                  "min_max"    : null,
+                  "is_hit"     : null
                 }
               },
-              "conditions": [
-                {
-                  "HasItem": {
-                    "item_slot": null,
-                    "item_category": "Shield",
-                    "not": false
-                  }
-                }
+              "conditions"         : [
+                { "HasItem": {"item_slot": null, "item_category": "Shield", "not": false} }
               ],
               "conditions_duration": 0
             }
           },
           "modifier": "More",
-          "value": 40.0
+          "value"   : 40.0
         }
       }
     ]
   },
-  "sabre": {
-    "name": "Sabre",
-    "icon": "items/weapons_1h/sabre.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 250,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          12.0,
-          19.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "sabre"            : {
+    "name"           : "Sabre",
+    "icon"           : "items/weapons_1h/sabre.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 250,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [12.0, 19.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "treasure_cutlass": {
-    "name": "Cutlass of Greed",
-    "icon": "items/weapons_1h/treasure_cutlass.webp",
-    "description": "Once drawn in the scent of gold, it refuses to be sheathed.",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 260,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
-        "ignore_quality": true
+  "treasure_cutlass" : {
+    "name"           : "Cutlass of Greed",
+    "icon"           : "items/weapons_1h/treasure_cutlass.webp",
+    "description"    : "Once drawn in the scent of gold, it refuses to be sheathed.",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 260,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : { "CritChance": {"skill_type": null, "skill_id": null} },
+        "modifier" : "Flat",
+        "scope"    : "Local",
+        "value"    : 5.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+      "unique_2": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          180.0,
-          240.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [180.0, 240.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_3": {
+        "stat"     : {
           "StatusPower": {
-            "status_id": null,
+            "status_id"  : null,
             "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null,
-            "min_max": null
+            "debuff"     : null,
+            "skill_type" : "Curse",
+            "skill_id"   : null,
+            "min_max"    : null
           }
         },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Global",
+        "value"    : [40.0, 60.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_4": {
+        "stat"     : {
           "StatusPower": {
-            "status_id": null,
+            "status_id"  : null,
             "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+            "debuff"     : null,
+            "skill_type" : null,
+            "skill_id"   : null,
+            "min_max"    : null
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
-        ],
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : [80.0, 120.0],
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_5": {
+        "stat"     : {
           "StatConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
+            "stat"               : {
+              "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
             },
-            "conditions": [
+            "conditions"         : [
               {
                 "HasStatus": {
-                  "status_id": "blessing_gold",
+                  "status_id"  : "blessing_gold",
                   "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "not": false
+                  "debuff"     : null,
+                  "skill_type" : null,
+                  "not"        : false
                 }
               }
             ],
             "conditions_duration": 0
           }
         },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        "modifier" : "More",
+        "scope"    : "Global",
+        "value"    : 100.0,
+        "is_unique": true
       }
-    ],
-    "triggers": [
+    },
+    "triggers"       : [
       {
-        "OnKill": {
-          "conditions": []
-        },
-        "description": null,
-        "trigger_id": "treasure_cutlass",
-        "target": "Me",
-        "modifiers": [],
+        "OnKill"           : {"conditions": []},
+        "description"      : null,
+        "trigger_id"       : "treasure_cutlass",
+        "target"           : "Me",
+        "modifiers"        : [],
         "trigger_propagate": false,
-        "skill_type": "Curse",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
-        "skill_repeat": {
-          "value": 1,
-          "target": "Same",
-          "repeat_cooldown": 0.3
-        },
-        "effects": [
+        "skill_type"       : "Curse",
+        "skill_range"      : "Melee",
+        "skill_shape"      : "Single",
+        "skill_repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
+        "effects"          : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "greed",
-              "value": 1.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "greed",
+              "value"                : 1.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       }
     ],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          12.0,
-          19.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [12.0, 19.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      330,
-      410,
-      500,
-      600
-    ],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [330, 410, 500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "Increased",
-          "value": 35.0
+          "value"   : 35.0
         }
       },
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "StatusPower": {
-              "status_id": null,
+              "status_id"  : null,
               "damage_type": "Any",
-              "debuff": null,
-              "skill_type": null,
-              "skill_id": null,
-              "min_max": null
+              "debuff"     : null,
+              "skill_type" : null,
+              "skill_id"   : null,
+              "min_max"    : null
             }
           },
           "modifier": "More",
-          "value": 40.0
+          "value"   : 40.0
         }
       }
     ]
   },
-  "weapon_1h_7": {
-    "name": "Battleaxe",
-    "icon": "items/weapons_1h/battleaxe.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 320,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          14.0,
-          22.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "weapon_1h_7"      : {
+    "name"           : "Battleaxe",
+    "icon"           : "items/weapons_1h/battleaxe.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 320,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [14.0, 22.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "weapon_1h_8": {
-    "name": "Rapier",
-    "icon": "items/weapons_1h/rapier.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 400,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          16.0,
-          25.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "weapon_1h_8"      : {
+    "name"           : "Rapier",
+    "icon"           : "items/weapons_1h/rapier.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 400,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [16.0, 25.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "desert_whip": {
-    "name": "The Taskmaster",
-    "icon": "items/weapons_1h/desert_whip.webp",
-    "description": "Lash enough, and even the desert begins to take shape.",
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 410,
-    "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 33.0,
-        "ignore_quality": true
+  "desert_whip"      : {
+    "name"           : "The Taskmaster",
+    "icon"           : "items/weapons_1h/desert_whip.webp",
+    "description"    : "Lash enough, and even the desert begins to take shape.",
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 410,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : { "Speed": {"skill_type": "Attack", "skill_id": null} },
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : 33.0,
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
+      "unique_2": {
+        "stat"     : {
+          "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
         },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          200.0,
-          250.0
-        ],
-        "ignore_quality": true
+        "modifier" : "Increased",
+        "scope"    : "Local",
+        "value"    : [200.0, 250.0],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": null,
-            "skill_id": "weapon_skill"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": -2.0,
-        "ignore_quality": true
+      "unique_3": {
+        "stat"     : { "Speed": {"skill_type": null, "skill_id": "weapon_skill"} },
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : -2.0,
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_4": {
+        "stat"     : {
           "SkillTargetModifier": {
             "skill_type": null,
-            "skill_id": "weapon_skill",
-            "range": null,
-            "shape": "Square4",
-            "repeat": null
+            "skill_id"  : "weapon_skill",
+            "range"     : null,
+            "shape"     : "Square4",
+            "repeat"    : null
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
       },
-      {
-        "stat": {
+      "unique_5": {
+        "stat"     : {
           "SkillTargetModifier": {
             "skill_type": null,
-            "skill_id": "double_strike",
-            "range": null,
-            "shape": "Vertical2",
-            "repeat": null
+            "skill_id"  : "double_strike",
+            "range"     : null,
+            "shape"     : "Vertical2",
+            "repeat"    : null
           }
         },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
       }
-    ],
-    "triggers": [
+    },
+    "triggers"       : [
       {
-        "OnHit": {
-          "skill_type": "Attack",
-          "range": null,
-          "is_crit": false,
-          "is_blocked": null,
-          "is_hurt": null,
+        "OnHit"            : {
+          "skill_type"  : "Attack",
+          "range"       : null,
+          "is_crit"     : false,
+          "is_blocked"  : null,
+          "is_hurt"     : null,
           "is_triggered": null,
-          "damage_type": null,
-          "skill_ids": null,
-          "conditions": []
+          "damage_type" : null,
+          "skill_ids"   : null,
+          "conditions"  : []
         },
-        "description": null,
-        "trigger_id": "desert_whip_hit",
-        "target": "Me",
-        "modifiers": [],
+        "description"      : null,
+        "trigger_id"       : "desert_whip_hit",
+        "target"           : "Me",
+        "modifiers"        : [],
         "trigger_propagate": false,
-        "skill_type": "Other",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
-        "skill_repeat": {
-          "value": 1,
-          "target": "Same",
-          "repeat_cooldown": 0.3
-        },
-        "effects": [
+        "skill_type"       : "Other",
+        "skill_range"      : "Melee",
+        "skill_shape"      : "Single",
+        "skill_repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
+        "effects"          : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "desert_whip",
-              "value": 100.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
+            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
+            "ApplyStatus"            : {
+              "status_id"            : "desert_whip",
+              "value"                : 100.0,
+              "value_factor"         : 1.0,
+              "duration"             : null,
+              "escalation"           : null,
+              "max_stacks"           : null,
+              "avoidable"            : null,
               "replace_on_value_only": false
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       },
       {
-        "OnHit": {
-          "skill_type": null,
-          "range": null,
-          "is_crit": true,
-          "is_blocked": null,
-          "is_hurt": null,
+        "OnHit"            : {
+          "skill_type"  : null,
+          "range"       : null,
+          "is_crit"     : true,
+          "is_blocked"  : null,
+          "is_hurt"     : null,
           "is_triggered": null,
-          "damage_type": null,
-          "skill_ids": [
-            "weapon_skill"
-          ],
-          "conditions": []
+          "damage_type" : null,
+          "skill_ids"   : ["weapon_skill"],
+          "conditions"  : []
         },
-        "description": null,
-        "trigger_id": "desert_whip_crit",
-        "target": "Me",
-        "modifiers": [],
+        "description"      : null,
+        "trigger_id"       : "desert_whip_crit",
+        "target"           : "Me",
+        "modifiers"        : [],
         "trigger_propagate": false,
-        "skill_type": "Other",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
-        "skill_repeat": {
-          "value": 1,
-          "target": "Same",
-          "repeat_cooldown": 0.3
-        },
-        "effects": [
+        "skill_type"       : "Other",
+        "skill_range"      : "Melee",
+        "skill_shape"      : "Single",
+        "skill_repeat"     : {"value": 1, "target": "Same", "repeat_cooldown": 0.3},
+        "effects"          : [
           {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "RefreshStatus": {
-              "status_id": "desert_whip",
+            "success_chance": {"value": 100.0, "lucky_chance": 0.0},
+            "RefreshStatus"          : {
+              "status_id"  : "desert_whip",
               "damage_type": null,
-              "debuff": null,
-              "value": -100.0,
-              "modifier": "Percent"
+              "debuff"     : null,
+              "value"      : -100.0,
+              "modifier"   : "Percent"
             },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
+            "ignore_stat_effects"    : [],
+            "conditional_modifiers"  : [],
             "independent_application": false,
-            "optional_application": false,
-            "description": null
+            "optional_application"   : false,
+            "description"            : null
           }
         ]
       }
     ],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          16.0,
-          25.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [16.0, 25.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [
-      500,
-      600
-    ],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [500, 600],
     "upgrade_effects": [
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Min",
-              "is_hit": null
+              "min_max"    : "Min",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value"   : 2.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
+          "stat"    : {
             "Damage": {
-              "skill_type": null,
-              "skill_id": null,
+              "skill_type" : null,
+              "skill_id"   : null,
               "damage_type": "Physical",
-              "min_max": "Max",
-              "is_hit": null
+              "min_max"    : "Max",
+              "is_hit"     : null
             }
           },
           "modifier": "Flat",
-          "value": 3.0
+          "value"   : 3.0
         }
       },
       {
         "scope": "Local",
         "stat_effect": {
-          "stat": {
-            "Damage": {
-              "skill_type": null,
-              "skill_id": null,
-              "damage_type": null,
-              "min_max": null,
-              "is_hit": null
-            }
+          "stat"    : {
+            "Damage": {"skill_type": null, "skill_id": null, "damage_type": null, "min_max": null, "is_hit": null}
           },
           "modifier": "Increased",
-          "value": 50.0
+          "value"   : 50.0
         }
       }
     ]
   },
-  "weapon_1h_9": {
-    "name": "Pick",
-    "icon": "items/weapons_1h/warpick.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 490,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          18.0,
-          28.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "weapon_1h_9"      : {
+    "name"           : "Pick",
+    "icon"           : "items/weapons_1h/warpick.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 490,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [18.0, 28.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "weapon_1h_10": {
-    "name": "Warblade",
-    "icon": "items/weapons_1h/warblade.webp",
-    "description": null,
-    "slot": "Weapon",
-    "extra_slots": [],
-    "categories": [
-      "AttackWeapon",
-      "MeleeWeapon",
-      "MeleeWeapon1H"
-    ],
-    "min_area_level": 590,
-    "rarity": "Normal",
-    "affixes": [],
-    "triggers": [],
-    "weapon_specs": {
-      "range": "Melee",
-      "shape": "Single",
-      "cooldown": 2.0,
-      "damage": {
-        "Physical": [
-          20.0,
-          31.0
-        ]
-      },
-      "crit_chance": {
-        "value": 5.0,
-        "lucky_chance": 0.0
-      },
+  "weapon_1h_10"     : {
+    "name"           : "Warblade",
+    "icon"           : "items/weapons_1h/warblade.webp",
+    "description"    : null,
+    "slot"           : "Weapon",
+    "extra_slots"    : [],
+    "categories"     : ["AttackWeapon", "MeleeWeapon", "MeleeWeapon1H"],
+    "min_area_level" : 590,
+    "rarity"         : "Normal",
+    "affixes"        : {},
+    "triggers"       : [],
+    "weapon_specs"   : {
+      "range"      : "Melee",
+      "shape"      : "Single",
+      "cooldown"   : 2.0,
+      "damage"     : { "Physical": [20.0, 31.0] },
+      "crit_chance": {"value": 5.0, "lucky_chance": 0.0},
       "crit_damage": 100.0
     },
-    "armor_specs": null,
-    "rune_specs": null,
-    "map_specs": null,
-    "ignore_quality": false,
-    "upgrade_levels": [],
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : false,
+    "upgrade_levels" : [],
     "upgrade_effects": []
   }
 }

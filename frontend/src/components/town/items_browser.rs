@@ -80,7 +80,7 @@ fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibilit
             !item.base.categories.contains(&ItemCategory::Soul)
                 && (item.base.categories.contains(&ItemCategory::Remnant)
                     || (item.modifiers.rarity == ItemRarity::Rare
-                        && item.modifiers.count_nonunique_affixes() == 4))
+                        && item.modifiers.count_presuffixes() == 4))
         }
         InventoryItemEligibility::Imbue => {
             (matches!(
