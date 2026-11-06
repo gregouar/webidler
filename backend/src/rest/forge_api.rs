@@ -70,7 +70,7 @@ pub async fn post_temper(
     )
     .await?;
 
-    *item = items_controller::temper_item(&master_store.items_store.affixes_table, item)?;
+    *item = items_controller::temper_item(&master_store.items_store, item)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -122,9 +122,9 @@ pub async fn post_affix(
     }
 
     *item = items_controller::create_item_specs(
+        &master_store.items_store,
         item.base.clone(),
         item.modifiers.clone(),
-        &master_store.items_store.affixes_table,
         0.0,
     );
 
@@ -164,7 +164,7 @@ pub async fn post_upgrade(
     )
     .await?;
 
-    *item = items_controller::upgrade_item(&master_store.items_store.affixes_table, item)?;
+    *item = items_controller::upgrade_item(&master_store.items_store, item)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -232,7 +232,7 @@ pub async fn post_imbue(
         .bag
         .get_mut(item_index)
         .ok_or(AppError::NotFound)?;
-    *item = soul_crafting::imbue(&master_store.items_store.affixes_table, item, soul)?;
+    *item = soul_crafting::imbue(&master_store.items_store, item, soul)?;
 
     inventory.bag.remove(soul_index);
 

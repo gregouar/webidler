@@ -35,7 +35,10 @@ impl ItemsStore {
     ) -> Self {
         let soul_by_categories = items
             .iter()
-            .filter(|(_, base)| base.categories.contains(&ItemCategory::Soul))
+            .filter(|(_, base)| {
+                base.categories.contains(&ItemCategory::Soul)
+                    && base.rarity != shared::data::item::ItemRarity::Unique
+            })
             .map(|(item_id, base)| {
                 let mut categories = base.categories.clone();
                 categories.remove(&ItemCategory::Soul);

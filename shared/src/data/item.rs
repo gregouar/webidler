@@ -245,7 +245,14 @@ pub struct ItemModifiers {
     pub quality: f32,
     pub upgrade_level: u8,
 
-    pub affixes: IndexMap<String, u8>,
+    pub affixes: Vec<AffixRoll>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+pub struct AffixRoll {
+    pub base_item_id: Option<String>,
+    pub affix_id: String,
+    pub value: u8,
 }
 
 // #[cfg(feature = "modifiable")]

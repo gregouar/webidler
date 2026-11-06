@@ -1,7 +1,6 @@
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 use anyhow::Context;
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use sqlx::{Transaction, types::JsonValue};
 
@@ -9,7 +8,7 @@ use shared::data::{
     area::AreaLevel,
     character_status::StatusId,
     conditional_modifier::Condition,
-    item::{ItemBase, ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
+    item::{AffixRoll, ItemBase, ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
     item_affix::{
         AffixEffect, AffixEffectBlueprint, AffixEffectScope, AffixTag, AffixType, ItemAffix,
     },
@@ -32,11 +31,9 @@ use crate::{
     },
     game::{
         data::{
-            inventory_data::InventoryData,
-            items_store::{ItemAffixesTable, ItemsStore},
+            inventory_data::InventoryData, items_store::ItemsStore,
             passives::PassivesTreeAscensionData,
         },
-        systems::loot_generator::base_affix_id,
         utils::rng,
     },
 };
@@ -239,16 +236,12 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
         affix.affix_type = AffixType::Soul;
     }
 
-    // Transform to normalized new UID based affixes
-    let mut affixes = IndexMap::new();
+    // Transform to normalized, source-aware affix rolls.
+    let mut affixes = Vec::new();
     for old_affix in &old_affixes {
-        let Some((affix_id, effect_blueprint, applies_quality)) = find_blueprint(
-            old_affix,
-            &old.base_item_id,
-            base,
-            &items_store.affixes_table,
-            &affixes,
-        ) else {
+        let Some((source_base_item_id, affix_id, effect_blueprint, applies_quality)) =
+            find_blueprint(old_affix, &old.base_item_id, base, items_store, &affixes)
+        else {
             tracing::warn!(
                 base_item_id = old.base_item_id,
                 affix_name = old_affix.name,
@@ -258,26 +251,33 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
             continue;
         };
 
-        affixes.insert(
+        affixes.push(AffixRoll {
+            base_item_id: source_base_item_id,
             affix_id,
-            normalized_roll(
+            value: normalized_roll(
                 old_affix.effects.first().map(|effect| &effect.stat_effect),
                 effect_blueprint,
                 old.quality,
                 applies_quality,
             ),
-        );
+        });
     }
 
     for effect_id in base.affixes.keys() {
-        let affix_id = base_affix_id(&old.base_item_id, effect_id);
-        if !affixes.contains_key(&affix_id) {
+        if !affixes.iter().any(|affix| {
+            affix.base_item_id.as_deref() == Some(old.base_item_id.as_str())
+                && affix.affix_id == *effect_id
+        }) {
             tracing::warn!(
                 base_item_id = old.base_item_id,
-                affix_id,
+                affix_id = effect_id,
                 "adding missing base affix with a new random roll"
             );
-            affixes.insert(affix_id, random_normalized_roll());
+            affixes.push(AffixRoll {
+                base_item_id: Some(old.base_item_id.clone()),
+                affix_id: effect_id.clone(),
+                value: random_normalized_roll(),
+            });
         }
     }
 
@@ -296,31 +296,38 @@ fn find_blueprint<'a>(
     old_affix: &ItemAffix,
     base_item_id: &str,
     base: &'a ItemBase,
-    affixes_table: &'a ItemAffixesTable,
-    used_affixes: &IndexMap<String, u8>,
-) -> Option<(String, &'a AffixEffectBlueprint, bool)> {
-    let is_used = |id: &str| used_affixes.contains_key(id);
+    items_store: &'a ItemsStore,
+    used_affixes: &[AffixRoll],
+) -> Option<(Option<String>, String, &'a AffixEffectBlueprint, bool)> {
+    let is_used = |source_base_item_id: Option<&str>, id: &str| {
+        used_affixes.iter().any(|affix| {
+            affix.base_item_id.as_deref() == source_base_item_id && affix.affix_id == id
+        })
+    };
     let old_effect = old_affix.effects.first();
 
     if (old_affix.name == base.name && old_affix.tier == 0) || (old_affix.name == "Unique") {
         let candidate = base
             .affixes
             .iter()
-            .filter(|(effect_id, _)| !is_used(&base_affix_id(base_item_id, effect_id)))
-            .max_by_key(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect));
+            .filter(|(effect_id, _)| !is_used(Some(base_item_id), effect_id))
+            .filter(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect))
+            .next();
         if let Some((effect_id, blueprint)) = candidate {
             return Some((
-                base_affix_id(base_item_id, effect_id),
+                Some(base_item_id.to_string()),
+                effect_id.clone(),
                 &blueprint.effect,
                 !blueprint.is_unique,
             ));
         }
     }
 
-    affixes_table
+    items_store
+        .affixes_table
         .iter()
         .filter(|(id, blueprint)| {
-            !is_used(id)
+            !is_used(None, id)
                 && blueprint.name == old_affix.name
                 && blueprint.tier == old_affix.tier
                 && blueprint
@@ -338,7 +345,7 @@ fn find_blueprint<'a>(
             blueprint
                 .effects
                 .first()
-                .map(|effect| (id.clone(), effect, false))
+                .map(|effect| (None, id.clone(), effect, false))
         })
 }
 
