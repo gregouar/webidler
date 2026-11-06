@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use std::collections::{BTreeSet, HashSet};
+use std::collections::BTreeSet;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -352,12 +352,12 @@ impl ItemSpecs {
             .count()
     }
 
-    pub fn get_families(&self) -> HashSet<String> {
-        self.affixes
-            .iter()
-            .map(|affix| affix.family.clone())
-            .collect()
-    }
+    // pub fn get_families(&self) -> HashSet<String> {
+    //     self.affixes
+    //         .iter()
+    //         .map(|affix| affix.family.clone())
+    //         .collect()
+    // }
 
     /// A soul affix can replace another of the same family, but not be added on an item with
     /// other affixes of the same family.
