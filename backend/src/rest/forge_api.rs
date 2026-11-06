@@ -102,8 +102,12 @@ pub async fn post_affix(
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        affix_operation_price(payload.operation, item.count_presuffixes(), &item.base)
-            .ok_or(AppError::UserError("forge operation unavailable".into()))?,
+        affix_operation_price(
+            payload.operation,
+            item.modifiers.count_presuffixes(),
+            &item.base,
+        )
+        .ok_or(AppError::UserError("forge operation unavailable".into()))?,
     )
     .await?;
 

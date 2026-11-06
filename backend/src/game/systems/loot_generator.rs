@@ -338,8 +338,8 @@ pub fn add_affix(
         return false;
     }
 
-    let prefixes_amount = count_affixes(modifiers, AffixType::Prefix);
-    let suffixes_amount = count_affixes(modifiers, AffixType::Suffix);
+    let prefixes_amount = modifiers.count_affixes(AffixType::Prefix);
+    let suffixes_amount = modifiers.count_affixes(AffixType::Suffix);
 
     if prefixes_amount + suffixes_amount >= MAX_AFFIXES && affix_type != Some(AffixType::Soul) {
         return false;
@@ -406,8 +406,8 @@ pub fn remove_affix(
         return false;
     }
 
-    let prefixes_amount = count_affixes(modifiers, AffixType::Prefix);
-    let suffixes_amount = count_affixes(modifiers, AffixType::Suffix);
+    let prefixes_amount = modifiers.count_affixes(AffixType::Prefix);
+    let suffixes_amount = modifiers.count_affixes(AffixType::Suffix);
 
     if prefixes_amount == 0 && suffixes_amount == 0 {
         return false;
@@ -454,7 +454,7 @@ fn update_rarity(
     modifiers: &mut ItemModifiers,
     affixes_amount: usize,
 ) {
-    let new_rarity = if count_affixes(modifiers, AffixType::Soul) > 0 {
+    let new_rarity = if modifiers.count_affixes(AffixType::Soul) > 0 {
         ItemRarity::Masterwork
     } else if affixes_amount > 2 {
         ItemRarity::Rare
@@ -464,9 +464,10 @@ fn update_rarity(
         ItemRarity::Normal
     };
 
-    if new_rarity != modifiers.rarity
+    if (new_rarity != modifiers.rarity
         && new_rarity != ItemRarity::Masterwork
-        && modifiers.rarity != ItemRarity::Masterwork
+        && modifiers.rarity != ItemRarity::Masterwork)
+        || new_rarity == ItemRarity::Magic
     {
         modifiers.name = generate_name(items_store, base, new_rarity, &modifiers.affixes);
     }
@@ -525,14 +526,6 @@ fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaL
 
 fn roll_affix_value() -> u8 {
     rng::random_range(0..=100).unwrap_or(50) as u8
-}
-
-fn count_affixes(modifiers: &ItemModifiers, affix_type: AffixType) -> usize {
-    modifiers
-        .affixes
-        .iter()
-        .filter(|affix| affix.affix_type == affix_type)
-        .count()
 }
 
 fn get_families(affixes_table: &ItemAffixesTable, modifiers: &ItemModifiers) -> HashSet<String> {

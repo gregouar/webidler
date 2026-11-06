@@ -337,11 +337,11 @@ pub struct MapSpecs {
     pub reward_loot_table: Option<String>,
 }
 
-impl ItemSpecs {
+impl ItemModifiers {
     pub fn count_affixes(&self, affix_type: AffixType) -> usize {
         self.affixes
             .iter()
-            .filter(|affix| affix_type == affix.affix_type)
+            .filter(|affix| affix.affix_type == affix_type)
             .count()
     }
 
@@ -351,14 +351,9 @@ impl ItemSpecs {
             .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
             .count()
     }
+}
 
-    // pub fn get_families(&self) -> HashSet<String> {
-    //     self.affixes
-    //         .iter()
-    //         .map(|affix| affix.family.clone())
-    //         .collect()
-    // }
-
+impl ItemSpecs {
     /// A soul affix can replace another of the same family, but not be added on an item with
     /// other affixes of the same family.
     pub fn can_replace_soul_affix(&self, soul_affix: &ItemAffix) -> bool {
