@@ -250,6 +250,7 @@ pub struct ItemModifiers {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AffixRoll {
+    pub affix_type: AffixType,
     pub base_item_id: Option<String>,
     pub affix_id: String,
     pub value: u8,

@@ -90,6 +90,7 @@ pub struct AffixEffectBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemAffix {
+    pub base_item_id: Option<String>,
     pub affix_id: String,
 
     // TODO: Remove and use data store

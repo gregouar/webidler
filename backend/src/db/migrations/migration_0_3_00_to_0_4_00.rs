@@ -8,7 +8,10 @@ use shared::data::{
     area::AreaLevel,
     character_status::StatusId,
     conditional_modifier::Condition,
-    item::{AffixRoll, ItemBase, ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
+    item::{
+        AffixRoll, ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSlot, SkillRange,
+        SkillShape,
+    },
     item_affix::{
         AffixEffect, AffixEffectBlueprint, AffixEffectScope, AffixTag, AffixType, ItemAffix,
     },
@@ -252,6 +255,17 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
         };
 
         affixes.push(AffixRoll {
+            affix_type: if base.categories.contains(&ItemCategory::Soul)
+                && source_base_item_id.is_some()
+            {
+                AffixType::Soul
+            } else if applies_quality && source_base_item_id.is_some() {
+                AffixType::Base
+            } else if source_base_item_id.is_some() {
+                AffixType::Unique
+            } else {
+                old_affix.affix_type
+            },
             base_item_id: source_base_item_id,
             affix_id,
             value: normalized_roll(
@@ -263,8 +277,8 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
         });
     }
 
-    for effect_id in base.affixes.keys() {
-        if !affixes.iter().any(|affix| {
+    for (effect_id, effect_bp) in base.affixes.iter() {
+        if !affixes.iter().any(|affix: &AffixRoll| {
             affix.base_item_id.as_deref() == Some(old.base_item_id.as_str())
                 && affix.affix_id == *effect_id
         }) {
@@ -274,6 +288,13 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
                 "adding missing base affix with a new random roll"
             );
             affixes.push(AffixRoll {
+                affix_type: if base.categories.contains(&ItemCategory::Soul) {
+                    AffixType::Soul
+                } else if effect_bp.is_unique {
+                    AffixType::Unique
+                } else {
+                    AffixType::Base
+                },
                 base_item_id: Some(old.base_item_id.clone()),
                 affix_id: effect_id.clone(),
                 value: random_normalized_roll(),
@@ -433,6 +454,7 @@ struct OldItemAffix {
 impl From<OldItemAffix> for ItemAffix {
     fn from(value: OldItemAffix) -> Self {
         Self {
+            base_item_id: None,
             affix_id: "legacy".to_string(),
             name: value.name,
             family: value.family,
