@@ -1,8 +1,7 @@
-//! Data migration from 0.3.00 to 0.3.02.
-
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 use anyhow::Context;
+use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use sqlx::{Transaction, types::JsonValue};
 
@@ -10,8 +9,10 @@ use shared::data::{
     area::AreaLevel,
     character_status::StatusId,
     conditional_modifier::Condition,
-    item::{ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
-    item_affix::{AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    item::{ItemBase, ItemModifiers, ItemRarity, ItemSlot, SkillRange, SkillShape},
+    item_affix::{
+        AffixEffect, AffixEffectBlueprint, AffixEffectScope, AffixTag, AffixType, ItemAffix,
+    },
     modifier::Modifier,
     passive::PassiveNodeId,
     skill::{DamageType, RestoreModifier, RestoreType, SkillType},
@@ -25,20 +26,29 @@ use shared::data::{
 
 use crate::{
     db::{
-        characters_data::{
-            CharacterDataEntry, upsert_character_inventory_data, upsert_character_passives_data,
-        },
+        characters_data::CharacterDataEntry,
         pool::{Database, DbExecutor, DbPool},
     },
-    game::data::{inventory_data::InventoryData, passives::PassivesTreeAscensionData},
+    game::{
+        data::{
+            inventory_data::InventoryData,
+            items_store::{ItemAffixesTable, ItemsStore},
+            passives::PassivesTreeAscensionData,
+        },
+        utils::rng,
+    },
 };
 
 use super::realm_rollover;
 
-const TARGET_DATA_VERSION: &str = "0.3.02";
+const TARGET_DATA_VERSION: &str = "0.4.00";
 const REALM_MIGRATIONS: [(&str, &str); 2] = [("Standard", "Legacy"), ("StandardSSF", "LegacySSF")];
 
-pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
+pub async fn migrate(
+    db_pool: &DbPool,
+    items_store: &ItemsStore,
+    affixes_table: &ItemAffixesTable,
+) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;
 
     stop_all_grinds(&mut *tx).await?;
@@ -50,10 +60,10 @@ pub async fn migrate(db_pool: &DbPool) -> anyhow::Result<()> {
     realm_rollover::rollover_realms(&mut tx, &REALM_MIGRATIONS, TARGET_DATA_VERSION)
         .await
         .context("rollover_realms")?;
-    migrate_character_items(&mut tx)
+    migrate_character_items(&mut tx, items_store, affixes_table)
         .await
         .context("migrate_character_items")?;
-    migrate_stash_and_market_items(&mut tx)
+    migrate_stash_and_market_items(&mut tx, items_store, affixes_table)
         .await
         .context("migrate_stash_and_market_items")?;
     realm_rollover::finalize_data_versions(&mut tx, TARGET_DATA_VERSION)
@@ -100,6 +110,8 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
 
 async fn migrate_character_items(
     executor: &mut Transaction<'static, Database>,
+    items_store: &ItemsStore,
+    affixes_table: &ItemAffixesTable,
 ) -> anyhow::Result<()> {
     let characters_data = sqlx::query_as!(
         CharacterDataEntry,
@@ -125,32 +137,55 @@ async fn migrate_character_items(
     for character_data in characters_data {
         let old_inventory: OldInventoryData = rmp_serde::from_slice(&character_data.inventory_data)
             .with_context(|| format!("inventory of '{}'", character_data.character_id))?;
-        let inventory_data: InventoryData = old_inventory.into();
+        let inventory = InventoryData {
+            equipped: old_inventory
+                .equipped
+                .into_iter()
+                .map(|(slot, item)| {
+                    migrate_item(item, items_store, affixes_table).map(|item| (slot, item))
+                })
+                .collect::<anyhow::Result<_>>()?,
+            bag: old_inventory
+                .bag
+                .into_iter()
+                .map(|item| migrate_item(item, items_store, affixes_table))
+                .collect::<anyhow::Result<_>>()?,
+            max_bag_size: old_inventory.max_bag_size,
+            sheathed: old_inventory.sheathed,
+        };
 
-        upsert_character_inventory_data(
-            &mut **executor,
-            &character_data.character_id,
-            rmp_serde::to_vec(&inventory_data)?,
-        )
-        .await?;
-
-        if let Some(passives_data) = character_data.passives_data {
+        let passives_data = if let Some(passives_data) = character_data.passives_data {
             let old_passives: OldPassivesTreeAscensionData = rmp_serde::from_slice(&passives_data)
                 .with_context(|| format!("passives of '{}'", character_data.character_id))?;
-            let passives_data: PassivesTreeAscensionData = old_passives.into();
+            Some(rmp_serde::to_vec(&PassivesTreeAscensionData {
+                ascended_nodes: old_passives.ascended_nodes,
+                socketed_nodes: old_passives
+                    .socketed_nodes
+                    .into_iter()
+                    .map(|(node, item)| {
+                        migrate_item(item, items_store, affixes_table).map(|item| (node, item))
+                    })
+                    .collect::<anyhow::Result<_>>()?,
+            })?)
+        } else {
+            None
+        };
 
-            upsert_character_passives_data(
-                &mut **executor,
-                &character_data.character_id,
-                rmp_serde::to_vec(&passives_data)?,
-            )
-            .await?;
-        }
+        let inventory_data = rmp_serde::to_vec(&inventory)?;
 
         sqlx::query!(
-            "UPDATE characters_data SET data_version = $1 WHERE character_id = $2",
-            TARGET_DATA_VERSION,
+            r#"
+            UPDATE characters_data
+            SET inventory_data = $2,
+                passives_data = $3,
+                data_version = $4,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE character_id = $1
+            "#,
             character_data.character_id,
+            inventory_data,
+            passives_data,
+            TARGET_DATA_VERSION,
         )
         .execute(&mut **executor)
         .await?;
@@ -161,6 +196,8 @@ async fn migrate_character_items(
 
 async fn migrate_stash_and_market_items(
     executor: &mut Transaction<'static, Database>,
+    items_store: &ItemsStore,
+    affixes_table: &ItemAffixesTable,
 ) -> anyhow::Result<()> {
     let stash_items = sqlx::query!(
         r#"
@@ -178,7 +215,7 @@ async fn migrate_stash_and_market_items(
     for stash_item in stash_items {
         let old_item: OldItemModifiers = serde_json::from_value(stash_item.item_data)
             .with_context(|| format!("stash item '{}'", stash_item.stash_item_id))?;
-        let item: ItemModifiers = old_item.into();
+        let item = migrate_item(old_item, items_store, affixes_table)?;
         let item_data = serde_json::to_value(item)?;
 
         sqlx::query!(
@@ -194,6 +231,167 @@ async fn migrate_stash_and_market_items(
     Ok(())
 }
 
+fn migrate_item(
+    old: OldItemModifiers,
+    items_store: &ItemsStore,
+    affixes_table: &ItemAffixesTable,
+) -> anyhow::Result<ItemModifiers> {
+    let base = items_store
+        .content
+        .get(&old.base_item_id)
+        .with_context(|| format!("missing item base '{}'", old.base_item_id))?;
+
+    // Convert soul affix
+    let mut old_affixes: Vec<ItemAffix> = old.affixes.into_iter().map(Into::into).collect();
+    if let Some(affix) = old_affixes
+        .iter_mut()
+        .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
+        .nth(4)
+    {
+        affix.affix_type = AffixType::Soul;
+    }
+
+    // Transform to normalized new UID based affixes
+    let mut affixes = IndexMap::new();
+    for old_affix in &old_affixes {
+        let Some((affix_id, effect_blueprint, applies_quality)) =
+            find_blueprint(old_affix, &old.base_item_id, base, affixes_table, &affixes)
+        else {
+            tracing::warn!(
+                base_item_id = old.base_item_id,
+                affix_name = old_affix.name,
+                affix_tier = old_affix.tier,
+                "removing persisted affix with no matching blueprint"
+            );
+            continue;
+        };
+
+        affixes.insert(
+            affix_id,
+            normalized_roll(
+                old_affix.effects.first().map(|effect| &effect.stat_effect),
+                effect_blueprint,
+                old.quality,
+                applies_quality,
+            ),
+        );
+    }
+
+    for effect_id in base.affixes.keys() {
+        let affix_id = shared::data::item::base_affix_id(&old.base_item_id, effect_id);
+        if !affixes.contains_key(&affix_id) {
+            tracing::warn!(
+                base_item_id = old.base_item_id,
+                affix_id,
+                "adding missing base affix with a new random roll"
+            );
+            affixes.insert(affix_id, random_normalized_roll());
+        }
+    }
+
+    Ok(ItemModifiers {
+        base_item_id: old.base_item_id,
+        name: old.name,
+        rarity: old.rarity,
+        level: old.level,
+        quality: old.quality,
+        upgrade_level: old.upgrade_level,
+        affixes,
+    })
+}
+
+fn find_blueprint<'a>(
+    old_affix: &ItemAffix,
+    base_item_id: &str,
+    base: &'a ItemBase,
+    affixes_table: &'a ItemAffixesTable,
+    used_affixes: &IndexMap<String, u8>,
+) -> Option<(String, &'a AffixEffectBlueprint, bool)> {
+    let is_used = |id: &str| used_affixes.contains_key(id);
+    let old_effect = old_affix.effects.first();
+
+    if (old_affix.name == base.name && old_affix.tier == 0) || (old_affix.name == "Unique") {
+        let candidate = base
+            .affixes
+            .iter()
+            .filter(|(effect_id, _)| {
+                !is_used(&shared::data::item::base_affix_id(base_item_id, effect_id))
+            })
+            .max_by_key(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect));
+        if let Some((effect_id, blueprint)) = candidate {
+            return Some((
+                shared::data::item::base_affix_id(base_item_id, effect_id),
+                &blueprint.effect,
+                !blueprint.is_unique,
+            ));
+        }
+    }
+
+    affixes_table
+        .iter()
+        .filter(|(id, blueprint)| {
+            !is_used(id)
+                && blueprint.name == old_affix.name
+                && blueprint.tier == old_affix.tier
+                && blueprint
+                    .restrictions
+                    .as_ref()
+                    .is_none_or(|restrictions| !restrictions.is_disjoint(&base.categories))
+        })
+        .max_by_key(|(_, blueprint)| {
+            blueprint
+                .effects
+                .first()
+                .is_some_and(|effect| effect_matches(old_effect, effect))
+        })
+        .and_then(|(id, blueprint)| {
+            blueprint
+                .effects
+                .first()
+                .map(|effect| (id.clone(), effect, false))
+        })
+}
+
+fn effect_matches(old_effect: Option<&AffixEffect>, blueprint: &AffixEffectBlueprint) -> bool {
+    old_effect.is_some_and(|old| {
+        old.scope == blueprint.scope
+            && old.stat_effect.stat == blueprint.stat
+            && old.stat_effect.modifier == blueprint.modifier
+    })
+}
+
+fn normalized_roll(
+    old_effect: Option<&StatEffect>,
+    blueprint: &AffixEffectBlueprint,
+    quality: f32,
+    applies_quality: bool,
+) -> u8 {
+    let Some(old_effect) = old_effect else {
+        return random_normalized_roll();
+    };
+    let quality_factor = if applies_quality && quality.is_finite() {
+        1.0 + f64::from(quality.max(0.0)) * 0.01
+    } else {
+        1.0
+    };
+    let value_without_quality = old_effect.value / quality_factor;
+    let range = blueprint.value.max - blueprint.value.min;
+    if !value_without_quality.is_finite() || !range.is_finite() {
+        return random_normalized_roll();
+    }
+    if range == 0.0 {
+        return 50;
+    }
+
+    (((value_without_quality - blueprint.value.min) / range * 100.0)
+        .round()
+        .clamp(0.0, 100.0)) as u8
+}
+
+fn random_normalized_roll() -> u8 {
+    rng::random_range(0..=100).unwrap_or(50) as u8
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 struct OldInventoryData {
     equipped: HashMap<ItemSlot, OldItemModifiers>,
@@ -203,39 +401,11 @@ struct OldInventoryData {
     sheathed: HashSet<ItemSlot>,
 }
 
-impl From<OldInventoryData> for InventoryData {
-    fn from(value: OldInventoryData) -> Self {
-        Self {
-            equipped: value
-                .equipped
-                .into_iter()
-                .map(|(slot, item)| (slot, item.into()))
-                .collect(),
-            bag: value.bag.into_iter().map(Into::into).collect(),
-            max_bag_size: value.max_bag_size,
-            sheathed: value.sheathed,
-        }
-    }
-}
-
 #[derive(Serialize, Deserialize, Clone, Debug, Default, PartialEq)]
 struct OldPassivesTreeAscensionData {
     ascended_nodes: HashMap<PassiveNodeId, u8>,
     #[serde(default)]
     socketed_nodes: HashMap<PassiveNodeId, OldItemModifiers>,
-}
-
-impl From<OldPassivesTreeAscensionData> for PassivesTreeAscensionData {
-    fn from(value: OldPassivesTreeAscensionData) -> Self {
-        Self {
-            ascended_nodes: value.ascended_nodes,
-            socketed_nodes: value
-                .socketed_nodes
-                .into_iter()
-                .map(|(node_id, item)| (node_id, item.into()))
-                .collect(),
-        }
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -249,30 +419,6 @@ struct OldItemModifiers {
     quality: f32,
     #[serde(default)]
     upgrade_level: u8,
-}
-
-impl From<OldItemModifiers> for ItemModifiers {
-    fn from(value: OldItemModifiers) -> Self {
-        let mut affixes: Vec<ItemAffix> = value.affixes.into_iter().map(Into::into).collect();
-
-        if let Some(affix) = affixes
-            .iter_mut()
-            .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))
-            .nth(4)
-        {
-            affix.affix_type = AffixType::Soul;
-        }
-
-        Self {
-            base_item_id: value.base_item_id,
-            name: value.name,
-            rarity: value.rarity,
-            level: value.level,
-            affixes,
-            quality: value.quality,
-            upgrade_level: value.upgrade_level,
-        }
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
