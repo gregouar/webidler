@@ -4,6 +4,8 @@ use futures::future::join_all;
 use indexmap::IndexMap;
 use std::{
     collections::{HashMap, HashSet},
+    fmt::Debug,
+    hash::Hash,
     path::{Path, PathBuf},
     sync::Arc,
 };
@@ -24,12 +26,8 @@ use shared::data::{
 };
 
 use super::{
-    area::AreaBlueprint,
-    indexed_store::IndexedStore,
-    items_store::{ItemAdjectivesTable, ItemAffixesTable, ItemNounsTable, ItemsStore},
-    loot_table::LootTable,
-    manifest,
-    monster::BaseMonsterSpecs,
+    area::AreaBlueprint, indexed_store::IndexedStore, items_store::ItemsStore,
+    loot_table::LootTable, manifest, monster::BaseMonsterSpecs,
 };
 
 use crate::game::{
@@ -65,9 +63,7 @@ pub struct MasterStore {
     pub skill_masteries_store: Arc<SkillMasteriesStore>,
     pub statuses_store: Arc<StatusesStore>,
     pub items_store: Arc<ItemsStore>,
-    pub item_affixes_table: Arc<ItemAffixesTable>,
-    pub item_adjectives_table: Arc<ItemAdjectivesTable>,
-    pub item_nouns_table: Arc<ItemNounsTable>,
+
     pub loot_tables_store: Arc<LootTablesStore>,
     pub gamble_table: Arc<GambleTable>,
     pub monster_specs_store: Arc<MonstersSpecsStore>,
@@ -115,13 +111,13 @@ impl MasterStore {
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Benedictions)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Skills)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::SkillMasteries)),
-            join_load_and_merge_tables::<StatusesStore>(
+            join_load_and_merge_tables::<StatusesStore, _, _>(
                 manifest.get_resources(ManifestCategory::Statuses),
             ),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::Items)),
             join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAffixes)),
-            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemAdjectives)),
-            join_load_and_merge_tables(manifest.get_resources(ManifestCategory::ItemNouns)),
+            join_load_and_merge_lists(manifest.get_resources(ManifestCategory::ItemAdjectives)),
+            join_load_and_merge_lists(manifest.get_resources(ManifestCategory::ItemNouns)),
             join_load_and_map(manifest.get_resources(ManifestCategory::Loot)),
             join_load_and_map(manifest.get_resources(ManifestCategory::GambleTable)),
             join_load_and_map(manifest.get_resources(ManifestCategory::Monsters)),
@@ -174,10 +170,13 @@ impl MasterStore {
             skills_store: Arc::new(skills_store?),
             skill_masteries_store: Arc::new(skill_masteries_store?),
             statuses_store: Arc::new(statuses_store?.into_indexed_keys()),
-            items_store: Arc::new(ItemsStore::new(items_store_content?, item_signature_key)),
-            item_affixes_table: Arc::new(item_affixes_table?),
-            item_adjectives_table: Arc::new(item_adjectives_table?),
-            item_nouns_table: Arc::new(item_nouns_table?),
+            items_store: Arc::new(ItemsStore::new(
+                items_store_content?,
+                item_affixes_table?,
+                item_adjectives_table?,
+                item_nouns_table?,
+                item_signature_key,
+            )),
             loot_tables_store: Arc::new(loot_tables_store),
             gamble_table: Arc::new(gamble_table),
             monster_specs_store: Arc::new(monster_specs_store?),
@@ -206,22 +205,53 @@ async fn join_load_and_map<T: LoadJsonFromFile>(paths: Vec<PathBuf>) -> Result<H
     .collect::<Result<_>>()
 }
 
-async fn join_load_and_merge_tables<T>(paths: Vec<PathBuf>) -> Result<T>
+async fn join_load_and_merge_tables<T, K, V>(paths: Vec<PathBuf>) -> Result<T>
 where
-    T: LoadJsonFromFile
-        + IntoIterator
-        + std::iter::FromIterator<<T as std::iter::IntoIterator>::Item>,
+    T: LoadJsonFromFile + IntoIterator<Item = (K, V)> + FromIterator<(K, V)>,
+    K: Clone + Debug + Eq + Hash,
 {
-    let table: Vec<_> = join_all(
+    let tables = join_all(paths.into_iter().map(|path| async move {
+        Result::<_>::Ok((path.clone(), T::load_from_file(path).await?))
+    }))
+    .await
+    .into_iter()
+    .collect::<Result<Vec<_>>>()?;
+
+    let mut merged_keys = HashSet::new();
+    let mut merged_entries = Vec::new();
+    for (path, table) in tables {
+        let entries = table.into_iter().collect::<Vec<_>>();
+        let keys = entries
+            .iter()
+            .map(|(key, _)| key.clone())
+            .collect::<HashSet<_>>();
+        if let Some(duplicate) = merged_keys.intersection(&keys).next() {
+            return Err(anyhow!(
+                "Duplicate store key {duplicate:?} while merging '{}'",
+                path.display()
+            ));
+        }
+        merged_keys.extend(keys);
+        merged_entries.extend(entries);
+    }
+
+    Ok(merged_entries.into_iter().collect())
+}
+
+async fn join_load_and_merge_lists<T>(paths: Vec<PathBuf>) -> Result<Vec<T>>
+where
+    T: LoadJsonFromFile,
+{
+    let lists = join_all(
         paths
             .into_iter()
-            .map(|f| async move { T::load_from_file(f).await }),
+            .map(|path| async move { Vec::<T>::load_from_file(path).await }),
     )
     .await
     .into_iter()
-    .collect::<Result<_>>()?;
+    .collect::<Result<Vec<_>>>()?;
 
-    Ok(table.into_iter().flatten().collect())
+    Ok(lists.into_iter().flatten().collect())
 }
 
 fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
@@ -237,12 +267,12 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
 
     for (item_id, item) in master_store
         .items_store
-        .content
+        .items
         .iter()
         .filter(|(_, item)| item.categories.contains(&ItemCategory::Soul))
     {
-        for affix in &item.affixes {
-            let StatType::AllocatePassive(passive_id) = &affix.stat else {
+        for affix in item.affixes.values() {
+            let StatType::AllocatePassive(passive_id) = &affix.effect.stat else {
                 continue;
             };
 
@@ -285,12 +315,12 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         .values()
         .flat_map(|t| &t.entries)
     {
-        if !master_store.items_store.content.contains_key(&loot.item_id) {
+        if !master_store.items_store.items.contains_key(&loot.item_id) {
             errors.push(anyhow!("Missing item '{}' from store", loot.item_id));
         }
     }
 
-    for (item_id, item) in &master_store.items_store.content {
+    for (item_id, item) in &master_store.items_store.items {
         let Some(map_specs) = &item.map_specs else {
             continue;
         };
@@ -316,7 +346,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         };
         match &quest.reward {
             QuestReward::Item { item_id, .. } => {
-                if !master_store.items_store.content.contains_key(item_id) {
+                if !master_store.items_store.items.contains_key(item_id) {
                     errors.push(anyhow!(
                         "Missing quest reward item '{}' referenced by area '{}'",
                         item_id,
@@ -413,7 +443,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
                         .flat_map(|trigger| trigger.trigger_effect.effects.iter())
                 }),
         )
-        .chain(master_store.items_store.content.values().flat_map(|item| {
+        .chain(master_store.items_store.items.values().flat_map(|item| {
             item.triggers
                 .iter()
                 .flat_map(|trigger| trigger.trigger_effect.effects.iter())

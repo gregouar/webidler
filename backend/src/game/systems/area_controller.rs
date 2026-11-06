@@ -73,16 +73,9 @@ pub fn init_area_specs(
         }
 
         EffectsMap::combine_all(
-            std::iter::once(
-                map_item
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Local, false),
-            )
-            .chain(std::iter::once(
-                map_item
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Global, false),
-            )),
+            std::iter::once(map_item.aggregate_effects(AffixEffectScope::Local, false)).chain(
+                std::iter::once(map_item.aggregate_effects(AffixEffectScope::Global, false)),
+            ),
         )
     } else {
         Default::default()

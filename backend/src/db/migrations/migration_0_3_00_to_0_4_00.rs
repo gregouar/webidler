@@ -25,6 +25,7 @@ use shared::data::{
 };
 
 use crate::{
+    app_state::MasterStore,
     db::{
         characters_data::CharacterDataEntry,
         pool::{Database, DbExecutor, DbPool},
@@ -44,11 +45,7 @@ use super::realm_rollover;
 const TARGET_DATA_VERSION: &str = "0.4.00";
 const REALM_MIGRATIONS: [(&str, &str); 2] = [("Standard", "Legacy"), ("StandardSSF", "LegacySSF")];
 
-pub async fn migrate(
-    db_pool: &DbPool,
-    items_store: &ItemsStore,
-    affixes_table: &ItemAffixesTable,
-) -> anyhow::Result<()> {
+pub async fn migrate(db_pool: &DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
     let mut tx = db_pool.begin().await?;
 
     stop_all_grinds(&mut *tx).await?;
@@ -60,10 +57,10 @@ pub async fn migrate(
     realm_rollover::rollover_realms(&mut tx, &REALM_MIGRATIONS, TARGET_DATA_VERSION)
         .await
         .context("rollover_realms")?;
-    migrate_character_items(&mut tx, items_store, affixes_table)
+    migrate_character_items(&mut tx, &master_store.items_store)
         .await
         .context("migrate_character_items")?;
-    migrate_stash_and_market_items(&mut tx, items_store, affixes_table)
+    migrate_stash_and_market_items(&mut tx, &master_store.items_store)
         .await
         .context("migrate_stash_and_market_items")?;
     realm_rollover::finalize_data_versions(&mut tx, TARGET_DATA_VERSION)
@@ -111,7 +108,6 @@ async fn stop_all_grinds<'c>(executor: impl DbExecutor<'c>) -> anyhow::Result<()
 async fn migrate_character_items(
     executor: &mut Transaction<'static, Database>,
     items_store: &ItemsStore,
-    affixes_table: &ItemAffixesTable,
 ) -> anyhow::Result<()> {
     let characters_data = sqlx::query_as!(
         CharacterDataEntry,
@@ -141,14 +137,12 @@ async fn migrate_character_items(
             equipped: old_inventory
                 .equipped
                 .into_iter()
-                .map(|(slot, item)| {
-                    migrate_item(item, items_store, affixes_table).map(|item| (slot, item))
-                })
+                .map(|(slot, item)| migrate_item(item, items_store).map(|item| (slot, item)))
                 .collect::<anyhow::Result<_>>()?,
             bag: old_inventory
                 .bag
                 .into_iter()
-                .map(|item| migrate_item(item, items_store, affixes_table))
+                .map(|item| migrate_item(item, items_store))
                 .collect::<anyhow::Result<_>>()?,
             max_bag_size: old_inventory.max_bag_size,
             sheathed: old_inventory.sheathed,
@@ -162,9 +156,7 @@ async fn migrate_character_items(
                 socketed_nodes: old_passives
                     .socketed_nodes
                     .into_iter()
-                    .map(|(node, item)| {
-                        migrate_item(item, items_store, affixes_table).map(|item| (node, item))
-                    })
+                    .map(|(node, item)| migrate_item(item, items_store).map(|item| (node, item)))
                     .collect::<anyhow::Result<_>>()?,
             })?)
         } else {
@@ -197,7 +189,6 @@ async fn migrate_character_items(
 async fn migrate_stash_and_market_items(
     executor: &mut Transaction<'static, Database>,
     items_store: &ItemsStore,
-    affixes_table: &ItemAffixesTable,
 ) -> anyhow::Result<()> {
     let stash_items = sqlx::query!(
         r#"
@@ -215,7 +206,7 @@ async fn migrate_stash_and_market_items(
     for stash_item in stash_items {
         let old_item: OldItemModifiers = serde_json::from_value(stash_item.item_data)
             .with_context(|| format!("stash item '{}'", stash_item.stash_item_id))?;
-        let item = migrate_item(old_item, items_store, affixes_table)?;
+        let item = migrate_item(old_item, items_store)?;
         let item_data = serde_json::to_value(item)?;
 
         sqlx::query!(
@@ -231,13 +222,9 @@ async fn migrate_stash_and_market_items(
     Ok(())
 }
 
-fn migrate_item(
-    old: OldItemModifiers,
-    items_store: &ItemsStore,
-    affixes_table: &ItemAffixesTable,
-) -> anyhow::Result<ItemModifiers> {
+fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Result<ItemModifiers> {
     let base = items_store
-        .content
+        .items
         .get(&old.base_item_id)
         .with_context(|| format!("missing item base '{}'", old.base_item_id))?;
 
@@ -254,9 +241,13 @@ fn migrate_item(
     // Transform to normalized new UID based affixes
     let mut affixes = IndexMap::new();
     for old_affix in &old_affixes {
-        let Some((affix_id, effect_blueprint, applies_quality)) =
-            find_blueprint(old_affix, &old.base_item_id, base, affixes_table, &affixes)
-        else {
+        let Some((affix_id, effect_blueprint, applies_quality)) = find_blueprint(
+            old_affix,
+            &old.base_item_id,
+            base,
+            &items_store.affixes_table,
+            &affixes,
+        ) else {
             tracing::warn!(
                 base_item_id = old.base_item_id,
                 affix_name = old_affix.name,

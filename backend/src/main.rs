@@ -147,12 +147,7 @@ async fn main() {
 
 async fn migrate_data(db_pool: &db::DbPool, master_store: &MasterStore) -> anyhow::Result<()> {
     // db::migrations::migration_0_2_01_to_0_3_00::migrate(db_pool).await?;
-    db::migrations::migration_0_3_00_to_0_4_00::migrate(
-        db_pool,
-        &master_store.items_store,
-        &master_store.item_affixes_table,
-    )
-    .await?;
+    db::migrations::migration_0_3_00_to_0_4_00::migrate(db_pool, &master_store).await?;
     Ok(())
 }
 
