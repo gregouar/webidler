@@ -6,7 +6,9 @@ use shared::{
             ArmorSpecs, ItemBase, ItemModifiers, ItemRarity, ItemSlot, ItemSpecs, MapSpecs,
             WeaponSpecs,
         },
-        item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
+        item_affix::{
+            AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects,
+        },
         modifier::Modifier,
         skill::{BaseSkillSpecs, DamageType, SkillType},
         stat_effect::{
@@ -29,46 +31,38 @@ pub fn init_item_specs_from_store(
     item_modifiers: ItemModifiers,
 ) -> Option<ItemSpecs> {
     items_store
-        .content
+        .items
         .get(&item_modifiers.base_item_id)
-        .map(|base| {
-            create_item_specs(
-                base.clone(),
-                item_modifiers,
-                0.0, // &items_store.signature_key,
-            )
-        })
+        .map(|base| create_item_specs(items_store, base.clone(), item_modifiers, 0.0))
 }
 
 pub fn create_item_specs(
+    items_store: &ItemsStore,
     mut base: ItemBase,
-    mut modifiers: ItemModifiers,
+    modifiers: ItemModifiers,
     gold_price: f64,
     // signature_key: &HmacKey,
 ) -> ItemSpecs {
-    compute_upgrade_effects(&base, &mut modifiers);
-
+    let affixes = compute_affixes(items_store, &base, &modifiers);
+    let required_level = base.min_area_level.max(
+        affixes
+            .iter()
+            .map(|affix| affix.item_level)
+            .max()
+            .unwrap_or_default(),
+    );
     let effects: Vec<StatEffect> =
-        (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
+        (&aggregate_effects(&affixes, AffixEffectScope::Local, false)).into();
 
+    // TODO: have extra_slots in ItemSpecs outer?
     for effect in effects.iter() {
         if let StatType::RemoveSlotUse(item_slot) = &effect.stat {
             base.extra_slots.remove(item_slot);
         }
     }
 
-    // TODO: compute triggers with local effects applied to it
-
     ItemSpecs {
-        required_level: base.min_area_level.max(
-            modifiers
-                .affixes
-                .iter()
-                .map(|affix| affix.item_level)
-                .max()
-                .unwrap_or_default(),
-        ),
-        // .max(1),
+        required_level,
         weapon_specs: base
             .weapon_specs
             .clone()
@@ -80,11 +74,11 @@ pub fn create_item_specs(
         map_specs: base
             .map_specs
             .clone()
-            .map(|map_specs| compute_map_specs(map_specs, &modifiers)),
+            .map(|map_specs| compute_map_specs(map_specs, &modifiers, &affixes)),
         base,
         modifiers,
+        affixes,
         gold_price,
-        // signature: Default::default(),
     }
 
     // if let Ok(serialized_item_specs) = rmp_serde::to_vec(&item_specs) {
@@ -92,6 +86,105 @@ pub fn create_item_specs(
     // }
 
     // item_specs
+}
+
+pub fn compute_affixes(
+    items_store: &ItemsStore,
+    base: &ItemBase,
+    modifiers: &ItemModifiers,
+) -> Vec<ItemAffix> {
+    let mut affixes = modifiers
+        .affixes
+        .iter()
+        .filter_map(|roll| {
+            if let Some(source_base_item_id) = &roll.base_item_id {
+                let source_base = items_store.items.get(source_base_item_id).or_else(|| {
+                    tracing::warn!(
+                        source_base_item_id,
+                        affix_id = roll.affix_id,
+                        item_base_id = modifiers.base_item_id,
+                        "missing source base item for item affix"
+                    );
+                    None
+                })?;
+                let effect = source_base.affixes.get(&roll.affix_id).or_else(|| {
+                    tracing::warn!(
+                        source_base_item_id,
+                        affix_id = roll.affix_id,
+                        item_base_id = modifiers.base_item_id,
+                        "missing item affix blueprint on source base item"
+                    );
+                    None
+                })?;
+                return Some(ItemAffix {
+                    base_item_id: roll.base_item_id.clone(),
+                    affix_id: roll.affix_id.clone(),
+                    name: source_base.name.clone(),
+                    family: source_base.name.clone(),
+                    tags: effect
+                        .is_unique
+                        .then_some(AffixTag::Unique)
+                        .into_iter()
+                        .collect(),
+                    affix_type: roll.affix_type,
+                    tier: 0,
+                    effects: vec![compute_affix_effect(
+                        &effect.effect,
+                        roll.value,
+                        (roll.affix_type == AffixType::Base).then_some(modifiers.quality),
+                    )],
+                    item_level: source_base.min_area_level,
+                });
+            }
+
+            let blueprint = items_store.affixes_table.get(&roll.affix_id).or_else(|| {
+                tracing::warn!(
+                    affix_id = roll.affix_id,
+                    base_item_id = modifiers.base_item_id,
+                    "missing item affix blueprint"
+                );
+                None
+            })?;
+            Some(ItemAffix {
+                base_item_id: None,
+                affix_id: roll.affix_id.clone(),
+                name: blueprint.name.clone(),
+                family: blueprint.family.clone(),
+                tags: blueprint.tags.clone(),
+                affix_type: roll.affix_type,
+                tier: blueprint.tier,
+                effects: blueprint
+                    .effects
+                    .iter()
+                    .map(|effect| compute_affix_effect(effect, roll.value, None))
+                    .collect(),
+                item_level: blueprint.item_level,
+            })
+        })
+        .collect::<Vec<_>>();
+
+    affixes.extend(compute_upgrade_affix(base, modifiers));
+    affixes
+}
+
+fn compute_affix_effect(
+    blueprint: &shared::data::item_affix::AffixEffectBlueprint,
+    roll: u8,
+    quality: Option<f32>,
+) -> AffixEffect {
+    let value = (blueprint.value.min
+        + (blueprint.value.max - blueprint.value.min) * roll.clamp(0, 100) as f64 * 0.01)
+        * (1.0 + quality.unwrap_or_default() as f64 * 0.01);
+
+    AffixEffect {
+        scope: blueprint.scope,
+        stat_effect: StatEffect {
+            stat: blueprint.stat.clone(),
+            modifier: blueprint.modifier,
+            value: value.round(),
+            bypass_ignore: blueprint.bypass_ignore,
+        },
+    }
 }
 
 fn compute_weapon_specs(
@@ -203,12 +296,15 @@ fn compute_armor_specs(
     armor_specs
 }
 
-fn compute_map_specs(mut map_specs: MapSpecs, modifiers: &ItemModifiers) -> MapSpecs {
+fn compute_map_specs(
+    mut map_specs: MapSpecs,
+    modifiers: &ItemModifiers,
+    affixes: &[ItemAffix],
+) -> MapSpecs {
     map_specs.max_power_shard_level = (modifiers.rarity != ItemRarity::Unique).then(|| {
         let max_power_shard_level = MAX_POWER_SHARD_LEVEL_BASE
             + map_specs.max_power_shard_level.unwrap_or_default()
-            + modifiers
-                .affixes
+            + affixes
                 .iter()
                 .map(|affix| affix.item_level)
                 .sum::<AreaLevel>()
@@ -219,41 +315,36 @@ fn compute_map_specs(mut map_specs: MapSpecs, modifiers: &ItemModifiers) -> MapS
     map_specs
 }
 
-fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
-    if item_modifiers.upgrade_level > 0 {
-        item_modifiers
-            .affixes
-            .retain(|affix| !matches!(affix.affix_type, AffixType::Upgrade));
-
-        item_modifiers
-            .affixes
-            .extend(base.upgrade_effects.iter().cloned().map(|upgrade_effect| {
-                ItemAffix {
-                    name: "Empowered".into(),
-                    family: "empowered".into(),
-                    tags: Default::default(),
-                    affix_type: AffixType::Upgrade,
-                    tier: item_modifiers.upgrade_level,
-                    effects: [AffixEffect {
-                        scope: upgrade_effect.scope,
-                        stat_effect: StatEffect {
-                            value: upgrade_effect.stat_effect.value
-                                * item_modifiers.upgrade_level as f64,
-                            ..upgrade_effect.stat_effect
-                        },
-                    }]
-                    .into(),
-                    item_level: base
-                        .upgrade_levels
-                        .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-                        .copied()
-                        .unwrap_or_default(),
-                }
-            }));
-    }
+fn compute_upgrade_affix(base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<ItemAffix> {
+    (item_modifiers.upgrade_level > 0 && !base.upgrade_effects.is_empty()).then(|| ItemAffix {
+        base_item_id: None,
+        affix_id: "empowered".into(),
+        name: "Empowered".into(),
+        family: "empowered".into(),
+        tags: Default::default(),
+        affix_type: AffixType::Upgrade,
+        tier: item_modifiers.upgrade_level,
+        effects: base
+            .upgrade_effects
+            .iter()
+            .cloned()
+            .map(|upgrade_effect| AffixEffect {
+                scope: upgrade_effect.scope,
+                stat_effect: StatEffect {
+                    value: upgrade_effect.stat_effect.value * item_modifiers.upgrade_level as f64,
+                    ..upgrade_effect.stat_effect
+                },
+            })
+            .collect(),
+        item_level: base
+            .upgrade_levels
+            .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+            .copied()
+            .unwrap_or_default(),
+    })
 }
 
-pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+pub fn upgrade_item(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     let available_upgrade_levels = item
         .base
         .upgrade_levels
@@ -268,15 +359,17 @@ pub fn upgrade_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     let mut item_modifiers = item.modifiers.clone();
     item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
 
-    Ok(create_item_specs(item.base.clone(), item_modifiers, 0.0))
+    Ok(create_item_specs(
+        items_store,
+        item.base.clone(),
+        item_modifiers,
+        0.0,
+    ))
 }
 
-pub fn temper_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+pub fn temper_item(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
     if item.base.ignore_quality {
         return Err(AppError::UserError("that item cannot have quality".into()));
-    }
-    if !item.modifiers.quality.is_finite() || item.modifiers.quality < 0.0 {
-        return Err(AppError::UserError("invalid item quality".into()));
     }
     if item.modifiers.quality >= MAX_TEMPERED_ITEM_QUALITY {
         return Err(AppError::UserError(
@@ -284,38 +377,18 @@ pub fn temper_item(item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
         ));
     }
 
-    let quality_increase = rng::random_range(1_u8..=5).ok_or(AppError::UserError(
-        "failed to roll tempering quality".into(),
-    ))?;
+    let quality_increase = rng::random_range(1_u8..=5).unwrap_or(1);
 
-    // TODO: Change later when modifiers will carry normalized base values...
-
-    let old_quality = item.modifiers.quality;
-    let new_quality = (old_quality + f32::from(quality_increase)).min(MAX_TEMPERED_ITEM_QUALITY);
-    let mut item_modifiers = item.modifiers.clone();
-    item_modifiers.quality = new_quality;
-
-    let old_quality_factor = 1.0 + f64::from(old_quality) * 0.01;
-    let new_quality_factor = 1.0 + f64::from(new_quality) * 0.01;
-    let mut base_affixes = item_modifiers
-        .affixes
-        .iter_mut()
-        .filter(|affix| affix.affix_type == AffixType::Unique);
-    for blueprint in &item.base.affixes {
-        let Some(affix) = base_affixes.next() else {
-            break;
-        };
-        if !blueprint.ignore_quality {
-            for effect in affix.effects.iter_mut() {
-                effect.stat_effect.value =
-                    effect.stat_effect.value / old_quality_factor * new_quality_factor;
-            }
-        }
-    }
+    let quality =
+        (item.modifiers.quality + f32::from(quality_increase)).min(MAX_TEMPERED_ITEM_QUALITY);
 
     Ok(create_item_specs(
+        items_store,
         item.base.clone(),
-        item_modifiers,
+        ItemModifiers {
+            quality,
+            ..item.modifiers.clone()
+        },
         item.gold_price,
     ))
 }
