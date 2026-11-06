@@ -54,6 +54,7 @@ pub const MAP_LOOT_TEMPLATE: GenerateLootTemplate = GenerateLootTemplate {
     prevent_categories: &[],
 };
 
+#[allow(clippy::too_many_arguments)]
 pub fn generate_loot(
     loot_table: &LootTable,
     items_store: &ItemsStore,
@@ -93,6 +94,7 @@ fn roll_rarity(weights: &RarityWeights, loot_rarity: f64) -> ItemRarity {
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub fn roll_item(
     loot_table: &LootTable,
     items_store: &ItemsStore,

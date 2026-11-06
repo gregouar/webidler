@@ -113,7 +113,7 @@ pub fn imbue(
     item: &ItemSpecs,
     soul: &ItemSpecs,
 ) -> Result<ItemSpecs, AppError> {
-    if !is_compatible_soul(item, &soul) {
+    if !is_compatible_soul(item, soul) {
         return Err(AppError::UserError(
             "Item and Soul are not compatible".to_string(),
         ));

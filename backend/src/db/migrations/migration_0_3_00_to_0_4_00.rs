@@ -331,9 +331,7 @@ fn find_blueprint<'a>(
         let candidate = base
             .affixes
             .iter()
-            .filter(|(effect_id, _)| !is_used(Some(base_item_id), effect_id))
-            .filter(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect))
-            .next();
+            .filter(|(effect_id, _)| !is_used(Some(base_item_id), effect_id)).find(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect));
         if let Some((effect_id, blueprint)) = candidate {
             return Some((
                 Some(base_item_id.to_string()),
