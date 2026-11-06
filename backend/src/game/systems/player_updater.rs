@@ -125,8 +125,7 @@ pub fn update_player_specs(
         player_inventory
             .equipped_items()
             .flat_map(|(_, i)| {
-                i.modifiers
-                    .aggregate_effects(AffixEffectScope::Global, false)
+                i.aggregate_effects(AffixEffectScope::Global, false)
                     .into_iter()
             })
             .collect(),

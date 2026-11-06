@@ -29,11 +29,13 @@ use crate::{
     auth::{self, User},
     db::{self, market::MarketEntry},
     game::{
-        data::{inventory_data::inventory_data_to_player_inventory, items_store::ItemsStore},
+        data::inventory_data::inventory_data_to_player_inventory,
         systems::{inventory_controller, items_controller, stashes_controller},
     },
     integration::chat::ChatIntegration,
-    rest::utils::{MsgPack, verify_character_in_town, verify_character_user, verify_not_ssf},
+    rest::utils::{
+        MsgPack, buy_with_gems, verify_character_in_town, verify_character_user, verify_not_ssf,
+    },
 };
 
 use super::AppError;
@@ -73,9 +75,7 @@ pub async fn post_browse_market(
     Ok(Json(BrowseMarketItemsResponse {
         items: items
             .into_iter()
-            .filter_map(|market_item_entry| {
-                into_market_item(&master_store.items_store, market_item_entry)
-            })
+            .filter_map(|market_item_entry| into_market_item(&master_store, market_item_entry))
             .collect(),
         has_more,
     }))
@@ -128,19 +128,7 @@ pub async fn post_buy_market_item(
         0.0
     };
 
-    let character_resources = db::characters::update_character_resources(
-        &mut *tx,
-        &payload.character_id,
-        -price,
-        0.0,
-        0.0,
-        0.0,
-    )
-    .await?;
-
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
+    let resource_gems = buy_with_gems(&mut tx, &payload.character_id, price).await?;
 
     db::stashes::update_stash_gems(&mut *tx, &item_bought.stash_id, price).await?;
 
@@ -172,7 +160,7 @@ pub async fn post_buy_market_item(
     tx.commit().await?;
 
     Ok(Json(BuyMarketItemResponse {
-        resource_gems: character_resources.resource_gems,
+        resource_gems,
         inventory,
     }))
 }
@@ -336,13 +324,13 @@ pub async fn get_market_stash_items(
     let items: Vec<_> = db::market::read_full_market_stash_items(&db_pool, stash_id)
         .await?
         .into_iter()
-        .filter_map(|entry| into_market_item(&master_store.items_store, entry))
+        .filter_map(|entry| into_market_item(&master_store, entry))
         .collect();
 
     Ok(MsgPack(GetMarketStashItemsResponse { items }))
 }
 
-fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Option<MarketItem> {
+fn into_market_item(master_store: &MasterStore, market_entry: MarketEntry) -> Option<MarketItem> {
     Some(MarketItem {
         item_id: market_entry.market_id as usize,
         owner_id: market_entry.owner_id,
@@ -357,7 +345,7 @@ fn into_market_item(items_store: &ItemsStore, market_entry: MarketEntry) -> Opti
         price: market_entry.price,
 
         item_specs: items_controller::init_item_specs_from_store(
-            items_store,
+            &master_store.items_store,
             serde_json::from_value(market_entry.item_data).ok()?,
         )?,
 

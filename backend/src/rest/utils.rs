@@ -3,9 +3,18 @@ use axum::{
     response::{IntoResponse, Response},
 };
 
-use shared::data::user::User;
+use shared::data::{
+    player::PlayerInventory,
+    user::{User, UserCharacterId},
+};
+use sqlx::Transaction;
 
-use crate::{db::characters::CharacterEntry, rest::AppError};
+use crate::{
+    app_state::MasterStore,
+    db::{self, characters::CharacterEntry, pool::Database},
+    game::data::inventory_data::inventory_data_to_player_inventory,
+    rest::AppError,
+};
 
 pub fn verify_character_user(character: &CharacterEntry, user: &User) -> Result<(), AppError> {
     if character.user_id != user.user_id {
@@ -36,6 +45,45 @@ pub fn verify_not_ssf(character: &CharacterEntry) -> Result<(), AppError> {
         ));
     }
     Ok(())
+}
+
+pub async fn load_player_town_inventory(
+    tx: &mut Transaction<'_, Database>,
+    master_store: &MasterStore,
+    user: &User,
+    character_id: &UserCharacterId,
+) -> Result<(CharacterEntry, PlayerInventory), AppError> {
+    let character = db::characters::read_character(&mut **tx, character_id)
+        .await?
+        .ok_or(AppError::NotFound)?;
+
+    verify_character_user(&character, user)?;
+    verify_character_in_town(&character)?;
+
+    let inventory_data = db::characters_data::load_inventory_data(&mut **tx, character_id)
+        .await?
+        .ok_or(AppError::UserError("newbies can't do that".into()))?;
+
+    Ok((
+        character,
+        inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
+    ))
+}
+
+pub async fn buy_with_gems(
+    tx: &mut Transaction<'_, Database>,
+    character_id: &UserCharacterId,
+    price: f64,
+) -> Result<f64, AppError> {
+    let character_resources =
+        db::characters::update_character_resources(&mut **tx, character_id, -price, 0.0, 0.0, 0.0)
+            .await?;
+
+    if character_resources.resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".into()));
+    }
+
+    Ok(character_resources.resource_gems)
 }
 
 pub struct MsgPack<T>(pub T);

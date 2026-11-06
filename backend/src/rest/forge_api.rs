@@ -21,15 +21,12 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, User},
     db::{self},
-    game::{
-        data::inventory_data::inventory_data_to_player_inventory,
-        systems::{
-            inventory_controller, items_controller,
-            loot_generator::{self, GenerateLootTemplate},
-            soul_crafting,
-        },
+    game::systems::{
+        inventory_controller, items_controller,
+        loot_generator::{self, GenerateLootTemplate},
+        soul_crafting,
     },
-    rest::utils::{verify_character_in_town, verify_character_user},
+    rest::utils::{buy_with_gems, load_player_town_inventory},
 };
 
 use super::AppError;
@@ -56,45 +53,24 @@ pub async fn post_temper(
 ) -> Result<Json<ForgeTemperResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let item = inventory
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
 
-    let price = computations::temper_item_price(item).ok_or(AppError::UserError(
-        "item cannot be tempered further".into(),
-    ))?;
-
-    let character_resources = db::characters::update_character_resources(
-        &mut *tx,
+    let resource_gems = buy_with_gems(
+        &mut tx,
         &payload.character_id,
-        -price,
-        0.0,
-        0.0,
-        0.0,
+        computations::temper_item_price(item).ok_or(AppError::UserError(
+            "item cannot be tempered further".into(),
+        ))?,
     )
     .await?;
 
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
-
-    *item = items_controller::temper_item(item)?;
+    *item = items_controller::temper_item(&master_store.items_store.affixes_table, item)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -102,7 +78,7 @@ pub async fn post_temper(
     tx.commit().await?;
 
     Ok(Json(ForgeTemperResponse {
-        resource_gems: character_resources.resource_gems,
+        resource_gems,
         inventory,
     }))
 }
@@ -115,67 +91,42 @@ pub async fn post_affix(
 ) -> Result<Json<ForgeAffixResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let item = inventory
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
 
-    let price = affix_operation_price(
-        payload.operation,
-        item.modifiers.count_nonunique_affixes(),
-        &item.base,
-    )
-    .ok_or(AppError::UserError("forge operation unavailable".into()))?;
-
-    let character_resources = db::characters::update_character_resources(
-        &mut *tx,
+    let resource_gems = buy_with_gems(
+        &mut tx,
         &payload.character_id,
-        -price,
-        0.0,
-        0.0,
-        0.0,
+        affix_operation_price(payload.operation, item.count_presuffixes(), &item.base)
+            .ok_or(AppError::UserError("forge operation unavailable".into()))?,
     )
     .await?;
 
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
-
     if !match payload.operation {
         ForgeAffixOperation::Add(affix_type) => loot_generator::add_affix(
+            &master_store.items_store,
             &item.base,
             &mut item.modifiers,
             affix_type,
-            &master_store.item_affixes_table,
-            &master_store.item_adjectives_table,
-            &master_store.item_nouns_table,
         ),
-        ForgeAffixOperation::Remove => loot_generator::remove_affix(
-            &item.base,
-            &mut item.modifiers,
-            &master_store.item_adjectives_table,
-            &master_store.item_nouns_table,
-        ),
+        ForgeAffixOperation::Remove => {
+            loot_generator::remove_affix(&master_store.items_store, &item.base, &mut item.modifiers)
+        }
     } {
         return Err(AppError::UserError("forge operation failed".into()));
     }
 
-    *item = items_controller::create_item_specs(item.base.clone(), item.modifiers.clone(), 0.0);
+    *item = items_controller::create_item_specs(
+        item.base.clone(),
+        item.modifiers.clone(),
+        &master_store.items_store.affixes_table,
+        0.0,
+    );
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -183,7 +134,7 @@ pub async fn post_affix(
     tx.commit().await?;
 
     Ok(Json(ForgeAffixResponse {
-        resource_gems: character_resources.resource_gems,
+        resource_gems,
         inventory,
     }))
 }
@@ -196,45 +147,24 @@ pub async fn post_upgrade(
 ) -> Result<Json<ForgeUpgradeResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let item = inventory
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
 
-    let price = computations::upgrade_item_price(item).ok_or(AppError::UserError(
-        "maximum upgrade level reached for that item".into(),
-    ))?;
-
-    let character_resources = db::characters::update_character_resources(
-        &mut *tx,
+    let resource_gems = buy_with_gems(
+        &mut tx,
         &payload.character_id,
-        -price,
-        0.0,
-        0.0,
-        0.0,
+        computations::upgrade_item_price(item).ok_or(AppError::UserError(
+            "maximum upgrade level reached for that item".into(),
+        ))?,
     )
     .await?;
 
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
-
-    *item = items_controller::upgrade_item(item)?;
+    *item = items_controller::upgrade_item(&master_store.items_store.affixes_table, item)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -242,7 +172,7 @@ pub async fn post_upgrade(
     tx.commit().await?;
 
     Ok(Json(ForgeUpgradeResponse {
-        resource_gems: character_resources.resource_gems,
+        resource_gems,
         inventory,
     }))
 }
@@ -255,43 +185,26 @@ pub async fn post_sacrifice(
 ) -> Result<Json<ForgeSacrificeResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let bag_index = payload.item_index as usize;
     let item = inventory.bag.get(bag_index).ok_or(AppError::NotFound)?;
 
-    let price = computations::sacrifice_price(&item.modifiers.affixes);
-    let character_resources = db::characters::update_character_resources(
-        &mut *tx,
+    let resource_gems = buy_with_gems(
+        &mut tx,
         &payload.character_id,
-        -price,
-        0.0,
-        0.0,
-        0.0,
+        computations::sacrifice_price(&item.affixes),
     )
     .await?;
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
 
-    inventory.bag[bag_index] = soul_crafting::sacrifice(item, &master_store.items_store)?;
+    inventory.bag[bag_index] = soul_crafting::sacrifice(&master_store.items_store, item)?;
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
     tx.commit().await?;
 
     Ok(Json(ForgeSacrificeResponse {
-        resource_gems: character_resources.resource_gems,
+        resource_gems,
         inventory,
     }))
 }
@@ -304,18 +217,8 @@ pub async fn post_imbue(
 ) -> Result<Json<ForgeImbueResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let item_index = payload.item_index as usize;
     let soul_index = payload.soul_index as usize;
@@ -329,7 +232,7 @@ pub async fn post_imbue(
         .bag
         .get_mut(item_index)
         .ok_or(AppError::NotFound)?;
-    *item = soul_crafting::imbue(item, soul)?;
+    *item = soul_crafting::imbue(&master_store.items_store.affixes_table, item, soul)?;
 
     inventory.bag.remove(soul_index);
 
@@ -346,49 +249,24 @@ pub async fn post_gamble(
     Extension(user): Extension<User>,
     Json(payload): Json<GambleItemRequest>,
 ) -> Result<Json<GambleItemResponse>, AppError> {
-    let mut tx = db_pool.begin().await?;
-
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
     if !constants::GAMBLE_ITEM_CATEGORIES.contains(&payload.item_category) {
         return Err(AppError::UserError("forbidden item category".into()));
     }
+    let mut tx = db_pool.begin().await?;
 
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't forge items".into()))?;
+    let (character, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
-
-    let price = computations::gamble_price(character.max_area_level as u16);
-
-    let character_resources = db::characters::update_character_resources(
-        &mut *tx,
+    let resource_gems = buy_with_gems(
+        &mut tx,
         &payload.character_id,
-        -price,
-        0.0,
-        0.0,
-        0.0,
+        computations::gamble_price(character.max_area_level as u16),
     )
     .await?;
-
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
 
     match loot_generator::generate_loot(
         &master_store.gamble_table.loot_table,
         &master_store.items_store,
-        &master_store.item_affixes_table,
-        &master_store.item_adjectives_table,
-        &master_store.item_nouns_table,
         &GenerateLootTemplate {
             allow_unique: true,
             max_base: payload.item_category.is_some(),
@@ -412,7 +290,7 @@ pub async fn post_gamble(
     tx.commit().await?;
 
     Ok(Json(GambleItemResponse {
-        resource_gems: character_resources.resource_gems,
+        resource_gems,
         inventory,
     }))
 }

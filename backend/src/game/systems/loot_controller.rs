@@ -139,7 +139,8 @@ fn item_score(item: &ItemSpecs) -> usize {
     // }
 
     score += match item.modifiers.rarity {
-        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,
+        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare => 0,
+        ItemRarity::Masterwork => 1_000_000,
         ItemRarity::Unique => 2_000_000,
     };
 
@@ -160,11 +161,10 @@ fn item_score(item: &ItemSpecs) -> usize {
     }
 
     score += item
-        .modifiers
         .affixes
         .iter()
         // .map(|a| a.tier.pow(2) as usize)
-        .filter(|a| a.affix_type != AffixType::Unique)
+        .filter(|a| !matches!(a.affix_type, AffixType::Base | AffixType::Unique))
         .map(|a| (100 + a.item_level as usize).pow(2))
         .sum::<usize>();
     // * 10_000;

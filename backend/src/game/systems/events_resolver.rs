@@ -550,9 +550,6 @@ fn handle_area_completed_event(
         match loot_generator::generate_loot(
             &game_data.area_blueprint.loot_table,
             &master_store.items_store,
-            &master_store.item_affixes_table,
-            &master_store.item_adjectives_table,
-            &master_store.item_nouns_table,
             if new_max {
                 &DEFAULT_LOOT_TEMPLATE
             } else {
