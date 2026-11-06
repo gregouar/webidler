@@ -453,7 +453,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 }
                 forge::affix_operation_price(
                     ForgeAffixOperation::Add(None),
-                    item.item_specs.modifiers.count_nonunique_affixes(),
+                    item.item_specs.count_presuffixes(),
                     &item.item_specs.base,
                 )
             }
@@ -468,8 +468,8 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     return None;
                 }
 
-                let prefixes = item.item_specs.modifiers.count_affixes(AffixType::Prefix);
-                let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
+                let prefixes = item.item_specs.count_affixes(AffixType::Prefix);
+                let suffixes = item.item_specs.count_affixes(AffixType::Suffix);
 
                 if prefixes == suffixes {
                     forge::affix_operation_price(
@@ -492,8 +492,8 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     return None;
                 }
 
-                let prefixes = item.item_specs.modifiers.count_affixes(AffixType::Prefix);
-                let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
+                let prefixes = item.item_specs.count_affixes(AffixType::Prefix);
+                let suffixes = item.item_specs.count_affixes(AffixType::Suffix);
 
                 if suffixes == prefixes {
                     forge::affix_operation_price(
@@ -513,7 +513,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => forge::affix_operation_price(
                 ForgeAffixOperation::Remove,
-                item.item_specs.modifiers.count_nonunique_affixes(),
+                item.item_specs.count_presuffixes(),
                 &item.item_specs.base,
             ),
             _ => None,
@@ -527,8 +527,8 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     return None;
                 }
 
-                let prefixes = item.item_specs.modifiers.count_affixes(AffixType::Prefix);
-                let suffixes = item.item_specs.modifiers.count_affixes(AffixType::Suffix);
+                let prefixes = item.item_specs.count_affixes(AffixType::Prefix);
+                let suffixes = item.item_specs.count_affixes(AffixType::Suffix);
                 let available = match affix_type {
                     None => prefixes + suffixes > 0,
                     Some(AffixType::Prefix) => prefixes > suffixes,
@@ -911,9 +911,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
                     .categories
                     .contains(&ItemCategory::Soul) =>
             {
-                Some(computations::sacrifice_price(
-                    &item.item_specs.modifiers.affixes,
-                ))
+                Some(computations::sacrifice_price(&item.item_specs.affixes))
             }
             _ => None,
         })
@@ -1095,12 +1093,9 @@ pub fn ImbueDetails(
                         .is_superset(&item.item_specs.base.categories)
                         && soul
                             .item_specs
-                            .modifiers
                             .affixes
                             .first()
-                            .is_some_and(|affix| {
-                                item.item_specs.modifiers.can_replace_soul_affix(affix)
-                            })
+                            .is_some_and(|affix| item.item_specs.can_replace_soul_affix(affix))
                 }
                 _ => false,
             })

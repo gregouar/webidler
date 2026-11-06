@@ -798,10 +798,8 @@ fn PassiveSkillTree(
         let mut passives_tree_specs = data_context.passives_tree_specs.get();
         for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
             let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
-            node_specs.effects = (&(item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Global, false)))
-                .into();
+            node_specs.effects =
+                (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into();
             node_specs.triggers = item_specs.base.triggers.clone();
         }
         passives_tree_specs
@@ -892,10 +890,8 @@ fn AscendNode(
             if let Some(item_specs) = socket.get() {
                 let mut node_specs = node_specs.clone();
                 node_specs.icon = item_specs.base.icon.clone();
-                node_specs.effects = (&(item_specs
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Global, false)))
-                    .into(); // TODO: Better copy, don't aggregate?
+                node_specs.effects =
+                    (&item_specs.aggregate_effects(AffixEffectScope::Global, false)).into(); // TODO: Better copy, don't aggregate?
                 node_specs.triggers = item_specs.base.triggers.clone();
                 node_specs.root_node |= item_specs
                     .base

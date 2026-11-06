@@ -434,12 +434,10 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     if req_affix_level
         .map(|req_affix_level| !match rule_type {
             FilterRuleType::Pickup => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .any(|affix| affix.item_level >= req_affix_level),
             FilterRuleType::Sell => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .all(|affix| affix.item_level <= req_affix_level),
@@ -657,7 +655,6 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     }
 
     let effects = item_specs
-        .modifiers
         .aggregate_effects(AffixEffectScope::Global, true)
         .0;
     for stat_filter in stat_filters.iter() {

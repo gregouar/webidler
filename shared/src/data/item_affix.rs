@@ -3,7 +3,7 @@ use std::collections::BTreeSet;
 
 use crate::{
     data::{chance::ChanceRange, modifier::Modifier},
-    serde_utils::{default_true, is_false},
+    serde_utils::is_false,
 };
 
 use super::{
@@ -14,11 +14,12 @@ use super::{
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum AffixType {
+    Base,
     Prefix,
     Suffix,
+    Soul,
     Unique,
     Upgrade,
-    Soul,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Eq, PartialEq, Hash, PartialOrd, Ord)]
@@ -83,25 +84,25 @@ pub struct AffixEffectBlueprint {
     pub scope: AffixEffectScope,
     pub value: ChanceRange<f64>,
 
-    #[serde(default = "default_true")]
-    pub ignore_quality: bool,
-
     #[serde(default, skip_serializing_if = "is_false")]
     pub bypass_ignore: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemAffix {
+    pub affix_id: String,
+
+    // TODO: Remove and use data store
     pub name: String,
     pub family: String,
     pub tags: BTreeSet<AffixTag>,
 
+    // TODO: Remove and use data store
     pub affix_type: AffixType,
     pub tier: u8,
+    pub item_level: AreaLevel,
 
     pub effects: Vec<AffixEffect>,
-    #[serde(default)] // For retro compatibility
-    pub item_level: AreaLevel,
     // pub triggers: Vec<TriggeredEffect>, // TODO
 }
 

@@ -235,17 +235,6 @@ pub struct ItemAffixEffectBlueprint {
     #[serde(default = "default_true")]
     pub is_unique: bool,
 }
-
-pub fn base_affix_id(item_id: &str, effect_id: &str) -> String {
-    format!("{item_id}_{effect_id}")
-}
-
-pub fn base_affix_effect_id<'a>(item_id: &str, affix_id: &'a str) -> Option<&'a str> {
-    affix_id
-        .strip_prefix(item_id)
-        .and_then(|suffix| suffix.strip_prefix('_'))
-}
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemModifiers {
     pub base_item_id: String,
@@ -390,7 +379,7 @@ impl ItemSpecs {
             .count()
     }
 
-    pub fn count_nonunique_affixes(&self) -> usize {
+    pub fn count_presuffixes(&self) -> usize {
         self.affixes
             .iter()
             .filter(|affix| matches!(affix.affix_type, AffixType::Prefix | AffixType::Suffix))

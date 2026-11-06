@@ -36,6 +36,7 @@ use crate::{
             items_store::{ItemAffixesTable, ItemsStore},
             passives::PassivesTreeAscensionData,
         },
+        systems::loot_generator::base_affix_id,
         utils::rng,
     },
 };
@@ -269,7 +270,7 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
     }
 
     for effect_id in base.affixes.keys() {
-        let affix_id = shared::data::item::base_affix_id(&old.base_item_id, effect_id);
+        let affix_id = base_affix_id(&old.base_item_id, effect_id);
         if !affixes.contains_key(&affix_id) {
             tracing::warn!(
                 base_item_id = old.base_item_id,
@@ -305,13 +306,11 @@ fn find_blueprint<'a>(
         let candidate = base
             .affixes
             .iter()
-            .filter(|(effect_id, _)| {
-                !is_used(&shared::data::item::base_affix_id(base_item_id, effect_id))
-            })
+            .filter(|(effect_id, _)| !is_used(&base_affix_id(base_item_id, effect_id)))
             .max_by_key(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect));
         if let Some((effect_id, blueprint)) = candidate {
             return Some((
-                shared::data::item::base_affix_id(base_item_id, effect_id),
+                base_affix_id(base_item_id, effect_id),
                 &blueprint.effect,
                 !blueprint.is_unique,
             ));
@@ -427,6 +426,7 @@ struct OldItemAffix {
 impl From<OldItemAffix> for ItemAffix {
     fn from(value: OldItemAffix) -> Self {
         Self {
+            affix_id: "legacy".to_string(),
             name: value.name,
             family: value.family,
             tags: value.tags,
