@@ -31,18 +31,19 @@ pub fn init_item_specs_from_store(
     items_store
         .items
         .get(&item_modifiers.base_item_id)
-        .map(|base| create_item_specs(items_store, base.clone(), item_modifiers, 0.0))
+        .map(|item_base| create_item_specs(items_store, item_base, item_modifiers, 0.0))
 }
 
 pub fn create_item_specs(
     items_store: &ItemsStore,
-    mut base: ItemBase,
-    modifiers: ItemModifiers,
+    item_base: &ItemBase,
+    mut modifiers: ItemModifiers,
     gold_price: f64,
     // signature_key: &HmacKey,
 ) -> ItemSpecs {
-    let affixes = compute_affixes(items_store, &base, &modifiers);
-    let required_level = base.min_area_level.max(
+    items_store.items.attach_key(&mut modifiers.base_item_id);
+    let affixes = compute_affixes(items_store, item_base, &modifiers);
+    let required_level = item_base.min_area_level.max(
         affixes
             .iter()
             .map(|affix| affix.item_level)
@@ -52,30 +53,32 @@ pub fn create_item_specs(
     let effects: Vec<StatEffect> =
         (&aggregate_effects(&affixes, AffixEffectScope::Local, false)).into();
 
-    // TODO: have extra_slots in ItemSpecs outer?
+    let mut extra_slots = item_base.extra_slots.clone();
     for effect in effects.iter() {
         if let StatType::RemoveSlotUse(item_slot) = &effect.stat {
-            base.extra_slots.remove(item_slot);
+            extra_slots.remove(item_slot);
         }
     }
 
     ItemSpecs {
-        required_level,
-        weapon_specs: base
+        slot: item_base.slot(),
+        extra_slots,
+        categories: item_base.categories.clone(),
+        weapon_specs: item_base
             .weapon_specs
             .clone()
             .map(|weapon_specs| compute_weapon_specs(weapon_specs, modifiers.quality, &effects)),
-        armor_specs: base
+        armor_specs: item_base
             .armor_specs
             .clone()
             .map(|armor_specs| compute_armor_specs(armor_specs, modifiers.quality, &effects)),
-        map_specs: base
+        map_specs: item_base
             .map_specs
             .clone()
             .map(|map_specs| compute_map_specs(map_specs, &modifiers, &affixes)),
-        base,
         modifiers,
         affixes,
+        required_level,
         gold_price,
     }
 
@@ -100,7 +103,7 @@ pub fn compute_affixes(
                     tracing::warn!(
                         source_base_item_id,
                         affix_id = roll.affix_id,
-                        item_base_id = modifiers.base_item_id,
+                        item_base_id = modifiers.base_item_id.to_string(),
                         "missing source base item for item affix"
                     );
                     None
@@ -109,7 +112,7 @@ pub fn compute_affixes(
                     tracing::warn!(
                         source_base_item_id,
                         affix_id = roll.affix_id,
-                        item_base_id = modifiers.base_item_id,
+                        item_base_id = modifiers.base_item_id.to_string(),
                         "missing item affix blueprint on source base item"
                     );
                     None
@@ -327,6 +330,7 @@ fn compute_upgrade_affix(base: &ItemBase, item_modifiers: &ItemModifiers) -> Opt
 }
 
 pub fn upgrade_item(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
+    let item_base = items_store.get_item_base(item);
     let available_upgrade_levels = item
         .base
         .upgrade_levels

@@ -138,6 +138,7 @@ impl GameInstanceData {
             .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
 
         let area_specs = area_controller::init_area_specs(
+            &master_store.items_store,
             &master_store.loot_tables_store,
             &mut area_blueprint,
             &map_item,
@@ -146,7 +147,7 @@ impl GameInstanceData {
         if area_specs.hidden
             && !map_item
                 .as_ref()
-                .and_then(|map_item| map_item.base.map_specs.as_ref())
+                .and_then(|map_item| map_item.map_specs.as_ref())
                 .and_then(|map_specs| map_specs.replace_area_id.as_ref())
                 .map(|replace_area_id| replace_area_id == &area_id)
                 .unwrap_or_default()

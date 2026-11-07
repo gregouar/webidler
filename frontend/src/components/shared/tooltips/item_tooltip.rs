@@ -665,12 +665,11 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Shield => "Off-hand",
                     ItemSlot::Accessory => "Cloak",
                     ItemSlot::Weapon => {
-                        if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon2H) {
+                        if item_specs.categories.contains(&ItemCategory::MeleeWeapon2H) {
                             "Two-Handed Melee Weapon"
-                        } else if item_specs.base.categories.contains(&ItemCategory::RangedWeapon) {
+                        } else if item_specs.categories.contains(&ItemCategory::RangedWeapon) {
                             "Ranged Weapon"
-                        } else if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon1H)
-                        {
+                        } else if item_specs.categories.contains(&ItemCategory::MeleeWeapon1H) {
                             "One-Handed Melee Weapon"
                         } else {
                             "Weapon"
@@ -720,7 +719,7 @@ pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
             .categories
             .contains(&ItemCategory::Soul)
             .then(|| {
-                let soul_category = soul_category_str(&item_specs.base.categories);
+                let soul_category = soul_category_str(&item_specs.categories);
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm">
                         {format!("{} Soul", soul_category)}

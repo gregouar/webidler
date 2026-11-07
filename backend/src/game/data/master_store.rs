@@ -320,7 +320,7 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         }
     }
 
-    for (item_id, item) in &master_store.items_store.items {
+    for (item_id, item) in master_store.items_store.items.iter() {
         let Some(map_specs) = &item.map_specs else {
             continue;
         };

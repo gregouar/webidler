@@ -9,11 +9,11 @@ use crate::{
 };
 
 pub fn can_sacrifice(item: &ItemSpecs) -> bool {
-    if item.base.categories.contains(&ItemCategory::Soul) {
+    if item.categories.contains(&ItemCategory::Soul) {
         return false;
     }
 
-    if item.base.categories.contains(&ItemCategory::Remnant) {
+    if item.categories.contains(&ItemCategory::Remnant) {
         return true;
     }
 
@@ -24,14 +24,14 @@ pub fn can_imbue(item: &ItemSpecs) -> bool {
     matches!(
         item.modifiers.rarity,
         ItemRarity::Rare | ItemRarity::Masterwork
-    ) && !item.base.categories.contains(&ItemCategory::Soul)
-        && !item.base.categories.contains(&ItemCategory::Remnant)
+    ) && !item.categories.contains(&ItemCategory::Soul)
+        && !item.categories.contains(&ItemCategory::Remnant)
 }
 
 pub fn is_compatible_soul(items_store: &ItemsStore, item: &ItemSpecs, soul: &ItemSpecs) -> bool {
     can_imbue(item)
-        && soul.base.categories.contains(&ItemCategory::Soul)
-        && soul.base.categories.is_superset(&item.base.categories)
+        && soul.categories.contains(&ItemCategory::Soul)
+        && soul.categories.is_superset(&item.categories)
         && soul.affixes.len() == 1
         && soul.affixes.first().is_some_and(|soul_affix| {
             soul_affix.base_item_id.is_some()
@@ -95,7 +95,7 @@ pub fn sacrifice(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs
         .as_ref()
         .and_then(|base_item_id| items_store.items.get(base_item_id));
 
-    let mut soul_categories = item.base.categories.clone();
+    let mut soul_categories = item.categories.clone();
     soul_categories.remove(&ItemCategory::Remnant);
     let soul_item_id =
         items_store

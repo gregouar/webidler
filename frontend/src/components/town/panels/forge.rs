@@ -196,16 +196,14 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             }
                             ForgeTab::Imbue => {
                                 let on_item_select = Callback::new(move |item: SelectedMarketItem| {
-                                    if item.item_specs.base.categories.contains(&ItemCategory::Soul)
-                                    {
+                                    if item.item_specs.categories.contains(&ItemCategory::Soul) {
                                         selected_soul.set(SelectedItem::InMarket(item));
                                     } else {
                                         selected_item.set(SelectedItem::InMarket(item));
                                     }
                                 });
                                 let on_item_cancel = Callback::new(move |item: SelectedMarketItem| {
-                                    if item.item_specs.base.categories.contains(&ItemCategory::Soul)
-                                    {
+                                    if item.item_specs.categories.contains(&ItemCategory::Soul) {
                                         selected_soul.set(SelectedItem::None);
                                     } else {
                                         selected_item.set(SelectedItem::None);
@@ -923,7 +921,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
             matches!(
                 selected,
                 SelectedItem::InMarket(item)
-                    if item.item_specs.base.categories.contains(&ItemCategory::Soul)
+                    if item.item_specs.categories.contains(&ItemCategory::Soul)
             )
         })
     };
@@ -1092,7 +1090,7 @@ pub fn ImbueDetails(
                     soul.item_specs
                         .base
                         .categories
-                        .is_superset(&item.item_specs.base.categories)
+                        .is_superset(&item.item_specs.categories)
                         && soul.item_specs.affixes.first().is_some_and(|soul_affix| {
                             soul_affix.base_item_id.is_some()
                                 || !item.item_specs.affixes.iter().any(|affix| {

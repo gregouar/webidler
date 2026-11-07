@@ -9,7 +9,7 @@ use crate::{
         character::CharacterId,
         character_status::StatusId,
         conditional_modifier::{Condition, ConditionalModifier},
-        item::{ItemCategory, ItemSpecs},
+        item::{ItemBase, ItemCategory, ItemSpecs},
         item_affix::AffixEffectScope,
         modifier::ModifiableValue,
         stat_effect::{
@@ -136,15 +136,14 @@ pub struct SkillRequiredItem {
 impl SkillRequiredItem {
     pub fn is_match(&self, item_slot: ItemSlot, item_specs: &ItemSpecs) -> bool {
         self.slot
-            .map(|slot| slot == item_slot || item_specs.base.extra_slots.contains(&slot))
+            .map(|slot| slot == item_slot || item_specs.extra_slots.contains(&slot))
             .unwrap_or(true)
             && self
                 .category
-                .map(|category| item_specs.base.categories.contains(&category))
+                .map(|category| item_specs.categories.contains(&category))
                 .unwrap_or(true)
     }
 }
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,

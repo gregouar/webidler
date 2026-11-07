@@ -7,6 +7,7 @@ use strum_macros::EnumIter;
 use crate::{
     data::{
         chance::Chance,
+        indexed_key::IndexedKey,
         item_affix::{AffixEffect, AffixType},
         modifier::ModifiableValue,
         skill::DamageType,
@@ -22,6 +23,8 @@ use super::{
     item_affix::{AffixEffectBlueprint, ItemAffix},
     stat_effect::DamageMap,
 };
+
+pub type BaseItemId = IndexedKey<String>;
 
 // pub type ItemSignature = [u8; 32];
 
@@ -67,12 +70,11 @@ impl InventorySortType {
         }
     }
 
-    /// The same ordering is used for bags and full stash contents.
     pub fn compare(self, a: &ItemSpecs, b: &ItemSpecs) -> std::cmp::Ordering {
         let rarity = || b.modifiers.rarity.cmp(&a.modifiers.rarity);
         let category = || {
             let sort_category = |item: &ItemSpecs| {
-                let mut categories = item.base.categories.iter().rev().copied();
+                let mut categories = item.categories.iter().rev().copied();
                 let category = categories.next();
                 let soul_category = (category == Some(ItemCategory::Soul))
                     .then(|| categories.next())
@@ -81,7 +83,7 @@ impl InventorySortType {
             };
             sort_category(a)
                 .cmp(&sort_category(b))
-                .then_with(|| a.base.slot.cmp(&b.base.slot))
+                .then_with(|| a.slot.cmp(&b.slot))
         };
         let level = || b.required_level.cmp(&a.required_level);
         let ordering: std::cmp::Ordering = match self {
@@ -89,10 +91,9 @@ impl InventorySortType {
             Self::ItemType => category().then_with(rarity).then_with(level),
             Self::ItemLevel => level().then_with(category).then_with(rarity),
             Self::ItemBase => a
-                .base
-                .name
-                .cmp(&b.base.name)
-                .then_with(|| a.modifiers.base_item_id.cmp(&b.modifiers.base_item_id))
+                .modifiers
+                .base_item_id
+                .cmp(&b.modifiers.base_item_id)
                 .then_with(rarity)
                 .then_with(level),
         };
@@ -236,7 +237,7 @@ pub struct ItemAffixEffectBlueprint {
 }
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemModifiers {
-    pub base_item_id: String,
+    pub base_item_id: BaseItemId,
     pub name: String,
 
     pub rarity: ItemRarity,
@@ -250,7 +251,7 @@ pub struct ItemModifiers {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AffixRoll {
     pub affix_type: AffixType,
-    pub base_item_id: Option<String>,
+    pub base_item_id: Option<BaseItemId>,
     pub affix_id: String,
     pub value: u8,
 }
@@ -258,7 +259,11 @@ pub struct AffixRoll {
 // #[cfg(feature = "modifiable")]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemSpecs {
-    pub base: ItemBase,
+    pub slot: Option<ItemSlot>,
+    pub extra_slots: BTreeSet<ItemSlot>,
+    // We could get rid of this, but for convenience it's really nice...
+    pub categories: BTreeSet<ItemCategory>,
+    // pub base: ItemBase,
     pub modifiers: ItemModifiers,
 
     pub affixes: Vec<ItemAffix>,
@@ -266,6 +271,7 @@ pub struct ItemSpecs {
     pub weapon_specs: Option<WeaponSpecs>,
     pub armor_specs: Option<ArmorSpecs>,
     pub map_specs: Option<MapSpecs>,
+    pub rune_specs: Option<RuneSpecs>,
 
     pub required_level: AreaLevel,
     pub gold_price: f64,

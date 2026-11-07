@@ -144,14 +144,12 @@ fn item_score(item: &ItemSpecs) -> usize {
         ItemRarity::Unique => 2_000_000,
     };
 
-    if item.base.categories.contains(&ItemCategory::Rune)
-        || item.base.categories.contains(&ItemCategory::Map)
+    if item.categories.contains(&ItemCategory::Rune) || item.categories.contains(&ItemCategory::Map)
     {
         score += 500_000
     }
 
     if item
-        .base
         .rune_specs
         .as_ref()
         .map(|rune_specs| rune_specs.root_node)

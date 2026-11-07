@@ -4,6 +4,7 @@ use std::collections::BTreeSet;
 use crate::{
     data::{
         chance::ChanceRange,
+        item::BaseItemId,
         modifier::Modifier,
         stat_effect::{DamageStatType, EffectsMap},
     },
@@ -94,7 +95,7 @@ pub struct AffixEffectBlueprint {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemAffix {
-    pub base_item_id: Option<String>,
+    pub base_item_id: Option<BaseItemId>,
     pub affix_id: String,
 
     pub item_level: AreaLevel,

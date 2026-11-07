@@ -69,16 +69,16 @@ pub enum InventoryItemEligibility {
 fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibility) -> bool {
     match eligibility {
         InventoryItemEligibility::Any => true,
-        InventoryItemEligibility::Quality => !item.base.ignore_quality,
-        InventoryItemEligibility::Unique => item.base.rarity == ItemRarity::Unique,
+        InventoryItemEligibility::Quality => !item.ignore_quality,
+        InventoryItemEligibility::Unique => item.rarity == ItemRarity::Unique,
         InventoryItemEligibility::NonUnique => {
-            item.base.rarity != ItemRarity::Unique
-                && !item.base.categories.contains(&ItemCategory::Soul)
-                && !item.base.categories.contains(&ItemCategory::Remnant)
+            item.rarity != ItemRarity::Unique
+                && !item.categories.contains(&ItemCategory::Soul)
+                && !item.categories.contains(&ItemCategory::Remnant)
         }
         InventoryItemEligibility::Sacrifice => {
-            !item.base.categories.contains(&ItemCategory::Soul)
-                && (item.base.categories.contains(&ItemCategory::Remnant)
+            !item.categories.contains(&ItemCategory::Soul)
+                && (item.categories.contains(&ItemCategory::Remnant)
                     || (item.modifiers.rarity == ItemRarity::Rare
                         && item.modifiers.count_presuffixes() == 4))
         }
@@ -86,9 +86,9 @@ fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibilit
             (matches!(
                 item.modifiers.rarity,
                 ItemRarity::Rare | ItemRarity::Masterwork
-            ) && !item.base.categories.contains(&ItemCategory::Soul)
-                && !item.base.categories.contains(&ItemCategory::Remnant))
-                || item.base.categories.contains(&ItemCategory::Soul)
+            ) && !item.categories.contains(&ItemCategory::Soul)
+                && !item.categories.contains(&ItemCategory::Remnant))
+                || item.categories.contains(&ItemCategory::Soul)
         }
     }
 }

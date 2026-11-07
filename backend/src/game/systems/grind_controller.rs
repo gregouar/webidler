@@ -194,16 +194,16 @@ fn generate_quest_reward(
             item_rarity,
             max_affixes,
         } => {
-            let base = master_store.items_store.items.get(item_id)?.clone();
-            let rarity = if base.rarity == ItemRarity::Unique {
+            let item_base = master_store.items_store.items.get(item_id)?;
+            let rarity = if item_base.rarity == ItemRarity::Unique {
                 ItemRarity::Unique
             } else {
-                item_rarity.unwrap_or(base.rarity)
+                item_rarity.unwrap_or(item_base.rarity)
             };
             Some(loot_generator::roll_item_stats(
                 &master_store.items_store,
                 item_id.clone(),
-                base,
+                item_base,
                 rarity,
                 *level,
                 0,

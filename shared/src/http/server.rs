@@ -9,7 +9,7 @@ use crate::data::{
     area::{AreaLevel, AreaSpecs},
     character_status::{StatusId, StatusSpecs},
     cosmetics::CosmeticType,
-    item::ItemBase,
+    item::{BaseItemId, ItemBase},
     item_affix::ItemAffixBlueprint,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
@@ -174,7 +174,7 @@ pub struct GetMasterDataResponse {
     pub achievements: IndexMap<String, AchievementSpecs>,
     pub passives_tree_specs: PassivesTreeSpecs,
     pub benedictions_specs: IndexMap<String, BenedictionsCategory>,
-    pub item_bases: HashMap<String, ItemBase>,
+    pub item_bases: HashMap<BaseItemId, ItemBase>,
     pub item_affixes: HashMap<String, ItemAffixBlueprint>,
 }
 

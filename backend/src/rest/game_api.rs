@@ -86,7 +86,7 @@ pub async fn get_master_data(
             .cloned()
             .unwrap_or_default(),
         benedictions_specs: master_store.benedictions_store.as_ref().clone(),
-        item_bases: master_store.items_store.items.clone(),
+        item_bases: master_store.items_store.items.clone().into_iter().collect(),
         item_affixes: master_store.items_store.affixes_table.clone(),
     }))
 }

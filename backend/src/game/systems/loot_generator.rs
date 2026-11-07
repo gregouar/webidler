@@ -7,7 +7,9 @@ use shared::{
         area::AreaLevel,
         chance::ChanceRange,
         forge::MAX_AFFIXES,
-        item::{AffixRoll, ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
+        item::{
+            AffixRoll, BaseItemId, ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs,
+        },
         item_affix::AffixType,
     },
 };
@@ -136,8 +138,8 @@ pub fn roll_item(
 #[allow(clippy::too_many_arguments)]
 pub fn roll_item_stats(
     items_store: &ItemsStore,
-    base_item_id: String,
-    base: ItemBase,
+    base_item_id: BaseItemId,
+    item_base: &ItemBase,
     rarity: ItemRarity,
     level: AreaLevel,
     power_level_modifier: AreaLevel,
@@ -145,16 +147,16 @@ pub fn roll_item_stats(
     gold_find: f64,
     // signature_key: &HmacSignature,
 ) -> ItemSpecs {
-    let quality = if base.ignore_quality {
+    let quality = if item_base.ignore_quality {
         0.0
     } else {
-        roll_quality(base.min_area_level, level)
+        roll_quality(item_base.min_area_level, level)
     };
 
-    let affixes = roll_base_affixes(&base_item_id, &base);
+    let affixes = roll_base_affixes(&base_item_id, &item_base);
     let mut modifiers = ItemModifiers {
         base_item_id,
-        name: base.name.clone(),
+        name: item_base.name.clone(),
         rarity: match rarity {
             ItemRarity::Unique => ItemRarity::Unique,
             _ => ItemRarity::Normal,
@@ -189,11 +191,16 @@ pub fn roll_item_stats(
     };
 
     for _ in 0..affixes_amount {
-        add_affix(items_store, &base, &mut modifiers, None);
+        add_affix(items_store, &item_base, &mut modifiers, None);
     }
 
     if rarity == ItemRarity::Masterwork {
-        add_affix(items_store, &base, &mut modifiers, Some(AffixType::Soul));
+        add_affix(
+            items_store,
+            &item_base,
+            &mut modifiers,
+            Some(AffixType::Soul),
+        );
     }
 
     let gold_price = computations::item_gold_price(
@@ -202,7 +209,7 @@ pub fn roll_item_stats(
     ) * gold_find
         * 0.01;
 
-    items_controller::create_item_specs(items_store, base, modifiers, gold_price)
+    items_controller::create_item_specs(items_store, item_base, modifiers, gold_price)
 }
 
 fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
@@ -219,7 +226,7 @@ fn roll_base_item(
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
-) -> Option<(String, ItemBase)> {
+) -> Option<(BaseItemId, &ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()
@@ -306,12 +313,11 @@ fn roll_base_item(
         items_store
             .items
             .get(&loot_entry.item_id)
-            .cloned()
             .map(|item_base| (loot_entry.item_id.clone(), item_base))
     })
 }
 
-pub fn roll_base_affixes(base_item_id: &str, base_item: &ItemBase) -> Vec<AffixRoll> {
+pub fn roll_base_affixes(base_item_id: &BaseItemId, base_item: &ItemBase) -> Vec<AffixRoll> {
     base_item
         .affixes
         .iter()
@@ -323,7 +329,7 @@ pub fn roll_base_affixes(base_item_id: &str, base_item: &ItemBase) -> Vec<AffixR
             } else {
                 AffixType::Base
             },
-            base_item_id: Some(base_item_id.to_string()),
+            base_item_id: Some(base_item_id.clone()),
             affix_id: effect_id.clone(),
             value: roll_affix_value(),
         })

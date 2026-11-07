@@ -395,7 +395,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     }
 
     if item_category
-        .map(|item_category| !item_specs.base.categories.contains(&item_category))
+        .map(|item_category| !item_specs.categories.contains(&item_category))
         .unwrap_or_default()
     {
         return false;

@@ -224,7 +224,7 @@ async fn migrate_stash_and_market_items(
 fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Result<ItemModifiers> {
     let base = items_store
         .items
-        .get(&old.base_item_id)
+        .get(&old.base_item_id.clone().into())
         .with_context(|| format!("missing item base '{}'", old.base_item_id))?;
 
     // Convert soul affix
@@ -265,7 +265,7 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
             } else {
                 old_affix.affix_type
             },
-            base_item_id: source_base_item_id,
+            base_item_id: source_base_item_id.map(Into::into),
             affix_id,
             value: normalized_roll(
                 old_affix.effects.first().map(|effect| &effect.stat_effect),
@@ -294,7 +294,7 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
                 } else {
                     AffixType::Base
                 },
-                base_item_id: Some(old.base_item_id.clone()),
+                base_item_id: Some(old.base_item_id.clone().into()),
                 affix_id: effect_id.clone(),
                 value: random_normalized_roll(),
             });
@@ -302,7 +302,7 @@ fn migrate_item(old: OldItemModifiers, items_store: &ItemsStore) -> anyhow::Resu
     }
 
     Ok(ItemModifiers {
-        base_item_id: old.base_item_id,
+        base_item_id: old.base_item_id.into(),
         name: old.name,
         rarity: old.rarity,
         level: old.level,

@@ -3,16 +3,14 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeSet, HashMap, HashSet};
 
 use shared::data::{
-    item::{ItemBase, ItemCategory},
+    item::{BaseItemId, ItemBase, ItemCategory, ItemSpecs},
     item_affix::{AffixTag, ItemAffixBlueprint},
 };
 
-use crate::game::utils::json::LoadJsonFromFile;
+use crate::game::{data::indexed_store::IndexedStore, utils::json::LoadJsonFromFile};
 
-pub type ItemId = String;
-
-pub type ItemsStoreContent = HashMap<ItemId, ItemBase>;
-pub type SoulBasesByCategories = HashMap<BTreeSet<ItemCategory>, ItemId>;
+pub type ItemsStoreContent = IndexedStore<String, ItemBase>;
+pub type SoulBasesByCategories = HashMap<BTreeSet<ItemCategory>, BaseItemId>;
 
 #[derive(Debug, Clone)]
 pub struct ItemsStore {
@@ -33,6 +31,7 @@ impl ItemsStore {
         nouns_table: ItemNounsTable,
         signature_key: HmacKey,
     ) -> Self {
+        let items = items.into_indexed_keys();
         let soul_by_categories = items
             .iter()
             .filter(|(_, base)| {
@@ -54,6 +53,10 @@ impl ItemsStore {
             soul_by_categories,
             signature_key,
         }
+    }
+
+    pub fn get_item_base(&self, item_specs: &ItemSpecs) -> Option<&ItemBase> {
+        self.items.get(&item_specs.modifiers.base_item_id)
     }
 }
 

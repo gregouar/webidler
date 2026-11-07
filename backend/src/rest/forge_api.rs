@@ -60,11 +60,15 @@ pub async fn post_temper(
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
+    let item_base = master_store
+        .items_store
+        .get_item_base(item)
+        .ok_or(AppError::NotFound)?;
 
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        computations::temper_item_price(item).ok_or(AppError::UserError(
+        computations::temper_item_price(item_base, &item.modifiers).ok_or(AppError::UserError(
             "item cannot be tempered further".into(),
         ))?,
     )
@@ -98,6 +102,10 @@ pub async fn post_affix(
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
+    let item_base = master_store
+        .items_store
+        .get_item_base(item)
+        .ok_or(AppError::NotFound)?;
 
     let resource_gems = buy_with_gems(
         &mut tx,
@@ -105,7 +113,7 @@ pub async fn post_affix(
         affix_operation_price(
             payload.operation,
             item.modifiers.count_presuffixes(),
-            &item.base,
+            item_base,
         )
         .ok_or(AppError::UserError("forge operation unavailable".into()))?,
     )
@@ -114,12 +122,12 @@ pub async fn post_affix(
     if !match payload.operation {
         ForgeAffixOperation::Add(affix_type) => loot_generator::add_affix(
             &master_store.items_store,
-            &item.base,
+            item_base,
             &mut item.modifiers,
             affix_type,
         ),
         ForgeAffixOperation::Remove => {
-            loot_generator::remove_affix(&master_store.items_store, &item.base, &mut item.modifiers)
+            loot_generator::remove_affix(&master_store.items_store, item_base, &mut item.modifiers)
         }
     } {
         return Err(AppError::UserError("forge operation failed".into()));
@@ -127,7 +135,7 @@ pub async fn post_affix(
 
     *item = items_controller::create_item_specs(
         &master_store.items_store,
-        item.base.clone(),
+        item_base,
         item.modifiers.clone(),
         0.0,
     );
@@ -158,11 +166,15 @@ pub async fn post_upgrade(
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
+    let item_base = master_store
+        .items_store
+        .get_item_base(item)
+        .ok_or(AppError::NotFound)?;
 
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        computations::upgrade_item_price(item).ok_or(AppError::UserError(
+        computations::upgrade_item_price(item_base, &item.modifiers).ok_or(AppError::UserError(
             "maximum upgrade level reached for that item".into(),
         ))?,
     )
