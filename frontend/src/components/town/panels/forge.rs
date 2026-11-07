@@ -1094,18 +1094,19 @@ pub fn ImbueDetails(
                         .categories
                         .is_superset(&item.item_specs.base.categories)
                         && soul.item_specs.affixes.first().is_some_and(|soul_affix| {
-                            !item.item_specs.affixes.iter().any(|affix| {
-                                let item_affixes = data_context.item_affixes.read_untracked();
-                                let affix_family =
-                                    item_affixes.get(&affix.affix_id).map(|a| &a.family);
-                                let soul_affix_family =
-                                    item_affixes.get(&soul_affix.affix_id).map(|a| &a.family);
+                            soul_affix.base_item_id.is_some()
+                                || !item.item_specs.affixes.iter().any(|affix| {
+                                    let item_affixes = data_context.item_affixes.read_untracked();
+                                    let affix_family =
+                                        item_affixes.get(&affix.affix_id).map(|a| &a.family);
+                                    let soul_affix_family =
+                                        item_affixes.get(&soul_affix.affix_id).map(|a| &a.family);
 
-                                affix.affix_type != AffixType::Soul
-                                    && !(affix_family.is_some()
-                                        && soul_affix_family.is_some()
-                                        && soul_affix_family == affix_family)
-                            })
+                                    affix.affix_type != AffixType::Soul
+                                        && !(affix_family.is_some()
+                                            && soul_affix_family.is_some()
+                                            && soul_affix_family == affix_family)
+                                })
                         })
                 }
                 _ => false,

@@ -779,6 +779,7 @@ pub fn formatted_affixes_list(
 ) -> Vec<impl IntoView + use<>> {
     let data_context: DataContext = expect_context();
     let item_affixes = data_context.item_affixes.read_untracked();
+    let item_bases = data_context.item_bases.read_untracked();
     affixes
         .iter()
         .filter(|affix| affix.affix_type == affix_type)
@@ -796,12 +797,28 @@ pub fn formatted_affixes_list(
                 }
                 .into_any(),
                 _ => {
-                    // TODO: Base Item Unique Affix for Unique Souls
-                    let base_affix = item_affixes.get(&affix.affix_id);
-                    let mut tags: Vec<_> = base_affix
+                    let affix_item_base = affix
+                        .base_item_id
+                        .as_ref()
+                        .and_then(|item_id| item_bases.get(item_id));
+
+                    let base_affix = affix_item_base
+                        .and_then(|affix_item_base| affix_item_base.affixes.get(&affix.affix_id));
+
+                    let item_affix = item_affixes.get(&affix.affix_id);
+
+                    let mut tags: Vec<_> = item_affix
                         .map(|base_affix| base_affix.tags.iter().collect())
                         .unwrap_or(Vec::new());
                     tags.sort();
+
+                    if base_affix
+                        .map(|item_base_affix| item_base_affix.is_unique)
+                        .unwrap_or_default()
+                    {
+                        tags.push(&AffixTag::Unique);
+                    }
+
                     let tags: Vec<_> = tags
                         .into_iter()
                         .map(|tag| affix_tag_str(*tag).to_string())
@@ -816,8 +833,12 @@ pub fn formatted_affixes_list(
                             {affix_type_str(affix.affix_type)}" "
                             <span class="italic">
                                 "‘"
-                                {base_affix
+                                {item_affix
                                     .map(|base_affix| base_affix.name.clone())
+                                    .or(
+                                        affix_item_base
+                                            .map(|affix_item_base| affix_item_base.name.clone()),
+                                    )
                                     .unwrap_or("Affix".to_string())}"’"
                             </span> "  (Level: " {affix.item_level}") – " {scope_str(scope)}
                             " – "{tags.join(", ")}

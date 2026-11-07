@@ -34,21 +34,22 @@ pub fn is_compatible_soul(items_store: &ItemsStore, item: &ItemSpecs, soul: &Ite
         && soul.base.categories.is_superset(&item.base.categories)
         && soul.affixes.len() == 1
         && soul.affixes.first().is_some_and(|soul_affix| {
-            !item.affixes.iter().any(|affix| {
-                let affix_family = items_store
-                    .affixes_table
-                    .get(&affix.affix_id)
-                    .map(|a| &a.family);
-                let soul_affix_family = items_store
-                    .affixes_table
-                    .get(&soul_affix.affix_id)
-                    .map(|a| &a.family);
+            soul_affix.base_item_id.is_some()
+                || !item.affixes.iter().any(|affix| {
+                    let affix_family = items_store
+                        .affixes_table
+                        .get(&affix.affix_id)
+                        .map(|a| &a.family);
+                    let soul_affix_family = items_store
+                        .affixes_table
+                        .get(&soul_affix.affix_id)
+                        .map(|a| &a.family);
 
-                affix.affix_type != AffixType::Soul
-                    && !(affix_family.is_some()
-                        && soul_affix_family.is_some()
-                        && soul_affix_family == affix_family)
-            })
+                    affix.affix_type != AffixType::Soul
+                        && !(affix_family.is_some()
+                            && soul_affix_family.is_some()
+                            && soul_affix_family == affix_family)
+                })
         })
     // .is_some_and(|affix| item.can_replace_soul_affix(affix))
 }
