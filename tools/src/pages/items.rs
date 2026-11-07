@@ -20,9 +20,7 @@ use frontend::components::{
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use shared::data::{
     item::{AffixRoll, ArmorSpecs, ItemBase, ItemCategory, ItemModifiers, ItemSpecs, WeaponSpecs},
-    item_affix::{
-        AffixEffect, AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects,
-    },
+    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix, aggregate_effects},
     modifier::Modifier,
     skill::{DamageType, SkillType},
     stat_effect::{
@@ -303,15 +301,7 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs 
                     ItemAffix {
                         base_item_id: Some(modifiers.base_item_id.clone()),
                         affix_id: effect_id.clone(),
-                        name: base.name.clone(),
-                        family: base.name.clone(),
-                        tags: blueprint
-                            .is_unique
-                            .then_some(AffixTag::Unique)
-                            .into_iter()
-                            .collect(),
                         affix_type,
-                        tier: 0,
                         effects: vec![AffixEffect {
                             scope: effect.scope,
                             stat_effect: StatEffect {
@@ -476,11 +466,7 @@ fn compute_upgrade_affix(base: &ItemBase, item_modifiers: &ItemModifiers) -> Opt
     (item_modifiers.upgrade_level > 0 && !base.upgrade_effects.is_empty()).then(|| ItemAffix {
         base_item_id: None,
         affix_id: "empowered".into(),
-        name: "Empowered".into(),
-        family: "empowered".into(),
-        tags: Default::default(),
         affix_type: AffixType::Upgrade,
-        tier: item_modifiers.upgrade_level,
         effects: base
             .upgrade_effects
             .iter()
