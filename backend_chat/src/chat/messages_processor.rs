@@ -104,6 +104,7 @@ impl MessagesProcessor {
                 };
 
             let content = if let Some(profanity) = self.profanities_checker.find_profanity(&content)
+                && channel != ChatChannel::System
             {
                 tracing::warn!(target: "chat", channel = ?msg.channel, user_id = %msg.user_id.unwrap_or_default(), content = %&content, "moderated message");
                 // send_direct_error(
