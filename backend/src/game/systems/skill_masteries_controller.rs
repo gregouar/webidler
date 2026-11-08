@@ -107,6 +107,10 @@ fn validate_skill_mastery(
     let Some(mastery_specs) = skill_masteries_store.get(skill_id) else {
         return false;
     };
+    if mastery_state.upgrades_bought.len() > mastery_specs.upgrades.len() {
+        return false;
+    }
+
     let mastery_level = mastery_state.level(mastery_specs.max_level);
     let mut spent_points = 0u16;
 

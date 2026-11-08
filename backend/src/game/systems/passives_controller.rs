@@ -195,6 +195,12 @@ pub fn validate_ascension(
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<f64, AppError> {
+    if passives_tree_ascension.ascended_nodes.len() > passives_tree_specs.nodes.len() {
+        return Err(AppError::UserError(
+            "invalid ascension: too many nodes".into(),
+        ));
+    }
+
     let mut cost = 0.0;
 
     let max_level_tree =

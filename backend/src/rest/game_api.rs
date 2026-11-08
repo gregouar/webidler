@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use axum::{
     Extension, Json, Router,
-    extract::State,
+    extract::{DefaultBodyLimit, State},
     middleware,
     routing::{get, post},
 };
@@ -58,7 +58,8 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
-        ));
+        ))
+        .layer(DefaultBodyLimit::max(64 * 1024));
 
     Router::new()
         .route("/game/master-data", get(get_master_data))
@@ -204,6 +205,10 @@ pub async fn post_save_passives_build(
     Extension(user): Extension<User>,
     Json(payload): Json<SavePassivesRequest>,
 ) -> Result<Json<SavePassivesResponse>, AppError> {
+    if payload.purchased_nodes.len() > 100 {
+        return Err(AppError::UserError("invalid: too many nodes".into()));
+    }
+
     let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)

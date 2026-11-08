@@ -13,6 +13,7 @@ use shared::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
             PassivesTreeSpecs, PurchasedNodes,
         },
+        stat_effect::StatType,
     },
     http::client::{AscendPassivesRequest, SavePassivesRequest, SocketPassiveRequest},
 };
@@ -492,20 +493,20 @@ fn ConfirmAscendButton(
         }
     });
 
-    let try_ascend = {
-        let confirm_context = expect_context::<ConfirmContext>();
-        move |_| {
-            (confirm_context.confirm)(
-                format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
-                do_ascend.clone(),
-            );
-        }
-    };
+    // let try_ascend = {
+    //     let confirm_context = expect_context::<ConfirmContext>();
+    //     move |_| {
+    //         (confirm_context.confirm)(
+    //             format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
+    //             do_ascend.clone(),
+    //         );
+    //     }
+    // };
 
     let disabled = Signal::derive(move || !has_changed.get() || invalid_tree.get());
 
     view! {
-        <MenuButton on:click=try_ascend disabled=disabled>
+        <MenuButton on:click=move |_| do_ascend() disabled=disabled>
             "Confirm"
         </MenuButton>
     }
@@ -565,6 +566,21 @@ fn RefundAscendButton(
 // Build Header
 // -------------
 
+fn max_player_level(town_context: &TownContext) -> u8 {
+    let extra_levels = town_context
+        .player_benedictions
+        .with(|player_benedictions| {
+            player_benedictions
+                .categories
+                .get("max_level")
+                .and_then(|benediction| {
+                    benediction.purchased_benedictions.get("max_level").copied()
+                })
+                .unwrap_or_default()
+        });
+    DEFAULT_MAX_LEVEL.saturating_add(extra_levels as u8)
+}
+
 #[component]
 pub fn BuildPanelHeader(
     passives_tree_build: RwSignal<PurchasedNodes>,
@@ -582,6 +598,8 @@ pub fn BuildPanelHeader(
             .passives_tree_build
             .with(|base_build| passives_tree_build.read().iter().ne(base_build.iter()))
     });
+
+    let max_player_level = Memo::new(move |_| max_player_level(&town_context));
 
     view! {
         {(!view_only)
@@ -606,7 +624,7 @@ pub fn BuildPanelHeader(
                                         </div>
                                     </NumberInset>
                                     "/"
-                                    {DEFAULT_MAX_LEVEL}
+                                    {max_player_level}
                                 }
                                     .into_any()
                             }
@@ -751,6 +769,23 @@ fn PassiveSkillTree(
 
     let character_id = town_context.character.read_untracked().character_id;
 
+    let purchased_nodes = Memo::new(move |_| {
+        let mut purchased_nodes = passives_tree_build.get();
+        for (_, item) in town_context.inventory.read().equipped_items() {
+            for effect in item
+                .affixes
+                .iter()
+                .flat_map(|affix| &affix.effects)
+                .filter(|effect| effect.scope == AffixEffectScope::Global)
+            {
+                if let StatType::AllocatePassive(node_id) = &effect.stat_effect.stat {
+                    purchased_nodes.insert(*node_id);
+                }
+            }
+        }
+        purchased_nodes
+    });
+
     let points_available = Memo::new(move |_| {
         if view_only {
             0.0
@@ -810,7 +845,7 @@ fn PassiveSkillTree(
         <PassiveSkillStats
             passives_tree_specs=derived_passives_tree_specs
             passives_tree_ascension=passives_tree_ascension
-            purchased_nodes=passives_tree_build
+            purchased_nodes
         />
         <Pannable>
             <For
@@ -845,6 +880,7 @@ fn PassiveSkillTree(
                     selected_socket_node
                     active_tab
                     search_node
+                    purchased_nodes
                     view_only
                 />
             </For>
@@ -863,6 +899,7 @@ fn AscendNode(
     search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
+    #[prop(into)] purchased_nodes: Signal<PurchasedNodes>,
     tree_connections: Memo<TreeConnections>,
     invalid_nodes: Signal<HashSet<PassiveNodeId>>,
     view_only: bool,
@@ -958,7 +995,8 @@ fn AscendNode(
             }
             PassivesTab::Build => {
                 if (derived_node_specs.read().locked && node_level.get() == 0)
-                    || (passives_tree_build.read().len() + 1 >= 75)
+                    || (passives_tree_build.read().len() + 1
+                        >= usize::from(max_player_level(&town_context)))
                 {
                     0
                 } else if derived_node_specs.read().root_node {
@@ -1015,7 +1053,7 @@ fn AscendNode(
                 }
             }
             PassivesTab::Build => {
-                if passives_tree_build.read().contains(&node_id) {
+                if purchased_nodes.read().contains(&node_id) {
                     PurchaseStatus::Purchased
                 } else if !view_only && max_upgrade_level.get() > 0 {
                     PurchaseStatus::Purchaseable
