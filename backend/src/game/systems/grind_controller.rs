@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
     data::{
@@ -118,57 +120,80 @@ fn generate_end_grind_rewards(
         .saturating_add(*game_data.area_specs.item_level_modifier)
         .saturating_add(*game_data.area_specs.power_level);
 
-    let item_rewards = (0..amount_map_rewards)
-        .flat_map(|_| {
-            loot_generator::generate_loot(
-                &game_data.area_blueprint.loot_table,
+    let mut prevent_roll = HashSet::new();
+
+    let mut item_rewards = Vec::new();
+    for _ in 0..amount_map_rewards {
+        let item = loot_generator::generate_loot(
+            &game_data.area_blueprint.loot_table,
+            &master_store.items_store,
+            &MAP_LOOT_TEMPLATE,
+            item_level,
+            0,
+            false,
+            *game_data.area_specs.loot_rarity,
+            0.0,
+            Some(&prevent_roll),
+        );
+        if let Some(item) = item {
+            if item.modifiers.rarity == ItemRarity::Unique {
+                prevent_roll.insert(item.modifiers.base_item_id.clone());
+            }
+            item_rewards.push(item);
+        }
+    }
+    for _ in 0..amount_normal_rewards {
+        let item = loot_generator::generate_loot(
+            &game_data.area_blueprint.loot_table,
+            &master_store.items_store,
+            &DEFAULT_LOOT_TEMPLATE,
+            item_level,
+            0,
+            false,
+            *game_data.area_specs.loot_rarity,
+            0.0,
+            Some(&prevent_roll),
+        );
+        if let Some(item) = item {
+            if item.modifiers.rarity == ItemRarity::Unique {
+                prevent_roll.insert(item.modifiers.base_item_id.clone());
+            }
+            item_rewards.push(item);
+        }
+    }
+    for _ in 0..amount_rare_rewards {
+        let item = if let Some(reward_loot_table) = &game_data.area_blueprint.reward_loot_table {
+            loot_generator::roll_item(
+                reward_loot_table,
                 &master_store.items_store,
-                &MAP_LOOT_TEMPLATE,
+                &DEFAULT_LOOT_TEMPLATE,
                 item_level,
                 0,
-                false,
-                *game_data.area_specs.loot_rarity,
+                true,
+                ItemRarity::Unique,
                 0.0,
+                Some(&prevent_roll),
             )
-        })
-        .chain((0..amount_normal_rewards).flat_map(|_| {
+        } else {
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
                 &DEFAULT_LOOT_TEMPLATE,
                 item_level,
                 0,
-                false,
-                *game_data.area_specs.loot_rarity,
+                true,
+                *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
                 0.0,
+                Some(&prevent_roll),
             )
-        }))
-        .chain((0..amount_rare_rewards).flat_map(|_| {
-            if let Some(reward_loot_table) = &game_data.area_blueprint.reward_loot_table {
-                loot_generator::roll_item(
-                    reward_loot_table,
-                    &master_store.items_store,
-                    &DEFAULT_LOOT_TEMPLATE,
-                    item_level,
-                    0,
-                    true,
-                    ItemRarity::Unique,
-                    0.0,
-                )
-            } else {
-                loot_generator::generate_loot(
-                    &game_data.area_blueprint.loot_table,
-                    &master_store.items_store,
-                    &DEFAULT_LOOT_TEMPLATE,
-                    item_level,
-                    0,
-                    true,
-                    *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
-                    0.0,
-                )
+        };
+        if let Some(item) = item {
+            if item.modifiers.rarity == ItemRarity::Unique {
+                prevent_roll.insert(item.modifiers.base_item_id.clone());
             }
-        }))
-        .collect();
+            item_rewards.push(item);
+        }
+    }
 
     let quest_reward = generate_quest_reward(master_store, game_data);
 
@@ -251,6 +276,7 @@ fn generate_quest_reward(
                     true,
                     *rarity,
                     0.0,
+                    None,
                 ),
                 None => loot_generator::generate_loot(
                     loot_table,
@@ -261,6 +287,7 @@ fn generate_quest_reward(
                     true,
                     *game_data.area_specs.loot_rarity,
                     0.0,
+                    None,
                 ),
             }
         }

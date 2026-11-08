@@ -66,6 +66,7 @@ pub fn generate_loot(
     is_boss_level: bool,
     loot_rarity: f64,
     gold_find: f64,
+    prevent_roll: Option<&HashSet<BaseItemId>>,
 ) -> Option<ItemSpecs> {
     let mut rarity = roll_rarity(&RarityWeights::default(), loot_rarity);
     if !loot_template.allow_unique {
@@ -80,6 +81,7 @@ pub fn generate_loot(
         is_boss_level,
         rarity,
         gold_find,
+        prevent_roll,
     )
 }
 
@@ -106,6 +108,7 @@ pub fn roll_item(
     is_boss_level: bool,
     rarity: ItemRarity,
     gold_find: f64,
+    prevent_roll: Option<&HashSet<BaseItemId>>,
 ) -> Option<ItemSpecs> {
     roll_base_item(
         loot_table,
@@ -114,6 +117,7 @@ pub fn roll_item(
         level,
         is_boss_level,
         rarity == ItemRarity::Unique,
+        prevent_roll,
     )
     .map(|(base_item_id, base)| {
         let rarity = if base.rarity != ItemRarity::Unique {
@@ -226,6 +230,7 @@ fn roll_base_item<'a>(
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
+    prevent_roll: Option<&HashSet<BaseItemId>>,
 ) -> Option<(BaseItemId, &'a ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
@@ -245,6 +250,7 @@ fn roll_base_item<'a>(
                     .prevent_categories
                     .iter()
                     .all(|category| !item_specs.categories.contains(category))
+                && !prevent_roll.is_some_and(|prevent_roll| prevent_roll.contains(&l.item_id))
         })
         .collect();
 

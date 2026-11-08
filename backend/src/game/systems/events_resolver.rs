@@ -565,6 +565,7 @@ fn handle_area_completed_event(
                     1.0
                 },
             game_data.player_specs.read().gold_find.get(),
+            None,
         ) {
             Some(item_specs) => {
                 for item_specs in
