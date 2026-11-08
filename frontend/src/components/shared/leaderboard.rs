@@ -2,7 +2,7 @@ use std::{collections::HashMap, sync::Arc};
 
 use leptos::{html::*, prelude::*};
 use leptos_router::hooks::use_navigate;
-use rand::Rng;
+use rand::RngExt;
 use shared::{
     constants::POWER_LEVEL_LEADERBOARD_AREA_ID, data::realms::Realm, http::server::LeaderboardEntry,
 };

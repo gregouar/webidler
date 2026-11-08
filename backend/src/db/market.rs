@@ -83,7 +83,7 @@ pub async fn sell_item<'c>(
             realm_id
         )
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
-        RETURNING market_id
+        RETURNING market_id as "market_id!"
         "#,
         stash_item_id,
         recipient_id,
@@ -119,8 +119,8 @@ pub async fn read_full_market_stash_items<'c>(
     sqlx::query_as::<_, MarketEntry>(
         r#"
         SELECT 
-            market.market_id, 
-            stash_items.stash_item_id,
+            market.market_id as "market_id!",
+            stash_items.stash_item_id as "stash_item_id!",
             owner.user_id AS owner_id, 
             owner.username AS owner_name,
             market.recipient_id, 
@@ -245,8 +245,8 @@ pub async fn read_market_items<'c>(
         MarketEntry,
         r#"
         SELECT 
-            market.market_id,
-            stash_items.stash_item_id, 
+            market.market_id as "market_id!",
+            stash_items.stash_item_id as "stash_item_id!",
             owner.user_id as "owner_id!: UserId", 
             owner.username as "owner_name!: String",
             market.recipient_id as "recipient_id?: UserId",
@@ -645,8 +645,8 @@ pub async fn buy_item<'c>(
             AND market.realm_id = $3
             AND market.deleted_at IS NULL
         RETURNING
-            market.market_id, 
-            market.stash_item_id,
+            market.market_id as "market_id!",
+            market.stash_item_id as "stash_item_id!",
             market.recipient_id as "recipient_id?: UserCharacterId", 
             market.price as "price: f64"
         "#,

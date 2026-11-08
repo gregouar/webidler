@@ -62,8 +62,8 @@ pub async fn redeem_password_reset<'c>(
                 AND expires_at > CURRENT_TIMESTAMP
                 AND used_at IS NULL
             RETURNING
-                token_id,
-                user_id as "user_id: UserId"
+                token_id as "token_id!",
+                user_id as "user_id!: UserId"
         "#,
         user_id,
         token_hash

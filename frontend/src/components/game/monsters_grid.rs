@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use rand::Rng;
+use rand::RngExt;
 use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
 use shared::data::skill::{DamageType, SkillEffectType, SkillType};

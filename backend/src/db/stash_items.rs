@@ -191,7 +191,7 @@ async fn create_stash_item<'c>(
             max_power_shard_level
         )
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
-        RETURNING stash_item_id
+        RETURNING stash_item_id as "stash_item_id!"
         "#,
         stash_id,
         character_id,
@@ -310,9 +310,9 @@ pub async fn read_full_stash_items<'c>(
         StashItemEntry,
         r#"
         SELECT 
-            stash_items.stash_id as "stash_id: StashId", 
-            stash_items.stash_item_id,
-            stashes.user_id as "user_id: UserId",
+            stash_items.stash_id as "stash_id!: StashId",
+            stash_items.stash_item_id as "stash_item_id!",
+            stashes.user_id as "user_id!: UserId",
             owner.character_id as "character_id?: UserCharacterId",
             owner.character_name as "character_name?: String",
             stash_items.item_data as "item_data: JsonValue", 
@@ -419,9 +419,9 @@ pub async fn read_stash_items<'c>(
         StashItemEntry,
         r#"
         SELECT 
-            stash_items.stash_id as "stash_id: StashId", 
-            stash_items.stash_item_id, 
-            stashes.user_id as "user_id: UserId",
+            stash_items.stash_id as "stash_id!: StashId",
+            stash_items.stash_item_id as "stash_item_id!",
+            stashes.user_id as "user_id!: UserId",
             owner.character_id as "character_id?: UserCharacterId", 
             owner.character_name as "character_name?: String",
             item_data as "item_data: JsonValue",
@@ -746,13 +746,13 @@ pub async fn take_item<'c>(
             AND ($2 OR stash_id = $3)
             AND deleted_at is NULL
         RETURNING
-            stash_id as "stash_id: StashId",
+            stash_id as "stash_id!: StashId",
             (
                 SELECT stashes.user_id
                 FROM stashes
                 WHERE stashes.stash_id = stash_items.stash_id
             ) as "user_id!: UserId",
-            stash_item_id, 
+            stash_item_id as "stash_item_id!",
             character_id as "character_id?: UserCharacterId", 
             NULL as "character_name?: String",
             item_data as "item_data: JsonValue",

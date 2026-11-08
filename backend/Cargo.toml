@@ -12,7 +12,7 @@ anyhow = "1.0.104"
 dotenvy = "0.15.7"
 
 axum = { version = "0.8.9", features = ["ws"] }
-axum-extra = { version = "0.10.3", features = ["typed-header"] }
+axum-extra = { version = "0.12.6", features = ["typed-header"] }
 
 futures = "0.3.34"
 futures-util = { version = "0.3.34", default-features = false, features = [
@@ -24,12 +24,12 @@ tokio = { version = "1.54.1", features = ["full"] }
 http = "1.5.0"
 headers = "0.4.2"
 tower = "0.5.3"
-tower-http = { version = "0.6.11", features = ["cors", "fs", "trace"] }
+tower-http = { version = "0.7.1", features = ["cors", "fs", "trace"] }
 
 tracing = "0.1.44"
 tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
 
-sqlx = { version = "0.8.6", features = [
+sqlx = { version = "0.9.0", features = [
     "runtime-tokio",
     "postgres",
     "sqlite",
@@ -43,22 +43,22 @@ serde_json = { version = "1.0.154", features = ["preserve_order"] }
 serde_plain = "1.0.2"
 serde_ignored = "0.1.14"
 
-jsonwebtoken = { version = "10.4.0", features = ["rust_crypto"] }
-argon2 = "0.5.3"
-aes-gcm = "0.10.3"
-base64 = "0.22.1"
-sha2 = "0.10.9"
+jsonwebtoken = { version = "11.1.0", features = ["rust_crypto"] }
+argon2 = "0.6.0"
+aes-gcm = "0.11.1"
+base64 = "0.23.1"
+sha2 = "0.11.1"
 
 reqwest = { version = "0.13.5", features = ["json", "form"] }
 lettre = { version = "0.11.23", features = ["tokio1", "tokio1-native-tls"] }
 
-rand = "0.9.5"
-rand_chacha = "0.9.0"
-strum = "0.27.2"
+rand = "0.10.3"
+rand_chacha = "0.10.0"
+strum = "0.28.0"
 chrono = "0.4.45"
 uuid = { version = "1.29.1", features = ["v4"] }
 
-itertools = "0.14.0"
+itertools = "0.15.0"
 indexmap = { version = "2.14.2", features = ["serde"] }
 dashmap = "6.2.1"
 

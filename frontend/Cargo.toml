@@ -11,19 +11,29 @@ anyhow = "1.0.104"
 leptos = { version = "0.8.23", features = ["csr"] }
 leptos_router = "0.8.17"
 leptos_meta = "0.8.7"
-leptos-use = { version = "0.18.3", features = [
-    "use_document",
-    "use_mouse",
-    "use_mouse_in_element",
-    "use_event_listener",
-    "use_window_size",
-    "on_click_outside",
-    "use_infinite_scroll",
-    "use_interval_fn",
-    "storage",
+leptos-use = { version = "0.20.0", features = [
+    # "use_document",
+    # "use_mouse",
+    # "use_mouse_in_element",
+    # "use_event_listener",
+    # "use_window_size",
+    # "on_click_outside",
+    # "use_infinite_scroll",
+    # "use_interval_fn",
     "watch_debounced",
     "watch_throttled",
 ] }
+leptos-use-document = "0.20.0"
+leptos-use-mouse = "0.20.0"
+leptos-use-mouse-in-element = "0.20.0"
+leptos-use-event-listener = "0.20.0"
+leptos-use-window-size = "0.20.0"
+leptos-use-on-click-outside = "0.20.0"
+leptos-use-infinite-scroll = "0.20.0"
+leptos-use-interval-fn = "0.20.0"
+leptos-use-storage = "0.20.0"
+# leptos-watch-debounced = "0.20.0"
+# leptos-watch-throttled = "0.20.0"
 web-sys = { version = "0.3.107", features = ["Performance", "Selection", "Storage", "ValidityState"] }
 js-sys = "0.3.107"
 
@@ -35,15 +45,15 @@ serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 serde_plain = "1.0.2"
 codee = { version = "0.3.5", features = ["msgpack_serde"] }
-base64 = "0.22.1"
-strum = "0.27.2"
-nutype = { version = "0.6.2",  features = ["serde", "regex"] }
+base64 = "0.23.1"
+strum = "0.28.0"
+nutype = { version = "0.8.0",  features = ["serde", "regex"] }
 uuid = { version = "1.29.1", features = ["v4","js"] }
 
 chrono = "0.4.45"
 indexmap = "2.14.2"
-itertools = "0.14.0"
+itertools = "0.15.0"
 
-rand = "0.9.5"
-getrandom = { version = "0.3.4", features = ["wasm_js"] }
+rand = "0.10.3"
+getrandom = { version = "0.4.3", features = ["wasm_js"] }
 futures = "0.3.34"

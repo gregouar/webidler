@@ -1,5 +1,5 @@
 use rand::{
-    Rng, SeedableRng,
+    RngExt, SeedableRng,
     distr::uniform::{SampleRange, SampleUniform},
 };
 use rand_chacha::ChaCha8Rng;
