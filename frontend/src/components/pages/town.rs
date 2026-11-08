@@ -1,7 +1,9 @@
 use codee::string::JsonSerdeCodec;
+
 use leptos::{prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
-use leptos_use::{storage, watch_debounced};
+use leptos_use_storage::use_session_storage;
+use leptos_use_watch_debounce_throttle::watch_debounced;
 
 use shared::{
     data::user::{UserCharacterActivity, UserCharacterId},
@@ -44,7 +46,7 @@ pub fn TownPage() -> impl IntoView {
     let toaster = expect_context::<Toasts>();
 
     let (get_character_id_storage, _, _) =
-        storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+        use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
     let town_loaded = RwSignal::new(false);
     let static_data_loaded = RwSignal::new(false);
     let achievements_request_in_flight = RwSignal::new(false);

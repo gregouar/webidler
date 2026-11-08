@@ -3,8 +3,8 @@ use std::sync::Arc;
 use codee::string::JsonSerdeCodec;
 use leptos::prelude::*;
 use leptos_router::hooks::use_navigate;
-use leptos_use::storage;
 
+use leptos_use_storage::use_session_storage;
 use shared::data::{
     area::StartAreaConfig,
     cosmetics::CosmeticType,
@@ -649,7 +649,7 @@ pub fn StartGrindPanel(
     });
 
     let (_, set_area_config_storage, _) =
-        storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
+        use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>

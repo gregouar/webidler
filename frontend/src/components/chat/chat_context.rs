@@ -1,10 +1,4 @@
 use codee::{Encoder, binary::MsgpackSerdeCodec, string::JsonSerdeCodec};
-use leptos::{prelude::*, task::spawn_local};
-use leptos_use::{
-    ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
-    core::ConnectionReadyState, storage, use_websocket_with_options,
-};
-use shared::data::item::ItemSpecs;
 use std::{
     collections::{HashMap, HashSet},
     ops::ControlFlow,
@@ -12,6 +6,14 @@ use std::{
 };
 use web_sys::CloseEvent;
 
+use leptos::{prelude::*, task::spawn_local};
+use leptos_use_storage::{use_local_storage, use_session_storage};
+use leptos_use_websocket::{
+    ConnectionReadyState, ReconnectLimit, UseWebSocketError, UseWebSocketOptions,
+    UseWebSocketReturn, use_websocket_with_options,
+};
+
+use shared::data::item::ItemSpecs;
 use shared_chat::{
     messages::{
         client::{ClientChatMessage, ClientConnectMessage, ClientPostMessage},
@@ -60,7 +62,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     let accessibility_context: AccessibilityContext = expect_context();
     let opened = RwSignal::new(!accessibility_context.is_on_mobile());
     let (stored_pinned, set_pinned, _) =
-        storage::use_local_storage::<Option<bool>, JsonSerdeCodec>("chat_pinned");
+        use_local_storage::<Option<bool>, JsonSerdeCodec>("chat_pinned");
 
     // Websocket
     let on_error_callback = {
@@ -145,7 +147,7 @@ pub fn ChatProvider(url: String, children: Children) -> impl IntoView {
     let write_channel = RwSignal::new(ChatChannel::Global);
     let linked_item = RwSignal::new(None);
     let (stored_messages, set_stored_messages, _) =
-        storage::use_session_storage::<Vec<ChatMessage>, JsonSerdeCodec>(CHAT_HISTORY_STORAGE_KEY);
+        use_session_storage::<Vec<ChatMessage>, JsonSerdeCodec>(CHAT_HISTORY_STORAGE_KEY);
 
     let send = Callback::new(move |(msg, character_id)| {
         if let Ok(content) = ChatContent::try_new(msg) {

@@ -1,6 +1,7 @@
-use leptos::prelude::*;
-use leptos_use::on_click_outside;
 use std::sync::Arc;
+
+use leptos::prelude::*;
+use leptos_use_on_click_outside::on_click_outside;
 
 use crate::components::ui::{
     buttons::{MenuButton, MenuButtonRed},

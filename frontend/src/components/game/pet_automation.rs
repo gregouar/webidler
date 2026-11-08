@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_use::{UseIntervalOptions, use_interval_with_options};
+use leptos_use_interval::{UseIntervalOptions, use_interval_with_options};
 
 use shared::data::pets::PetButton;
 

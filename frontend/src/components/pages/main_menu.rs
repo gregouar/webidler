@@ -1,6 +1,7 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
+use leptos_use_on_click_outside::on_click_outside;
 use leptos_use_storage::use_local_storage;
 use rand::{RngExt, distr::Alphanumeric};
 
@@ -686,7 +687,7 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
     let success = RwSignal::new(false);
 
     let node_ref = NodeRef::new();
-    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+    let _ = on_click_outside(node_ref, move |_| open.set(false));
 
     let on_submit = {
         move |_| {
@@ -819,7 +820,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
     let processing = RwSignal::new(false);
 
     let node_ref = NodeRef::new();
-    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+    let _ = on_click_outside(node_ref, move |_| open.set(false));
 
     let on_submit = {
         let navigate = use_navigate();

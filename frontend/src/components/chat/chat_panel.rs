@@ -1,12 +1,13 @@
 use std::{sync::Arc, time::Duration};
 
 use codee::{Decoder, binary::MsgpackSerdeCodec};
+
 use leptos::{
     ev::{mousemove, mouseup},
     prelude::*,
     web_sys::wasm_bindgen::JsCast,
 };
-use leptos_use::use_resize_observer;
+use leptos_use_resize_observer::use_resize_observer;
 
 use shared::data::{cosmetics::CosmeticType, item::ItemSpecs, user::UserCharacterId};
 use shared_chat::types::{ChatChannel, ChatMessage, UserId};

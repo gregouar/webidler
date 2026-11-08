@@ -4,8 +4,8 @@ use codee::string::JsonSerdeCodec;
 use indexmap::IndexMap;
 use leptos::{html::*, prelude::*, task::spawn_local, web_sys};
 use leptos_router::hooks::use_navigate;
-use leptos_use::storage;
 
+use leptos_use_storage::use_session_storage;
 use shared::{
     data::{
         area::AreaSpecs,
@@ -431,9 +431,9 @@ fn CharacterSlot(
     let play_character = {
         let navigate = use_navigate();
         let (_, set_character_id_storage, _) =
-            storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+            use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
         let (_, set_area_id_storage, _) =
-            storage::use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
+            use_session_storage::<Option<String>, JsonSerdeCodec>("area_id");
         let character_activity = character.activity.clone();
         let accessibility: AccessibilityContext = expect_context();
 

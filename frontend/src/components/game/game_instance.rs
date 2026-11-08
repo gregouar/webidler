@@ -1,7 +1,8 @@
 use chrono::{DateTime, Utc};
 use codee::string::JsonSerdeCodec;
+
 use leptos::{html::*, prelude::*, task::spawn_local};
-use leptos_use::storage;
+use leptos_use_storage::use_session_storage;
 
 use shared::{
     data::{area::StartAreaConfig, user::UserCharacterId},
@@ -41,10 +42,10 @@ pub fn GameInstance() -> impl IntoView {
     let backend = expect_context::<BackendClient>();
 
     let (get_character_id_storage, _, _) =
-        storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+        use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
 
     let (get_area_config_storage, _, _) =
-        storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
+        use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
     let conn = expect_context::<WebsocketContext>();
     let server_down_until = RwSignal::new(None::<DateTime<Utc>>);

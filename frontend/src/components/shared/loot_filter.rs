@@ -1,11 +1,13 @@
-use std::sync::Arc;
-
 use codee::string::JsonSerdeCodec;
 use indexmap::IndexMap;
-use leptos::{html::*, prelude::*};
-
-use leptos_use::storage;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+use strum::IntoEnumIterator;
+use uuid::Uuid;
+
+use leptos::{html::*, prelude::*};
+use leptos_use_storage::use_local_storage;
+
 use shared::{
     data::{
         area::AreaLevel,
@@ -17,8 +19,6 @@ use shared::{
     },
     types::ItemName,
 };
-use strum::IntoEnumIterator;
-use uuid::Uuid;
 
 use crate::components::{
     shared::inventory::loot_filter_category_to_str,
@@ -106,10 +106,8 @@ pub fn LootFilterPanel(
 ) -> impl IntoView {
     let selected_rule = RwSignal::new(None);
 
-    let (get_loot_filter, set_loot_filter, _) = storage::use_local_storage::<
-        LootFilter,
-        JsonSerdeCodec,
-    >(format!("loot_filter_{}", character_id));
+    let (get_loot_filter, set_loot_filter, _) =
+        use_local_storage::<LootFilter, JsonSerdeCodec>(format!("loot_filter_{}", character_id));
 
     loot_filter.set(get_loot_filter.get_untracked());
     let local_loot_filter = RwSignal::new(loot_filter.get_untracked());

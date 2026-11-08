@@ -1,8 +1,8 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
-use leptos_use::storage;
 
+use leptos_use_storage::use_local_storage;
 use shared::http::client::SignUpRequest;
 
 use crate::components::{
@@ -27,7 +27,7 @@ pub fn SignUpPage() -> impl IntoView {
     };
 
     let (get_username_storage, set_username_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
     let username = RwSignal::new(get_username_storage.get_untracked());
     let email = RwSignal::new(Some(None));

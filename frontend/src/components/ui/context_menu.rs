@@ -1,5 +1,5 @@
 use leptos::prelude::*;
-use leptos_use::on_click_outside;
+use leptos_use_on_click_outside::on_click_outside;
 
 #[component]
 pub fn ContextMenu(on_close: Callback<()>, children: Children) -> impl IntoView {

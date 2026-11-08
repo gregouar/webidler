@@ -11,17 +11,8 @@ anyhow = "1.0.104"
 leptos = { version = "0.8.23", features = ["csr"] }
 leptos_router = "0.8.17"
 leptos_meta = "0.8.7"
-leptos-use = { version = "0.20.0", features = [
-    "use_document",
-    "use_mouse",
-    "use_mouse_in_element",
-    "use_event_listener",
-    "use_window_size",
-    "on_click_outside",
-    "use_infinite_scroll",
-    "storage",
-    "watch_debounced"
-] }
+leptos-use-storage = "0.20.1"
+leptos-use-watch-debounce-throttle = "0.20.0"
 web-sys = { version = "0.3.107", features = ["Performance","Blob","BlobPropertyBag"] }
 
 console_error_panic_hook = "0.1.7"

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*, reactive::traits::Track};
 
-use leptos_use::watch_throttled;
+use leptos_use_watch_debounce_throttle::watch_throttled;
 use shared::{
     computations,
     data::{

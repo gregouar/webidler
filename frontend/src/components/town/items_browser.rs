@@ -1,7 +1,8 @@
 use chrono::{DateTime, Utc};
-use leptos::{html::*, prelude::*};
-use leptos_use::{UseInfiniteScrollOptions, use_infinite_scroll_with_options};
 use std::sync::Arc;
+
+use leptos::{html::*, prelude::*};
+use leptos_use_infinite_scroll::{UseInfiniteScrollOptions, use_infinite_scroll_with_options};
 
 use shared::data::{
     area::AreaLevel,

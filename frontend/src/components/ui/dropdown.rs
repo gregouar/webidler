@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use leptos::{prelude::*, web_sys};
-use leptos_use::on_click_outside;
+use leptos_use_on_click_outside::on_click_outside;
 
 use crate::components::{
     events::keyboard_event_key,
