@@ -24,7 +24,7 @@ leptos-use-resize-observer = "0.20.0"
 leptos-use-storage = "0.20.1"
 leptos-use-watch-debounce-throttle = "0.20.0"
 leptos-use-websocket = "0.20.2"
-web-sys = { version = "0.3.107", features = ["Performance", "Selection", "Storage", "ValidityState"] }
+web-sys = { version = "0.3.107", features = ["FileList", "Performance", "Selection", "Storage", "ValidityState"] }
 js-sys = "0.3.107"
 
 console_error_panic_hook = "0.1.7"

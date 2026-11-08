@@ -3,6 +3,7 @@ use std::sync::Arc;
 use indexmap::IndexMap;
 
 use leptos::{html::*, prelude::*};
+use leptos_use_watch_debounce_throttle::watch_debounced_with_options;
 
 use frontend::components::{
     backend_client::BackendClient,
@@ -17,7 +18,6 @@ use frontend::components::{
     utils::file_loader::{save_json, use_json_loader},
 };
 
-use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use shared::data::{
     item::{AffixRoll, ArmorSpecs, ItemBase, ItemCategory, ItemModifiers, ItemSpecs, WeaponSpecs},
     item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix, aggregate_effects},
