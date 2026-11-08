@@ -170,44 +170,6 @@
             }
         ]
     },
-    "taunt": {
-        "name"      : "Taunted",
-        "icon"      : "skills/taunt.svg",
-        "debuff"    : true,
-        "duration"  : 3,
-        "max_stacks": 1,
-        "effects"   : [
-            {
-                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
-                "value"       : 100.0,
-                "modifier"    : "Percent"
-            }
-        ]
-    },
-    "taunt_critical": {
-        "name"      : "Reckless",
-        "icon"      : "skills/taunt.svg",
-        "debuff"    : true,
-        "duration"  : 3,
-        "max_stacks": 1,
-        "effects"   : [
-            {
-                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
-                "value"       : 50.0,
-                "modifier"    : "Percent"
-            },
-            {
-                "StatModifier": { "stat": {"CritDamage": {}}, "modifier": "Flat", "debuff": false },
-                "value"       : 100.0,
-                "modifier"    : "Flat"
-            },
-            {
-                "StatModifier": { "stat": {"CritChance": {}}, "modifier": "Flat", "debuff": false },
-                "value"       : 10.0,
-                "modifier"    : "Flat"
-            }
-        ]
-    },
     "bees": {
         "name"      : "Bees",
         "icon"      : "skills/bee.svg",

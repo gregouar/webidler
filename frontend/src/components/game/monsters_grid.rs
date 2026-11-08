@@ -327,7 +327,7 @@ fn MonsterCard(
                 .map(|s| s.character_state.life.get())
                 .unwrap_or_default();
 
-            let diff = old_life - new_life;
+            let diff = (old_life - new_life).round();
             old_life = new_life;
 
             if diff > 0.0 {

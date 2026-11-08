@@ -1,5 +1,5 @@
 {
-    "poison_coating"            : {
+    "poison_coating": {
         "name"      : "Poison Coating",
         "icon"      : "skills/poison_coating.svg",
         "debuff"    : false,
@@ -16,7 +16,7 @@
             }
         ]
     },
-    "pyroclastic_infusion"      : {
+    "pyroclastic_infusion": {
         "name"      : "Pyroclastic Infusion",
         "icon"      : "skills/pyroclastic_infusion.svg",
         "debuff"    : false,
@@ -69,7 +69,7 @@
             }
         ]
     },
-    "pyroclastic_infusion_fire" : {
+    "pyroclastic_infusion_fire": {
         "name"      : "Magmatic Infusion",
         "icon"      : "skills/pyroclastic_infusion.svg",
         "debuff"    : false,
@@ -131,7 +131,7 @@
             }
         ]
     },
-    "retaliate_vulnerability"   : {
+    "retaliate_vulnerability": {
         "name"      : "Resentment",
         "icon"      : "skills/angry_eyes.svg",
         "debuff"    : true,
@@ -145,7 +145,7 @@
             }
         ]
     },
-    "sharpen_weapon"            : {
+    "sharpen_weapon": {
         "name"      : "Sharpen Weapon",
         "icon"      : "skills/sharpen_weapon.svg",
         "debuff"    : false,
@@ -190,7 +190,7 @@
             }
         ]
     },
-    "double_strike_feint"       : {
+    "double_strike_feint": {
         "name"      : "Distracted",
         "icon"      : "statuses/distraction.svg",
         "debuff"    : true,
@@ -208,7 +208,7 @@
             }
         ]
     },
-    "blast_charge"              : {
+    "blast_charge": {
         "name"      : "Blast Charge",
         "icon"      : "skills/blast_charge.svg",
         "debuff"    : true,
@@ -298,7 +298,7 @@
             }
         ]
     },
-    "whirlwind_guard"           : {
+    "whirlwind_guard": {
         "name"      : "Deflecting Spin",
         "icon"      : "skills/whirlwind.svg",
         "debuff"    : false,
@@ -317,7 +317,7 @@
             }
         ]
     },
-    "ground_slam_tremor"        : {
+    "ground_slam_tremor": {
         "name"      : "Destabilized",
         "icon"      : "statuses/earth_spit.svg",
         "debuff"    : true,
@@ -343,6 +343,44 @@
                     "debuff"  : true
                 },
                 "value"       : 33,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "taunt": {
+        "name"      : "Taunted",
+        "icon"      : "skills/taunt.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "taunt_critical": {
+        "name"      : "Reckless",
+        "icon"      : "skills/taunt.svg",
+        "debuff"    : true,
+        "duration"  : 3,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 50.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"CritDamage": {}}, "modifier": "Flat", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"CritChance": {}}, "modifier": "Flat", "debuff": false },
+                "value"       : 10.0,
                 "modifier"    : "Flat"
             }
         ]

@@ -608,7 +608,7 @@ fn BenedictionRow(
 pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> String {
     match benediction_effect {
         // BenedictionEffect::StartingGold => "Starting Gold".to_string(),
-        BenedictionEffect::StartingLevel => "Starting Level".to_string(),
+        BenedictionEffect::StartingLevel => "Starting Player Level".to_string(),
         BenedictionEffect::SkillSlots => "Skill Slots".to_string(),
         BenedictionEffect::StatEffect { stat, .. } => {
             effects_tooltip::format_multiplier_stat_name(stat)

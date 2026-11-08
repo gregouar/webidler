@@ -700,16 +700,7 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
-                "StatusFaster": {
+                "StatusEscalation": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
@@ -718,7 +709,7 @@
                 }
               },
               {
-                "StatusEscalation": {
+                "StatusFaster": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
@@ -743,6 +734,15 @@
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],
@@ -1170,106 +1170,6 @@
               "restore_type": "Life",
               "value": 25.0,
               "modifier": "Flat"
-            },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
-            "independent_application": false,
-            "optional_application": false,
-            "description": null
-          }
-        ]
-      }
-    ],
-    "triggers": [],
-    "auto_use_conditions": [],
-    "ignore_stat_effects": [],
-    "hidden": false
-  },
-  "taunt": {
-    "name": "Taunt",
-    "icon": "skills/taunt.svg",
-    "description": "Taunt enemies to attack you faster, at the cost of taking more damage.",
-    "skill_type": "Spell",
-    "cooldown": 3.0,
-    "mana_cost": 5.0,
-    "required_item": null,
-    "upgrade_cost": 50.0,
-    "upgrade_effects": [
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "taunt",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "Flat",
-        "value": 2.0,
-        "scope": "Local",
-        "description": null,
-        "hidden": false
-      },
-      {
-        "stat": {
-          "ManaCost": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "value": 1.0,
-        "scope": "Local",
-        "description": null,
-        "hidden": false
-      }
-    ],
-    "modifier_effects": [],
-    "targets": [
-      {
-        "range": "Distance",
-        "target_type": "Enemy",
-        "shape": "All",
-        "target_dead": false,
-        "repeat": {
-          "value": 1,
-          "target": "Same",
-          "repeat_cooldown": 0.3
-        },
-        "effects": [
-          {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "RefreshCooldown": {
-              "skill_type": null,
-              "skill_id": null,
-              "value": 2.0,
-              "modifier": "Flat"
-            },
-            "ignore_stat_effects": [],
-            "conditional_modifiers": [],
-            "independent_application": false,
-            "optional_application": false,
-            "description": null
-          },
-          {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "ApplyStatus": {
-              "status_id": "taunt",
-              "value": 20.0,
-              "value_factor": 1.0,
-              "duration": null,
-              "escalation": null,
-              "max_stacks": null,
-              "avoidable": null,
-              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
