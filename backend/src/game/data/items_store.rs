@@ -7,7 +7,10 @@ use shared::data::{
     item_affix::{AffixTag, ItemAffixBlueprint},
 };
 
-use crate::game::{data::indexed_store::IndexedStore, utils::json::LoadJsonFromFile};
+use crate::{
+    game::{data::indexed_store::IndexedStore, utils::json::LoadJsonFromFile},
+    rest::AppError,
+};
 
 pub type ItemsStoreContent = IndexedStore<String, ItemBase>;
 pub type SoulBasesByCategories = HashMap<BTreeSet<ItemCategory>, BaseItemId>;
@@ -55,8 +58,10 @@ impl ItemsStore {
         }
     }
 
-    pub fn get_item_base(&self, item_specs: &ItemSpecs) -> Option<&ItemBase> {
-        self.items.get(&item_specs.modifiers.base_item_id)
+    pub fn get_item_base(&self, item_specs: &ItemSpecs) -> Result<&ItemBase, AppError> {
+        self.items
+            .get(&item_specs.modifiers.base_item_id)
+            .ok_or(AppError::NotFound)
     }
 }
 

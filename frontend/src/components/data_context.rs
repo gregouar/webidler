@@ -8,7 +8,7 @@ use shared::data::{
     area::AreaSpecs,
     character_status::{StatusId, StatusSpecs},
     cosmetics::CosmeticType,
-    item::ItemBase,
+    item::{BaseItemId, ItemBase, ItemSpecs},
     item_affix::ItemAffixBlueprint,
     passive::PassivesTreeSpecs,
     pets::PetSpecs,
@@ -30,8 +30,10 @@ pub struct DataContext {
     pub achievements: RwSignal<IndexMap<String, AchievementSpecs>>,
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,
     pub benedictions_specs: RwSignal<IndexMap<String, BenedictionsCategory>>,
-    pub item_bases: RwSignal<HashMap<String, ItemBase>>,
+    pub item_bases: RwSignal<HashMap<BaseItemId, ItemBase>>,
     pub item_affixes: RwSignal<HashMap<String, ItemAffixBlueprint>>,
+
+    default_base_item: StoredValue<ItemBase>,
 
     load_lock: StoredValue<Arc<Mutex<()>>>,
     loaded: RwSignal<bool>,
@@ -52,6 +54,25 @@ pub fn provide_data_context() {
         item_affixes: RwSignal::new(Default::default()),
         load_lock: StoredValue::new(Arc::new(Mutex::new(()))),
         loaded: RwSignal::new(false),
+        default_base_item: StoredValue::new(ItemBase {
+            name: "Item".to_string(),
+            icon: "ui/shield.webp".to_string(),
+            description: Default::default(),
+            slot: Default::default(),
+            extra_slots: Default::default(),
+            categories: Default::default(),
+            min_area_level: Default::default(),
+            rarity: Default::default(),
+            affixes: Default::default(),
+            triggers: Default::default(),
+            weapon_specs: Default::default(),
+            armor_specs: Default::default(),
+            rune_specs: Default::default(),
+            map_specs: Default::default(),
+            ignore_quality: Default::default(),
+            upgrade_levels: Default::default(),
+            upgrade_effects: Default::default(),
+        }),
     });
 }
 
@@ -105,5 +126,13 @@ impl DataContext {
             .read_untracked()
             .get(status_id)
             .and_then(|status_specs| status_specs.adjective.clone())
+    }
+
+    pub fn base_item(&self, item_specs: &ItemSpecs) -> ItemBase {
+        self.item_bases
+            .read_untracked()
+            .get(&item_specs.modifiers.base_item_id)
+            .cloned()
+            .unwrap_or(self.default_base_item.get_value())
     }
 }

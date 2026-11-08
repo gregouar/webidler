@@ -57,10 +57,7 @@ pub struct StashItemFlattenStats {
     pub item_cooldown: Option<f64>,
 }
 
-fn flatten_stats(
-    item_base: &ItemBase,
-    item_specs: &ItemSpecs,
-) -> Result<StashItemFlattenStats, anyhow::Error> {
+pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemFlattenStats {
     let item_cooldown = item_specs
         .weapon_specs
         .as_ref()
@@ -86,10 +83,10 @@ fn flatten_stats(
         .as_ref()
         .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Storm));
 
-    Ok(StashItemFlattenStats {
+    StashItemFlattenStats {
         base_item_id: item_specs.modifiers.base_item_id.clone().into(),
         item_name: format!("{} {}", item_specs.modifiers.name, item_base.name),
-        item_rarity: serde_plain::to_string(&item_specs.modifiers.rarity)?,
+        item_rarity: serde_plain::to_string(&item_specs.modifiers.rarity).unwrap_or("".into()),
         item_level: item_specs.required_level as i32,
         item_power_level: item_specs.modifiers.level as i32,
         item_upgrade_level: item_specs.modifiers.upgrade_level as i32,
@@ -120,7 +117,7 @@ fn flatten_stats(
             .weapon_specs
             .as_ref()
             .map(|weapon_specs| *weapon_specs.crit_damage),
-    })
+    }
 }
 
 pub async fn store_item<'c>(
@@ -136,8 +133,7 @@ pub async fn store_item<'c>(
         stash_id,
         realm_id,
         character_id,
-        item_base
-            .categories
+        item.categories
             .iter()
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
@@ -152,7 +148,7 @@ pub async fn store_item<'c>(
                 ))
             })
             .collect(),
-        flatten_stats(item_base, item)?,
+        flatten_stats(item_base, item),
         serde_json::to_value(&item.modifiers)?,
     )
     .await?)

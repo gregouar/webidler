@@ -26,6 +26,7 @@ use crate::game::{
     data::{
         DataInit,
         event::EventsQueue,
+        items_store::ItemsStore,
         master_store::{SkillMasteriesStore, StatusesStore},
     },
     systems::{skill_masteries_controller, triggers_updater},
@@ -109,10 +110,10 @@ pub fn reset_player(player_state: &mut PlayerState) {
 // to have it working with the dynamic statuses.
 #[allow(clippy::too_many_arguments)]
 pub fn update_player_specs(
+    items_store: &ItemsStore,
     skill_masteries_store: &SkillMasteriesStore,
     statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
-    // player_specs: &PlayerSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
@@ -178,7 +179,8 @@ pub fn update_player_specs(
         .chain(
             player_inventory
                 .equipped_items()
-                .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
+                .filter_map(|(_, item_specs)| items_store.get_item_base(item_specs).ok())
+                .flat_map(|item_base| item_base.triggers.iter()),
         )
     {
         player_specs.character_specs.triggers.push(

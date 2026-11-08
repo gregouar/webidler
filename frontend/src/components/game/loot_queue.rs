@@ -19,6 +19,7 @@ use shared::{
 
 use crate::components::{
     accessibility::AccessibilityContext,
+    data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
     settings::SettingsContext,
     shared::{
@@ -35,6 +36,7 @@ pub fn LootQueue() -> impl IntoView {
     let accessibility: AccessibilityContext = expect_context();
     let settings: SettingsContext = expect_context();
     let game_context: GameContext = expect_context();
+    let data_context: DataContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let pickup_loot = {
@@ -199,6 +201,7 @@ pub fn LootQueue() -> impl IntoView {
                 let(loot)
             >
                 {
+                    let item_base = data_context.item_base(loot.item_specs);
                     let item_rarity = loot.item_specs.modifiers.rarity;
                     let gold_price = loot.item_specs.gold_price;
                     let gems_price = computations::item_gems_price(

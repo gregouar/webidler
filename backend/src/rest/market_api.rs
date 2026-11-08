@@ -27,7 +27,7 @@ use shared::{
 use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, User},
-    db::{self, market::MarketEntry},
+    db::{self, market::MarketEntry, stash_items::flatten_stats},
     game::{
         data::inventory_data::inventory_data_to_player_inventory,
         systems::{inventory_controller, items_controller, stashes_controller},
@@ -230,19 +230,21 @@ pub async fn post_sell_market_item(
 
     let stash_item_id = stashes_controller::store_stash_item(
         &mut tx,
+        &master_store.items_store,
         &payload.character_id,
         &mut stash,
         &item_specs,
     )
     .await?;
 
+    let item_base = master_store.items_store.get_item_base(&item_specs)?;
     db::market::sell_item(
         &mut tx,
         &character.realm_id,
         &stash_item_id,
         recipient_id,
         payload.price,
-        (&item_specs).try_into()?,
+        flatten_stats(item_base, &item_specs),
     )
     .await?;
 
@@ -293,13 +295,14 @@ pub async fn post_edit_market_item(
         return Err(AppError::Forbidden);
     }
 
+    let item_base = master_store.items_store.get_item_base(&item.item_specs)?;
     db::market::sell_item(
         &mut tx,
         &character.realm_id,
         &market_item.stash_item_id,
         market_item.recipient_id,
         payload.price,
-        (&item.item_specs).try_into()?,
+        flatten_stats(item_base, &item.item_specs),
     )
     .await?;
 

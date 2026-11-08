@@ -22,9 +22,8 @@ use crate::{
     auth::{self, User},
     db::{self},
     game::systems::{
-        inventory_controller, items_controller,
+        forge_controller, inventory_controller, items_controller,
         loot_generator::{self, GenerateLootTemplate},
-        soul_crafting,
     },
     rest::utils::{buy_with_gems, load_player_town_inventory},
 };
@@ -60,10 +59,7 @@ pub async fn post_temper(
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
-    let item_base = master_store
-        .items_store
-        .get_item_base(item)
-        .ok_or(AppError::NotFound)?;
+    let item_base = master_store.items_store.get_item_base(item)?;
 
     let resource_gems = buy_with_gems(
         &mut tx,
@@ -74,7 +70,7 @@ pub async fn post_temper(
     )
     .await?;
 
-    *item = items_controller::temper_item(&master_store.items_store, item)?;
+    *item = forge_controller::temper_item(&master_store.items_store, item)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -102,20 +98,13 @@ pub async fn post_affix(
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
-    let item_base = master_store
-        .items_store
-        .get_item_base(item)
-        .ok_or(AppError::NotFound)?;
+    let item_base = master_store.items_store.get_item_base(item)?;
 
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        affix_operation_price(
-            payload.operation,
-            item.modifiers.count_presuffixes(),
-            item_base,
-        )
-        .ok_or(AppError::UserError("forge operation unavailable".into()))?,
+        affix_operation_price(payload.operation, item.modifiers.count_presuffixes(), item)
+            .ok_or(AppError::UserError("forge operation unavailable".into()))?,
     )
     .await?;
 
@@ -166,10 +155,7 @@ pub async fn post_upgrade(
         .bag
         .get_mut(payload.item_index as usize)
         .ok_or(AppError::NotFound)?;
-    let item_base = master_store
-        .items_store
-        .get_item_base(item)
-        .ok_or(AppError::NotFound)?;
+    let item_base = master_store.items_store.get_item_base(item)?;
 
     let resource_gems = buy_with_gems(
         &mut tx,
@@ -180,7 +166,7 @@ pub async fn post_upgrade(
     )
     .await?;
 
-    *item = items_controller::upgrade_item(&master_store.items_store, item)?;
+    *item = forge_controller::upgrade_item(&master_store.items_store, item)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
@@ -214,7 +200,7 @@ pub async fn post_sacrifice(
     )
     .await?;
 
-    inventory.bag[bag_index] = soul_crafting::sacrifice(&master_store.items_store, item)?;
+    inventory.bag[bag_index] = forge_controller::sacrifice(&master_store.items_store, item)?;
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
     tx.commit().await?;
@@ -248,7 +234,7 @@ pub async fn post_imbue(
         .bag
         .get_mut(item_index)
         .ok_or(AppError::NotFound)?;
-    *item = soul_crafting::imbue(&master_store.items_store, item, &soul)?;
+    *item = forge_controller::imbue(&master_store.items_store, item, &soul)?;
 
     inventory.bag.remove(soul_index);
 

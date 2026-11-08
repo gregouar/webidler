@@ -325,8 +325,14 @@ pub async fn post_store_stash_item(
         .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
-    stashes_controller::store_stash_item(&mut tx, &payload.character_id, &mut stash, &item_specs)
-        .await?;
+    stashes_controller::store_stash_item(
+        &mut tx,
+        &master_store.items_store,
+        &payload.character_id,
+        &mut stash,
+        &item_specs,
+    )
+    .await?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;

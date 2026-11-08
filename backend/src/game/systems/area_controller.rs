@@ -67,7 +67,7 @@ pub fn init_area_specs(
                 .cloned();
         }
 
-        if let Some(map_item_base) = items_store.items.get_item_base(map_item) {
+        if let Ok(map_item_base) = items_store.get_item_base(map_item) {
             for trigger_specs in map_item_base.triggers.iter() {
                 area_specs.triggers.push(
                     trigger_specs.trigger.clone(),

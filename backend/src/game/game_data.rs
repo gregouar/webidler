@@ -171,6 +171,7 @@ impl GameInstanceData {
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
         passives_controller::compute_passives_tree_specs(
+            &master_store.items_store,
             &mut passives_tree_specs,
             &passives_tree_state.ascension,
         );
@@ -192,10 +193,10 @@ impl GameInstanceData {
         let player_state = PlayerState::init(&player_specs);
         // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
+            &master_store.items_store,
             &master_store.skill_masteries_store,
             &master_store.statuses_store,
             &player_base_specs,
-            // &player_specs,
             &player_state,
             &player_inventory,
             &passives_tree_specs,

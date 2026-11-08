@@ -9,7 +9,7 @@ use crate::{
         character::CharacterId,
         character_status::StatusId,
         conditional_modifier::{Condition, ConditionalModifier},
-        item::{ItemBase, ItemCategory, ItemSpecs},
+        item::{ItemCategory, ItemSpecs},
         item_affix::AffixEffectScope,
         modifier::ModifiableValue,
         stat_effect::{

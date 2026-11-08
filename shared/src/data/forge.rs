@@ -1,6 +1,6 @@
 use crate::{
     data::{
-        item::{ItemBase, ItemCategory, ItemSpecs},
+        item::{ItemCategory, ItemSpecs},
         item_affix::AffixType,
     },
     http::client::ForgeAffixOperation,

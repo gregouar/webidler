@@ -219,14 +219,14 @@ fn roll_quality(min_item_level: AreaLevel, level: AreaLevel) -> f32 {
         .round()
 }
 
-fn roll_base_item(
+fn roll_base_item<'a>(
     loot_table: &LootTable,
-    items_store: &ItemsStore,
+    items_store: &'a ItemsStore,
     loot_template: &GenerateLootTemplate,
     area_level: AreaLevel,
     is_boss_level: bool,
     is_unique: bool,
-) -> Option<(BaseItemId, &ItemBase)> {
+) -> Option<(BaseItemId, &'a ItemBase)> {
     let items_available: Vec<_> = loot_table
         .entries
         .iter()

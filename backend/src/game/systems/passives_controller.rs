@@ -18,7 +18,7 @@ use shared::{
 use crate::{
     app_state::MasterStore,
     db::{self, characters::CharacterAreaEntry, pool::Database},
-    game::data::master_store::AreaBlueprintStore,
+    game::data::{items_store::ItemsStore, master_store::AreaBlueprintStore},
     rest::AppError,
 };
 
@@ -74,14 +74,17 @@ pub fn purchase_node(
 }
 
 pub fn compute_passives_tree_specs(
+    items_store: &ItemsStore,
     passives_tree_specs: &mut PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
 ) {
     // TODO: Could compute ascension effects here to have them ready?
 
     for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
-        if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id) {
-            node_specs.icon = item_specs.base.icon.clone();
+        if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id)
+            && let Ok(item_base) = items_store.get_item_base(item_specs)
+        {
+            node_specs.icon = item_base.icon.clone();
             node_specs.name = item_specs.modifiers.name.clone();
 
             let mut effects: Vec<_> =
@@ -96,9 +99,8 @@ pub fn compute_passives_tree_specs(
             }
 
             node_specs.effects = effects;
-            node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.triggers = item_base.triggers.clone();
             node_specs.root_node |= item_specs
-                .base
                 .rune_specs
                 .as_ref()
                 .map(|rune_specs| rune_specs.root_node)
@@ -310,7 +312,7 @@ pub fn socket_node(
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
     if let Some(item_specs) = item_specs {
-        if item_specs.base.rune_specs.is_none() {
+        if item_specs.rune_specs.is_none() {
             return Err(AppError::UserError(
                 "Only Runes can be socketed into Passives Tree".into(),
             ));

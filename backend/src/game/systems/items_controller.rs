@@ -1,5 +1,5 @@
 use shared::{
-    constants::{MAX_POWER_SHARD_LEVEL_BASE, MAX_TEMPERED_ITEM_QUALITY, POWER_SHARD_LEVELS_NEEDED},
+    constants::{MAX_POWER_SHARD_LEVEL_BASE, POWER_SHARD_LEVELS_NEEDED},
     data::{
         area::AreaLevel,
         item::{
@@ -16,13 +16,7 @@ use shared::{
     },
 };
 
-use crate::{
-    game::{
-        data::{items_store::ItemsStore, master_store::SkillsStore},
-        utils::rng,
-    },
-    rest::AppError,
-};
+use crate::game::data::{items_store::ItemsStore, master_store::SkillsStore};
 
 pub fn init_item_specs_from_store(
     items_store: &ItemsStore,
@@ -61,7 +55,7 @@ pub fn create_item_specs(
     }
 
     ItemSpecs {
-        slot: item_base.slot(),
+        slot: item_base.slot,
         extra_slots,
         categories: item_base.categories.clone(),
         weapon_specs: item_base
@@ -76,6 +70,7 @@ pub fn create_item_specs(
             .map_specs
             .clone()
             .map(|map_specs| compute_map_specs(map_specs, &modifiers, &affixes)),
+        rune_specs: item_base.rune_specs.clone(),
         modifiers,
         affixes,
         required_level,
@@ -101,7 +96,7 @@ pub fn compute_affixes(
             if let Some(source_base_item_id) = &roll.base_item_id {
                 let source_base = items_store.items.get(source_base_item_id).or_else(|| {
                     tracing::warn!(
-                        source_base_item_id,
+                        source_base_item_id = source_base_item_id.to_string(),
                         affix_id = roll.affix_id,
                         item_base_id = modifiers.base_item_id.to_string(),
                         "missing source base item for item affix"
@@ -110,7 +105,7 @@ pub fn compute_affixes(
                 })?;
                 let effect = source_base.affixes.get(&roll.affix_id).or_else(|| {
                     tracing::warn!(
-                        source_base_item_id,
+                        source_base_item_id = source_base_item_id.to_string(),
                         affix_id = roll.affix_id,
                         item_base_id = modifiers.base_item_id.to_string(),
                         "missing item affix blueprint on source base item"
@@ -133,7 +128,7 @@ pub fn compute_affixes(
             let blueprint = items_store.affixes_table.get(&roll.affix_id).or_else(|| {
                 tracing::warn!(
                     affix_id = roll.affix_id,
-                    base_item_id = modifiers.base_item_id,
+                    base_item_id = modifiers.base_item_id.to_string(),
                     "missing item affix blueprint"
                 );
                 None
@@ -327,56 +322,6 @@ fn compute_upgrade_affix(base: &ItemBase, item_modifiers: &ItemModifiers) -> Opt
             .copied()
             .unwrap_or_default(),
     })
-}
-
-pub fn upgrade_item(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
-    let item_base = items_store.get_item_base(item);
-    let available_upgrade_levels = item
-        .base
-        .upgrade_levels
-        .iter()
-        .filter(|l| **l <= item.modifiers.level)
-        .count();
-
-    if available_upgrade_levels <= item.modifiers.upgrade_level as usize {
-        return Err(AppError::UserError("maximum empower level reached.".into()));
-    }
-
-    let mut item_modifiers = item.modifiers.clone();
-    item_modifiers.upgrade_level = item_modifiers.upgrade_level.saturating_add(1);
-
-    Ok(create_item_specs(
-        items_store,
-        item.base.clone(),
-        item_modifiers,
-        0.0,
-    ))
-}
-
-pub fn temper_item(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs, AppError> {
-    if item.base.ignore_quality {
-        return Err(AppError::UserError("that item cannot have quality".into()));
-    }
-    if item.modifiers.quality >= MAX_TEMPERED_ITEM_QUALITY {
-        return Err(AppError::UserError(
-            "maximum tempered quality reached for that item".into(),
-        ));
-    }
-
-    let quality_increase = rng::random_range(1_u8..=5).unwrap_or(1);
-
-    let quality =
-        (item.modifiers.quality + f32::from(quality_increase)).min(MAX_TEMPERED_ITEM_QUALITY);
-
-    Ok(create_item_specs(
-        items_store,
-        item.base.clone(),
-        ItemModifiers {
-            quality,
-            ..item.modifiers.clone()
-        },
-        item.gold_price,
-    ))
 }
 
 pub fn make_weapon_skill(
