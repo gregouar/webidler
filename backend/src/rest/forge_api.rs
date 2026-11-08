@@ -281,6 +281,7 @@ pub async fn post_gamble(
         false,
         master_store.gamble_table.item_rarity,
         0.0,
+        None,
     ) {
         Some(item_specs) => inventory_controller::store_item_to_bag(&mut inventory, item_specs)?,
         None => return Err(AppError::UserError("not item found".into())),
