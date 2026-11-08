@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ArmorSpecs, ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange, WeaponSpecs},
+    item::{ItemBase, ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects},
     skill::DamageType,
 };
@@ -254,8 +254,8 @@ pub fn ItemTooltipContent(
                     })}
                 <QualityTooltip item_specs=item_specs.clone() />
                 <SoulTooltip item_specs=item_specs.clone() />
-                <ArmorTooltip item_specs=item_specs.clone() base_specs=item_base.armor_specs />
-                <WeaponTooltip item_specs=item_specs.clone() base_specs=item_base.weapon_specs />
+                <ArmorTooltip item_specs=item_specs.clone() item_base=item_base.clone() />
+                <WeaponTooltip item_specs=item_specs.clone() item_base=item_base.clone() />
                 <RuneTooltip item_specs=item_specs.clone() />
                 <MapTooltip item_specs=item_specs.clone() />
             </ul>
@@ -372,11 +372,11 @@ fn tooltip_rarity_palette(item_rarity: ItemRarity) -> TooltipFramePalette {
 }
 
 #[component]
-pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>, base_specs: Option<ArmorSpecs>) -> impl IntoView {
+pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> impl IntoView {
     item_specs
         .armor_specs
         .as_ref()
-        .zip(base_specs.as_ref())
+        .zip(item_base.armor_specs.as_ref())
         .map(|(specs, base_specs)| {
             let armor_color = if specs.armor.round() != base_specs.armor.round() {
                 "text-blue-400"
@@ -426,11 +426,11 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>, base_specs: Option<ArmorSpecs>) 
 }
 
 #[component]
-pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, base_specs: Option<WeaponSpecs>) -> impl IntoView {
+pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> impl IntoView {
     item_specs
         .weapon_specs
         .as_ref()
-        .zip(base_specs.as_ref())
+        .zip(item_base.weapon_specs.as_ref())
         .map(|(specs, base_specs)| {
             let mut damage_lines = vec![];
 
