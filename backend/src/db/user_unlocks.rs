@@ -4,9 +4,12 @@ use std::collections::{HashMap, HashSet};
 
 use shared::data::user::{UserId, UserUnlocks};
 
-use crate::db::{
-    pool::{Database, DbExecutor, DbPool},
-    utc_datetime::UtcDateTime,
+use crate::{
+    constants::DATA_VERSION,
+    db::{
+        pool::{Database, DbExecutor, DbPool},
+        utc_datetime::UtcDateTime,
+    },
 };
 
 pub async fn load_user_unlocks(
@@ -81,9 +84,10 @@ pub async fn unlock_achievement(
     achievement_id: &str,
 ) -> Result<bool, sqlx::Error> {
     Ok(sqlx::query!(
-            "INSERT INTO user_achievements (user_id, achievement_id) VALUES ($1, $2) ON CONFLICT(user_id, achievement_id) DO NOTHING",
+            "INSERT INTO user_achievements (user_id, achievement_id, data_version) VALUES ($1, $2, $3) ON CONFLICT(user_id, achievement_id) DO NOTHING",
             user_id,
             achievement_id,
+            DATA_VERSION,
         )
         .execute(&mut **tx)
         .await?
