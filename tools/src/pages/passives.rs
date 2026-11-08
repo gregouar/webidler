@@ -4,6 +4,7 @@ use std::{
 };
 
 use leptos::{html::*, prelude::*};
+use leptos_use_watch_debounce_throttle::{WatchDebouncedOptions, watch_debounced_with_options};
 use serde::Serialize;
 use shared::data::passive::{
     PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,

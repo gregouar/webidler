@@ -3,7 +3,7 @@ use std::sync::Arc;
 use indexmap::IndexMap;
 
 use leptos::{html::*, prelude::*};
-use leptos_use_watch_debounce_throttle::watch_debounced_with_options;
+use leptos_use_watch_debounce_throttle::{WatchDebouncedOptions, watch_debounced_with_options};
 
 use frontend::components::{
     backend_client::BackendClient,

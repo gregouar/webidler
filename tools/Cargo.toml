@@ -12,6 +12,7 @@ leptos = { version = "0.8.23", features = ["csr"] }
 leptos_router = "0.8.17"
 leptos_meta = "0.8.7"
 leptos-use-storage = "0.20.1"
+leptos-use-interval-fn = "0.20.1"
 leptos-use-watch-debounce-throttle = "0.20.0"
 web-sys = { version = "0.3.107", features = ["Performance","Blob","BlobPropertyBag"] }
 

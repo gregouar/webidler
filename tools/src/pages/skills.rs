@@ -1,4 +1,5 @@
 use indexmap::IndexMap;
+use leptos_use_watch_debounce_throttle::{WatchDebouncedOptions, watch_debounced_with_options};
 use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};

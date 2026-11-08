@@ -6,6 +6,7 @@ use frontend::{
     components::settings::{GraphicsQuality, SettingsContext},
 };
 
+use leptos_use_interval_fn::use_interval_fn;
 use shared::data::monster::MonsterRarity;
 
 #[component]
