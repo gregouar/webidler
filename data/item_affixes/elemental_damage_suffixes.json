@@ -1,182 +1,182 @@
-[
-    {
-        "name"        : "of Infusion",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 1,
-        "weight"      : 500,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 1,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [25, 45]
-            }
-        ]
-    },
-    {
-        "name"        : "of Imbuement",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 2,
-        "weight"      : 500,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 50,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [55, 70]
-            }
-        ]
-    },
-    {
-        "name"        : "of Catalysis",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 3,
-        "weight"      : 500,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 100,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [80, 95]
-            }
-        ]
-    },
-    {
-        "name"        : "of Attunement",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 4,
-        "weight"      : 500,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 150,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [105, 120]
-            }
-        ]
-    },
-    {
-        "name"        : "of Synthesis",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 5,
-        "weight"      : 500,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 200,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [130, 145]
-            }
-        ]
-    },
-    {
-        "name"        : "of Resonance",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 6,
-        "weight"      : 450,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 260,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [160, 180]
-            }
-        ]
-    },
-    {
-        "name"        : "of Amplification",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 7,
-        "weight"      : 400,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 330,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [195, 220]
-            }
-        ]
-    },
-    {
-        "name"        : "of Potentiation",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 8,
-        "weight"      : 350,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 410,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [235, 265]
-            }
-        ]
-    },
-    {
-        "name"        : "of Convergence",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 9,
-        "weight"      : 200,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 500,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [280, 320]
-            }
-        ]
-    },
-    {
-        "name"        : "of Quintessence",
-        "family"      : "inc_elemental_attack_damage",
-        "tags"        : ["Attack", "Fire", "Storm", "Poison"],
-        "affix_type"  : "Suffix",
-        "tier"        : 10,
-        "weight"      : 100,
-        "restrictions": ["AttackWeapon"],
-        "item_level"  : 600,
-        "effects"     : [
-            {
-                "scope"   : "Global",
-                "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
-                "modifier": "More",
-                "value"   : [350, 400]
-            }
-        ]
-    }
-]
+{
+  "item_inc_elemental_attack_damage_t1" : {
+    "name"        : "of Infusion",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 1,
+    "weight"      : 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 1,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [25, 45]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t2" : {
+    "name"        : "of Imbuement",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 2,
+    "weight"      : 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 50,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [55, 70]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t3" : {
+    "name"        : "of Catalysis",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 3,
+    "weight"      : 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 100,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [80, 95]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t4" : {
+    "name"        : "of Attunement",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 4,
+    "weight"      : 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 150,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [105, 120]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t5" : {
+    "name"        : "of Synthesis",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 5,
+    "weight"      : 500,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 200,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [130, 145]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t6" : {
+    "name"        : "of Resonance",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 6,
+    "weight"      : 450,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 260,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [160, 180]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t7" : {
+    "name"        : "of Amplification",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 7,
+    "weight"      : 400,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 330,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [195, 220]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t8" : {
+    "name"        : "of Potentiation",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 8,
+    "weight"      : 350,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 410,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [235, 265]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t9" : {
+    "name"        : "of Convergence",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 500,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [280, 320]
+      }
+    ]
+  },
+  "item_inc_elemental_attack_damage_t10": {
+    "name"        : "of Quintessence",
+    "family"      : "inc_elemental_attack_damage",
+    "tags"        : ["Attack", "Fire", "Storm", "Poison"],
+    "affix_type"  : "Suffix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["AttackWeapon"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "scope"   : "Global",
+        "stat"    : { "Damage": {"damage_type": "Elemental", "skill_type": "Attack"} },
+        "modifier": "More",
+        "value"   : [350, 400]
+      }
+    ]
+  }
+}

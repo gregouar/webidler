@@ -143,12 +143,19 @@ fn goal_satisfied(
             amount,
         } => {
             let matches = |item: &ItemSpecs| {
+                // let Some(item_base) = master_store
+                //     .items_store
+                //     .items
+                //     .get(&item.modifiers.base_item_id)
+                // else {
+                //     return false;
+                // };
                 item_level.is_none_or(|required| item.modifiers.level >= required)
                     && item_rarity.is_none_or(|required| item.modifiers.rarity == required)
                     && item_id
                         .as_ref()
                         .is_none_or(|id| item.modifiers.base_item_id == *id)
-                    && item_category.is_none_or(|required| item.base.categories.contains(&required))
+                    && item_category.is_none_or(|required| item.categories.contains(&required))
             };
             let required = *amount as usize;
 

@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_add_life_regen_t1": {
     "name"        : "Lively",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -14,7 +14,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  4}
     ]
   },
-  {
+  "map_add_life_regen_t2": {
     "name"        : "Healthy",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -29,7 +29,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  8}
     ]
   },
-  {
+  "map_add_life_regen_t3": {
     "name"        : "Hearty",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -44,7 +44,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value": 12}
     ]
   },
-  {
+  "map_add_life_regen_t4": {
     "name"        : "Enduring",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -59,7 +59,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value": 16}
     ]
   },
-  {
+  "map_add_life_regen_t5": {
     "name"        : "Vigorous",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -74,7 +74,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  20}
     ]
   },
-  {
+  "map_add_life_regen_t6": {
     "name"        : "Burly",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -89,7 +89,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  24}
     ]
   },
-  {
+  "map_add_life_regen_t7": {
     "name"        : "Brawny",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -104,7 +104,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  28}
     ]
   },
-  {
+  "map_add_life_regen_t8": {
     "name"        : "Solid",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -119,7 +119,7 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  32}
     ]
   },
-  {
+  "map_add_life_regen_t9": {
     "name"        : "Imposing",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -134,4 +134,4 @@
       {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  40}
     ]
   }
-]
+}

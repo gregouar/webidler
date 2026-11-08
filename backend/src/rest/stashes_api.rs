@@ -1,4 +1,4 @@
-use anyhow::{Result, anyhow};
+use anyhow::Result;
 
 use axum::{
     Extension, Json, Router,
@@ -26,11 +26,11 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, User},
     db::{self, characters::CharacterEntry, stashes::StashEntry},
-    game::{
-        data::inventory_data::inventory_data_to_player_inventory,
-        systems::{inventory_controller, stashes_controller},
+    game::systems::{inventory_controller, stashes_controller},
+    rest::utils::{
+        MsgPack, load_player_town_inventory, verify_character_in_town, verify_character_user,
+        verify_not_ssf,
     },
-    rest::utils::{MsgPack, verify_character_in_town, verify_character_user, verify_not_ssf},
 };
 
 use super::AppError;
@@ -271,26 +271,14 @@ pub async fn post_take_stash_item(
 ) -> Result<Json<TakeStashItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
+    let (character, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let mut stash = db::stashes::get_stash(&mut *tx, &stash_id)
         .await?
         .ok_or(AppError::NotFound)?;
 
     verify_stash_access_write(&character, &stash)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies can't take items".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
 
     inventory_controller::store_item_to_bag(
         &mut inventory,
@@ -324,12 +312,8 @@ pub async fn post_store_stash_item(
 ) -> Result<Json<StoreStashItemResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
+    let (character, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let mut stash = db::stashes::get_stash(&mut *tx, &stash_id)
         .await?
@@ -337,20 +321,18 @@ pub async fn post_store_stash_item(
 
     verify_stash_access_write(&character, &stash)?;
 
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(anyhow!("inventory not found"))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
-
     let item_specs = (payload.item_index < inventory.bag.len())
         .then(|| inventory.bag.remove(payload.item_index))
         .ok_or(AppError::NotFound)?;
 
-    stashes_controller::store_stash_item(&mut tx, &payload.character_id, &mut stash, &item_specs)
-        .await?;
+    stashes_controller::store_stash_item(
+        &mut tx,
+        &master_store.items_store,
+        &payload.character_id,
+        &mut stash,
+        &item_specs,
+    )
+    .await?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;

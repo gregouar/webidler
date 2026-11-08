@@ -215,7 +215,7 @@ async fn new_game_instance(
             if (map_item_index as usize) < player_inventory.bag.len() {
                 let map_item = player_inventory.bag.remove(map_item_index as usize);
 
-                if let Some(map_specs) = &map_item.base.map_specs {
+                if let Some(map_specs) = &map_item.map_specs {
                     if let Some(map_area_id) = &map_specs.area_id
                         && *map_area_id != area_config.area_id
                     {
@@ -239,7 +239,7 @@ async fn new_game_instance(
 
     let area_id = map_item
         .as_ref()
-        .and_then(|item_specs| item_specs.base.map_specs.as_ref())
+        .and_then(|item_specs| item_specs.map_specs.as_ref())
         .and_then(|map_specs| map_specs.replace_area_id.clone())
         .unwrap_or(area_config.area_id);
 
@@ -312,24 +312,17 @@ pub fn new_player_inventory(master_store: &MasterStore) -> PlayerInventory {
         max_bag_size: 40,
         ..Default::default()
     };
-    let base_weapon_id = "dagger".to_string();
-    if let Some(base_weapon) = master_store
-        .items_store
-        .content
-        .get(&base_weapon_id)
-        .cloned()
-    {
+    let base_weapon_id = "dagger".into();
+    if let Some(base_weapon) = master_store.items_store.items.get(&base_weapon_id) {
         let _ = inventory_controller::equip_item(
             &mut player_inventory,
             loot_generator::roll_item_stats(
+                &master_store.items_store,
                 base_weapon_id,
                 base_weapon,
                 ItemRarity::Normal,
                 0,
                 0,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 false,
                 0.0,
             ),

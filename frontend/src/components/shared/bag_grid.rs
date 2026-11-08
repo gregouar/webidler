@@ -136,7 +136,7 @@ fn BagItem(config: Arc<BagConfig>, item_index: usize) -> impl IntoView {
         let config = config.clone();
         move |_| {
             maybe_item
-                .with(|item| item.as_ref().and_then(|item| item.base.slot))
+                .with(|item| item.as_ref().and_then(|item| item.slot))
                 .and_then(|slot| config.comparable_item.and_then(|compare| compare.run(slot)))
         }
     });

@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_add_life_regen_t1" : {
     "name"        : "of Regeneration",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [1, 2] }
     ]
   },
-  {
+  "item_add_life_regen_t2" : {
     "name"        : "of Vigor",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [3, 4] }
     ]
   },
-  {
+  "item_add_life_regen_t3" : {
     "name"        : "of Restoration",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [5, 6] }
     ]
   },
-  {
+  "item_add_life_regen_t4" : {
     "name"        : "of Endurance",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [7, 8] }
     ]
   },
-  {
+  "item_add_life_regen_t5" : {
     "name"        : "of Vitality",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [9, 10] }
     ]
   },
-  {
+  "item_add_life_regen_t6" : {
     "name"        : "of Renewal",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [11, 12] }
     ]
   },
-  {
+  "item_add_life_regen_t7" : {
     "name"        : "of Rejuvenation",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [13, 14] }
     ]
   },
-  {
+  "item_add_life_regen_t8" : {
     "name"        : "of Invigoration",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [15, 16] }
     ]
   },
-  {
+  "item_add_life_regen_t9" : {
     "name"        : "of Perpetuity",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [17, 18] }
     ]
   },
-  {
+  "item_add_life_regen_t10": {
     "name"        : "of Immortality",
     "family"      : "add_life_regen",
     "tags"        : ["Life"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": "LifeRegen", "modifier": "Flat", "value": [19, 20] }
     ]
   }
-]
+}

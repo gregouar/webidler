@@ -8,7 +8,7 @@ use crate::{
     },
     data::{
         area::{AreaLevel, AreaState},
-        item::{ItemRarity, ItemSpecs},
+        item::{ItemBase, ItemModifiers, ItemRarity},
         item_affix::{AffixType, ItemAffix},
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
@@ -125,6 +125,25 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
     )
 }
 
+pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
+    if is_ssf && item_rarity == ItemRarity::Unique {
+        (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
+    } else {
+        0.0
+    }
+}
+
+pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
+    let rarity_multiplier = match item_rarity {
+        ItemRarity::Normal => 1.0,
+        ItemRarity::Magic => 2.0,
+        ItemRarity::Rare => 4.0,
+        ItemRarity::Masterwork | ItemRarity::Unique => 8.0,
+    };
+
+    10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
+}
+
 pub fn gamble_price(item_level: AreaLevel) -> f64 {
     (item_level as f64 / 20.0).floor() + 10.0
 }
@@ -145,41 +164,20 @@ pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
         .round()
 }
 
-pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
-    if is_ssf && item_rarity == ItemRarity::Unique {
-        (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
-    } else {
-        0.0
-    }
-}
-
-pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
-    let rarity_multiplier = match item_rarity {
-        ItemRarity::Normal => 1.0,
-        ItemRarity::Magic => 2.0,
-        ItemRarity::Rare => 4.0,
-        ItemRarity::Masterwork | ItemRarity::Unique => 8.0,
-    };
-
-    10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
-}
-
-pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
-    item_specs
-        .base
+pub fn upgrade_item_price(item_base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<f64> {
+    item_base
         .upgrade_levels
-        .get(item_specs.modifiers.upgrade_level as usize)
+        .get(item_modifiers.upgrade_level as usize)
         .and_then(|next_upgrade_level| {
-            (*next_upgrade_level <= item_specs.modifiers.level)
-                .then_some((*next_upgrade_level / 2 + item_specs.base.min_area_level) as f64)
+            (*next_upgrade_level <= item_modifiers.level)
+                .then_some((*next_upgrade_level / 2 + item_base.min_area_level) as f64)
         })
 }
 
-pub fn temper_item_price(item_specs: &ItemSpecs) -> Option<f64> {
-    let quality = item_specs
-        .modifiers
+pub fn temper_item_price(item_base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<f64> {
+    let quality = item_modifiers
         .quality
         .clamp(0.0, constants::MAX_TEMPERED_ITEM_QUALITY);
-    (!item_specs.base.ignore_quality && quality < constants::MAX_TEMPERED_ITEM_QUALITY)
+    (!item_base.ignore_quality && quality < constants::MAX_TEMPERED_ITEM_QUALITY)
         .then(|| ((f64::from(quality) / 5.0).floor() + 1.0).powi(2))
 }

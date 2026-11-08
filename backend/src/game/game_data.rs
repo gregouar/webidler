@@ -138,6 +138,7 @@ impl GameInstanceData {
             .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
 
         let area_specs = area_controller::init_area_specs(
+            &master_store.items_store,
             &master_store.loot_tables_store,
             &mut area_blueprint,
             &map_item,
@@ -146,7 +147,7 @@ impl GameInstanceData {
         if area_specs.hidden
             && !map_item
                 .as_ref()
-                .and_then(|map_item| map_item.base.map_specs.as_ref())
+                .and_then(|map_item| map_item.map_specs.as_ref())
                 .and_then(|map_specs| map_specs.replace_area_id.as_ref())
                 .map(|replace_area_id| replace_area_id == &area_id)
                 .unwrap_or_default()
@@ -170,6 +171,7 @@ impl GameInstanceData {
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
         passives_controller::compute_passives_tree_specs(
+            &master_store.items_store,
             &mut passives_tree_specs,
             &passives_tree_state.ascension,
         );
@@ -191,10 +193,10 @@ impl GameInstanceData {
         let player_state = PlayerState::init(&player_specs);
         // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
+            &master_store.items_store,
             &master_store.skill_masteries_store,
             &master_store.statuses_store,
             &player_base_specs,
-            // &player_specs,
             &player_state,
             &player_inventory,
             &passives_tree_specs,

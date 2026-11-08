@@ -218,7 +218,18 @@ async fn upsert_character_benedictions_data<'c>(
     Ok(())
 }
 
-// TODO: Split
+pub async fn load_inventory_data<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<Option<InventoryData>> {
+    let character_data = read_character_data(executor, character_id).await?;
+    if let Some(character_data) = character_data {
+        Ok(Some(rmp_serde::from_slice(&character_data.inventory_data)?))
+    } else {
+        Ok(None)
+    }
+}
+
 pub async fn load_character_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,

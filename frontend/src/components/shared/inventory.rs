@@ -12,6 +12,7 @@ use crate::{
     assets::img_asset,
     components::{
         chat::chat_context::ChatContext,
+        data_context::DataContext,
         events::{EventsContext, Key},
         shared::{
             bag_grid::{BagAction, BagConfig, BagGrid, BagSortButton, EmptySlot},
@@ -128,6 +129,7 @@ fn EquippedItem(
     fallback_asset: &'static str,
     fallback_alt: &'static str,
 ) -> impl IntoView {
+    let data_context: DataContext = expect_context();
     let show_menu = RwSignal::new(false);
 
     let render_fallback = move || {
@@ -176,11 +178,12 @@ fn EquippedItem(
                         .get(&main_slot)
                         .cloned()
                     {
+                        let item_base = data_context.get_item_base(&item_specs);
                         view! {
                             <EmptySlot>
                                 <img
                                     draggable="false"
-                                    src=img_asset(&item_specs.base.icon)
+                                    src=img_asset(&item_base.icon)
                                     alt=fallback_alt
                                     class="object-contain max-w-full max-h-full opacity-50"
                                 />
@@ -432,15 +435,15 @@ fn inventory_bag_config(inventory: &InventoryConfig, sell_queue: SellQueue) -> B
         items.with(|items| {
             items.get(index).is_some_and(|item| {
                 equip_filter.with(|filter| match filter {
-                    InventoryEquipFilter::Slot => item.base.slot.is_some(),
+                    InventoryEquipFilter::Slot => item.slot.is_some(),
                     InventoryEquipFilter::Map(area_id) => {
-                        item.base.map_specs.as_ref().is_some_and(|map| {
+                        item.map_specs.as_ref().is_some_and(|map| {
                             map.area_id
                                 .as_ref()
                                 .is_none_or(|map_area| area_id == map_area)
                         })
                     }
-                    InventoryEquipFilter::Rune => item.base.rune_specs.is_some(),
+                    InventoryEquipFilter::Rune => item.rune_specs.is_some(),
                     InventoryEquipFilter::Bag => true,
                 })
             })

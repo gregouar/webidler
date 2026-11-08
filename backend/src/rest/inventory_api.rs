@@ -21,10 +21,8 @@ use crate::{
     app_state::{AppState, MasterStore},
     auth::{self, User},
     db,
-    game::{
-        data::inventory_data::inventory_data_to_player_inventory, systems::inventory_controller,
-    },
-    rest::utils::{verify_character_in_town, verify_character_user},
+    game::systems::inventory_controller,
+    rest::utils::load_player_town_inventory,
 };
 
 use super::AppError;
@@ -49,20 +47,9 @@ pub async fn post_sort_inventory(
 ) -> Result<Json<InventorySortResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
     inventory_controller::sort_bag(&mut inventory, payload.sort_type);
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
@@ -81,20 +68,8 @@ pub async fn post_equip_item(
 ) -> Result<Json<InventoryEquipResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (character, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     inventory_controller::equip_item_from_bag(
         character.max_area_level as AreaLevel,
@@ -118,20 +93,8 @@ pub async fn post_unequip_item(
 ) -> Result<Json<InventoryUnequipResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     inventory_controller::unequip_item_to_bag(&mut inventory, payload.item_slot)?;
 
@@ -151,20 +114,8 @@ pub async fn post_delete_items(
 ) -> Result<Json<InventoryDeleteResponse>, AppError> {
     let mut tx = db_pool.begin().await?;
 
-    let character = db::characters::read_character(&mut *tx, &payload.character_id)
-        .await?
-        .ok_or(AppError::NotFound)?;
-
-    verify_character_user(&character, &user)?;
-    verify_character_in_town(&character)?;
-
-    let (inventory_data, _, _, _) =
-        db::characters_data::load_character_data(&mut *tx, &payload.character_id)
-            .await?
-            .ok_or(AppError::UserError("newbies don't have inventory".into()))?;
-
-    let mut inventory =
-        inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+    let (character, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
     let mut item_indexes = payload.item_indexes;
     item_indexes.sort_by_key(|&i| i);

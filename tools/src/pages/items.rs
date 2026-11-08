@@ -19,8 +19,8 @@ use frontend::components::{
 
 use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
 use shared::data::{
-    item::{ArmorSpecs, ItemBase, ItemModifiers, ItemSpecs, WeaponSpecs},
-    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix},
+    item::{AffixRoll, ArmorSpecs, ItemBase, ItemCategory, ItemModifiers, ItemSpecs, WeaponSpecs},
+    item_affix::{AffixEffect, AffixEffectScope, AffixType, ItemAffix, aggregate_effects},
     modifier::Modifier,
     skill::{DamageType, SkillType},
     stat_effect::{
@@ -236,31 +236,32 @@ fn ItemPreview(
     let item_specs = move || {
         selected_item
             .get()
-            .and_then(|selected_item| items_store.read().get(&selected_item).cloned())
-            .map(|item_base| {
+            .and_then(|item_id| {
+                items_store
+                    .read()
+                    .get(&item_id)
+                    .cloned()
+                    .map(|item_base| (item_id, item_base))
+            })
+            .map(|(item_id, item_base)| {
                 let unique_effects = item_base
                     .affixes
                     .iter()
-                    .map(|affix| ItemAffix {
-                        name: "Unique".to_string(),
-                        family: "unique".to_string(),
-                        tags: Default::default(),
-                        affix_type: AffixType::Unique,
-                        tier: 0,
-                        effects: Vec::from([AffixEffect {
-                            scope: affix.scope,
-                            stat_effect: StatEffect {
-                                stat: affix.stat.clone(),
-                                modifier: affix.modifier,
-                                value: affix.value.max,
-                                bypass_ignore: false,
-                            },
-                        }]),
-                        item_level: 0,
+                    .map(|(effect_id, effect_bp)| AffixRoll {
+                        affix_type: if item_base.categories.contains(&ItemCategory::Soul) {
+                            AffixType::Soul
+                        } else if effect_bp.is_unique {
+                            AffixType::Unique
+                        } else {
+                            AffixType::Base
+                        },
+                        base_item_id: Some(item_id.clone().into()),
+                        affix_id: effect_id.clone(),
+                        value: 100,
                     })
                     .collect();
                 let modifiers = ItemModifiers {
-                    base_item_id: selected_item.get().unwrap_or_default(),
+                    base_item_id: item_id.into(),
                     name: item_base.name.clone(),
                     rarity: item_base.rarity,
                     level: 999,
@@ -282,21 +283,65 @@ fn ItemPreview(
     }
 }
 
-pub fn create_item_specs(base: ItemBase, mut modifiers: ItemModifiers) -> ItemSpecs {
-    compute_upgrade_effects(&base, &mut modifiers);
-
-    let effects: Vec<StatEffect> =
-        (&modifiers.aggregate_effects(AffixEffectScope::Local, false)).into();
-
-    ItemSpecs {
-        required_level: base.min_area_level.max(
+pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs {
+    let mut affixes = base
+        .affixes
+        .iter()
+        .filter_map(|(effect_id, blueprint)| {
+            let effect = &blueprint.effect;
             modifiers
                 .affixes
                 .iter()
-                .map(|affix| affix.item_level)
-                .max()
-                .unwrap_or_default(),
-        ),
+                .find(|roll| {
+                    roll.base_item_id.as_deref() == Some(modifiers.base_item_id.as_str())
+                        && roll.affix_id == *effect_id
+                })
+                .map(|roll| {
+                    let affix_type = roll.affix_type;
+                    ItemAffix {
+                        base_item_id: Some(modifiers.base_item_id.clone()),
+                        affix_id: effect_id.clone(),
+                        affix_type,
+                        effects: vec![AffixEffect {
+                            scope: effect.scope,
+                            stat_effect: StatEffect {
+                                stat: effect.stat.clone(),
+                                modifier: effect.modifier,
+                                value: ((effect.value.min
+                                    + (effect.value.max - effect.value.min)
+                                        * f64::from(roll.value)
+                                        * 0.01)
+                                    * if affix_type == AffixType::Base {
+                                        1.0 + f64::from(modifiers.quality.max(0.0)) * 0.01
+                                    } else {
+                                        1.0
+                                    })
+                                .round(),
+                                bypass_ignore: effect.bypass_ignore,
+                            },
+                        }],
+                        item_level: base.min_area_level,
+                    }
+                })
+        })
+        .collect::<Vec<_>>();
+    affixes.extend(compute_upgrade_affix(&base, &modifiers));
+
+    let required_level = base.min_area_level.max(
+        affixes
+            .iter()
+            .map(|affix| affix.item_level)
+            .max()
+            .unwrap_or_default(),
+    );
+    let effects: Vec<StatEffect> =
+        (&aggregate_effects(&affixes, AffixEffectScope::Local, false)).into();
+
+    ItemSpecs {
+        slot: base.slot,
+        extra_slots: base.extra_slots.clone(),
+        categories: base.categories.clone(),
+        required_level,
         weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
             compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
         }),
@@ -304,8 +349,9 @@ pub fn create_item_specs(base: ItemBase, mut modifiers: ItemModifiers) -> ItemSp
             compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
         }),
         map_specs: base.map_specs.clone(),
-        base,
+        rune_specs: base.rune_specs.clone(),
         modifiers,
+        affixes,
         gold_price: 0.0,
     }
 }
@@ -419,36 +465,27 @@ fn compute_armor_specs(
     armor_specs
 }
 
-fn compute_upgrade_effects(base: &ItemBase, item_modifiers: &mut ItemModifiers) {
-    if item_modifiers.upgrade_level > 0 {
-        item_modifiers
-            .affixes
-            .retain(|affix| !matches!(affix.affix_type, AffixType::Upgrade));
-
-        item_modifiers
-            .affixes
-            .extend(base.upgrade_effects.iter().cloned().map(|upgrade_effect| {
-                ItemAffix {
-                    name: "Empowered".into(),
-                    family: "empowered".into(),
-                    tags: Default::default(),
-                    affix_type: AffixType::Upgrade,
-                    tier: item_modifiers.upgrade_level,
-                    effects: [AffixEffect {
-                        scope: upgrade_effect.scope,
-                        stat_effect: StatEffect {
-                            value: upgrade_effect.stat_effect.value
-                                * item_modifiers.upgrade_level as f64,
-                            ..upgrade_effect.stat_effect
-                        },
-                    }]
-                    .into(),
-                    item_level: base
-                        .upgrade_levels
-                        .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
-                        .copied()
-                        .unwrap_or_default(),
-                }
-            }));
-    }
+fn compute_upgrade_affix(base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<ItemAffix> {
+    (item_modifiers.upgrade_level > 0 && !base.upgrade_effects.is_empty()).then(|| ItemAffix {
+        base_item_id: None,
+        affix_id: "empowered".into(),
+        affix_type: AffixType::Upgrade,
+        effects: base
+            .upgrade_effects
+            .iter()
+            .cloned()
+            .map(|upgrade_effect| AffixEffect {
+                scope: upgrade_effect.scope,
+                stat_effect: StatEffect {
+                    value: upgrade_effect.stat_effect.value * item_modifiers.upgrade_level as f64,
+                    ..upgrade_effect.stat_effect
+                },
+            })
+            .collect(),
+        item_level: base
+            .upgrade_levels
+            .get(item_modifiers.upgrade_level.saturating_sub(1) as usize)
+            .copied()
+            .unwrap_or_default(),
+    })
 }

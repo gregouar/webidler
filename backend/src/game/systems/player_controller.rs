@@ -276,13 +276,13 @@ pub fn equip_item_from_bag(
     )?;
 
     if let Some(old_item) = old_item
-        && let Some(slot) = old_item.base.slot
+        && let Some(slot) = old_item.slot
     {
         unequip_weapon(player_base_specs, player_state, player_controller, slot);
     }
 
     if new_item.weapon_specs.is_some()
-        && let Some(slot) = new_item.base.slot
+        && let Some(slot) = new_item.slot
     {
         equip_weapon(
             &master_store.skills_store,

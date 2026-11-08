@@ -621,7 +621,6 @@ pub fn StartGrindPanel(
                     .cloned()
                     .and_then(|item_specs: ItemSpecs| {
                         item_specs
-                            .base
                             .categories
                             .contains(&ItemCategory::Map)
                             .then(|| Arc::new(item_specs))

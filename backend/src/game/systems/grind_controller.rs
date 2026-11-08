@@ -123,9 +123,6 @@ fn generate_end_grind_rewards(
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 &MAP_LOOT_TEMPLATE,
                 item_level,
                 0,
@@ -138,9 +135,6 @@ fn generate_end_grind_rewards(
             loot_generator::generate_loot(
                 &game_data.area_blueprint.loot_table,
                 &master_store.items_store,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 &DEFAULT_LOOT_TEMPLATE,
                 item_level,
                 0,
@@ -154,9 +148,6 @@ fn generate_end_grind_rewards(
                 loot_generator::roll_item(
                     reward_loot_table,
                     &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
                     &DEFAULT_LOOT_TEMPLATE,
                     item_level,
                     0,
@@ -168,9 +159,6 @@ fn generate_end_grind_rewards(
                 loot_generator::generate_loot(
                     &game_data.area_blueprint.loot_table,
                     &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
                     &DEFAULT_LOOT_TEMPLATE,
                     item_level,
                     0,
@@ -206,21 +194,19 @@ fn generate_quest_reward(
             item_rarity,
             max_affixes,
         } => {
-            let base = master_store.items_store.content.get(item_id)?.clone();
-            let rarity = if base.rarity == ItemRarity::Unique {
+            let item_base = master_store.items_store.items.get(item_id)?;
+            let rarity = if item_base.rarity == ItemRarity::Unique {
                 ItemRarity::Unique
             } else {
-                item_rarity.unwrap_or(base.rarity)
+                item_rarity.unwrap_or(item_base.rarity)
             };
             Some(loot_generator::roll_item_stats(
+                &master_store.items_store,
                 item_id.clone(),
-                base,
+                item_base,
                 rarity,
                 *level,
                 0,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 *max_affixes,
                 0.0,
             ))
@@ -259,9 +245,6 @@ fn generate_quest_reward(
                 Some(rarity) => loot_generator::roll_item(
                     loot_table,
                     &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
                     &template,
                     *level,
                     0,
@@ -272,9 +255,6 @@ fn generate_quest_reward(
                 None => loot_generator::generate_loot(
                     loot_table,
                     &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
                     &template,
                     *level,
                     0,

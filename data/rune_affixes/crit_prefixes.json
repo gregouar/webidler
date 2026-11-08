@@ -1,182 +1,132 @@
-[
-  {
-    "name": "Harmful",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 1,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 1,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 5, 10 ]
-      }
+{
+  "rune_inc_crit_damage_t1" : {
+    "name"        : "Harmful",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 1,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 1,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [5, 10] }
     ]
   },
-  {
-    "name": "Dangerous",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 2,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 100,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 15, 20 ]
-      }
+  "rune_inc_crit_damage_t2" : {
+    "name"        : "Dangerous",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 2,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 100,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [15, 20] }
     ]
   },
-  {
-    "name": "Grievous",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 3,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 200,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 25, 30 ]
-      }
+  "rune_inc_crit_damage_t3" : {
+    "name"        : "Grievous",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 3,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 200,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [25, 30] }
     ]
   },
-  {
-    "name": "Lethal",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 4,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 300,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 35, 40 ]
-      }
+  "rune_inc_crit_damage_t4" : {
+    "name"        : "Lethal",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 4,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 300,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [35, 40] }
     ]
   },
-  {
-    "name": "Mortal",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 5,
-    "weight": 1000,
-    "restrictions": [ "Rune" ],
-    "item_level": 400,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 45, 50 ]
-      }
+  "rune_inc_crit_damage_t5" : {
+    "name"        : "Mortal",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 5,
+    "weight"      : 1000,
+    "restrictions": ["Rune"],
+    "item_level"  : 400,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [45, 50] }
     ]
   },
-  {
-    "name": "Deadly",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 6,
-    "weight": 900,
-    "restrictions": [ "Rune" ],
-    "item_level": 500,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 55, 60 ]
-      }
+  "rune_inc_crit_damage_t6" : {
+    "name"        : "Deadly",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 6,
+    "weight"      : 900,
+    "restrictions": ["Rune"],
+    "item_level"  : 500,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [55, 60] }
     ]
   },
-  {
-    "name": "Fatal",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 7,
-    "weight": 800,
-    "restrictions": [ "Rune" ],
-    "item_level": 600,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 65, 70 ]
-      }
+  "rune_inc_crit_damage_t7" : {
+    "name"        : "Fatal",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 7,
+    "weight"      : 800,
+    "restrictions": ["Rune"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [65, 70] }
     ]
   },
-  {
-    "name": "Grim",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 8,
-    "weight": 400,
-    "restrictions": [ "Rune" ],
-    "item_level": 700,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 75, 80 ]
-      }
+  "rune_inc_crit_damage_t8" : {
+    "name"        : "Grim",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 8,
+    "weight"      : 400,
+    "restrictions": ["Rune"],
+    "item_level"  : 700,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [75, 80] }
     ]
   },
-  {
-    "name": "Terrible",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 9,
-    "weight": 200,
-    "restrictions": [ "Rune" ],
-    "item_level": 800,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 85, 90 ]
-      }
+  "rune_inc_crit_damage_t9" : {
+    "name"        : "Terrible",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 9,
+    "weight"      : 200,
+    "restrictions": ["Rune"],
+    "item_level"  : 800,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [85, 90] }
     ]
   },
-  {
-    "name": "Terminal",
-    "family": "inc_crit_damage",
-    "tags": [ "Attack", "Critical" ],
-    "affix_type": "Prefix",
-    "tier": 10,
-    "weight": 100,
-    "restrictions": [ "Rune" ],
-    "item_level": 900,
-    "effects": [
-      {
-        "scope": "Global",
-        "stat": { "CritDamage": { } },
-        "modifier": "Increased",
-        "value": [ 95, 100 ]
-      }
+  "rune_inc_crit_damage_t10": {
+    "name"        : "Terminal",
+    "family"      : "inc_crit_damage",
+    "tags"        : ["Attack", "Critical"],
+    "affix_type"  : "Prefix",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Rune"],
+    "item_level"  : 900,
+    "effects"     : [
+      { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [95, 100] }
     ]
   }
-]
+}

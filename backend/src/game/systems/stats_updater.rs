@@ -238,12 +238,12 @@ pub fn check_condition(
                             item_slot
                                 .map(|item_slot| {
                                     equipped_slot == item_slot
-                                        || item_specs.base.extra_slots.contains(&item_slot)
+                                        || item_specs.extra_slots.contains(&item_slot)
                                 })
                                 .unwrap_or(true)
                                 && item_category
                                     .map(|item_category| {
-                                        item_specs.base.categories.contains(&item_category)
+                                        item_specs.categories.contains(&item_category)
                                     })
                                     .unwrap_or(true)
                         })

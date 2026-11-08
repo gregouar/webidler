@@ -132,7 +132,8 @@ jobs:
             MAX_BACKUPS=10
             ls -1t $BACKUP_DIR/db_backup_*.sql | tail -n +$((MAX_BACKUPS + 1)) | xargs -r rm -f
 
-            docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend
+            # Reset nginx for cache
+            docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend nginx
 
             # docker compose -f /webidler/tmp/docker-compose.yml stop
             # docker compose -f /webidler/tmp/docker-compose.yml down

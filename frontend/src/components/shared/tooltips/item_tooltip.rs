@@ -5,8 +5,8 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
-    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix},
+    item::{ItemBase, ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
+    item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects},
     skill::DamageType,
 };
 
@@ -66,18 +66,22 @@ pub fn ItemTooltipContent(
     max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
+    let data_context: DataContext = expect_context();
+    let item_base = data_context.get_item_base(&item_specs);
+
     let (has_effects, effects) = if show_affixes {
-        let base_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Unique);
-        let prefixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Prefix);
-        let suffixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Suffix);
-        let upgrade_affixes =
-            formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Upgrade);
-        let soul_affixes = formatted_affixes_list(&item_specs.modifiers.affixes, AffixType::Soul);
+        let base_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Base);
+        let unique_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Unique);
+        let prefixes = formatted_affixes_list(&item_specs.affixes, AffixType::Prefix);
+        let suffixes = formatted_affixes_list(&item_specs.affixes, AffixType::Suffix);
+        let upgrade_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Upgrade);
+        let soul_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Soul);
         // let effects = formatted_affixes_list(&item_specs.modifiers.affixes);
         (
             !base_affixes.is_empty()
                 || !prefixes.is_empty()
                 || !suffixes.is_empty()
+                || !unique_affixes.is_empty()
                 || !upgrade_affixes.is_empty()
                 || !soul_affixes.is_empty(),
             view! {
@@ -108,6 +112,7 @@ pub fn ItemTooltipContent(
                             {suffixes}
                         }
                     })}
+                {(!unique_affixes.is_empty()).then(|| view! { {unique_affixes} })}
                 {(!upgrade_affixes.is_empty())
                     .then(|| {
                         view! {
@@ -131,23 +136,16 @@ pub fn ItemTooltipContent(
         )
     } else {
         let mut effects = effects_tooltip::formatted_effects_list(
-            (&item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Local, false))
-                .into(),
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Local, false)).into(),
         );
         effects.extend(effects_tooltip::formatted_effects_list(
-            (&item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Global, false))
-                .into(),
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into(),
         ));
         (!effects.is_empty(), view! { {effects} }.into_any())
     };
 
     let (has_triggers, triggers) = {
-        let trigger_lines = item_specs
-            .base
+        let trigger_lines = item_base
             .triggers
             .clone()
             .into_iter()
@@ -174,17 +172,15 @@ pub fn ItemTooltipContent(
     };
 
     let (has_upgrades, upgrades) = {
-        if show_affixes && !item_specs.base.upgrade_effects.is_empty() {
-            let upgrade_effects = item_specs
-                .base
+        if show_affixes && !item_base.upgrade_effects.is_empty() {
+            let upgrade_effects = item_base
                 .upgrade_effects
                 .iter()
                 .map(|effect| effect.stat_effect.clone())
                 .collect::<Vec<_>>();
 
             (
-                item_specs
-                    .base
+                item_base
                     .upgrade_levels
                     .get(item_specs.modifiers.upgrade_level as usize)
                     .map(|next_level| *next_level <= item_specs.modifiers.level)
@@ -196,8 +192,7 @@ pub fn ItemTooltipContent(
         }
     };
 
-    let max_upgrade_level = item_specs
-        .base
+    let max_upgrade_level = item_base
         .upgrade_levels
         .iter()
         .filter(|upgrade_level| **upgrade_level <= item_specs.modifiers.level)
@@ -234,14 +229,18 @@ pub fn ItemTooltipContent(
                     <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
                         ItemRarity::Rare | ItemRarity::Masterwork => {
-                            Some(view! { <li class="">{item_specs.base.name.clone()}</li> })
+                            Some(view! { <li class="">{item_base.name.clone()}</li> })
                         }
                         _ => None,
                     }}
 
                 </ul>
             </strong> <Separator /> <ul class="list-none xl:space-y-1">
-                <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
+                <ItemSlotTooltip
+                    item_specs=item_specs.clone()
+                    base_item_level=item_base.min_area_level
+                    show_level=show_affixes
+                />
                 {(max_upgrade_level > 0)
                     .then(|| {
                         view! {
@@ -255,8 +254,8 @@ pub fn ItemTooltipContent(
                     })}
                 <QualityTooltip item_specs=item_specs.clone() />
                 <SoulTooltip item_specs=item_specs.clone() />
-                <ArmorTooltip item_specs=item_specs.clone() />
-                <WeaponTooltip item_specs=item_specs.clone() />
+                <ArmorTooltip item_specs=item_specs.clone() item_base=item_base.clone() />
+                <WeaponTooltip item_specs=item_specs.clone() item_base=item_base.clone() />
                 <RuneTooltip item_specs=item_specs.clone() />
                 <MapTooltip item_specs=item_specs.clone() />
             </ul>
@@ -293,8 +292,7 @@ pub fn ItemTooltipContent(
             </ul>
             {(!hide_description)
                 .then(|| {
-                    item_specs
-                        .base
+                    item_base
                         .description
                         .clone()
                         .map(|description| {
@@ -374,11 +372,11 @@ fn tooltip_rarity_palette(item_rarity: ItemRarity) -> TooltipFramePalette {
 }
 
 #[component]
-pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> impl IntoView {
     item_specs
         .armor_specs
         .as_ref()
-        .zip(item_specs.base.armor_specs.as_ref())
+        .zip(item_base.armor_specs.as_ref())
         .map(|(specs, base_specs)| {
             let armor_color = if specs.armor.round() != base_specs.armor.round() {
                 "text-blue-400"
@@ -428,11 +426,11 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> impl IntoView {
     item_specs
         .weapon_specs
         .as_ref()
-        .zip(item_specs.base.weapon_specs.as_ref())
+        .zip(item_base.weapon_specs.as_ref())
         .map(|(specs, base_specs)| {
             let mut damage_lines = vec![];
 
@@ -554,7 +552,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
 #[component]
 pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    item_specs.base.rune_specs.as_ref().map(|specs| {
+    item_specs.rune_specs.as_ref().map(|specs| {
         let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
             <li class="text-zinc-400 text-xs xl:text-sm ">{item_rarity}" Rune"</li>
@@ -653,10 +651,13 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl IntoView {
+pub fn ItemSlotTooltip(
+    item_specs: Arc<ItemSpecs>,
+    base_item_level: AreaLevel,
+    show_level: bool,
+) -> impl IntoView {
     view! {
         {item_specs
-            .base
             .slot
             .map(|slot| {
                 let item_slot = match slot {
@@ -669,12 +670,11 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     ItemSlot::Shield => "Off-hand",
                     ItemSlot::Accessory => "Cloak",
                     ItemSlot::Weapon => {
-                        if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon2H) {
+                        if item_specs.categories.contains(&ItemCategory::MeleeWeapon2H) {
                             "Two-Handed Melee Weapon"
-                        } else if item_specs.base.categories.contains(&ItemCategory::RangedWeapon) {
+                        } else if item_specs.categories.contains(&ItemCategory::RangedWeapon) {
                             "Ranged Weapon"
-                        } else if item_specs.base.categories.contains(&ItemCategory::MeleeWeapon1H)
-                        {
+                        } else if item_specs.categories.contains(&ItemCategory::MeleeWeapon1H) {
                             "One-Handed Melee Weapon"
                         } else {
                             "Weapon"
@@ -682,6 +682,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     }
                 };
                 let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
+
                 // if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
                 // "Two-Handed Weapon"
                 // } else {
@@ -691,8 +692,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm ">
                         {item_rarity} " " {item_slot}
-                        {(show_level)
-                            .then(|| format!(" - Level {}", item_specs.base.min_area_level))}
+                        {(show_level).then(|| format!(" - Level {}", base_item_level))}
                     </li>
                 }
             })}
@@ -720,11 +720,11 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     view! {
         {item_specs
-            .base
             .categories
             .contains(&ItemCategory::Soul)
             .then(|| {
-                let soul_category = soul_category_str(&item_specs.base.categories);
+                let soul_category = soul_category_str(&item_specs.categories);
+
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm">
                         {format!("{} Soul", soul_category)}
@@ -735,10 +735,10 @@ pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 }
             })}
         {item_specs
-            .base
             .categories
             .contains(&ItemCategory::Remnant)
             .then(|| {
+
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm  italic">
                         "Can be sacrificed for a chance to extract its Unique Soul."
@@ -781,6 +781,9 @@ pub fn formatted_affixes_list(
     affixes: &[ItemAffix],
     affix_type: AffixType,
 ) -> Vec<impl IntoView + use<>> {
+    let data_context: DataContext = expect_context();
+    let item_affixes = data_context.item_affixes.read_untracked();
+    let item_bases = data_context.item_bases.read_untracked();
     affixes
         .iter()
         .filter(|affix| affix.affix_type == affix_type)
@@ -791,15 +794,35 @@ pub fn formatted_affixes_list(
                 .map(|e| e.scope)
                 .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Unique | AffixType::Upgrade => view! {
+                AffixType::Base | AffixType::Unique | AffixType::Upgrade => view! {
                     <li class="text-zinc-400 text-xs -mb-1">
                         {affix_type_str(affix.affix_type)}" – "{scope_str(scope)}
                     </li>
                 }
                 .into_any(),
                 _ => {
-                    let mut tags: Vec<_> = affix.tags.iter().collect();
+                    let affix_item_base = affix
+                        .base_item_id
+                        .as_ref()
+                        .and_then(|item_id| item_bases.get(item_id));
+
+                    let base_affix = affix_item_base
+                        .and_then(|affix_item_base| affix_item_base.affixes.get(&affix.affix_id));
+
+                    let item_affix = item_affixes.get(&affix.affix_id);
+
+                    let mut tags: Vec<_> = item_affix
+                        .map(|base_affix| base_affix.tags.iter().collect())
+                        .unwrap_or_default();
                     tags.sort();
+
+                    if base_affix
+                        .map(|item_base_affix| item_base_affix.is_unique)
+                        .unwrap_or_default()
+                    {
+                        tags.push(&AffixTag::Unique);
+                    }
+
                     let tags: Vec<_> = tags
                         .into_iter()
                         .map(|tag| affix_tag_str(*tag).to_string())
@@ -812,8 +835,17 @@ pub fn formatted_affixes_list(
                             "text-zinc-400 text-xs -mb-1"
                         }>
                             {affix_type_str(affix.affix_type)}" "
-                            <span class="italic">"‘"{affix.name.clone()}"’"</span> "  (Level: "
-                            {affix.item_level}") – " {scope_str(scope)} " – "{tags.join(", ")}
+                            <span class="italic">
+                                "‘"
+                                {item_affix
+                                    .map(|base_affix| base_affix.name.clone())
+                                    .or(
+                                        affix_item_base
+                                            .map(|affix_item_base| affix_item_base.name.clone()),
+                                    )
+                                    .unwrap_or("Affix".to_string())}"’"
+                            </span> "  (Level: " {affix.item_level}") – " {scope_str(scope)}
+                            " – "{tags.join(", ")}
                         </li>
                     }
                     .into_any()
@@ -835,11 +867,12 @@ pub fn formatted_affixes_list(
 
 fn affix_type_str(affix_type: AffixType) -> &'static str {
     match affix_type {
+        AffixType::Base => "Base affix",
         AffixType::Prefix => "Prefix",
         AffixType::Suffix => "Suffix",
-        AffixType::Unique => "Base affix",
-        AffixType::Upgrade => "Empowering affix",
         AffixType::Soul => "Soul affix",
+        AffixType::Unique => "Unique affix",
+        AffixType::Upgrade => "Empowering affix",
     }
 }
 

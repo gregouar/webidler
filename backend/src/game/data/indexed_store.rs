@@ -21,6 +21,10 @@ where
         self.0.iter()
     }
 
+    pub fn values(&self) -> indexmap::map::Values<'_, IndexedKey<K>, T> {
+        self.0.values()
+    }
+
     pub fn get(&self, id: &IndexedKey<K>) -> Option<&T> {
         if let Some(key) = id.key()
             && let Some((stored_id, value)) = self.0.get_index(key)
@@ -56,6 +60,17 @@ where
             .enumerate()
             .map(|(key, (id, value))| (id.with_key(key), value))
             .collect()
+    }
+
+    pub fn contains_key(&self, id: &IndexedKey<K>) -> bool {
+        if let Some(key) = id.key()
+            && let Some((stored_id, _)) = self.0.get_index(key)
+            && stored_id == id
+        {
+            return true;
+        }
+
+        self.0.contains_key(id)
     }
 }
 

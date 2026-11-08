@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use crate::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot},
+    item::{BaseItemId, ItemCategory, ItemRarity, ItemSlot},
     skill::SkillType,
 };
 
@@ -54,7 +54,7 @@ pub enum AchievementGoal {
     },
     EquippedItem {
         #[serde(default)]
-        item_id: Option<String>,
+        item_id: Option<BaseItemId>,
         #[serde(default)]
         item_slot: Option<ItemSlot>,
         #[serde(default)]

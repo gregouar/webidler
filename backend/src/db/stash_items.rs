@@ -3,8 +3,8 @@ use std::collections::HashSet;
 use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
-    item::ItemSpecs,
-    item_affix::AffixEffectScope,
+    item::{ItemBase, ItemSpecs},
+    item_affix::{AffixEffectScope, aggregate_effects},
     market::MarketFilters,
     modifier::invert_formatted_effect_value,
     realms::RealmId,
@@ -57,70 +57,66 @@ pub struct StashItemFlattenStats {
     pub item_cooldown: Option<f64>,
 }
 
-impl TryFrom<&ItemSpecs> for StashItemFlattenStats {
-    type Error = anyhow::Error;
+pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemFlattenStats {
+    let item_cooldown = item_specs
+        .weapon_specs
+        .as_ref()
+        .map(|weapon_specs| weapon_specs.cooldown.get());
+    let item_damages = item_specs
+        .weapon_specs
+        .as_ref()
+        .map(|weapon_specs| weapon_specs.average_damages());
+    let item_damage_physical = item_specs
+        .weapon_specs
+        .as_ref()
+        .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Physical));
+    let item_damage_fire = item_specs
+        .weapon_specs
+        .as_ref()
+        .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Fire));
+    let item_damage_poison = item_specs
+        .weapon_specs
+        .as_ref()
+        .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Poison));
+    let item_damage_storm = item_specs
+        .weapon_specs
+        .as_ref()
+        .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Storm));
 
-    fn try_from(value: &ItemSpecs) -> Result<Self, Self::Error> {
-        let item_cooldown = value
+    StashItemFlattenStats {
+        base_item_id: item_specs.modifiers.base_item_id.clone().into(),
+        item_name: format!("{} {}", item_specs.modifiers.name, item_base.name),
+        item_rarity: serde_plain::to_string(&item_specs.modifiers.rarity).unwrap_or("".into()),
+        item_level: item_specs.required_level as i32,
+        item_power_level: item_specs.modifiers.level as i32,
+        item_upgrade_level: item_specs.modifiers.upgrade_level as i32,
+        max_power_shard_level: item_specs
+            .map_specs
+            .as_ref()
+            .and_then(|map_specs| map_specs.max_power_shard_level)
+            .map(i32::from),
+        item_armor: item_specs
+            .armor_specs
+            .as_ref()
+            .map(|armor_specs| *armor_specs.armor),
+        item_block: item_specs
+            .armor_specs
+            .as_ref()
+            .map(|armor_specs| armor_specs.block.get() as f64),
+        item_cooldown,
+        item_damages,
+        item_damage_physical,
+        item_damage_fire,
+        item_damage_poison,
+        item_damage_storm,
+        item_crit_chance: item_specs
             .weapon_specs
             .as_ref()
-            .map(|weapon_specs| weapon_specs.cooldown.get());
-        let item_damages = value
+            .map(|weapon_specs| weapon_specs.crit_chance.value.get() as f64),
+        item_crit_damage: item_specs
             .weapon_specs
             .as_ref()
-            .map(|weapon_specs| weapon_specs.average_damages());
-        let item_damage_physical = value
-            .weapon_specs
-            .as_ref()
-            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Physical));
-        let item_damage_fire = value
-            .weapon_specs
-            .as_ref()
-            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Fire));
-        let item_damage_poison = value
-            .weapon_specs
-            .as_ref()
-            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Poison));
-        let item_damage_storm = value
-            .weapon_specs
-            .as_ref()
-            .map(|weapon_specs| weapon_specs.average_damage_type(DamageType::Storm));
-
-        Ok(Self {
-            base_item_id: value.modifiers.base_item_id.clone(),
-            item_name: format!("{} {}", value.modifiers.name, value.base.name),
-            item_rarity: serde_plain::to_string(&value.modifiers.rarity)?,
-            item_level: value.required_level as i32,
-            item_power_level: value.modifiers.level as i32,
-            item_upgrade_level: value.modifiers.upgrade_level as i32,
-            max_power_shard_level: value
-                .map_specs
-                .as_ref()
-                .and_then(|map_specs| map_specs.max_power_shard_level)
-                .map(i32::from),
-            item_armor: value
-                .armor_specs
-                .as_ref()
-                .map(|armor_specs| *armor_specs.armor),
-            item_block: value
-                .armor_specs
-                .as_ref()
-                .map(|armor_specs| armor_specs.block.get() as f64),
-            item_cooldown,
-            item_damages,
-            item_damage_physical,
-            item_damage_fire,
-            item_damage_poison,
-            item_damage_storm,
-            item_crit_chance: value
-                .weapon_specs
-                .as_ref()
-                .map(|weapon_specs| weapon_specs.crit_chance.value.get() as f64),
-            item_crit_damage: value
-                .weapon_specs
-                .as_ref()
-                .map(|weapon_specs| *weapon_specs.crit_damage),
-        })
+            .map(|weapon_specs| *weapon_specs.crit_damage),
     }
 }
 
@@ -129,6 +125,7 @@ pub async fn store_item<'c>(
     stash_id: &StashId,
     realm_id: &RealmId,
     character_id: &UserCharacterId,
+    item_base: &ItemBase,
     item: &ItemSpecs,
 ) -> anyhow::Result<StashItemId> {
     Ok(create_stash_item(
@@ -136,13 +133,11 @@ pub async fn store_item<'c>(
         stash_id,
         realm_id,
         character_id,
-        item.base
-            .categories
+        item.categories
             .iter()
             .filter_map(|category| serde_plain::to_string(&category).ok())
             .collect(),
-        item.modifiers
-            .aggregate_effects(AffixEffectScope::Global, true)
+        aggregate_effects(&item.affixes, AffixEffectScope::Global, true)
             .0
             .into_iter()
             .filter_map(|((stat_type, modifier, _), stat_value)| {
@@ -153,7 +148,7 @@ pub async fn store_item<'c>(
                 ))
             })
             .collect(),
-        item.try_into()?,
+        flatten_stats(item_base, item),
         serde_json::to_value(&item.modifiers)?,
     )
     .await?)
