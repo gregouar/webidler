@@ -69,10 +69,10 @@ pub enum InventoryItemEligibility {
 fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibility) -> bool {
     match eligibility {
         InventoryItemEligibility::Any => true,
-        InventoryItemEligibility::Quality => !item.ignore_quality,
-        InventoryItemEligibility::Unique => item.rarity == ItemRarity::Unique,
+        InventoryItemEligibility::Quality => item.slot.is_some(), // That's a hack but it works :o)
+        InventoryItemEligibility::Unique => item.modifiers.rarity == ItemRarity::Unique,
         InventoryItemEligibility::NonUnique => {
-            item.rarity != ItemRarity::Unique
+            item.modifiers.rarity != ItemRarity::Unique
                 && !item.categories.contains(&ItemCategory::Soul)
                 && !item.categories.contains(&ItemCategory::Remnant)
         }
@@ -330,7 +330,6 @@ pub fn ItemRow(
     #[prop(default = false)] rejected: bool,
     max_item_level: Signal<AreaLevel>,
 ) -> impl IntoView {
-    let slot = item_specs.base.slot;
     let is_highlighted = Signal::derive(highlight);
     let row_state_class = Signal::derive(move || {
         let mut classes = String::new();
@@ -392,7 +391,9 @@ pub fn ItemRow(
                     />
                 </div>
 
-                {slot.map(|slot| view! { <ItemCompare item_slot=slot max_item_level /> })}
+                {item_specs
+                    .slot
+                    .map(|slot| view! { <ItemCompare item_slot=slot max_item_level /> })}
 
                 {(price > 0.0)
                     .then(|| {

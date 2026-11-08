@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange},
+    item::{ArmorSpecs, ItemCategory, ItemRarity, ItemSlot, ItemSpecs, SkillRange, WeaponSpecs},
     item_affix::{AffixEffectScope, AffixTag, AffixType, ItemAffix, aggregate_effects},
     skill::DamageType,
 };
@@ -66,6 +66,9 @@ pub fn ItemTooltipContent(
     max_item_level: Signal<AreaLevel>,
     // #[prop(default = Signal::derive(|| AreaLevel::MAX))] max_item_level: RwSignal<AreaLevel>,
 ) -> impl IntoView {
+    let data_context: DataContext = expect_context();
+    let item_base = data_context.get_item_base(&item_specs);
+
     let (has_effects, effects) = if show_affixes {
         let base_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Base);
         let unique_affixes = formatted_affixes_list(&item_specs.affixes, AffixType::Unique);
@@ -142,8 +145,7 @@ pub fn ItemTooltipContent(
     };
 
     let (has_triggers, triggers) = {
-        let trigger_lines = item_specs
-            .base
+        let trigger_lines = item_base
             .triggers
             .clone()
             .into_iter()
@@ -170,17 +172,15 @@ pub fn ItemTooltipContent(
     };
 
     let (has_upgrades, upgrades) = {
-        if show_affixes && !item_specs.base.upgrade_effects.is_empty() {
-            let upgrade_effects = item_specs
-                .base
+        if show_affixes && !item_base.upgrade_effects.is_empty() {
+            let upgrade_effects = item_base
                 .upgrade_effects
                 .iter()
                 .map(|effect| effect.stat_effect.clone())
                 .collect::<Vec<_>>();
 
             (
-                item_specs
-                    .base
+                item_base
                     .upgrade_levels
                     .get(item_specs.modifiers.upgrade_level as usize)
                     .map(|next_level| *next_level <= item_specs.modifiers.level)
@@ -192,8 +192,7 @@ pub fn ItemTooltipContent(
         }
     };
 
-    let max_upgrade_level = item_specs
-        .base
+    let max_upgrade_level = item_base
         .upgrade_levels
         .iter()
         .filter(|upgrade_level| **upgrade_level <= item_specs.modifiers.level)
@@ -230,14 +229,18 @@ pub fn ItemTooltipContent(
                     <li class=" whitespace-pre-line">{item_specs.modifiers.name.clone()}</li>
                     {match item_specs.modifiers.rarity {
                         ItemRarity::Rare | ItemRarity::Masterwork => {
-                            Some(view! { <li class="">{item_specs.base.name.clone()}</li> })
+                            Some(view! { <li class="">{item_base.name.clone()}</li> })
                         }
                         _ => None,
                     }}
 
                 </ul>
             </strong> <Separator /> <ul class="list-none xl:space-y-1">
-                <ItemSlotTooltip item_specs=item_specs.clone() show_level=show_affixes />
+                <ItemSlotTooltip
+                    item_specs=item_specs.clone()
+                    base_item_level=item_base.min_area_level
+                    show_level=show_affixes
+                />
                 {(max_upgrade_level > 0)
                     .then(|| {
                         view! {
@@ -251,8 +254,8 @@ pub fn ItemTooltipContent(
                     })}
                 <QualityTooltip item_specs=item_specs.clone() />
                 <SoulTooltip item_specs=item_specs.clone() />
-                <ArmorTooltip item_specs=item_specs.clone() />
-                <WeaponTooltip item_specs=item_specs.clone() />
+                <ArmorTooltip item_specs=item_specs.clone() base_specs=item_base.armor_specs />
+                <WeaponTooltip item_specs=item_specs.clone() base_specs=item_base.weapon_specs />
                 <RuneTooltip item_specs=item_specs.clone() />
                 <MapTooltip item_specs=item_specs.clone() />
             </ul>
@@ -289,8 +292,7 @@ pub fn ItemTooltipContent(
             </ul>
             {(!hide_description)
                 .then(|| {
-                    item_specs
-                        .base
+                    item_base
                         .description
                         .clone()
                         .map(|description| {
@@ -370,11 +372,11 @@ fn tooltip_rarity_palette(item_rarity: ItemRarity) -> TooltipFramePalette {
 }
 
 #[component]
-pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>, base_specs: Option<ArmorSpecs>) -> impl IntoView {
     item_specs
         .armor_specs
         .as_ref()
-        .zip(item_specs.base.armor_specs.as_ref())
+        .zip(base_specs.as_ref())
         .map(|(specs, base_specs)| {
             let armor_color = if specs.armor.round() != base_specs.armor.round() {
                 "text-blue-400"
@@ -424,11 +426,11 @@ pub fn ArmorTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
+pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, base_specs: Option<WeaponSpecs>) -> impl IntoView {
     item_specs
         .weapon_specs
         .as_ref()
-        .zip(item_specs.base.weapon_specs.as_ref())
+        .zip(base_specs.as_ref())
         .map(|(specs, base_specs)| {
             let mut damage_lines = vec![];
 
@@ -550,7 +552,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 
 #[component]
 pub fn RuneTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
-    item_specs.base.rune_specs.as_ref().map(|specs| {
+    item_specs.rune_specs.as_ref().map(|specs| {
         let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
         view! {
             <li class="text-zinc-400 text-xs xl:text-sm ">{item_rarity}" Rune"</li>
@@ -649,10 +651,13 @@ pub fn MapTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 }
 
 #[component]
-pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl IntoView {
+pub fn ItemSlotTooltip(
+    item_specs: Arc<ItemSpecs>,
+    base_item_level: AreaLevel,
+    show_level: bool,
+) -> impl IntoView {
     view! {
         {item_specs
-            .base
             .slot
             .map(|slot| {
                 let item_slot = match slot {
@@ -677,6 +682,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                     }
                 };
                 let item_rarity = item_rarity_str(Some(item_specs.modifiers.rarity));
+
                 // if item_specs.base.extra_slots.contains(&ItemSlot::Shield) {
                 // "Two-Handed Weapon"
                 // } else {
@@ -686,8 +692,7 @@ pub fn ItemSlotTooltip(item_specs: Arc<ItemSpecs>, show_level: bool) -> impl Int
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm ">
                         {item_rarity} " " {item_slot}
-                        {(show_level)
-                            .then(|| format!(" - Level {}", item_specs.base.min_area_level))}
+                        {(show_level).then(|| format!(" - Level {}", base_item_level))}
                     </li>
                 }
             })}
@@ -715,11 +720,11 @@ pub fn QualityTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
 pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
     view! {
         {item_specs
-            .base
             .categories
             .contains(&ItemCategory::Soul)
             .then(|| {
                 let soul_category = soul_category_str(&item_specs.categories);
+
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm">
                         {format!("{} Soul", soul_category)}
@@ -730,10 +735,10 @@ pub fn SoulTooltip(item_specs: Arc<ItemSpecs>) -> impl IntoView {
                 }
             })}
         {item_specs
-            .base
             .categories
             .contains(&ItemCategory::Remnant)
             .then(|| {
+
                 view! {
                     <li class="text-zinc-400 text-xs xl:text-sm  italic">
                         "Can be sacrificed for a chance to extract its Unique Soul."

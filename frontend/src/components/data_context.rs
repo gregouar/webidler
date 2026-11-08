@@ -33,7 +33,7 @@ pub struct DataContext {
     pub item_bases: RwSignal<HashMap<BaseItemId, ItemBase>>,
     pub item_affixes: RwSignal<HashMap<String, ItemAffixBlueprint>>,
 
-    default_base_item: StoredValue<ItemBase>,
+    default_item_base: StoredValue<ItemBase>,
 
     load_lock: StoredValue<Arc<Mutex<()>>>,
     loaded: RwSignal<bool>,
@@ -54,7 +54,7 @@ pub fn provide_data_context() {
         item_affixes: RwSignal::new(Default::default()),
         load_lock: StoredValue::new(Arc::new(Mutex::new(()))),
         loaded: RwSignal::new(false),
-        default_base_item: StoredValue::new(ItemBase {
+        default_item_base: StoredValue::new(ItemBase {
             name: "Item".to_string(),
             icon: "ui/shield.webp".to_string(),
             description: Default::default(),
@@ -128,11 +128,11 @@ impl DataContext {
             .and_then(|status_specs| status_specs.adjective.clone())
     }
 
-    pub fn base_item(&self, item_specs: &ItemSpecs) -> ItemBase {
+    pub fn get_item_base(&self, item_specs: &ItemSpecs) -> ItemBase {
         self.item_bases
             .read_untracked()
             .get(&item_specs.modifiers.base_item_id)
             .cloned()
-            .unwrap_or(self.default_base_item.get_value())
+            .unwrap_or(self.default_item_base.get_value())
     }
 }

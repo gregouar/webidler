@@ -447,13 +447,13 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
     let affix_price = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
+                if item.item_specs.modifiers.rarity == ItemRarity::Unique {
                     return None;
                 }
                 forge::affix_operation_price(
                     ForgeAffixOperation::Add(None),
                     item.item_specs.modifiers.count_presuffixes(),
-                    &item.item_specs.base,
+                    &item.item_specs,
                 )
             }
             _ => None,
@@ -463,7 +463,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
     let prefix_price = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
+                if item.item_specs.modifiers.rarity == ItemRarity::Unique {
                     return None;
                 }
 
@@ -474,7 +474,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     forge::affix_operation_price(
                         ForgeAffixOperation::Add(Some(AffixType::Prefix)),
                         prefixes + suffixes,
-                        &item.item_specs.base,
+                        &item.item_specs,
                     )
                 } else {
                     None
@@ -487,7 +487,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
     let suffix_price = move || {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
+                if item.item_specs.modifiers.rarity == ItemRarity::Unique {
                     return None;
                 }
 
@@ -498,7 +498,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     forge::affix_operation_price(
                         ForgeAffixOperation::Add(Some(AffixType::Suffix)),
                         prefixes + suffixes,
-                        &item.item_specs.base,
+                        &item.item_specs,
                     )
                 } else {
                     None
@@ -513,7 +513,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
             SelectedItem::InMarket(item) => forge::affix_operation_price(
                 ForgeAffixOperation::Remove,
                 item.item_specs.modifiers.count_presuffixes(),
-                &item.item_specs.base,
+                &item.item_specs,
             ),
             _ => None,
         })
@@ -522,7 +522,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
     let replace_price = move |affix_type| {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
-                if item.item_specs.base.rarity == ItemRarity::Unique {
+                if item.item_specs.modifiers.rarity == ItemRarity::Unique {
                     return None;
                 }
 
@@ -543,12 +543,12 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 let remove_price = forge::affix_operation_price(
                     ForgeAffixOperation::Remove,
                     affixes_amount,
-                    &item.item_specs.base,
+                    &item.item_specs,
                 )?;
                 let add_price = forge::affix_operation_price(
                     ForgeAffixOperation::Add(affix_type),
                     affixes_amount.checked_sub(1)?,
-                    &item.item_specs.base,
+                    &item.item_specs,
                 )?;
 
                 Some(remove_price + add_price)
@@ -770,7 +770,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
 pub fn TemperDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
     let toaster: Toasts = expect_context();
+
     let tempering = RwSignal::new(false);
     let temper_result = RwSignal::new(None::<f32>);
     let selected_item_index = RwSignal::new(None::<usize>);
@@ -788,7 +790,10 @@ pub fn TemperDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
 
     let temper_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => computations::temper_item_price(&item.item_specs),
+            SelectedItem::InMarket(item) => {
+                let item_base = data_context.get_item_base(&item.item_specs);
+                computations::temper_item_price(&item_base, &item.item_specs.modifiers)
+            }
             _ => None,
         })
     };
@@ -904,11 +909,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
     let sacrifice_price = move || {
         selected_item.with(|selected| match selected {
             SelectedItem::InMarket(item)
-                if !item
-                    .item_specs
-                    .base
-                    .categories
-                    .contains(&ItemCategory::Soul) =>
+                if !item.item_specs.categories.contains(&ItemCategory::Soul) =>
             {
                 Some(computations::sacrifice_price(&item.item_specs.affixes))
             }
@@ -967,11 +968,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
         move || {
             if !discarding.get_untracked()
                 && let SelectedItem::InMarket(item) = selected_item.get()
-                && item
-                    .item_specs
-                    .base
-                    .categories
-                    .contains(&ItemCategory::Soul)
+                && item.item_specs.categories.contains(&ItemCategory::Soul)
             {
                 discarding.set(true);
                 spawn_local(async move {
@@ -1088,7 +1085,6 @@ pub fn ImbueDetails(
             selected_soul.with(|selected_soul| match (selected_item, selected_soul) {
                 (SelectedItem::InMarket(item), SelectedItem::InMarket(soul)) => {
                     soul.item_specs
-                        .base
                         .categories
                         .is_superset(&item.item_specs.categories)
                         && soul.item_specs.affixes.first().is_some_and(|soul_affix| {
@@ -1198,6 +1194,7 @@ pub fn ImbueDetails(
 pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
     let backend: BackendClient = expect_context();
     let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
     let toaster: Toasts = expect_context();
     let confirm_context: ConfirmContext = expect_context();
 
@@ -1205,7 +1202,10 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     let wrong_item = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => item.item_specs.base.upgrade_levels.is_empty(),
+            SelectedItem::InMarket(item) => {
+                let item_base = data_context.get_item_base(&item.item_specs);
+                item_base.upgrade_levels.is_empty()
+            }
             _ => true,
         })
     };
@@ -1257,14 +1257,15 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
         move || {
             let do_upgrade_item = Arc::new(do_upgrade_item);
             let next_power_level = selected_item.with(|selected_item| match selected_item {
-                SelectedItem::InMarket(item) => item
-                    .item_specs
-                    .base
-                    .upgrade_levels
-                    .get(item.item_specs.modifiers.upgrade_level as usize)
-                    .map(|next_upgrade_level| {
-                        item.item_specs.required_level.max(*next_upgrade_level)
-                    }),
+                SelectedItem::InMarket(item) => {
+                    let item_base = data_context.get_item_base(&item.item_specs);
+                    item_base
+                        .upgrade_levels
+                        .get(item.item_specs.modifiers.upgrade_level as usize)
+                        .map(|next_upgrade_level| {
+                            item.item_specs.required_level.max(*next_upgrade_level)
+                        })
+                }
                 _ => None,
             });
             let character_power_level = town_context.character.read_untracked().max_area_level;
@@ -1293,7 +1294,10 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
     let upgrade_price = move || {
         selected_item.with(|selected_item| match selected_item {
-            SelectedItem::InMarket(item) => computations::upgrade_item_price(&item.item_specs),
+            SelectedItem::InMarket(item) => {
+                let item_base = data_context.get_item_base(&item.item_specs);
+                computations::upgrade_item_price(&item_base, &item.item_specs.modifiers)
+            }
             _ => None,
         })
     };

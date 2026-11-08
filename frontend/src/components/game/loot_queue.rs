@@ -36,7 +36,6 @@ pub fn LootQueue() -> impl IntoView {
     let accessibility: AccessibilityContext = expect_context();
     let settings: SettingsContext = expect_context();
     let game_context: GameContext = expect_context();
-    let data_context: DataContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let pickup_loot = {
@@ -201,7 +200,6 @@ pub fn LootQueue() -> impl IntoView {
                 let(loot)
             >
                 {
-                    let item_base = data_context.item_base(loot.item_specs);
                     let item_rarity = loot.item_specs.modifiers.rarity;
                     let gold_price = loot.item_specs.gold_price;
                     let gems_price = computations::item_gems_price(
@@ -298,7 +296,6 @@ pub fn LootQueue() -> impl IntoView {
                                     <ItemCard
                                         comparable_item_specs=loot
                                             .item_specs
-                                            .base
                                             .slot
                                             .and_then(|slot| {
                                                 game_context
@@ -383,11 +380,13 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return true;
     }
 
+    let data_context: DataContext = expect_context();
+    let item_base = data_context.get_item_base(item_specs);
+
     if item_name
         .as_ref()
         .map(|item_name| {
-            !item_specs
-                .base
+            !item_base
                 .name
                 .to_lowercase()
                 .contains(&item_name.to_lowercase())
@@ -426,8 +425,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if req_item_level
         .map(|req_item_level| !match rule_type {
-            FilterRuleType::Pickup => item_specs.base.min_area_level >= req_item_level,
-            FilterRuleType::Sell => item_specs.base.min_area_level <= req_item_level,
+            FilterRuleType::Pickup => item_base.min_area_level >= req_item_level,
+            FilterRuleType::Sell => item_base.min_area_level <= req_item_level,
         })
         .unwrap_or_default()
     {

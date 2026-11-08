@@ -797,10 +797,11 @@ fn PassiveSkillTree(
     let derived_passives_tree_specs = Memo::new(move |_| {
         let mut passives_tree_specs = data_context.passives_tree_specs.get();
         for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
+            let item_base = data_context.get_item_base(item_specs);
             let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
             node_specs.effects =
                 (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into();
-            node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.triggers = item_base.triggers.clone();
         }
         passives_tree_specs
     });
@@ -867,8 +868,9 @@ fn AscendNode(
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
-    let backend = expect_context::<BackendClient>();
-    let toaster = expect_context::<Toasts>();
+    let data_context: DataContext = expect_context();
+    let backend: BackendClient = expect_context();
+    let toaster: Toasts = expect_context();
 
     let socket = Memo::new(move |_| match active_tab.get() {
         PassivesTab::Ascend => passives_tree_ascension
@@ -888,14 +890,14 @@ fn AscendNode(
         let node_specs = node_specs.clone();
         move |_| {
             if let Some(item_specs) = socket.get() {
+                let item_base = data_context.get_item_base(&item_specs);
                 let mut node_specs = node_specs.clone();
-                node_specs.icon = item_specs.base.icon.clone();
+                node_specs.icon = item_base.icon.clone();
                 node_specs.effects =
                     (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false))
                         .into(); // TODO: Better copy, don't aggregate?
-                node_specs.triggers = item_specs.base.triggers.clone();
+                node_specs.triggers = item_base.triggers.clone();
                 node_specs.root_node |= item_specs
-                    .base
                     .rune_specs
                     .as_ref()
                     .map(|rune_specs| rune_specs.root_node)
@@ -1314,7 +1316,6 @@ fn validate_build(
                 .get(node_step)
                 .and_then(|item_specs| {
                     item_specs
-                        .base
                         .rune_specs
                         .as_ref()
                         .map(|rune_specs| rune_specs.root_node)
