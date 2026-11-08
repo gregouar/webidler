@@ -104,10 +104,7 @@ pub fn is_compatible_soul(items_store: &ItemsStore, item: &ItemSpecs, soul: &Ite
                         .get(&soul_affix.affix_id)
                         .map(|a| &a.family);
 
-                    affix.affix_type != AffixType::Soul
-                        && !(affix_family.is_some()
-                            && soul_affix_family.is_some()
-                            && soul_affix_family == affix_family)
+                    affix.affix_type != AffixType::Soul && soul_affix_family == affix_family
                 })
         })
     // .is_some_and(|affix| item.can_replace_soul_affix(affix))

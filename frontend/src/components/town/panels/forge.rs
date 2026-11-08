@@ -1097,9 +1097,7 @@ pub fn ImbueDetails(
                                         item_affixes.get(&soul_affix.affix_id).map(|a| &a.family);
 
                                     affix.affix_type != AffixType::Soul
-                                        && !(affix_family.is_some()
-                                            && soul_affix_family.is_some()
-                                            && soul_affix_family == affix_family)
+                                        && soul_affix_family == affix_family
                                 })
                         })
                 }
