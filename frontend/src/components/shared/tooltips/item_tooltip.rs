@@ -813,7 +813,7 @@ pub fn formatted_affixes_list(
 
                     let mut tags: Vec<_> = item_affix
                         .map(|base_affix| base_affix.tags.iter().collect())
-                        .unwrap_or(Vec::new());
+                        .unwrap_or_default();
                     tags.sort();
 
                     if base_affix

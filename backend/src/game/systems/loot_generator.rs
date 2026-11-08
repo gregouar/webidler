@@ -153,7 +153,7 @@ pub fn roll_item_stats(
         roll_quality(item_base.min_area_level, level)
     };
 
-    let affixes = roll_base_affixes(&base_item_id, &item_base);
+    let affixes = roll_base_affixes(&base_item_id, item_base);
     let mut modifiers = ItemModifiers {
         base_item_id,
         name: item_base.name.clone(),
@@ -191,13 +191,13 @@ pub fn roll_item_stats(
     };
 
     for _ in 0..affixes_amount {
-        add_affix(items_store, &item_base, &mut modifiers, None);
+        add_affix(items_store, item_base, &mut modifiers, None);
     }
 
     if rarity == ItemRarity::Masterwork {
         add_affix(
             items_store,
-            &item_base,
+            item_base,
             &mut modifiers,
             Some(AffixType::Soul),
         );

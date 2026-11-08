@@ -255,13 +255,13 @@ fn ItemPreview(
                         } else {
                             AffixType::Base
                         },
-                        base_item_id: Some(item_id.clone()),
+                        base_item_id: Some(item_id.clone().into()),
                         affix_id: effect_id.clone(),
                         value: 100,
                     })
                     .collect();
                 let modifiers = ItemModifiers {
-                    base_item_id: item_id,
+                    base_item_id: item_id.into(),
                     name: item_base.name.clone(),
                     rarity: item_base.rarity,
                     level: 999,
@@ -338,6 +338,9 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs 
         (&aggregate_effects(&affixes, AffixEffectScope::Local, false)).into();
 
     ItemSpecs {
+        slot: base.slot,
+        extra_slots: base.extra_slots.clone(),
+        categories: base.categories.clone(),
         required_level,
         weapon_specs: base.weapon_specs.as_ref().map(|weapon_specs| {
             compute_weapon_specs(weapon_specs.clone(), modifiers.quality, &effects)
@@ -346,7 +349,7 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs 
             compute_armor_specs(armor_specs.clone(), modifiers.quality, &effects)
         }),
         map_specs: base.map_specs.clone(),
-        base,
+        rune_specs: base.rune_specs.clone(),
         modifiers,
         affixes,
         gold_price: 0.0,
