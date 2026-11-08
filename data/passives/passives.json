@@ -6,7 +6,7 @@
         "icon": "passives/monkey.svg",
         "x": 90.0,
         "y": -130.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Armor",
         "effects": [
@@ -510,7 +510,7 @@
         "upgrade_extra_cost": 29
       },
       "0bd6d73c-0b10-4524-b280-ca71fdc054c9": {
-        "name": "Greater Ranged Weapon Damage",
+        "name": "Archery",
         "icon": "passives/high_shot.svg",
         "x": -117.5,
         "y": 177.5,
@@ -544,6 +544,16 @@
             },
             "modifier": "More",
             "value": 25.0
+          },
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -574,6 +584,16 @@
               }
             },
             "modifier": "More",
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -1631,7 +1651,7 @@
         "icon": "passives/caduceus.svg",
         "x": 52.5,
         "y": 95.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Life",
         "effects": [
@@ -2327,7 +2347,7 @@
         "icon": "passives/myrmidon.svg",
         "x": -95.0,
         "y": 62.5,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Armor",
         "effects": [
@@ -3031,7 +3051,7 @@
         "icon": "passives/centaur_heart.svg",
         "x": -52.5,
         "y": 95.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Life",
         "effects": [
@@ -3054,7 +3074,7 @@
           {
             "stat": "Life",
             "modifier": "More",
-            "value": 4.0
+            "value": 3.0
           },
           {
             "stat": {
@@ -5613,7 +5633,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -5630,7 +5650,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -5688,14 +5708,14 @@
         "icon": "passives/wisdom.svg",
         "x": -35.0,
         "y": -87.5,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Mana",
         "effects": [
           {
             "stat": "Mana",
-            "modifier": "Increased",
-            "value": 4.0
+            "modifier": "More",
+            "value": 5.0
           },
           {
             "stat": "ManaRegen",
@@ -5708,8 +5728,8 @@
         "upgrade_effects": [
           {
             "stat": "Mana",
-            "modifier": "Increased",
-            "value": 2.0
+            "modifier": "More",
+            "value": 1.0
           },
           {
             "stat": "ManaRegen",
@@ -6668,7 +6688,7 @@
         "icon": "passives/third_eye.svg",
         "x": 72.5,
         "y": -182.5,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Mana",
         "effects": [
@@ -6695,7 +6715,7 @@
               "StatConditionalModifier": {
                 "stat": {
                   "Damage": {
-                    "skill_type": "Spell",
+                    "skill_type": null,
                     "skill_id": null,
                     "damage_type": null,
                     "min_max": null,
@@ -6738,7 +6758,7 @@
               "StatConditionalModifier": {
                 "stat": {
                   "Damage": {
-                    "skill_type": "Spell",
+                    "skill_type": null,
                     "skill_id": null,
                     "damage_type": null,
                     "min_max": null,
@@ -8715,7 +8735,7 @@
         "icon": "passives/kneeling.svg",
         "x": -155.0,
         "y": -50.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Status",
         "effects": [
@@ -9540,7 +9560,7 @@
         "upgrade_extra_cost": 0
       },
       "84587682-6d87-4179-8c45-05ed5e640c38": {
-        "name": "Greater Two-Handed Melee Weapon Damage",
+        "name": "Polemaster",
         "icon": "passives/war_axe.svg",
         "x": -180.0,
         "y": -167.5,
@@ -9574,6 +9594,16 @@
             },
             "modifier": "More",
             "value": 25.0
+          },
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "value": 25.0
           }
         ],
         "triggers": [],
@@ -9604,6 +9634,16 @@
               }
             },
             "modifier": "More",
+            "value": 15.0
+          },
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
             "value": 15.0
           }
         ],
@@ -9654,7 +9694,7 @@
         "icon": "passives/cuauhtli.svg",
         "x": -57.5,
         "y": 165.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Life",
         "effects": [
@@ -9681,7 +9721,7 @@
               "StatConditionalModifier": {
                 "stat": {
                   "Damage": {
-                    "skill_type": "Attack",
+                    "skill_type": null,
                     "skill_id": null,
                     "damage_type": null,
                     "min_max": null,
@@ -9724,7 +9764,7 @@
               "StatConditionalModifier": {
                 "stat": {
                   "Damage": {
-                    "skill_type": "Attack",
+                    "skill_type": null,
                     "skill_id": null,
                     "damage_type": null,
                     "min_max": null,
@@ -12476,7 +12516,7 @@
         "icon": "passives/fangs_circle.svg",
         "x": -57.5,
         "y": 110.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Life",
         "effects": [
@@ -13841,7 +13881,7 @@
         "icon": "passives/crab.svg",
         "x": -95.0,
         "y": -62.5,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Armor",
         "effects": [
@@ -13943,7 +13983,7 @@
         "icon": "passives/zebra_shield.svg",
         "x": -172.0,
         "y": 53.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Armor",
         "effects": [
@@ -14369,7 +14409,7 @@
         "icon": "passives/frenzy.svg",
         "x": -120.0,
         "y": 0.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Attack",
         "effects": [
@@ -14601,25 +14641,6 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -14635,6 +14656,25 @@
                       "debuff": null,
                       "skill_type": null,
                       "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   }
                 ],
@@ -14735,12 +14775,12 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
+                    "StatusEscalation": {
+                      "status_id": null,
                       "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   },
                   {
@@ -14753,7 +14793,16 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14769,15 +14818,6 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   }
                 ],
@@ -14878,15 +14918,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
@@ -14916,6 +14947,15 @@
                   },
                   {
                     "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -15247,7 +15287,7 @@
         "icon": "passives/candle_skull.svg",
         "x": 175.0,
         "y": 60.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Utility",
         "effects": [
@@ -15870,7 +15910,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -15887,7 +15927,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -16115,7 +16155,7 @@
         "icon": "passives/lotus.svg",
         "x": 57.5,
         "y": 110.0,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Spell",
         "effects": [
@@ -16273,7 +16313,7 @@
         "icon": "passives/meditation.svg",
         "x": 35.0,
         "y": -87.5,
-        "size": 1,
+        "size": 2,
         "root_node": false,
         "node_type": "Mana",
         "effects": [
@@ -16566,7 +16606,7 @@
               }
             },
             "modifier": "More",
-            "value": 10.0
+            "value": 20.0
           }
         ],
         "triggers": [],
@@ -16583,7 +16623,7 @@
               }
             },
             "modifier": "More",
-            "value": 5.0
+            "value": 8.0
           }
         ],
         "max_upgrade_level": 5,
@@ -18401,7 +18441,7 @@
         "icon": "passives/sorcery.svg",
         "x": 120.0,
         "y": 0.0,
-        "size": 2,
+        "size": 1,
         "root_node": false,
         "node_type": "Spell",
         "effects": [

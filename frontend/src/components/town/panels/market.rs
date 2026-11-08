@@ -1746,6 +1746,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         // Unique passive souls
         (
+            StatType::AllocatePassive(uuid!("0088c436-0b23-4993-a966-b57d2444e996")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("0bd6d73c-0b10-4524-b280-ca71fdc054c9")),
             Modifier::Flat,
         ),
@@ -1758,11 +1762,23 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("1bcd296a-d021-4892-9c9d-d1bc4fbb1482")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("214090ea-2db1-429a-b965-382e8a2e78cb")),
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("26eca27a-95a6-4949-bef7-25cf3b79c340")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("2c872ce5-d750-4a2b-bdc9-ecf51501a7d1")),
+            Modifier::Flat,
+        ),
+        (
+            StatType::AllocatePassive(uuid!("36aafa33-ac3d-401d-b4d5-2dbe9a82926d")),
             Modifier::Flat,
         ),
         (
@@ -1798,7 +1814,15 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("5aa6c4af-db53-4f03-9c7b-ad6888d6545d")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("5f96379e-5249-4b0e-8a4d-1e8c0f951f82")),
+            Modifier::Flat,
+        ),
+        (
+            StatType::AllocatePassive(uuid!("656cf6f9-32f1-488e-b188-e81cae806e70")),
             Modifier::Flat,
         ),
         (
@@ -1826,6 +1850,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("7d81dac1-de3c-4a4d-8e96-7f31ff042e5e")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("7e10ea6e-22f5-43f9-8c49-9df5d664e87a")),
             Modifier::Flat,
         ),
@@ -1835,6 +1863,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::AllocatePassive(uuid!("84587682-6d87-4179-8c45-05ed5e640c38")),
+            Modifier::Flat,
+        ),
+        (
+            StatType::AllocatePassive(uuid!("84896a91-0b06-4860-92be-b52a225a0b10")),
             Modifier::Flat,
         ),
         (
@@ -1866,6 +1898,10 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("b5fce054-f56b-47de-9e4f-d565c54f830c")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("c351443b-35e6-4860-aa43-86eec4c92e51")),
             Modifier::Flat,
         ),
@@ -1878,15 +1914,19 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("c9382d85-ae3d-4efd-9352-79f820fbf726")),
+            Modifier::Flat,
+        ),
+        (
+            StatType::AllocatePassive(uuid!("cc2ee934-c6ab-462a-9dd2-74b00a3720af")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("cf14e084-a8ed-496a-b832-b3180ff93a51")),
             Modifier::Flat,
         ),
         (
             StatType::AllocatePassive(uuid!("cfff8b24-fb03-4a7e-a0b1-0c512a2ec7c4")),
-            Modifier::Flat,
-        ),
-        (
-            StatType::AllocatePassive(uuid!("d103b2b7-0801-4c7d-ad6d-fc735f713026")),
             Modifier::Flat,
         ),
         (
@@ -1902,7 +1942,19 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
             Modifier::Flat,
         ),
         (
+            StatType::AllocatePassive(uuid!("d6af89ce-d578-44ac-9f1e-acb3df84117b")),
+            Modifier::Flat,
+        ),
+        (
             StatType::AllocatePassive(uuid!("db23ff19-242a-4751-b628-e41b698a0788")),
+            Modifier::Flat,
+        ),
+        (
+            StatType::AllocatePassive(uuid!("de4fefa1-145a-4825-8de9-ad5c52140395")),
+            Modifier::Flat,
+        ),
+        (
+            StatType::AllocatePassive(uuid!("df82a320-e565-4f56-a224-64f4d960ec6c")),
             Modifier::Flat,
         ),
         (
@@ -1911,10 +1963,6 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
         ),
         (
             StatType::AllocatePassive(uuid!("f275006b-3e0a-4177-a128-f501b7b91b4e")),
-            Modifier::Flat,
-        ),
-        (
-            StatType::AllocatePassive(uuid!("ff796aa2-b773-47aa-9745-622c333e424a")),
             Modifier::Flat,
         ),
     ];

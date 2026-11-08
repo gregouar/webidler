@@ -1052,33 +1052,6 @@
     "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "passive_warfare_amulet_soul": {
-    "name"           : "Eldritch Soul",
-    "icon"           : "items/souls/amulet_passive_soul.webp",
-    "description"    : null,
-    "slot"           : null,
-    "extra_slots"    : [],
-    "categories"     : ["Jewelry", "Amulet", "Soul"],
-    "min_area_level" : 700,
-    "rarity"         : "Unique",
-    "affixes"        : {
-      "unique_1": {
-        "stat"     : {"AllocatePassive": "d103b2b7-0801-4c7d-ad6d-fc735f713026"},
-        "modifier" : "Flat",
-        "scope"    : "Global",
-        "value"    : 1.0,
-        "is_unique": true
-      }
-    },
-    "triggers"       : [],
-    "weapon_specs"   : null,
-    "armor_specs"    : null,
-    "rune_specs"     : null,
-    "map_specs"      : null,
-    "ignore_quality" : true,
-    "upgrade_levels" : [],
-    "upgrade_effects": []
-  },
   "passive_twist_the_knife_amulet_soul": {
     "name"           : "Eldritch Soul",
     "icon"           : "items/souls/amulet_passive_soul.webp",
@@ -1133,7 +1106,7 @@
     "upgrade_levels" : [],
     "upgrade_effects": []
   },
-  "passive_sorcery_amulet_soul": {
+  "passive_monkey_agility_amulet_soul": {
     "name"           : "Eldritch Soul",
     "icon"           : "items/souls/amulet_passive_soul.webp",
     "description"    : null,
@@ -1144,7 +1117,358 @@
     "rarity"         : "Unique",
     "affixes"        : {
       "unique_1": {
-        "stat"     : {"AllocatePassive": "ff796aa2-b773-47aa-9745-622c333e424a"},
+        "stat"     : {"AllocatePassive": "0088c436-0b23-4993-a966-b57d2444e996"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_fortitude_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "1bcd296a-d021-4892-9c9d-d1bc4fbb1482"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_myrmidon_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "26eca27a-95a6-4949-bef7-25cf3b79c340"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_heartful_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "36aafa33-ac3d-401d-b4d5-2dbe9a82926d"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_wisdom_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "5aa6c4af-db53-4f03-9c7b-ad6888d6545d"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_third_eye_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "656cf6f9-32f1-488e-b188-e81cae806e70"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_devotion_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "7d81dac1-de3c-4a4d-8e96-7f31ff042e5e"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_warrior_endurance_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "84896a91-0b06-4860-92be-b52a225a0b10"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_vampirism_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "b5fce054-f56b-47de-9e4f-d565c54f830c"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_crustacean_life_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "c9382d85-ae3d-4efd-9352-79f820fbf726"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_slippery_buckler_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "cc2ee934-c6ab-462a-9dd2-74b00a3720af"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_heretism_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "d6af89ce-d578-44ac-9f1e-acb3df84117b"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_inner_peace_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "de4fefa1-145a-4825-8de9-ad5c52140395"},
+        "modifier" : "Flat",
+        "scope"    : "Global",
+        "value"    : 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers"       : [],
+    "weapon_specs"   : null,
+    "armor_specs"    : null,
+    "rune_specs"     : null,
+    "map_specs"      : null,
+    "ignore_quality" : true,
+    "upgrade_levels" : [],
+    "upgrade_effects": []
+  },
+  "passive_nirvana_amulet_soul": {
+    "name"           : "Eldritch Soul",
+    "icon"           : "items/souls/amulet_passive_soul.webp",
+    "description"    : null,
+    "slot"           : null,
+    "extra_slots"    : [],
+    "categories"     : ["Jewelry", "Amulet", "Soul"],
+    "min_area_level" : 700,
+    "rarity"         : "Unique",
+    "affixes"        : {
+      "unique_1": {
+        "stat"     : {"AllocatePassive": "df82a320-e565-4f56-a224-64f4d960ec6c"},
         "modifier" : "Flat",
         "scope"    : "Global",
         "value"    : 1.0,
