@@ -145,7 +145,7 @@ pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
 }
 
 pub fn gamble_price(item_level: AreaLevel) -> f64 {
-    (item_level as f64 / 20.0).floor() + 10.0
+    (item_level as f64 / 10.0).floor() + 10.0
 }
 
 pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
