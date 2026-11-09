@@ -429,7 +429,7 @@ fn compute_character_specs(
 
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
-            StatType::RestoreOnHit { .. } => {}
+            StatType::RestoreOnHit { .. } | StatType::StatusOnHit { .. } => {}
             // Only for player
             StatType::MaxPlayerLevel
             | StatType::MovementSpeed

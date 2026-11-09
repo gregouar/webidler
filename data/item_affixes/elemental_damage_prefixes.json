@@ -576,7 +576,7 @@
     ]
   },
   "item_inc_storm_damage_t3"  : {
-    "name"        : "Conductive",
+    "name"        : "Conveying",
     "family"      : "inc_storm_damage",
     "tags"        : ["Spell", "Storm"],
     "affix_type"  : "Prefix",

@@ -563,6 +563,7 @@ pub fn format_multiplier_stat(effect: &StatEffect) -> String {
 }
 
 pub fn format_multiplier_stat_name(stat: &StatType) -> String {
+    let data_context: DataContext = expect_context();
     match stat {
         StatType::MaxPlayerLevel => "Maximum Player Level".to_string(),
         StatType::Life => "Maximum Life".to_string(),
@@ -708,16 +709,6 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::ItemLevel => "Items Power Level".to_string(),
         StatType::GemsFind => "Gems Find".to_string(),
         StatType::PowerLevel => "Power Level".to_string(),
-        StatType::RestoreOnHit {
-            restore_type,
-            skill_type,
-        } => {
-            format!(
-                "{} gained on {}Hit",
-                restore_type_str(Some(*restore_type)),
-                skill_type_str(*skill_type)
-            )
-        }
         StatType::DamageTaken {
             skill_type,
             damage_type,
@@ -750,6 +741,27 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
             "Refreshed Cooldown{}",
             skill_filter_str(skill_filter, " with ", true)
         ),
+        StatType::RestoreOnHit {
+            restore_type,
+            skill_type,
+        } => {
+            format!(
+                "{} gained on {}Hit",
+                restore_type_str(Some(*restore_type)),
+                skill_type_str(*skill_type)
+            )
+        }
+        StatType::StatusOnHit {
+            status_id,
+            skill_type,
+        } => {
+            let status_name = data_context.status_name(status_id);
+            format!(
+                "{} Effects on {}Hit",
+                status_name,
+                skill_type_str(*skill_type)
+            )
+        }
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
         }
@@ -822,6 +834,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
 }
 
 pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
+    let data_context: DataContext = expect_context();
     match stat {
         StatType::MaxPlayerLevel => format!(
             "{} Maximum Player Level",
@@ -1064,15 +1077,6 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 )
             }
         }
-        StatType::RestoreOnHit {
-            restore_type,
-            skill_type,
-        } => format!(
-            "Gain {} {} on {}Hit",
-            format_flat_number(value, false),
-            restore_type_str(Some(*restore_type)),
-            skill_type_str(*skill_type)
-        ),
         StatType::DamageTaken {
             skill_type,
             damage_type,
@@ -1153,6 +1157,27 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 "{} seconds to Refreshed Cooldown{}",
                 format_adds_removes(value, true, ""),
                 skill_filter_str(skill_filter, " with ", true)
+            )
+        }
+        StatType::RestoreOnHit {
+            restore_type,
+            skill_type,
+        } => format!(
+            "Gain {} {} on {}Hit",
+            format_flat_number(value, false),
+            restore_type_str(Some(*restore_type)),
+            skill_type_str(*skill_type)
+        ),
+        StatType::StatusOnHit {
+            status_id,
+            skill_type,
+        } => {
+            let status_name = data_context.status_name(status_id);
+            format!(
+                "Apply {} at {}% Effectiveness on {}Hit",
+                status_name,
+                format_flat_number(value, false),
+                skill_type_str(*skill_type)
             )
         }
         StatType::SkillLevel(skill_filter) => {

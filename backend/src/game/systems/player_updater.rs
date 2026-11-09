@@ -6,6 +6,7 @@ use shared::{
         area::{AreaLevel, AreaSpecs, AreaThreat},
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
+        character_status::StatusId,
         item::{SkillRange, SkillShape},
         item_affix::{AffixEffectScope, aggregate_effects},
         modifier::{ModifiableValue, Modifier},
@@ -296,6 +297,7 @@ fn compute_player_specs(
         gold_find,
         threat_gain,
         restore_on_hit,
+        status_on_hit,
     } = modify_player_specs(
         ModifiablePlayerSpecs {
             max_player_level: (player_base_specs.max_level as f64).into(),
@@ -303,6 +305,7 @@ fn compute_player_specs(
             gold_find: player_specs.gold_find.into(),
             threat_gain: player_specs.threat_gain.into(),
             restore_on_hit: Default::default(),
+            status_on_hit: Default::default(),
         },
         effects,
     );
@@ -352,6 +355,52 @@ fn compute_player_specs(
         );
     }
 
+    for ((status_id, skill_type), value) in status_on_hit.into_iter() {
+        player_specs.character_specs.triggers.push(
+            EventTrigger::OnHit(HitTrigger {
+                skill_type,
+                is_hurt: Some(true),
+                is_triggered: Some(false),
+                ..Default::default()
+            }),
+            TriggerEffect {
+                trigger_id: format!("status_on_hit_{:?}_{:?}", status_id, skill_type),
+                target: TriggerTarget::SameTarget,
+                skill_range: SkillRange::Any,
+                skill_type: SkillType::Other,
+                skill_shape: SkillShape::Single,
+                skill_repeat: Default::default(),
+                modifiers: Vec::new(),
+                effects: vec![SkillEffect {
+                    success_chance: Chance::new_sure(),
+                    effect_type: SkillEffectType::ApplyStatus {
+                        status_id,
+                        value: ChanceRange {
+                            min: value,
+                            max: value,
+                            lucky_chance: Default::default(),
+                        },
+                        value_factor: 1.0,
+                        duration: None,
+                        escalation: None,
+                        max_stacks: None,
+                        avoidable: None,
+                        replace_on_value_only: false,
+                        computed_status_triggers: None,
+                    },
+                    ignore_stat_effects: Default::default(),
+                    conditional_modifiers: Default::default(),
+                    independent_application: false,
+                    optional_application: false,
+                    description: None,
+                }],
+                trigger_propagate: false,
+                // inherit_source_effects: false,
+            },
+            Some(CharacterId::Player),
+        );
+    }
+
     player_specs.character_specs.skills_specs = skills_specs
         .into_iter()
         .map(|(player_base_skill, skill_specs)| {
@@ -378,13 +427,14 @@ fn compute_player_specs(
 }
 
 #[derive(Clone, Default)]
-pub struct ModifiablePlayerSpecs {
-    pub max_player_level: ModifiableValue<f64>,
-    pub movement_cooldown: ModifiableValue<AtLeastOne>,
-    pub gold_find: ModifiableValue<NonNegative>,
-    pub threat_gain: ModifiableValue<NonNegative>,
+struct ModifiablePlayerSpecs {
+    max_player_level: ModifiableValue<f64>,
+    movement_cooldown: ModifiableValue<AtLeastOne>,
+    gold_find: ModifiableValue<NonNegative>,
+    threat_gain: ModifiableValue<NonNegative>,
 
-    pub restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
+    restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
+    status_on_hit: HashMap<(StatusId, Option<SkillType>), ModifiableValue<NonNegative>>,
 }
 
 fn modify_player_specs(
@@ -392,7 +442,7 @@ fn modify_player_specs(
     effects: &[StatEffect],
 ) -> ModifiablePlayerSpecs {
     for effect in effects.iter() {
-        match effect.stat {
+        match &effect.stat {
             StatType::MaxPlayerLevel => modifiable_player_specs.max_player_level.apply_effect(effect),
             StatType::MovementSpeed => modifiable_player_specs
                 .movement_cooldown
@@ -405,17 +455,20 @@ fn modify_player_specs(
                 skill_type,
             } => {
                 let skill_types = match skill_type {
-                    Some(skill_type) => vec![skill_type],
+                    Some(skill_type) => vec![*skill_type],
                     None => SkillType::iter().collect(),
                 };
 
                 for skill_type in skill_types {
                     modifiable_player_specs
                         .restore_on_hit
-                        .entry((restore_type, skill_type))
+                        .entry((*restore_type, skill_type))
                         .or_default()
                         .apply_effect(effect);
                 }
+            }
+            StatType::StatusOnHit { status_id, skill_type } => {
+                modifiable_player_specs.status_on_hit.entry((status_id.clone(),*skill_type)).or_default().apply_effect(effect);
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character

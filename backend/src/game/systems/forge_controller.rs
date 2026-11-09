@@ -140,16 +140,16 @@ pub fn sacrifice(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs
         })
         .ok_or(AppError::NotFound)?;
 
-    // let base_affix = affix_roll
-    //     .base_item_id
-    //     .as_ref()
-    //     .and_then(|base_item_id| items_store.items.get(base_item_id))
-    //     .and_then(|base_item| base_item.affixes.get(&affix_roll.affix_id));
-
     let base_item = affix_roll
         .base_item_id
         .as_ref()
         .and_then(|base_item_id| items_store.items.get(base_item_id));
+
+    let item_affix = affix_roll
+        .base_item_id
+        .is_none()
+        .then(|| items_store.affixes_table.get(&affix_roll.affix_id))
+        .flatten();
 
     let mut soul_categories = item.categories.clone();
     soul_categories.remove(&ItemCategory::Remnant);
@@ -161,17 +161,26 @@ pub fn sacrifice(items_store: &ItemsStore, item: &ItemSpecs) -> Result<ItemSpecs
                 "no Soul base exists for this item category".to_string(),
             ))?;
 
+    let is_unique = base_item.is_some()
+        || item_affix
+            .map(|item_affix| item_affix.affix_type == AffixType::Soul)
+            .unwrap_or_default();
+
     let soul_item = items_controller::init_item_specs_from_store(
         items_store,
         ItemModifiers {
             base_item_id: soul_item_id.clone(),
             name: format!(
                 "{} Soul",
-                base_item
-                    .map(|base_item| &base_item.name)
-                    .unwrap_or(&item.modifiers.name)
+                if is_unique {
+                    item_affix
+                        .map(|item_affix| &item_affix.name)
+                        .unwrap_or(&item.modifiers.name)
+                } else {
+                    &item.modifiers.name
+                }
             ),
-            rarity: if base_item.is_some() {
+            rarity: if is_unique {
                 ItemRarity::Unique
             } else {
                 ItemRarity::Masterwork

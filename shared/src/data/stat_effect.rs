@@ -260,11 +260,6 @@ pub enum StatType {
         effect_type: Option<StatSkillEffectType>,
     },
     Speed(#[serde(default)] StatSkillFilter),
-    RestoreOnHit {
-        restore_type: RestoreType,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-    },
     Restore {
         #[serde(default)]
         restore_type: Option<RestoreType>,
@@ -293,6 +288,16 @@ pub enum StatType {
     RefreshedCooldown {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
+    },
+    RestoreOnHit {
+        restore_type: RestoreType,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusOnHit {
+        status_id: StatusId,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
     },
     SkillConditionalModifier {
         stat: Box<StatType>,
