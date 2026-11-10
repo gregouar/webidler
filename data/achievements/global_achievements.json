@@ -183,8 +183,17 @@
         "name"       : "Broodkiller",
         "description": "Kill the Broodmother.",
         "goals"      : [
-            { "AreaLevel": {"value": 30, "area_id": "witch_lair_2.json"} }
+            { "AreaLevel": {"value": 50, "area_id": "witch_lair_2.json"} }
         ],
         "rewards": [ {"Pet": "pet_witch"}, {"Cosmetic": "badge_witch"} ]
+    },
+    "edict_stars"            : {
+        "icon"       : "achievements/telescope.svg",
+        "name"       : "The Stars are Aligned",
+        "description": "Kill what comes when the stars are aligned...",
+        "goals"      : [
+            { "AreaLevel": {"value": 50, "area_id": "mythos_stars.json"} }
+        ],
+        "rewards": [ {"Pet": "pet_octopus"} ]
     }
 }
