@@ -6,7 +6,7 @@
   "skills"  : [
     {
       "name"      : "Shoot",
-      "icon"      : "skills/fireball.svg",
+      "icon"      : "skills/reticule.svg",
       "cooldown"  : 3.0,
       "skill_type": "Attack",
       "targets"   : [

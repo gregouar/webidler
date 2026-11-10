@@ -1,23 +1,21 @@
 {
-  "name": "Blazing Corsair",
+  "name"    : "Blazing Corsair",
   "portrait": "monsters/island/pirate_pistol.webp",
   "max_life": 8,
-  "armor": { "Fire": 50 },
-  "skills": [
+  "armor"   : {"Fire": 50},
+  "skills"  : [
     {
-      "name": "Shoot",
-      "icon": "skills/fireball.svg",
-      "cooldown": 3.0,
+      "name"      : "Shoot",
+      "icon"      : "skills/reticule.svg",
+      "cooldown"  : 3.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 4 ],
-                  "Fire": [ 3, 6 ]
-                }
+                "damage": { "Physical": [2, 4], "Fire": [3, 6] }
               }
             }
           ]
