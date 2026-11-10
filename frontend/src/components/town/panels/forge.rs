@@ -120,7 +120,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                             on:click=move |_| { switch_tab(ForgeTab::Affix) }
                             class:py-3
                         >
-                            <div class="mx-1">"Forge"</div>
+                            <div class="mx-1">"Affix"</div>
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
@@ -561,7 +561,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
         <div class="w-full h-full flex flex-col justify-between relative">
             <CardInsetTitle>
                 <span class="inline-flex items-center gap-1">
-                    "Forge Item"
+                    "Affix Item"
                     <HelpTooltip text="Add or remove Affixes from non-Unique Items. Items can have up to 2 Prefixes and 2 Suffixes, but cannot have 2 Prefixes without at least 1 Suffix, or 2 Suffixes without at least 1 Prefix." />
                 </span>
             </CardInsetTitle>

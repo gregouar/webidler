@@ -26,7 +26,12 @@
             "max_level": null,
             "weight"   : 1000,
             "spawns"   : [
-                { "monster": "possessed_ashigaru.json", "quantity": [1, 2] }
+                { "monster": "piano_mimic.json", "quantity": [0, 1] },
+                { "monster": "hangman.json",     "quantity": [0, 1] },
+                { "monster": "cowboy.json",      "quantity": [0, 1] },
+                { "monster": "piano_mimic.json", "quantity": 1      },
+                { "monster": "hangman.json",     "quantity": [0, 2] },
+                { "monster": "cowboy.json",      "quantity": 2      }
             ]
         }
     ]

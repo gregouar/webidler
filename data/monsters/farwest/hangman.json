@@ -1,0 +1,38 @@
+{
+  "name"    : "Hangman Revenant",
+  "portrait": "monsters/farwest/hangman.webp",
+  "max_life": 8,
+  "skills"  : [
+    {
+      "name"      : "Cut",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [5, 10] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Hang",
+      "icon"      : "skills/slipknot.svg",
+      "cooldown"  : 10.0,
+      "skill_type": "Curse",
+      "range"     : "Distance",
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "hanged", "value": 10} }
+          ]
+        }
+      ]
+    }
+  ]
+}
