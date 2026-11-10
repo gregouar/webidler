@@ -9,9 +9,9 @@
       "icon"      : "skills/fireball.svg",
       "cooldown"  : 3.0,
       "skill_type": "Attack",
-      "range"     : "Distance",
       "targets"   : [
         {
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
