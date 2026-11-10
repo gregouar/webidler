@@ -244,6 +244,12 @@ pub struct ForgeTemperRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeRerollRequest {
+    pub character_id: UserCharacterId,
+    pub item_index: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeSacrificeRequest {
     pub character_id: UserCharacterId,
     pub item_index: u32,

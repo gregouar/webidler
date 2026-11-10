@@ -298,6 +298,12 @@ pub struct ForgeTemperResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeRerollResponse {
+    pub resource_gems: f64,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeSacrificeResponse {
     pub resource_gems: f64,
     pub inventory: PlayerInventory,

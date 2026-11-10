@@ -10,9 +10,9 @@ use shared::{
         item_affix::AffixType,
     },
     http::client::{
-        ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
-        ForgeTemperRequest, ForgeUpgradeRequest, GambleItemRequest, InventoryDeleteRequest,
-        InventorySortRequest,
+        ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeRerollRequest,
+        ForgeSacrificeRequest, ForgeTemperRequest, ForgeUpgradeRequest, GambleItemRequest,
+        InventoryDeleteRequest, InventorySortRequest,
     },
 };
 
@@ -46,6 +46,7 @@ use crate::components::{
 enum ForgeTab {
     Affix,
     Temper,
+    Reroll,
     Sacrifice,
     Imbue,
     Gamble,
@@ -160,6 +161,15 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         </TabButton>
                         <TabButton
                             is_active=Signal::derive(move || {
+                                active_tab.get() == ForgeTab::Reroll
+                            })
+                            on:click=move |_| { switch_tab(ForgeTab::Reroll) }
+                            class:py-3
+                        >
+                            <div class="mx-1">"Reroll"</div>
+                        </TabButton>
+                        <TabButton
+                            is_active=Signal::derive(move || {
                                 active_tab.get() == ForgeTab::Gamble
                             })
                             on:click=move |_| { switch_tab(ForgeTab::Gamble) }
@@ -183,11 +193,13 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         {move || match active_tab.get() {
                             ForgeTab::Affix
                             | ForgeTab::Temper
+                            | ForgeTab::Reroll
                             | ForgeTab::UniqueUpgrade
                             | ForgeTab::Sacrifice => {
                                 let eligibility = match active_tab.get() {
                                     ForgeTab::Affix => InventoryItemEligibility::NonUnique,
                                     ForgeTab::Temper => InventoryItemEligibility::Quality,
+                                    ForgeTab::Reroll => InventoryItemEligibility::Reroll,
                                     ForgeTab::UniqueUpgrade => InventoryItemEligibility::Unique,
                                     ForgeTab::Sacrifice => InventoryItemEligibility::Sacrifice,
                                     _ => InventoryItemEligibility::Any,
@@ -231,6 +243,7 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                                 view! { <ForgeAffixDetails selected_item /> }.into_any()
                             }
                             ForgeTab::Temper => view! { <TemperDetails selected_item /> }.into_any(),
+                            ForgeTab::Reroll => view! { <RerollDetails selected_item /> }.into_any(),
                             ForgeTab::Sacrifice => {
                                 view! { <SacrificeDetails selected_item /> }.into_any()
                             }
@@ -762,6 +775,109 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                 </div>
 
             </div>
+        </div>
+    }
+}
+
+#[component]
+pub fn RerollDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
+    let backend: BackendClient = expect_context();
+    let town_context: TownContext = expect_context();
+    let toaster: Toasts = expect_context();
+    let reforging = RwSignal::new(false);
+
+    let reroll_price = move || {
+        selected_item.with(|selected| match selected {
+            SelectedItem::InMarket(item) if forge::can_reroll(&item.item_specs) => {
+                Some(forge::reroll_price(&item.item_specs.affixes))
+            }
+            _ => None,
+        })
+    };
+
+    let do_reroll = {
+        let character_id = town_context.character.read_untracked().character_id;
+        move || {
+            if reforging.get_untracked() {
+                return;
+            }
+            if let SelectedItem::InMarket(item) = selected_item.get() {
+                reforging.set(true);
+                spawn_local(async move {
+                    match backend
+                        .forge_reroll(&ForgeRerollRequest {
+                            character_id,
+                            item_index: item.index as u32,
+                        })
+                        .await
+                    {
+                        Ok(response) => {
+                            let updated_item = response.inventory.bag.get(item.index).cloned();
+                            town_context.inventory.set(response.inventory);
+                            town_context.character.write().resource_gems = response.resource_gems;
+
+                            if let Some(updated_item) = updated_item {
+                                selected_item.set(SelectedItem::InMarket(SelectedMarketItem {
+                                    item_specs: Arc::new(updated_item),
+                                    ..item
+                                }));
+                            } else {
+                                selected_item.set(SelectedItem::None);
+                            }
+                        }
+                        Err(error) => show_toast(
+                            toaster,
+                            format!("Failed to reroll item: {error}"),
+                            ToastVariant::Error,
+                        ),
+                    }
+                    reforging.set(false);
+                });
+            }
+        }
+    };
+
+    view! {
+        <div class="flex h-full w-full flex-col justify-between">
+            <CardInsetTitle>
+                <span class="inline-flex items-center gap-1">
+                    "Reroll Item"
+                    <HelpTooltip text="Reroll every Affix values within their level range." />
+                </span>
+            </CardInsetTitle>
+
+            <ItemDetails selected_item show_affixes=true />
+
+            <MenuButton
+                on:click=move |_| do_reroll()
+                disabled=Signal::derive(move || {
+                    reforging.get()
+                        || reroll_price()
+                            .is_none_or(|price| {
+                                price > town_context.character.read().resource_gems
+                            })
+                })
+            >
+                <div class="flex h-[2em] w-full items-center justify-center gap-1 text-zinc-400">
+                    {move || {
+                        if selected_item.read().is_empty() {
+                            view! { "Select an Item to Reroll" }.into_any()
+                        } else {
+                            match reroll_price() {
+                                Some(price) => {
+                                    view! {
+                                        "Reroll for "
+                                        <span class="font-bold text-fuchsia-300">{price}</span>
+                                        <GemsIcon />
+                                    }
+                                        .into_any()
+                                }
+                                None => view! { "This Item cannot be Rerolled" }.into_any(),
+                            }
+                        }
+                    }}
+                </div>
+            </MenuButton>
         </div>
     }
 }

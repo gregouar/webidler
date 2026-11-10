@@ -1,11 +1,15 @@
 use shared::data::{
-    forge::MAX_TEMPERED_ITEM_QUALITY,
+    forge::{self, MAX_TEMPERED_ITEM_QUALITY},
     item::{AffixRoll, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
     item_affix::AffixType,
 };
 
 use crate::{
-    game::{data::items_store::ItemsStore, systems::items_controller, utils::rng},
+    game::{
+        data::items_store::ItemsStore,
+        systems::{items_controller, loot_generator},
+        utils::rng,
+    },
     rest::AppError,
 };
 
@@ -61,6 +65,39 @@ pub fn temper_item(
             quality,
             ..item_specs.modifiers.clone()
         },
+        item_specs.gold_price,
+    ))
+}
+
+pub fn reroll_item(
+    items_store: &ItemsStore,
+    item_specs: &ItemSpecs,
+) -> Result<ItemSpecs, AppError> {
+    if !forge::can_reroll(item_specs) {
+        return Err(AppError::UserError("invalid item".into()));
+    }
+
+    let item_base = items_store.get_item_base(item_specs)?;
+    let mut modifiers = item_specs.modifiers.clone();
+
+    modifiers.affixes = loot_generator::roll_base_affixes(&modifiers.base_item_id, item_base)
+        .into_iter()
+        .chain(modifiers.affixes.into_iter().filter(|affix| {
+            matches!(
+                affix.affix_type,
+                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+            )
+        }))
+        .map(|affix| AffixRoll {
+            value: loot_generator::roll_affix_value(),
+            ..affix
+        })
+        .collect();
+
+    Ok(items_controller::create_item_specs(
+        items_store,
+        item_base,
+        modifiers,
         item_specs.gold_price,
     ))
 }

@@ -13,9 +13,9 @@ use shared::{
         client::{
             AscendPassivesRequest, BrowseMarketItemsRequest, BuyBenedictionsRequest,
             BuyMarketItemRequest, CreateCharacterRequest, EditMarketItemRequest,
-            ExchangeGemsStashRequest, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
-            ForgeTemperRequest, ForgeUpgradeRequest, ForgotPasswordRequest, GambleItemRequest,
-            GetStashItemsRequest, InventoryDeleteRequest, InventoryEquipRequest,
+            ExchangeGemsStashRequest, ForgeAffixRequest, ForgeImbueRequest, ForgeRerollRequest,
+            ForgeSacrificeRequest, ForgeTemperRequest, ForgeUpgradeRequest, ForgotPasswordRequest,
+            GambleItemRequest, GetStashItemsRequest, InventoryDeleteRequest, InventoryEquipRequest,
             InventorySortRequest, InventoryUnequipRequest, RejectMarketItemRequest,
             ResetPasswordRequest, SaveFavoriteSkillsRequest, SavePassivesRequest,
             SaveSkillMasteryUpgradesRequest, SellMarketItemRequest, SignInRequest, SignUpRequest,
@@ -27,7 +27,7 @@ use shared::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
             BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
             DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
-            ExchangeGemsStashResponse, ForgeAffixResponse, ForgeImbueResponse,
+            ExchangeGemsStashResponse, ForgeAffixResponse, ForgeImbueResponse, ForgeRerollResponse,
             ForgeSacrificeResponse, ForgeTemperResponse, ForgeUpgradeResponse,
             ForgotPasswordResponse, GambleItemResponse, GetAccountUserUnlocksResponse,
             GetCharacterDetailsResponse, GetDiscordInviteResponse, GetMarketStashItemsResponse,
@@ -425,6 +425,13 @@ impl BackendClient {
         request: &ForgeTemperRequest,
     ) -> Result<ForgeTemperResponse, BackendError> {
         self.post_auth("forge/temper", request).await
+    }
+
+    pub async fn forge_reroll(
+        &self,
+        request: &ForgeRerollRequest,
+    ) -> Result<ForgeRerollResponse, BackendError> {
+        self.post_auth("forge/reroll", request).await
     }
 
     pub async fn forge_sacrifice(

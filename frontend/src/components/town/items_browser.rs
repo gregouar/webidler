@@ -63,6 +63,7 @@ pub enum InventoryItemEligibility {
     Quality,
     Unique,
     NonUnique,
+    Reroll,
     Sacrifice,
     Imbue,
 }
@@ -77,6 +78,7 @@ fn inventory_item_allowed(item: &ItemSpecs, eligibility: InventoryItemEligibilit
                 && !item.categories.contains(&ItemCategory::Soul)
                 && !item.categories.contains(&ItemCategory::Remnant)
         }
+        InventoryItemEligibility::Reroll => shared::data::forge::can_reroll(item),
         InventoryItemEligibility::Sacrifice => {
             !item.categories.contains(&ItemCategory::Soul)
                 && (item.categories.contains(&ItemCategory::Remnant)

@@ -7,12 +7,12 @@ use shared::{
     data::forge::{self, affix_operation_price},
     http::{
         client::{
-            ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
-            ForgeTemperRequest, ForgeUpgradeRequest, GambleItemRequest,
+            ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeRerollRequest,
+            ForgeSacrificeRequest, ForgeTemperRequest, ForgeUpgradeRequest, GambleItemRequest,
         },
         server::{
-            ForgeAffixResponse, ForgeImbueResponse, ForgeSacrificeResponse, ForgeTemperResponse,
-            ForgeUpgradeResponse, GambleItemResponse,
+            ForgeAffixResponse, ForgeImbueResponse, ForgeRerollResponse, ForgeSacrificeResponse,
+            ForgeTemperResponse, ForgeUpgradeResponse, GambleItemResponse,
         },
     },
 };
@@ -35,6 +35,7 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route("/forge/affix", post(post_affix))
         .route("/forge/upgrade", post(post_upgrade))
         .route("/forge/temper", post(post_temper))
+        .route("/forge/reroll", post(post_reroll))
         .route("/forge/sacrifice", post(post_sacrifice))
         .route("/forge/imbue", post(post_imbue))
         .route("/forge/gamble", post(post_gamble))
@@ -78,6 +79,41 @@ pub async fn post_temper(
     tx.commit().await?;
 
     Ok(Json(ForgeTemperResponse {
+        resource_gems,
+        inventory,
+    }))
+}
+
+pub async fn post_reroll(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Extension(user): Extension<User>,
+    Json(payload): Json<ForgeRerollRequest>,
+) -> Result<Json<ForgeRerollResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let (_, mut inventory) =
+        load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
+
+    let item = inventory
+        .bag
+        .get_mut(payload.item_index as usize)
+        .ok_or(AppError::NotFound)?;
+
+    let resource_gems = buy_with_gems(
+        &mut tx,
+        &payload.character_id,
+        forge::reroll_price(&item.affixes),
+    )
+    .await?;
+
+    *item = forge_controller::reroll_item(&master_store.items_store, item)?;
+
+    db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
+        .await?;
+    tx.commit().await?;
+
+    Ok(Json(ForgeRerollResponse {
         resource_gems,
         inventory,
     }))

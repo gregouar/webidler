@@ -1,7 +1,7 @@
 use crate::{
     data::{
         area::AreaLevel,
-        item::{ItemBase, ItemCategory, ItemModifiers, ItemSpecs},
+        item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
         item_affix::{AffixType, ItemAffix},
     },
     http::client::ForgeAffixOperation,
@@ -73,6 +73,22 @@ pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
         .max_by(|a, b| a.total_cmp(b))
         .unwrap_or_default()
         / 5.0)
+        .round()
+}
+
+pub fn can_reroll(item: &ItemSpecs) -> bool {
+    item.modifiers.rarity != ItemRarity::Normal
+        && !item.categories.contains(&ItemCategory::Soul)
+        && !item.categories.contains(&ItemCategory::Remnant)
+}
+
+pub fn reroll_price(affixes: &[ItemAffix]) -> f64 {
+    (affixes
+        .iter()
+        .map(|affix| affix.item_level as f64)
+        .max_by(|a, b| a.total_cmp(b))
+        .unwrap_or_default()
+        / 20.0)
         .round()
 }
 

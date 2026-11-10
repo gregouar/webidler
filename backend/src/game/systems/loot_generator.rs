@@ -538,7 +538,7 @@ fn tweak_affix_weight(base_weight: u64, tier_level: AreaLevel, area_level: AreaL
     (base_weight as f64 * factor) as u64
 }
 
-fn roll_affix_value() -> u8 {
+pub fn roll_affix_value() -> u8 {
     rng::random_range(0..=100).unwrap_or(50) as u8
 }
 
