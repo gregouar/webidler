@@ -8,8 +8,7 @@ use crate::{
     },
     data::{
         area::{AreaLevel, AreaState},
-        item::{ItemBase, ItemModifiers, ItemRarity},
-        item_affix::{AffixType, ItemAffix},
+        item::ItemRarity,
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
@@ -142,42 +141,4 @@ pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
     };
 
     10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
-}
-
-pub fn gamble_price(item_level: AreaLevel) -> f64 {
-    (item_level as f64 / 10.0).floor() + 10.0
-}
-
-pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
-    (affixes
-        .iter()
-        .filter(|affix| {
-            matches!(
-                affix.affix_type,
-                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
-            )
-        })
-        .map(|affix| affix.item_level as f64)
-        .max_by(|a, b| a.total_cmp(b))
-        .unwrap_or_default()
-        / 5.0)
-        .round()
-}
-
-pub fn upgrade_item_price(item_base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<f64> {
-    item_base
-        .upgrade_levels
-        .get(item_modifiers.upgrade_level as usize)
-        .and_then(|next_upgrade_level| {
-            (*next_upgrade_level <= item_modifiers.level)
-                .then_some((*next_upgrade_level / 2 + item_base.min_area_level) as f64)
-        })
-}
-
-pub fn temper_item_price(item_base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<f64> {
-    let quality = item_modifiers
-        .quality
-        .clamp(0.0, constants::MAX_TEMPERED_ITEM_QUALITY);
-    (!item_base.ignore_quality && quality < constants::MAX_TEMPERED_ITEM_QUALITY)
-        .then(|| ((f64::from(quality) / 5.0).floor() + 1.0).powi(2))
 }

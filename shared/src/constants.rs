@@ -45,7 +45,6 @@ pub const POWER_LEVEL_LEADERBOARD_AREA_ID: &str = "power_level";
 
 pub const MAX_ITEM_QUALITY_PER_LEVEL: f32 = 0.5;
 pub const MAX_ITEM_QUALITY: f32 = 25.0;
-pub const MAX_TEMPERED_ITEM_QUALITY: f32 = 50.0;
 
 pub const THREAT_COOLDOWN: f64 = 20.0;
 pub const THREAT_BOSS_COOLDOWN: f64 = 60.0;

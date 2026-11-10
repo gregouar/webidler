@@ -1,9 +1,7 @@
-use shared::{
-    constants::MAX_TEMPERED_ITEM_QUALITY,
-    data::{
-        item::{AffixRoll, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
-        item_affix::AffixType,
-    },
+use shared::data::{
+    forge::MAX_TEMPERED_ITEM_QUALITY,
+    item::{AffixRoll, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
+    item_affix::AffixType,
 };
 
 use crate::{

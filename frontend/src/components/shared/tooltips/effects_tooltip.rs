@@ -1268,8 +1268,8 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 .join(", ");
 
             format!(
-                "{} becomes {result_str}",
-                skill_filter_str(skill_filter, "", false),
+                "{} become {result_str}",
+                skill_filter_str(skill_filter, "", true),
             )
         }
         StatType::TriggerEffectModifier {

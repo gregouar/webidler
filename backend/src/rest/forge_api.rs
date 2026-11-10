@@ -3,8 +3,8 @@ use anyhow::Result;
 use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
-    computations, constants,
-    data::forge::affix_operation_price,
+    constants,
+    data::forge::{self, affix_operation_price},
     http::{
         client::{
             ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeSacrificeRequest,
@@ -64,7 +64,7 @@ pub async fn post_temper(
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        computations::temper_item_price(item_base, &item.modifiers).ok_or(AppError::UserError(
+        forge::temper_item_price(item_base, &item.modifiers).ok_or(AppError::UserError(
             "item cannot be tempered further".into(),
         ))?,
     )
@@ -160,7 +160,7 @@ pub async fn post_upgrade(
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        computations::upgrade_item_price(item_base, &item.modifiers).ok_or(AppError::UserError(
+        forge::upgrade_item_price(item_base, &item.modifiers).ok_or(AppError::UserError(
             "maximum upgrade level reached for that item".into(),
         ))?,
     )
@@ -196,7 +196,7 @@ pub async fn post_sacrifice(
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        computations::sacrifice_price(&item.affixes),
+        forge::sacrifice_price(&item.affixes),
     )
     .await?;
 
@@ -262,7 +262,7 @@ pub async fn post_gamble(
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        computations::gamble_price(character.max_area_level as u16),
+        forge::gamble_price(character.max_area_level as u16),
     )
     .await?;
 

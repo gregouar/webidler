@@ -1,7 +1,8 @@
 use chrono::Utc;
 use leptos::{prelude::*, task::spawn_local};
+use std::sync::Arc;
+
 use shared::{
-    computations,
     constants::GAMBLE_ITEM_CATEGORIES,
     data::{
         forge,
@@ -14,7 +15,6 @@ use shared::{
         InventorySortRequest,
     },
 };
-use std::sync::Arc;
 
 use crate::components::{
     backend_client::BackendClient,
@@ -792,7 +792,7 @@ pub fn TemperDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
                 let item_base = data_context.get_item_base(&item.item_specs);
-                computations::temper_item_price(&item_base, &item.item_specs.modifiers)
+                forge::temper_item_price(&item_base, &item.item_specs.modifiers)
             }
             _ => None,
         })
@@ -911,7 +911,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
             SelectedItem::InMarket(item)
                 if !item.item_specs.categories.contains(&ItemCategory::Soul) =>
             {
-                Some(computations::sacrifice_price(&item.item_specs.affixes))
+                Some(forge::sacrifice_price(&item.item_specs.affixes))
             }
             _ => None,
         })
@@ -1294,7 +1294,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
         selected_item.with(|selected_item| match selected_item {
             SelectedItem::InMarket(item) => {
                 let item_base = data_context.get_item_base(&item.item_specs);
-                computations::upgrade_item_price(&item_base, &item.item_specs.modifiers)
+                forge::upgrade_item_price(&item_base, &item.item_specs.modifiers)
             }
             _ => None,
         })
@@ -1391,8 +1391,7 @@ pub fn GambleDetails(
 
     let user_gems = move || town_context.character.read().resource_gems;
 
-    let gamble_price =
-        move || computations::gamble_price(town_context.character.read().max_area_level);
+    let gamble_price = move || forge::gamble_price(town_context.character.read().max_area_level);
 
     let do_gamble = {
         let character_id = town_context.character.read_untracked().character_id;
