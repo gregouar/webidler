@@ -788,17 +788,8 @@ pub fn formatted_affixes_list(
         .iter()
         .filter(|affix| affix.affix_type == affix_type)
         .map(|affix| {
-            let scope = affix
-                .effects
-                .first()
-                .map(|e| e.scope)
-                .unwrap_or(AffixEffectScope::Global);
             let affix_meta = match affix_type {
-                AffixType::Base | AffixType::Unique | AffixType::Upgrade => view! {
-                    <li class="text-zinc-400 text-xs -mb-1">
-                        {affix_type_str(affix.affix_type)}" – "{scope_str(scope)}
-                    </li>
-                }
+                AffixType::Base | AffixType::Unique | AffixType::Upgrade => view! { <li class="text-zinc-400 text-xs -mb-1">{affix_type_str(affix.affix_type)}</li> }
                 .into_any(),
                 _ => {
                     let affix_item_base = affix
@@ -844,22 +835,75 @@ pub fn formatted_affixes_list(
                                             .map(|affix_item_base| affix_item_base.name.clone()),
                                     )
                                     .unwrap_or("Affix".to_string())}"’"
-                            </span> "  (Level: " {affix.item_level}") – " {scope_str(scope)}
-                            " – "{tags.join(", ")}
+                            </span> "  ·  Level: " {affix.item_level}"  ·  " {tags.join(", ")}
                         </li>
                     }
                     .into_any()
                 }
             };
+
+            let effect_blueprints = affix
+                .base_item_id
+                .as_ref()
+                .and_then(|item_id| item_bases.get(item_id))
+                .and_then(|item_base| item_base.affixes.get(&affix.affix_id))
+                .map(|blueprint| vec![&blueprint.effect])
+                .or_else(|| {
+                    item_affixes
+                        .get(&affix.affix_id)
+                        .map(|blueprint| blueprint.effects.iter().collect())
+                })
+                .unwrap_or_default();
+
+            let effects = affix
+                .effects
+                .iter().zip(effect_blueprints.iter())
+           
+                .filter_map(|(affix_effect, blueprint)| {
+                    let effect = effects_tooltip::format_stat(&affix_effect.stat_effect);
+                    if effect.is_empty() {
+                        return None;
+                    }
+
+                    let range ={
+                        let format_range_value = |value: f64| {
+                            let value = number::format_number(value.round());
+                            match affix_effect.stat_effect.modifier {
+                                shared::data::modifier::Modifier::Flat => value,
+                                shared::data::modifier::Modifier::Increased
+                                | shared::data::modifier::Modifier::More => format!("{value}%"),
+                            }
+                        };
+                        let min = format_range_value(blueprint.value.min);
+                        let max = format_range_value(blueprint.value.max);
+                        (min != max).then_some((min, max))
+                    };
+
+                    Some(view! {
+                        <li class="whitespace-pre-line">
+                            <span class="text-blue-400">{effect}</span>
+                            <span class="text-xs text-zinc-400 inline-block whitespace-nowrap">
+                                "  ·  " {scope_str(affix_effect.scope)}
+                                {range
+                                    .map(|(min, max)| {
+                                        view! {
+                                            " ("
+                                            {min}
+                                            "–"
+                                            {max}
+                                            ")"
+                                        }
+                                            .into_any()
+                                    })}
+                            </span>
+                        </li>
+                    })
+                })
+                .collect::<Vec<_>>();
+
             view! {
                 {affix_meta}
-                {effects_tooltip::formatted_effects_list(
-                    affix
-                        .effects
-                        .iter()
-                        .map(|affix_effect| affix_effect.stat_effect.clone())
-                        .collect(),
-                )}
+                {effects}
             }
         })
         .collect()
