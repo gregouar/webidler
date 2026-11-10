@@ -189,7 +189,7 @@ fn PlayerCard() -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
     view! {
-        <Card class="w-full flex-1 min-h-0">
+        <Card class="w-full flex-1 min-h-0" clip_content=false>
             <PlayerName />
 
             <div class="flex-1 min-h-0 flex justify-around items-stretch gap-1 xl:gap-2">

@@ -14,6 +14,7 @@ pub fn Card(
     #[prop(default = true)] gap: bool,
     #[prop(default = true)] pad: bool,
     #[prop(default = true)] enable_texture: bool,
+    #[prop(default = true)] clip_content: bool,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
@@ -72,7 +73,8 @@ pub fn Card(
             </div>
 
             <div class=format!(
-                "relative z-10 flex h-full flex-col clip-octagon {} {}",
+                "relative z-10 flex h-full flex-col {} {} {}",
+                if clip_content { "clip-octagon" } else { "" },
                 if gap { "gap-1 xl:gap-2" } else { "" },
                 if pad { "p-1 xl:p-3" } else { "m-[2px] overflow-hidden" },
             )>{children()}</div>
@@ -85,24 +87,33 @@ pub fn MenuCard(
     #[prop(optional)] class: Option<&'static str>,
     #[prop(default = true)] gap: bool,
     #[prop(default = true)] pad: bool,
+    #[prop(default = true)] clip_content: bool,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
-    let stone_texture = img_asset("ui/dark_stone.webp");
+    let stone_texture = StoredValue::new(img_asset("ui/dark_stone.webp"));
 
     view! {
         <div
             class=move || {
                 let quality = settings.graphics_quality();
                 format!(
-                    "max-h-full flex flex-col relative clip-octagon
+                    "max-h-full flex flex-col relative
                     {} {} {} {}",
-                    match quality {
-                        GraphicsQuality::High => {
-                            "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                    if clip_content {
+                        match quality {
+                            GraphicsQuality::High => {
+                                "clip-octagon border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                            }
+                            GraphicsQuality::Medium => {
+                                "clip-octagon border border-[#6c5734]/50"
+                            }
+                            GraphicsQuality::Low => {
+                                "clip-octagon border border-[#4f4532] bg-zinc-800"
+                            }
                         }
-                        GraphicsQuality::Medium => "border border-[#6c5734]/50",
-                        GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
+                    } else {
+                        "isolate border border-transparent"
                     },
                     if gap { "gap-1 xl:gap-2" } else { "" },
                     if pad { "p-1 xl:p-3" } else { "p-[2px]" },
@@ -110,6 +121,9 @@ pub fn MenuCard(
                 )
             }
             style=move || {
+                if !clip_content {
+                    return String::new();
+                }
                 match settings.graphics_quality() {
                     GraphicsQuality::High => {
                         format!(
@@ -119,16 +133,53 @@ pub fn MenuCard(
                                 url('{}');
                             background-blend-mode: screen, normal;
                             ",
-                            stone_texture,
+                            stone_texture.get_value(),
                         )
                     }
                     GraphicsQuality::Medium => {
-                        format!("background-image: url('{}');", stone_texture)
+                        format!("background-image: url('{}');", stone_texture.get_value())
                     }
                     GraphicsQuality::Low => String::new(),
                 }
             }
         >
+            <Show when=move || !clip_content>
+                <div
+                    class=move || {
+                        let quality = settings.graphics_quality();
+                        format!(
+                            "pointer-events-none absolute inset-0 -z-10 clip-octagon {}",
+                            match quality {
+                                GraphicsQuality::High => {
+                                    "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                                }
+                                GraphicsQuality::Medium => "border border-[#6c5734]/50",
+                                GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
+                            },
+                        )
+                    }
+                    style=move || {
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                format!(
+                                    "
+                                    background-image:
+                                        linear-gradient(180deg, rgba(214, 165, 102, 0.04), rgba(0,0,0,0)),
+                                        url('{}');
+                                    background-blend-mode: screen, normal;
+                                    ",
+                                    stone_texture.get_value(),
+                                )
+                            }
+                            GraphicsQuality::Medium => {
+                                format!("background-image: url('{}');", stone_texture.get_value())
+                            }
+                            GraphicsQuality::Low => String::new(),
+                        }
+                    }
+                    aria-hidden="true"
+                />
+            </Show>
 
             {children()}
         </div>
