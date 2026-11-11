@@ -6,7 +6,7 @@ use leptos::prelude::*;
 use shared::data::{
     area::AreaLevel,
     item::{BaseItemId, ItemCategory},
-    item_affix::{AffixType, ItemAffixBlueprint, affix_group_id},
+    item_affix::{AffixEffectBlueprint, AffixType, ItemAffixBlueprint, affix_group_id},
     market::AFFIX_FILTERS_AMOUNT,
     stat_effect::StatEffect,
 };
@@ -153,6 +153,19 @@ struct AffixGroupOption {
     levels: Vec<AreaLevel>,
 }
 
+fn affix_effect_label(effect: &AffixEffectBlueprint, show_fixed_values: bool) -> String {
+    if show_fixed_values && effect.value.min == effect.value.max {
+        effects_tooltip::format_stat(&StatEffect {
+            stat: effect.stat.clone(),
+            modifier: effect.modifier,
+            value: effect.value.min,
+            bypass_ignore: effect.bypass_ignore,
+        })
+    } else {
+        format_stat_filter(&effect.stat, effect.modifier, effect.value.max < 0.0)
+    }
+}
+
 fn affix_effects_label(
     affix: &ItemAffixBlueprint,
     affix_base_category: AffixBaseCategory,
@@ -161,18 +174,7 @@ fn affix_effects_label(
     let effects = affix
         .effects
         .iter()
-        .map(|effect| {
-            if show_fixed_values && effect.value.min == effect.value.max {
-                effects_tooltip::format_stat(&StatEffect {
-                    stat: effect.stat.clone(),
-                    modifier: effect.modifier,
-                    value: effect.value.min,
-                    bypass_ignore: effect.bypass_ignore,
-                })
-            } else {
-                format_stat_filter(&effect.stat, effect.modifier, effect.value.max < 0.0)
-            }
-        })
+        .map(|effect| affix_effect_label(effect, show_fixed_values))
         .collect::<Vec<_>>()
         .join(", ");
 
@@ -297,5 +299,40 @@ fn affix_groups(
 
             (group_id, AffixGroupOption { label, levels })
         })
+        .chain(
+            data_context
+                .item_bases
+                .read_untracked()
+                .iter()
+                .filter(|(_, item_base)| {
+                    item_base.categories.contains(&ItemCategory::Soul)
+                        && (category.is_none()
+                            || item_base.categories.iter().all(|cat| {
+                                *cat == ItemCategory::Soul || intersected_categories.contains(cat)
+                            }))
+                })
+                .flat_map(|(base_item_id, item_base)| {
+                    item_base
+                        .affixes
+                        .iter()
+                        .filter(|(_, affix)| affix.is_unique)
+                        .map(move |(affix_id, affix)| {
+                            (base_item_id, item_base.min_area_level, affix_id, affix)
+                        })
+                })
+                .map(|(base_item_id, level, affix_id, affix)| {
+                    (
+                        (Some(base_item_id.clone()), affix_id.clone()),
+                        AffixGroupOption {
+                            label: format!(
+                                "({}) {}",
+                                affix_type_str(AffixType::Soul),
+                                affix_effect_label(&affix.effect, true)
+                            ),
+                            levels: vec![level],
+                        },
+                    )
+                }),
+        )
         .collect()
 }
