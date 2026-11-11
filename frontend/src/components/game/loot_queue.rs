@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::{AffixEffectScope, AffixType, aggregate_effects},
+        item_affix::{AffixEffectScope, AffixType, affix_group_id, aggregate_effects},
         loot::{LootState, QueuedLoot},
         modifier::invert_formatted_effect_value,
         player::EquippedSlot,
@@ -24,7 +24,7 @@ use crate::components::{
     settings::SettingsContext,
     shared::{
         item_card::ItemCard,
-        loot_filter::{FilterRule, FilterRuleType, LootFilter, affix_group_id},
+        loot_filter::{FilterRule, FilterRuleType, LootFilter},
         resources::{ResourceReward, ResourceRewardOverlay},
     },
     ui::{toast::*, tooltip::DynamicTooltipPosition},

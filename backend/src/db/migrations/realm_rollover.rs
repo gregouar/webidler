@@ -251,6 +251,24 @@ async fn migrate_realm_rows(
     .execute(&mut **executor)
     .await?;
 
+    sqlx::query!(
+        r#"
+        UPDATE stash_items_affixes
+        SET realm_id = $1
+        WHERE realm_id = $2
+          AND stash_item_id IN (
+              SELECT stash_item_id
+              FROM stash_items
+              WHERE data_version < $3
+          )
+        "#,
+        target_realm,
+        source_realm,
+        target_data_version,
+    )
+    .execute(&mut **executor)
+    .await?;
+
     Ok(())
 }
 

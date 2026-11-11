@@ -4,9 +4,7 @@ use sqlx::{FromRow, Transaction, types::JsonValue};
 
 use shared::data::{
     item::{ItemBase, ItemSpecs},
-    item_affix::{AffixEffectScope, aggregate_effects},
-    market::MarketFilters,
-    modifier::invert_formatted_effect_value,
+    item_affix::{AffixEffectScope, AffixType, affix_group_id, aggregate_effects},
     realms::RealmId,
     skill::DamageType,
     stash::StashId,
@@ -55,6 +53,13 @@ pub struct StashItemFlattenStats {
     pub item_crit_chance: Option<f64>,
     pub item_crit_damage: Option<f64>,
     pub item_cooldown: Option<f64>,
+}
+
+struct StashItemAffixProjection {
+    base_item_id: Option<String>,
+    affix_group_id: String,
+    affix_level: i32,
+    roll_value: i32,
 }
 
 pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemFlattenStats {
@@ -120,6 +125,31 @@ pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemF
     }
 }
 
+fn flatten_affixes(item: &ItemSpecs) -> Vec<StashItemAffixProjection> {
+    item.modifiers
+        .affixes
+        .iter()
+        .filter(|affix_roll| {
+            matches!(
+                affix_roll.affix_type,
+                AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+            )
+        })
+        .filter_map(|affix_roll| {
+            let resolved_affix = item.affixes.iter().find(|affix| {
+                affix.affix_id == affix_roll.affix_id
+                    && affix.base_item_id == affix_roll.base_item_id
+            })?;
+            Some(StashItemAffixProjection {
+                affix_group_id: affix_group_id(&affix_roll.affix_id).to_string(),
+                affix_level: resolved_affix.item_level.into(),
+                base_item_id: affix_roll.base_item_id.as_ref().map(ToString::to_string),
+                roll_value: affix_roll.value.into(),
+            })
+        })
+        .collect()
+}
+
 pub async fn store_item<'c>(
     executor: &mut Transaction<'c, Database>,
     stash_id: &StashId,
@@ -148,6 +178,7 @@ pub async fn store_item<'c>(
                 ))
             })
             .collect(),
+        flatten_affixes(item),
         flatten_stats(item_base, item),
         serde_json::to_value(&item.modifiers)?,
     )
@@ -162,6 +193,7 @@ async fn create_stash_item<'c>(
     character_id: &UserCharacterId,
     item_categories: HashSet<String>,
     item_stats: Vec<(JsonValue, String, f64)>,
+    item_affixes: Vec<StashItemAffixProjection>,
     stash_item_flatten_stats: StashItemFlattenStats,
     item_data: JsonValue,
 ) -> Result<StashItemId, sqlx::Error> {
@@ -248,6 +280,30 @@ async fn create_stash_item<'c>(
         .await?;
     }
 
+    for affix in item_affixes {
+        sqlx::query!(
+            r#"
+            INSERT INTO stash_items_affixes (
+                stash_item_id,
+                base_item_id,
+                affix_group_id,
+                affix_level,
+                roll_value,
+                realm_id
+            )
+            VALUES ($1, $2, $3, $4, $5, $6)
+            "#,
+            stash_item_id,
+            affix.base_item_id,
+            affix.affix_group_id,
+            affix.affix_level,
+            affix.roll_value,
+            realm_id,
+        )
+        .execute(&mut **executor)
+        .await?;
+    }
+
     Ok(stash_item_id)
 }
 
@@ -329,389 +385,389 @@ pub async fn read_full_stash_items<'c>(
     .await
 }
 
-pub async fn read_stash_items<'c>(
-    executor: impl DbExecutor<'c>,
-    stash_id: StashId,
-    filters: MarketFilters,
-    skip: i64,
-    limit: i64,
-) -> anyhow::Result<(Vec<StashItemEntry>, bool)> {
-    let limit_more = limit + 1;
+// pub async fn read_stash_items<'c>(
+//     executor: impl DbExecutor<'c>,
+//     stash_id: StashId,
+//     filters: MarketFilters,
+//     skip: i64,
+//     limit: i64,
+// ) -> anyhow::Result<(Vec<StashItemEntry>, bool)> {
+//     let limit_more = limit + 1;
 
-    let no_filter_by_name = filters.item_name.is_none();
-    let item_name = filters
-        .item_name
-        .map(|x| format!("%{}%", x.to_uppercase()))
-        .unwrap_or_default();
+//     let no_filter_by_name = filters.item_name.is_none();
+//     let item_name = filters
+//         .item_name
+//         .map(|x| format!("%{}%", x.to_uppercase()))
+//         .unwrap_or_default();
 
-    let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
-    let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
+//     let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
+//     let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
 
-    let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
-    let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
-    let no_filter_max_power_shard_level = filters.min_max_power_shard_level.is_none();
-    let min_max_power_shard_level = filters
-        .min_max_power_shard_level
-        .map(i32::from)
-        .unwrap_or_default();
+//     let min_power_level = filters.min_power_level.map(|x| x as i32).unwrap_or(0);
+//     let min_upgrade_level = filters.min_upgrade_level.map(|x| x as i32).unwrap_or(0);
+//     let no_filter_max_power_shard_level = filters.min_max_power_shard_level.is_none();
+//     let min_max_power_shard_level = filters
+//         .min_max_power_shard_level
+//         .map(i32::from)
+//         .unwrap_or_default();
 
-    let no_filter_item_cooldown = filters.item_cooldown.is_none();
-    let item_cooldown = filters.item_cooldown.unwrap_or_default();
+//     let no_filter_item_cooldown = filters.item_cooldown.is_none();
+//     let item_cooldown = filters.item_cooldown.unwrap_or_default();
 
-    let no_filter_item_damages = filters.item_damages.is_none();
-    let item_damages = filters.item_damages.unwrap_or_default();
+//     let no_filter_item_damages = filters.item_damages.is_none();
+//     let item_damages = filters.item_damages.unwrap_or_default();
 
-    let no_filter_item_damage_physical = filters.item_damage_physical.is_none();
-    let item_damage_physical = filters.item_damage_physical.unwrap_or_default();
+//     let no_filter_item_damage_physical = filters.item_damage_physical.is_none();
+//     let item_damage_physical = filters.item_damage_physical.unwrap_or_default();
 
-    let no_filter_item_damage_fire = filters.item_damage_fire.is_none();
-    let item_damage_fire = filters.item_damage_fire.unwrap_or_default();
+//     let no_filter_item_damage_fire = filters.item_damage_fire.is_none();
+//     let item_damage_fire = filters.item_damage_fire.unwrap_or_default();
 
-    let no_filter_item_damage_poison = filters.item_damage_poison.is_none();
-    let item_damage_poison = filters.item_damage_poison.unwrap_or_default();
+//     let no_filter_item_damage_poison = filters.item_damage_poison.is_none();
+//     let item_damage_poison = filters.item_damage_poison.unwrap_or_default();
 
-    let no_filter_item_damage_storm = filters.item_damage_storm.is_none();
-    let item_damage_storm = filters.item_damage_storm.unwrap_or_default();
+//     let no_filter_item_damage_storm = filters.item_damage_storm.is_none();
+//     let item_damage_storm = filters.item_damage_storm.unwrap_or_default();
 
-    let no_filter_item_crit_chance = filters.item_crit_chance.is_none();
-    let item_crit_chance = filters.item_crit_chance.unwrap_or_default();
+//     let no_filter_item_crit_chance = filters.item_crit_chance.is_none();
+//     let item_crit_chance = filters.item_crit_chance.unwrap_or_default();
 
-    let no_filter_item_crit_damage = filters.item_crit_damage.is_none();
-    let item_crit_damage = filters.item_crit_damage.unwrap_or_default();
+//     let no_filter_item_crit_damage = filters.item_crit_damage.is_none();
+//     let item_crit_damage = filters.item_crit_damage.unwrap_or_default();
 
-    let no_filter_item_armor = filters.item_armor.is_none();
-    let item_armor = filters.item_armor.unwrap_or_default();
+//     let no_filter_item_armor = filters.item_armor.is_none();
+//     let item_armor = filters.item_armor.unwrap_or_default();
 
-    let no_filter_item_block = filters.item_block.is_none();
-    let item_block = filters.item_block.unwrap_or_default();
+//     let no_filter_item_block = filters.item_block.is_none();
+//     let item_block = filters.item_block.unwrap_or_default();
 
-    let item_rarity = filters
-        .item_rarity
-        .and_then(|x| serde_plain::to_string(&x).ok())
-        .unwrap_or_default();
+//     let item_rarity = filters
+//         .item_rarity
+//         .and_then(|x| serde_plain::to_string(&x).ok())
+//         .unwrap_or_default();
 
-    let item_category = filters
-        .item_category
-        .and_then(|x| serde_plain::to_string(&x).ok())
-        .unwrap_or_default();
+//     let item_category = filters
+//         .item_category
+//         .and_then(|x| serde_plain::to_string(&x).ok())
+//         .unwrap_or_default();
 
-    let order_by = serde_plain::to_string(&filters.order_by).unwrap_or_default();
+//     let order_by = serde_plain::to_string(&filters.order_by).unwrap_or_default();
 
-    let stat_filters = filters.stat_filters.map(|stat_filter| {
-        stat_filter
-            .and_then(|stat_filter| {
-                let value = stat_filter.value.filter(|value| *value != 0.0);
-                Some((
-                    serde_json::to_value(stat_filter.stat).ok()?,
-                    serde_plain::to_string(&stat_filter.modifier).ok()?,
-                    value
-                        .map(|value| invert_formatted_effect_value(value, stat_filter.modifier))
-                        .unwrap_or_default(),
-                    stat_filter.exclude,
-                    value.is_some(),
-                    value.is_some_and(|value| value < 0.0),
-                ))
-            })
-            .unwrap_or_default()
-    });
+//     let stat_filters = filters.stat_filters.map(|stat_filter| {
+//         stat_filter
+//             .and_then(|stat_filter| {
+//                 let value = stat_filter.value.filter(|value| *value != 0.0);
+//                 Some((
+//                     serde_json::to_value(stat_filter.stat).ok()?,
+//                     serde_plain::to_string(&stat_filter.modifier).ok()?,
+//                     value
+//                         .map(|value| invert_formatted_effect_value(value, stat_filter.modifier))
+//                         .unwrap_or_default(),
+//                     stat_filter.exclude,
+//                     value.is_some(),
+//                     value.is_some_and(|value| value < 0.0),
+//                 ))
+//             })
+//             .unwrap_or_default()
+//     });
 
-    let raw_items = sqlx::query_as!(
-        StashItemEntry,
-        r#"
-        SELECT 
-            stash_items.stash_id as "stash_id!: StashId",
-            stash_items.stash_item_id as "stash_item_id!",
-            stashes.user_id as "user_id!: UserId",
-            owner.character_id as "character_id?: UserCharacterId", 
-            owner.character_name as "character_name?: String",
-            item_data as "item_data: JsonValue",
-            stash_items.created_at
-        FROM 
-            stash_items 
-        INNER JOIN
-            stashes ON stashes.stash_id = stash_items.stash_id
-        INNER JOIN
-            characters AS owner ON owner.character_id = stash_items.character_id
-        LEFT JOIN
-            stash_items_stats AS stat1 ON stat1.stash_item_id = stash_items.stash_item_id
-                AND stat1.item_stat = $28
-                AND stat1.stat_modifier = $29
-        LEFT JOIN
-            stash_items_stats AS stat2 ON stat2.stash_item_id = stash_items.stash_item_id
-                AND stat2.item_stat = $34
-                AND stat2.stat_modifier = $35
-        LEFT JOIN
-            stash_items_stats AS stat3 ON stat3.stash_item_id = stash_items.stash_item_id
-                AND stat3.item_stat = $40
-                AND stat3.stat_modifier = $41
-        LEFT JOIN
-            stash_items_stats AS stat4 ON stat4.stash_item_id = stash_items.stash_item_id
-                AND stat4.item_stat = $46
-                AND stat4.stat_modifier = $47
-        LEFT JOIN
-            stash_items_stats AS stat5 ON stat5.stash_item_id = stash_items.stash_item_id
-                AND stat5.item_stat = $52
-                AND stat5.stat_modifier = $53
-        WHERE 
-            stash_items.stash_id = $4
-            AND stash_items.deleted_at IS NULL
-            AND ($5 OR UPPER(stash_items.item_name) LIKE $6)
-            AND (stash_items.item_level >= $7)
-            AND (stash_items.item_level <= $58)
-            AND (stash_items.item_power_level >= $59)
-            AND (stash_items.item_upgrade_level >= $60)
-            AND ($8 = '' OR stash_items.item_rarity = $8)
-            AND ($9 = '' OR EXISTS (
-                SELECT 1
-                FROM stash_items_categories cat
-                WHERE cat.stash_item_id = stash_items.stash_item_id
-                AND cat.category = $9
-            ))
-            AND ($61 OR stash_items.item_cooldown <= $62)
-            AND ($63 OR stash_items.max_power_shard_level >= $64)
-            AND ($10 OR stash_items.item_damages >= $11)
-            AND ($12 OR stash_items.item_damage_physical >= $13)
-            AND ($14 OR stash_items.item_damage_fire >= $15)
-            AND ($16 OR stash_items.item_damage_poison >= $17)
-            AND ($18 OR stash_items.item_damage_storm >= $19)
-            AND ($20 OR stash_items.item_crit_chance >= $21)
-            AND ($22 OR stash_items.item_crit_damage >= $23)
-            AND ($24 OR stash_items.item_armor >= $25)
-            AND ($26 OR stash_items.item_block >= $27)
-            AND (
-                $29 = ''
-                OR (
-                    NOT $31
-                    AND stat1.stat_value IS NOT NULL
-                    AND stat1.stat_value != 0
-                    AND (
-                        NOT $32
-                        OR ($33 AND stat1.stat_value <= $30)
-                        OR (NOT $33 AND stat1.stat_value >= $30)
-                    )
-                )
-                OR (
-                    $31
-                    AND (
-                        stat1.stat_value IS NULL
-                        OR stat1.stat_value = 0
-                        OR (
-                            $32
-                            AND (
-                                ($33 AND stat1.stat_value > $30)
-                                OR (NOT $33 AND stat1.stat_value < $30)
-                            )
-                        )
-                    )
-                )
-            )
-            AND (
-                $35 = ''
-                OR (
-                    NOT $37
-                    AND stat2.stat_value IS NOT NULL
-                    AND stat2.stat_value != 0
-                    AND (
-                        NOT $38
-                        OR ($39 AND stat2.stat_value <= $36)
-                        OR (NOT $39 AND stat2.stat_value >= $36)
-                    )
-                )
-                OR (
-                    $37
-                    AND (
-                        stat2.stat_value IS NULL
-                        OR stat2.stat_value = 0
-                        OR (
-                            $38
-                            AND (
-                                ($39 AND stat2.stat_value > $36)
-                                OR (NOT $39 AND stat2.stat_value < $36)
-                            )
-                        )
-                    )
-                )
-            )
-            AND (
-                $41 = ''
-                OR (
-                    NOT $43
-                    AND stat3.stat_value IS NOT NULL
-                    AND stat3.stat_value != 0
-                    AND (
-                        NOT $44
-                        OR ($45 AND stat3.stat_value <= $42)
-                        OR (NOT $45 AND stat3.stat_value >= $42)
-                    )
-                )
-                OR (
-                    $43
-                    AND (
-                        stat3.stat_value IS NULL
-                        OR stat3.stat_value = 0
-                        OR (
-                            $44
-                            AND (
-                                ($45 AND stat3.stat_value > $42)
-                                OR (NOT $45 AND stat3.stat_value < $42)
-                            )
-                        )
-                    )
-                )
-            )
-            AND (
-                $47 = ''
-                OR (
-                    NOT $49
-                    AND stat4.stat_value IS NOT NULL
-                    AND stat4.stat_value != 0
-                    AND (
-                        NOT $50
-                        OR ($51 AND stat4.stat_value <= $48)
-                        OR (NOT $51 AND stat4.stat_value >= $48)
-                    )
-                )
-                OR (
-                    $49
-                    AND (
-                        stat4.stat_value IS NULL
-                        OR stat4.stat_value = 0
-                        OR (
-                            $50
-                            AND (
-                                ($51 AND stat4.stat_value > $48)
-                                OR (NOT $51 AND stat4.stat_value < $48)
-                            )
-                        )
-                    )
-                )
-            )
-            AND (
-                $53 = ''
-                OR (
-                    NOT $55
-                    AND stat5.stat_value IS NOT NULL
-                    AND stat5.stat_value != 0
-                    AND (
-                        NOT $56
-                        OR ($57 AND stat5.stat_value <= $54)
-                        OR (NOT $57 AND stat5.stat_value >= $54)
-                    )
-                )
-                OR (
-                    $55
-                    AND (
-                        stat5.stat_value IS NULL
-                        OR stat5.stat_value = 0
-                        OR (
-                            $56
-                            AND (
-                                ($57 AND stat5.stat_value > $54)
-                                OR (NOT $57 AND stat5.stat_value < $54)
-                            )
-                        )
-                    )
-                )
-            )
-        ORDER BY 
-            CASE
-                WHEN  $3 = 'Level' THEN stash_items.item_level
-            END ASC,
-            CASE
-                WHEN  $3 = 'Damage' THEN  stash_items.item_damages
-                WHEN  $3 = 'DamagePhysical' THEN  stash_items.item_damage_physical
-                WHEN  $3 = 'DamageFire' THEN  stash_items.item_damage_fire
-                WHEN  $3 = 'DamagePoison' THEN  stash_items.item_damage_poison
-                WHEN  $3 = 'DamageStorm' THEN  stash_items.item_damage_storm
-                WHEN  $3 = 'CritChance' THEN  stash_items.item_crit_chance
-                WHEN  $3 = 'CritDamage' THEN  stash_items.item_crit_damage
-                WHEN  $3 = 'Armor' THEN  stash_items.item_armor
-                WHEN  $3 = 'Block' THEN  stash_items.item_block
-            END DESC NULLS LAST, 
-            CASE WHEN $3 = 'StatFilters' THEN stat1.stat_value END DESC NULLS LAST,
-            CASE WHEN $3 = 'StatFilters' THEN stat2.stat_value END DESC NULLS LAST,
-            CASE WHEN $3 = 'StatFilters' THEN stat3.stat_value END DESC NULLS LAST,
-            CASE WHEN $3 = 'StatFilters' THEN stat4.stat_value END DESC NULLS LAST,
-            CASE WHEN $3 = 'StatFilters' THEN stat5.stat_value END DESC NULLS LAST,
-            stash_items.created_at DESC
-        LIMIT $1
-        OFFSET $2
-        "#,
-        limit_more, // $1
-        skip,       // $2
-        order_by,   // $3
-        stash_id,
-        no_filter_by_name, // $5
-        item_name,
-        min_req_level,
-        item_rarity,
-        item_category,
-        no_filter_item_damages, // $10
-        item_damages,
-        no_filter_item_damage_physical,
-        item_damage_physical,
-        no_filter_item_damage_fire,
-        item_damage_fire, // $15
-        no_filter_item_damage_poison,
-        item_damage_poison,
-        no_filter_item_damage_storm,
-        item_damage_storm,
-        no_filter_item_crit_chance, // 20
-        item_crit_chance,
-        no_filter_item_crit_damage,
-        item_crit_damage,
-        no_filter_item_armor,
-        item_armor, // $25
-        no_filter_item_block,
-        item_block,
-        stat_filters[0].0,
-        stat_filters[0].1,
-        stat_filters[0].2,
-        stat_filters[0].3,
-        stat_filters[0].4,
-        stat_filters[0].5, // $33
-        stat_filters[1].0,
-        stat_filters[1].1,
-        stat_filters[1].2,
-        stat_filters[1].3,
-        stat_filters[1].4,
-        stat_filters[1].5, // $39
-        stat_filters[2].0,
-        stat_filters[2].1,
-        stat_filters[2].2,
-        stat_filters[2].3,
-        stat_filters[2].4,
-        stat_filters[2].5, // $45
-        stat_filters[3].0,
-        stat_filters[3].1,
-        stat_filters[3].2,
-        stat_filters[3].3,
-        stat_filters[3].4,
-        stat_filters[3].5, // $51
-        stat_filters[4].0,
-        stat_filters[4].1,
-        stat_filters[4].2,
-        stat_filters[4].3,
-        stat_filters[4].4,
-        stat_filters[4].5, // $57
-        max_req_level,
-        min_power_level,
-        min_upgrade_level, // $60
-        no_filter_item_cooldown,
-        item_cooldown,
-        no_filter_max_power_shard_level,
-        min_max_power_shard_level // $64
-    )
-    .fetch_all(executor)
-    .await?;
+//     let raw_items = sqlx::query_as!(
+//         StashItemEntry,
+//         r#"
+//         SELECT
+//             stash_items.stash_id as "stash_id!: StashId",
+//             stash_items.stash_item_id as "stash_item_id!",
+//             stashes.user_id as "user_id!: UserId",
+//             owner.character_id as "character_id?: UserCharacterId",
+//             owner.character_name as "character_name?: String",
+//             item_data as "item_data: JsonValue",
+//             stash_items.created_at
+//         FROM
+//             stash_items
+//         INNER JOIN
+//             stashes ON stashes.stash_id = stash_items.stash_id
+//         INNER JOIN
+//             characters AS owner ON owner.character_id = stash_items.character_id
+//         LEFT JOIN
+//             stash_items_stats AS stat1 ON stat1.stash_item_id = stash_items.stash_item_id
+//                 AND stat1.item_stat = $28
+//                 AND stat1.stat_modifier = $29
+//         LEFT JOIN
+//             stash_items_stats AS stat2 ON stat2.stash_item_id = stash_items.stash_item_id
+//                 AND stat2.item_stat = $34
+//                 AND stat2.stat_modifier = $35
+//         LEFT JOIN
+//             stash_items_stats AS stat3 ON stat3.stash_item_id = stash_items.stash_item_id
+//                 AND stat3.item_stat = $40
+//                 AND stat3.stat_modifier = $41
+//         LEFT JOIN
+//             stash_items_stats AS stat4 ON stat4.stash_item_id = stash_items.stash_item_id
+//                 AND stat4.item_stat = $46
+//                 AND stat4.stat_modifier = $47
+//         LEFT JOIN
+//             stash_items_stats AS stat5 ON stat5.stash_item_id = stash_items.stash_item_id
+//                 AND stat5.item_stat = $52
+//                 AND stat5.stat_modifier = $53
+//         WHERE
+//             stash_items.stash_id = $4
+//             AND stash_items.deleted_at IS NULL
+//             AND ($5 OR UPPER(stash_items.item_name) LIKE $6)
+//             AND (stash_items.item_level >= $7)
+//             AND (stash_items.item_level <= $58)
+//             AND (stash_items.item_power_level >= $59)
+//             AND (stash_items.item_upgrade_level >= $60)
+//             AND ($8 = '' OR stash_items.item_rarity = $8)
+//             AND ($9 = '' OR EXISTS (
+//                 SELECT 1
+//                 FROM stash_items_categories cat
+//                 WHERE cat.stash_item_id = stash_items.stash_item_id
+//                 AND cat.category = $9
+//             ))
+//             AND ($61 OR stash_items.item_cooldown <= $62)
+//             AND ($63 OR stash_items.max_power_shard_level >= $64)
+//             AND ($10 OR stash_items.item_damages >= $11)
+//             AND ($12 OR stash_items.item_damage_physical >= $13)
+//             AND ($14 OR stash_items.item_damage_fire >= $15)
+//             AND ($16 OR stash_items.item_damage_poison >= $17)
+//             AND ($18 OR stash_items.item_damage_storm >= $19)
+//             AND ($20 OR stash_items.item_crit_chance >= $21)
+//             AND ($22 OR stash_items.item_crit_damage >= $23)
+//             AND ($24 OR stash_items.item_armor >= $25)
+//             AND ($26 OR stash_items.item_block >= $27)
+//             AND (
+//                 $29 = ''
+//                 OR (
+//                     NOT $31
+//                     AND stat1.stat_value IS NOT NULL
+//                     AND stat1.stat_value != 0
+//                     AND (
+//                         NOT $32
+//                         OR ($33 AND stat1.stat_value <= $30)
+//                         OR (NOT $33 AND stat1.stat_value >= $30)
+//                     )
+//                 )
+//                 OR (
+//                     $31
+//                     AND (
+//                         stat1.stat_value IS NULL
+//                         OR stat1.stat_value = 0
+//                         OR (
+//                             $32
+//                             AND (
+//                                 ($33 AND stat1.stat_value > $30)
+//                                 OR (NOT $33 AND stat1.stat_value < $30)
+//                             )
+//                         )
+//                     )
+//                 )
+//             )
+//             AND (
+//                 $35 = ''
+//                 OR (
+//                     NOT $37
+//                     AND stat2.stat_value IS NOT NULL
+//                     AND stat2.stat_value != 0
+//                     AND (
+//                         NOT $38
+//                         OR ($39 AND stat2.stat_value <= $36)
+//                         OR (NOT $39 AND stat2.stat_value >= $36)
+//                     )
+//                 )
+//                 OR (
+//                     $37
+//                     AND (
+//                         stat2.stat_value IS NULL
+//                         OR stat2.stat_value = 0
+//                         OR (
+//                             $38
+//                             AND (
+//                                 ($39 AND stat2.stat_value > $36)
+//                                 OR (NOT $39 AND stat2.stat_value < $36)
+//                             )
+//                         )
+//                     )
+//                 )
+//             )
+//             AND (
+//                 $41 = ''
+//                 OR (
+//                     NOT $43
+//                     AND stat3.stat_value IS NOT NULL
+//                     AND stat3.stat_value != 0
+//                     AND (
+//                         NOT $44
+//                         OR ($45 AND stat3.stat_value <= $42)
+//                         OR (NOT $45 AND stat3.stat_value >= $42)
+//                     )
+//                 )
+//                 OR (
+//                     $43
+//                     AND (
+//                         stat3.stat_value IS NULL
+//                         OR stat3.stat_value = 0
+//                         OR (
+//                             $44
+//                             AND (
+//                                 ($45 AND stat3.stat_value > $42)
+//                                 OR (NOT $45 AND stat3.stat_value < $42)
+//                             )
+//                         )
+//                     )
+//                 )
+//             )
+//             AND (
+//                 $47 = ''
+//                 OR (
+//                     NOT $49
+//                     AND stat4.stat_value IS NOT NULL
+//                     AND stat4.stat_value != 0
+//                     AND (
+//                         NOT $50
+//                         OR ($51 AND stat4.stat_value <= $48)
+//                         OR (NOT $51 AND stat4.stat_value >= $48)
+//                     )
+//                 )
+//                 OR (
+//                     $49
+//                     AND (
+//                         stat4.stat_value IS NULL
+//                         OR stat4.stat_value = 0
+//                         OR (
+//                             $50
+//                             AND (
+//                                 ($51 AND stat4.stat_value > $48)
+//                                 OR (NOT $51 AND stat4.stat_value < $48)
+//                             )
+//                         )
+//                     )
+//                 )
+//             )
+//             AND (
+//                 $53 = ''
+//                 OR (
+//                     NOT $55
+//                     AND stat5.stat_value IS NOT NULL
+//                     AND stat5.stat_value != 0
+//                     AND (
+//                         NOT $56
+//                         OR ($57 AND stat5.stat_value <= $54)
+//                         OR (NOT $57 AND stat5.stat_value >= $54)
+//                     )
+//                 )
+//                 OR (
+//                     $55
+//                     AND (
+//                         stat5.stat_value IS NULL
+//                         OR stat5.stat_value = 0
+//                         OR (
+//                             $56
+//                             AND (
+//                                 ($57 AND stat5.stat_value > $54)
+//                                 OR (NOT $57 AND stat5.stat_value < $54)
+//                             )
+//                         )
+//                     )
+//                 )
+//             )
+//         ORDER BY
+//             CASE
+//                 WHEN  $3 = 'Level' THEN stash_items.item_level
+//             END ASC,
+//             CASE
+//                 WHEN  $3 = 'Damage' THEN  stash_items.item_damages
+//                 WHEN  $3 = 'DamagePhysical' THEN  stash_items.item_damage_physical
+//                 WHEN  $3 = 'DamageFire' THEN  stash_items.item_damage_fire
+//                 WHEN  $3 = 'DamagePoison' THEN  stash_items.item_damage_poison
+//                 WHEN  $3 = 'DamageStorm' THEN  stash_items.item_damage_storm
+//                 WHEN  $3 = 'CritChance' THEN  stash_items.item_crit_chance
+//                 WHEN  $3 = 'CritDamage' THEN  stash_items.item_crit_damage
+//                 WHEN  $3 = 'Armor' THEN  stash_items.item_armor
+//                 WHEN  $3 = 'Block' THEN  stash_items.item_block
+//             END DESC NULLS LAST,
+//             CASE WHEN $3 = 'StatFilters' THEN stat1.stat_value END DESC NULLS LAST,
+//             CASE WHEN $3 = 'StatFilters' THEN stat2.stat_value END DESC NULLS LAST,
+//             CASE WHEN $3 = 'StatFilters' THEN stat3.stat_value END DESC NULLS LAST,
+//             CASE WHEN $3 = 'StatFilters' THEN stat4.stat_value END DESC NULLS LAST,
+//             CASE WHEN $3 = 'StatFilters' THEN stat5.stat_value END DESC NULLS LAST,
+//             stash_items.created_at DESC
+//         LIMIT $1
+//         OFFSET $2
+//         "#,
+//         limit_more, // $1
+//         skip,       // $2
+//         order_by,   // $3
+//         stash_id,
+//         no_filter_by_name, // $5
+//         item_name,
+//         min_req_level,
+//         item_rarity,
+//         item_category,
+//         no_filter_item_damages, // $10
+//         item_damages,
+//         no_filter_item_damage_physical,
+//         item_damage_physical,
+//         no_filter_item_damage_fire,
+//         item_damage_fire, // $15
+//         no_filter_item_damage_poison,
+//         item_damage_poison,
+//         no_filter_item_damage_storm,
+//         item_damage_storm,
+//         no_filter_item_crit_chance, // 20
+//         item_crit_chance,
+//         no_filter_item_crit_damage,
+//         item_crit_damage,
+//         no_filter_item_armor,
+//         item_armor, // $25
+//         no_filter_item_block,
+//         item_block,
+//         stat_filters[0].0,
+//         stat_filters[0].1,
+//         stat_filters[0].2,
+//         stat_filters[0].3,
+//         stat_filters[0].4,
+//         stat_filters[0].5, // $33
+//         stat_filters[1].0,
+//         stat_filters[1].1,
+//         stat_filters[1].2,
+//         stat_filters[1].3,
+//         stat_filters[1].4,
+//         stat_filters[1].5, // $39
+//         stat_filters[2].0,
+//         stat_filters[2].1,
+//         stat_filters[2].2,
+//         stat_filters[2].3,
+//         stat_filters[2].4,
+//         stat_filters[2].5, // $45
+//         stat_filters[3].0,
+//         stat_filters[3].1,
+//         stat_filters[3].2,
+//         stat_filters[3].3,
+//         stat_filters[3].4,
+//         stat_filters[3].5, // $51
+//         stat_filters[4].0,
+//         stat_filters[4].1,
+//         stat_filters[4].2,
+//         stat_filters[4].3,
+//         stat_filters[4].4,
+//         stat_filters[4].5, // $57
+//         max_req_level,
+//         min_power_level,
+//         min_upgrade_level, // $60
+//         no_filter_item_cooldown,
+//         item_cooldown,
+//         no_filter_max_power_shard_level,
+//         min_max_power_shard_level // $64
+//     )
+//     .fetch_all(executor)
+//     .await?;
 
-    let has_more = raw_items.len() as i64 == limit_more;
+//     let has_more = raw_items.len() as i64 == limit_more;
 
-    Ok((
-        raw_items.into_iter().take(limit as usize).collect(),
-        has_more,
-    ))
-}
+//     Ok((
+//         raw_items.into_iter().take(limit as usize).collect(),
+//         has_more,
+//     ))
+// }
 
 pub async fn take_item<'c>(
     executor: &mut Transaction<'c, Database>,
@@ -727,6 +783,13 @@ pub async fn take_item<'c>(
 
     sqlx::query!(
         "UPDATE stash_items_stats SET deleted_at = CURRENT_TIMESTAMP WHERE stash_item_id = $1",
+        stash_item_id
+    )
+    .execute(&mut **executor)
+    .await?;
+
+    sqlx::query!(
+        "UPDATE stash_items_affixes SET deleted_at = CURRENT_TIMESTAMP WHERE stash_item_id = $1",
         stash_item_id
     )
     .execute(&mut **executor)

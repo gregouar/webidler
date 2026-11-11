@@ -1,10 +1,7 @@
 use codee::string::JsonSerdeCodec;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    sync::Arc,
-};
+use std::sync::Arc;
 use strum::IntoEnumIterator;
 use uuid::Uuid;
 
@@ -15,37 +12,34 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemCategory, ItemRarity},
-        item_affix::{AffixType, ItemAffixBlueprint},
-        market::STAT_FILTERS_AMOUNT,
+        market::{AFFIX_FILTERS_AMOUNT, STAT_FILTERS_AMOUNT},
         modifier::Modifier,
-        stat_effect::{StatEffect, StatType},
+        stat_effect::StatType,
         user::UserCharacterId,
     },
     types::ItemName,
 };
 
 use crate::components::{
-    data_context::DataContext,
     shared::{
+        affix_filters::AffixFilters,
         inventory::loot_filter_category_to_str,
-        tooltips::{effects_tooltip::format_stat, item_tooltip::affix_type_str},
+        stat_filters::{StatFilterSignals, StatFilters},
     },
-    town::panels::market::{StatDropdown, format_stat_filter, item_rarity_str},
+    town::panels::market::item_rarity_str,
     ui::{
         buttons::{FancyButton, MenuButton, Toggle},
         card::{CardHeader, CardInset, MenuCard},
         checkbox::Checkbox,
         confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
-        input::{Input, ValidatedInput},
+        input::ValidatedInput,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
         tooltip::{StaticTooltip, StaticTooltipPosition},
     },
     utils::file_loader::{save_json, use_json_loader},
 };
-
-pub const AFFIX_FILTERS_AMOUNT: usize = 5;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct LootFilter {
@@ -496,15 +490,12 @@ pub fn EditRule(
     rule_field!(item_block);
 
     // Stats
-    let stat_filters: [(_, _, _); STAT_FILTERS_AMOUNT] = std::array::from_fn(|_| {
+    let stat_filters: StatFilterSignals = std::array::from_fn(|_| {
         (
             RwSignal::new(None),
             RwSignal::new(None),
             RwSignal::new(false),
         )
-    });
-    let visible_stat_filters = Memo::new(move |_| {
-        visible_filter_slots(&stat_filters.map(|(stat_type, _, _)| stat_type.get().is_some()))
     });
 
     Effect::new(move || {
@@ -592,10 +583,6 @@ pub fn EditRule(
             RwSignal::new(None::<AreaLevel>),
         )
     });
-    let visible_affix_filters = Memo::new(move |_| {
-        visible_filter_slots(&affix_filters.map(|(affix_id, _)| affix_id.get().is_some()))
-    });
-
     Effect::new(move |_| {
         with_selected_rule(selected_rule, loot_filter, move |rule| {
             for (index, (affix_id, min_level)) in affix_filters.iter().enumerate() {
@@ -618,31 +605,6 @@ pub fn EditRule(
                     min_level: min_level.get(),
                 });
             });
-        }
-    });
-
-    let data_context: DataContext = expect_context();
-    let available_affix_groups =
-        Memo::new(move |_| affix_groups(data_context, item_category.get()));
-
-    Effect::new(move |_| {
-        let groups = available_affix_groups.read();
-        for (affix_id, min_level) in affix_filters {
-            let Some(selected_affix) = affix_id.get() else {
-                min_level.set(None);
-                continue;
-            };
-            let Some(group) = groups.get(&selected_affix) else {
-                affix_id.set(None);
-                min_level.set(None);
-                continue;
-            };
-            if min_level
-                .get()
-                .is_some_and(|level| !group.levels.contains(&level))
-            {
-                min_level.set(None);
-            }
         }
     });
 
@@ -712,159 +674,12 @@ pub fn EditRule(
                 </div>
             </div>
 
-            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4 border-b border-zinc-700">
-                {stat_filters
-                    .into_iter()
-                    .enumerate()
-                    .map(|(index, (stat_type, stat_value, stat_excluded))| {
-                        view! {
-                            <Show when=move || index < visible_stat_filters.get()>
-                                <div class="flex gap-2 xl:gap-4 items-center">
-                                    {move || {
-                                        stat_type
-                                            .read()
-                                            .is_some()
-                                            .then(|| {
-                                                view! {
-                                                    <MenuButton
-                                                        class:flex-none
-                                                        on:click=move |_| {
-                                                            stat_type.set(None);
-                                                            stat_value.set(None);
-                                                            stat_excluded.set(false);
-                                                        }
-                                                    >
-                                                        "❌"
-                                                    </MenuButton>
-                                                }
-                                            })
-                                    }}
-                                    <span class=move || {
-                                        if stat_type.read().is_none() {
-                                            "flex-1 text-center"
-                                        } else {
-                                            "flex-1"
-                                        }
-                                    }>
-                                        <StatDropdown chosen_option=stat_type />
-                                    </span>
-                                    {move || {
-                                        stat_type
-                                            .read()
-                                            .is_some()
-                                            .then(|| {
-                                                view! {
-                                                    <div class="w-36">
-                                                        <Input
-                                                            id="stat_value_1"
-                                                            input_type="number"
-                                                            placeholder="Value"
-                                                            bind=stat_value
-                                                        />
-                                                    </div>
-                                                    <StaticTooltip
-                                                        position=StaticTooltipPosition::Top
-                                                        tooltip=|| {
-                                                            "Require the stat to be absent or below the given value."
-                                                        }
-                                                    >
-                                                        <Checkbox
-                                                            label="Exclude".to_string()
-                                                            checked=stat_excluded
-                                                            on_change=move |checked| { stat_excluded.set(checked) }
-                                                        />
-                                                    </StaticTooltip>
-                                                }
-                                            })
-                                    }}
-                                </div>
-                            </Show>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+            <div class="border-b border-zinc-700">
+                <StatFilters stat_filters />
             </div>
 
-            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4 border-b border-zinc-700">
-                {affix_filters
-                    .into_iter()
-                    .enumerate()
-                    .map(|(index, (affix_id, min_level))| {
-                        view! {
-                            <Show when=move || index < visible_affix_filters.get()>
-                                <div class="flex w-full min-w-0 gap-2 xl:gap-4 items-center">
-                                    {move || {
-                                        affix_id
-                                            .read()
-                                            .is_some()
-                                            .then(|| {
-                                                view! {
-                                                    <MenuButton
-                                                        class:flex-none
-                                                        on:click=move |_| {
-                                                            affix_id.set(None);
-                                                            min_level.set(None);
-                                                        }
-                                                    >
-                                                        "❌"
-                                                    </MenuButton>
-                                                }
-                                            })
-                                    }}
-                                    <span class=move || {
-                                        if affix_id.read().is_none() {
-                                            "flex-1 min-w-0 text-center"
-                                        } else {
-                                            "flex-1 min-w-0"
-                                        }
-                                    }>
-                                        {move || {
-                                            let options = available_affix_groups
-                                                .read()
-                                                .iter()
-                                                .map(|(group_id, group)| {
-                                                    (Some(group_id.clone()), group.label.clone())
-                                                })
-                                                .collect();
-                                            view! {
-                                                <SearchableDropdownMenu
-                                                    options
-                                                    chosen_option=affix_id
-                                                    missing_text="+ Add Affix Filter"
-                                                    width_class="w-full min-w-0"
-                                                />
-                                            }
-                                        }}
-                                    </span>
-                                    {move || {
-                                        affix_id
-                                            .get()
-                                            .and_then(|selected_affix| {
-                                                available_affix_groups.read().get(&selected_affix).cloned()
-                                            })
-                                            .map(|group| {
-                                                let options = std::iter::once((None, "Level".to_string()))
-                                                    .chain(
-                                                        group
-                                                            .levels
-                                                            .into_iter()
-                                                            .map(|level| { (Some(level), level.to_string()) }),
-                                                    )
-                                                    .collect();
-                                                view! {
-                                                    <DropdownMenu
-                                                        options
-                                                        chosen_option=min_level
-                                                        missing_text="Level"
-                                                        width_class="w-24"
-                                                    />
-                                                }
-                                            })
-                                    }}
-                                </div>
-                            </Show>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+            <div class="border-b border-zinc-700">
+                <AffixFilters affix_filters item_category />
             </div>
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4">
@@ -953,162 +768,4 @@ pub fn EditRule(
 
         </CardInset>
     }
-}
-
-pub fn affix_group_id(affix_id: &str) -> &str {
-    affix_id
-        .rsplit_once("_t")
-        .filter(|(_, tier)| !tier.is_empty() && tier.chars().all(|c| c.is_ascii_digit()))
-        .map(|(group_id, _)| group_id)
-        .unwrap_or(affix_id)
-}
-
-#[derive(Clone, PartialEq)]
-struct AffixGroupOption {
-    label: String,
-    levels: Vec<AreaLevel>,
-}
-
-fn affix_effects_label(
-    affix: &ItemAffixBlueprint,
-    affix_base_category: AffixBaseCategory,
-    show_fixed_values: bool,
-) -> String {
-    let effects = affix
-        .effects
-        .iter()
-        .map(|effect| {
-            if show_fixed_values && effect.value.min == effect.value.max {
-                format_stat(&StatEffect {
-                    stat: effect.stat.clone(),
-                    modifier: effect.modifier,
-                    value: effect.value.min,
-                    bypass_ignore: effect.bypass_ignore,
-                })
-            } else {
-                format_stat_filter(&effect.stat, effect.modifier)
-            }
-        })
-        .collect::<Vec<_>>()
-        .join(", ");
-
-    let meta = if let Some(category) = affix_base_category_str(affix_base_category) {
-        format!("({category} · {})", affix_type_str(affix.affix_type))
-    } else {
-        format!("({})", affix_type_str(affix.affix_type))
-    };
-
-    format!(" {meta} {effects}",)
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum AffixBaseCategory {
-    Item,
-    Rune,
-    Map,
-    Other,
-}
-
-fn affix_base_category(affix_id: &str) -> AffixBaseCategory {
-    let prefix = affix_id
-        .split_once('_')
-        .map(|(prefix, _)| prefix)
-        .unwrap_or(affix_id);
-    match prefix {
-        "item" => AffixBaseCategory::Item,
-        "rune" => AffixBaseCategory::Rune,
-        "map" => AffixBaseCategory::Map,
-        _ => AffixBaseCategory::Other,
-    }
-}
-
-fn affix_base_category_str(affix_base_category: AffixBaseCategory) -> Option<&'static str> {
-    match affix_base_category {
-        AffixBaseCategory::Item => Some("Item"),
-        AffixBaseCategory::Rune => Some("Rune"),
-        AffixBaseCategory::Map => Some("Edict"),
-        AffixBaseCategory::Other => None,
-    }
-}
-
-fn visible_filter_slots(occupied: &[bool]) -> usize {
-    let Some(last_occupied) = occupied.iter().rposition(|occupied| *occupied) else {
-        return usize::from(!occupied.is_empty());
-    };
-
-    let occupied_slots = last_occupied + 1;
-    if occupied_slots < occupied.len()
-        && occupied[..occupied_slots].iter().all(|occupied| *occupied)
-    {
-        occupied_slots + 1
-    } else {
-        occupied_slots
-    }
-}
-
-fn affix_groups(
-    data_context: DataContext,
-    category: Option<ItemCategory>,
-) -> IndexMap<String, AffixGroupOption> {
-    let item_affixes = data_context.item_affixes.read_untracked();
-    let mut groups =
-        BTreeMap::<(AffixBaseCategory, AffixType, String), Vec<&ItemAffixBlueprint>>::new();
-
-    let intersected_categories = category
-        .map(|category| {
-            data_context
-                .item_bases
-                .read_untracked()
-                .values()
-                .filter(|item_base| item_base.categories.contains(&category))
-                .fold(BTreeSet::new(), |mut acc, item_base| {
-                    if acc.is_empty() {
-                        acc.extend(item_base.categories.iter());
-                    } else {
-                        acc.retain(|c| item_base.categories.contains(c));
-                    }
-
-                    acc
-                })
-        })
-        .unwrap_or_default();
-
-    for (affix_id, affix) in item_affixes.iter().filter(|(_, affix)| {
-        matches!(
-            affix.affix_type,
-            AffixType::Prefix | AffixType::Suffix | AffixType::Soul
-        ) && (category.is_none()
-            || (category == Some(ItemCategory::Remnant) && affix.affix_type == AffixType::Soul)
-            || !intersected_categories.is_disjoint(&affix.restrictions))
-    }) {
-        groups
-            .entry((
-                affix_base_category(affix_id),
-                affix.affix_type,
-                affix_group_id(affix_id).to_string(),
-            ))
-            .or_default()
-            .push(affix);
-    }
-
-    groups
-        .into_iter()
-        .map(|((affix_base_category, _, group_id), group)| {
-            let label = affix_effects_label(
-                group
-                    .first()
-                    .copied()
-                    .expect("aggregated affix groups cannot be empty"),
-                affix_base_category,
-                group.len() == 1,
-            );
-            let mut levels = group
-                .iter()
-                .map(|affix| affix.item_level)
-                .collect::<Vec<_>>();
-            levels.sort_unstable();
-
-            (group_id, AffixGroupOption { label, levels })
-        })
-        .collect()
 }

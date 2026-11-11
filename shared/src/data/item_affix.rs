@@ -107,6 +107,14 @@ pub struct AffixEffect {
     pub stat_effect: StatEffect,
 }
 
+pub fn affix_group_id(affix_id: &str) -> &str {
+    affix_id
+        .rsplit_once("_t")
+        .filter(|(_, tier)| !tier.is_empty() && tier.chars().all(|c| c.is_ascii_digit()))
+        .map(|(group_id, _)| group_id)
+        .unwrap_or(affix_id)
+}
+
 pub fn aggregate_effects(
     affixes: &[ItemAffix],
     scope: AffixEffectScope,

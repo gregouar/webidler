@@ -241,6 +241,17 @@ pub async fn read_market_items<'c>(
             .unwrap_or_default()
     });
 
+    let affix_filters = filters.affix_filters.map(|affix_filter| {
+        affix_filter
+            .map(|affix_filter| {
+                (
+                    affix_filter.affix_group_id,
+                    affix_filter.min_level.map(i32::from).unwrap_or_default(),
+                )
+            })
+            .unwrap_or_default()
+    });
+
     let raw_items = sqlx::query_as!(
         MarketEntry,
         r#"
@@ -480,6 +491,51 @@ pub async fn read_market_items<'c>(
                     )
                 )
             )
+            AND ($69 = '' OR market.stash_item_id IN (
+                SELECT affix1.stash_item_id
+                FROM stash_items_affixes affix1
+                WHERE affix1.deleted_at IS NULL
+                  AND affix1.realm_id = $66
+                  AND affix1.base_item_id IS NULL
+                  AND affix1.affix_group_id = $69
+                  AND affix1.affix_level >= $70
+            ))
+            AND ($71 = '' OR market.stash_item_id IN (
+                SELECT affix2.stash_item_id
+                FROM stash_items_affixes affix2
+                WHERE affix2.deleted_at IS NULL
+                  AND affix2.realm_id = $66
+                  AND affix2.base_item_id IS NULL
+                  AND affix2.affix_group_id = $71
+                  AND affix2.affix_level >= $72
+            ))
+            AND ($73 = '' OR market.stash_item_id IN (
+                SELECT affix3.stash_item_id
+                FROM stash_items_affixes affix3
+                WHERE affix3.deleted_at IS NULL
+                  AND affix3.realm_id = $66
+                  AND affix3.base_item_id IS NULL
+                  AND affix3.affix_group_id = $73
+                  AND affix3.affix_level >= $74
+            ))
+            AND ($75 = '' OR market.stash_item_id IN (
+                SELECT affix4.stash_item_id
+                FROM stash_items_affixes affix4
+                WHERE affix4.deleted_at IS NULL
+                  AND affix4.realm_id = $66
+                  AND affix4.base_item_id IS NULL
+                  AND affix4.affix_group_id = $75
+                  AND affix4.affix_level >= $76
+            ))
+            AND ($77 = '' OR market.stash_item_id IN (
+                SELECT affix5.stash_item_id
+                FROM stash_items_affixes affix5
+                WHERE affix5.deleted_at IS NULL
+                  AND affix5.realm_id = $66
+                  AND affix5.base_item_id IS NULL
+                  AND affix5.affix_group_id = $77
+                  AND affix5.affix_level >= $78
+            ))
             AND (market.price <= $58)
         ORDER BY 
             COALESCE(market.recipient_id = $4, false) DESC, 
@@ -578,7 +634,17 @@ pub async fn read_market_items<'c>(
         item_cooldown, // $65
         realm_id,
         no_filter_max_power_shard_level,
-        min_max_power_shard_level // $68
+        min_max_power_shard_level, // $68
+        affix_filters[0].0,
+        affix_filters[0].1, // $70
+        affix_filters[1].0,
+        affix_filters[1].1, // $72
+        affix_filters[2].0,
+        affix_filters[2].1, // $74
+        affix_filters[3].0,
+        affix_filters[3].1, // $76
+        affix_filters[4].0,
+        affix_filters[4].1 // $78
     )
     .fetch_all(executor)
     .await?;

@@ -1,5 +1,6 @@
 pub mod account;
 pub mod achievements;
+pub mod affix_filters;
 pub mod bag_grid;
 pub mod inventory;
 pub mod item_card;
@@ -12,4 +13,5 @@ pub mod player_count;
 pub mod resources;
 pub mod settings;
 pub mod skills;
+pub mod stat_filters;
 pub mod tooltips;

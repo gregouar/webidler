@@ -598,6 +598,7 @@ pub fn ItemCompare(item_slot: ItemSlot, max_item_level: Signal<AreaLevel>) -> im
     view! {
         <div
             class="absolute flex top-2 right-2 px-2 py-1 rounded-[4px] items-center border border-zinc-700/80 bg-black/45 hover:bg-black/60"
+            class:hidden=move || !town_context.inventory.read().equipped.contains_key(&item_slot)
 
             on:touchstart=move |_| show_tooltip()
             on:contextmenu=move |ev| {
