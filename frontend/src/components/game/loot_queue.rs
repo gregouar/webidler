@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::{AffixEffectScope, AffixType, affix_group_id, aggregate_effects},
+        item_affix::{AffixEffectScope, affix_group_id, aggregate_effects},
         loot::{LootState, QueuedLoot},
         modifier::invert_formatted_effect_value,
         player::EquippedSlot,
@@ -416,12 +416,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     for affix_filter in affix_filters.iter().flatten() {
         if !item_specs.affixes.iter().any(|affix| {
-            affix.base_item_id.is_none()
-                && matches!(
-                    affix.affix_type,
-                    AffixType::Prefix | AffixType::Suffix | AffixType::Soul
-                )
-                && affix_group_id(&affix.affix_id) == affix_filter.affix_id
+            affix.base_item_id == affix_filter.base_item_id
+                && affix_group_id(&affix.affix_id) == affix_filter.affix_group_id
                 && affix_filter
                     .min_level
                     .is_none_or(|min_level| match rule_type {

@@ -5,7 +5,7 @@ use strum_macros::EnumIter;
 use crate::{
     data::{
         area::AreaLevel,
-        item::{ItemCategory, ItemRarity, ItemSpecs},
+        item::{BaseItemId, ItemCategory, ItemRarity, ItemSpecs},
         modifier::Modifier,
         stat_effect::StatType,
         user::UserCharacterId,
@@ -47,6 +47,7 @@ pub struct MarketStatFilter {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
 pub struct MarketAffixFilter {
+    pub base_item_id: Option<BaseItemId>,
     pub affix_group_id: String,
     #[serde(default)]
     pub min_level: Option<AreaLevel>,

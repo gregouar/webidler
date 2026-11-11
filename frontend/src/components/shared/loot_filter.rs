@@ -11,8 +11,8 @@ use leptos_use_storage::use_local_storage;
 use shared::{
     data::{
         area::AreaLevel,
-        item::{ItemCategory, ItemRarity},
-        market::{AFFIX_FILTERS_AMOUNT, STAT_FILTERS_AMOUNT},
+        item::{BaseItemId, ItemCategory, ItemRarity},
+        market::{AFFIX_FILTERS_AMOUNT, MarketAffixFilter, STAT_FILTERS_AMOUNT},
         modifier::Modifier,
         stat_effect::StatType,
         user::UserCharacterId,
@@ -66,9 +66,7 @@ pub struct FilterRule {
     pub item_name: Option<ItemName>,
     pub item_level: Option<AreaLevel>,
     pub req_item_level: Option<AreaLevel>,
-    #[serde(default)]
     pub req_affix_level: Option<AreaLevel>,
-    #[serde(default)]
     pub max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
@@ -86,17 +84,10 @@ pub struct FilterRule {
     pub item_block: Option<f64>,
 
     #[allow(clippy::type_complexity)]
+    // TODO: MarketStatFilter?
     pub stat_filters: [Option<((StatType, Modifier), Option<f64>, bool)>; STAT_FILTERS_AMOUNT],
-
     #[serde(default)]
-    pub affix_filters: [Option<LootAffixFilter>; AFFIX_FILTERS_AMOUNT],
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
-pub struct LootAffixFilter {
-    pub affix_id: String,
-    #[serde(default)]
-    pub min_level: Option<AreaLevel>,
+    pub affix_filters: [Option<MarketAffixFilter>; AFFIX_FILTERS_AMOUNT],
 }
 
 impl FilterRule {
@@ -579,7 +570,7 @@ pub fn EditRule(
 
     let affix_filters: [(_, _); AFFIX_FILTERS_AMOUNT] = std::array::from_fn(|_| {
         (
-            RwSignal::new(None::<String>),
+            RwSignal::new(None::<(Option<BaseItemId>, String)>),
             RwSignal::new(None::<AreaLevel>),
         )
     });
@@ -587,7 +578,10 @@ pub fn EditRule(
         with_selected_rule(selected_rule, loot_filter, move |rule| {
             for (index, (affix_id, min_level)) in affix_filters.iter().enumerate() {
                 if let Some(filter) = &rule.affix_filters[index] {
-                    affix_id.set(Some(filter.affix_id.clone()));
+                    affix_id.set(Some((
+                        filter.base_item_id.clone(),
+                        filter.affix_group_id.clone(),
+                    )));
                     min_level.set(filter.min_level);
                 } else {
                     affix_id.set(None);
@@ -600,10 +594,14 @@ pub fn EditRule(
     Effect::new(move |_| {
         for (index, (affix_id, min_level)) in affix_filters.iter().enumerate() {
             update_selected_rule(selected_rule, loot_filter, move |rule| {
-                rule.affix_filters[index] = affix_id.get().map(|affix_id| LootAffixFilter {
-                    affix_id,
-                    min_level: min_level.get(),
-                });
+                rule.affix_filters[index] =
+                    affix_id
+                        .get()
+                        .map(|(base_item_id, affix_group_id)| MarketAffixFilter {
+                            base_item_id,
+                            affix_group_id,
+                            min_level: min_level.get(),
+                        });
             });
         }
     });

@@ -5,7 +5,7 @@ use leptos::prelude::*;
 
 use shared::data::{
     area::AreaLevel,
-    item::ItemCategory,
+    item::{BaseItemId, ItemCategory},
     item_affix::{AffixType, ItemAffixBlueprint, affix_group_id},
     market::AFFIX_FILTERS_AMOUNT,
     stat_effect::StatEffect,
@@ -23,8 +23,10 @@ use crate::components::{
     },
 };
 
-pub type AffixFilterSignals =
-    [(RwSignal<Option<String>>, RwSignal<Option<AreaLevel>>); AFFIX_FILTERS_AMOUNT];
+pub type AffixFilterSignals = [(
+    RwSignal<Option<(Option<BaseItemId>, String)>>,
+    RwSignal<Option<AreaLevel>>,
+); AFFIX_FILTERS_AMOUNT];
 
 #[component]
 pub fn AffixFilters(
@@ -231,10 +233,12 @@ pub fn visible_filter_slots(occupied: &[bool]) -> usize {
 fn affix_groups(
     data_context: DataContext,
     category: Option<ItemCategory>,
-) -> IndexMap<String, AffixGroupOption> {
+) -> IndexMap<(Option<BaseItemId>, String), AffixGroupOption> {
     let item_affixes = data_context.item_affixes.read_untracked();
-    let mut groups =
-        BTreeMap::<(AffixBaseCategory, AffixType, String), Vec<&ItemAffixBlueprint>>::new();
+    let mut groups = BTreeMap::<
+        (AffixBaseCategory, AffixType, (Option<BaseItemId>, String)),
+        Vec<&ItemAffixBlueprint>,
+    >::new();
 
     let intersected_categories = category
         .map(|category| {
@@ -266,7 +270,7 @@ fn affix_groups(
             .entry((
                 affix_base_category(affix_id),
                 affix.affix_type,
-                affix_group_id(affix_id).to_string(),
+                (None, affix_group_id(affix_id).to_string()),
             ))
             .or_default()
             .push(affix);

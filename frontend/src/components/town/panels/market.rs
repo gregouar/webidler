@@ -1358,11 +1358,12 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     });
     let affix_filters = filters.get_untracked().affix_filters.map(|affix_filter| {
         (
-            RwSignal::new(
-                affix_filter
-                    .as_ref()
-                    .map(|affix_filter| affix_filter.affix_group_id.clone()),
-            ),
+            RwSignal::new(affix_filter.as_ref().map(|affix_filter| {
+                (
+                    affix_filter.base_item_id.clone(),
+                    affix_filter.affix_group_id.clone(),
+                )
+            })),
             RwSignal::new(
                 affix_filter
                     .as_ref()
@@ -1388,7 +1389,8 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
             filters.write().affix_filters[index] =
                 affix_group_id
                     .get()
-                    .map(|affix_group_id| MarketAffixFilter {
+                    .map(|(base_item_id, affix_group_id)| MarketAffixFilter {
+                        base_item_id,
                         affix_group_id,
                         min_level: min_level.get(),
                     });
