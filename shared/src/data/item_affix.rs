@@ -17,7 +17,7 @@ use super::{
     stat_effect::{StatEffect, StatType},
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum AffixType {
     Base,
     Prefix,
@@ -72,11 +72,9 @@ pub struct ItemAffixBlueprint {
     pub tier: u8,
     pub weight: u64, // Bigger weight means more chance to have affix
 
-    #[serde(default)]
-    pub restrictions: Option<BTreeSet<ItemCategory>>,
+    pub restrictions: BTreeSet<ItemCategory>,
     pub item_level: AreaLevel,
 
-    #[serde(default)]
     pub effects: Vec<AffixEffectBlueprint>,
     // #[serde(default)]
     // pub triggers: Vec<TriggeredEffect>, // TODO

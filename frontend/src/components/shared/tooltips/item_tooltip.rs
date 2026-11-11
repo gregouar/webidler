@@ -909,7 +909,7 @@ pub fn formatted_affixes_list(
         .collect()
 }
 
-fn affix_type_str(affix_type: AffixType) -> &'static str {
+pub fn affix_type_str(affix_type: AffixType) -> &'static str {
     match affix_type {
         AffixType::Base => "Base affix",
         AffixType::Prefix => "Prefix",

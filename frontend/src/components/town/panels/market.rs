@@ -1987,7 +1987,7 @@ pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> im
     }
 }
 
-fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
+pub fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
     match modifier {
         Modifier::Increased => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
         Modifier::More => format!("#% More {}", format_multiplier_stat_name(stat_type)),

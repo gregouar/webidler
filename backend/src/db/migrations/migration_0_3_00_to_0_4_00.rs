@@ -349,10 +349,7 @@ fn find_blueprint<'a>(
             !is_used(None, id)
                 && blueprint.name == old_affix.name
                 && blueprint.tier == old_affix.tier
-                && blueprint
-                    .restrictions
-                    .as_ref()
-                    .is_none_or(|restrictions| !restrictions.is_disjoint(&base.categories))
+                && !blueprint.restrictions.is_disjoint(&base.categories)
         })
         .max_by_key(|(_, blueprint)| {
             blueprint

@@ -105,9 +105,7 @@ pub fn MenuCard(
                             GraphicsQuality::High => {
                                 "clip-octagon border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
                             }
-                            GraphicsQuality::Medium => {
-                                "clip-octagon border border-[#6c5734]/50"
-                            }
+                            GraphicsQuality::Medium => "clip-octagon border border-[#6c5734]/50",
                             GraphicsQuality::Low => {
                                 "clip-octagon border border-[#4f4532] bg-zinc-800"
                             }
@@ -277,7 +275,7 @@ pub fn CardInset(
     view! {
         <div class=move || {
             format!(
-                "flex flex-col overflow-y-auto
+                "flex flex-col overflow-y-auto overscroll-none
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] ring-1 ring-zinc-950 
                 {} {} {}",
                 class.unwrap_or_default(),

@@ -8,7 +8,7 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::{AffixEffectScope, aggregate_effects},
+        item_affix::{AffixEffectScope, AffixType, aggregate_effects},
         loot::{LootState, QueuedLoot},
         modifier::invert_formatted_effect_value,
         player::EquippedSlot,
@@ -24,7 +24,7 @@ use crate::components::{
     settings::SettingsContext,
     shared::{
         item_card::ItemCard,
-        loot_filter::{FilterRule, FilterRuleType, LootFilter},
+        loot_filter::{FilterRule, FilterRuleType, LootFilter, affix_group_id},
         resources::{ResourceReward, ResourceRewardOverlay},
     },
     ui::{toast::*, tooltip::DynamicTooltipPosition},
@@ -363,6 +363,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         max_power_shard_level,
         item_rarity,
         item_category,
+        affix_filters,
         item_damages,
         item_damage_physical,
         item_damage_fire,
@@ -411,6 +412,25 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         .unwrap_or_default()
     {
         return false;
+    }
+
+    for affix_filter in affix_filters.iter().flatten() {
+        if !item_specs.affixes.iter().any(|affix| {
+            affix.base_item_id.is_none()
+                && matches!(
+                    affix.affix_type,
+                    AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+                )
+                && affix_group_id(&affix.affix_id) == affix_filter.affix_id
+                && affix_filter
+                    .min_level
+                    .is_none_or(|min_level| match rule_type {
+                        FilterRuleType::Pickup => affix.item_level >= min_level,
+                        FilterRuleType::Sell => affix.item_level <= min_level,
+                    })
+        }) {
+            return false;
+        }
     }
 
     if item_level

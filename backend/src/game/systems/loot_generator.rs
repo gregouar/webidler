@@ -510,10 +510,7 @@ fn roll_affix(
     let available_affixes: Vec<_> = affixes_table
         .iter()
         .filter(|(_, a)| {
-            a.restrictions
-                .as_ref()
-                .map(|r| !r.is_disjoint(&base_item.categories))
-                .unwrap_or(true)
+            !a.restrictions.is_disjoint(&base_item.categories)
                 && area_level >= a.item_level
                 && a.affix_type == affix_type
                 && !families_in_use.contains(&a.family)
