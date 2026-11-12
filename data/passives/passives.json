@@ -618,7 +618,7 @@
               }
             },
             "modifier": "More",
-            "value": -1e300
+            "value": -1e+300
           },
           {
             "stat": {
@@ -3421,7 +3421,7 @@
               }
             },
             "modifier": "More",
-            "value": -1e300
+            "value": -1e+300
           },
           {
             "stat": {
@@ -3868,7 +3868,7 @@
               }
             },
             "modifier": "More",
-            "value": -1e200
+            "value": -1e+200
           }
         ],
         "triggers": [],
@@ -4530,7 +4530,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": null,
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -8822,7 +8823,7 @@
               }
             },
             "modifier": "More",
-            "value": -1e300
+            "value": -1e+300
           },
           {
             "stat": {
@@ -8990,7 +8991,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": "Fire",
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -9039,7 +9041,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": "Storm",
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -10650,7 +10653,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": null,
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -11971,7 +11975,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": "Fire",
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -13342,7 +13347,8 @@
               "is_hurt": null,
               "is_triggered": null,
               "damage_type": "Fire",
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -13616,7 +13622,8 @@
               "is_hurt": true,
               "is_triggered": false,
               "damage_type": null,
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,
@@ -13809,7 +13816,7 @@
               }
             },
             "modifier": "More",
-            "value": -1e300
+            "value": -1e+300
           },
           {
             "stat": {
@@ -14380,7 +14387,7 @@
           {
             "stat": "Life",
             "modifier": "More",
-            "value": -1e300
+            "value": -1e+300
           },
           {
             "stat": {
@@ -14641,24 +14648,6 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14675,6 +14664,24 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -14775,15 +14782,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
@@ -14803,6 +14801,15 @@
                   },
                   {
                     "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -14927,6 +14934,24 @@
                     }
                   },
                   {
+                    "StatusEscalation": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusPower": {
                       "status_id": null,
                       "damage_type": null,
@@ -14937,25 +14962,7 @@
                     }
                   },
                   {
-                    "StatusEscalation": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
                       "status_id": null,
                       "damage_type": null,
                       "debuff": null,
@@ -15771,7 +15778,8 @@
               "is_hurt": true,
               "is_triggered": null,
               "damage_type": "Storm",
-              "skill_ids": null,
+              "skill_id": null,
+              "item_slot": null,
               "conditions": []
             },
             "description": null,

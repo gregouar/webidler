@@ -22,6 +22,7 @@ use crate::components::{
         effects_tooltip::{
             damage_type_str, format_stat, skill_status_filter_str, status_type_value_str,
         },
+        item_tooltip,
         skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
     },
     ui::number::format_number,
@@ -453,19 +454,17 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
 fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
     let data_context: DataContext = expect_context();
 
-    let skills_str = hit_trigger.skill_ids.as_ref().and_then(|skill_ids| {
-        if skill_ids.len() == 1 {
-            skill_ids
-                .iter()
-                .next()
-                .map(|skill_id| format!(" with {}", data_context.skill_name(skill_id)))
-        } else {
-            None
-        }
-    });
+    let skills_str = hit_trigger
+        .skill_id
+        .as_ref()
+        .map(|skill_id| format!(" with {}", data_context.skill_name(skill_id)));
+
+    let item_slot_str = hit_trigger
+        .item_slot
+        .map(|item_slot| format!(" with {}", item_tooltip::item_slot_str(item_slot)));
 
     format!(
-        "{}{}{}{}{}{}Hit{}",
+        "{}{}{}{}{}{}Hit{}{}",
         hurt_str(hit_trigger.is_hurt),
         blocked_str(hit_trigger.is_blocked),
         critical_str(hit_trigger.is_crit),
@@ -473,6 +472,7 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
         skill_type_str(hit_trigger.skill_type),
         damage_type_str(hit_trigger.damage_type),
         skills_str.unwrap_or_default(),
+        item_slot_str.unwrap_or_default(),
     )
 }
 

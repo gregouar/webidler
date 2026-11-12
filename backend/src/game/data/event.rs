@@ -4,6 +4,7 @@ use shared::data::{
     area::{AreaLevel, ThreatLevel},
     character::CharacterId,
     character_status::StatusId,
+    item::ItemSlot,
     modifier::ModifiableValue,
     skill::{DamageType, RestoreType, SkillRange, SkillType},
     values::NonNegative,
@@ -35,6 +36,7 @@ pub struct HitEvent {
 
     pub trigger_depth: u8,
     pub skill_id: String,
+    pub item_slot: Option<ItemSlot>,
 
     pub skill_type: SkillType,
     pub range: SkillRange,

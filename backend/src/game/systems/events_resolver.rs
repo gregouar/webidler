@@ -191,10 +191,14 @@ fn handle_hit_event<'a>(
                             <= 0.0
                     })
                     .unwrap_or_default()
-                || hit_trigger
-                    .skill_ids
-                    .as_ref()
-                    .map(|skill_ids| !skill_ids.contains(&hit_event.skill_id))
+                || !compare_options(&hit_trigger.skill_id.as_ref(), &Some(&hit_event.skill_id))
+                || !hit_trigger
+                    .item_slot
+                    .map(|item_slot| {
+                        hit_event
+                            .item_slot
+                            .is_some_and(|hit_item_slot| item_slot == hit_item_slot)
+                    })
                     .unwrap_or_default()
                 || hit_trigger.conditions.iter().any(|condition| {
                     check_condition(

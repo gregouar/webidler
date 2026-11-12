@@ -6,7 +6,7 @@ use shared::data::{
     character::CharacterAttrs,
     character_status::StatusEffectType,
     conditional_modifier::ConditionalModifier,
-    item::WeaponSpecs,
+    item::{ItemSlot, WeaponSpecs},
     item_affix::AffixEffectScope,
     modifier::{BaseModifiableValue, ModifiableValue, Modifier},
     player::PlayerInventory,
@@ -199,6 +199,7 @@ fn apply_weapon_effects(
                         factor,
                         damage_type,
                     } => weapon_skill_effect(
+                        item_slot,
                         inventory
                             .get_equipped_item(item_slot)
                             .and_then(|item_specs| item_specs.weapon_specs.as_ref()),
@@ -216,6 +217,7 @@ fn apply_weapon_effects(
 }
 
 fn weapon_skill_effect(
+    item_slot: ItemSlot,
     weapon_specs: Option<&WeaponSpecs>,
     factor: f64,
     damage_type: Option<DamageType>,
@@ -274,6 +276,7 @@ fn weapon_skill_effect(
                 crit_damage: weapon_specs.crit_damage.as_new_base(),
                 unblockable: false,
                 armor_penetration: Default::default(),
+                item_slot: Some(item_slot),
             },
             success_chance: Chance::new_sure(),
             ignore_stat_effects: Default::default(),
@@ -1358,6 +1361,7 @@ pub fn apply_stat_effect_on_skill_effect(
             crit_damage,
             unblockable,
             armor_penetration: _,
+            item_slot: _,
         } => {
             for damage_type in DamageType::iter().filter(|d| *d != DamageType::Poison) {
                 let value = damage.entry(damage_type).or_default();

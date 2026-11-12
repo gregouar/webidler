@@ -69,7 +69,7 @@
             "Trigger"      : {
               "trigger_id": "weapon_skill_life_on_hit",
               "skill_type": "Attack",
-              "OnHit"     : { "skill_ids": ["weapon_skill"], "is_hurt": true },
+              "OnHit"     : {"skill_id": "weapon_skill", "is_hurt": true},
               "target"    : "Source",
               "effects"   : [
                 { "Restore": {"restore_type": "Life", "value": 1, "modifier": "Flat"} }
@@ -98,7 +98,7 @@
             "Trigger"      : {
               "trigger_id": "weapon_skill_mana_on_hit",
               "skill_type": "Attack",
-              "OnHit"     : { "skill_ids": ["weapon_skill"], "is_hurt": true },
+              "OnHit"     : {"skill_id": "weapon_skill", "is_hurt": true},
               "target"    : "Source",
               "effects"   : [
                 { "Restore": {"restore_type": "Mana", "value": 1, "modifier": "Flat"} }

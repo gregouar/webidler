@@ -237,17 +237,15 @@
     "triggers": [
       {
         "OnHit": {
-          "skill_type": "Attack",
+          "skill_type": null,
           "range": null,
           "is_crit": null,
           "is_blocked": null,
           "is_hurt": true,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": [
-            "gloves_skill",
-            "double_strike"
-          ],
+          "skill_id": null,
+          "item_slot": "Gloves",
           "conditions": []
         },
         "description": null,
@@ -732,7 +730,8 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
@@ -943,7 +942,8 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": "Storm",
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
@@ -996,18 +996,18 @@
             },
             "ignore_stat_effects": [
               {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
                   "damage_type": "Storm",
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],
@@ -1307,7 +1307,7 @@
   },
   "wolf_gloves": {
     "name": "Wearwulf",
-    "icon": "items/gloves/wolf_gloves_2.webp",
+    "icon": "items/gloves/wolf_gloves.webp",
     "description": "Kill the Beast. Take its Skin. Wear it. Become the Beast.",
     "slot": "Gloves",
     "extra_slots": [
@@ -1351,7 +1351,86 @@
         "is_unique": true
       }
     },
-    "triggers": [],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": true,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_id": null,
+          "item_slot": "Gloves",
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "wolf_gloves",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Physical"
+            },
+            "hidden": false
+          }
+        ],
+        "trigger_propagate": false,
+        "skill_type": "Attack",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 30.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "bleed",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",

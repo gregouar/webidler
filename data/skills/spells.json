@@ -700,31 +700,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusFaster": {
                   "status_id": null,
                   "damage_type": "Any",
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
-                }
-              },
-              {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
                 }
               },
               {
@@ -743,6 +724,25 @@
                   "damage_type": null,
                   "min_max": null,
                   "is_hit": null
+                }
+              },
+              {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
                 }
               }
             ],
@@ -937,9 +937,8 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": [
-            "irradiate"
-          ],
+          "skill_id": "irradiate",
+          "item_slot": null,
           "conditions": []
         },
         "description": null,

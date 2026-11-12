@@ -511,7 +511,7 @@
                         "Trigger"      : {
                             "trigger_id": "meditate_damage_per_restore",
                             "skill_type": "Blessing",
-                            "OnRestored": { "skill_ids": ["meditate"], "restore_type": "Mana" },
+                            "OnRestored": {"skill_id": "meditate", "restore_type": "Mana"},
                             "target"    : "Me",
                             "effects"   : [
                                 {

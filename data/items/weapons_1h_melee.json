@@ -769,7 +769,7 @@
           "is_hurt"     : true,
           "is_triggered": false,
           "damage_type" : null,
-          "skill_ids"   : ["weapon_skill", "double_strike"],
+          "item_slot"   : "Weapon",
           "conditions"  : []
         },
         "description"      : null,
@@ -811,7 +811,7 @@
           "is_hurt"     : true,
           "is_triggered": false,
           "damage_type" : null,
-          "skill_ids"   : ["weapon_skill", "double_strike"],
+          "item_slot"   : "Weapon",
           "conditions"  : []
         },
         "description"      : null,
@@ -1411,7 +1411,7 @@
           "is_hurt"     : null,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : null,
+          "skill_id"    : null,
           "conditions"  : []
         },
         "description"      : null,
@@ -1453,7 +1453,7 @@
           "is_hurt"     : null,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : ["weapon_skill"],
+          "skill_id"    : "weapon_skill",
           "conditions"  : []
         },
         "description"      : null,

@@ -355,7 +355,7 @@
           "is_hurt"     : true,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : null,
+          "skill_id"    : null,
           "conditions"  : []
         },
         "description": null,
@@ -712,7 +712,7 @@
           "is_hurt"     : null,
           "is_triggered": false,
           "damage_type" : null,
-          "skill_ids"   : null,
+          "skill_id"    : null,
           "conditions"  : []
         },
         "description": null,
@@ -914,8 +914,8 @@
           "is_hurt"     : null,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : ["rain_arrows"],
-          "conditions"  : [             ]
+          "skill_id"    : "rain_arrows",
+          "conditions"  : []
         },
         "description"      : null,
         "trigger_id"       : "acid_rain",
@@ -1169,7 +1169,7 @@
           "is_hurt"     : true,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : null,
+          "skill_id"    : null,
           "conditions"  : []
         },
         "description": null,

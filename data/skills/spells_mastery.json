@@ -308,7 +308,7 @@
             "Trigger"      : {
               "trigger_id": "blizzard_vulnerability",
               "skill_type": "Spell",
-              "OnHit"     : { "skill_ids": ["blizzard"], "is_hurt": true, "is_crit": true },
+              "OnHit"     : {"skill_id": "blizzard", "is_hurt": true, "is_crit": true},
               "target"    : "SameTarget",
               "effects"   : [
                 { "ApplyStatus": {"status_id": "blizzard_vulnerability", "value": 100} }
@@ -400,7 +400,7 @@
             "Trigger"      : {
               "trigger_id": "spark_crit_status",
               "skill_type": "Spell",
-              "OnHit"     : { "skill_ids": ["spark"], "is_hurt": true },
+              "OnHit"     : {"skill_id": "spark", "is_hurt": true},
               "target"    : "SameTarget",
               "effects"   : [
                 { "ApplyStatus": {"status_id": "spark_crit_vuln", "value": 20} }
@@ -1228,8 +1228,8 @@
               "trigger_id": "voodoo_doll_poison_heal",
               "skill_type": "Spell",
               "OnHit"     : {
-                "skill_ids" : ["voodoo_doll"],
-                "is_hurt"   : true,
+                "skill_id": "voodoo_doll",
+                "is_hurt" : true,
                 "conditions": [
                   { "HasStatus": {"damage_type": "Poison"} }
                 ]

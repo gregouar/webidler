@@ -628,6 +628,7 @@ pub fn format_skill_effect(
             crit_damage,
             unblockable,
             armor_penetration,
+            item_slot:_,
         } => view! {
             {
                 let mut damage_lines = Vec::new();

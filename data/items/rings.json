@@ -254,7 +254,7 @@
           "is_hurt"     : null,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : null,
+          "skill_id"    : null,
           "conditions"  : []
         },
         "description"      : null,
@@ -844,7 +844,7 @@
           "is_hurt"     : true,
           "is_triggered": null,
           "damage_type" : null,
-          "skill_ids"   : null,
+          "skill_id"    : null,
           "conditions"  : []
         },
         "description"      : null,

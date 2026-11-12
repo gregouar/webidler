@@ -270,6 +270,8 @@ pub enum SkillEffectType {
         unblockable: bool,
         #[serde(default)]
         armor_penetration: Percent,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        item_slot: Option<ItemSlot>,
     },
     ApplyStatus {
         status_id: StatusId,

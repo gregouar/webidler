@@ -6,7 +6,7 @@ use shared::{
     data::{
         character::{CharacterAttrs, CharacterId, CharacterState},
         character_status::{StatusEffectType, StatusId},
-        item::SkillRange,
+        item::{ItemSlot, SkillRange},
         modifier::{BaseModifiableValue, ModifiableValue},
         player::CharacterSpecs,
         rng::MarbleRollType,
@@ -40,6 +40,7 @@ pub fn attack_character(
     unblockable: bool,
     armor_penetration: Percent,
     skill_id: &str,
+    item_slot: &Option<ItemSlot>,
     trigger_depth: u8,
 ) -> bool {
     let (target_id, (target_specs, target_state)) = target;
@@ -118,6 +119,7 @@ pub fn attack_character(
         is_blocked,
         is_hurt,
         skill_id: skill_id.into(),
+        item_slot: item_slot.clone(),
         trigger_depth,
     }));
 

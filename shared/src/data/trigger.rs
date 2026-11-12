@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     character::CharacterId,
     conditional_modifier::Condition,
-    item::SkillShape,
+    item::{ItemSlot, SkillShape},
     modifier::Modifier,
     skill::{RestoreType, SkillRepeat, TargetType},
     stat_effect::StatStatusFilter,
@@ -117,7 +117,9 @@ pub struct HitTrigger {
     #[serde(default)]
     pub damage_type: Option<DamageType>,
     #[serde(default)]
-    pub skill_ids: Option<Vec<String>>,
+    pub skill_id: Option<String>,
+    #[serde(default)]
+    pub item_slot: Option<ItemSlot>,
     #[serde(default)]
     pub conditions: Vec<Condition>,
 }

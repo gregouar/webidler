@@ -538,6 +538,7 @@ fn apply_skill_effect_on_target(
             unblockable,
             armor_penetration,
             damage_factors: _,
+            item_slot,
         } => {
             let crit_marble_bag = attacker_marble_bags
                 .entry(MarbleRollType::CritChance)
@@ -570,6 +571,7 @@ fn apply_skill_effect_on_target(
                 *unblockable,
                 *armor_penetration,
                 skill_id,
+                item_slot,
                 trigger_depth,
             )
         }
