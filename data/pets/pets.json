@@ -7,6 +7,7 @@
     "pet_owl"     : {"name": "Owl",           "icon": "pets/pet_owl.webp"     },
     "pet_otter"   : {"name": "Otter Wizard",  "icon": "pets/pet_otter.webp"   },
     "pet_octopus" : {"name": "Octopoulpi",    "icon": "pets/pet_octopus.webp" },
+    "pet_mythos"  : {"name": "Chubithulhu",   "icon": "pets/pet_mythos.webp"  },
     "pet_mosquito": {"name": "Blood Sucker",  "icon": "pets/pet_mosquito.webp"},
     "pet_crab"    : {"name": "Treasure Crab", "icon": "pets/pet_crab.webp"    },
     "pet_scarab"  : {"name": "Desert Scarab", "icon": "pets/pet_scarab.webp"  },

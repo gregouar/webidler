@@ -13,6 +13,13 @@
             "description": "This player killed Amelia, the Broodborne Witch."
         }
     },
+    "badge_stars"       : {
+        "Badge": {
+            "icon"       : "badges/badge_stars.webp",
+            "name"       : "Still Sane",
+            "description": "This player killed Yog-Zathoth, the Cosmic Horror."
+        }
+    },
     "badge_chaos_gold"  : {
         "Badge": {
             "icon"       : "badges/badge_chaos_gold.webp",

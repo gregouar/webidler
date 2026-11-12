@@ -22,14 +22,14 @@
             { "AreaLevel": {"value": 150, "area_id": "farwest.json"     } },
             { "AreaLevel": {"value":  30, "area_id": "mythos.json"      } }
         ],
-        "rewards": [ {"Pet": "pet_cat_dog"} ]
+        "rewards": [ {"Pet": "pet_octopus"} ]
     },
     "power_level_600"        : {
         "icon"       : "achievements/trophy.svg",
         "name"       : "Endgame",
         "description": "Reach Power Level 600.",
         "goals"      : [ {"PowerLevel": 600} ],
-        "rewards"    : [ {"Pet": "pet_crow"} ]
+        "rewards"    : [ {"Pet": "pet_cat_dog"} ]
     },
     "power_level_900"        : {
         "icon"       : "achievements/trophy.svg",
@@ -171,7 +171,7 @@
     },
     "edict_mummy"            : {
         "icon"       : "achievements/mummy_head.svg",
-        "name"       : "All About the Mummies",
+        "name"       : "Mummies I'd Like to Fight",
         "description": "Reach Area Level 500 during a Mummy Invasion.",
         "goals"      : [
             { "AreaLevel": {"value": 500, "area_id": "desert_mummy.json"} }
@@ -194,6 +194,6 @@
         "goals"      : [
             { "AreaLevel": {"value": 50, "area_id": "mythos_stars.json"} }
         ],
-        "rewards": [ {"Pet": "pet_octopus"} ]
+        "rewards": [ {"Pet": "pet_mythos"}, {"Cosmetic": "badge_stars"} ]
     }
 }
