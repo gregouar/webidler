@@ -70,7 +70,7 @@ pub fn ItemsPage() -> impl IntoView {
 
     let save = move || {
         save_json(
-            &data_context.item_bases.get(),
+            &items_store.get(),
             &filename.get().unwrap_or("items.json".into()),
         );
     };
