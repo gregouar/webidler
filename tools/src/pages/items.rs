@@ -46,10 +46,18 @@ pub fn ItemsPage() -> impl IntoView {
         }
     });
 
-    let items_store = RwSignal::new(Default::default());
+    let items_store: RwSignal<ItemsStore> = RwSignal::new(Default::default());
     let selected_item = RwSignal::new(None);
 
     let (loaded_file, filename, on_file) = use_json_loader::<ItemsStore>();
+
+    Effect::new(move || {
+        *data_context.item_bases.write() = items_store
+            .get()
+            .into_iter()
+            .map(|(k, v)| (k.into(), Arc::new(v)))
+            .collect();
+    });
 
     Effect::new(move || {
         loaded_file.with(|loaded_file| {
@@ -62,7 +70,7 @@ pub fn ItemsPage() -> impl IntoView {
 
     let save = move || {
         save_json(
-            &items_store.get(),
+            &data_context.item_bases.get(),
             &filename.get().unwrap_or("items.json".into()),
         );
     };
