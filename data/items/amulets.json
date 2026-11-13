@@ -612,15 +612,6 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -628,6 +619,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],
@@ -1069,12 +1069,12 @@
               },
               "conditions": [
                 {
-                  "HasStatus": {
+                  "StatusStacks": {
                     "status_id": null,
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": "Curse",
-                    "not": false
+                    "min_stacks": 0
                   }
                 }
               ],
