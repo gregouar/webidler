@@ -1,29 +1,58 @@
 {
     "fangbreaker": {
-        "name": "Fangbreaking",
-        "icon": "statuses/punch_blast.svg",
-        "debuff": false,
-        "duration": 5.0,
+        "name"      : "Fangbreaking",
+        "icon"      : "statuses/punch_blast.svg",
+        "debuff"    : false,
+        "duration"  : 5.0,
         "max_stacks": 10,
-        "effects": [
+        "effects"   : [
             {
-
                 "StatModifier": {
-                    "stat": {
+                    "stat"    : {
                         "Damage": {
-                            "skill_type": "Attack",
-                            "skill_id": null,
+                            "skill_type"       : "Attack",
+                            "skill_id"         : null,
                             "skill_description": null,
-                            "damage_type": null,
-                            "min_max": null,
-                            "is_hit": null
+                            "damage_type"      : null,
+                            "min_max"          : null,
+                            "is_hit"           : null
                         }
                     },
                     "modifier": "More",
-                    "debuff": false
+                    "debuff"  : false
                 },
-                "value": 50.0,
-                "modifier": "Flat"
+                "value"       : 50.0,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "wolf_curse" : {
+        "name"      : "Curse of Lycanthropy",
+        "icon"      : "statuses/werewolf.svg",
+        "debuff"    : true,
+        "duration"  : 2.0,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "Mana", "modifier": "More", "debuff": true},
+                "value"       : 1e300,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {
+                    "stat"    : {
+                        "SkillConditionalModifier": {
+                            "stat": { "Damage": {"item_slot": "Gloves"} },
+                            "conditions": [
+                                { "StatusStacks": {"status_id": "bleed"} }
+                            ]
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 20,
+                "modifier"    : "Percent"
             }
         ]
     }

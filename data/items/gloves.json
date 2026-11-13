@@ -1349,6 +1349,21 @@
           400.0
         ],
         "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "StatusStacks": {
+            "status_id": "bleed",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 1.0,
+        "is_unique": true
       }
     },
     "triggers": [
@@ -1423,6 +1438,47 @@
                 }
               }
             ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      },
+      {
+        "OnTick": {
+          "tick_interval": 10
+        },
+        "description": null,
+        "trigger_id": "wolf_curse",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "wolf_curse",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,

@@ -119,7 +119,7 @@ pub fn attack_character(
         is_blocked,
         is_hurt,
         skill_id: skill_id.into(),
-        item_slot: item_slot.clone(),
+        item_slot: *item_slot,
         trigger_depth,
     }));
 

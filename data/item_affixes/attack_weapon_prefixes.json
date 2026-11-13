@@ -9,7 +9,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 1,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [20, 35] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [25, 45] }
     ]
   },
   "item_inc_damage_local_t2"     : {
@@ -22,7 +22,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 50,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [45, 55] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [55, 70] }
     ]
   },
   "item_inc_damage_local_t3"     : {
@@ -35,7 +35,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 100,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [65, 75] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [80, 95] }
     ]
   },
   "item_inc_damage_local_t4"     : {
@@ -48,7 +48,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 150,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [85, 95] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [105, 120] }
     ]
   },
   "item_inc_damage_local_t5"     : {
@@ -61,7 +61,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 200,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [105, 115] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [130, 145] }
     ]
   },
   "item_inc_damage_local_t6"     : {
@@ -74,7 +74,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 260,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [130, 145] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [160, 180] }
     ]
   },
   "item_inc_damage_local_t7"     : {
@@ -87,7 +87,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 330,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [160, 180] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [195, 220] }
     ]
   },
   "item_inc_damage_local_t8"     : {
@@ -100,7 +100,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 410,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [195, 220] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [235, 265] }
     ]
   },
   "item_inc_damage_local_t9"     : {
@@ -113,7 +113,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 500,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [235, 270] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [280, 320] }
     ]
   },
   "item_inc_damage_local_t10"    : {
@@ -126,7 +126,7 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 600,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [300, 350] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [350, 400] }
     ]
   },
   "item_add_physical_damage_t1"  : {
