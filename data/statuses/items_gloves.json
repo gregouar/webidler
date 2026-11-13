@@ -29,7 +29,7 @@
     "wolf_curse" : {
         "name"      : "Curse of Lycanthropy",
         "icon"      : "statuses/werewolf.svg",
-        "debuff"    : true,
+        "debuff"    : false,
         "duration"  : 2.0,
         "max_stacks": 1,
         "effects"   : [
@@ -51,7 +51,7 @@
                     "modifier": "More",
                     "debuff"  : false
                 },
-                "value"       : 20,
+                "value"       : 30,
                 "modifier"    : "Percent"
             }
         ]
