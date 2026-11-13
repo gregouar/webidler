@@ -173,7 +173,7 @@ async fn new_game_instance(
         &mut player_skill_masteries,
     );
 
-    let player_resources = PlayerResources::default();
+    let mut player_resources = PlayerResources::default();
     // player_resources.gold += benedictions_controller::find_benediction_value(
     //     &master_store.benedictions_store,
     //     &player_benedictions,
@@ -201,7 +201,7 @@ async fn new_game_instance(
         &passives_tree_state.ascension,
     ));
 
-    let player_base_specs = player_updater::init_player_base_specs(
+    let mut player_base_specs = player_updater::init_player_base_specs(
         character.character_name,
         character.portrait,
         character.max_area_level as AreaLevel,
@@ -209,6 +209,10 @@ async fn new_game_instance(
         player_skill_masteries,
         max_skills,
     );
+
+    for _ in 0..extra_level {
+        player_controller::level_up_no_cost(&mut player_base_specs, None, &mut player_resources);
+    }
 
     let map_item = match area_config.map_item_index {
         Some(map_item_index) => {
@@ -279,14 +283,6 @@ async fn new_game_instance(
 
     if game_data.area_specs.coming_soon {
         return Err(anyhow!("forbidden area"));
-    }
-
-    for _ in 0..extra_level {
-        player_controller::level_up_no_cost(
-            game_data.player_base_specs.mutate(),
-            &mut game_data.player_state,
-            game_data.player_resources.mutate(),
-        );
     }
 
     player_controller::init_skills_from_inventory(

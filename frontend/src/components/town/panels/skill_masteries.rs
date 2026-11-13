@@ -1028,6 +1028,7 @@ fn format_mastery_upgrade_effect(
                     {conditions_tooltip::format_skill_modifier_conditions_post(
                         &auto_use_conditions,
                         "",
+                        "",
                     )}
                 </EffectLi>
             }.into_any())},

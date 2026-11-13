@@ -489,7 +489,7 @@ fn format_target_conditions(
             prefix,
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
             middlefix,
-            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "", "")
         )
     }
 }
@@ -590,7 +590,7 @@ fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
         "On Kill of {}Enemy{}",
         conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions, ""),
-        conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions, ""),
+        conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions, "", ""),
     )
 }
 

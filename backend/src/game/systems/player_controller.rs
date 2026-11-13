@@ -242,21 +242,23 @@ pub fn level_up(
     }
 
     player_resources.experience -= player_base_specs.experience_needed;
-    level_up_no_cost(player_base_specs, player_state, player_resources);
+    level_up_no_cost(player_base_specs, Some(player_state), player_resources);
 
     true
 }
 
 pub fn level_up_no_cost(
     player_base_specs: &mut PlayerBaseSpecs,
-    player_state: &mut PlayerState,
+    player_state: Option<&mut PlayerState>,
     player_resources: &mut PlayerResources,
 ) {
     player_base_specs.level += 1;
     player_base_specs.experience_needed = computations::player_level_up_cost(player_base_specs);
 
     player_resources.passive_points += 1;
-    player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
+    if let Some(player_state) = player_state {
+        player_state.character_state.life += PLAYER_LIFE_PER_LEVEL.into();
+    }
     player_base_specs.character_attrs =
         player_updater::base_player_character_attrs(player_base_specs.level);
 }
