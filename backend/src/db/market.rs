@@ -498,8 +498,8 @@ pub async fn read_market_items<'c>(
                 WHERE affix.deleted_at IS NULL
                   AND affix.realm_id = $66
                   AND (
-                    ($69 IS NULL AND affix.base_item_id IS NULL) 
-                    OR affix.base_item_id = $69
+                    ($69::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $69::TEXT
                   )
                   AND affix.affix_group_id = $70
                   AND affix.affix_level >= $71
@@ -510,8 +510,8 @@ pub async fn read_market_items<'c>(
                 WHERE affix.deleted_at IS NULL
                   AND affix.realm_id = $66
                   AND (
-                    ($72 IS NULL AND affix.base_item_id IS NULL) 
-                    OR affix.base_item_id = $72
+                    ($72::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $72::TEXT
                   )
                   AND affix.affix_group_id = $73
                   AND affix.affix_level >= $74
@@ -522,8 +522,8 @@ pub async fn read_market_items<'c>(
                 WHERE affix.deleted_at IS NULL
                   AND affix.realm_id = $66
                   AND (
-                    ($75 IS NULL AND affix.base_item_id IS NULL) 
-                    OR affix.base_item_id = $75
+                    ($75::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $75::TEXT
                   )
                   AND affix.affix_group_id = $76
                   AND affix.affix_level >= $77
@@ -534,8 +534,8 @@ pub async fn read_market_items<'c>(
                 WHERE affix.deleted_at IS NULL
                   AND affix.realm_id = $66
                   AND (
-                    ($78 IS NULL AND affix.base_item_id IS NULL) 
-                    OR affix.base_item_id = $78
+                    ($78::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $78::TEXT
                   )
                   AND affix.affix_group_id = $79
                   AND affix.affix_level >= $80
@@ -546,8 +546,8 @@ pub async fn read_market_items<'c>(
                 WHERE affix.deleted_at IS NULL
                   AND affix.realm_id = $66
                   AND (
-                    ($81 IS NULL AND affix.base_item_id IS NULL) 
-                    OR affix.base_item_id = $81
+                    ($81::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $81::TEXT
                   )
                   AND affix.affix_group_id = $82
                   AND affix.affix_level >= $83
