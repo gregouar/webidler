@@ -3,7 +3,7 @@
         "name": "Eldritch Depths (The Stars are Aligned)",
         "description": "No mortal tongue can name what slumbers in these depths. The fortunate lose only their sanity before the end.",
         "power_level": 90,
-        "required_level": 600,
+        "required_level": 700,
         "item_level_modifier": 180,
         "boss": true,
         "hidden": true,
@@ -13,7 +13,7 @@
     "loot_tables": [
         "tier_1.json",      "tier_2.json",      "tier_3.json",      "tier_4.json",      "tier_5.json",
         "tier_6.json",      "tier_7.json",      "tier_8.json",      "tier_9.json",      "tier_10.json",
-        "area_mythos.json", "edict_stars.json"
+        "area_mythos.json"
     ],
     "bosses"     : [
         {

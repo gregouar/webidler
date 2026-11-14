@@ -874,6 +874,60 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "edict_dragon": {
+    "name": "Dragon Egg",
+    "icon": "items/maps/edict_dragon.webp",
+    "description": "Will hatch if brought to the summits of the Peaks.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_2": {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 150.0,
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": "PowerLevel",
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 120.0,
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "peaks.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "peaks_dragon.json",
+      "reward_loot_table": "edict_dragon.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "edict_stars": {
     "name": "Map of the Stars",
     "icon": "items/maps/edict_stars.webp",

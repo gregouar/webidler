@@ -471,7 +471,8 @@
               },
               "crit_damage": 100.0,
               "unblockable": false,
-              "armor_penetration": 0.0
+              "armor_penetration": 0.0,
+              "item_slot": "Shield"
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -1541,7 +1542,8 @@
               },
               "crit_damage": 100.0,
               "unblockable": false,
-              "armor_penetration": 0.0
+              "armor_penetration": 0.0,
+              "item_slot": "Shield"
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],

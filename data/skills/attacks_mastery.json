@@ -848,7 +848,8 @@
                   "FlatDamage": {
                     "damage"     : { "Physical": [5, 10] },
                     "crit_chance": 5,
-                    "crit_damage": 100
+                    "crit_damage": 100,
+                    "item_slot"  : "Shield"
                   }
                 },
                 { "ApplyStatus": {"status_id": "poison", "value": 0}, "optional_application": true }
