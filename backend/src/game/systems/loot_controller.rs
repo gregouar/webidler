@@ -139,18 +139,17 @@ fn item_score(item: &ItemSpecs) -> usize {
     // }
 
     score += match item.modifiers.rarity {
-        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare | ItemRarity::Masterwork => 0,
+        ItemRarity::Normal | ItemRarity::Magic | ItemRarity::Rare => 0,
+        ItemRarity::Masterwork => 1_000_000,
         ItemRarity::Unique => 2_000_000,
     };
 
-    if item.base.categories.contains(&ItemCategory::Rune)
-        || item.base.categories.contains(&ItemCategory::Map)
+    if item.categories.contains(&ItemCategory::Rune) || item.categories.contains(&ItemCategory::Map)
     {
         score += 500_000
     }
 
     if item
-        .base
         .rune_specs
         .as_ref()
         .map(|rune_specs| rune_specs.root_node)
@@ -160,11 +159,10 @@ fn item_score(item: &ItemSpecs) -> usize {
     }
 
     score += item
-        .modifiers
         .affixes
         .iter()
         // .map(|a| a.tier.pow(2) as usize)
-        .filter(|a| a.affix_type != AffixType::Unique)
+        .filter(|a| !matches!(a.affix_type, AffixType::Base | AffixType::Unique))
         .map(|a| (100 + a.item_level as usize).pow(2))
         .sum::<usize>();
     // * 10_000;

@@ -8,17 +8,19 @@ use std::{
 use shared::{
     constants::DEFAULT_MAX_LEVEL,
     data::{
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         passive::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
             PassivesTreeSpecs, PurchasedNodes,
         },
+        stat_effect::StatType,
     },
     http::client::{AscendPassivesRequest, SavePassivesRequest, SocketPassiveRequest},
 };
 
 use crate::components::{
     backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
     shared::{
         inventory::InventoryEquipFilter,
@@ -53,13 +55,14 @@ pub fn PassivesPanel(
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
 
     let ascension_cost = RwSignal::new(0.0);
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
     let passives_tree_build = RwSignal::new(PurchasedNodes::default());
 
     let tree_connections =
-        Memo::new(move |_| town_context.passives_tree_specs.with(compute_connections));
+        Memo::new(move |_| data_context.passives_tree_specs.with(compute_connections));
 
     Effect::new(move || {
         let mut initial_cost = 0.0;
@@ -77,7 +80,7 @@ pub fn PassivesPanel(
             passives_tree_ascension.update(|passives_tree_ascension| {
                 *passives_tree_ascension = temp;
                 passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
-                    let keep = town_context
+                    let keep = data_context
                         .passives_tree_specs
                         .read_untracked()
                         .nodes
@@ -103,7 +106,7 @@ pub fn PassivesPanel(
 
     let validated_ascension = Memo::new(move |_| {
         passives_tree_ascension.with(|passives_tree_ascension| {
-            town_context
+            data_context
                 .passives_tree_specs
                 .with(|passives_tree_specs| {
                     tree_connections.with(|tree_connections| {
@@ -118,7 +121,7 @@ pub fn PassivesPanel(
     });
 
     let validated_build = Memo::new(move |_| {
-        town_context
+        data_context
             .passives_tree_specs
             .with(|passives_tree_specs| {
                 town_context
@@ -154,7 +157,7 @@ pub fn PassivesPanel(
         loaded_ascension.with(|loaded_ascension| {
             if let Some(loaded_ascension) = loaded_ascension {
                 let mut loaded_ascension = loaded_ascension.clone();
-                let passives_tree_specs = town_context.passives_tree_specs.read_untracked();
+                let passives_tree_specs = data_context.passives_tree_specs.read_untracked();
 
                 loaded_ascension
                     .ascended_nodes
@@ -176,7 +179,7 @@ pub fn PassivesPanel(
     Effect::new(move || {
         loaded_build.with(|loaded_build| {
             if let Some(loaded_build) = loaded_build {
-                let passives_tree_specs = town_context.passives_tree_specs.read_untracked();
+                let passives_tree_specs = data_context.passives_tree_specs.read_untracked();
                 passives_tree_build.set(
                     loaded_build
                         .iter()
@@ -371,13 +374,14 @@ pub fn AscendPanelHeader(
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
 
     let reset = move || {
         let mut initial_cost = 0.0;
         passives_tree_ascension.update(|passives_tree_ascension| {
             *passives_tree_ascension = town_context.passives_tree_ascension.get_untracked();
             passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
-                let keep = town_context
+                let keep = data_context
                     .passives_tree_specs
                     .read_untracked()
                     .nodes
@@ -453,11 +457,11 @@ fn ConfirmAscendButton(
     ascension_cost: RwSignal<f64>,
     has_changed: Memo<bool>,
 ) -> impl IntoView {
-    let do_ascend = Arc::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let toaster = expect_context::<Toasts>();
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let toaster = expect_context::<Toasts>();
 
+    let do_ascend = Arc::new({
         let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({
@@ -489,20 +493,20 @@ fn ConfirmAscendButton(
         }
     });
 
-    let try_ascend = {
-        let confirm_context = expect_context::<ConfirmContext>();
-        move |_| {
-            (confirm_context.confirm)(
-                format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
-                do_ascend.clone(),
-            );
-        }
-    };
+    // let try_ascend = {
+    //     let confirm_context = expect_context::<ConfirmContext>();
+    //     move |_| {
+    //         (confirm_context.confirm)(
+    //             format! {"Do you confirm Ascension for {} Power Shards?",ascension_cost.get() },
+    //             do_ascend.clone(),
+    //         );
+    //     }
+    // };
 
     let disabled = Signal::derive(move || !has_changed.get() || invalid_tree.get());
 
     view! {
-        <MenuButton on:click=try_ascend disabled=disabled>
+        <MenuButton on:click=move |_| do_ascend() disabled=disabled>
             "Confirm"
         </MenuButton>
     }
@@ -513,10 +517,10 @@ fn RefundAscendButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     ascension_cost: RwSignal<f64>,
 ) -> impl IntoView {
+    let backend = expect_context::<BackendClient>();
+    let town_context = expect_context::<TownContext>();
+    let toaster = expect_context::<Toasts>();
     let do_reset = Arc::new({
-        let backend = expect_context::<BackendClient>();
-        let town_context = expect_context::<TownContext>();
-        let toaster = expect_context::<Toasts>();
         let character_id = town_context.character.read_untracked().character_id;
         move || {
             spawn_local({
@@ -562,6 +566,21 @@ fn RefundAscendButton(
 // Build Header
 // -------------
 
+fn max_player_level(town_context: &TownContext) -> u8 {
+    let extra_levels = town_context
+        .player_benedictions
+        .with(|player_benedictions| {
+            player_benedictions
+                .categories
+                .get("max_level")
+                .and_then(|benediction| {
+                    benediction.purchased_benedictions.get("max_level").copied()
+                })
+                .unwrap_or_default()
+        });
+    DEFAULT_MAX_LEVEL.saturating_add(extra_levels as u8)
+}
+
 #[component]
 pub fn BuildPanelHeader(
     passives_tree_build: RwSignal<PurchasedNodes>,
@@ -579,6 +598,8 @@ pub fn BuildPanelHeader(
             .passives_tree_build
             .with(|base_build| passives_tree_build.read().iter().ne(base_build.iter()))
     });
+
+    let max_player_level = Memo::new(move |_| max_player_level(&town_context));
 
     view! {
         {(!view_only)
@@ -603,7 +624,7 @@ pub fn BuildPanelHeader(
                                         </div>
                                     </NumberInset>
                                     "/"
-                                    {DEFAULT_MAX_LEVEL}
+                                    {max_player_level}
                                 }
                                     .into_any()
                             }
@@ -742,10 +763,28 @@ fn PassiveSkillTree(
     view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
 
     let character_id = town_context.character.read_untracked().character_id;
+
+    let purchased_nodes = Memo::new(move |_| {
+        let mut purchased_nodes = passives_tree_build.get();
+        for (_, item) in town_context.inventory.read().equipped_items() {
+            for effect in item
+                .affixes
+                .iter()
+                .flat_map(|affix| &affix.effects)
+                .filter(|effect| effect.scope == AffixEffectScope::Global)
+            {
+                if let StatType::AllocatePassive(node_id) = &effect.stat_effect.stat {
+                    purchased_nodes.insert(*node_id);
+                }
+            }
+        }
+        purchased_nodes
+    });
 
     let points_available = Memo::new(move |_| {
         if view_only {
@@ -791,14 +830,13 @@ fn PassiveSkillTree(
     });
 
     let derived_passives_tree_specs = Memo::new(move |_| {
-        let mut passives_tree_specs = town_context.passives_tree_specs.get();
+        let mut passives_tree_specs = data_context.passives_tree_specs.get();
         for (node_id, item_specs) in passives_tree_ascension.read().socketed_nodes.iter() {
+            let item_base = data_context.get_item_base(item_specs);
             let node_specs = passives_tree_specs.nodes.entry(*node_id).or_default();
-            node_specs.effects = (&(item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Global, false)))
-                .into();
-            node_specs.triggers = item_specs.base.triggers.clone();
+            node_specs.effects =
+                (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into();
+            node_specs.triggers = item_base.triggers.clone();
         }
         passives_tree_specs
     });
@@ -807,26 +845,26 @@ fn PassiveSkillTree(
         <PassiveSkillStats
             passives_tree_specs=derived_passives_tree_specs
             passives_tree_ascension=passives_tree_ascension
-            purchased_nodes=passives_tree_build
+            purchased_nodes
         />
         <Pannable>
             <For
                 each=move || {
-                    town_context.passives_tree_specs.read().connections.clone().into_iter()
+                    data_context.passives_tree_specs.read().connections.clone().into_iter()
                 }
                 key=|conn| (conn.from, conn.to)
                 let(conn)
             >
                 <AscendConnection
                     connection=conn
-                    passives_tree_specs=town_context.passives_tree_specs
+                    passives_tree_specs=data_context.passives_tree_specs
                     passives_tree_ascension
                     passives_tree_build
                     active_tab
                 />
             </For>
             <For
-                each=move || { town_context.passives_tree_specs.read().nodes.clone().into_iter() }
+                each=move || { data_context.passives_tree_specs.read().nodes.clone().into_iter() }
                 key=|(id, _)| *id
                 let((id, node))
             >
@@ -842,6 +880,7 @@ fn PassiveSkillTree(
                     selected_socket_node
                     active_tab
                     search_node
+                    purchased_nodes
                     view_only
                 />
             </For>
@@ -860,13 +899,15 @@ fn AscendNode(
     search_node: RwSignal<Option<String>>,
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     passives_tree_build: RwSignal<PurchasedNodes>,
+    #[prop(into)] purchased_nodes: Signal<PurchasedNodes>,
     tree_connections: Memo<TreeConnections>,
     invalid_nodes: Signal<HashSet<PassiveNodeId>>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context: TownContext = expect_context();
-    let backend = expect_context::<BackendClient>();
-    let toaster = expect_context::<Toasts>();
+    let data_context: DataContext = expect_context();
+    let backend: BackendClient = expect_context();
+    let toaster: Toasts = expect_context();
 
     let socket = Memo::new(move |_| match active_tab.get() {
         PassivesTab::Ascend => passives_tree_ascension
@@ -886,15 +927,14 @@ fn AscendNode(
         let node_specs = node_specs.clone();
         move |_| {
             if let Some(item_specs) = socket.get() {
+                let item_base = data_context.get_item_base(&item_specs);
                 let mut node_specs = node_specs.clone();
-                node_specs.icon = item_specs.base.icon.clone();
-                node_specs.effects = (&(item_specs
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Global, false)))
-                    .into(); // TODO: Better copy, don't aggregate?
-                node_specs.triggers = item_specs.base.triggers.clone();
+                node_specs.icon = item_base.icon.clone();
+                node_specs.effects =
+                    (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false))
+                        .into(); // TODO: Better copy, don't aggregate?
+                node_specs.triggers = item_base.triggers.clone();
                 node_specs.root_node |= item_specs
-                    .base
                     .rune_specs
                     .as_ref()
                     .map(|rune_specs| rune_specs.root_node)
@@ -955,7 +995,8 @@ fn AscendNode(
             }
             PassivesTab::Build => {
                 if (derived_node_specs.read().locked && node_level.get() == 0)
-                    || (passives_tree_build.read().len() + 1 >= DEFAULT_MAX_LEVEL as usize)
+                    || (passives_tree_build.read().len() + 1
+                        >= usize::from(max_player_level(&town_context)))
                 {
                     0
                 } else if derived_node_specs.read().root_node {
@@ -1012,7 +1053,7 @@ fn AscendNode(
                 }
             }
             PassivesTab::Build => {
-                if passives_tree_build.read().contains(&node_id) {
+                if purchased_nodes.read().contains(&node_id) {
                     PurchaseStatus::Purchased
                 } else if !view_only && max_upgrade_level.get() > 0 {
                     PurchaseStatus::Purchaseable
@@ -1313,7 +1354,6 @@ fn validate_build(
                 .get(node_step)
                 .and_then(|item_specs| {
                     item_specs
-                        .base
                         .rune_specs
                         .as_ref()
                         .map(|rune_specs| rune_specs.root_node)

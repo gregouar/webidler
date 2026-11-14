@@ -2,22 +2,22 @@ Uniques:
 
 Amulets: 7
 Body: 7
-Boots: 5+2
+Boots: 7
 Cloak: 7
-Focus: 5
+Focus: 5 + 3
 Gloves: 6
-Helmet: 6
-Rings: 6
-Shields: 5
-1h: 7+1
+Helmet: 6 + 1
+Rings: 6 + 1
+Shields: 5 + 1
+1h: 8 + 1
 2h: 7
-Ranged: 5
-Wand: 6+1
+Ranged: 5 + 2
+Wand: 7
 ----
-Total: 79+4
+Total: 83 + 9
 
-Runes: 9
-Maps: 6+3
+Runes: 9 + 1
+Maps: 9 + 1 (+ 1)
 
 
 

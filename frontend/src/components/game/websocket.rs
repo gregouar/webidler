@@ -2,17 +2,15 @@ use std::sync::Arc;
 
 use leptos::prelude::*;
 use leptos::web_sys::CloseEvent;
-use leptos_use::{
-    ReconnectLimit, UseWebSocketError, UseWebSocketOptions, UseWebSocketReturn,
-    core::ConnectionReadyState, use_websocket_with_options,
+use leptos_use_websocket::{
+    ConnectionReadyState, ReconnectLimit, UseWebSocketError, UseWebSocketOptions,
+    UseWebSocketReturn, use_websocket_with_options,
 };
 
 use codee::{Decoder, Encoder, binary::MsgpackSerdeCodec};
 use serde::{Serialize, de::DeserializeOwned};
 
-use shared::messages::client::ClientMessage;
-use shared::messages::compression;
-use shared::messages::server::ServerMessage;
+use shared::messages::{client::ClientMessage, compression, server::ServerMessage};
 
 use crate::components::ui::toast::*;
 

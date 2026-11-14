@@ -1,0 +1,26 @@
+{
+  "name"    : "Cowboy",
+  "portrait": "monsters/farwest/cowboy.webp",
+  "max_life": 8,
+  "armor"   : {"Fire": 50},
+  "skills"  : [
+    {
+      "name"      : "Shoot",
+      "icon"      : "skills/reticule.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4], "Fire": [3, 6] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

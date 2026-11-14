@@ -85,11 +85,9 @@ fn handle_client_message(
         }
         ClientMessage::LevelUpSkill(m) => {
             for _ in 0..m.amount {
-                if let Some((_, player_base_skill)) = game_data
-                    .player_base_specs
-                    .mutate()
-                    .skills
-                    .get_index_mut(m.skill_index as usize)
+                let player_base_specs = game_data.player_base_specs.mutate();
+                if let Some(skill_id) = player_base_specs.skills_in_use.get(m.skill_index as usize)
+                    && let Some(player_base_skill) = player_base_specs.skills.get_mut(skill_id)
                 {
                     skills_controller::level_up_skill(
                         player_base_skill,
@@ -111,6 +109,7 @@ fn handle_client_message(
             for _ in 0..m.amount {
                 player_controller::level_up(
                     game_data.player_base_specs.mutate(),
+                    game_data.player_specs.read(),
                     &mut game_data.player_state,
                     game_data.player_resources.mutate(),
                 );

@@ -1,0 +1,9 @@
+{
+  "area_specific": true,
+  "entries"      : [
+    {"item_id": "rune_edict_dragon_physical", "weight": 10, "boss_only": true},
+    {"item_id": "rune_edict_dragon_fire",     "weight": 10, "boss_only": true},
+    {"item_id": "rune_edict_dragon_storm",    "weight": 10, "boss_only": true},
+    {"item_id": "rune_edict_dragon_poison",   "weight": 10, "boss_only": true}
+  ]
+}

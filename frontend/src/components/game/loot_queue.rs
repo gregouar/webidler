@@ -2,13 +2,13 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*, reactive::traits::Track};
 
-use leptos_use::watch_throttled;
+use leptos_use_watch_debounce_throttle::watch_throttled;
 use shared::{
     computations,
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, affix_group_id, aggregate_effects},
         loot::{LootState, QueuedLoot},
         modifier::invert_formatted_effect_value,
         player::EquippedSlot,
@@ -19,6 +19,7 @@ use shared::{
 
 use crate::components::{
     accessibility::AccessibilityContext,
+    data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
     settings::SettingsContext,
     shared::{
@@ -295,7 +296,6 @@ pub fn LootQueue() -> impl IntoView {
                                     <ItemCard
                                         comparable_item_specs=loot
                                             .item_specs
-                                            .base
                                             .slot
                                             .and_then(|slot| {
                                                 game_context
@@ -363,6 +363,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         max_power_shard_level,
         item_rarity,
         item_category,
+        affix_filters,
         item_damages,
         item_damage_physical,
         item_damage_fire,
@@ -380,11 +381,13 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return true;
     }
 
+    let data_context: DataContext = expect_context();
+    let item_base = data_context.get_item_base(item_specs);
+
     if item_name
         .as_ref()
         .map(|item_name| {
-            !item_specs
-                .base
+            !item_base
                 .name
                 .to_lowercase()
                 .contains(&item_name.to_lowercase())
@@ -395,7 +398,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     }
 
     if item_category
-        .map(|item_category| !item_specs.base.categories.contains(&item_category))
+        .map(|item_category| !item_specs.categories.contains(&item_category))
         .unwrap_or_default()
     {
         return false;
@@ -411,6 +414,21 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return false;
     }
 
+    for affix_filter in affix_filters.iter().flatten() {
+        if !item_specs.affixes.iter().any(|affix| {
+            affix.base_item_id == affix_filter.base_item_id
+                && affix_group_id(&affix.affix_id) == affix_filter.affix_group_id
+                && affix_filter
+                    .min_level
+                    .is_none_or(|min_level| match rule_type {
+                        FilterRuleType::Pickup => affix.item_level >= min_level,
+                        FilterRuleType::Sell => affix.item_level <= min_level,
+                    })
+        }) {
+            return false;
+        }
+    }
+
     if item_level
         .map(|item_level| !match rule_type {
             FilterRuleType::Pickup => item_specs.modifiers.level >= item_level,
@@ -423,8 +441,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if req_item_level
         .map(|req_item_level| !match rule_type {
-            FilterRuleType::Pickup => item_specs.required_level >= req_item_level,
-            FilterRuleType::Sell => item_specs.required_level <= req_item_level,
+            FilterRuleType::Pickup => item_base.min_area_level >= req_item_level,
+            FilterRuleType::Sell => item_base.min_area_level <= req_item_level,
         })
         .unwrap_or_default()
     {
@@ -434,12 +452,10 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     if req_affix_level
         .map(|req_affix_level| !match rule_type {
             FilterRuleType::Pickup => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .any(|affix| affix.item_level >= req_affix_level),
             FilterRuleType::Sell => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .all(|affix| affix.item_level <= req_affix_level),
@@ -656,10 +672,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return false;
     }
 
-    let effects = item_specs
-        .modifiers
-        .aggregate_effects(AffixEffectScope::Global, true)
-        .0;
+    let effects = aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, true).0;
     for stat_filter in stat_filters.iter() {
         if let Some(((stat_type, stat_modifier), stat_value, stat_excluded)) = stat_filter.as_ref()
         {

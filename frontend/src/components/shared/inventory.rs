@@ -4,7 +4,7 @@ use leptos::{html::Div, portal::Portal, prelude::*, web_sys};
 
 use shared::data::{
     area::AreaLevel,
-    item::{InventorySortType, ItemCategory, ItemRarity, ItemSlot, ItemSpecs},
+    item::{InventorySortType, ItemCategory, ItemSlot, ItemSpecs},
     player::{EquippedSlot, PlayerInventory},
 };
 
@@ -12,6 +12,7 @@ use crate::{
     assets::img_asset,
     components::{
         chat::chat_context::ChatContext,
+        data_context::DataContext,
         events::{EventsContext, Key},
         shared::{
             bag_grid::{BagAction, BagConfig, BagGrid, BagSortButton, EmptySlot},
@@ -37,11 +38,6 @@ pub enum InventoryEquipFilter {
     Slot,
     Map(String),
     Rune,
-    Rarity {
-        // Maybe later rename to Any, and not_item_rarity
-        item_rarity: ItemRarity,
-        not: bool,
-    },
     Bag,
 }
 
@@ -133,6 +129,7 @@ fn EquippedItem(
     fallback_asset: &'static str,
     fallback_alt: &'static str,
 ) -> impl IntoView {
+    let data_context: DataContext = expect_context();
     let show_menu = RwSignal::new(false);
 
     let render_fallback = move || {
@@ -181,11 +178,12 @@ fn EquippedItem(
                         .get(&main_slot)
                         .cloned()
                     {
+                        let item_base = data_context.get_item_base(&item_specs);
                         view! {
                             <EmptySlot>
                                 <img
                                     draggable="false"
-                                    src=img_asset(&item_specs.base.icon)
+                                    src=img_asset(&item_base.icon)
                                     alt=fallback_alt
                                     class="object-contain max-w-full max-h-full opacity-50"
                                 />
@@ -213,7 +211,6 @@ fn EquippedItemEquippedSlot(
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
 
-    let equipped_item_rarity = item_specs.modifiers.rarity;
     let is_weapon = item_specs.weapon_specs.is_some();
     let is_sheathed = Signal::derive({
         let inventory = inventory.clone();
@@ -233,9 +230,6 @@ fn EquippedItemEquippedSlot(
                 InventoryEquipFilter::Map(_)
                 | InventoryEquipFilter::Rune
                 | InventoryEquipFilter::Bag => false,
-                InventoryEquipFilter::Rarity { item_rarity, not } => {
-                    (equipped_item_rarity == *item_rarity) != *not
-                }
             })
     });
 
@@ -441,18 +435,15 @@ fn inventory_bag_config(inventory: &InventoryConfig, sell_queue: SellQueue) -> B
         items.with(|items| {
             items.get(index).is_some_and(|item| {
                 equip_filter.with(|filter| match filter {
-                    InventoryEquipFilter::Slot => item.base.slot.is_some(),
+                    InventoryEquipFilter::Slot => item.slot.is_some(),
                     InventoryEquipFilter::Map(area_id) => {
-                        item.base.map_specs.as_ref().is_some_and(|map| {
+                        item.map_specs.as_ref().is_some_and(|map| {
                             map.area_id
                                 .as_ref()
                                 .is_none_or(|map_area| area_id == map_area)
                         })
                     }
-                    InventoryEquipFilter::Rune => item.base.rune_specs.is_some(),
-                    InventoryEquipFilter::Rarity { item_rarity, not } => {
-                        (item.modifiers.rarity == *item_rarity) != *not
-                    }
+                    InventoryEquipFilter::Rune => item.rune_specs.is_some(),
                     InventoryEquipFilter::Bag => true,
                 })
             })
@@ -649,6 +640,8 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
             Ring => "Ring",
             Map => "Edict",
             Rune => "Rune",
+            Soul => "Soul",
+            Remnant => "Remnant",
         },
         None => "Any Item",
     }

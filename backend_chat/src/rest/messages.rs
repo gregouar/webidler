@@ -41,6 +41,7 @@ async fn post_private_message(
             username: None,
             character_id: None,
             character_name: None,
+            character_title: None,
             chat_badge: None, // TODO: System badge?
             content: payload.content.into_inner(),
             linked_item: payload.linked_item,
@@ -74,6 +75,7 @@ async fn post_broadcast_message(
                 username: None,
                 character_id: None,
                 character_name: None,
+                character_title: None,
                 chat_badge: None, // TODO: System badge?
                 content: payload.content.into_inner(),
                 linked_item: payload.linked_item,

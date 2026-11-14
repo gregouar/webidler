@@ -3,13 +3,15 @@ use shared::{
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
         item::ItemSpecs,
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         modifier::ModifiableValue,
         stat_effect::{EffectsMap, StatType},
     },
 };
 
-use crate::game::data::{area::AreaBlueprint, master_store::LootTablesStore};
+use crate::game::data::{
+    area::AreaBlueprint, items_store::ItemsStore, master_store::LootTablesStore,
+};
 
 pub fn decrease_area_level(area_state: &mut AreaState, amount: i32) {
     area_state.area_level = (area_state.area_level as i32)
@@ -30,6 +32,7 @@ pub fn auto_increase_area_level(area_state: &mut AreaState, amount: i32) {
 }
 
 pub fn init_area_specs(
+    items_store: &ItemsStore,
     loot_tables_store: &LootTablesStore,
     area_blueprint: &mut AreaBlueprint,
     map_item: &Option<ItemSpecs>,
@@ -37,7 +40,7 @@ pub fn init_area_specs(
     let mut area_specs = area_blueprint.specs.clone();
 
     let map_effects = if let Some(map_item) = map_item {
-        if let Some(map_specs) = &map_item.base.map_specs {
+        if let Some(map_specs) = &map_item.map_specs {
             area_specs.reward_picks += map_specs.reward_picks;
             area_specs.reward_slots += map_specs.reward_slots;
 
@@ -64,25 +67,27 @@ pub fn init_area_specs(
                 .cloned();
         }
 
-        for trigger_specs in map_item.base.triggers.iter() {
-            area_specs.triggers.push(
-                trigger_specs.trigger.clone(),
-                trigger_specs.trigger_effect.clone(),
-                None,
-            );
+        if let Ok(map_item_base) = items_store.get_item_base(map_item) {
+            for trigger_specs in map_item_base.triggers.iter() {
+                area_specs.triggers.push(
+                    trigger_specs.trigger.clone(),
+                    trigger_specs.trigger_effect.clone(),
+                    None,
+                );
+            }
         }
 
         EffectsMap::combine_all(
-            std::iter::once(
-                map_item
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Local, false),
-            )
-            .chain(std::iter::once(
-                map_item
-                    .modifiers
-                    .aggregate_effects(AffixEffectScope::Global, false),
-            )),
+            std::iter::once(aggregate_effects(
+                &map_item.affixes,
+                AffixEffectScope::Local,
+                false,
+            ))
+            .chain(std::iter::once(aggregate_effects(
+                &map_item.affixes,
+                AffixEffectScope::Global,
+                false,
+            ))),
         )
     } else {
         Default::default()

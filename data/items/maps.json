@@ -10,7 +10,7 @@
     ],
     "min_area_level": 100,
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -39,7 +39,7 @@
     ],
     "min_area_level": 300,
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -68,7 +68,7 @@
     ],
     "min_area_level": 600,
     "rarity": "Magic",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -97,33 +97,33 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "GemsFind",
         "modifier": "Increased",
         "scope": "Global",
         "value": 1000.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": null
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 500.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Block": "Attack"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 50.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -152,17 +152,17 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Meet Regular Patrons"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -170,23 +170,23 @@
           50.0,
           80.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 10.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -197,14 +197,14 @@
           "is_hurt": true,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "edict_menu",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Any",
@@ -266,31 +266,31 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Enemies Drop no Item"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
         "value": 500.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -301,7 +301,8 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
@@ -322,10 +323,10 @@
             "factor": 5.0,
             "source": {
               "HitDamage": null
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -387,8 +388,8 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Speed": {
             "skill_type": null,
@@ -398,16 +399,16 @@
         "modifier": "More",
         "scope": "Local",
         "value": 300.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -415,9 +416,9 @@
           50.0,
           100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -448,17 +449,17 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "May drop Cursed Treasures"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -466,23 +467,23 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 30.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": "Life",
         "modifier": "Increased",
         "scope": "Local",
         "value": 500.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -495,9 +496,9 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_6": {
         "stat": {
           "StatusPower": {
             "status_id": null,
@@ -511,9 +512,9 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -524,14 +525,14 @@
           "is_hurt": true,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "edict_treasure_map",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -595,17 +596,17 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "The Desert is Invaded by Mummies"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "DamageTaken": {
             "skill_type": null,
@@ -615,23 +616,23 @@
         "modifier": "More",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Local",
         "value": 50.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -639,9 +640,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -670,31 +671,31 @@
     ],
     "min_area_level": 500,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "The Spider Witch has finished her ritual..."
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
-        "value": 60.0,
-        "ignore_quality": true
+        "value": 90.0,
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -702,9 +703,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -715,14 +716,14 @@
           "is_hurt": true,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "edict_witch",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -784,22 +785,22 @@
     ],
     "min_area_level": 600,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "ItemAreaChance",
         "modifier": "Increased",
         "scope": "Local",
         "value": 2000.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "PowerLevel",
         "modifier": "Flat",
         "scope": "Local",
         "value": 80.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "ItemRarity",
         "modifier": "Increased",
         "scope": "Global",
@@ -807,9 +808,9 @@
           100.0,
           200.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -838,24 +839,24 @@
     ],
     "min_area_level": 600,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Contains no Boss"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "GoldFind",
         "modifier": "Increased",
         "scope": "Local",
-        "value": -1e200,
-        "ignore_quality": true
+        "value": -1e+200,
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -868,6 +869,123 @@
       "loot_tables": [],
       "replace_area_id": "chaos_gold.json",
       "reward_loot_table": "edict_gold.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_dragon": {
+    "name": "Dragon Egg",
+    "icon": "items/maps/edict_dragon.webp",
+    "description": "Will hatch if brought to the summits of the Peaks.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_2": {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 150.0,
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": "PowerLevel",
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 120.0,
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "peaks.json",
+      "reward_picks": 0,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "peaks_dragon.json",
+      "reward_loot_table": "edict_dragon.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_stars": {
+    "name": "Map of the Stars",
+    "icon": "items/maps/edict_stars.webp",
+    "description": "Ripped from the Necronomicon. What kind of Eldritch Horror could this summon?",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 700,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "stat": {
+          "Description": "Reward with an Eldritch Soul"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": "ItemLevel",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 190.0,
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": "PowerLevel",
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 140.0,
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": "ItemRarity",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          150.0,
+          200.0
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "mythos.json",
+      "reward_picks": 0,
+      "reward_slots": 3,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "mythos_stars.json",
+      "reward_loot_table": "edict_stars.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [],

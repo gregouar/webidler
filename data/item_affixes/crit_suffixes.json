@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_crit_chance_t1" : {
     "name"        : "of Aim",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [15, 25] }
     ]
   },
-  {
+  "item_inc_crit_chance_t2" : {
     "name"        : "of Rigor",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [30, 40] }
     ]
   },
-  {
+  "item_inc_crit_chance_t3" : {
     "name"        : "of Accuracy",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [45, 55] }
     ]
   },
-  {
+  "item_inc_crit_chance_t4" : {
     "name"        : "of Efficiency",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [60, 70] }
     ]
   },
-  {
+  "item_inc_crit_chance_t5" : {
     "name"        : "of Precision",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [75, 85] }
     ]
   },
-  {
+  "item_inc_crit_chance_t6" : {
     "name"        : "of Incisiveness",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [90, 100] }
     ]
   },
-  {
+  "item_inc_crit_chance_t7" : {
     "name"        : "of Exactitude",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [105, 115] }
     ]
   },
-  {
+  "item_inc_crit_chance_t8" : {
     "name"        : "of Meticulousness",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [120, 130] }
     ]
   },
-  {
+  "item_inc_crit_chance_t9" : {
     "name"        : "of Certainty",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [135, 150] }
     ]
   },
-  {
+  "item_inc_crit_chance_t10": {
     "name"        : "of Perfection",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [155, 175] }
     ]
   }
-]
+}

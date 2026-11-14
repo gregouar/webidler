@@ -1,4 +1,5 @@
 use shared::data::{
+    modifier::ModifiableValue,
     stat_effect::{StatEffect, StatType},
     trigger::{TriggerEffect, TriggerEffectModifier},
 };
@@ -10,6 +11,28 @@ pub fn compute_trigger_specs_effects<'a>(
     trigger_effect: &mut TriggerEffect,
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
 ) {
+    let mut repeat_modifier: ModifiableValue<f64> = 1.0.into();
+    for effect in effects.clone() {
+        if let StatType::SkillRepeat { skill_filter } = &effect.stat
+            && skill_filter
+                .is_match_with_skill(trigger_effect.skill_type, &trigger_effect.trigger_id)
+        {
+            repeat_modifier.apply_effect(effect);
+        }
+    }
+
+    if *repeat_modifier != 1.0 {
+        trigger_effect.skill_repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
+        trigger_effect.skill_repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
+
+        trigger_effect.skill_repeat.value.min = (trigger_effect.skill_repeat.value.min as f64
+            * *repeat_modifier
+            / *repeat_modifier.base()) as u8;
+        trigger_effect.skill_repeat.value.max = (trigger_effect.skill_repeat.value.max as f64
+            * *repeat_modifier
+            / *repeat_modifier.base()) as u8;
+    }
+
     compute_trigger_specs_effects_with_extra(
         statuses_store,
         trigger_effect,
@@ -57,6 +80,7 @@ fn apply_trigger_effect_modifiers<'a>(
                 modifier: effect.modifier,
                 factor: effect.value,
                 source: source.clone(),
+                hidden: false,
             });
         }
     }

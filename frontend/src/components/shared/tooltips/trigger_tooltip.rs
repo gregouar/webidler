@@ -22,6 +22,7 @@ use crate::components::{
         effects_tooltip::{
             damage_type_str, format_stat, skill_status_filter_str, status_type_value_str,
         },
+        item_tooltip,
         skill_tooltip::{self, EffectLi, shape_str, skill_type_str},
     },
     ui::number::format_number,
@@ -48,10 +49,6 @@ pub fn format_triggers(
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> impl IntoView + use<> {
-    // let trigger_status_name = trigger_status_name.unwrap_or(default)
-
-    let data_context: DataContext = expect_context();
-
     let trigger_events = triggers
         .iter()
         .map(|trigger| format_trigger_event(&trigger.trigger))
@@ -62,15 +59,18 @@ pub fn format_triggers(
         .next()
         .expect("format_triggers requires at least one trigger");
 
-    let trigger_event_status_name = if let EventTrigger::OnApplyStatus(StatusTrigger {
-        ref status_filter,
-        ..
-    }) = trigger.trigger
+    if trigger
+        .description
+        .as_ref()
+        .map(|description| description.is_empty())
+        .unwrap_or_default()
     {
-        status_filter
-            .status_id
-            .as_ref()
-            .map(|status_id| data_context.status_name(status_id))
+        return view! { "" }.into_any();
+    }
+
+    let triggering_status = if let EventTrigger::OnApplyStatus(ref status_trigger) = trigger.trigger
+    {
+        Some(status_trigger)
     } else {
         None
     };
@@ -85,12 +85,9 @@ pub fn format_triggers(
                 trigger.trigger_effect.target == TriggerTarget::Me,
                 Some(&trigger.trigger_effect.modifiers),
                 // effects_map,
-                if trigger_event_status_name.is_some() {
-                    trigger_event_status_name.as_deref()
-                } else {
-                    trigger_status_name
-                },
+                trigger_status_name,
                 trigger_status_value,
+                triggering_status,
             )
         })
         .collect::<Vec<_>>();
@@ -138,7 +135,7 @@ pub fn format_triggers(
                     {trigger_events} {shape_infos} {repeat_infos} {details_infos}":"
                 </EffectLi>
                 <EffectLi>
-                    <ul class="list-none xl:space-y-1">
+                    <ul class="list-none xl:space-y-0">
                         {trigger
                             .description
                             .map(|description| {
@@ -150,6 +147,7 @@ pub fn format_triggers(
             </ul>
         </EffectLi>
     }
+    .into_any()
 }
 
 pub fn get_trigger_modifier_value(
@@ -179,18 +177,25 @@ pub fn format_trigger_modifier(
     value_color: Option<&str>,
     trigger_status_name: Option<&str>,
     trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    triggering_status: Option<&StatusTrigger>,
 ) -> Option<impl IntoView + use<>> {
-    modifier.map(|modifier| {
+    modifier.and_then(|modifier| {
+        if modifier.hidden {
+            return None;
+        }
+
         if let Some(trigger_modifier_value) =
             get_trigger_modifier_value(modifier, factor, trigger_status_value)
         {
-            return view! {
-                <span class=format!(
-                    "font-semibold {}",
-                    value_color.unwrap_or_default(),
-                )>{skill_tooltip::format_min_max(trigger_modifier_value)}</span>
-            }
-            .into_any();
+            return Some(
+                view! {
+                    <span class=format!(
+                        "font-semibold {}",
+                        value_color.unwrap_or_default(),
+                    )>{skill_tooltip::format_min_max(trigger_modifier_value)}</span>
+                }
+                .into_any(),
+            );
         }
 
         let factor = modifier.factor * factor.unwrap_or(1.0);
@@ -204,12 +209,12 @@ pub fn format_trigger_modifier(
                 " of "
             }
         });
-        view! {
+        Some(view! {
             {factor_str}
-            {trigger_modifier_source_str(&modifier.source, trigger_status_name)}
+            {trigger_modifier_source_str(&modifier.source, trigger_status_name, triggering_status)}
             {suffix}
         }
-        .into_any()
+        .into_any())
     })
 }
 
@@ -217,7 +222,7 @@ pub fn format_trigger_modifier_per(source: &TriggerEffectModifierSource) -> Stri
     if let TriggerEffectModifierSource::HitCrit = source {
         " on Critical Hit".to_string()
     } else {
-        format!(" per {}", trigger_modifier_source_str(source, None))
+        format!(" per {}", trigger_modifier_source_str(source, None, None))
     }
 }
 
@@ -233,6 +238,7 @@ pub fn format_extra_trigger_modifiers(
             StatType::Restore { .. } => modifier.modifier == Modifier::Increased,
             _ => true,
         })
+        .filter(|modifier| !modifier.hidden)
         .map(|modifier| {
             let stat_effect = StatEffect {
                 stat: modifier.stat.clone(),
@@ -251,8 +257,10 @@ pub fn format_extra_trigger_modifiers(
 pub fn trigger_modifier_source_str(
     modifier_source: &TriggerEffectModifierSource,
     trigger_status_name: Option<&str>,
+    triggering_status: Option<&StatusTrigger>,
     // trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
 ) -> String {
+    let data_context: DataContext = expect_context();
     match modifier_source {
         TriggerEffectModifierSource::HitDamage(damage_type) => {
             format!("{}Hit Damage", damage_type_str(*damage_type))
@@ -260,7 +268,7 @@ pub fn trigger_modifier_source_str(
         TriggerEffectModifierSource::HitCrit => "Critical".to_string(),
         TriggerEffectModifierSource::HitCritDamage => "Critical Hit Damage Modifier".to_string(),
         TriggerEffectModifierSource::AreaLevel => "Area Power Level".to_string(),
-        TriggerEffectModifierSource::StatusValue {
+        TriggerEffectModifierSource::TargetStatusValue {
             status_filter,
             skill_type,
         } => {
@@ -270,7 +278,7 @@ pub fn trigger_modifier_source_str(
                 status_type_value_str(status_filter)
             )
         }
-        TriggerEffectModifierSource::StatusDuration {
+        TriggerEffectModifierSource::TargetStatusDuration {
             status_filter,
             skill_type,
         } => {
@@ -286,12 +294,12 @@ pub fn trigger_modifier_source_str(
                 )
             )
         }
-        TriggerEffectModifierSource::StatusStacks {
+        TriggerEffectModifierSource::TargetStatusStacks {
             status_filter,
             skill_type,
         } => {
             format!(
-                "{} Stacks",
+                "{} Stack",
                 skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -303,6 +311,44 @@ pub fn trigger_modifier_source_str(
             )
         }
         TriggerEffectModifierSource::RestoreValue => "Restored Amount".to_string(),
+        TriggerEffectModifierSource::TriggeringStatusDuration => {
+            format!(
+                "{} Duration",
+                format_triggering_status_str(triggering_status)
+            )
+        }
+        TriggerEffectModifierSource::TriggeringStatusValue => {
+            let value_str = if triggering_status
+                .map(|status_trigger| {
+                    status_trigger.status_filter.damage_type.is_some()
+                        || status_trigger
+                            .status_filter
+                            .status_id
+                            .as_ref()
+                            .and_then(|status_id| {
+                                data_context
+                                    .statuses_specs
+                                    .read_untracked()
+                                    .get(status_id)
+                                    .map(|status_specs| status_specs.damage_type.is_some())
+                            })
+                            .unwrap_or_default()
+                })
+                .unwrap_or_default()
+            {
+                "Damage"
+            } else {
+                "Value"
+            };
+            format!(
+                "{} {}",
+                format_triggering_status_str(triggering_status),
+                value_str
+            )
+        }
+        TriggerEffectModifierSource::TriggeringStatusStacks { ignore_initial: _ } => {
+            format!("{} Stack", format_triggering_status_str(triggering_status))
+        }
         TriggerEffectModifierSource::TriggerStatusDuration => match trigger_status_name {
             Some(trigger_status_name) => format!("{} Duration", trigger_status_name),
             None => "Status Duration".to_string(),
@@ -311,6 +357,26 @@ pub fn trigger_modifier_source_str(
             Some(trigger_status_name) => format!("{} Value", trigger_status_name),
             None => "Status Value".to_string(),
         },
+        TriggerEffectModifierSource::TriggerStatusStacks { ignore_initial: _ } => {
+            match trigger_status_name {
+                Some(trigger_status_name) => format!("{} Stack", trigger_status_name),
+                None => "Stack".to_string(),
+            }
+        }
+    }
+}
+
+fn format_triggering_status_str(triggering_status: Option<&StatusTrigger>) -> String {
+    match triggering_status {
+        Some(status_trigger) => skill_status_filter_str(
+            &StatSkillFilter {
+                skill_type: status_trigger.skill_type,
+                ..Default::default()
+            },
+            &status_trigger.status_filter,
+            false,
+        ),
+        None => "Triggering Status".into(),
     }
 }
 
@@ -338,11 +404,18 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
             format!("On {}Death", format_target_type(target_type))
         }
         EventTrigger::OnApplyStatus(status_trigger) => {
-            format!(
-                "On Applying {}{}",
-                format_status_trigger(status_trigger),
-                format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
-            )
+            if status_trigger.is_max_stacks == Some(true) {
+                format!(
+                    "On Reaching maximum Stacks of {}",
+                    format_status_trigger(status_trigger)
+                )
+            } else {
+                format!(
+                    "On Applying {}{}",
+                    format_status_trigger(status_trigger),
+                    format_target_conditions(&status_trigger.conditions, " against ", " Enemies")
+                )
+            }
         }
         EventTrigger::OnReceiveStatus(status_trigger) => match status_trigger.is_evaded {
             Some(true) => match (&status_trigger.skill_type, &status_trigger.status_filter) {
@@ -353,32 +426,45 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
                 }
                 _ => format!("On Evaded {}", format_status_trigger(status_trigger)),
             },
-            _ => match &status_trigger.skill_type {
-                Some(SkillType::Blessing) => "On Blessed".into(),
-                Some(SkillType::Curse) => "On Cursed".into(),
-                _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
-            },
+            _ => {
+                if status_trigger.is_max_stacks == Some(true) {
+                    format!(
+                        "On Reaching maximum Stacks of {}",
+                        format_status_trigger(status_trigger)
+                    )
+                } else {
+                    match &status_trigger.skill_type {
+                        Some(SkillType::Blessing) => "On Blessed".into(),
+                        Some(SkillType::Curse) => "On Cursed".into(),
+                        _ => format!("On Affected by {}", format_status_trigger(status_trigger)),
+                    }
+                }
+            }
         },
         EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
+        EventTrigger::OnTick(tick_trigger) => {
+            format!(
+                "Every {:.1} seconds",
+                0.1 * tick_trigger.tick_interval as f64
+            )
+        }
     }
 }
 
 fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
     let data_context: DataContext = expect_context();
 
-    let skills_str = hit_trigger.skill_ids.as_ref().and_then(|skill_ids| {
-        if skill_ids.len() == 1 {
-            skill_ids
-                .iter()
-                .next()
-                .map(|skill_id| format!(" with {}", data_context.skill_name(skill_id)))
-        } else {
-            None
-        }
-    });
+    let skills_str = hit_trigger
+        .skill_id
+        .as_ref()
+        .map(|skill_id| format!(" with {}", data_context.skill_name(skill_id)));
+
+    let item_slot_str = hit_trigger
+        .item_slot
+        .map(|item_slot| format!(" with {}", item_tooltip::item_slot_str(item_slot)));
 
     format!(
-        "{}{}{}{}{}{}Hit{}",
+        "{}{}{}{}{}{}Hit{}{}",
         hurt_str(hit_trigger.is_hurt),
         blocked_str(hit_trigger.is_blocked),
         critical_str(hit_trigger.is_crit),
@@ -386,6 +472,7 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
         skill_type_str(hit_trigger.skill_type),
         damage_type_str(hit_trigger.damage_type),
         skills_str.unwrap_or_default(),
+        item_slot_str.unwrap_or_default(),
     )
 }
 
@@ -402,7 +489,7 @@ fn format_target_conditions(
             prefix,
             conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
             middlefix,
-            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "")
+            conditions_tooltip::format_skill_modifier_conditions_post(conditions, "", "")
         )
     }
 }
@@ -436,8 +523,9 @@ fn format_status_trigger(status_trigger: &StatusTrigger) -> String {
                 ..Default::default()
             },
             &status_trigger.status_filter,
-            true,
+            false,
         )
+        .trim()
     )
 }
 
@@ -500,9 +588,9 @@ fn format_restore_trigger(restore_trigger: &RestoreTrigger) -> String {
 
 fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
     format!(
-        "On {}Enemy{} Kill",
+        "On Kill of {}Enemy{}",
         conditions_tooltip::format_skill_modifier_conditions_pre(&kill_trigger.conditions, ""),
-        conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions, ""),
+        conditions_tooltip::format_skill_modifier_conditions_post(&kill_trigger.conditions, "", ""),
     )
 }
 

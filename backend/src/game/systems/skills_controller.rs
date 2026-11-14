@@ -538,6 +538,7 @@ fn apply_skill_effect_on_target(
             unblockable,
             armor_penetration,
             damage_factors: _,
+            item_slot,
         } => {
             let crit_marble_bag = attacker_marble_bags
                 .entry(MarbleRollType::CritChance)
@@ -554,12 +555,7 @@ fn apply_skill_effect_on_target(
                         .or_default();
                     (
                         *damage_type,
-                        (*value).roll_with_marble_rolls(seed, damage_marble_bag)
-                            * (if is_crit {
-                                1.0 + **crit_damage * 0.01
-                            } else {
-                                1.0
-                            }),
+                        (*value).roll_with_marble_rolls(seed, damage_marble_bag),
                     )
                 })
                 .collect();
@@ -575,6 +571,7 @@ fn apply_skill_effect_on_target(
                 *unblockable,
                 *armor_penetration,
                 skill_id,
+                item_slot,
                 trigger_depth,
             )
         }
@@ -621,7 +618,7 @@ fn apply_skill_effect_on_target(
             statuses_store,
             target,
             status_filter,
-            value.roll_with_seed(seed),
+            *value.roll_with_seed(seed),
             modifier,
         ),
         SkillEffectType::Restore {
@@ -648,7 +645,7 @@ fn apply_skill_effect_on_target(
         } => characters_controller::refresh_skills_cooldown(
             target,
             skill_filter,
-            value.roll_with_seed(seed),
+            *value.roll_with_seed(seed),
             modifier,
         ),
     }
@@ -684,7 +681,6 @@ fn repeat_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
-    // TODO: Check cooldown
     if repeated_skill_effect
         .targets_group
         .repeat

@@ -84,12 +84,12 @@ pub struct Email(String);
 )]
 pub struct Password(String);
 
-#[nutype(
-    sanitize(trim),
-    validate(len_char_max = 32, regex = ALPHANUMERIC_RE),
-    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
-)]
-pub struct AssetName(String);
+// #[nutype(
+//     sanitize(trim),
+//     validate(len_char_max = 32, regex = ALPHANUMERIC_RE),
+//     derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+// )]
+// pub struct AssetName(String);
 
 #[nutype(
     sanitize(with=|v| v.round()),

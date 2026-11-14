@@ -57,6 +57,7 @@ pub fn update_monster_specs(
     base_specs: &MonsterSpecs,
     monster_specs: &mut MonsterSpecs,
     monster_state: &MonsterState,
+    player_effects: &[StatEffect],
     area_threat: &AreaThreat,
 ) {
     monster_specs.character_specs = characters_updater::update_character_specs(
@@ -98,5 +99,6 @@ pub fn update_monster_specs(
         character_id,
         &mut monster_specs.character_specs,
         &monster_state.character_state,
+        player_effects,
     );
 }

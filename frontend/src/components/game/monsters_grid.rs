@@ -3,11 +3,12 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use rand::Rng;
+use rand::RngExt;
 use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
-use shared::data::skill::{DamageType, SkillType};
+use shared::data::skill::{DamageType, SkillEffectType, SkillType};
 use shared::data::stat_effect::{StatSkillFilter, StatStatusFilter};
+use shared::data::trigger::TriggerEffect;
 use shared::data::{character::CharacterSize, monster::MonsterSpecs, skill::SkillSpecs};
 use strum::IntoEnumIterator;
 
@@ -77,6 +78,32 @@ pub fn MonstersGrid() -> impl IntoView {
             || game_context.grind_rewards.read().is_some()
     });
 
+    let player_skill_triggers = Memo::new(move |_| {
+        game_context
+            .player_specs
+            .read()
+            .character_specs
+            .skills_specs
+            .iter()
+            .flat_map(|skill| &skill.targets)
+            .flat_map(|target| &target.effects)
+            .filter_map(|effect| match &effect.effect_type {
+                SkillEffectType::ApplyStatus {
+                    computed_status_triggers: Some(triggers),
+                    ..
+                } => Some(triggers),
+                _ => None,
+            })
+            .fold(HashMap::new(), |mut result, triggers| {
+                result.extend(
+                    triggers
+                        .iter()
+                        .map(|(id, effect)| (id.clone(), effect.clone())),
+                );
+                result
+            })
+    });
+
     view! {
         <div class=move || {
             let animation_class = if all_monsters_dead.get() {
@@ -131,7 +158,11 @@ pub fn MonstersGrid() -> impl IntoView {
                                         x_pos,
                                         y_pos,
                                     )>
-                                        <MonsterCard specs=specs index=index />
+                                        <MonsterCard
+                                            specs=specs
+                                            index=index
+                                            player_skill_triggers
+                                        />
                                     </div>
                                 }
                             }}
@@ -220,7 +251,11 @@ fn MonsterFeedbackOverlay(
 }
 
 #[component]
-fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
+fn MonsterCard(
+    specs: MonsterSpecs,
+    index: usize,
+    player_skill_triggers: Memo<HashMap<String, TriggerEffect>>,
+) -> impl IntoView {
     let game_context: GameContext = expect_context();
     let settings: SettingsContext = expect_context();
 
@@ -292,7 +327,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                 .map(|s| s.character_state.life.get())
                 .unwrap_or_default();
 
-            let diff = old_life - new_life;
+            let diff = (old_life - new_life).round();
             old_life = new_life;
 
             if diff > 0.0 {
@@ -509,6 +544,7 @@ fn MonsterCard(specs: MonsterSpecs, index: usize) -> impl IntoView {
                         just_evaded=just_evaded
                         is_dead=is_dead
                         statuses=statuses
+                        character_triggers=player_skill_triggers
                     />
                 // enable_blink=true
                 </div>

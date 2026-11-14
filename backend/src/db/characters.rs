@@ -1,6 +1,7 @@
 use sqlx::{FromRow, Transaction};
 
 use shared::data::{
+    cosmetics::CharacterCosmetics,
     realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
 };
@@ -22,6 +23,8 @@ pub struct CharacterEntry {
 
     pub character_name: String,
     pub portrait: String,
+    pub cosmetic_title: Option<String>,
+    pub cosmetic_badge: Option<String>,
     pub max_area_level: i32,
     pub resource_gems: f64,
     pub resource_shards: f64,
@@ -123,6 +126,8 @@ pub async fn read_character<'c>(
             is_ssf as "is_ssf!",
             character_name,
             portrait,
+            cosmetic_title,
+            cosmetic_badge,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
@@ -137,6 +142,25 @@ pub async fn read_character<'c>(
         FROM characters
         LEFT OUTER JOIN saved_game_instances
         ON characters.character_id = saved_game_instances.character_id
+        WHERE characters.character_id = $1
+        "#,
+        character_id
+    )
+    .fetch_optional(executor)
+    .await
+}
+
+pub async fn read_character_cosmetics<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> Result<Option<CharacterCosmetics>, sqlx::Error> {
+    sqlx::query_as!(
+        CharacterCosmetics,
+        r#"
+        SELECT
+            cosmetic_title as title,
+            cosmetic_badge as badge
+        FROM characters
         WHERE characters.character_id = $1
         "#,
         character_id
@@ -208,6 +232,8 @@ pub async fn read_all_user_characters<'c>(
             is_ssf as "is_ssf!",
             character_name,
             portrait,
+            cosmetic_title,
+            cosmetic_badge,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
@@ -252,19 +278,24 @@ pub async fn update_character<'c>(
     character_id: &UserCharacterId,
     name: &str,
     portrait: &str,
+    cosmetics: &CharacterCosmetics,
 ) -> Result<Option<()>, sqlx::Error> {
     let res = sqlx::query!(
         r#"
         UPDATE characters 
         SET
             character_name = $2,
-            portrait = $3
+            portrait = $3,
+            cosmetic_title = $4, 
+            cosmetic_badge = $5
         WHERE
             character_id = $1
         "#,
         character_id,
         name,
-        portrait
+        portrait,
+        cosmetics.title,
+        cosmetics.badge
     )
     .execute(executor)
     .await;

@@ -64,8 +64,21 @@ pub struct ModifiableValue<T> {
 #[cfg(feature = "modifiable")]
 impl<T> ModifiableValue<T>
 where
-    T: BaseModifiableValue + Default + Copy,
+    T: BaseModifiableValue + Copy,
 {
+    pub fn new(base: T, increased: f64, decreased: f64, more: f64, converted: f64) -> Self {
+        let mut n = Self {
+            more,
+            increased,
+            decreased,
+            converted,
+            base,
+            evaluated: base,
+        };
+        n.compute();
+        n
+    }
+
     pub fn factor(&self) -> f64 {
         if self.base.is_negative() {
             return 1.0;
@@ -155,12 +168,25 @@ where
         self.evaluated.into()
     }
 
-    pub fn base(&mut self) -> &T {
-        &self.base
+    pub fn increased(&self) -> f64 {
+        self.increased
+    }
+    pub fn decreased(&self) -> f64 {
+        self.decreased
+    }
+    pub fn more(&self) -> f64 {
+        self.more
+    }
+    pub fn converted(&self) -> f64 {
+        self.converted
     }
 
-    pub fn base_mut(&mut self) -> &mut T {
-        &mut self.base
+    pub fn base(&self) -> &T {
+        &self.base
+    }
+    pub fn base_mut(&mut self, func: impl Fn(T) -> T) {
+        self.base = func(self.base);
+        self.compute();
     }
 }
 
@@ -215,13 +241,16 @@ where
 #[cfg(feature = "modifiable")]
 impl<T> From<T> for ModifiableValue<T>
 where
-    T: Default + Copy,
+    T: Copy,
 {
     fn from(value: T) -> Self {
         Self {
             base: value,
             evaluated: value,
-            ..Default::default()
+            more: 0.0,
+            increased: 0.0,
+            decreased: 0.0,
+            converted: 0.0,
         }
     }
 }

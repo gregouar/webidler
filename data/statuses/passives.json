@@ -60,10 +60,10 @@
     "effects"   : [
       {
         "Trigger" : {
-          "name"             : "Open Wound",
-          "icon"             : "passives/open_wound.svg",
-          "description"      : null,
-          "trigger_id"       : "open_wound",
+          "name"       : "Open Wound",
+          "icon"       : "passives/open_wound.svg",
+          "description": null,
+          "trigger_id" : "open_wound",
           "OnTakeHit"        : {
             "skill_type"  : null,
             "range"       : null,
@@ -72,10 +72,10 @@
             "is_hurt"     : null,
             "is_triggered": null,
             "damage_type" : null,
-            "skill_ids"   : null,
+            "skill_id"    : null,
             "conditions"  : []
           },
-          "target"           : "SameTarget",
+          "target": "SameTarget",
           "modifiers"        : [
             {
               "stat"    : {
@@ -93,11 +93,11 @@
               "source"  : "TriggerStatusValue"
             }
           ],
-          "skill_range"      : "Melee",
-          "skill_type"       : "Other",
+          "skill_range": "Melee",
+          "skill_type" : "Other",
           "effects"          : [
             {
-              "success_chance"       : {"value": 100, "lucky_chance": 0},
+              "success_chance": {"value": 100, "lucky_chance": 0},
               "FlatDamage"           : {
                 "damage"     : {},
                 "crit_chance": {"value": 0, "lucky_chance": 0},
@@ -136,7 +136,7 @@
     "icon"      : "passives/pyromaniac.svg",
     "debuff"    : false,
     "duration"  : 3,
-    "max_stacks": 30,
+    "max_stacks": 20,
     "effects"   : [
       {
         "StatModifier": {
@@ -185,7 +185,7 @@
     "effects"   : [
       {
         "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
-        "value"       : 60,
+        "value"       : 50,
         "modifier"    : "Percent"
       },
       {

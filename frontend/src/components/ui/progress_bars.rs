@@ -1,5 +1,5 @@
 use leptos::{html::*, prelude::*};
-use leptos_use::use_interval_fn;
+use leptos_use_interval_fn::use_interval_fn;
 
 use crate::components::settings::{GraphicsQuality, SettingsContext};
 

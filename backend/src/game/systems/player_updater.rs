@@ -6,8 +6,9 @@ use shared::{
         area::{AreaLevel, AreaSpecs, AreaThreat},
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
+        character_status::StatusId,
         item::{SkillRange, SkillShape},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
         player::{PlayerBaseSpecs, PlayerInventory, PlayerSpecs, PlayerState},
@@ -15,7 +16,7 @@ use shared::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
         skill_mastery::PlayerSkillMasteries,
-        stat_effect::{StatConverterSource, StatConverterSpecs, StatEffect, StatType},
+        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
         values::{AtLeastOne, NonNegative},
     },
@@ -26,6 +27,7 @@ use crate::game::{
     data::{
         DataInit,
         event::EventsQueue,
+        items_store::ItemsStore,
         master_store::{SkillMasteriesStore, StatusesStore},
     },
     systems::{skill_masteries_controller, triggers_updater},
@@ -64,7 +66,7 @@ pub fn init_player_base_specs(
         character_attrs: base_player_character_attrs(1),
         effects,
         max_skills,
-        buy_skill_cost: 0.0,
+        skills_in_use: Default::default(),
         skills: Default::default(),
         level: 1,
         experience_needed: 20.0,
@@ -109,10 +111,10 @@ pub fn reset_player(player_state: &mut PlayerState) {
 // to have it working with the dynamic statuses.
 #[allow(clippy::too_many_arguments)]
 pub fn update_player_specs(
+    items_store: &ItemsStore,
     skill_masteries_store: &SkillMasteriesStore,
     statuses_store: &StatusesStore,
     player_base_specs: &PlayerBaseSpecs,
-    // player_specs: &PlayerSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
     passives_tree_specs: &PassivesTreeSpecs,
@@ -120,27 +122,43 @@ pub fn update_player_specs(
     area_specs: &AreaSpecs,
     area_threat: &AreaThreat,
 ) -> PlayerSpecs {
-    let effects: Vec<_> = [
+    let mut effects: Vec<_> = [
         player_base_specs.effects.clone(),
         player_inventory
             .equipped_items()
             .flat_map(|(_, i)| {
-                i.modifiers
-                    .aggregate_effects(AffixEffectScope::Global, false)
-                    .into_iter()
+                aggregate_effects(&i.affixes, AffixEffectScope::Global, false).into_iter()
             })
             .collect(),
-        passive::generate_effects_fom_passives(
-            passives_tree_specs,
-            &passives_tree_state.ascension,
-            &passives_tree_state.purchased_nodes,
-        ),
         skill_masteries_controller::generate_player_stat_effects(
             skill_masteries_store,
             player_base_specs,
         ),
     ]
     .concat();
+
+    let mut purchased_nodes = passives_tree_state.purchased_nodes.clone();
+    for effect in effects.iter() {
+        if let StatType::AllocatePassive(passive_id) = &effect.stat
+            && let Some(passive_specs) = passives_tree_specs.nodes.get(passive_id)
+            && (!passive_specs.locked
+                || passives_tree_state
+                    .ascension
+                    .ascended_nodes
+                    .get(passive_id)
+                    .copied()
+                    .unwrap_or_default()
+                    > 0)
+        {
+            purchased_nodes.insert(*passive_id);
+        }
+    }
+
+    effects.extend(passive::generate_effects_fom_passives(
+        passives_tree_specs,
+        &passives_tree_state.ascension,
+        &purchased_nodes,
+    ));
 
     let mut player_specs = compute_player_specs(
         skill_masteries_store,
@@ -162,7 +180,8 @@ pub fn update_player_specs(
         .chain(
             player_inventory
                 .equipped_items()
-                .flat_map(|(_, item_specs)| item_specs.base.triggers.iter()),
+                .filter_map(|(_, item_specs)| items_store.get_item_base(item_specs).ok())
+                .flat_map(|item_base| item_base.triggers.iter()),
         )
     {
         player_specs.character_specs.triggers.push(
@@ -185,6 +204,7 @@ pub fn update_player_specs(
         CharacterId::Player,
         &mut player_specs.character_specs,
         &player_state.character_state,
+        &[],
     );
 
     player_specs
@@ -199,7 +219,7 @@ fn compute_player_specs(
     player_base_specs: &PlayerBaseSpecs,
     player_state: &PlayerState,
     player_inventory: &PlayerInventory,
-    effects: Vec<StatEffect>,
+    mut effects: Vec<StatEffect>,
 ) -> PlayerSpecs {
     let mut player_specs = PlayerSpecs::init(player_base_specs);
 
@@ -228,6 +248,38 @@ fn compute_player_specs(
         .value
         .apply_modifier(total_block as f64, Modifier::Flat);
 
+    let skills_specs: Vec<_> = player_base_specs
+        .skills_in_use
+        .iter()
+        .flat_map(|skill_id| {
+            player_base_specs
+                .skills
+                .get(skill_id)
+                .map(|player_base_skill| {
+                    (
+                        player_base_skill,
+                        skills_updater::init_skill_specs(
+                            skill_id.to_string(),
+                            &player_base_skill.base_skill_specs,
+                            &effects,
+                        ),
+                    )
+                })
+        })
+        .collect();
+
+    effects.extend(EffectsMap::combine_all(skills_specs.iter().map(
+        |(player_base_skill, skill_specs)| {
+            skills_updater::compute_skill_upgrade_effects(
+                &player_base_skill.base_skill_specs,
+                player_base_skill
+                    .upgrade_level
+                    .saturating_add(skill_specs.level_modifier),
+                AffixEffectScope::Global,
+            )
+        },
+    )));
+
     player_specs.character_specs = characters_updater::update_character_specs(
         statuses_store,
         area_threat,
@@ -240,20 +292,25 @@ fn compute_player_specs(
     let effects = &player_specs.character_specs.effects;
 
     let ModifiablePlayerSpecs {
+        max_player_level,
         movement_cooldown,
         gold_find,
         threat_gain,
         restore_on_hit,
+        status_on_hit,
     } = modify_player_specs(
         ModifiablePlayerSpecs {
+            max_player_level: (player_base_specs.max_level as f64).into(),
             movement_cooldown: player_specs.movement_cooldown.into(),
             gold_find: player_specs.gold_find.into(),
             threat_gain: player_specs.threat_gain.into(),
             restore_on_hit: Default::default(),
+            status_on_hit: Default::default(),
         },
         effects,
     );
 
+    player_specs.max_level = (*max_player_level) as u8;
     player_specs.movement_cooldown = *movement_cooldown;
     player_specs.gold_find = *gold_find * *area_specs.gold_find * 0.01;
     player_specs.threat_gain = *threat_gain;
@@ -292,27 +349,76 @@ fn compute_player_specs(
                     description: None,
                 }],
                 trigger_propagate: false,
-                inherit_source_effects: false,
+                // inherit_source_effects: false,
             },
             Some(CharacterId::Player),
         );
     }
 
-    player_specs.character_specs.skills_specs = player_base_specs
-        .skills
-        .iter()
-        .map(|(skill_id, player_base_skill)| {
+    for ((status_id, skill_type), value) in status_on_hit.into_iter() {
+        player_specs.character_specs.triggers.push(
+            EventTrigger::OnHit(HitTrigger {
+                skill_type,
+                is_hurt: Some(true),
+                is_triggered: Some(false),
+                ..Default::default()
+            }),
+            TriggerEffect {
+                trigger_id: format!("status_on_hit_{:?}_{:?}", status_id, skill_type),
+                target: TriggerTarget::SameTarget,
+                skill_range: SkillRange::Any,
+                skill_type: SkillType::Other,
+                skill_shape: SkillShape::Single,
+                skill_repeat: Default::default(),
+                modifiers: Vec::new(),
+                effects: vec![SkillEffect {
+                    success_chance: Chance::new_sure(),
+                    effect_type: SkillEffectType::ApplyStatus {
+                        status_id,
+                        value: ChanceRange {
+                            min: value,
+                            max: value,
+                            lucky_chance: Default::default(),
+                        },
+                        value_factor: 1.0,
+                        duration: None,
+                        escalation: None,
+                        max_stacks: None,
+                        avoidable: None,
+                        replace_on_value_only: false,
+                        computed_status_triggers: None,
+                    },
+                    ignore_stat_effects: Default::default(),
+                    conditional_modifiers: Default::default(),
+                    independent_application: false,
+                    optional_application: false,
+                    description: None,
+                }],
+                trigger_propagate: false,
+                // inherit_source_effects: false,
+            },
+            Some(CharacterId::Player),
+        );
+    }
+
+    player_specs.character_specs.skills_specs = skills_specs
+        .into_iter()
+        .map(|(player_base_skill, skill_specs)| {
+            let skill_mastery = skill_masteries_store.get(&skill_specs.skill_id).zip(
+                player_base_specs
+                    .skill_masteries
+                    .masteries
+                    .get(&skill_specs.skill_id),
+            );
             skills_updater::update_skill_specs(
                 statuses_store,
-                skill_id.to_string(),
+                skill_specs,
                 &player_base_skill.base_skill_specs,
                 player_base_skill.upgrade_level,
                 effects,
                 &player_specs.character_specs.character_attrs,
                 Some(player_inventory),
-                skill_masteries_store
-                    .get(skill_id)
-                    .zip(player_base_specs.skill_masteries.masteries.get(skill_id)),
+                skill_mastery,
             )
         })
         .collect();
@@ -321,12 +427,14 @@ fn compute_player_specs(
 }
 
 #[derive(Clone, Default)]
-pub struct ModifiablePlayerSpecs {
-    pub movement_cooldown: ModifiableValue<AtLeastOne>,
-    pub gold_find: ModifiableValue<NonNegative>,
-    pub threat_gain: ModifiableValue<NonNegative>,
+struct ModifiablePlayerSpecs {
+    max_player_level: ModifiableValue<f64>,
+    movement_cooldown: ModifiableValue<AtLeastOne>,
+    gold_find: ModifiableValue<NonNegative>,
+    threat_gain: ModifiableValue<NonNegative>,
 
-    pub restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
+    restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
+    status_on_hit: HashMap<(StatusId, Option<SkillType>), ModifiableValue<NonNegative>>,
 }
 
 fn modify_player_specs(
@@ -334,7 +442,8 @@ fn modify_player_specs(
     effects: &[StatEffect],
 ) -> ModifiablePlayerSpecs {
     for effect in effects.iter() {
-        match effect.stat {
+        match &effect.stat {
+            StatType::MaxPlayerLevel => modifiable_player_specs.max_player_level.apply_effect(effect),
             StatType::MovementSpeed => modifiable_player_specs
                 .movement_cooldown
                 .apply_negative_effect(effect),
@@ -346,17 +455,20 @@ fn modify_player_specs(
                 skill_type,
             } => {
                 let skill_types = match skill_type {
-                    Some(skill_type) => vec![skill_type],
+                    Some(skill_type) => vec![*skill_type],
                     None => SkillType::iter().collect(),
                 };
 
                 for skill_type in skill_types {
                     modifiable_player_specs
                         .restore_on_hit
-                        .entry((restore_type, skill_type))
+                        .entry((*restore_type, skill_type))
                         .or_default()
                         .apply_effect(effect);
                 }
+            }
+            StatType::StatusOnHit { status_id, skill_type } => {
+                modifiable_player_specs.status_on_hit.entry((status_id.clone(),*skill_type)).or_default().apply_effect(effect);
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character
@@ -372,6 +484,7 @@ fn modify_player_specs(
             | StatType::Evade(_)
             | StatType::EvadeDamageTaken
             | StatType::DamageTaken { .. }
+            | StatType::CritDamageTaken { .. }
             | StatType::StatusResistance { .. }
             | StatType::StatConverter(StatConverterSpecs {
                 source:
@@ -399,10 +512,11 @@ fn modify_player_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::StatConverter(StatConverterSpecs {
-                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. }, // | StatConverterSource::DamageOverTime { .. }
+                source: StatConverterSource::CritDamage | StatConverterSource::Damage { .. } | StatConverterSource::StatusDuration{..}, // | StatConverterSource::DamageOverTime { .. }
                 ..
             })
             | StatType::SuccessChance { .. }
+            | StatType::RefreshedCooldown { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillTargetModifier { .. }
             | StatType::SkillRepeat { .. }
@@ -415,6 +529,8 @@ fn modify_player_specs(
             | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::PowerLevel
+            | StatType::AllocatePassive(_) // Done in init_player_specs
+            | StatType::RemoveSlotUse(_)
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }

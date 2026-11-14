@@ -1,10 +1,12 @@
+use leptos::prelude::*;
+use leptos_router::hooks::use_navigate;
+
 use frontend::{
     assets::img_asset,
     components::settings::{GraphicsQuality, SettingsContext},
 };
-use leptos::prelude::*;
-use leptos_router::hooks::use_navigate;
-use leptos_use::use_interval_fn;
+
+use leptos_use_interval_fn::use_interval_fn;
 use shared::data::monster::MonsterRarity;
 
 #[component]

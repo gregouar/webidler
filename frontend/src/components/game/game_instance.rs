@@ -1,7 +1,8 @@
 use chrono::{DateTime, Utc};
 use codee::string::JsonSerdeCodec;
+
 use leptos::{html::*, prelude::*, task::spawn_local};
-use leptos_use::storage;
+use leptos_use_storage::use_session_storage;
 
 use shared::{
     data::{area::StartAreaConfig, user::UserCharacterId},
@@ -11,10 +12,9 @@ use shared::{
     },
 };
 
-use crate::components::ui::number::format_local_time;
 use crate::components::{
     backend_client::BackendClient,
-    chat::chat_panel::ChatPanel,
+    data_context::DataContext,
     game::{
         GameContext,
         battle_scene::BattleScene,
@@ -22,8 +22,15 @@ use crate::components::{
         panels::{EndGrindPanel, GameInventoryPanel, PassivesPanel, SkillsPanel, StatisticsPanel},
         websocket::WebsocketContext,
     },
-    shared::settings::SettingsModal,
-    ui::{loading_screen::LoadingScreen, progress_bars::provide_cooldown_clock, toast::*},
+    shared::{
+        achievements::{self, AchievementsPanel},
+        pets::PetsPanel,
+        settings::SettingsModal,
+    },
+    ui::{
+        loading_screen::LoadingScreen, number::format_local_time,
+        progress_bars::provide_cooldown_clock, toast::*,
+    },
 };
 
 #[component]
@@ -35,10 +42,10 @@ pub fn GameInstance() -> impl IntoView {
     let backend = expect_context::<BackendClient>();
 
     let (get_character_id_storage, _, _) =
-        storage::use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
+        use_session_storage::<UserCharacterId, JsonSerdeCodec>("character_id");
 
     let (get_area_config_storage, _, _) =
-        storage::use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
+        use_session_storage::<Option<StartAreaConfig>, JsonSerdeCodec>("area_config");
 
     let conn = expect_context::<WebsocketContext>();
     let server_down_until = RwSignal::new(None::<DateTime<Utc>>);
@@ -107,9 +114,18 @@ pub fn GameInstance() -> impl IntoView {
                     <GameInventoryPanel open=game_context.open_inventory />
                     <EndGrindPanel />
                     <SettingsModal open=game_context.open_settings />
+                    <AchievementsPanel
+                        open=game_context.open_achievements
+                        user_unlocks=game_context.user_unlocks
+                    />
+                    <PetsPanel
+                        open=game_context.open_pets
+                        character_id=Signal::derive(move || game_context.character_id.get())
+                        player_pets=game_context.player_pets
+                        user_unlocks=game_context.user_unlocks
+                    />
                 </div>
             </Show>
-            <ChatPanel character_id=get_character_id_storage.get_untracked() />
         </main>
     }
 }
@@ -129,6 +145,23 @@ fn handle_message(
         }
         ServerMessage::UpdateGame(m) => {
             sync_game(game_context, *m);
+        }
+        ServerMessage::AchievementsUnlocked(message) => {
+            let data_context = expect_context::<DataContext>();
+            let toaster = expect_context::<Toasts>();
+
+            for achievement_id in message.achievement_ids.iter() {
+                game_context
+                    .user_unlocks
+                    .write()
+                    .achievements
+                    .insert(achievement_id.clone(), Utc::now());
+            }
+            achievements::notify_newly_unlocked_achievements(
+                data_context,
+                toaster,
+                message.achievement_ids,
+            );
         }
         ServerMessage::Error(error_message) => {
             let toaster = expect_context::<Toasts>();
@@ -155,6 +188,8 @@ fn handle_message(
 fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     let InitGameMessage {
         character_id,
+        character_cosmetics,
+        user_unlocks,
         realm,
         area_id,
         map_item,
@@ -168,11 +203,14 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         skill_mastery_skill_specs,
         player_specs,
         player_state,
+        player_pets,
         auto_skills,
     } = init_message;
 
-    game_context.started.set(true);
     game_context.character_id.set(character_id);
+    game_context.character_cosmetics.set(character_cosmetics);
+    game_context.player_pets.set(player_pets);
+    game_context.user_unlocks.set(user_unlocks);
     game_context.area_id.set(area_id);
     game_context.realm.set(realm);
     game_context.map_item.set(map_item);
@@ -189,6 +227,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.player_specs.set(player_specs);
     game_context.player_state.set(player_state);
     game_context.player_auto_skills.set(auto_skills);
+    game_context.started.set(true);
 }
 
 fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
@@ -225,7 +264,6 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.player_state.set(player_state);
     game_context.player_stamina.set(player_stamina);
     if let Some(monster_specs) = monster_specs {
-        // *game_context.monster_wave.write() += 1; // TODO: Overflow
         game_context.monster_specs.set(monster_specs);
     }
     game_context.monster_states.set(monster_states);

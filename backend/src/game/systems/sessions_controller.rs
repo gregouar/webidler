@@ -13,7 +13,7 @@ use shared::{
         realms::Realm,
         skill_mastery::PlayerSkillMasteries,
         temple::{BenedictionEffect, PlayerBenedictions},
-        user::UserCharacterId,
+        user::{UserCharacterId, UserId},
     },
 };
 
@@ -27,8 +27,8 @@ use crate::{
         game_data::GameInstanceData,
         sessions::{Session, SessionsStore},
         systems::{
-            benedictions_controller, inventory_controller, player_controller::PlayerController,
-            player_updater,
+            benedictions_controller, inventory_controller, passives_controller,
+            player_controller::PlayerController, player_updater, skill_masteries_controller,
         },
     },
     rest::AppError,
@@ -45,6 +45,7 @@ pub async fn create_session(
     area_config: Option<StartAreaConfig>,
 ) -> Result<Session> {
     let character_id = character.character_id;
+    let user_id = character.user_id;
     tracing::debug!("create new session for player '{character_id}'...");
 
     let mut first_try = true;
@@ -75,7 +76,7 @@ pub async fn create_session(
 
     // If not available, try from saved games, otherwise start new game
     let game_instance_data = if let Some(saved_instance) =
-        load_game_instance(db_pool, master_store, &character_id).await
+        load_game_instance(db_pool, master_store, &character_id, character.user_id).await
     {
         saved_instance
     } else {
@@ -90,6 +91,7 @@ pub async fn create_session(
 
     Ok(Session {
         character_id,
+        user_id,
         last_active: Instant::now(),
         game_data: Box::new(game_instance_data),
     })
@@ -99,8 +101,11 @@ async fn load_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character_id: &UserCharacterId,
+    user_id: UserId,
 ) -> Option<GameInstanceData> {
-    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id).await {
+    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id, user_id)
+        .await
+    {
         Ok(Some((mut game_instance, saved_at))) => {
             // Maybe move this somewhere else
             game_instance.player_stamina += Duration::from_secs(
@@ -135,64 +140,45 @@ async fn new_game_instance(
     let character_data =
         db::characters_data::load_character_data(db_pool, &character.character_id).await?;
 
-    let (mut player_inventory, passives_tree_state, player_benedictions, player_skill_masteries) =
-        match character_data {
-            Some((inventory_data, ascension_data, player_benedictions, player_skill_masteries)) => {
-                (
-                    inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
-                    PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
-                        &master_store.items_store,
-                        ascension_data,
-                    )),
-                    player_benedictions,
-                    player_skill_masteries,
-                )
-            }
-            None => {
-                let mut player_inventory = PlayerInventory {
-                    max_bag_size: 40,
-                    ..Default::default()
-                };
+    let (
+        mut player_inventory,
+        passives_tree_state,
+        mut player_benedictions,
+        mut player_skill_masteries,
+    ) = match character_data {
+        Some((inventory_data, ascension_data, player_benedictions, player_skill_masteries)) => (
+            inventory_data_to_player_inventory(&master_store.items_store, inventory_data),
+            PassivesTreeState::init(ascension_data_to_passives_tree_ascension(
+                &master_store.items_store,
+                ascension_data,
+            )),
+            player_benedictions,
+            player_skill_masteries,
+        ),
+        None => (
+            new_player_inventory(master_store),
+            PassivesTreeState::default(),
+            PlayerBenedictions::default(),
+            PlayerSkillMasteries::default(),
+        ),
+    };
 
-                let base_weapon_id = "dagger".to_string();
-                if let Some(base_weapon) = master_store
-                    .items_store
-                    .content
-                    .get(&base_weapon_id)
-                    .cloned()
-                {
-                    let _ = inventory_controller::equip_item(
-                        &mut player_inventory,
-                        loot_generator::roll_item_stats(
-                            base_weapon_id,
-                            base_weapon,
-                            ItemRarity::Normal,
-                            0,
-                            0,
-                            &master_store.item_affixes_table,
-                            &master_store.item_adjectives_table,
-                            &master_store.item_nouns_table,
-                            false,
-                            0.0, // &master_store.items_store.signature_key,
-                        ),
-                    );
-                }
+    benedictions_controller::sanitize_benedictions(
+        &master_store.benedictions_store,
+        &mut player_benedictions,
+    );
 
-                (
-                    player_inventory,
-                    PassivesTreeState::default(),
-                    PlayerBenedictions::default(),
-                    PlayerSkillMasteries::default(),
-                )
-            }
-        };
+    skill_masteries_controller::sanitize_skill_masteries(
+        &master_store.skill_masteries_store,
+        &mut player_skill_masteries,
+    );
 
     let mut player_resources = PlayerResources::default();
-    player_resources.gold += benedictions_controller::find_benediction_value(
-        &master_store.benedictions_store,
-        &player_benedictions,
-        &BenedictionEffect::StartingGold,
-    );
+    // player_resources.gold += benedictions_controller::find_benediction_value(
+    //     &master_store.benedictions_store,
+    //     &player_benedictions,
+    //     &BenedictionEffect::StartingGold,
+    // );
     let extra_level = benedictions_controller::find_benediction_value(
         &master_store.benedictions_store,
         &player_benedictions,
@@ -206,25 +192,34 @@ async fn new_game_instance(
     .clamp(0.0, (MAX_SKILL_SLOTS - DEFAULT_SKILL_SLOTS) as f64) as u8;
     let max_skills = DEFAULT_SKILL_SLOTS + extra_skill_slots;
 
-    let player_base_specs = player_updater::init_player_base_specs(
+    let mut effects: Vec<_> = benedictions_controller::generate_effects_map_from_benedictions(
+        &master_store.benedictions_store,
+        &player_benedictions,
+    )
+    .into();
+    effects.extend(passives_controller::generate_allocated_sockets_effects(
+        &passives_tree_state.ascension,
+    ));
+
+    let mut player_base_specs = player_updater::init_player_base_specs(
         character.character_name,
         character.portrait,
         character.max_area_level as AreaLevel,
-        benedictions_controller::generate_effects_map_from_benedictions(
-            &master_store.benedictions_store,
-            &player_benedictions,
-        )
-        .into(),
+        effects,
         player_skill_masteries,
         max_skills,
     );
+
+    for _ in 0..extra_level {
+        player_controller::level_up_no_cost(&mut player_base_specs, None, &mut player_resources);
+    }
 
     let map_item = match area_config.map_item_index {
         Some(map_item_index) => {
             if (map_item_index as usize) < player_inventory.bag.len() {
                 let map_item = player_inventory.bag.remove(map_item_index as usize);
 
-                if let Some(map_specs) = &map_item.base.map_specs {
+                if let Some(map_specs) = &map_item.map_specs {
                     if let Some(map_area_id) = &map_specs.area_id
                         && *map_area_id != area_config.area_id
                     {
@@ -248,7 +243,7 @@ async fn new_game_instance(
 
     let area_id = map_item
         .as_ref()
-        .and_then(|item_specs| item_specs.base.map_specs.as_ref())
+        .and_then(|item_specs| item_specs.map_specs.as_ref())
         .and_then(|map_specs| map_specs.replace_area_id.clone())
         .unwrap_or(area_config.area_id);
 
@@ -263,6 +258,9 @@ async fn new_game_instance(
                 )
             })
             .unwrap_or_default();
+
+    let user_achievements =
+        db::user_unlocks::read_achievements(db_pool, &character.user_id).await?;
 
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
@@ -280,18 +278,11 @@ async fn new_game_instance(
         player_inventory,
         Duration::from_secs_f64(character.resource_stamina),
         player_controller,
+        user_achievements,
     )?;
 
     if game_data.area_specs.coming_soon {
         return Err(anyhow!("forbidden area"));
-    }
-
-    for _ in 0..extra_level {
-        player_controller::level_up_no_cost(
-            game_data.player_base_specs.mutate(),
-            &mut game_data.player_state,
-            game_data.player_resources.mutate(),
-        );
     }
 
     player_controller::init_skills_from_inventory(
@@ -310,6 +301,30 @@ async fn new_game_instance(
     .await?;
 
     Ok(game_data)
+}
+
+pub fn new_player_inventory(master_store: &MasterStore) -> PlayerInventory {
+    let mut player_inventory = PlayerInventory {
+        max_bag_size: 40,
+        ..Default::default()
+    };
+    let base_weapon_id = "dagger".into();
+    if let Some(base_weapon) = master_store.items_store.items.get(&base_weapon_id) {
+        let _ = inventory_controller::equip_item(
+            &mut player_inventory,
+            loot_generator::roll_item_stats(
+                &master_store.items_store,
+                base_weapon_id,
+                base_weapon,
+                ItemRarity::Normal,
+                0,
+                0,
+                false,
+                0.0,
+            ),
+        );
+    }
+    player_inventory
 }
 
 pub async fn save_all_sessions(db_pool: &db::DbPool, sessions_store: &SessionsStore) -> Result<()> {

@@ -10,7 +10,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -34,7 +34,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -58,8 +58,8 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -69,9 +69,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Block": null
         },
@@ -81,9 +81,9 @@
           15.0,
           20.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Armor": "Storm"
         },
@@ -93,9 +93,9 @@
           50.0,
           80.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnTakeHit": {
@@ -106,18 +106,23 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "stunning_block",
         "target": "Source",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -225,7 +230,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -249,7 +254,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -273,8 +278,8 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "StatConditionalModifier": {
             "stat": {
@@ -295,9 +300,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 140.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ThreatGain",
         "modifier": "More",
         "scope": "Global",
@@ -305,9 +310,9 @@
           50.0,
           100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "LifeRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -315,9 +320,9 @@
           8.0,
           12.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Armor": "Physical"
         },
@@ -327,9 +332,9 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "Armor": "Poison"
         },
@@ -339,9 +344,25 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_6": {
+        "stat": {
+          "StatusPower": {
+            "status_id": "taunt",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -435,7 +456,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -459,8 +480,8 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
@@ -470,9 +491,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Physical"
         },
@@ -482,9 +503,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Damage": {
             "skill_type": "Attack",
@@ -500,9 +521,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "SkillTargetModifier": {
             "skill_type": null,
@@ -519,9 +540,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -547,16 +568,6 @@
           },
           "modifier": "Flat",
           "value": 35.0
-        }
-      },
-      {
-        "scope": "Local",
-        "stat_effect": {
-          "stat": {
-            "Armor": "Physical"
-          },
-          "modifier": "Increased",
-          "value": 20.0
         }
       },
       {
@@ -598,7 +609,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -622,8 +633,8 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": "Life",
         "modifier": "Flat",
         "scope": "Global",
@@ -631,9 +642,9 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Armor": "Fire"
         },
@@ -643,9 +654,9 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "GoldFind",
         "modifier": "More",
         "scope": "Global",
@@ -653,16 +664,16 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": "ManaRegen",
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -672,6 +683,7 @@
           "debuff": null,
           "is_triggered": false,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
@@ -690,21 +702,19 @@
             },
             "modifier": "Flat",
             "factor": 1.0,
-            "source": {
-              "StatusDuration": {
-                "status_id": null,
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": "Curse"
-              }
-            }
+            "source": "TriggeringStatusDuration",
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Any",
         "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
             "success_chance": {
@@ -824,7 +834,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -848,7 +858,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -872,26 +882,26 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Armor": "Physical"
         },
         "modifier": "More",
         "scope": "Local",
-        "value": -1e200,
-        "ignore_quality": true
+        "value": -1e+200,
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Block": null
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 20.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Block": null
         },
@@ -901,9 +911,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -916,9 +926,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 400.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -931,9 +941,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 240.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1003,7 +1013,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1027,7 +1037,7 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {

@@ -49,7 +49,7 @@ impl<'r> Decode<'r, Sqlite> for UtcDateTime {
 impl<'q> Encode<'q, Sqlite> for UtcDateTime {
     fn encode_by_ref(
         &self,
-        buf: &mut <Sqlite as sqlx::Database>::ArgumentBuffer<'q>,
+        buf: &mut <Sqlite as sqlx::Database>::ArgumentBuffer,
     ) -> Result<sqlx::encode::IsNull, Box<dyn Error + Send + Sync>> {
         let naive = self.0.naive_utc();
         <NaiveDateTime as Encode<Sqlite>>::encode_by_ref(&naive, buf)

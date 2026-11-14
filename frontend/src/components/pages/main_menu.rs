@@ -1,8 +1,9 @@
 use codee::string::JsonSerdeCodec;
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::{components::Redirect, hooks::use_navigate};
-use leptos_use::storage;
-use rand::{Rng, distr::Alphanumeric};
+use leptos_use_on_click_outside::on_click_outside;
+use leptos_use_storage::use_local_storage;
+use rand::{RngExt, distr::Alphanumeric};
 
 use shared::{
     http::client::{ForgotPasswordRequest, SignInRequest, SignUpRequest},
@@ -37,9 +38,7 @@ pub fn MainMenuPage() -> impl IntoView {
 
     view! {
         <Transition fallback=move || {
-            view! {
-                <LoadingScreen title="Loading..." detail="Checking your session." />
-            }
+            view! { <LoadingScreen title="Loading..." detail="Checking your session." /> }
         }>
             {move || Suspend::new(async move {
                 if refresh_token.await {
@@ -55,16 +54,16 @@ pub fn MainMenuPage() -> impl IntoView {
 #[component]
 fn MainMenu() -> impl IntoView {
     let (get_username_storage, set_username_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
     let username = RwSignal::new(get_username_storage.get_untracked());
     let password = RwSignal::new(None);
 
     let (get_guest_username_storage, _, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
 
     let (get_guest_password_storage, _, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
 
     let captcha_token = RwSignal::new(None);
 
@@ -688,7 +687,7 @@ pub fn ForgotPasswordModal(open: RwSignal<bool>) -> impl IntoView {
     let success = RwSignal::new(false);
 
     let node_ref = NodeRef::new();
-    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+    let _ = on_click_outside(node_ref, move |_| open.set(false));
 
     let on_submit = {
         move |_| {
@@ -789,14 +788,13 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
 
-    let (_, set_username_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
+    let (_, set_username_storage, _) = use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
     let (_, set_guest_username_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
 
     let (_, set_guest_password_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
 
     let username = RwSignal::new({
         let mut rng = rand::rng();
@@ -822,7 +820,7 @@ pub fn GuestModal(open: RwSignal<bool>, captcha_token: RwSignal<Option<String>>)
     let processing = RwSignal::new(false);
 
     let node_ref = NodeRef::new();
-    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+    let _ = on_click_outside(node_ref, move |_| open.set(false));
 
     let on_submit = {
         let navigate = use_navigate();

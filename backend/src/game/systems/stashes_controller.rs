@@ -49,6 +49,8 @@ pub async fn take_stash_item<'c>(
 
 pub async fn store_stash_item<'c>(
     executor: &mut Transaction<'c, Database>,
+    items_store: &ItemsStore,
+
     character_id: &UserCharacterId,
     stash: &mut StashEntry,
     item_specs: &ItemSpecs,
@@ -62,6 +64,7 @@ pub async fn store_stash_item<'c>(
         &stash.stash_id,
         &stash.realm_id,
         character_id,
+        items_store.get_item_base(item_specs)?,
         item_specs,
     )
     .await?;

@@ -1,5 +1,4 @@
 use anyhow;
-
 use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
@@ -11,7 +10,7 @@ use shared::data::{
 use crate::{
     app_state::MasterStore,
     constants::DATA_VERSION,
-    db::utc_datetime::UtcDateTime,
+    db::{user_unlocks, utc_datetime::UtcDateTime},
     game::{data::master_store, game_data::GameInstanceData},
 };
 
@@ -73,15 +72,17 @@ async fn upsert_saved_game_instance<'c>(
     Ok(())
 }
 
-pub async fn load_game_instance_data<'c>(
-    executor: impl DbExecutor<'c>,
+pub async fn load_game_instance_data(
+    db_pool: &DbPool,
     master_store: &master_store::MasterStore,
     character_id: &UserCharacterId,
+    user_id: UserId,
 ) -> anyhow::Result<Option<(GameInstanceData, DateTime<Utc>)>> {
-    let saved_game_instance = load_saved_game_instance(executor, character_id).await?;
+    let saved_game_instance = load_saved_game_instance(db_pool, character_id).await?;
+    let user_achievements = user_unlocks::read_achievements(db_pool, &user_id).await?;
     if let Some(instance) = saved_game_instance {
         Ok(Some((
-            GameInstanceData::from_bytes(master_store, &instance.game_data)?,
+            GameInstanceData::from_bytes(master_store, &instance.game_data, user_achievements)?,
             instance.saved_at.into(),
         )))
     } else {
@@ -137,7 +138,13 @@ pub async fn peek_game_instances(
     .await?;
 
     for entry in entries {
-        load_game_instance_data(db_pool, master_store, &entry.character_id).await?;
+        load_game_instance_data(
+            db_pool,
+            master_store,
+            &entry.character_id,
+            Default::default(),
+        )
+        .await?;
     }
 
     Ok(())

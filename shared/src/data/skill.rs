@@ -10,6 +10,7 @@ use crate::{
         character_status::StatusId,
         conditional_modifier::{Condition, ConditionalModifier},
         item::{ItemCategory, ItemSpecs},
+        item_affix::AffixEffectScope,
         modifier::ModifiableValue,
         stat_effect::{
             Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
@@ -67,6 +68,8 @@ pub struct BaseSkillSpecs {
 pub struct SkillUpgradeEffect {
     #[serde(flatten)]
     pub stat_effect: StatEffect,
+    #[serde(default)]
+    pub scope: AffixEffectScope,
     #[serde(default)]
     pub description: Option<String>,
     #[serde(default)]
@@ -133,15 +136,14 @@ pub struct SkillRequiredItem {
 impl SkillRequiredItem {
     pub fn is_match(&self, item_slot: ItemSlot, item_specs: &ItemSpecs) -> bool {
         self.slot
-            .map(|slot| slot == item_slot || item_specs.base.extra_slots.contains(&slot))
+            .map(|slot| slot == item_slot || item_specs.extra_slots.contains(&slot))
             .unwrap_or(true)
             && self
                 .category
-                .map(|category| item_specs.base.categories.contains(&category))
+                .map(|category| item_specs.categories.contains(&category))
                 .unwrap_or(true)
     }
 }
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
@@ -268,6 +270,8 @@ pub enum SkillEffectType {
         unblockable: bool,
         #[serde(default)]
         armor_penetration: Percent,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        item_slot: Option<ItemSlot>,
     },
     ApplyStatus {
         status_id: StatusId,

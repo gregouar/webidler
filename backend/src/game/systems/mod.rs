@@ -1,8 +1,10 @@
+pub mod achievements_controller;
 pub mod area_controller;
 pub mod benedictions_controller;
 pub mod characters_controller;
 pub mod characters_updater;
 pub mod events_resolver;
+pub mod forge_controller;
 pub mod grind_controller;
 pub mod inventory_controller;
 pub mod items_controller;

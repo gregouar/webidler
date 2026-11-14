@@ -2,16 +2,21 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*};
 
-use shared::data::area::AreaLevel;
-use shared::data::item::{ItemRarity, ItemSpecs};
+use shared::data::{
+    area::AreaLevel,
+    item::{ItemRarity, ItemSpecs},
+};
 
-use crate::assets::img_asset;
-use crate::components::events::{EventsContext, Key};
-use crate::components::settings::{GraphicsQuality, SettingsContext};
-use crate::components::shared::tooltips::item_tooltip::ComparableType;
-use crate::components::ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition};
-
-use super::tooltips::ItemTooltip;
+use crate::{
+    assets::img_asset,
+    components::{
+        data_context::DataContext,
+        events::{EventsContext, Key},
+        settings::{GraphicsQuality, SettingsContext},
+        shared::tooltips::{ItemTooltip, item_tooltip::ComparableType},
+        ui::tooltip::{DynamicTooltipContext, DynamicTooltipPosition},
+    },
+};
 
 #[component]
 pub fn ItemCard(
@@ -22,6 +27,8 @@ pub fn ItemCard(
     #[prop(default = false)] can_sell: bool,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
+    let data_context: DataContext = expect_context();
+
     let (accent, inner_border, rarity_wash, rarity_core, frame_shine) =
         match item_specs.modifiers.rarity {
             ItemRarity::Normal => (
@@ -61,12 +68,12 @@ pub fn ItemCard(
             ),
         };
 
-    let icon_asset = img_asset(&item_specs.base.icon);
+    let item_base = data_context.get_item_base(&item_specs);
+    let icon_asset = img_asset(&item_base.icon);
     let item_name = item_specs.modifiers.name.clone();
 
-    let tooltip_context = expect_context::<DynamicTooltipContext>();
+    let tooltip_context: DynamicTooltipContext = expect_context();
     let tooltip_id = RwSignal::new(0);
-
     let show_tooltip = move |show_affixes, compare: bool| {
         let item_specs = item_specs.clone();
         let comparable_item_specs = comparable_item_specs.clone();
@@ -115,7 +122,6 @@ pub fn ItemCard(
             tooltip_position,
         ));
     };
-
     let hide_tooltip = {
         move || {
             tooltip_context.hide(tooltip_id.get_untracked());
@@ -255,9 +261,9 @@ pub fn ItemCard(
                 class=move || {
                     format!(
                         "relative z-10 object-contain max-w-full max-h-full p-1 transition-transform duration-75 ease-out
-                group-hover:scale-[1.045] group-hover:brightness-110
-                group-active:scale-[0.96] group-active:brightness-95
-                {}",
+                        group-hover:scale-[1.045] group-hover:brightness-110
+                        group-active:scale-[0.96] group-active:brightness-95
+                        {}",
                         if settings.uses_surface_effects() {
                             "xl:drop-shadow-[0px_6px_6px_black]"
                         } else {

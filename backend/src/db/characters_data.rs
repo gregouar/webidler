@@ -1,8 +1,8 @@
 use sqlx::FromRow;
 
 use shared::data::{
-    passive::PassivesTreeAscension, player::PlayerInventory, skill_mastery::PlayerSkillMasteries,
-    temple::PlayerBenedictions, user::UserCharacterId,
+    passive::PassivesTreeAscension, pets::PlayerPets, player::PlayerInventory,
+    skill_mastery::PlayerSkillMasteries, temple::PlayerBenedictions, user::UserCharacterId,
 };
 
 use crate::{
@@ -23,9 +23,47 @@ pub struct CharacterDataEntry {
     pub passives_data: Option<Vec<u8>>,
     pub benedictions_data: Option<Vec<u8>>,
     pub skill_masteries_data: Option<Vec<u8>>,
+    pub pets_data: Option<Vec<u8>>,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
+}
+
+pub async fn save_character_pets<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+    pets: &PlayerPets,
+) -> anyhow::Result<bool> {
+    let pets_data = rmp_serde::to_vec(pets)?;
+    let result = sqlx::query!(
+        "UPDATE characters_data SET
+            data_version = $2,
+            pets_data = $3,
+            updated_at = CURRENT_TIMESTAMP
+         WHERE character_id = $1",
+        character_id,
+        DATA_VERSION,
+        pets_data,
+    )
+    .execute(executor)
+    .await?;
+    Ok(result.rows_affected() > 0)
+}
+
+pub async fn load_character_pets<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<PlayerPets> {
+    let pets_data = sqlx::query_scalar!(
+        "SELECT pets_data FROM characters_data WHERE character_id = $1",
+        character_id,
+    )
+    .fetch_optional(executor)
+    .await?
+    .flatten();
+    Ok(pets_data
+        .and_then(|data| rmp_serde::from_slice(&data).ok())
+        .unwrap_or_default())
 }
 
 pub async fn save_character_inventory<'c>(
@@ -180,7 +218,18 @@ async fn upsert_character_benedictions_data<'c>(
     Ok(())
 }
 
-// TODO: Split
+pub async fn load_inventory_data<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> anyhow::Result<Option<InventoryData>> {
+    let character_data = read_character_data(executor, character_id).await?;
+    if let Some(character_data) = character_data {
+        Ok(Some(rmp_serde::from_slice(&character_data.inventory_data)?))
+    } else {
+        Ok(None)
+    }
+}
+
 pub async fn load_character_data<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
@@ -234,6 +283,7 @@ async fn read_character_data<'c>(
             passives_data,
             benedictions_data,
             skill_masteries_data,
+            pets_data,
             created_at,
             updated_at
          FROM characters_data WHERE character_id = $1

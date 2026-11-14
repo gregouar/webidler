@@ -132,6 +132,7 @@ pub enum ToasterPosition {
 pub enum ToastVariant {
     Normal,
     Success,
+    Achievement,
     Info,
     Warning,
     Error,
@@ -142,6 +143,7 @@ fn ToastIcon(variant: ToastVariant) -> impl IntoView {
     let badge_class = match variant {
         ToastVariant::Normal => "text-stone-200",
         ToastVariant::Success => "text-emerald-300",
+        ToastVariant::Achievement => "text-[#f0c75e]",
         ToastVariant::Info => "text-sky-300",
         ToastVariant::Warning => "text-amber-300",
         ToastVariant::Error => "text-rose-300",
@@ -189,6 +191,27 @@ fn ToastIcon(variant: ToastVariant) -> impl IntoView {
                             class="h-5 w-5"
                         >
                             <path d="m20 6-11 11-5-5" />
+                        </svg>
+                    }
+                        .into_any()
+                }
+                ToastVariant::Achievement => {
+                    view! {
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="h-5 w-5"
+                        >
+                            <path d="M8 21h8" />
+                            <path d="M12 17v4" />
+                            <path d="M7 4h10v4a5 5 0 0 1-10 0V4Z" />
+                            <path d="M7 6H4v2a4 4 0 0 0 4 4" />
+                            <path d="M17 6h3v2a4 4 0 0 1-4 4" />
                         </svg>
                     }
                         .into_any()
@@ -274,6 +297,12 @@ fn ToastView(
             "text-emerald-300/90",
             "text-stone-100",
             "Success",
+        ),
+        ToastVariant::Achievement => (
+            "bg-[#d9a928]/85",
+            "text-[#f0c75e]",
+            "text-amber-100",
+            "Achievement",
         ),
         ToastVariant::Info => ("bg-sky-300/70", "text-sky-300/90", "text-stone-100", "Info"),
         ToastVariant::Warning => (

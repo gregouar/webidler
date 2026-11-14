@@ -69,7 +69,7 @@
             "Trigger"      : {
               "trigger_id": "weapon_skill_life_on_hit",
               "skill_type": "Attack",
-              "OnHit"     : { "skill_ids": ["weapon_skill"], "is_hurt": true },
+              "OnHit"     : {"skill_id": "weapon_skill", "is_hurt": true},
               "target"    : "Source",
               "effects"   : [
                 { "Restore": {"restore_type": "Life", "value": 1, "modifier": "Flat"} }
@@ -98,7 +98,7 @@
             "Trigger"      : {
               "trigger_id": "weapon_skill_mana_on_hit",
               "skill_type": "Attack",
-              "OnHit"     : { "skill_ids": ["weapon_skill"], "is_hurt": true },
+              "OnHit"     : {"skill_id": "weapon_skill", "is_hurt": true},
               "target"    : "Source",
               "effects"   : [
                 { "Restore": {"restore_type": "Mana", "value": 1, "modifier": "Flat"} }
@@ -161,12 +161,12 @@
             }
           },
           {
-            "value"        : -1,
-            "upgrade_value": 0,
+            "value"        : -0.5,
+            "upgrade_value":  0  ,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
-                  "stat"      : {"Speed": {}},
+                  "stat": {"Speed": {}},
                   "conditions": [
                     { "HasItem": {"item_slot": "Shield", "not": true} }
                   ]
@@ -177,12 +177,12 @@
             }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
-                  "stat"      : { "Damage": {"skill_type": "Attack"} },
+                  "stat": { "Damage": {"skill_type": "Attack"} },
                   "conditions": [
                     { "HasItem": {"item_slot": "Shield", "not": true} }
                   ]
@@ -307,7 +307,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConverter": {
@@ -335,7 +335,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConverter": {
@@ -470,7 +470,7 @@
         "effects"     : [
           {
             "value"        : 20,
-            "upgrade_value": 0,
+            "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
@@ -492,7 +492,7 @@
           },
           {
             "value"        : -1e+200,
-            "upgrade_value": 0,
+            "upgrade_value":  0     ,
             "StatEffect"   : {
               "stat"    : { "Damage": {"skill_type": "Attack", "is_hit": true} },
               "modifier": "More",
@@ -553,7 +553,7 @@
               "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_fire"} },
               "modifier": "Flat"
             },
-            "hidden"       : true
+            "hidden": true
           },
           {
             "value"        : 10,
@@ -562,7 +562,7 @@
               "stat"    : { "StatusPower": {"status_id": "pyroclastic_infusion_storm"} },
               "modifier": "Flat"
             },
-            "hidden"       : true
+            "hidden": true
           }
         ]
       },
@@ -751,7 +751,7 @@
         "effects"     : [
           {
             "value"        : 100,
-            "upgrade_value": 0,
+            "upgrade_value":   0,
             "StatEffect"   : {
               "stat"    : {
                 "TriggerEffectModifier": {
@@ -781,7 +781,7 @@
             "StatEffect"   : {
               "stat"    : {
                 "SkillConditionalModifier": {
-                  "stat"      : {"Damage": {}},
+                  "stat": {"Damage": {}},
                   "conditions": [
                     { "StatusStacks": {"status_id": "bleed"} }
                   ]
@@ -848,7 +848,8 @@
                   "FlatDamage": {
                     "damage"     : { "Physical": [5, 10] },
                     "crit_chance": 5,
-                    "crit_damage": 100
+                    "crit_damage": 100,
+                    "item_slot"  : "Shield"
                   }
                 },
                 { "ApplyStatus": {"status_id": "poison", "value": 0}, "optional_application": true }
@@ -905,7 +906,7 @@
             }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "retaliate_vulnerability"} },
@@ -921,8 +922,8 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 { "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
@@ -995,8 +996,8 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 { "stat": {"CritChance": {}}, "modifier": "Flat", "value": 1 }
@@ -1027,8 +1028,8 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"              : 1,
-            "upgrade_value"      : 0,
+            "value"        : 1,
+            "upgrade_value": 0,
             "SkillModifierEffect": {
               "effects": [
                 {
@@ -1169,7 +1170,7 @@
             }
           },
           {
-            "value"        : 0,
+            "value"        :  0,
             "upgrade_value": 15,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "double_strike_feint"} },
@@ -1193,6 +1194,16 @@
             "value"        : 10,
             "upgrade_value": 10,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "hidden"       : true,
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "acid_rain"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
           }
         ]
       },
@@ -1244,13 +1255,23 @@
       "big_arrows" : {
         "title"       : "Meteor Shower",
         "base_cost"   : 10,
-        "upgrade_cost": 1,
-        "max_level"   : 10,
+        "upgrade_cost": 5,
+        "max_level"   : 5,
         "effects"     : [
           {
-            "value"        : 65,
-            "upgrade_value": 15,
+            "value"        : 100,
+            "upgrade_value": 50,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "hidden"       : true,
+            "value"        : 100,
+            "upgrade_value": 50,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "acid_rain"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
           },
           {
             "value"        : 1,
@@ -1261,8 +1282,8 @@
             }
           },
           {
-            "value"        : -100,
-            "upgrade_value": 0,
+            "value"        : -185,
+            "upgrade_value":    0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
               "scope"   : "Global",
@@ -1279,7 +1300,7 @@
         "effects"     : [
           {
             "value"        : 50,
-            "upgrade_value": 0,
+            "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : { "SkillRepeat": {"skill_id": "rain_arrows"} },
               "scope"   : "Global",
@@ -1287,9 +1308,151 @@
             }
           },
           {
-            "value"        : -33,
+            "value"        : -100,
             "upgrade_value": 0,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
+          },
+          {
+            "hidden"       : true,
+            "value"        : -100,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "acid_rain"} },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "blast_arrow"         : {
+    "max_level": 100,
+    "upgrades" : {
+      "damage"      : {
+        "title"       : "Damage",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "Damage": {"skill_id": "blast_arrow"} },
+              "modifier": "More"
+            }
+          },
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "blast_charge"} },
+              "modifier": "More"
+            }
+          }
+        ]
+      },
+      "speed"       : {
+        "title"       : "Attack Speed",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "stacks"      : {
+        "title"       : "Long Fuse",
+        "base_cost"   : 2,
+        "upgrade_cost": 2,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : {
+              "stat"    : { "StatusStacks": {"status_id": "blast_charge"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "stack_damage": {
+        "title"       : "Compound Explosion",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 50,
+            "upgrade_value":  0,
+            "StatEffect"   : {
+              "stat"    : {
+                "TriggerEffectModifier": {
+                  "stat"    : {"Damage": {}},
+                  "skill_id": "blast_charge",
+                  "source"  : {"TriggerStatusStacks": {}}
+                }
+              },
+              "modifier": "More",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "stack_crit"  : {
+        "title"       : "Critical Mass",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "stat"    : {
+                "TriggerEffectModifier": {
+                  "stat"    : {"CritChance": {}},
+                  "skill_id": "blast_charge",
+                  "source"  : {"TriggerStatusStacks": {}}
+                }
+              },
+              "modifier": "Flat",
+              "scope"   : "Global"
+            }
+          }
+        ]
+      },
+      "cluster"     : {
+        "title"       : "Cluster Bombs",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "Trigger"      : {
+              "trigger_id"   : "blast_arrow_cluster",
+              "target"       : "SameTarget",
+              "skill_type"   : "Attack",
+              "skill_shape"  : "Contact",
+              "OnApplyStatus": {"status_id": "blast_charge", "is_triggered": false},
+              "effects"      : [
+                {
+                  "ApplyStatus": { "status_id": "blast_charge", "value": [5, 15] }
+                }
+              ],
+              "description": "Inflict Blast Charge"
+            }
           }
         ]
       }
@@ -1521,6 +1684,132 @@
                 }
               ]
             }
+          }
+        ]
+      }
+    }
+  },
+  "taunt"               : {
+    "max_level": 100,
+    "upgrades" : {
+      "power"               : {
+        "title"       : "Taunt Effects",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 100,
+        "effects"     : [
+          {
+            "value"        : 2,
+            "upgrade_value": 2,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "taunt"} },
+              "modifier": "Flat"
+            }
+          }
+        ]
+      },
+      "taunt_refresh"       : {
+        "title"       : "Provocation",
+        "base_cost"   : 5,
+        "upgrade_cost": 5,
+        "max_level"   : 3,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 1,
+            "StatEffect"   : { "stat": {"RefreshedCooldown": {}}, "modifier": "Flat" }
+          },
+          {
+            "value"        : 15,
+            "upgrade_value": 15,
+            "StatEffect"   : {
+              "stat"    : { "StatusPower": {"status_id": "taunt"} },
+              "modifier": "Increased"
+            }
+          }
+        ]
+      },
+      "threat_speed"        : {
+        "title"       : "Threatening Face",
+        "base_cost"   : 1,
+        "upgrade_cost": 1,
+        "max_level"   : 10,
+        "effects"     : [
+          {
+            "value"        : 10,
+            "upgrade_value": 10,
+            "StatEffect"   : {"scope": "Global", "modifier": "More", "stat": "ThreatGain"}
+          },
+          {
+            "value"        : 3,
+            "upgrade_value": 3,
+            "StatEffect"   : { "modifier": "Increased", "stat": {"Speed": {}} }
+          }
+        ]
+      },
+      "armor_damage"        : {
+        "title"       : "Daunting Presence",
+        "base_cost"   : 20,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 3,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "scope"   : "Global",
+              "modifier": "Flat",
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Armor": {"damage_type": "Physical"} },
+                  "stat"      : { "StatusPower": {"status_id": "taunt"} },
+                  "is_extra"  : true,
+                  "skill_type": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "poison_vulnerability": {
+        "title"       : "Toxic Personality",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "vulnerability_poison", "value": 100} }
+          },
+          {
+            "value"        : 5,
+            "upgrade_value": 0,
+            "StatEffect"   : {
+              "modifier": "Flat",
+              "scope"   : "Global",
+              "stat"    : {
+                "StatConverter": {
+                  "source"    : { "Armor": {"damage_type": "Poison"} },
+                  "stat"      : { "StatusPower": {"status_id": "vulnerability_poison"} },
+                  "is_extra"  : true,
+                  "skill_type": null
+                }
+              }
+            }
+          }
+        ]
+      },
+      "critical"            : {
+        "title"       : "Reckless Mockery",
+        "base_cost"   : 10,
+        "upgrade_cost": 0,
+        "max_level"   : 1,
+        "effects"     : [
+          {
+            "value"        : 1,
+            "upgrade_value": 0,
+            "SkillEffect"  : { "ApplyStatus": {"status_id": "taunt_critical", "value": 100} }
           }
         ]
       }

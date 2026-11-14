@@ -1,5 +1,56 @@
 {
-    "righteous_fire"            : {
+    "spark": {
+        "name"      : "Sparking",
+        "icon"      : "skills/spark.svg",
+        "debuff"    : false,
+        "duration"  : 3,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_owner_effects": true,
+                    "trigger_id"           : "spark",
+                    "target"               : "Enemy",
+                    "skill_type"           : "Spell",
+                    "skill_repeat"         : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
+                    "OnTick"               : {"tick_interval": 3},
+                    "effects"              : [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Storm": [0, 3] }
+                            }
+                        }
+                    ],
+                    "modifiers"            : [
+                        {
+                            "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark"} },
+                            "modifier": "Flat",
+                            "factor"  : 1,
+                            "source"  : { "TriggerStatusStacks": {"ignore_initial": true} },
+                            "hidden"  : true
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "spark_crit_vuln": {
+        "name"      : "Critical Accumulation",
+        "icon"      : "skills/spark.svg",
+        "debuff"    : true,
+        "duration"  : 1,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"CritDamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "righteous_fire": {
         "name"       : "Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -11,7 +62,7 @@
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 5, "modifier": "Percent" }
         ]
     },
-    "righteous_fire_self"       : {
+    "righteous_fire_self": {
         "name"       : "Self-Righteous Fire",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -22,7 +73,7 @@
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 20, "modifier": "Percent" }
         ]
     },
-    "unrighteous_fire"          : {
+    "unrighteous_fire": {
         "name"       : "Unrighteous Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -34,7 +85,7 @@
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 5, "modifier": "Percent" }
         ]
     },
-    "unrighteous_fire_self"     : {
+    "unrighteous_fire_self": {
         "name"       : "Self-Loathing Pestilence",
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
@@ -45,7 +96,7 @@
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 20, "modifier": "Percent" }
         ]
     },
-    "blizzard_vulnerability"    : {
+    "blizzard_vulnerability": {
         "name"      : "Chilblains",
         "icon"      : "statuses/hand_bandage.svg",
         "debuff"    : true,
@@ -59,7 +110,7 @@
             }
         ]
     },
-    "burning_ray_scorching"     : {
+    "burning_ray_scorching": {
         "name"      : "Scorched",
         "icon"      : "passives/flaming_claw.svg",
         "debuff"    : true,
@@ -89,6 +140,124 @@
                 "value"       : 100,
                 "modifier"    : "Percent"
             }
+        ]
+    },
+    "heal_buff_damage": {
+        "name"      : "Refreshed",
+        "icon"      : "statuses/heal_refresh.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 50.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "heal_debuff_damage": {
+        "name"      : "Cleansed",
+        "icon"      : "statuses/heal_cleanse.svg",
+        "debuff"    : false,
+        "duration"  : 4,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "bees": {
+        "name"      : "Bees",
+        "icon"      : "skills/bee.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_player_effects": true,
+                    "trigger_id"            : "bees",
+                    "target"                : "Me",
+                    "skill_type"            : "Spell",
+                    "trigger_propagate"     : true,
+                    "OnTick"                : {"tick_interval": 5},
+                    "effects"               : [
+                        {
+                            "FlatDamage": { "damage": {"Physical": 0} }
+                        }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Min"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.01,
+                            "source"  : "TriggerStatusValue"
+                        },
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Physical", "min_max": "Max"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.02,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "bees_poison": {
+        "name"      : "Stinging Bees",
+        "icon"      : "skills/bee.svg",
+        "debuff"    : true,
+        "duration"  : 5,
+        "max_stacks": 5,
+        "effects"   : [
+            {
+                "Trigger" : {
+                    "inherit_player_effects": true,
+                    "trigger_id"            : "bees",
+                    "target"                : "Me",
+                    "skill_type"            : "Spell",
+                    "trigger_propagate"     : true,
+                    "OnTick"                : {"tick_interval": 5},
+                    "effects"               : [
+                        { "ApplyStatus": {"status_id": "bees_poison_damage", "value": 0} }
+                    ],
+                    "modifiers"             : [
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Poison", "min_max": "Min"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.02,
+                            "source"  : "TriggerStatusValue"
+                        },
+                        {
+                            "stat"    : { "Damage": {"damage_type": "Poison", "min_max": "Max"} },
+                            "modifier": "Flat",
+                            "factor"  : 0.04,
+                            "source"  : "TriggerStatusValue"
+                        }
+                    ]
+                },
+                "value"   : 1,
+                "modifier": "Flat"
+            }
+        ]
+    },
+    "bees_poison_damage": {
+        "name"       : "Stung",
+        "icon"       : "statuses/poison.svg",
+        "debuff"     : true,
+        "damage_type": "Poison",
+        "avoidable"  : true,
+        "duration"   : 1,
+        "max_stacks" : 20,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
         ]
     }
 }

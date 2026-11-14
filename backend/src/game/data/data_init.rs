@@ -71,6 +71,7 @@ impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
                 effects: specs.effects.clone(),
                 conditional_modifiers: Default::default(),
             },
+            max_level: specs.max_level,
             movement_cooldown: specs.movement_cooldown,
             gold_find: specs.gold_find,
             threat_gain: specs.threat_gain,

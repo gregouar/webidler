@@ -21,11 +21,13 @@ pub fn ResourceRewardOverlay(#[prop(into)] reward: Signal<ResourceReward>) -> im
     view! {
         <For each=move || vec![reward.get()] key=|reward| reward.0 let(reward)>
             <Show when=move || { reward.1 > 0.0 }>
-                <div class="
-                reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
-                absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
-                flex items-center gap-1 font-number"
-                style="top: calc(50% - 1.5rem);">
+                <div
+                    class="
+                    reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
+                    absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    flex items-center gap-1 font-number"
+                    style="top: calc(50% - 1.5rem);"
+                >
                     <span>+{format_number(reward.1)}</span>
                     <img
                         draggable="false"
@@ -37,11 +39,13 @@ pub fn ResourceRewardOverlay(#[prop(into)] reward: Signal<ResourceReward>) -> im
             </Show>
 
             <Show when=move || { reward.2 > 0.0 }>
-                <div class="
-                reward-float gems-text text-fuchsia-400 text-lg xl:text-2xl text-shadow-md
-                absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
-                flex items-center gap-1 font-number"
-                style="top: calc(50% + 1.5rem);">
+                <div
+                    class="
+                    reward-float gems-text text-fuchsia-400 text-lg xl:text-2xl text-shadow-md
+                    absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    flex items-center gap-1 font-number"
+                    style="top: calc(50% + 1.5rem);"
+                >
                     <span>+{format_number(reward.2)}</span>
                     <img
                         draggable="false"

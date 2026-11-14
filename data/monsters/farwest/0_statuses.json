@@ -1,0 +1,19 @@
+{
+    "hanged": {
+        "name"       : "Hanged",
+        "icon"       : "skills/slipknot.svg",
+        "damage_type": "Physical",
+        "avoidable"  : true,
+        "debuff"     : true,
+        "duration"   : 5,
+        "max_stacks" : 1,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" },
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "More", "debuff": true},
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
+    }
+}

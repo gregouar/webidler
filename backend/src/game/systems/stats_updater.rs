@@ -130,36 +130,45 @@ pub fn check_condition(
         Condition::StatusStacks {
             status_filter,
             skill_type,
-        } => character_state
-            .statuses
-            .iter()
-            .map(|(status_id, status_states)| {
-                let Some(status_specs) = statuses_store.get(status_id) else {
-                    return 0;
-                };
-                if status_filter.is_match_with_status(
-                    status_id,
-                    status_specs.damage_type,
-                    status_specs.debuff,
-                ) {
-                    skill_type
-                        .map(|skill_type| {
-                            status_states
-                                .iter()
-                                .map(|status_state| {
-                                    (status_state.skill_type == skill_type) as usize
-                                })
-                                .sum()
-                        })
-                        .unwrap_or(status_states.len())
-                } else {
-                    0
-                }
-            })
-            .sum::<usize>() as f64,
+            min_stacks,
+        } => {
+            let stacks = character_state
+                .statuses
+                .iter()
+                .map(|(status_id, status_states)| {
+                    let Some(status_specs) = statuses_store.get(status_id) else {
+                        return 0;
+                    };
+                    if status_filter.is_match_with_status(
+                        status_id,
+                        status_specs.damage_type,
+                        status_specs.debuff,
+                    ) {
+                        skill_type
+                            .map(|skill_type| {
+                                status_states
+                                    .iter()
+                                    .map(|status_state| {
+                                        (status_state.skill_type == skill_type) as usize
+                                    })
+                                    .sum()
+                            })
+                            .unwrap_or(status_states.len())
+                    } else {
+                        0
+                    }
+                })
+                .sum::<usize>();
+            if stacks >= *min_stacks as usize {
+                stacks as f64
+            } else {
+                0.0
+            }
+        }
         Condition::StatusDuration {
             status_filter,
             skill_type,
+            use_max_duration,
         } => character_state
             .statuses
             .iter()
@@ -173,7 +182,13 @@ pub fn check_condition(
             .filter(|status_state| {
                 skill_type.is_none_or(|skill_type| status_state.skill_type == skill_type)
             })
-            .map(|status_state| status_state.duration.get())
+            .map(|status_state| {
+                if *use_max_duration {
+                    status_state.max_duration.get()
+                } else {
+                    status_state.duration.get()
+                }
+            })
             .fold(0.0_f64, f64::max),
         Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
             let Some(status_specs) = statuses_store.get(status_id) else {
@@ -200,8 +215,14 @@ pub fn check_condition(
         Condition::LowLife => {
             (character_state.life.get() <= character_attrs.max_life.get() * 0.5) as usize as f64
         }
+        Condition::NotLowLife => {
+            (character_state.life.get() > character_attrs.max_life.get() * 0.5) as usize as f64
+        }
         Condition::LowMana => {
             (character_state.mana.get() <= character_attrs.max_mana.get() * 0.5) as usize as f64
+        }
+        Condition::NotLowMana => {
+            (character_state.mana.get() > character_attrs.max_mana.get() * 0.5) as usize as f64
         }
         Condition::ThreatLevel => area_threat.threat_level as f64,
         Condition::HasItem {
@@ -217,12 +238,12 @@ pub fn check_condition(
                             item_slot
                                 .map(|item_slot| {
                                     equipped_slot == item_slot
-                                        || item_specs.base.extra_slots.contains(&item_slot)
+                                        || item_specs.extra_slots.contains(&item_slot)
                                 })
                                 .unwrap_or(true)
                                 && item_category
                                     .map(|item_category| {
-                                        item_specs.base.categories.contains(&item_category)
+                                        item_specs.categories.contains(&item_category)
                                     })
                                     .unwrap_or(true)
                         })

@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_dec_threat_t1" : {
     "name"        : "Sneaky",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-15, -10] }
     ]
   },
-  {
+  "item_dec_threat_t2" : {
     "name"        : "Furtive",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-25, -20] }
     ]
   },
-  {
+  "item_dec_threat_t3" : {
     "name"        : "Stealthy",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-35, -30] }
     ]
   },
-  {
+  "item_dec_threat_t4" : {
     "name"        : "Hidden",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-45, -40] }
     ]
   },
-  {
+  "item_dec_threat_t5" : {
     "name"        : "Veiled",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-55, -50] }
     ]
   },
-  {
+  "item_dec_threat_t6" : {
     "name"        : "Masked",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-65, -60] }
     ]
   },
-  {
+  "item_dec_threat_t7" : {
     "name"        : "Cloaked",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-75, -70] }
     ]
   },
-  {
+  "item_dec_threat_t8" : {
     "name"        : "Shadowed",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-85, -80] }
     ]
   },
-  {
+  "item_dec_threat_t9" : {
     "name"        : "Obscured",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-95, -90] }
     ]
   },
-  {
+  "item_dec_threat_t10": {
     "name"        : "Invisible",
     "family"      : "dec_threat",
     "tags"        : ["Stealth"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": "ThreatGain", "modifier": "Increased", "value": [-120, -100] }
     ]
   }
-]
+}

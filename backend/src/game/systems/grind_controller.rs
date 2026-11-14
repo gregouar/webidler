@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
     data::{
@@ -88,89 +90,110 @@ fn generate_end_grind_rewards(
 ) -> GrindRewards {
     let area_level = game_data.area_state.read().max_area_level;
 
-    // Up to 2 rewards are edict, only 1 if only 2 rewards available.
     let rewards_amount = if area_level >= ITEM_REWARDS_MIN_LEVEL && !game_data.area_specs.training {
         game_data.area_specs.reward_slots
     } else {
         0
     };
 
+    // Up to 4 rewards max, with rare one first; first 2 rewards are always normal
+    let (amount_normal_rewards, amount_rare_rewards) = if rewards_amount >= 6 {
+        (0, 4)
+    } else if rewards_amount == 5 {
+        (1, 3)
+    } else if rewards_amount >= 2 {
+        (2, rewards_amount - 2)
+    } else {
+        (rewards_amount, 0)
+    };
+
+    // // Up to 2 rewards are edict, only 1 if only 2 rewards available.
     let amount_map_rewards = if area_level >= ITEM_REWARDS_MAP_MIN_LEVEL {
         if rewards_amount > 2 { 2 } else { 1 }
     } else {
         0
-    };
-
-    let amount_normal_rewards = (2 - amount_map_rewards).min(rewards_amount);
-    let amount_rare_rewards = rewards_amount - amount_normal_rewards - amount_map_rewards;
+    }
+    .min(amount_normal_rewards);
+    let amount_normal_rewards = amount_normal_rewards - amount_map_rewards;
 
     let item_level = area_level
         .saturating_add(*game_data.area_specs.item_level_modifier)
         .saturating_add(*game_data.area_specs.power_level);
 
-    let item_rewards = (0..amount_map_rewards)
-        .flat_map(|_| {
-            loot_generator::generate_loot(
-                &game_data.area_blueprint.loot_table,
+    let mut prevent_roll = HashSet::new();
+
+    let mut item_rewards = Vec::new();
+    for _ in 0..amount_map_rewards {
+        let item = loot_generator::generate_loot(
+            &game_data.area_blueprint.loot_table,
+            &master_store.items_store,
+            &MAP_LOOT_TEMPLATE,
+            item_level,
+            0,
+            false,
+            *game_data.area_specs.loot_rarity,
+            0.0,
+            Some(&prevent_roll),
+        );
+        if let Some(item) = item {
+            if item.modifiers.rarity == ItemRarity::Unique {
+                prevent_roll.insert(item.modifiers.base_item_id.clone());
+            }
+            item_rewards.push(item);
+        }
+    }
+    for _ in 0..amount_normal_rewards {
+        let item = loot_generator::generate_loot(
+            &game_data.area_blueprint.loot_table,
+            &master_store.items_store,
+            &DEFAULT_LOOT_TEMPLATE,
+            item_level,
+            0,
+            false,
+            *game_data.area_specs.loot_rarity,
+            0.0,
+            Some(&prevent_roll),
+        );
+        if let Some(item) = item {
+            if item.modifiers.rarity == ItemRarity::Unique {
+                prevent_roll.insert(item.modifiers.base_item_id.clone());
+            }
+            item_rewards.push(item);
+        }
+    }
+    for _ in 0..amount_rare_rewards {
+        let item = if let Some(reward_loot_table) = &game_data.area_blueprint.reward_loot_table {
+            loot_generator::roll_item(
+                reward_loot_table,
                 &master_store.items_store,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
-                &MAP_LOOT_TEMPLATE,
-                item_level,
-                0,
-                false,
-                *game_data.area_specs.loot_rarity,
-                0.0,
-            )
-        })
-        .chain((0..amount_normal_rewards).flat_map(|_| {
-            loot_generator::generate_loot(
-                &game_data.area_blueprint.loot_table,
-                &master_store.items_store,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 &DEFAULT_LOOT_TEMPLATE,
                 item_level,
                 0,
-                false,
-                *game_data.area_specs.loot_rarity,
+                true,
+                ItemRarity::Unique,
                 0.0,
+                Some(&prevent_roll),
             )
-        }))
-        .chain((0..amount_rare_rewards).flat_map(|_| {
-            if let Some(reward_loot_table) = &game_data.area_blueprint.reward_loot_table {
-                loot_generator::roll_item(
-                    reward_loot_table,
-                    &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
-                    &DEFAULT_LOOT_TEMPLATE,
-                    item_level,
-                    0,
-                    true,
-                    ItemRarity::Unique,
-                    0.0,
-                )
-            } else {
-                loot_generator::generate_loot(
-                    &game_data.area_blueprint.loot_table,
-                    &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
-                    &DEFAULT_LOOT_TEMPLATE,
-                    item_level,
-                    0,
-                    true,
-                    *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
-                    0.0,
-                )
+        } else {
+            loot_generator::generate_loot(
+                &game_data.area_blueprint.loot_table,
+                &master_store.items_store,
+                &DEFAULT_LOOT_TEMPLATE,
+                item_level,
+                0,
+                true,
+                *game_data.area_specs.loot_rarity * ITEM_REWARDS_RARE_FACTOR,
+                0.0,
+                Some(&prevent_roll),
+            )
+        };
+        if let Some(item) = item {
+            if item.modifiers.rarity == ItemRarity::Unique {
+                prevent_roll.insert(item.modifiers.base_item_id.clone());
             }
-        }))
-        .collect();
+            item_rewards.push(item);
+        }
+    }
 
     let quest_reward = generate_quest_reward(master_store, game_data);
 
@@ -196,21 +219,19 @@ fn generate_quest_reward(
             item_rarity,
             max_affixes,
         } => {
-            let base = master_store.items_store.content.get(item_id)?.clone();
-            let rarity = if base.rarity == ItemRarity::Unique {
+            let item_base = master_store.items_store.items.get(item_id)?;
+            let rarity = if item_base.rarity == ItemRarity::Unique {
                 ItemRarity::Unique
             } else {
-                item_rarity.unwrap_or(base.rarity)
+                item_rarity.unwrap_or(item_base.rarity)
             };
             Some(loot_generator::roll_item_stats(
+                &master_store.items_store,
                 item_id.clone(),
-                base,
+                item_base,
                 rarity,
                 *level,
                 0,
-                &master_store.item_affixes_table,
-                &master_store.item_adjectives_table,
-                &master_store.item_nouns_table,
                 *max_affixes,
                 0.0,
             ))
@@ -249,28 +270,24 @@ fn generate_quest_reward(
                 Some(rarity) => loot_generator::roll_item(
                     loot_table,
                     &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
                     &template,
                     *level,
                     0,
                     true,
                     *rarity,
                     0.0,
+                    None,
                 ),
                 None => loot_generator::generate_loot(
                     loot_table,
                     &master_store.items_store,
-                    &master_store.item_affixes_table,
-                    &master_store.item_adjectives_table,
-                    &master_store.item_nouns_table,
                     &template,
                     *level,
                     0,
                     true,
                     *game_data.area_specs.loot_rarity,
                     0.0,
+                    None,
                 ),
             }
         }

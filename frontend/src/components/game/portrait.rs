@@ -78,6 +78,15 @@ pub fn CharacterPortrait(
     });
 
     let data_context: DataContext = expect_context();
+    let image_uri = data_context
+        .cosmetics_specs
+        .read_untracked()
+        .get(&image_uri)
+        .and_then(|cosmetic| match cosmetic {
+            shared::data::cosmetics::CosmeticType::Portrait(specs) => Some(specs.image.clone()),
+            _ => None,
+        })
+        .unwrap_or(image_uri);
 
     let statuses_map = Memo::new(move |_| {
         statuses.read().iter().fold(
@@ -290,7 +299,17 @@ pub fn CharacterPortrait(
                     // <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
                     <img
                         draggable="false"
-                        src=img_asset(&image_uri)
+                        // TODO: Move to backend authority later
+                        src={
+                            let wolf_curse = "wolf_curse".to_string().into();
+                            move || {
+                                if statuses_map.read().contains_key(&wolf_curse) {
+                                    img_asset("adventurers/werewolf_male.webp")
+                                } else {
+                                    img_asset(&image_uri)
+                                }
+                            }
+                        }
                         alt=character_name
                         class=move || {
                             format!(
@@ -598,6 +617,7 @@ fn StatusIcon(
                                 character_triggers
                                     .map(|character_triggers| character_triggers.read())
                                     .as_deref(),
+                                None,
                             )}
                         </div>
                     }

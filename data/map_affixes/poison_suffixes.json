@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_extra_poison_damage_t1": {
     "name"        : "of Sickness",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -10,7 +10,7 @@
     "item_level"  : 100,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -22,10 +22,10 @@
         "value"   : 40
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 20},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 4}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  4}
     ]
   },
-  {
+  "map_extra_poison_damage_t2": {
     "name"        : "of Infection",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -36,7 +36,7 @@
     "item_level"  : 200,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -48,10 +48,10 @@
         "value"   : 80
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 40},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 8}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  8}
     ]
   },
-  {
+  "map_extra_poison_damage_t3": {
     "name"        : "of Contagion",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -62,7 +62,7 @@
     "item_level"  : 300,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -74,10 +74,10 @@
         "value"   : 120
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 60},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 12}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value": 12}
     ]
   },
-  {
+  "map_extra_poison_damage_t4": {
     "name"        : "of Toxicity",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -88,7 +88,7 @@
     "item_level"  : 400,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -100,10 +100,10 @@
         "value"   : 160
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 80},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 16}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value": 16}
     ]
   },
-  {
+  "map_extra_poison_damage_t5": {
     "name"        : "of Venom",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -114,7 +114,7 @@
     "item_level"  : 500,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -126,10 +126,10 @@
         "value"   : 200
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 100},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 20}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  20}
     ]
   },
-  {
+  "map_extra_poison_damage_t6": {
     "name"        : "of Pestilence",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -140,7 +140,7 @@
     "item_level"  : 600,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -152,10 +152,10 @@
         "value"   : 240
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 120},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 24}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  24}
     ]
   },
-  {
+  "map_extra_poison_damage_t7": {
     "name"        : "of Corruption",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -166,7 +166,7 @@
     "item_level"  : 700,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -178,10 +178,10 @@
         "value"   : 280
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 140},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 28}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  28}
     ]
   },
-  {
+  "map_extra_poison_damage_t8": {
     "name"        : "of Putrefaction",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -192,7 +192,7 @@
     "item_level"  : 800,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -204,10 +204,10 @@
         "value"   : 320
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 160},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 32}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  32}
     ]
   },
-  {
+  "map_extra_poison_damage_t9": {
     "name"        : "of Necrosis",
     "family"      : "extra_poison_damage",
     "tags"        : ["Poison"],
@@ -218,7 +218,7 @@
     "item_level"  : 900,
     "effects"     : [
       {
-        "scope"   : "Local",
+        "scope": "Local",
         "stat"    : {
           "StatConverter": {
             "source"  : {"DamageOverTime": {}},
@@ -230,7 +230,7 @@
         "value"   : 400
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 200},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 40}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  40}
     ]
   }
-]
+}

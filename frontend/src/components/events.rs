@@ -7,7 +7,8 @@ use leptos::{
         Element, HtmlInputElement, HtmlTextAreaElement, wasm_bindgen::JsCast, wasm_bindgen::JsValue,
     },
 };
-use leptos_use::{use_document, use_event_listener};
+use leptos_use_document::use_document;
+use leptos_use_event_listener::use_event_listener;
 
 pub fn keyboard_event_key(ev: &web_sys::KeyboardEvent) -> Option<String> {
     keyboard_event_string_property(ev, "key")

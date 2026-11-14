@@ -1,0 +1,226 @@
+{
+  "remnant_evade_lucky"           : {
+    "name"        : "Slippery",
+    "family"      : "remnant_affix",
+    "tags"        : ["Armor", "Stealth", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Boots", "Accessory"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "Lucky": { "skill_type": null, "skill_id": null, "roll_type": {"Evade": null} }
+        },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100.0
+      }
+    ]
+  },
+  "remnant_2h_to_1h"              : {
+    "name"        : "Balanced",
+    "family"      : "remnant_affix",
+    "tags"        : ["Attack", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["MeleeWeapon2H"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "stat": {"RemoveSlotUse": "Shield"              }, "modifier": "Flat", "scope": "Local", "value":   1 },
+      { "stat": {                           "Damage": {}}, "modifier": "More", "scope": "Local", "value": -43 }
+    ]
+  },
+  "remnant_crit_immune"           : {
+    "name"        : "Unwavering",
+    "family"      : "remnant_affix",
+    "tags"        : ["Armor", "Critical", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Helmet", "Body"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "stat": {"CritDamageTaken": {}}, "modifier": "More", "scope": "Global", "value": -1e300 }
+    ]
+  },
+  "remnant_more_armor"            : {
+    "name"        : "Armored",
+    "family"      : "remnant_affix",
+    "tags"        : ["Armor", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Amulet", "Shield"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "stat": {"Armor": null}, "modifier": "More", "scope": "Global", "value": [20, 30] }
+    ]
+  },
+  "remnant_elemental_armor"       : {
+    "name"        : "Insulated",
+    "family"      : "remnant_affix",
+    "tags"        : ["Armor", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Armor"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "stat": {"Armor": "Elemental"}, "modifier": "Flat", "scope": "Global", "value": [200, 300] }
+    ]
+  },
+  "remnant_vulnerability_physical": {
+    "name"        : "Frail",
+    "family"      : "remnant_affix",
+    "tags"        : ["Status", "Physical", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Gloves", "Ring"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusOnHit": {"status_id": "vulnerability_physical"} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100
+      }
+    ]
+  },
+  "remnant_vulnerability_fire"    : {
+    "name"        : "Flammable",
+    "family"      : "remnant_affix",
+    "tags"        : ["Status", "Fire", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Gloves", "Ring"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusOnHit": {"status_id": "vulnerability_fire"} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100
+      }
+    ]
+  },
+  "remnant_vulnerability_storm"   : {
+    "name"        : "Conductive",
+    "family"      : "remnant_affix",
+    "tags"        : ["Status", "Storm", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Gloves", "Ring"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusOnHit": {"status_id": "vulnerability_storm"} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100
+      }
+    ]
+  },
+  "remnant_vulnerability_poison"  : {
+    "name"        : "Putrid",
+    "family"      : "remnant_affix",
+    "tags"        : ["Status", "Poison", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Gloves", "Ring"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusOnHit": {"status_id": "vulnerability_poison"} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100
+      }
+    ]
+  },
+  "remnant_1h_multi"              : {
+    "name"        : "Flickering",
+    "family"      : "remnant_affix",
+    "tags"        : ["Attack", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["MeleeWeapon1H"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "SkillTargetModifier": {
+            "skill_id": "weapon_skill",
+            "range"   : "Any",
+            "repeat"  : {"min_value": 2, "max_value": 3, "target": "Any"}
+          }
+        },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
+      }
+    ]
+  },
+  "remnant_unblockable_attack"    : {
+    "name"        : "Inexorable",
+    "family"      : "remnant_affix",
+    "tags"        : ["Attack", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["MeleeWeapon1H", "Shield"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "SkillEffectModifier": {"skill_type": "Attack", "unblockable": true} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
+      }
+    ]
+  },
+  "remnant_allocate_rune"         : {
+    "name"        : "Innate",
+    "family"      : "remnant_affix",
+    "tags"        : ["Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Rune"],
+    "item_level"  : 600,
+    "effects"     : [
+      {"stat": "MaxPlayerLevel", "modifier": "Flat", "scope": "Global", "value": -1},
+      {
+        "stat"    : {"AllocatePassive": "00000000-0000-0000-0000-000000000000"},
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
+      }
+    ]
+  },
+  "remnant_map_shards"            : {
+    "name"        : "Sharding",
+    "family"      : "remnant_affix",
+    "tags"        : ["Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Map"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {"Description2": "Unlock Power Shards up to 150 extra Area Levels"},
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
+      }
+    ]
+  }
+}

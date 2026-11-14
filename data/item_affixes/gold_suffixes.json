@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_gold_t1" : {
     "name"        : "of Greed",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [25, 45] }
     ]
   },
-  {
+  "item_inc_gold_t2" : {
     "name"        : "of Cupidity",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [55, 70] }
     ]
   },
-  {
+  "item_inc_gold_t3" : {
     "name"        : "of Avarice",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [80, 95] }
     ]
   },
-  {
+  "item_inc_gold_t4" : {
     "name"        : "of Covetousness",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [105, 120] }
     ]
   },
-  {
+  "item_inc_gold_t5" : {
     "name"        : "of Rapacity",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [130, 145] }
     ]
   },
-  {
+  "item_inc_gold_t6" : {
     "name"        : "of Plunder",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [160, 180] }
     ]
   },
-  {
+  "item_inc_gold_t7" : {
     "name"        : "of Pillage",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [195, 220] }
     ]
   },
-  {
+  "item_inc_gold_t8" : {
     "name"        : "of Looting",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [235, 265] }
     ]
   },
-  {
+  "item_inc_gold_t9" : {
     "name"        : "of Hoarding",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [280, 320] }
     ]
   },
-  {
+  "item_inc_gold_t10": {
     "name"        : "of Gluttony",
     "family"      : "inc_gold",
     "tags"        : ["Gold"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": "GoldFind", "modifier": "More", "value": [350, 400] }
     ]
   }
-]
+}

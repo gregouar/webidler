@@ -11,7 +11,8 @@ use shared::{
         player::{CharacterSpecs, PlayerInventory},
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
         stat_effect::{
-            EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType, compare_options,
+            EffectsMap, LuckyRollType, StatConverterSource, StatEffect, StatType, ToDamageTypes,
+            compare_options,
         },
         trigger::TriggerEffectModifierSource,
     },
@@ -173,8 +174,10 @@ pub fn update_character_specs(
             .entry(skill_type)
             .or_default()
             .value
-            .base_mut()
-            .set_bounds(Some(0.0), Some(MAX_BLOCK));
+            .base_mut(|mut base| {
+                base.set_bounds(Some(0.0), Some(MAX_BLOCK));
+                base
+            });
     }
 
     for damage_type in DamageType::iter() {
@@ -184,8 +187,10 @@ pub fn update_character_specs(
             .entry(damage_type)
             .or_default()
             .value
-            .base_mut()
-            .set_bounds(Some(0.0), Some(MAX_EVADE));
+            .base_mut(|mut base| {
+                base.set_bounds(Some(0.0), Some(MAX_EVADE));
+                base
+            });
     }
 
     // for skill_type in SkillType::iter() {
@@ -261,28 +266,15 @@ fn compute_character_specs(
             StatType::LifeRegen => character_attrs.life_regen.apply_effect(effect),
             StatType::Mana => character_attrs.max_mana.apply_effect(effect),
             StatType::ManaRegen => character_attrs.mana_regen.apply_effect(effect),
-            StatType::Armor(armor_type) => match armor_type {
-                Some(armor_type) => {
-                    for damage_type in DamageType::iter() {
-                        if armor_type.is_match(damage_type) {
-                            character_attrs
-                                .armor
-                                .entry(damage_type)
-                                .or_default()
-                                .apply_effect(effect)
-                        }
-                    }
+            StatType::Armor(armor_type) => {
+                for damage_type in armor_type.to_damage_types() {
+                    character_attrs
+                        .armor
+                        .entry(*damage_type)
+                        .or_default()
+                        .apply_effect(effect)
                 }
-                None => {
-                    for damage_type in DamageType::iter() {
-                        character_attrs
-                            .armor
-                            .entry(damage_type)
-                            .or_default()
-                            .apply_effect(effect)
-                    }
-                }
-            },
+            }
             StatType::TakeFromManaBeforeLife => character_attrs
                 .take_from_mana_before_life
                 .apply_effect(effect),
@@ -349,6 +341,20 @@ fn compute_character_specs(
                             .or_insert(100.0.into())
                             .apply_effect(effect);
                     }
+                }
+            }
+            StatType::CritDamageTaken { skill_type } => {
+                let skill_types = match skill_type {
+                    Some(skill_type) => vec![*skill_type],
+                    None => SkillType::iter().collect(),
+                };
+
+                for skill_type in skill_types {
+                    character_attrs
+                        .crit_damage_taken
+                        .entry(skill_type)
+                        .or_insert(100.0.into())
+                        .apply_effect(effect);
                 }
             }
             StatType::StatusResistance {
@@ -423,9 +429,13 @@ fn compute_character_specs(
 
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Only for player (for now...)
-            StatType::RestoreOnHit { .. } => {}
+            StatType::RestoreOnHit { .. } | StatType::StatusOnHit { .. } => {}
             // Only for player
-            StatType::MovementSpeed | StatType::GoldFind | StatType::ThreatGain => {}
+            StatType::MaxPlayerLevel
+            | StatType::MovementSpeed
+            | StatType::GoldFind
+            | StatType::ThreatGain
+            | StatType::AllocatePassive(_) => {}
             // Delegate to skills
             StatType::ManaCost { .. }
             | StatType::Damage { .. }
@@ -440,6 +450,7 @@ fn compute_character_specs(
             | StatType::Speed(_)
             | StatType::Lucky { .. }
             | StatType::SuccessChance { .. }
+            | StatType::RefreshedCooldown { .. }
             | StatType::SkillLevel(_)
             | StatType::SkillConditionalModifier { .. }
             | StatType::SkillTargetModifier { .. }
@@ -452,6 +463,7 @@ fn compute_character_specs(
             | StatType::ItemLevel
             | StatType::GemsFind
             | StatType::PowerLevel
+            | StatType::RemoveSlotUse(_)
             | StatType::Description(_)
             | StatType::Description2(_) => {}
         }
@@ -461,7 +473,7 @@ fn compute_character_specs(
     if !stats_converters.is_empty() {
         stats_converters.sort_by_key(|(stat_converter, modifier, _, _)| {
             (
-                stat_converter.source,
+                stat_converter.source.clone(),
                 stat_converter.stat.clone(),
                 *modifier,
             )
@@ -537,7 +549,9 @@ fn compute_character_specs(
                     })
                     .sum(),
 
-                StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => {
+                StatConverterSource::CritDamage
+                | StatConverterSource::Damage { .. }
+                | StatConverterSource::StatusDuration { .. } => {
                     continue;
                 }
             };
@@ -612,7 +626,9 @@ pub fn compute_stat_converter(
             })
             .sum(),
 
-        StatConverterSource::CritDamage | StatConverterSource::Damage { .. } => 0.0,
+        StatConverterSource::CritDamage
+        | StatConverterSource::Damage { .. }
+        | StatConverterSource::StatusDuration { .. } => 0.0,
     }
 }
 
@@ -621,6 +637,7 @@ pub fn extend_triggers_from_skills_and_statuses(
     character_id: CharacterId,
     character_specs: &mut CharacterSpecs,
     character_state: &CharacterState,
+    player_effects: &[StatEffect],
 ) {
     let effects = &character_specs.effects;
 
@@ -634,10 +651,32 @@ pub fn extend_triggers_from_skills_and_statuses(
             if let StatusEffectType::Trigger {
                 trigger_specs,
                 inherit_owner_effects,
+                inherit_player_effects,
             } = &status_effect.status_effect_type
             {
                 let mut trigger_effect = trigger_specs.trigger_effect.clone();
 
+                let owner_effects = if *inherit_owner_effects {
+                    effects.iter()
+                } else {
+                    [].iter()
+                };
+
+                let player_effects = if *inherit_player_effects {
+                    player_effects.iter()
+                } else {
+                    [].iter()
+                };
+
+                // Mandatory to compute skill effects even if modifier_effects is empty to
+                // initialize trigger status with base values
+                triggers_updater::compute_trigger_specs_effects(
+                    statuses_store,
+                    &mut trigger_effect,
+                    owner_effects.chain(player_effects),
+                );
+
+                // Compute modifiers effects as a second step in case we added some from owner effects
                 let modifier_effects: Vec<_> = trigger_effect
                     .modifiers
                     .iter()
@@ -651,6 +690,9 @@ pub fn extend_triggers_from_skills_and_statuses(
                                 .iter()
                                 .map(|status_stack| status_stack.duration.get())
                                 .sum(),
+                            TriggerEffectModifierSource::TriggerStatusStacks { ignore_initial } => {
+                                status_stacks.len().saturating_sub(ignore_initial as usize) as f64
+                            }
                             _ => 0.0,
                         };
 
@@ -662,20 +704,13 @@ pub fn extend_triggers_from_skills_and_statuses(
                         })
                     })
                     .collect();
-
-                let combined_effects = modifier_effects.iter().chain(if *inherit_owner_effects {
-                    effects.iter()
-                } else {
-                    [].iter()
-                });
-
-                // Mandatory to compute skill effects even if modifier_effects is empty to
-                // initialize trigger status with base values
-                triggers_updater::compute_trigger_specs_effects(
-                    statuses_store,
-                    &mut trigger_effect,
-                    combined_effects.clone(),
-                );
+                if !modifier_effects.is_empty() {
+                    triggers_updater::compute_trigger_specs_effects(
+                        statuses_store,
+                        &mut trigger_effect,
+                        modifier_effects.iter(),
+                    );
+                }
 
                 character_specs.triggers.push(
                     trigger_specs.trigger.clone(),

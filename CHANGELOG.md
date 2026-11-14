@@ -1,5 +1,36 @@
 # Changelog
 
+## Major Game Update: «Pets & Achievements»
+
+Features:
+
+- Achievements: meeting certain goals unlock achievements bound to your account, rewarding with various Cosmetics and Pets.
+- Pets: they can be assigned to various buttons to automate the clicking. Also they are cute.
+- Soul Crafting: it is no longer possible to add a fifth affix directly in the Forge. Instead, you can Sacrifice a Rare Item with 2 Prefixes and 2 Suffixes to extract randomly one of these as a Soul Affix. The Soul Affix can then be Imbued on another Rare Item of the same category, turning it into a Soulforged Item. A Soul Affix can always be replaced by another. Soul Affixes are tradable Items.
+- Item Remnants: starting from Power Level 600, it is possible to drop Remnant of an Item. It is a Soulforged Item of a certain categories (e.g. Boots), with 4 to 5 affixes, including a Unique Soul Affix not obtainable elsewhere. A Remnant of an Item cannot be equipped, but it can be Sacrificed.
+- Forge Temper & Reroll: Upgrade Item Quality up to 50%, and try you luck by rerolling all affixes values.
+
+Content:
+
+- New Areas: Grim Frontier and Eldritch Depths, concluding the campaign.
+- New Skill: Taunt, which partially refresh Enemy Skill Cooldowns at the cost of taking more damage.
+- New Skill: Spark, imbue yourself with electricity to repeatedly shock enemies.
+- New Skill: Summon Bees, and they'll scream NO! NOT THE BEES!
+- New Skill: Blast Arrow, stack explosive charges on your enemies and watch them go BOOM.
+- 8 new Unique Items, 2 new Unique Edicts and 1 new Unique Rune.
+- A new Benediction in the Temple to increase Maximum Player Level.
+
+Balance Changes:
+
+- New Elemental Damage with Attacks affixes available on Weapons.
+- Increased Buffs Duration affixes are now available on Helmets as well.
+- Terminal Illness Passive now do More Toxic Damage Escalation based on Duration but remove all Hit Damage.
+- Various Unique Items, Passives & Skill Masteries tweaks.
+
+Fixes:
+
+- Increased Modifiers are not longer multiplicative when applied to triggered effects (e.g. Caustic Convergence Increased Fire & Increased Toxic Damage are now additive).
+
 ## Major Game Update: «Skill Masteries»
 
 Features:

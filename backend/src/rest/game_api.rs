@@ -2,7 +2,7 @@ use anyhow::Result;
 
 use axum::{
     Extension, Json, Router,
-    extract::State,
+    extract::{DefaultBodyLimit, State},
     middleware,
     routing::{get, post},
 };
@@ -15,8 +15,7 @@ use shared::{
             SavePassivesRequest, SaveSkillMasteryUpgradesRequest, SocketPassiveRequest,
         },
         server::{
-            AscendPassivesResponse, BuyBenedictionsResponse, GetAreasResponse,
-            GetBenedictionsResponse, GetPassivesResponse, GetSkillsResponse, GetStatusesResponse,
+            AscendPassivesResponse, BuyBenedictionsResponse, GetMasterDataResponse,
             SaveFavoriteSkillsResponse, SavePassivesResponse, SaveSkillMasteryUpgradesResponse,
             SocketPassiveResponse,
         },
@@ -37,7 +36,7 @@ use crate::{
             skill_masteries_controller, skills_updater,
         },
     },
-    rest::utils::{verify_character_in_town, verify_character_user},
+    rest::utils::{MsgPack, verify_character_in_town, verify_character_user},
 };
 
 use super::AppError;
@@ -59,63 +58,37 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .layer(middleware::from_fn_with_state(
             app_state,
             auth::authorization_middleware,
-        ));
+        ))
+        .layer(DefaultBodyLimit::max(64 * 1024));
 
     Router::new()
-        .route("/game/areas", get(get_areas))
-        .route("/game/skills", get(get_skills))
-        .route("/game/statuses", get(get_statuses))
-        .route("/game/passives", get(get_passives))
-        .route("/game/benedictions", get(get_benedictions))
+        .route("/game/master-data", get(get_master_data))
         .merge(auth_routes)
 }
 
-pub async fn get_areas(
+pub async fn get_master_data(
     State(master_store): State<MasterStore>,
-) -> Result<Json<GetAreasResponse>, AppError> {
-    Ok(Json(GetAreasResponse {
+) -> Result<MsgPack<GetMasterDataResponse>, AppError> {
+    Ok(MsgPack(GetMasterDataResponse {
         areas: master_store
             .area_blueprints_store
             .iter()
             .map(|(k, v)| (k.clone(), v.specs.clone()))
             .collect(),
-    }))
-}
-
-pub async fn get_skills(
-    State(master_store): State<MasterStore>,
-) -> Result<Json<GetSkillsResponse>, AppError> {
-    Ok(Json(GetSkillsResponse {
         skills: (*master_store.skills_store).clone(),
         skill_masteries: master_store.skill_masteries_store.as_ref().clone(),
-    }))
-}
-
-pub async fn get_statuses(
-    State(master_store): State<MasterStore>,
-) -> Result<Json<GetStatusesResponse>, AppError> {
-    Ok(Json(GetStatusesResponse {
         statuses: (*master_store.statuses_store).clone().into_iter().collect(),
-    }))
-}
-
-pub async fn get_passives(
-    State(master_store): State<MasterStore>,
-) -> Result<Json<GetPassivesResponse>, AppError> {
-    Ok(Json(GetPassivesResponse {
+        cosmetics: (*master_store.cosmetics_store).clone(),
+        pets: (*master_store.pets_store).clone(),
+        achievements: (*master_store.achievements_store).clone(),
         passives_tree_specs: master_store
             .passives_store
             .get("default")
             .cloned()
             .unwrap_or_default(),
-    }))
-}
-
-pub async fn get_benedictions(
-    State(master_store): State<MasterStore>,
-) -> Result<Json<GetBenedictionsResponse>, AppError> {
-    Ok(Json(GetBenedictionsResponse {
         benedictions_specs: master_store.benedictions_store.as_ref().clone(),
+        item_bases: master_store.items_store.items.clone().into_iter().collect(),
+        item_affixes: master_store.items_store.affixes_table.clone(),
     }))
 }
 
@@ -194,6 +167,7 @@ pub async fn post_socket_passive(
 
     let mut inventory =
         inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
+
     let mut ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
@@ -231,6 +205,10 @@ pub async fn post_save_passives_build(
     Extension(user): Extension<User>,
     Json(payload): Json<SavePassivesRequest>,
 ) -> Result<Json<SavePassivesResponse>, AppError> {
+    if payload.purchased_nodes.len() > 100 {
+        return Err(AppError::UserError("invalid: too many nodes".into()));
+    }
+
     let mut tx = db_pool.begin().await?;
 
     let character = db::characters::read_character(&mut *tx, &payload.character_id)
@@ -339,7 +317,7 @@ pub async fn post_save_skill_mastery_upgrades(
         &master_store,
         &payload.character_id,
         &payload.skill_id,
-        &payload.upgrades_bought,
+        payload.upgrades_bought,
     )
     .await?;
 

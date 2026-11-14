@@ -1,3 +1,4 @@
+use sqlx::Transaction;
 use std::collections::{HashMap, VecDeque};
 
 use shared::{
@@ -5,18 +6,19 @@ use shared::{
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, aggregate_effects},
+        modifier::Modifier,
         passive::{PassiveNodeId, PassivesTreeAscension, PassivesTreeSpecs, PassivesTreeState},
         player::PlayerResources,
+        stat_effect::{StatEffect, StatType},
         user::UserCharacterId,
     },
 };
-use sqlx::Transaction;
 
 use crate::{
     app_state::MasterStore,
     db::{self, characters::CharacterAreaEntry, pool::Database},
-    game::data::master_store::AreaBlueprintStore,
+    game::data::{items_store::ItemsStore, master_store::AreaBlueprintStore},
     rest::AppError,
 };
 
@@ -72,29 +74,62 @@ pub fn purchase_node(
 }
 
 pub fn compute_passives_tree_specs(
+    items_store: &ItemsStore,
     passives_tree_specs: &mut PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
 ) {
     // TODO: Could compute ascension effects here to have them ready?
 
     for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
-        if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id) {
-            node_specs.icon = item_specs.base.icon.clone();
+        if let Some(node_specs) = passives_tree_specs.nodes.get_mut(passive_node_id)
+            && let Ok(item_base) = items_store.get_item_base(item_specs)
+        {
+            node_specs.icon = item_base.icon.clone();
             node_specs.name = item_specs.modifiers.name.clone();
 
-            node_specs.effects = (&(item_specs
-                .modifiers
-                .aggregate_effects(AffixEffectScope::Global, false)))
-                .into(); // TODO: Better copy, don't aggregate?
-            node_specs.triggers = item_specs.base.triggers.clone();
+            let mut effects: Vec<_> =
+                (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into(); // TODO: Better copy, don't aggregate?
+
+            for effect in effects.iter_mut() {
+                if let StatType::AllocatePassive(passive_id) = &mut effect.stat
+                    && passive_id.is_nil()
+                {
+                    *passive_id = *passive_node_id;
+                }
+            }
+
+            node_specs.effects = effects;
+            node_specs.triggers = item_base.triggers.clone();
             node_specs.root_node |= item_specs
-                .base
                 .rune_specs
                 .as_ref()
                 .map(|rune_specs| rune_specs.root_node)
                 .unwrap_or_default();
         }
     }
+}
+
+pub fn generate_allocated_sockets_effects(
+    passives_tree_ascension: &PassivesTreeAscension,
+) -> Vec<StatEffect> {
+    let mut returned_effects = Vec::new();
+    for (passive_node_id, item_specs) in passives_tree_ascension.socketed_nodes.iter() {
+        let effects: Vec<_> =
+            (&aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, false)).into();
+        for effect in effects.iter() {
+            if let StatType::AllocatePassive(passive_id) = &effect.stat
+                && passive_id.is_nil()
+            {
+                returned_effects.push(StatEffect {
+                    stat: StatType::AllocatePassive(*passive_node_id),
+                    modifier: Modifier::Flat,
+                    value: 1.0,
+                    bypass_ignore: true,
+                });
+            }
+        }
+    }
+    returned_effects
 }
 
 pub fn refund_missing(
@@ -145,7 +180,6 @@ pub async fn update_ascension(
 
     db::characters_data::save_character_passives(&mut **tx, character_id, passives_tree_ascension)
         .await?;
-
     Ok(())
 }
 
@@ -161,6 +195,12 @@ pub fn validate_ascension(
     passives_tree_specs: &PassivesTreeSpecs,
     passives_tree_ascension: &PassivesTreeAscension,
 ) -> Result<f64, AppError> {
+    if passives_tree_ascension.ascended_nodes.len() > passives_tree_specs.nodes.len() {
+        return Err(AppError::UserError(
+            "invalid ascension: too many nodes".into(),
+        ));
+    }
+
     let mut cost = 0.0;
 
     let max_level_tree =
@@ -278,7 +318,7 @@ pub fn socket_node(
         .ok_or(anyhow::anyhow!("passives tree not found"))?;
 
     if let Some(item_specs) = item_specs {
-        if item_specs.base.rune_specs.is_none() {
+        if item_specs.rune_specs.is_none() {
             return Err(AppError::UserError(
                 "Only Runes can be socketed into Passives Tree".into(),
             ));

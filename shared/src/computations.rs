@@ -8,7 +8,7 @@ use crate::{
     },
     data::{
         area::{AreaLevel, AreaState},
-        item::{ItemRarity, ItemSpecs},
+        item::ItemRarity,
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
     },
@@ -124,10 +124,6 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
     )
 }
 
-pub fn gamble_price(item_level: AreaLevel) -> f64 {
-    (item_level as f64 / 20.0).floor() + 10.0
-}
-
 pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
     if is_ssf && item_rarity == ItemRarity::Unique {
         (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
@@ -145,15 +141,4 @@ pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
     };
 
     10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
-}
-
-pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
-    item_specs
-        .base
-        .upgrade_levels
-        .get(item_specs.modifiers.upgrade_level as usize)
-        .and_then(|next_upgrade_level| {
-            (*next_upgrade_level <= item_specs.modifiers.level)
-                .then_some((*next_upgrade_level / 2 + item_specs.base.min_area_level) as f64)
-        })
 }

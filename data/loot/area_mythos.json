@@ -1,0 +1,7 @@
+{
+    "area_specific": true,
+    "entries"      : [
+        {"item_id": "rune_yellow_sign", "weight": 9999, "boss_only": true},
+        {"item_id": "edict_stars",      "weight": 1999                   }
+    ]
+}

@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use shared::data::{
     stat_effect::EffectsMap,
-    temple::{BenedictionEffect, PlayerBenedictions},
+    temple::{BenedictionEffect, PlayerBenedictions, PlayerBenedictionsCategory},
     user::UserCharacterId,
 };
 use sqlx::Transaction;
@@ -79,10 +79,12 @@ pub async fn update_benedictions(
     resource_gold: f64,
     player_benedictions: &PlayerBenedictions,
 ) -> Result<(), AppError> {
-    let (_, _, prev_benedictions, _) =
+    let (_, _, mut prev_benedictions, _) =
         db::characters_data::load_character_data(&mut **tx, character_id)
             .await?
             .unwrap_or_default();
+
+    sanitize_benedictions(&master_store.benedictions_store, &mut prev_benedictions);
 
     validate_benedictions(
         &master_store.benedictions_store,
@@ -130,26 +132,7 @@ pub fn validate_benedictions(
     player_benedictions: &PlayerBenedictions,
 ) -> anyhow::Result<()> {
     for (category_id, player_category) in player_benedictions.categories.iter() {
-        let category_specs = benedictions_store
-            .get(category_id)
-            .ok_or_else(|| anyhow::anyhow!("invalid benedictions"))?;
-
-        if player_category.upgrade_level > category_specs.max_upgrade_level.unwrap_or(u64::MAX) {
-            return Err(anyhow::anyhow!("invalid benedictions"));
-        }
-
-        for benediction_id in player_category.purchased_benedictions.keys() {
-            if !category_specs.benedictions.contains_key(benediction_id) {
-                return Err(anyhow::anyhow!("invalid benedictions"));
-            }
-        }
-
-        let total_level: u64 = player_category
-            .purchased_benedictions
-            .values()
-            .copied()
-            .sum();
-        if total_level > player_category.upgrade_level {
+        if !validate_benediction(benedictions_store, category_id, player_category) {
             return Err(anyhow::anyhow!("invalid benedictions"));
         }
     }
@@ -167,4 +150,56 @@ pub fn validate_benedictions(
     }
 
     Ok(())
+}
+
+pub fn sanitize_benedictions(
+    benedictions_store: &BenedictionsStore,
+    player_benedictions: &mut PlayerBenedictions,
+) {
+    player_benedictions
+        .categories
+        .retain(|category_id, _| benedictions_store.contains_key(category_id));
+
+    for (category_id, player_category) in player_benedictions.categories.iter_mut() {
+        let category_specs = benedictions_store.get(category_id).unwrap();
+
+        player_category.upgrade_level = player_category
+            .upgrade_level
+            .min(category_specs.max_upgrade_level);
+
+        if !validate_benediction(benedictions_store, category_id, player_category) {
+            player_category.purchased_benedictions.clear();
+        }
+    }
+}
+
+fn validate_benediction(
+    benedictions_store: &BenedictionsStore,
+    category_id: &str,
+    player_category: &PlayerBenedictionsCategory,
+) -> bool {
+    let Some(category_specs) = benedictions_store.get(category_id) else {
+        return false;
+    };
+
+    if player_category.upgrade_level > category_specs.max_upgrade_level {
+        return false;
+    }
+
+    for benediction_id in player_category.purchased_benedictions.keys() {
+        if !category_specs.benedictions.contains_key(benediction_id) {
+            return false;
+        }
+    }
+
+    let total_level: u64 = player_category
+        .purchased_benedictions
+        .values()
+        .copied()
+        .sum();
+    if total_level > player_category.upgrade_level {
+        return false;
+    }
+
+    true
 }

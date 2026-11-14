@@ -1,315 +1,1287 @@
 {
-  "magic_missile"  : {
-    "name"           : "Magic Missile",
-    "description"    : "A quick spell that fires a bolt of energy at a random enemy.",
-    "icon"           : "skills/magic_missile.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 2,
-    "mana_cost"      : 1,
-    "upgrade_cost"   : 20,
+  "magic_missile": {
+    "name": "Magic Missile",
+    "icon": "skills/magic_missile.svg",
+    "description": "A quick spell that fires a bolt of energy at a random enemy.",
+    "skill_type": "Spell",
+    "cooldown": 2.0,
+    "mana_cost": 1.0,
+    "required_item": null,
+    "upgrade_cost": 20.0,
     "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets"        : [
       {
-        "range"  : "Any",
-        "repeat" : {"value": 1, "target": "Any"},
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Any",
+          "repeat_cooldown": 0.0
+        },
         "effects": [
           {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "FlatDamage": {
-              "damage"     : { "Storm": [0, 12] },
-              "crit_chance": 5,
-              "crit_damage": 100
-            }
+              "damage": {
+                "Storm": [
+                  0.0,
+                  12.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 5.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 100.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
   "chain_lightning": {
-    "name"           : "Chain Lightning",
-    "description"    : "A powerful spell that hit randomly multiple enemies.",
-    "icon"           : "skills/chain_lightning.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 4,
-    "mana_cost"      : 6,
-    "upgrade_cost"   : 50,
+    "name": "Chain Lightning",
+    "icon": "skills/chain_lightning.svg",
+    "description": "A powerful spell that hit randomly multiple enemies.",
+    "skill_type": "Spell",
+    "cooldown": 4.0,
+    "mana_cost": 6.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets"        : [
       {
-        "range"  : "Any",
-        "repeat" : {"value": 3, "target": "Different", "repeat_cooldown": 0.3},
-        "effects": [
-          {
-            "FlatDamage": {
-              "damage"     : { "Storm": [0, 30] },
-              "crit_chance": 5,
-              "crit_damage": 100
-            }
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
           }
-        ]
-      }
-    ]
-  },
-  "blizzard"       : {
-    "name"           : "Blizzard",
-    "description"    : "Summon a mighty storm that repeatedly hit enemies.",
-    "icon"           : "skills/blizzard.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 7,
-    "mana_cost"      : 10,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets"        : [
-      {
-        "range"  : "Any",
-        "shape"  : "Square4",
-        "repeat" : {"value": 5, "target": "Any", "repeat_cooldown": 0.5},
-        "effects": [
-          {
-            "FlatDamage": {
-              "damage": { "Storm": [0, 5] }
-            }
-          }
-        ]
-      }
-    ]
-  },
-  "fireball"       : {
-    "name"           : "Fireball",
-    "description"    : "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",
-    "icon"           : "skills/fireball.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 4,
-    "mana_cost"      : 6,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets"        : [
-      {
-        "range"  : "Distance",
-        "shape"  : "Square4",
-        "repeat" : {"value": 1, "target": "Any", "repeat_cooldown": 0.5},
-        "effects": [
-          {
-            "FlatDamage": {
-              "damage": { "Fire": [5, 15] }
-            }
-          }
-        ]
-      }
-    ]
-  },
-  "burning_ray"    : {
-    "name"           : "Burning Ray",
-    "description"    : "Release a horizontal beam of fire that burns enemies over time.",
-    "icon"           : "skills/burning_ray.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 3,
-    "mana_cost"      : 5,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets"        : [
-      {
-        "range"  : "Distance",
-        "shape"  : "Horizontal3",
-        "effects": [
-          {
-            "ApplyStatus": { "status_id": "burn", "value": [2, 5] }
-          }
-        ]
-      }
-    ]
-  },
-  "righteous_fire" : {
-    "name"               : "Righteous Fire",
-    "description"        : "Remove your pants and burn everything, including yourself.",
-    "icon"               : "skills/righteous_fire.svg",
-    "skill_type"         : "Spell",
-    "cooldown"           : 1.5,
-    "mana_cost"          : 2,
-    "upgrade_cost"       : 50,
-    "upgrade_effects"    : [
-      {
-        "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
+        },
         "modifier": "More",
-        "value"   : 30
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       },
       {
-        "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
-        "modifier": "More",
-        "value"   : 30,
-        "hidden"  : true
-      },
-      {
-        "stat"         : { "StatusPower": {"status_id": "righteous_fire_self"} },
-        "modifier"     : "Increased",
-        "value"        : 20,
-        "bypass_ignore": true
-      },
-      {
-        "stat"         : { "StatusPower": {"status_id": "unrighteous_fire_self"} },
-        "modifier"     : "Increased",
-        "value"        : 20,
-        "bypass_ignore": true,
-        "hidden"       : true
-      },
-      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
     ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 3,
+          "target": "Different",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  30.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 5.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 100.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
     "ignore_stat_effects": [],
-    "targets"            : [
+    "hidden": false
+  },
+  "blizzard": {
+    "name": "Blizzard",
+    "icon": "skills/blizzard.svg",
+    "description": "Summon a mighty storm that repeatedly hit enemies.",
+    "skill_type": "Spell",
+    "cooldown": 7.0,
+    "mana_cost": 10.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "range"  : "Melee",
-        "shape"  : "Vertical2",
-        "effects": [
-          { "ApplyStatus": {"status_id": "righteous_fire", "value": 100} }
-        ]
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       },
       {
-        "target_type": "Me",
-        "effects"    : [
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "Square4",
+        "target_dead": false,
+        "repeat": {
+          "value": 5,
+          "target": "Any",
+          "repeat_cooldown": 0.5
+        },
+        "effects": [
           {
-            "ApplyStatus"        : {"status_id": "righteous_fire_self", "value": 100},
-            "ignore_stat_effects": [
-              {"Damage": {}},
-              { "StatusDuration": {"damage_type": "Any"} },
-              { "StatusEscalation": {"damage_type": "Any"} },
-              { "StatusFaster": {"damage_type": "Any"} },
-              { "StatusPower": {"damage_type": "Any"} }
-            ]
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  5.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
       }
     ],
-    "modifier_effects"   : [
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "spark": {
+    "name": "Spark",
+    "icon": "skills/spark.svg",
+    "description": "Imbue yourself with electricity to electrocute a random foe on a regular basis.",
+    "skill_type": "Spell",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "spark",
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Melee",
+        "target_type": "Me",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "spark",
+              "value": 1.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "fireball": {
+    "name": "Fireball",
+    "icon": "skills/fireball.svg",
+    "description": "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",
+    "skill_type": "Spell",
+    "cooldown": 4.0,
+    "mana_cost": 6.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Distance",
+        "target_type": "Enemy",
+        "shape": "Square4",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Any",
+          "repeat_cooldown": 0.5
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Fire": [
+                  5.0,
+                  15.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "burning_ray": {
+    "name": "Burning Ray",
+    "icon": "skills/burning_ray.svg",
+    "description": "Release a horizontal beam of fire that burns enemies over time.",
+    "skill_type": "Spell",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Distance",
+        "target_type": "Enemy",
+        "shape": "Horizontal3",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "burn",
+              "value": [
+                2.0,
+                5.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "righteous_fire": {
+    "name": "Righteous Fire",
+    "icon": "skills/righteous_fire.svg",
+    "description": "Remove your pants and burn everything, including yourself.",
+    "skill_type": "Spell",
+    "cooldown": 1.5,
+    "mana_cost": 2.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "righteous_fire",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "unrighteous_fire",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": true
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "righteous_fire_self",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 20.0,
+        "bypass_ignore": true,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "unrighteous_fire_self",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 20.0,
+        "bypass_ignore": true,
+        "scope": "Local",
+        "description": null,
+        "hidden": true
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [
       {
         "effects": [
           {
-            "stat"         : { "Damage": {"damage_type": "Fire"} },
-            "bypass_ignore": true,
-            "modifier"     : "More",
-            "value"        : 1
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "value": 1.0,
+            "bypass_ignore": true
           }
         ],
-        "source" : {"CharacterStats": "MaxLife"},
-        "factor" : 1
+        "source": {
+          "CharacterStats": "MaxLife"
+        },
+        "factor": 1.0,
+        "hidden": false
       }
-    ]
-  },
-  "poison_cloud"   : {
-    "name": "Poison Cloud",
-    "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
-    "icon": "skills/poison_cloud.svg",
-    "skill_type": "Spell",
-    "cooldown": 7,
-    "mana_cost": 10,
-    "upgrade_cost": 50,
-    "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
     ],
     "targets": [
       {
-        "range"  : "Distance",
-        "shape"  : "All",
-        "repeat" : {"value": 2, "target": "Any", "repeat_cooldown": 1},
+        "range": "Melee",
+        "target_type": "Enemy",
+        "shape": "Vertical2",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
           {
-            "ApplyStatus": { "status_id": "poison", "value": [4, 8] }
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "righteous_fire",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
           }
         ]
-      }
-    ]
-  },
-  "irradiate"      : {
-    "name": "Irradiate",
-    "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time.",
-    "icon": "skills/irradiate.svg",
-    "skill_type": "Spell",
-    "cooldown": 3,
-    "mana_cost": 5,
-    "upgrade_cost": 50,
-    "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets": [
-      {
-        "range"  : "Any",
-        "shape"  : "Vertical2",
-        "effects": [
-          {
-            "FlatDamage": {
-              "damage": { "Storm": [0, 10] }
-            }
-          },
-          {
-            "ApplyStatus": { "status_id": "poison", "value": [3, 5] }
-          }
-        ]
-      }
-    ]
-  },
-  "voodoo_doll"    : {
-    "name"           : "Voodoo Doll",
-    "description"    : "Stab your Voodoo Doll to inflict physical pain to all enemies.",
-    "icon"           : "skills/voodoo.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 1.2,
-    "mana_cost"      : 2,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      { "stat": {"Damage": {}                }, "modifier": "More",      "value": 30 },
-      { "stat": {              "ManaCost": {}}, "modifier": "Increased", "value":  1 }
-    ],
-    "targets"        : [
-      {
-        "range"  : "Distance",
-        "shape"  : "All",
-        "effects": [
-          {
-            "FlatDamage": { "damage": {"Physical": 1} }
-          },
-          {"Kill": null, "success_chance": 0}
-        ]
-      }
-    ]
-  },
-  "heal"           : {
-    "name"           : "Heal",
-    "description"    : "Restore a portion of your life with this simple yet effective healing spell.",
-    "icon"           : "skills/heal.svg",
-    "skill_type"     : "Spell",
-    "cooldown"       : 12,
-    "mana_cost"      : 10,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      {
-        "stat"    : { "Restore": {"restore_type": "Life"} },
-        "modifier": "Flat",
-        "value"   : 5
       },
-      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
-    ],
-    "targets"        : [
       {
+        "range": "Melee",
         "target_type": "Me",
-        "effects"    : [
-          { "Restore": {"restore_type": "Life", "value": 25, "modifier": "Flat"} }
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "righteous_fire_self",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "StatusFaster": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "poison_cloud": {
+    "name": "Poison Cloud",
+    "icon": "skills/poison_cloud.svg",
+    "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
+    "skill_type": "Spell",
+    "cooldown": 7.0,
+    "mana_cost": 10.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Distance",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 2,
+          "target": "Any",
+          "repeat_cooldown": 1.0
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "poison",
+              "value": [
+                4.0,
+                8.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "irradiate": {
+    "name": "Irradiate",
+    "icon": "skills/irradiate.svg",
+    "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time.",
+    "skill_type": "Spell",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "Vertical2",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": [
+                  0.0,
+                  10.0
+                ]
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_id": "irradiate",
+          "item_slot": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "irradiate_poison",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Storm"
+            },
+            "hidden": false
+          }
+        ],
+        "trigger_propagate": false,
+        "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "poison",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Spell",
+                  "skill_id": "irradiate",
+                  "damage_type": "Storm",
+                  "min_max": null,
+                  "is_hit": true
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "voodoo_doll": {
+    "name": "Voodoo Doll",
+    "icon": "skills/voodoo.svg",
+    "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
+    "skill_type": "Spell",
+    "cooldown": 1.2,
+    "mana_cost": 2.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Distance",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Physical": 1.0
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          },
+          {
+            "success_chance": {
+              "value": 0.0,
+              "lucky_chance": 0.0
+            },
+            "Kill": null,
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "heal": {
+    "name": "Heal",
+    "icon": "skills/heal.svg",
+    "description": "Restore a portion of your life with this simple yet effective healing spell.",
+    "skill_type": "Spell",
+    "cooldown": 12.0,
+    "mana_cost": 10.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Restore": {
+            "restore_type": "Life",
+            "skill_type": null,
+            "skill_id": null,
+            "modifier_description": "Flat"
+          }
+        },
+        "modifier": "Flat",
+        "value": 5.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Melee",
+        "target_type": "Me",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "Restore": {
+              "restore_type": "Life",
+              "value": 25.0,
+              "modifier": "Flat"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "summon_bees": {
+    "name": "Summon Bees",
+    "icon": "skills/bee.svg",
+    "description": "Summon a swarm of bees onto enemies, stinging them repeatedly for the duration of the spell.",
+    "skill_type": "Spell",
+    "cooldown": 2.0,
+    "mana_cost": 4.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "bees",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "bees_poison",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
+        "description": null,
+        "hidden": true
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "Horizontal2",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "bees",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   }
 }

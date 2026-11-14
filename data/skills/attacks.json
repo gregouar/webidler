@@ -7,7 +7,7 @@
     "cooldown": 0.0,
     "mana_cost": 0.0,
     "required_item": null,
-    "upgrade_cost": 10.0,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
         "stat": {
@@ -21,6 +21,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -33,6 +34,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -107,7 +109,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Gloves",
-              "factor": 1.0
+              "factor": 1.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -145,6 +148,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -161,14 +165,14 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "helmet_skill",
         "target": "Source",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Attack",
         "skill_range": "Melee",
@@ -194,7 +198,7 @@
                 "lucky_chance": 0.0
               },
               "crit_damage": 100.0,
-              "unblockable": false,
+              "unblockable": true,
               "armor_penetration": 0.0
             },
             "ignore_stat_effects": [],
@@ -213,13 +217,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "helmet_skill",
         "target": "Source",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Attack",
         "skill_range": "Melee",
@@ -284,6 +288,7 @@
         },
         "modifier": "Increased",
         "value": 10.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -296,6 +301,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -371,6 +377,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -427,14 +434,14 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "retaliate",
         "target": "Source",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Attack",
         "skill_range": "Melee",
@@ -464,7 +471,8 @@
               },
               "crit_damage": 100.0,
               "unblockable": false,
-              "armor_penetration": 0.0
+              "armor_penetration": 0.0,
+              "item_slot": "Shield"
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -522,6 +530,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -534,6 +543,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -608,7 +618,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 1.0
+              "factor": 1.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -646,6 +657,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -658,6 +670,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -732,7 +745,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 1.0
+              "factor": 1.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -771,6 +785,7 @@
         },
         "modifier": "Flat",
         "value": 10.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -787,6 +802,7 @@
         },
         "modifier": "Flat",
         "value": 10.0,
+        "scope": "Local",
         "description": null,
         "hidden": true
       },
@@ -803,6 +819,7 @@
         },
         "modifier": "Flat",
         "value": 10.0,
+        "scope": "Local",
         "description": null,
         "hidden": true
       },
@@ -815,6 +832,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -893,6 +911,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -905,6 +924,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -953,7 +973,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 2.0
+              "factor": 2.0,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -994,8 +1015,25 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
+      },
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "acid_rain",
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Global",
+        "description": null,
+        "hidden": true
       },
       {
         "stat": {
@@ -1006,6 +1044,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -1057,7 +1096,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.4
+              "factor": 0.4,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -1072,6 +1112,218 @@
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
     "hidden": false
+  },
+  "blast_arrow": {
+    "name": "Blast Arrow",
+    "icon": "skills/blast_arrow.svg",
+    "description": "Attach explosive charges to an enemy, detonating them when the enemy dies or the maximum number of charges is reached.",
+    "skill_type": "Attack",
+    "cooldown": 0.0,
+    "mana_cost": 3.0,
+    "required_item": {
+      "slot": null,
+      "category": "RangedWeapon"
+    },
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": "blast_arrow",
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "blast_charge",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "value": 30.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [
+      {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "item_stats": "Cooldown",
+            "slot": "Weapon",
+            "category": "RangedWeapon"
+          }
+        },
+        "factor": -1.0,
+        "hidden": true
+      },
+      {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "blast_charge",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Flat",
+            "value": 1.0
+          }
+        ],
+        "source": {
+          "ItemStats": {
+            "item_stats": {
+              "Damage": {
+                "damage_type": "Fire",
+                "min_max": null
+              }
+            },
+            "slot": "Weapon",
+            "category": "RangedWeapon"
+          }
+        },
+        "factor": 1.0,
+        "hidden": false
+      }
+    ],
+    "targets": [
+      {
+        "range": "Distance",
+        "target_type": "Enemy",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "WeaponEffect": {
+              "item_slot": "Weapon",
+              "factor": 0.7,
+              "damage_type": null
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "blast_charge",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": true,
+            "description": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "blast_charge",
+              "value": [
+                5.0,
+                15.0
+              ],
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "blast_charge": {
+    "name": "Blast Charge",
+    "icon": "",
+    "description": "",
+    "skill_type": "Attack",
+    "cooldown": 0.0,
+    "mana_cost": 0.0,
+    "required_item": null,
+    "upgrade_cost": 0.0,
+    "upgrade_effects": [],
+    "modifier_effects": [],
+    "targets": [],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": true
   },
   "whirlwind": {
     "name": "Whirlwind",
@@ -1098,6 +1350,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -1110,6 +1363,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -1161,7 +1415,8 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.7
+              "factor": 0.7,
+              "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -1202,6 +1457,7 @@
         },
         "modifier": "More",
         "value": 30.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -1214,6 +1470,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -1285,7 +1542,8 @@
               },
               "crit_damage": 100.0,
               "unblockable": false,
-              "armor_penetration": 0.0
+              "armor_penetration": 0.0,
+              "item_slot": "Shield"
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
@@ -1345,6 +1603,7 @@
         },
         "modifier": "Flat",
         "value": 10.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       },
@@ -1357,6 +1616,7 @@
         },
         "modifier": "Increased",
         "value": 1.0,
+        "scope": "Local",
         "description": null,
         "hidden": false
       }
@@ -1388,6 +1648,113 @@
               "max_stacks": null,
               "avoidable": null,
               "replace_on_value_only": true
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [
+      {
+        "Speed": {
+          "skill_type": null,
+          "skill_id": null
+        }
+      }
+    ],
+    "hidden": false
+  },
+  "taunt": {
+    "name": "Taunt",
+    "icon": "skills/taunt.svg",
+    "description": "Taunt enemies to attack you faster, at the cost of taking more damage.",
+    "skill_type": "Attack",
+    "cooldown": 3.0,
+    "mana_cost": 5.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "taunt",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 2.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      },
+      {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Distance",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshCooldown": {
+              "skill_type": null,
+              "skill_id": null,
+              "value": 2.0,
+              "modifier": "Flat"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "taunt",
+              "value": 20.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],

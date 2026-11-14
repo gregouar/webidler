@@ -12,7 +12,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -50,8 +50,8 @@
     ],
     "min_area_level": 0,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Speed": {
             "skill_type": "Attack",
@@ -61,9 +61,9 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -79,9 +79,9 @@
           8.0,
           10.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -188,8 +188,8 @@
     ],
     "min_area_level": 5,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -202,9 +202,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 4.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -217,9 +217,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 4.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -235,9 +235,9 @@
           20.0,
           40.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Speed": {
             "skill_type": "Attack",
@@ -250,9 +250,9 @@
           5.0,
           10.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "SkillConditionalModifier": {
             "stat": {
@@ -273,7 +273,8 @@
                   "status_id": "open_wound",
                   "damage_type": null,
                   "debuff": null,
-                  "skill_type": null
+                  "skill_type": null,
+                  "min_stacks": 0
                 }
               }
             ]
@@ -282,9 +283,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -426,7 +427,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -464,8 +465,8 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -481,9 +482,9 @@
           50.0,
           100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -493,9 +494,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 5.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatusPower": {
             "status_id": "open_wound",
@@ -509,10 +510,10 @@
         "modifier": "More",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": true,
-        "bypass_ignore": true
+        "bypass_ignore": true,
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "SuccessChance": {
             "skill_type": null,
@@ -528,9 +529,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "SkillConditionalModifier": {
             "stat": {
@@ -550,7 +551,8 @@
                   "status_id": "open_wound",
                   "damage_type": null,
                   "debuff": null,
-                  "skill_type": null
+                  "skill_type": null,
+                  "min_stacks": 0
                 }
               }
             ]
@@ -559,9 +561,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 20.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -670,7 +672,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -708,8 +710,8 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -722,9 +724,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 6.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -737,9 +739,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 12.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -752,9 +754,9 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": -400.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -770,9 +772,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "StatusDuration": {
             "status_id": "poison",
@@ -788,9 +790,9 @@
           20.0,
           40.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_6": {
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Mana",
@@ -803,9 +805,9 @@
           1.0,
           2.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_7": {
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Life",
@@ -818,9 +820,9 @@
           1.0,
           2.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_8": {
         "stat": {
           "SkillConditionalModifier": {
             "stat": {
@@ -850,9 +852,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1012,7 +1014,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1050,8 +1052,8 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Speed": {
             "skill_type": "Attack",
@@ -1064,9 +1066,9 @@
           10.0,
           20.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -1082,9 +1084,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -1094,9 +1096,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 5.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "StatusPower": {
             "status_id": null,
@@ -1113,9 +1115,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "RestoreOnHit": {
             "restore_type": "Mana",
@@ -1128,9 +1130,9 @@
           4.0,
           7.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -1141,17 +1143,14 @@
           "is_hurt": true,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": [
-            "weapon_skill",
-            "double_strike"
-          ],
+          "skill_id": null,
+          "item_slot": "Weapon",
           "conditions": []
         },
         "description": null,
         "trigger_id": "mosquito_sword_buff",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1194,17 +1193,14 @@
           "is_hurt": true,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": [
-            "weapon_skill",
-            "double_strike"
-          ],
+          "skill_id": null,
+          "item_slot": "Weapon",
           "conditions": []
         },
         "description": null,
         "trigger_id": "mosquito_sword_debuff",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1361,7 +1357,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1399,17 +1395,17 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Description": "Do only 1 Damage"
         },
         "modifier": "Flat",
         "scope": "Local",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -1419,9 +1415,9 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Block": null
         },
@@ -1431,9 +1427,25 @@
           30.0,
           50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_7": {
+        "stat": {
+          "StatusPower": {
+            "status_id": "double_strike_feint",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 100.0,
+        "is_unique": true
+      },
+      "unique_4": {
         "stat": {
           "StatConditionalModifier": {
             "stat": {
@@ -1463,9 +1475,9 @@
           120.0,
           160.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "SkillRepeat": {
             "skill_type": null,
@@ -1475,9 +1487,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_6": {
         "stat": {
           "SkillRepeat": {
             "skill_type": null,
@@ -1487,9 +1499,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1584,7 +1596,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1622,8 +1634,8 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -1633,9 +1645,9 @@
         "modifier": "Flat",
         "scope": "Local",
         "value": 5.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -1651,9 +1663,9 @@
           180.0,
           240.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatusPower": {
             "status_id": null,
@@ -1670,9 +1682,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "StatusPower": {
             "status_id": null,
@@ -1689,9 +1701,9 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "StatConditionalModifier": {
             "stat": {
@@ -1720,9 +1732,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -1732,7 +1744,6 @@
         "trigger_id": "treasure_cutlass",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -1874,7 +1885,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1912,7 +1923,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -1950,8 +1961,8 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "unique_1": {
         "stat": {
           "Speed": {
             "skill_type": "Attack",
@@ -1961,9 +1972,9 @@
         "modifier": "Increased",
         "scope": "Local",
         "value": 33.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -1979,9 +1990,9 @@
           200.0,
           250.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "Speed": {
             "skill_type": null,
@@ -1991,9 +2002,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": -2.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "SkillTargetModifier": {
             "skill_type": null,
@@ -2006,9 +2017,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "SkillTargetModifier": {
             "skill_type": null,
@@ -2021,9 +2032,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -2034,14 +2045,14 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "desert_whip_hit",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -2084,16 +2095,14 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": [
-            "weapon_skill"
-          ],
+          "skill_id": "weapon_skill",
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "desert_whip_crit",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -2213,7 +2222,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
@@ -2251,7 +2260,7 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",

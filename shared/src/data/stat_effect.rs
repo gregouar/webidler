@@ -1,15 +1,20 @@
-use std::collections::{BTreeMap, HashMap, hash_map};
+use std::{
+    collections::{BTreeMap, HashMap, hash_map},
+    slice::Iter,
+};
 
 use serde::{Deserialize, Serialize};
-use strum_macros::EnumIter;
+use strum::VariantArray as _;
+use strum_macros::{EnumIter, VariantArray};
 
 use crate::{
     data::{
         chance::ChanceRange,
         character_status::StatusId,
         conditional_modifier::Condition,
-        item::{SkillRange, SkillShape},
+        item::{ItemSlot, SkillRange, SkillShape},
         modifier::{ModifiableValue, Modifier, compute_more_factor},
+        passive::PassiveNodeId,
         skill::{RestoreModifier, RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
         values::NonNegative,
@@ -32,6 +37,7 @@ use super::skill::SkillType;
     Ord,
     Default,
     EnumIter,
+    VariantArray,
 )]
 pub enum DamageType {
     #[default]
@@ -174,17 +180,24 @@ impl StatStatusFilter {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatType {
     Description(String),
+    MaxPlayerLevel,
+    AllocatePassive(PassiveNodeId),
+    RemoveSlotUse(ItemSlot),
     GemsFind,
     ItemRarity,
     ItemAreaChance,
     ItemLevel,
     SkillLevel(#[serde(default)] StatSkillFilter),
-    Armor(Option<ArmorStatType>),
+    Armor(Option<DamageStatType>),
     DamageTaken {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
         damage_type: Option<DamageType>,
+    },
+    CritDamageTaken {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
     },
     Block(#[serde(default)] Option<SkillType>),
     BlockDamageTaken,
@@ -200,7 +213,7 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         #[serde(default)]
-        damage_type: Option<DamageType>,
+        damage_type: Option<DamageStatType>,
         #[serde(default)]
         min_max: Option<MinMax>,
         #[serde(default)]
@@ -247,11 +260,6 @@ pub enum StatType {
         effect_type: Option<StatSkillEffectType>,
     },
     Speed(#[serde(default)] StatSkillFilter),
-    RestoreOnHit {
-        restore_type: RestoreType,
-        #[serde(default)]
-        skill_type: Option<SkillType>,
-    },
     Restore {
         #[serde(default)]
         restore_type: Option<RestoreType>,
@@ -276,6 +284,20 @@ pub enum StatType {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
         roll_type: LuckyRollType,
+    },
+    RefreshedCooldown {
+        #[serde(flatten)]
+        skill_filter: StatSkillFilter,
+    },
+    RestoreOnHit {
+        restore_type: RestoreType,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+    },
+    StatusOnHit {
+        status_id: StatusId,
+        #[serde(default)]
+        skill_type: Option<SkillType>,
     },
     SkillConditionalModifier {
         stat: Box<StatType>,
@@ -361,6 +383,12 @@ impl Matchable for StatType {
                     && compare_options(damage_type, damage_type_2)
             }
             (
+                CritDamageTaken { skill_type },
+                CritDamageTaken {
+                    skill_type: skill_type_2,
+                },
+            ) => compare_options(skill_type, skill_type_2),
+            (
                 Lucky {
                     skill_filter,
                     roll_type,
@@ -382,6 +410,12 @@ impl Matchable for StatType {
             ) => {
                 skill_filter.is_match(skill_filter_2) && compare_options(effect_type, effect_type_2)
             }
+            (
+                RefreshedCooldown { skill_filter },
+                RefreshedCooldown {
+                    skill_filter: skill_filter_2,
+                },
+            ) => skill_filter.is_match(skill_filter_2),
             (
                 ManaCost { skill_filter },
                 ManaCost {
@@ -486,8 +520,8 @@ pub struct StatSkillRepeat {
     pub target: SkillRepeatTarget,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
-pub enum ArmorStatType {
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub enum DamageStatType {
     Physical,
     Elemental,
     Fire,
@@ -495,24 +529,83 @@ pub enum ArmorStatType {
     Poison,
 }
 
-impl ArmorStatType {
+impl Matchable for DamageStatType {
+    fn is_match(&self, other: &Self) -> bool {
+        matches!(
+            (self, other),
+            (DamageStatType::Physical, DamageStatType::Physical)
+                | (
+                    DamageStatType::Fire | DamageStatType::Elemental,
+                    DamageStatType::Fire | DamageStatType::Elemental
+                )
+                | (
+                    DamageStatType::Poison | DamageStatType::Elemental,
+                    DamageStatType::Poison | DamageStatType::Elemental
+                )
+                | (
+                    DamageStatType::Storm | DamageStatType::Elemental,
+                    DamageStatType::Storm | DamageStatType::Elemental
+                )
+        )
+    }
+}
+
+pub trait ToDamageTypes {
+    fn to_damage_types(&self) -> Iter<'_, DamageType>;
+}
+
+impl DamageStatType {
     pub fn is_match(&self, damage_type: DamageType) -> bool {
         matches!(
             (self, damage_type),
-            (ArmorStatType::Physical, DamageType::Physical)
+            (DamageStatType::Physical, DamageType::Physical)
                 | (
-                    ArmorStatType::Fire | ArmorStatType::Elemental,
+                    DamageStatType::Fire | DamageStatType::Elemental,
                     DamageType::Fire
                 )
                 | (
-                    ArmorStatType::Poison | ArmorStatType::Elemental,
+                    DamageStatType::Poison | DamageStatType::Elemental,
                     DamageType::Poison
                 )
                 | (
-                    ArmorStatType::Storm | ArmorStatType::Elemental,
+                    DamageStatType::Storm | DamageStatType::Elemental,
                     DamageType::Storm
                 )
         )
+    }
+}
+
+impl ToDamageTypes for DamageStatType {
+    fn to_damage_types(&self) -> Iter<'_, DamageType> {
+        match self {
+            DamageStatType::Physical => [DamageType::Physical].iter(),
+            DamageStatType::Elemental => {
+                [DamageType::Fire, DamageType::Storm, DamageType::Poison].iter()
+            }
+            DamageStatType::Fire => [DamageType::Fire].iter(),
+            DamageStatType::Storm => [DamageType::Storm].iter(),
+            DamageStatType::Poison => [DamageType::Poison].iter(),
+        }
+    }
+}
+
+impl ToDamageTypes for Option<DamageStatType> {
+    fn to_damage_types(&self) -> Iter<'_, DamageType> {
+        match self {
+            Some(damage_type) => damage_type.to_damage_types(),
+            None => DamageType::VARIANTS.iter(),
+        }
+    }
+}
+
+impl From<DamageType> for DamageStatType {
+    fn from(val: DamageType) -> Self {
+        match val {
+            DamageType::Physical => DamageStatType::Physical,
+            DamageType::Fire => DamageStatType::Fire,
+            DamageType::Storm => DamageStatType::Storm,
+            DamageType::Poison => DamageStatType::Poison,
+        }
     }
 }
 
@@ -598,7 +691,6 @@ pub enum LuckyRollType {
     // Restore,
     // StatusDuration,
     // StatusValue,
-    // TODO: could add others
 }
 
 impl Matchable for LuckyRollType {
@@ -633,18 +725,24 @@ pub struct StatConverterSpecs {
 
     #[serde(default)]
     pub is_extra: bool,
-    #[serde(default)]
-    pub skill_type: Option<SkillType>,
+    #[serde(flatten)]
+    pub skill_filter: StatSkillFilter,
     #[serde(default)]
     pub uncapped: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum StatConverterSource {
     CritDamage,
     Damage {
         #[serde(default)]
         damage_type: Option<DamageType>,
+        #[serde(default)]
+        min_max: Option<MinMax>,
+    },
+    StatusDuration {
+        #[serde(flatten)]
+        status_filter: StatStatusFilter,
         #[serde(default)]
         min_max: Option<MinMax>,
     },

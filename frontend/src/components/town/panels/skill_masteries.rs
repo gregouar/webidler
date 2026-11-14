@@ -987,7 +987,7 @@ fn format_mastery_upgrade_effect(
             affect_triggers:_,
         } => {
             Some(
-                skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None)
+                skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None,None)
                     .into_any(),
             )
         },
@@ -1012,6 +1012,7 @@ fn format_mastery_upgrade_effect(
                     1,
                     None,
                     None,
+                    None,
                 )}
             }.into_any())
         },
@@ -1026,6 +1027,7 @@ fn format_mastery_upgrade_effect(
                     )}
                     {conditions_tooltip::format_skill_modifier_conditions_post(
                         &auto_use_conditions,
+                        "",
                         "",
                     )}
                 </EffectLi>

@@ -1,0 +1,45 @@
+{
+    "name"    : "Pianostrosity",
+    "portrait": "monsters/farwest/piano.webp",
+    "max_life": 30,
+    "size"    : "Huge",
+    "armor"   : {"Poison": 50},
+    "skills"  : [
+        {
+            "name"      : "Sostenuto Stab",
+            "icon"      : "skills/needle_drill.svg",
+            "cooldown"  : 5.0,
+            "skill_type": "Attack",
+            "targets"   : [
+                {
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Physical": [6, 10] }
+                            }
+                        },
+                        {
+                            "ApplyStatus": { "status_id": "poison", "value": [3, 6], "escalation": 30 }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name"      : "Entrancing Song",
+            "icon"      : "skills/double_quaver.svg",
+            "cooldown"  : 10.0,
+            "skill_type": "Blessing",
+            "targets"   : [
+                {
+                    "target_type": "Friend",
+                    "range"      : "Any",
+                    "shape"      : "All",
+                    "effects"    : [
+                        { "ApplyStatus": {"status_id": "entrancing_song", "value": 100} }
+                    ]
+                }
+            ]
+        }
+    ]
+}
