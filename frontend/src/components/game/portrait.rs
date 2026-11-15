@@ -609,6 +609,7 @@ fn StatusIcon(
                     view! {
                         <div class="max-w-xl text-center list-none">
                             {format_status_effects(
+                                &status_id,
                                 status_specs,
                                 &value,
                                 None,

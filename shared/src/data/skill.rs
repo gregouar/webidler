@@ -246,6 +246,9 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub description: Option<String>,
+
+    #[serde(default)]
+    pub as_skill_type: Option<SkillType>,
 }
 
 #[allow(clippy::large_enum_variant)]

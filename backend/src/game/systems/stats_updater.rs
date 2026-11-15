@@ -191,6 +191,9 @@ pub fn check_condition(
             })
             .fold(0.0_f64, f64::max),
         Condition::Slowed => character_state.statuses.iter().any(|(status_id, _)| {
+            if status_id == "stun" {
+                return false;
+            }
             let Some(status_specs) = statuses_store.get(status_id) else {
                 return false;
             };

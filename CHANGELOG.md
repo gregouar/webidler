@@ -30,6 +30,7 @@ Balance Changes:
 Fixes:
 
 - Increased Modifiers are not longer multiplicative when applied to triggered effects (e.g. Caustic Convergence Increased Fire & Increased Toxic Damage are now additive).
+- Fix bug making Focus inherit the tag Blessing from Meditate.
 
 ## Major Game Update: «Skill Masteries»
 

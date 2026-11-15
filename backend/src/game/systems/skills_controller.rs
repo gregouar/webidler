@@ -526,6 +526,8 @@ fn apply_skill_effect_on_target(
         return false;
     }
 
+    let skill_type = skill_effect.as_skill_type.unwrap_or(skill_type);
+
     match &skill_effect.effect_type {
         SkillEffectType::WeaponEffect { .. } => {
             // Should already have been converted

@@ -4,7 +4,7 @@ use leptos::{html::*, prelude::*};
 
 use shared::data::{
     chance::ChanceRange,
-    character_status::{StatusEffect, StatusEffectType, StatusModifier, StatusSpecs},
+    character_status::{StatusEffect, StatusEffectType, StatusId, StatusModifier, StatusSpecs},
     modifier::{ModifiableValue, Modifier},
     stat_effect::StatEffect,
     trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
@@ -23,6 +23,7 @@ use crate::components::{
 };
 
 pub fn format_status_effects(
+    status_id: &StatusId,
     status_specs: StatusSpecs,
     value: &ChanceRange<ModifiableValue<NonNegative>>,
     value_factor: Option<f64>,
@@ -42,6 +43,10 @@ pub fn format_status_effects(
     //         status_specs.damage_type,
     //     )
     // });
+
+    if status_id == "stun" {
+        return Some("".into_any());
+    }
 
     let effect_lines = group_status_triggers_by_id(status_specs.effects.clone())
         .into_iter()

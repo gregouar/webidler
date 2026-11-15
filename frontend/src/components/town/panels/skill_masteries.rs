@@ -1006,6 +1006,7 @@ fn format_mastery_upgrade_effect(
             Some(view! {
                 <EffectLi>"Apply "{new_status_str}" instead of "{old_status_str}</EffectLi>
                 {status_tooltip::format_status_effects(
+                    new_status_id,
                     status_specs,
                     &(value.into()),
                     None,

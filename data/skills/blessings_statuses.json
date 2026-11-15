@@ -44,7 +44,7 @@
             },
             {
                 "replace_on_value_only": true,
-                "StatModifier"         : { "stat": {"CritDamage": {}}, "modifier": "Increased" },
+                "StatModifier"         : { "stat": {"CritDamage": {}}, "modifier": "More" },
                 "value"                : 100,
                 "modifier"             : "Percent"
             }

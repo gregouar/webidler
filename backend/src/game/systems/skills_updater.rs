@@ -284,6 +284,7 @@ fn weapon_skill_effect(
             independent_application: false,
             optional_application: false,
             description: None,
+            as_skill_type: None,
         }),
         Some(SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
@@ -316,6 +317,7 @@ fn weapon_skill_effect(
             independent_application: false,
             optional_application: true,
             description: None,
+            as_skill_type: None,
         }),
     ]
 }
@@ -899,6 +901,8 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
     extra_effects: impl Iterator<Item = &'b StatEffect> + Clone,
 ) -> Vec<StatEffect> {
+    let skill_type = skill_effect.as_skill_type.unwrap_or(skill_type);
+
     if let SkillEffectType::FlatDamage {
         damage,
         damage_factors,

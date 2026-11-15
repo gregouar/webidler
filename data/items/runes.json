@@ -466,16 +466,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": "Poison",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
@@ -491,6 +481,16 @@
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": "Poison",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
                 }
               }
             ],
@@ -1064,8 +1064,8 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
-  "rune_edict_dragon_physical": {
-    "name": "Iron Essence",
+  "rune_pure_physical": {
+    "name": "Iron Doctrine",
     "icon": "items/runes/rune_element_physical.webp",
     "description": "Pure Physical Prowess.",
     "slot": null,
@@ -1073,7 +1073,7 @@
     "categories": [
       "Rune"
     ],
-    "min_area_level": 0,
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -1088,7 +1088,7 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 100.0,
+        "value": 10.0,
         "is_unique": true
       },
       "unique_2": {
@@ -1105,6 +1105,30 @@
         "scope": "Global",
         "value": -1e+300,
         "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "StatConverter": {
+            "source": "CritDamage",
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "is_extra": true,
+            "skill_type": null,
+            "skill_id": null,
+            "uncapped": false
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 30.0,
+        "is_unique": true
       }
     },
     "triggers": [],
@@ -1115,11 +1139,31 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
-  "rune_edict_dragon_fire": {
-    "name": "Ember Essence",
+  "rune_pure_fire": {
+    "name": "Ember Doctrine",
     "icon": "items/runes/rune_element_fire.webp",
     "description": "Pure Physical Prowess.",
     "slot": null,
@@ -1127,7 +1171,7 @@
     "categories": [
       "Rune"
     ],
-    "min_area_level": 0,
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -1172,8 +1216,8 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
-  "rune_edict_dragon_storm": {
-    "name": "Tempest Essence",
+  "rune_pure_storm": {
+    "name": "Tempest Doctrine",
     "icon": "items/runes/rune_element_storm.webp",
     "description": "Pure Physical Prowess.",
     "slot": null,
@@ -1181,7 +1225,7 @@
     "categories": [
       "Rune"
     ],
-    "min_area_level": 0,
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -1226,8 +1270,8 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
-  "rune_edict_dragon_poison": {
-    "name": "Blight Essence",
+  "rune_pure_poison": {
+    "name": "Blight Doctrine",
     "icon": "items/runes/rune_element_poison.webp",
     "description": "Pure Physical Prowess.",
     "slot": null,
@@ -1235,7 +1279,7 @@
     "categories": [
       "Rune"
     ],
-    "min_area_level": 0,
+    "min_area_level": 260,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {

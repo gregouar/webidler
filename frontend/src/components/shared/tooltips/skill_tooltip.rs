@@ -772,6 +772,7 @@ pub fn format_skill_effect(
 
                     let status_effects_str =
                     status_tooltip::format_status_effects(
+                                &status_id,
                                 status_specs,
                                 &value,
                                 Some(value_factor),

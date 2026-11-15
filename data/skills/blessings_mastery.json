@@ -481,7 +481,8 @@
                         "SkillEffect"  : {
                             "success_chance"         : 30,
                             "ApplyStatus"            : {"status_id": "focus", "value": 100},
-                            "independent_application": true
+                            "independent_application": true,
+                            "as_skill_type"          : "Other"
                         }
                     }
                 ]
@@ -510,7 +511,7 @@
                         "upgrade_value": 0,
                         "Trigger"      : {
                             "trigger_id": "meditate_damage_per_restore",
-                            "skill_type": "Blessing",
+                            "skill_type": "Other",
                             "OnRestored": {"skill_id": "meditate", "restore_type": "Mana"},
                             "target"    : "Me",
                             "effects"   : [
@@ -526,7 +527,7 @@
                                 {
                                     "stat"    : {"StatusPower": {}},
                                     "modifier": "Flat",
-                                    "factor"  : 2.5,
+                                    "factor"  : 3,
                                     "source"  : "RestoreValue"
                                 }
                             ]
