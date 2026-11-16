@@ -8,7 +8,7 @@ use shared::data::{
     item::{BaseItemId, ItemCategory},
     item_affix::{AffixEffectBlueprint, AffixType, ItemAffixBlueprint, affix_group_id},
     market::AFFIX_FILTERS_AMOUNT,
-    stat_effect::StatEffect,
+    stat_effect::{StatEffect, StatType},
 };
 
 use crate::components::{
@@ -238,7 +238,12 @@ fn affix_groups(
 ) -> IndexMap<(Option<BaseItemId>, String), AffixGroupOption> {
     let item_affixes = data_context.item_affixes.read_untracked();
     let mut groups = BTreeMap::<
-        (AffixBaseCategory, AffixType, (Option<BaseItemId>, String)),
+        (
+            AffixBaseCategory,
+            AffixType, // For sorting purpose
+            StatType,  // For sorting purpose
+            (Option<BaseItemId>, String),
+        ),
         Vec<&ItemAffixBlueprint>,
     >::new();
 
@@ -272,15 +277,59 @@ fn affix_groups(
             .entry((
                 affix_base_category(affix_id),
                 affix.affix_type,
+                affix
+                    .effects
+                    .first()
+                    .map(|affix_effect| affix_effect.stat.clone())
+                    .unwrap_or(StatType::Description2("".to_string())),
                 (None, affix_group_id(affix_id).to_string()),
             ))
             .or_default()
             .push(affix);
     }
 
+    let unique_affixes: BTreeMap<(StatType, (Option<BaseItemId>, String)), AffixGroupOption> =
+        data_context
+            .item_bases
+            .read_untracked()
+            .iter()
+            .filter(|(_, item_base)| {
+                item_base.categories.contains(&ItemCategory::Soul)
+                    && (category.is_none()
+                        || item_base.categories.iter().all(|cat| {
+                            *cat == ItemCategory::Soul || intersected_categories.contains(cat)
+                        }))
+            })
+            .flat_map(|(base_item_id, item_base)| {
+                item_base
+                    .affixes
+                    .iter()
+                    .filter(|(_, affix)| affix.is_unique)
+                    .map(move |(affix_id, affix)| {
+                        (base_item_id, item_base.min_area_level, affix_id, affix)
+                    })
+            })
+            .map(|(base_item_id, level, affix_id, affix)| {
+                (
+                    (
+                        affix.effect.stat.clone(),
+                        (Some(base_item_id.clone()), affix_id.clone()),
+                    ),
+                    AffixGroupOption {
+                        label: format!(
+                            "({}) {}",
+                            affix_type_str(AffixType::Soul),
+                            affix_effect_label(&affix.effect, true)
+                        ),
+                        levels: vec![level],
+                    },
+                )
+            })
+            .collect();
+
     groups
         .into_iter()
-        .map(|((affix_base_category, _, group_id), mut group)| {
+        .map(|((affix_base_category, _, _, group_id), mut group)| {
             group.sort_by_key(|affix| affix.item_level);
             let label = affix_effects_label(
                 group
@@ -300,39 +349,9 @@ fn affix_groups(
             (group_id, AffixGroupOption { label, levels })
         })
         .chain(
-            data_context
-                .item_bases
-                .read_untracked()
-                .iter()
-                .filter(|(_, item_base)| {
-                    item_base.categories.contains(&ItemCategory::Soul)
-                        && (category.is_none()
-                            || item_base.categories.iter().all(|cat| {
-                                *cat == ItemCategory::Soul || intersected_categories.contains(cat)
-                            }))
-                })
-                .flat_map(|(base_item_id, item_base)| {
-                    item_base
-                        .affixes
-                        .iter()
-                        .filter(|(_, affix)| affix.is_unique)
-                        .map(move |(affix_id, affix)| {
-                            (base_item_id, item_base.min_area_level, affix_id, affix)
-                        })
-                })
-                .map(|(base_item_id, level, affix_id, affix)| {
-                    (
-                        (Some(base_item_id.clone()), affix_id.clone()),
-                        AffixGroupOption {
-                            label: format!(
-                                "({}) {}",
-                                affix_type_str(AffixType::Soul),
-                                affix_effect_label(&affix.effect, true)
-                            ),
-                            levels: vec![level],
-                        },
-                    )
-                }),
+            unique_affixes
+                .into_iter()
+                .map(|((_, group_id), group_option)| (group_id, group_option)),
         )
         .collect()
 }

@@ -111,7 +111,12 @@ pub fn affix_group_id(affix_id: &str) -> &str {
     affix_id
         .rsplit_once("_t")
         .filter(|(_, tier)| !tier.is_empty() && tier.chars().all(|c| c.is_ascii_digit()))
-        .map(|(group_id, _)| group_id)
+        .map(|(group_id, _)| {
+            group_id
+                .trim_end_matches("_1h")
+                .trim_end_matches("_2h")
+                .trim_end_matches("_local")
+        })
         .unwrap_or(affix_id)
 }
 
