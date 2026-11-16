@@ -8,5 +8,7 @@
     "title_max_various_skill_level": {"Title": "jack of all trades" },
     "title_regular_patron"         : {"Title": "regular patron"     },
     "title_treasure_hunter"        : {"Title": "treasure hunter"    },
-    "title_mummy_lover"            : {"Title": "mummy lover"        }
+    "title_mummy_lover"            : {"Title": "mummy lover"        },
+    "title_wanted"                 : {"Title": "most wanted"        },
+    "title_unique_edicts"          : {"Title": "jobro"              }
 }

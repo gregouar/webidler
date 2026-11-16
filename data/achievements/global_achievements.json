@@ -136,6 +136,25 @@
         ],
         "rewards": [ {"Cosmetic": "title_max_equipment"} ]
     },
+    "unique_edicts"          : {
+        "icon"        : "achievements/arrowhead.svg",
+        "name"        : "Bizarre Adventure",
+        "description" : "Complete 10 different named Grind variants using Unique Edicts.",
+        "goals_amount": 10,
+        "goals"       : [
+            { "AreaLevel": {"value": 50, "area_id": "inn_basement_2.json" } },
+            { "AreaLevel": {"value": 50, "area_id": "forest_mosquito.json"} },
+            { "AreaLevel": {"value": 50, "area_id": "witch_lair_2.json"   } },
+            { "AreaLevel": {"value": 50, "area_id": "castle_music.json"   } },
+            { "AreaLevel": {"value": 50, "area_id": "island_treasure.json"} },
+            { "AreaLevel": {"value": 50, "area_id": "peaks_dragon.json"   } },
+            { "AreaLevel": {"value": 50, "area_id": "desert_mummy.json"   } },
+            { "AreaLevel": {"value": 50, "area_id": "farwest_wanted.json" } },
+            { "AreaLevel": {"value": 50, "area_id": "mythos_stars.json"   } },
+            { "AreaLevel": {"value": 50, "area_id": "chaos_gold.json"     } }
+        ],
+        "rewards": [ {"Cosmetic": "title_unique_edicts"} ]
+    },
     "edict_menu"             : {
         "icon"       : "achievements/tavern_sign.svg",
         "name"       : "Vanquisher of Tavernus",

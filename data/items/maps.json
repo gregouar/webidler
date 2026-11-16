@@ -430,9 +430,7 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [
-        "edict_music.json"
-      ],
+      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": "edict_music.json"
     },
@@ -578,10 +576,8 @@
       "reward_picks": 1,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [
-        "edict_treasure.json"
-      ],
-      "replace_area_id": null,
+      "loot_tables": [],
+      "replace_area_id": "island_treasure.json",
       "reward_loot_table": "edict_treasure.json"
     },
     "ignore_quality": true,
@@ -658,6 +654,45 @@
       "loot_tables": [],
       "replace_area_id": "desert_mummy.json",
       "reward_loot_table": "edict_mummy.json"
+    },
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "edict_wanted": {
+    "name": "Wanted Poster",
+    "icon": "items/maps/edict_wanted.webp",
+    "description": "TODO",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Map"
+    ],
+    "min_area_level": 500,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "stat": {
+          "Description": "TODO"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": {
+      "area_id": "farwest.json",
+      "reward_picks": 1,
+      "reward_slots": 1,
+      "max_power_shard_level": null,
+      "loot_tables": [],
+      "replace_area_id": "farwest_wanted.json",
+      "reward_loot_table": "edict_wanted.json"
     },
     "ignore_quality": true,
     "upgrade_levels": [],
