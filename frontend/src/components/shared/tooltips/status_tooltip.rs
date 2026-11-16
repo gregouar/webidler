@@ -22,6 +22,7 @@ use crate::components::{
     ui::number::format_number,
 };
 
+#[allow(clippy::too_many_arguments)]
 pub fn format_status_effects(
     status_id: &StatusId,
     status_specs: StatusSpecs,
