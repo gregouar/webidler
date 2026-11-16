@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use rand::{self, seq::IteratorRandom};
 
@@ -14,6 +14,7 @@ use shared::{
             RepeatedSkillEffect, RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget,
             SkillTargetsGroup, SkillType, TargetType,
         },
+        stat_effect::DamageTypeMap,
         values::NonNegative,
     },
 };
@@ -547,16 +548,14 @@ fn apply_skill_effect_on_target(
                 .or_default();
             let is_crit = crit_chance.roll_with_marble_rolls(seed, crit_marble_bag);
 
-            let damage: HashMap<_, _> = damage
+            let damage: DamageTypeMap<_> = damage
                 .iter()
                 .map(|(damage_type, value)| {
                     let damage_marble_bag = attacker_marble_bags
-                        .entry(MarbleRollType::Damage {
-                            damage_type: *damage_type,
-                        })
+                        .entry(MarbleRollType::Damage { damage_type })
                         .or_default();
                     (
-                        *damage_type,
+                        damage_type,
                         (*value).roll_with_marble_rolls(seed, damage_marble_bag),
                     )
                 })

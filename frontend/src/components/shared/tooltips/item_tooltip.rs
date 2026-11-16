@@ -435,10 +435,10 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> im
             let mut damage_lines = vec![];
 
             for damage_type in DamageType::iter() {
-                let specs_value = specs.damage.get(&damage_type).copied().unwrap_or_default();
+                let specs_value = specs.damage.get(damage_type).copied().unwrap_or_default();
                 let base_value = base_specs
                     .damage
-                    .get(&damage_type)
+                    .get(damage_type)
                     .copied()
                     .unwrap_or_default();
 
@@ -858,7 +858,7 @@ pub fn formatted_affixes_list(
             let effects = affix
                 .effects
                 .iter().zip(effect_blueprints.iter())
-           
+
                 .filter_map(|(affix_effect, blueprint)| {
                     let effect = effects_tooltip::format_stat(&affix_effect.stat_effect);
                     if effect.is_empty() {

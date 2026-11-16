@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use shared::data::{
     stat_effect::EffectsMap,
     temple::{BenedictionEffect, PlayerBenedictions, PlayerBenedictionsCategory},
@@ -18,33 +16,32 @@ pub fn generate_effects_map_from_benedictions(
     benedictions_store: &BenedictionsStore,
     player_benedictions: &PlayerBenedictions,
 ) -> EffectsMap {
-    EffectsMap(
-        player_benedictions
-            .categories
-            .iter()
-            .flat_map(|(category_id, player_category)| {
-                let store_category = benedictions_store.get(category_id);
+    player_benedictions
+        .categories
+        .iter()
+        .flat_map(|(category_id, player_category)| {
+            let store_category = benedictions_store.get(category_id);
 
-                player_category.purchased_benedictions.iter().filter_map(
-                    move |(benediction_id, upgrade_level)| {
-                        let specs = store_category?.benedictions.get(benediction_id)?;
+            player_category.purchased_benedictions.iter().filter_map(
+                move |(benediction_id, upgrade_level)| {
+                    let specs = store_category?.benedictions.get(benediction_id)?;
 
-                        specs.compute_stat_effect(*upgrade_level)
-                    },
-                )
-            })
-            .fold(HashMap::new(), |mut effects, stat_effect| {
-                *effects
-                    .entry((
-                        stat_effect.stat.clone(),
-                        stat_effect.modifier,
-                        stat_effect.bypass_ignore,
-                    ))
-                    .or_default() += stat_effect.value;
+                    specs.compute_stat_effect(*upgrade_level)
+                },
+            )
+        })
+        .fold(EffectsMap::default(), |mut effects, stat_effect| {
+            *effects
+                .0
+                .entry((
+                    stat_effect.stat.clone(),
+                    stat_effect.modifier,
+                    stat_effect.bypass_ignore,
+                ))
+                .or_default() += stat_effect.value;
 
-                effects
-            }),
-    )
+            effects
+        })
 }
 
 pub fn find_benediction_value(

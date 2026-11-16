@@ -1,11 +1,11 @@
-use std::{collections::HashMap, time::Duration};
+use std::time::Duration;
 
 use shared::data::{
     character::{CharacterAttrs, CharacterId},
     character_status::{StatusEffectType, StatusMap, StatusSpecs, StatusState},
     player::CharacterState,
     skill::SkillType,
-    stat_effect::StatEffect,
+    stat_effect::{DamageTypeMap, StatEffect},
     values::NonNegative,
 };
 
@@ -73,11 +73,15 @@ fn update_status(
                 character_attrs,
                 character_life,
                 character_mana,
-                &HashMap::from([(
-                    *damage_type,
-                    (status_effect.computed_value(status_state.value)
-                        * elapsed_time_f64.get().min(status_state.duration.get())),
-                )]),
+                &{
+                    let mut damage = DamageTypeMap::default();
+                    damage.insert(
+                        *damage_type,
+                        status_effect.computed_value(status_state.value)
+                            * elapsed_time_f64.get().min(status_state.duration.get()),
+                    );
+                    damage
+                },
                 status_state.skill_type,
                 *armor_penetration,
                 None,

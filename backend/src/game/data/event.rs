@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use shared::data::{
     area::{AreaLevel, ThreatLevel},
     character::CharacterId,
@@ -7,6 +5,7 @@ use shared::data::{
     item::ItemSlot,
     modifier::ModifiableValue,
     skill::{DamageType, RestoreType, SkillRange, SkillType},
+    stat_effect::DamageTypeMap,
     values::NonNegative,
 };
 
@@ -44,7 +43,7 @@ pub struct HitEvent {
     pub is_blocked: bool,
     pub is_hurt: bool,
 
-    pub damage: HashMap<DamageType, ModifiableValue<NonNegative>>,
+    pub damage: DamageTypeMap<ModifiableValue<NonNegative>>,
 }
 #[derive(Debug, Clone)]
 pub struct StatusEvent {

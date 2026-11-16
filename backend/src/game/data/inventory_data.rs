@@ -1,8 +1,8 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 use shared::data::{
-    item::{ItemModifiers, ItemSlot},
+    item::{ItemModifiers, ItemSlot, ItemSlotSet},
     player::PlayerInventory,
 };
 
@@ -18,7 +18,7 @@ pub struct InventoryData {
     pub max_bag_size: u8,
 
     #[serde(default)]
-    pub sheathed: HashSet<ItemSlot>,
+    pub sheathed: ItemSlotSet,
 }
 
 pub fn inventory_data_to_player_inventory(

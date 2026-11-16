@@ -518,7 +518,7 @@ fn compute_character_specs(
                     let bounded_value = match damage_type {
                         Some(damage_type) => character_attrs
                             .evade
-                            .get_mut(&damage_type)
+                            .get_mut(damage_type)
                             .map(|evade| evade.value.convert_value(factor, specs.is_extra, false)),
                         None => character_attrs
                             .evade
@@ -541,7 +541,7 @@ fn compute_character_specs(
                     .armor
                     .iter_mut()
                     .map(|(armor_type, value)| {
-                        if compare_options(&Some(*armor_type), &damage_type) {
+                        if compare_options(&Some(armor_type), &damage_type) {
                             value.convert_value(factor, specs.is_extra, false)
                         } else {
                             0.0
@@ -595,7 +595,7 @@ pub fn compute_stat_converter(
             let bounded_value = match damage_type {
                 Some(damage_type) => character_attrs
                     .evade
-                    .get(damage_type)
+                    .get(*damage_type)
                     .map(|evade| evade.value),
                 None => character_attrs
                     .evade
@@ -618,7 +618,7 @@ pub fn compute_stat_converter(
             .armor
             .iter()
             .map(|(armor_type, value)| {
-                if compare_options(&Some(*armor_type), damage_type) {
+                if compare_options(&Some(armor_type), damage_type) {
                     **value
                 } else {
                     0.0

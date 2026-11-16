@@ -185,7 +185,7 @@ fn handle_hit_event<'a>(
                     .map(|damage_type| {
                         hit_event
                             .damage
-                            .get(&damage_type)
+                            .get(damage_type)
                             .map(|d| d.get())
                             .unwrap_or_default()
                             <= 0.0

@@ -67,7 +67,7 @@ fn add_hit_damage_kinds(
         return;
     };
 
-    for (&damage_type, value) in damage {
+    for (damage_type, value) in damage {
         let has_flat_trigger_damage = trigger_modifiers.iter().any(|modifier| {
             modifier.modifier == Modifier::Flat
                 && matches!(
@@ -440,7 +440,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Physical)
+                                                .get(DamageType::Physical)
                                                 .cloned()
                                                 .unwrap_or_default(),
                                         )
@@ -457,7 +457,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Fire)
+                                                .get(DamageType::Fire)
                                                 .cloned()
                                                 .unwrap_or_default(),
                                         )
@@ -474,7 +474,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Poison)
+                                                .get(DamageType::Poison)
                                                 .cloned()
                                                 .unwrap_or_default(),
                                         )
@@ -491,7 +491,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Storm)
+                                                .get(DamageType::Storm)
                                                 .cloned()
                                                 .unwrap_or_default(),
                                         )
@@ -619,17 +619,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         (
                                             DamageType::Physical,
                                             evades
-                                                .get(&DamageType::Physical)
+                                                .get(DamageType::Physical)
                                                 .copied()
                                                 .unwrap_or_default(),
                                         ),
                                         (
                                             DamageType::Fire,
-                                            evades.get(&DamageType::Fire).copied().unwrap_or_default(),
+                                            evades.get(DamageType::Fire).copied().unwrap_or_default(),
                                         ),
                                         (
                                             DamageType::Poison,
-                                            evades.get(&DamageType::Poison).copied().unwrap_or_default(),
+                                            evades.get(DamageType::Poison).copied().unwrap_or_default(),
                                         ),
                                     ]);
                                     evade_stats

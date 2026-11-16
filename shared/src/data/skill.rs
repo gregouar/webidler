@@ -13,8 +13,8 @@ use crate::{
         item_affix::AffixEffectScope,
         modifier::ModifiableValue,
         stat_effect::{
-            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
-            StatType,
+            DamageTypeMap, Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter,
+            StatStatusFilter, StatType,
         },
         trigger::{TriggerEffect, TriggerSpecs},
         values::{Cooldown, NonNegative, Percent},
@@ -264,7 +264,7 @@ pub enum SkillEffectType {
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]
-        damage_factors: HashMap<DamageType, f64>, // For tooltip purposes
+        damage_factors: DamageTypeMap<f64>, // For tooltip purposes
         #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]

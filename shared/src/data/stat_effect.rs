@@ -1,8 +1,7 @@
-use std::{
-    collections::{BTreeMap, HashMap, hash_map},
-    slice::Iter,
-};
+use std::{collections::hash_map, slice::Iter};
 
+use fixed_map::Key;
+use rustc_hash::FxHashMap;
 use serde::{Deserialize, Serialize};
 use strum::VariantArray as _;
 use strum_macros::{EnumIter, VariantArray};
@@ -38,6 +37,7 @@ use super::skill::SkillType;
     Default,
     EnumIter,
     VariantArray,
+    Key,
 )]
 pub enum DamageType {
     #[default]
@@ -53,7 +53,8 @@ impl Matchable for DamageType {
     }
 }
 
-pub type DamageMap = BTreeMap<DamageType, ChanceRange<ModifiableValue<NonNegative>>>;
+pub type DamageTypeMap<T> = fixed_map::Map<DamageType, T>;
+pub type DamageMap = DamageTypeMap<ChanceRange<ModifiableValue<NonNegative>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {
@@ -775,7 +776,7 @@ pub struct StatEffect {
     pub bypass_ignore: bool,
 }
 #[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
-pub struct EffectsMap(pub HashMap<(StatType, Modifier, bool), f64>);
+pub struct EffectsMap(pub FxHashMap<(StatType, Modifier, bool), f64>);
 
 impl From<&EffectsMap> for Vec<StatEffect> {
     fn from(val: &EffectsMap) -> Self {

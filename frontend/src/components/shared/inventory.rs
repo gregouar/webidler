@@ -219,7 +219,7 @@ fn EquippedItemEquippedSlot(
                 .player_inventory
                 .read()
                 .sheathed
-                .contains(&item_slot)
+                .contains(item_slot)
         }
     });
     let can_unequip = Signal::derive(move || {

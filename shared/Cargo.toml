@@ -15,6 +15,9 @@ nutype = { version = "0.8.0",  features = ["serde", "regex"] }
 regex = "1.13.1"
 lazy_static = "1.5.1"
 indexmap = { version = "2.14.2", features = ["serde"] }
+enumset = { version = "1.1.15", features = ["serde"] }
+fixed-map = { version = "0.9.6", features = ["serde"] }
+rustc-hash = "2.1.1"
 
 anyhow = "1.0.104"
 

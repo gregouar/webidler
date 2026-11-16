@@ -634,13 +634,13 @@ pub fn format_skill_effect(
             {
                 let mut damage_lines = Vec::new();
                 for damage_type in DamageType::iter() {
-                    let value = damage.get(&damage_type).copied().unwrap_or_default();
+                    let value = damage.get(damage_type).copied().unwrap_or_default();
                     let success_chance = success_chance.clone();
                     let damage_color = damage_color(damage_type);
                     let trigger_modifier_str = format_damage_trigger_modifier(
                         damage_type,
                         modifiers,
-                        damage_factors.get(&damage_type).copied(),
+                        damage_factors.get(damage_type).copied(),
                         damage_color,
                         trigger_status_name,
                         trigger_status_value,
@@ -1255,7 +1255,7 @@ pub fn skill_effect_text(
                 "Hit {}Damage",
                 damage
                     .keys()
-                    .map(|damage_type| damage_type_str(Some(*damage_type)))
+                    .map(|damage_type| damage_type_str(Some(damage_type)))
                     .join(" ")
             )
         }

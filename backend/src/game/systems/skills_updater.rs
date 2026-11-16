@@ -19,8 +19,8 @@ use shared::data::{
         PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState, SkillMasteryUpgradeEffectType,
     },
     stat_effect::{
-        EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource, StatConverterSpecs,
-        StatEffect, StatSkillEffectType, StatType, compare_options,
+        DamageMap, EffectsMap, LuckyRollType, Matchable, MinMax, StatConverterSource,
+        StatConverterSpecs, StatEffect, StatSkillEffectType, StatType, compare_options,
     },
     trigger::TriggerEffect,
     values::NonNegative,
@@ -245,7 +245,7 @@ fn weapon_skill_effect(
             max: NonNegative::new(max).multiply_value(factor).into(),
             lucky_chance: weapon_specs
                 .damage
-                .get(&damage_type)
+                .get(damage_type)
                 .map(|value| value.lucky_chance.as_new_base())
                 .unwrap_or_default(),
         }
@@ -256,12 +256,16 @@ fn weapon_skill_effect(
             effect_type: SkillEffectType::FlatDamage {
                 damage: match (damage_type, converted_damage) {
                     (Some(DamageType::Poison), _) => Default::default(),
-                    (Some(damage_type), Some(damage)) => [(damage_type, damage)].into(),
+                    (Some(damage_type), Some(damage)) => {
+                        let mut damage_map = DamageMap::default();
+                        damage_map.insert(damage_type, damage);
+                        damage_map
+                    }
                     (None, _) => weapon_specs
                         .damage
                         .iter()
-                        .filter(|(damage_type, _)| **damage_type != DamageType::Poison)
-                        .map(|(&damage_type, &damage)| {
+                        .filter(|(damage_type, _)| *damage_type != DamageType::Poison)
+                        .map(|(damage_type, &damage)| {
                             (
                                 damage_type,
                                 ChanceRange {
@@ -299,7 +303,7 @@ fn weapon_skill_effect(
                     (Some(DamageType::Poison), Some(damage)) => damage,
                     (None, _) => weapon_specs
                         .damage
-                        .get(&DamageType::Poison)
+                        .get(DamageType::Poison)
                         .map(|damage| ChanceRange {
                             min: damage.min.multiply_value(factor).into(),
                             max: damage.max.multiply_value(factor).into(),
@@ -711,7 +715,7 @@ fn compute_skill_modifier_effects(
                                 if let Some(dmg_type) = damage_type {
                                     weapon_specs
                                         .damage
-                                        .get(dmg_type)
+                                        .get(*dmg_type)
                                         .map(|d| match min_max {
                                             Some(MinMax::Min) => FactorType::Single(d.min.get()),
                                             Some(MinMax::Max) => FactorType::Single(d.max.get()),
@@ -917,7 +921,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     {
         *damage_factors = damage
             .iter()
-            .map(|(damage_type, value)| (*damage_type, value.max.factor()))
+            .map(|(damage_type, value)| (damage_type, value.max.factor()))
             .collect();
     }
 
@@ -1033,7 +1037,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                     };
                     let amount = match damage_type {
                         Some(damage_type) => damage
-                            .get_mut(&damage_type)
+                            .get_mut(damage_type)
                             .map(|d| {
                                 (
                                     d.min.convert_value(min_factor, specs.is_extra, true).get(),
@@ -1441,11 +1445,9 @@ pub fn apply_stat_effect_on_skill_effect(
                 *unblockable = *stat_unblockable;
             }
 
-            damage_factors.extend(
-                damage
-                    .iter()
-                    .map(|(damage_type, value)| (*damage_type, value.max.factor())),
-            );
+            for (damage_type, value) in damage.iter() {
+                damage_factors.insert(damage_type, value.max.factor());
+            }
         }
         SkillEffectType::ApplyStatus {
             status_id: skill_status_id,

@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
@@ -13,7 +13,7 @@ use crate::data::{
 };
 
 pub use super::character::{CharacterSpecs, CharacterState};
-use super::item::{ItemSlot, ItemSpecs};
+use super::item::{ItemSlot, ItemSlotSet, ItemSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerBaseSpecs {
@@ -91,7 +91,7 @@ pub struct PlayerInventory {
 
     // TODO: Have proper migration and have sheathed as part of EquippedSlot
     #[serde(default)]
-    pub sheathed: HashSet<ItemSlot>,
+    pub sheathed: ItemSlotSet,
 }
 
 impl PlayerInventory {

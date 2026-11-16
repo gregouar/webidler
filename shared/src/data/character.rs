@@ -9,7 +9,7 @@ use crate::data::{
     modifier::ModifiableValue,
     rng::{MarbleBag, MarbleRollType},
     skill::{DamageType, RepeatedSkillEffect, SkillType},
-    stat_effect::StatEffect,
+    stat_effect::{DamageTypeMap, StatEffect},
     trigger::TriggersMap,
     values::{AtLeastOne, NonNegative, Percent},
 };
@@ -102,7 +102,7 @@ pub struct CharacterAttrs {
     pub take_from_life_before_mana: ModifiableValue<Percent>,
 
     #[serde(default)]
-    pub armor: HashMap<DamageType, ModifiableValue<f64>>,
+    pub armor: DamageTypeMap<ModifiableValue<f64>>,
 
     #[serde(default)]
     pub block: HashMap<SkillType, BoundedChance>,
@@ -110,7 +110,7 @@ pub struct CharacterAttrs {
     pub block_damage: ModifiableValue<Percent>,
 
     #[serde(default)]
-    pub evade: HashMap<DamageType, BoundedChance>,
+    pub evade: DamageTypeMap<BoundedChance>,
     #[serde(default)]
     pub evade_damage: ModifiableValue<Percent>,
 

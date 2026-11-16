@@ -144,7 +144,7 @@ async fn migrate_character_items(
                 .map(|item| migrate_item(item, items_store))
                 .collect::<anyhow::Result<_>>()?,
             max_bag_size: old_inventory.max_bag_size,
-            sheathed: old_inventory.sheathed,
+            sheathed: old_inventory.sheathed.into_iter().collect(),
         };
 
         let passives_data = if let Some(passives_data) = character_data.passives_data {

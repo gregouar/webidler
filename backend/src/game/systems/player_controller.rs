@@ -313,7 +313,7 @@ pub fn unequip_item_to_bag(
     item_slot: ItemSlot,
 ) -> Result<(), AppError> {
     inventory_controller::unequip_item_to_bag(player_inventory, item_slot)?;
-    if !player_inventory.sheathed.remove(&item_slot) {
+    if !player_inventory.sheathed.remove(item_slot) {
         unequip_weapon(
             player_base_specs,
             player_state,
@@ -343,7 +343,7 @@ pub fn toggle_sheathe_item(
         return Err(AppError::UserError("item is not a weapon".into()));
     };
 
-    if !player_inventory.sheathed.contains(&item_slot) {
+    if !player_inventory.sheathed.contains(item_slot) {
         player_inventory.sheathed.insert(item_slot);
         unequip_weapon(
             player_base_specs,
@@ -415,7 +415,7 @@ pub fn init_skills_from_inventory(
         .collect::<Vec<_>>();
 
     for item_slot in weapons {
-        if !player_inventory.sheathed.contains(&item_slot)
+        if !player_inventory.sheathed.contains(item_slot)
             && !equip_weapon(
                 skills_store,
                 player_base_specs,
@@ -474,7 +474,7 @@ fn equip_weapon(
             true,
             Some(item_slot),
         ) {
-            player_inventory.sheathed.remove(&item_slot);
+            player_inventory.sheathed.remove(item_slot);
             true
         } else {
             player_inventory.sheathed.insert(item_slot);

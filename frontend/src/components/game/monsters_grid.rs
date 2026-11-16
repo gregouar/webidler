@@ -585,7 +585,7 @@ fn MonsterCard(
 fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
     let armor_values = DamageType::iter()
         .filter_map(|damage_type| {
-            let value = *attrs.armor.get(&damage_type).copied().unwrap_or_default();
+            let value = *attrs.armor.get(damage_type).copied().unwrap_or_default();
             (value > 0.0).then_some((damage_type, value))
         })
         .collect::<Vec<_>>();
@@ -659,7 +659,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
         .filter_map(|damage_type| {
             let value = attrs
                 .evade
-                .get(&damage_type)
+                .get(damage_type)
                 .copied()
                 .unwrap_or_default()
                 .value

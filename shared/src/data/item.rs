@@ -1,3 +1,4 @@
+use enumset::EnumSetType;
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeSet;
@@ -105,8 +106,20 @@ impl InventorySortType {
 }
 
 #[derive(
-    Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, EnumIter, PartialOrd, Ord,
+    Serialize,
+    Deserialize,
+    Debug,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    Hash,
+    EnumIter,
+    PartialOrd,
+    Ord,
+    EnumSetType,
 )]
+#[enumset(no_super_impls, repr = "u16", serialize_repr = "list")]
 pub enum ItemSlot {
     Accessory,
     Helmet,
@@ -118,6 +131,8 @@ pub enum ItemSlot {
     Boots,
     Ring,
 }
+
+pub type ItemSlotSet = enumset::EnumSet<ItemSlot>;
 
 impl TryFrom<usize> for ItemSlot {
     type Error = anyhow::Error;
@@ -304,7 +319,7 @@ impl WeaponSpecs {
 
     pub fn average_damage_type(&self, damage_type: DamageType) -> f64 {
         self
-                .damage.get(&damage_type)
+                .damage.get(damage_type)
                 .map(|value| 1.0 / self.cooldown.get()
             // TODO: Lucky?
             * (1.0 + *self.crit_damage * self.crit_chance.value.get() as f64 * 0.0001)*(value.min.get() + value.max.get()) * 0.5).unwrap_or_default()

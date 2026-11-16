@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use shared::{
     computations,
     constants::ARMOR_FACTOR,
@@ -11,7 +9,7 @@ use shared::{
         player::CharacterSpecs,
         rng::MarbleRollType,
         skill::{DamageType, RestoreModifier, RestoreType, SkillType},
-        stat_effect::{StatSkillFilter, StatStatusFilter, compare_options},
+        stat_effect::{DamageTypeMap, StatSkillFilter, StatStatusFilter, compare_options},
         values::{Cooldown, NonNegative, Percent},
     },
 };
@@ -33,7 +31,7 @@ pub fn attack_character(
     events_queue: &mut EventsQueue,
     target: &mut Target,
     attacker: CharacterId,
-    mut damage: HashMap<DamageType, ModifiableValue<NonNegative>>,
+    mut damage: DamageTypeMap<ModifiableValue<NonNegative>>,
     skill_type: SkillType,
     range: SkillRange,
     crit_damage: Option<f64>,
@@ -77,7 +75,7 @@ pub fn attack_character(
         &mut target_state.mana,
         &damage
             .iter()
-            .map(|(damage_type, value)| (*damage_type, **value))
+            .map(|(damage_type, value)| (damage_type, **value))
             .collect(),
         skill_type,
         armor_penetration,
@@ -130,7 +128,7 @@ pub fn damage_character(
     character_attrs: &CharacterAttrs,
     life: &mut NonNegative,
     mana: &mut NonNegative,
-    damage: &HashMap<DamageType, NonNegative>,
+    damage: &DamageTypeMap<NonNegative>,
     skill_type: SkillType,
     armor_penetration: Percent,
     crit_damage: Option<f64>,
@@ -141,7 +139,7 @@ pub fn damage_character(
             compute_damage(
                 character_attrs,
                 *amount,
-                *damage_type,
+                damage_type,
                 skill_type,
                 armor_penetration,
                 crit_damage,
@@ -184,7 +182,7 @@ fn compute_damage(
         - computations::diminishing(
             *character_attrs
                 .armor
-                .get(&damage_type)
+                .get(damage_type)
                 .cloned()
                 .unwrap_or_default(),
             ARMOR_FACTOR,
@@ -431,7 +429,7 @@ pub fn apply_status(
         target_specs
             .character_attrs
             .evade
-            .get(&damage_type)
+            .get(damage_type)
             .map(|evade| {
                 evade.roll_with_marble_bag(
                     target_state

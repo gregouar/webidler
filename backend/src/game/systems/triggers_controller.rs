@@ -107,7 +107,7 @@ pub fn apply_trigger_effects(
                             trigger_context
                                 .hit_context
                                 .as_ref()
-                                .and_then(|hit| hit.damage.get(damage_type))
+                                .and_then(|hit| hit.damage.get(*damage_type))
                         }
                         TriggerEffectModifierSource::TriggeringStatusValue => trigger_context
                             .status_context
@@ -152,7 +152,7 @@ pub fn apply_trigger_effects(
                     TriggerEffectModifierSource::HitDamage(Some(damage_type)) => trigger_context
                         .hit_context
                         .as_ref()
-                        .and_then(|hit| hit.damage.get(damage_type))
+                        .and_then(|hit| hit.damage.get(*damage_type))
                         .map(|d| d.get())
                         .unwrap_or_default(),
                     // NB: The following doesn't play nicely with increased modifiers
