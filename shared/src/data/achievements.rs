@@ -21,6 +21,17 @@ pub struct AchievementSpecs {
     pub rewards: Vec<AchievementReward>,
 }
 
+impl AchievementSpecs {
+    pub fn required_goal_count(&self) -> usize {
+        self.goals_amount.map(usize::from).unwrap_or_else(|| {
+            self.goals
+                .iter()
+                .map(AchievementGoal::required_amount)
+                .sum()
+        })
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum AchievementReward {
     Cosmetic(String),
@@ -68,6 +79,17 @@ pub enum AchievementGoal {
         #[serde(default = "default_one")]
         amount: u8,
     },
+}
+
+impl AchievementGoal {
+    pub fn required_amount(&self) -> usize {
+        match self {
+            Self::SkillLevel { amount, .. }
+            | Self::PassiveLevel { amount, .. }
+            | Self::EquippedItem { amount, .. } => usize::from(*amount),
+            Self::AreaLevel { .. } | Self::PowerLevel(_) | Self::PlayerLevel(_) => 1,
+        }
+    }
 }
 
 fn default_one() -> u8 {

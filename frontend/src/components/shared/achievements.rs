@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use shared::data::{achievements::AchievementReward, cosmetics::CosmeticType, user::UserUnlocks};
+use std::collections::HashMap;
 
 use crate::{
     assets::img_asset,
@@ -19,12 +20,19 @@ use crate::{
 pub fn AchievementsPanel(
     open: RwSignal<bool>,
     #[prop(into)] user_unlocks: Signal<UserUnlocks>,
+    #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, usize>>>,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
     view! {
         <MenuPanel open w_full=false h_full=false class:items-center>
             <MenuCard class="w-full max-w-5xl mx-auto">
-                <CardHeader title="Achievements" on_close=move || open.set(false) />
+                <CardHeader title="Achievements" on_close=move || open.set(false)>
+                    <div class="flex-1" />
+                    <div class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
+                        "("{move || user_unlocks.read().achievements.len()}" / "
+                        {move || data_context.achievements.read().len()}")"
+                    </div>
+                </CardHeader>
                 <CardInset class="min-h-0 overflow-y-auto">
                     <div class="grid grid-cols-1 items-stretch gap-2 xl:grid-cols-2 xl:gap-3">
                         <For
@@ -45,6 +53,23 @@ pub fn AchievementsPanel(
                                 let unlocked_id = id.clone();
                                 let unlocked_at = Memo::new(move |_| {
                                     user_unlocks.read().achievements.get(&unlocked_id).cloned()
+                                });
+                                let required_goal_count = achievement.required_goal_count();
+                                let progress_id = id.clone();
+                                let goal_progress = Memo::new(move |_| {
+                                    achievements_progress
+                                        .map(|achievements_progress| {
+                                            if achieved.get() {
+                                                required_goal_count
+                                            } else {
+                                                achievements_progress
+                                                    .read()
+                                                    .get(&progress_id)
+                                                    .copied()
+                                                    .unwrap_or_default()
+                                                    .min(required_goal_count)
+                                            }
+                                        })
                                 });
                                 let rewards = {
                                     let achievement_rewards = achievement.rewards.clone();
@@ -90,6 +115,29 @@ pub fn AchievementsPanel(
                                                             },
                                                         )
                                                     }>{achievement.name}</div>
+                                                    {move || {
+                                                        goal_progress
+                                                            .get()
+                                                            .map(|goal_progress| {
+                                                                view! {
+                                                                    <span class=move || {
+                                                                        format!(
+                                                                            "ml-auto shrink-0 text-sm font-semibold {}",
+                                                                            if achieved.get() {
+                                                                                "text-amber-200"
+                                                                            } else {
+                                                                                "text-zinc-300"
+                                                                            },
+                                                                        )
+                                                                    }>
+                                                                        {move || {
+                                                                            format!("{} / {}", goal_progress, required_goal_count)
+                                                                        }}
+                                                                    </span>
+                                                                }
+                                                            })
+                                                    }}
+
                                                 </div>
                                                 <div class="mt-1 flex-1 text-sm leading-snug text-zinc-300">
                                                     {achievement.description}

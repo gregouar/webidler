@@ -23,6 +23,7 @@ pub struct TownContext {
     pub areas: RwSignal<Vec<UserGrindArea>>,
     pub inventory: RwSignal<PlayerInventory>,
     pub user_unlocks: RwSignal<UserUnlocks>,
+    pub achievements_progress: RwSignal<HashMap<String, usize>>,
 
     pub character_stash: RwSignal<Stash>,
     pub user_stash: RwSignal<Stash>,
@@ -65,6 +66,7 @@ impl Default for TownContext {
             areas: Default::default(),
             inventory: Default::default(),
             user_unlocks: Default::default(),
+            achievements_progress: Default::default(),
             character_stash: RwSignal::new(Stash {
                 stash_type: StashType::Character,
                 ..Default::default()

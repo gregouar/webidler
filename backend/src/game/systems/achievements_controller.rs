@@ -63,41 +63,81 @@ pub fn check_achievements(
         .collect()
 }
 
+pub fn achievements_progress(
+    master_store: &MasterStore,
+    context: &AchievementContext<'_>,
+) -> HashMap<String, usize> {
+    master_store
+        .achievements_store
+        .iter()
+        .map(|(id, specs)| {
+            (
+                id.clone(),
+                achievement_progress(master_store, specs, context),
+            )
+        })
+        .collect()
+}
+
 fn achievement_satisfied(
     master_store: &MasterStore,
     specs: &AchievementSpecs,
     context: &AchievementContext<'_>,
 ) -> bool {
-    let required = specs
-        .goals_amount
-        .map(usize::from)
-        .unwrap_or(specs.goals.len());
-    specs
-        .goals
-        .iter()
-        .filter(|goal| goal_satisfied(master_store, goal, context))
-        .count()
-        >= required
+    achievement_progress(master_store, specs, context) >= specs.required_goal_count()
 }
 
-fn goal_satisfied(
+fn achievement_progress(
+    master_store: &MasterStore,
+    specs: &AchievementSpecs,
+    context: &AchievementContext<'_>,
+) -> usize {
+    aggregate_achievement_progress(
+        specs,
+        specs
+            .goals
+            .iter()
+            .map(|goal| goal_progress(master_store, goal, context)),
+    )
+}
+
+fn aggregate_achievement_progress(
+    specs: &AchievementSpecs,
+    goal_progress: impl IntoIterator<Item = usize>,
+) -> usize {
+    let progress = if specs.goals_amount.is_some() {
+        goal_progress
+            .into_iter()
+            .zip(&specs.goals)
+            .filter(|(progress, goal)| *progress >= goal.required_amount())
+            .count()
+    } else {
+        goal_progress.into_iter().sum()
+    };
+
+    progress.min(specs.required_goal_count())
+}
+
+fn goal_progress(
     master_store: &MasterStore,
     goal: &AchievementGoal,
     context: &AchievementContext<'_>,
-) -> bool {
+) -> usize {
     match goal {
         AchievementGoal::AreaLevel { value, area_id } => area_id
             .as_ref()
             .map(|id| context.area_levels.get(id).copied().unwrap_or_default() >= *value)
-            .unwrap_or_else(|| context.area_levels.values().any(|level| level >= value)),
-        AchievementGoal::PowerLevel(value) => context.power_level >= *value,
-        AchievementGoal::PlayerLevel(value) => context.player_level >= *value,
+            .unwrap_or_else(|| context.area_levels.values().any(|level| level >= value))
+            as usize,
+        AchievementGoal::PowerLevel(value) => (context.power_level >= *value) as usize,
+        AchievementGoal::PlayerLevel(value) => (context.player_level >= *value) as usize,
         AchievementGoal::SkillLevel {
             value,
             skill_id,
             skill_type,
             amount,
         } => {
+            let required = usize::from(*amount);
             context
                 .skill_masteries
                 .masteries
@@ -116,13 +156,14 @@ fn goal_satisfied(
                             .is_some_and(|specs| mastery.level(specs.max_level) >= *value as u16)
                 })
                 .count()
-                >= *amount as usize
+                .min(required)
         }
         AchievementGoal::PassiveLevel {
             value,
             passive_id,
             amount,
         } => {
+            let required = usize::from(*amount);
             context
                 .ascension
                 .ascended_nodes
@@ -131,7 +172,7 @@ fn goal_satisfied(
                     **level >= *value && passive_id.is_none_or(|required| **id == required)
                 })
                 .count()
-                >= *amount as usize
+                .min(required)
         }
         AchievementGoal::EquippedItem {
             item_id,
@@ -159,29 +200,33 @@ fn goal_satisfied(
             };
             let required = *amount as usize;
 
-            if *in_passives_tree {
-                item_slot.is_none()
-                    && context
+            let progress = if *in_passives_tree {
+                if item_slot.is_none() {
+                    context
                         .ascension
                         .socketed_nodes
                         .values()
                         .filter(|item| matches(item))
                         .count()
-                        >= required
+                } else {
+                    0
+                }
             } else if let Some(slot) = *item_slot {
-                required == 1
-                    && context
+                usize::from(
+                    context
                         .inventory
                         .get_equipped_item(slot)
-                        .is_some_and(&matches)
+                        .is_some_and(&matches),
+                )
             } else {
                 context
                     .inventory
                     .equipped_items()
                     .filter(|(_, item)| matches(item))
                     .count()
-                    >= required
-            }
+            };
+
+            progress.min(required)
         }
     }
 }

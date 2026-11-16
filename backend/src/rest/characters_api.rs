@@ -294,18 +294,21 @@ async fn post_reconcile_achievements(
     let ascension =
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
+    let achievement_context = AchievementContext {
+        area_levels: &area_levels,
+        power_level: character.max_area_level as AreaLevel,
+        player_level: 0,
+        skill_masteries: &skill_masteries,
+        ascension: &ascension,
+        inventory: &inventory,
+    };
     let newly_unlocked_achievements = achievements_controller::check_achievements(
         &master_store,
         &already_unlocked,
-        &AchievementContext {
-            area_levels: &area_levels,
-            power_level: character.max_area_level as AreaLevel,
-            player_level: 0,
-            skill_masteries: &skill_masteries,
-            ascension: &ascension,
-            inventory: &inventory,
-        },
+        &achievement_context,
     );
+    let achievements_progress =
+        achievements_controller::achievements_progress(&master_store, &achievement_context);
 
     achievements_controller::unlock_achievements(
         &mut tx,
@@ -322,6 +325,7 @@ async fn post_reconcile_achievements(
     Ok(Json(ReconcileAchievementsResponse {
         user_unlocks,
         newly_unlocked_achievements,
+        achievements_progress,
     }))
 }
 

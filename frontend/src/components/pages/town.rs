@@ -66,6 +66,9 @@ pub fn TownPage() -> impl IntoView {
                 match backend.post_reconcile_achievements(&character_id).await {
                     Ok(response) => {
                         town_context.user_unlocks.set(response.user_unlocks);
+                        town_context
+                            .achievements_progress
+                            .set(response.achievements_progress);
                         notify_newly_unlocked_achievements(
                             data_context,
                             toaster,
@@ -198,6 +201,7 @@ pub fn TownPage() -> impl IntoView {
                             <AchievementsPanel
                                 open=town_context.open_achievements
                                 user_unlocks=town_context.user_unlocks
+                                achievements_progress=town_context.achievements_progress
                             />
                             <PetsPanel
                                 open=town_context.open_pets
