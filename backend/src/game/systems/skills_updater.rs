@@ -134,7 +134,9 @@ pub fn update_skill_specs(
         Vec::new()
     };
 
-    skill_specs.targets = apply_weapon_effects(skill_specs.targets, inventory);
+    if let Some(inventory) = inventory {
+        apply_weapon_effects(&mut skill_specs.targets, inventory);
+    }
 
     local_effects.extend(EffectsMap::combine_all(
         std::iter::once(compute_skill_upgrade_effects(
@@ -179,53 +181,57 @@ pub fn update_skill_specs(
     skill_specs
 }
 
-fn apply_weapon_effects(
-    target_groups: Vec<SkillTargetsGroup>,
-    inventory: Option<&PlayerInventory>,
-) -> Vec<SkillTargetsGroup> {
-    let Some(inventory) = inventory else {
-        return target_groups;
-    };
+fn apply_weapon_effects(target_groups: &mut [SkillTargetsGroup], inventory: &PlayerInventory) {
+    for target in target_groups {
+        let weapon_effect_count = target
+            .effects
+            .iter()
+            .filter(|effect| matches!(effect.effect_type, SkillEffectType::WeaponEffect { .. }))
+            .count();
 
-    target_groups
-        .into_iter()
-        .map(|target| SkillTargetsGroup {
-            effects: target
-                .effects
-                .into_iter()
-                .flat_map(|skill_effect| match skill_effect.effect_type {
-                    SkillEffectType::WeaponEffect {
-                        item_slot,
-                        factor,
-                        damage_type,
-                    } => weapon_skill_effect(
-                        item_slot,
-                        inventory
-                            .get_equipped_item(item_slot)
-                            .and_then(|item_specs| item_specs.weapon_specs.as_ref()),
+        if weapon_effect_count == 0 {
+            continue;
+        }
+
+        let old_effects = std::mem::take(&mut target.effects);
+        let mut new_effects = Vec::with_capacity(old_effects.len() + weapon_effect_count);
+
+        for skill_effect in old_effects {
+            match skill_effect.effect_type {
+                SkillEffectType::WeaponEffect {
+                    item_slot,
+                    factor,
+                    damage_type,
+                } => {
+                    let Some(equipped_weapon) = inventory.get_equipped_item(item_slot) else {
+                        continue;
+                    };
+                    let Some(weapon_specs) = &equipped_weapon.weapon_specs else {
+                        continue;
+                    };
+
+                    let base_item_slot = equipped_weapon.slot.unwrap_or(item_slot);
+                    new_effects.extend(weapon_skill_effect(
+                        base_item_slot,
+                        weapon_specs,
                         *factor,
                         damage_type,
-                    )
-                    .into_iter()
-                    .flatten(),
-                    _ => [Some(skill_effect), None].into_iter().flatten(),
-                })
-                .collect(),
-            ..target
-        })
-        .collect()
+                    ));
+                }
+                _ => new_effects.push(skill_effect),
+            }
+        }
+
+        target.effects = new_effects;
+    }
 }
 
 fn weapon_skill_effect(
     item_slot: ItemSlot,
-    weapon_specs: Option<&WeaponSpecs>,
+    weapon_specs: &WeaponSpecs,
     factor: f64,
     damage_type: Option<DamageType>,
-) -> [Option<SkillEffect>; 2] {
-    let Some(weapon_specs) = weapon_specs else {
-        return [None, None];
-    };
-
+) -> [SkillEffect; 2] {
     let converted_damage = damage_type.map(|damage_type| {
         let (min, max) = weapon_specs
             .damage
@@ -246,7 +252,7 @@ fn weapon_skill_effect(
     });
 
     [
-        Some(SkillEffect {
+        SkillEffect {
             effect_type: SkillEffectType::FlatDamage {
                 damage: match (damage_type, converted_damage) {
                     (Some(DamageType::Poison), _) => Default::default(),
@@ -285,8 +291,8 @@ fn weapon_skill_effect(
             optional_application: false,
             description: None,
             as_skill_type: None,
-        }),
-        Some(SkillEffect {
+        },
+        SkillEffect {
             effect_type: SkillEffectType::ApplyStatus {
                 status_id: "poison".into(),
                 value: match (damage_type, converted_damage) {
@@ -318,7 +324,7 @@ fn weapon_skill_effect(
             optional_application: true,
             description: None,
             as_skill_type: None,
-        }),
+        },
     ]
 }
 
