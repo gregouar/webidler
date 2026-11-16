@@ -5,7 +5,7 @@ Body: 7
 Boots: 7
 Cloak: 7
 Focus: 5 + 3
-Gloves: 6
+Gloves: 6 + 1
 Helmet: 6 + 1
 Rings: 6 + 1
 Shields: 5 + 1

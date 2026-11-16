@@ -43,7 +43,7 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
                 )
             };
             if effect.value < 0.0 && number_value.round() >= 100.0 {
-                "Removes All".into()
+                "Remove All".into()
             } else {
                 format!("{}% {word}", format_number(number_value))
             }
@@ -56,7 +56,7 @@ pub fn format_effect_value(effect: &StatEffect) -> String {
                 (-(if div != 0.0 { effect.value / div } else { 0.0 }), "Less")
             };
             if effect.value < 0.0 && number_value.round() >= 100.0 {
-                "Removes All".into()
+                "Remove All".into()
             } else {
                 format!("{}% {word}", format_number(number_value))
             }
@@ -125,7 +125,7 @@ pub fn damage_over_time_type_str(damage_type: Option<DamageType>) -> &'static st
 pub fn is_hit_str(is_hit: &Option<bool>) -> &'static str {
     match is_hit {
         Some(true) => "Hit ",
-        Some(false) => "Non-hit",
+        Some(false) => "Non-hit ",
         None => "",
     }
 }
@@ -553,9 +553,23 @@ pub fn modifier_str(modifier: Modifier) -> &'static str {
 pub fn format_multiplier_stat(effect: &StatEffect) -> String {
     if let StatType::CritDamageTaken { skill_type } = effect.stat
         && effect.modifier == Modifier::More
-        && effect.value < -1e200
+        && effect.value <= -1e300
     {
         return format!("Immune to {}Critical Hits", skill_type_str(skill_type));
+    }
+
+    if let StatType::Damage { .. }
+    | StatType::StatusPower {
+        status_filter: StatStatusFilter {
+            damage_type: Some(_),
+            ..
+        },
+        ..
+    } = &effect.stat
+        && effect.modifier == Modifier::More
+        && effect.value <= -1e300
+    {
+        return format!("Cannot deal {}", format_multiplier_stat_name(&effect.stat));
     }
 
     format!(
