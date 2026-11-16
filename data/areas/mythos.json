@@ -2,9 +2,9 @@
     "specs"      : {
         "name": "Eldritch Depths",
         "description": "No mortal tongue can name what slumbers in these depths. The fortunate lose only their sanity before the end.",
-        "power_level": 90,
+        "power_level": 100,
         "required_level": 600,
-        "item_level_modifier": 180,
+        "item_level_modifier": 200,
         "boss": true,
         "header_background": "areas/mythos_header.webp",
         "footer_background": "areas/mythos_footer.webp",

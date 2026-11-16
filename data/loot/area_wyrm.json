@@ -14,6 +14,7 @@
     {"item_id": "weapon_shield",             "weight":  9999                                        },
     {"item_id": "amulet_7_unique",           "weight":   999                                        },
     {"item_id": "focus_ring",                "weight":   999                                        },
-    {"item_id": "wand_prism",                "weight":  9999                                        }
+    {"item_id": "wand_prism",                "weight":  9999                                        },
+    {"item_id": "edict_dragon",              "weight":   999                                        }
   ]
 }

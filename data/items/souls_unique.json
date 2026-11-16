@@ -9,7 +9,7 @@
       "Rune",
       "Soul"
     ],
-    "min_area_level": 800,
+    "min_area_level": 600,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -23,6 +23,21 @@
           }
         },
         "modifier": "More",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "CritDamage": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
         "scope": "Global",
         "value": 50.0,
         "is_unique": true
@@ -47,7 +62,7 @@
       "Rune",
       "Soul"
     ],
-    "min_area_level": 800,
+    "min_area_level": 600,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -62,7 +77,25 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "StatusDuration": {
+            "status_id": "burn",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 30.0,
         "is_unique": true
       }
     },
@@ -85,7 +118,7 @@
       "Rune",
       "Soul"
     ],
-    "min_area_level": 800,
+    "min_area_level": 600,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -100,7 +133,26 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "StatusPower": {
+            "status_id": "pure_storm",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 20.0,
         "is_unique": true
       }
     },
@@ -123,7 +175,7 @@
       "Rune",
       "Soul"
     ],
-    "min_area_level": 800,
+    "min_area_level": 600,
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
@@ -138,7 +190,25 @@
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "StatusDuration": {
+            "status_id": null,
+            "damage_type": "Poison",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 30.0,
         "is_unique": true
       }
     },
