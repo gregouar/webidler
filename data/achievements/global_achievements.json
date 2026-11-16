@@ -181,11 +181,20 @@
     "edict_witch"            : {
         "icon"       : "achievements/spider.svg",
         "name"       : "Broodkiller",
-        "description": "Kill the Broodmother.",
+        "description": "Accomplish the Profane Ritual.",
         "goals"      : [
             { "AreaLevel": {"value": 50, "area_id": "witch_lair_2.json"} }
         ],
         "rewards": [ {"Pet": "pet_witch"}, {"Cosmetic": "badge_witch"} ]
+    },
+    "edict_dragon"           : {
+        "icon"       : "achievements/egg.svg",
+        "name"       : "Child Care",
+        "description": "Bring the Egg to the top of the Peaks.",
+        "goals"      : [
+            { "AreaLevel": {"value": 50, "area_id": "peaks_dragon.json"} }
+        ],
+        "rewards": [ {"Pet": "pet_dragon_duck"}, {"Cosmetic": "badge_dragon"} ]
     },
     "edict_stars"            : {
         "icon"       : "achievements/telescope.svg",

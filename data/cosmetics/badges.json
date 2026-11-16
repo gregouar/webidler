@@ -13,6 +13,13 @@
             "description": "This player killed Amelia, the Broodborne Witch."
         }
     },
+    "badge_dragon"      : {
+        "Badge": {
+            "icon"       : "badges/badge_dragon.webp",
+            "name"       : "Dragon Slayer",
+            "description": "This player killed The Child of Zael and Abal."
+        }
+    },
     "badge_stars"       : {
         "Badge": {
             "icon"       : "badges/badge_stars.webp",
