@@ -16,7 +16,7 @@ Wand: 7
 ----
 Total: 83 + 9
 
-Runes: 9 + 1
+Runes: 9 + 1 + 4
 Maps: 9 + 1 (+ 1)
 
 

@@ -192,10 +192,10 @@ fn handle_hit_event<'a>(
                     })
                     .unwrap_or_default()
                 || !compare_options(&hit_trigger.skill_id.as_ref(), &Some(&hit_event.skill_id))
-                || !hit_trigger
+                || hit_trigger
                     .item_slot
                     .map(|item_slot| {
-                        hit_event
+                        !hit_event
                             .item_slot
                             .is_some_and(|hit_item_slot| item_slot == hit_item_slot)
                     })

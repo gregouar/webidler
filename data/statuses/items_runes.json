@@ -1,5 +1,5 @@
 {
-    "berserker": {
+    "berserker" : {
         "name"      : "Berserker",
         "icon"      : "statuses/enrage.svg",
         "debuff"    : false,
@@ -26,7 +26,39 @@
             }
         ]
     },
-    "madness"  : {
+    "pure_storm": {
+        "name"      : "Gathering Storm",
+        "icon"      : "statuses/surge.svg",
+        "debuff"    : false,
+        "duration"  : 1.0,
+        "max_stacks": 100,
+        "effects"   : [
+            {
+                "StatModifier": {
+                    "stat"    : {
+                        "Damage": {
+                            "skill_type"       : null,
+                            "skill_id"         : null,
+                            "skill_description": null,
+                            "damage_type"      : "Storm",
+                            "min_max"          : null,
+                            "is_hit"           : null
+                        }
+                    },
+                    "modifier": "More",
+                    "debuff"  : false
+                },
+                "value"       : 5.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"CritDamage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 5.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "madness"   : {
         "name"      : "Madness",
         "icon"      : "statuses/madness.svg",
         "debuff"    : false,

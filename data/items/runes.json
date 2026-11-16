@@ -274,7 +274,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -466,21 +467,21 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": "Poison",
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusDuration": {
                   "status_id": null,
                   "damage_type": "Poison",
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": "Poison",
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -497,7 +498,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -705,7 +707,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -971,7 +974,7 @@
   "rune_yellow_sign": {
     "name": "The Yellow Sign",
     "icon": "items/runes/rune_yellow_sign.webp",
-    "description": "Hastur claims your life in exchange for a glimpse of His power.",
+    "description": "The King in Yellow claims your life in exchange for a glimpse of His power.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -1049,7 +1052,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1067,7 +1071,7 @@
   "rune_pure_physical": {
     "name": "Iron Doctrine",
     "icon": "items/runes/rune_element_physical.webp",
-    "description": "Pure Physical Prowess.",
+    "description": "There is no subtlety in strength.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -1165,7 +1169,7 @@
   "rune_pure_fire": {
     "name": "Ember Doctrine",
     "icon": "items/runes/rune_element_fire.webp",
-    "description": "Pure Physical Prowess.",
+    "description": "Anything can become fuel.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -1179,14 +1183,14 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "damage_type": "Physical",
+            "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
           }
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": 10.0,
         "is_unique": true
       },
       "unique_2": {
@@ -1194,7 +1198,7 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "damage_type": "Elemental",
+            "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
           }
@@ -1202,6 +1206,53 @@
         "modifier": "More",
         "scope": "Global",
         "value": -1e+300,
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Poison",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e+300,
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": {
+          "SkillConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "skill_type": null,
+            "skill_id": null,
+            "conditions": [
+              {
+                "StatusStacks": {
+                  "status_id": "burn",
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "min_stacks": 0
+                }
+              }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 20.0,
         "is_unique": true
       }
     },
@@ -1213,13 +1264,33 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Fire",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_pure_storm": {
     "name": "Tempest Doctrine",
     "icon": "items/runes/rune_element_storm.webp",
-    "description": "Pure Physical Prowess.",
+    "description": "Rage like the tempest.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -1233,14 +1304,14 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "damage_type": "Physical",
+            "damage_type": "Storm",
             "min_max": null,
             "is_hit": null
           }
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": 10.0,
         "is_unique": true
       },
       "unique_2": {
@@ -1248,7 +1319,7 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "damage_type": "Elemental",
+            "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
           }
@@ -1257,9 +1328,77 @@
         "scope": "Global",
         "value": -1e+300,
         "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "StatusPower": {
+            "status_id": null,
+            "damage_type": "Any",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e+300,
+        "is_unique": true
       }
     },
-    "triggers": [],
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": "Storm",
+          "skill_id": null,
+          "item_slot": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "rune_pure_storm",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "pure_storm",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": {
@@ -1267,13 +1406,33 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Storm",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_pure_poison": {
     "name": "Blight Doctrine",
     "icon": "items/runes/rune_element_poison.webp",
-    "description": "Pure Physical Prowess.",
+    "description": "The living are merely the dying, delayed.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -1287,14 +1446,14 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "damage_type": "Physical",
+            "damage_type": "Poison",
             "min_max": null,
             "is_hit": null
           }
         },
         "modifier": "More",
         "scope": "Global",
-        "value": 50.0,
+        "value": 10.0,
         "is_unique": true
       },
       "unique_2": {
@@ -1302,9 +1461,24 @@
           "Damage": {
             "skill_type": null,
             "skill_id": null,
-            "damage_type": "Elemental",
+            "damage_type": "Fire",
             "min_max": null,
             "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": -1e+300,
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": true
           }
         },
         "modifier": "More",
@@ -1321,8 +1495,28 @@
     },
     "map_specs": null,
     "ignore_quality": true,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      330,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Poison",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "rune_edict_gold_attack": {
     "name": "Proof of Discipline",

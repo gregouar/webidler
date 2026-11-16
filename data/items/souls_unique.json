@@ -2,7 +2,7 @@
   "rune_soul_physical": {
     "name": "Iron Soul",
     "icon": "items/souls/rune_physical_soul.webp",
-    "description": null,
+    "description": "The world was forged to be broken.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -40,7 +40,7 @@
   "rune_soul_fire": {
     "name": "Ember Soul",
     "icon": "items/souls/rune_fire_soul.webp",
-    "description": null,
+    "description": "And only ashes remain.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -78,7 +78,7 @@
   "rune_soul_storm": {
     "name": "Tempest Soul",
     "icon": "items/souls/rune_storm_soul.webp",
-    "description": null,
+    "description": "A single spark can awaken the storm.",
     "slot": null,
     "extra_slots": [],
     "categories": [
@@ -116,7 +116,7 @@
   "rune_soul_poison": {
     "name": "Blight Soul",
     "icon": "items/souls/rune_poison_soul.webp",
-    "description": null,
+    "description": "Decay is patient. Decay is inevitable.",
     "slot": null,
     "extra_slots": [],
     "categories": [
