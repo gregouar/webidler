@@ -264,9 +264,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 </TutorialPopup>
                 <MenuButton
                     title="Pets"
-                    on:click=move |_| {
-                        town_context.open_pets.set(!town_context.open_pets.get_untracked())
-                    }
+                    on:click=move |_| { switch_panel(town_context.open_pets) }
                     disabled=move || {
                         !data_context
                             .pets_specs

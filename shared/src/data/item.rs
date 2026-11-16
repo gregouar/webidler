@@ -350,8 +350,8 @@ pub struct MapSpecs {
     #[serde(default)]
     pub max_power_shard_level: Option<AreaLevel>,
 
-    #[serde(default)]
-    pub loot_tables: Vec<String>,
+    // #[serde(default)]
+    // pub loot_tables: Vec<String>,
     #[serde(default)]
     pub replace_area_id: Option<String>,
     #[serde(default)]

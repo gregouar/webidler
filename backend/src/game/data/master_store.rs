@@ -320,25 +320,25 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         }
     }
 
-    for (item_id, item) in master_store.items_store.items.iter() {
-        let Some(map_specs) = &item.map_specs else {
-            continue;
-        };
+    // for (item_id, item) in master_store.items_store.items.iter() {
+    //     let Some(map_specs) = &item.map_specs else {
+    //         continue;
+    //     };
 
-        for loot_table_id in map_specs
-            .loot_tables
-            .iter()
-            .chain(map_specs.reward_loot_table.iter())
-        {
-            if !master_store.loot_tables_store.contains_key(loot_table_id) {
-                errors.push(anyhow!(
-                    "Missing loot table '{}' referenced by map item '{}'",
-                    loot_table_id,
-                    item_id
-                ));
-            }
-        }
-    }
+    //     for loot_table_id in map_specs
+    //         .loot_tables
+    //         .iter()
+    //         .chain(map_specs.reward_loot_table.iter())
+    //     {
+    //         if !master_store.loot_tables_store.contains_key(loot_table_id) {
+    //             errors.push(anyhow!(
+    //                 "Missing loot table '{}' referenced by map item '{}'",
+    //                 loot_table_id,
+    //                 item_id
+    //             ));
+    //         }
+    //     }
+    // }
 
     for (area_id, area) in master_store.area_blueprints_store.iter() {
         let Some(quest) = &area.specs.quest else {

@@ -20,7 +20,6 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": null
     },
@@ -49,7 +48,6 @@
       "reward_picks": 1,
       "reward_slots": 1,
       "max_power_shard_level": 100,
-      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": null
     },
@@ -78,7 +76,6 @@
       "reward_picks": 1,
       "reward_slots": 2,
       "max_power_shard_level": 200,
-      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": null
     },
@@ -133,7 +130,6 @@
       "reward_picks": 0,
       "reward_slots": 0,
       "max_power_shard_level": 300,
-      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": null
     },
@@ -248,7 +244,6 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "inn_basement_2.json",
       "reward_loot_table": "edict_menu.json"
     },
@@ -371,7 +366,6 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "forest_mosquito.json",
       "reward_loot_table": "edict_mosquito.json"
     },
@@ -430,7 +424,6 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": "edict_music.json"
     },
@@ -576,7 +569,6 @@
       "reward_picks": 1,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "island_treasure.json",
       "reward_loot_table": "edict_treasure.json"
     },
@@ -651,7 +643,6 @@
       "reward_picks": 1,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "desert_mummy.json",
       "reward_loot_table": "edict_mummy.json"
     },
@@ -690,7 +681,6 @@
       "reward_picks": 1,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "farwest_wanted.json",
       "reward_loot_table": "edict_wanted.json"
     },
@@ -805,7 +795,6 @@
       "reward_picks": 1,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "witch_lair_2.json",
       "reward_loot_table": "edict_witch.json"
     },
@@ -859,7 +848,6 @@
       "reward_picks": 1,
       "reward_slots": 2,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": null,
       "reward_loot_table": "area_chaos.json"
     },
@@ -905,7 +893,6 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "chaos_gold.json",
       "reward_loot_table": "edict_gold.json"
     },
@@ -959,7 +946,6 @@
       "reward_picks": 0,
       "reward_slots": 1,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "peaks_dragon.json",
       "reward_loot_table": "edict_dragon.json"
     },
@@ -1022,7 +1008,6 @@
       "reward_picks": 0,
       "reward_slots": 3,
       "max_power_shard_level": null,
-      "loot_tables": [],
       "replace_area_id": "mythos_stars.json",
       "reward_loot_table": "edict_stars.json"
     },

@@ -44,21 +44,21 @@ pub fn init_area_specs(
             area_specs.reward_picks += map_specs.reward_picks;
             area_specs.reward_slots += map_specs.reward_slots;
 
-            for loot_table_id in map_specs.loot_tables.iter() {
-                if let Some(loot_table) = loot_tables_store.get(loot_table_id) {
-                    if loot_table.area_specific {
-                        area_blueprint
-                            .loot_table_area
-                            .entries
-                            .extend(loot_table.entries.iter().cloned());
-                    } else {
-                        area_blueprint
-                            .loot_table
-                            .entries
-                            .extend(loot_table.entries.iter().cloned());
-                    }
-                }
-            }
+            // for loot_table_id in map_specs.loot_tables.iter() {
+            //     if let Some(loot_table) = loot_tables_store.get(loot_table_id) {
+            //         if loot_table.area_specific {
+            //             area_blueprint
+            //                 .loot_table_area
+            //                 .entries
+            //                 .extend(loot_table.entries.iter().cloned());
+            //         } else {
+            //             area_blueprint
+            //                 .loot_table
+            //                 .entries
+            //                 .extend(loot_table.entries.iter().cloned());
+            //         }
+            //     }
+            // }
 
             area_blueprint.reward_loot_table = map_specs
                 .reward_loot_table
