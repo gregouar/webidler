@@ -1,6 +1,6 @@
 Uniques:
 
-Amulets: 7
+Amulets: 7 (+ 1)
 Body: 7
 Boots: 7
 Cloak: 7
@@ -14,7 +14,7 @@ Shields: 5 + 1
 Ranged: 5 + 2
 Wand: 7
 ----
-Total: 83 + 9
+Total: 83 + 10 (+ 1)
 
 Runes: 9 + 1 + 4
 Maps: 9 + 1 (+ 1)

@@ -33,6 +33,21 @@
                 { "monster": "hangman.json",     "quantity": [0, 2] },
                 { "monster": "cowboy.json",      "quantity": 2      }
             ]
+        },
+        {
+            "min_level":    1,
+            "weight"   : 1000,
+            "spawns"   : [
+                { "monster": "bigfoot.json", "quantity": [0, 1] },
+                { "monster": "cactus.json",  "quantity": [0, 2] },
+                { "monster": "vulture.json", "quantity": [0, 2] },
+                { "monster": "bigfoot.json", "quantity": 1      },
+                { "monster": "vulture.json", "quantity": [1, 2] },
+                { "monster": "cactus.json",  "quantity": [1, 2] },
+                { "monster": "bigfoot.json", "quantity": 1      },
+                { "monster": "vulture.json", "quantity": 1      },
+                { "monster": "cactus.json",  "quantity": 1      }
+            ]
         }
     ]
 }

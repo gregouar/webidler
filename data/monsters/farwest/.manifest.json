@@ -1,4 +1,7 @@
 {
-  "meta"     : {"enabled": true},
-  "resources": { "monsters": ["cowboy.json", "hangman.json", "piano_mimic.json"], "statuses": ["0_statuses.json"] }
+  "meta": {"enabled": true},
+  "resources": {
+    "monsters": ["bigfoot.json",    "cactus.json", "cowboy.json", "hangman.json", "piano_mimic.json", "vulture.json"],
+    "statuses": ["0_statuses.json"                                                                                  ]
+  }
 }
