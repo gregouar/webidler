@@ -49,6 +49,9 @@ pub struct PlayerBenedictionsCategory {
 
 impl BenedictionsCategory {
     pub fn compute_price(&self, upgrade_level: u64) -> f64 {
+        if upgrade_level >= self.max_upgrade_level {
+            return f64::INFINITY;
+        }
         self.price * self.price_increase_factor.powi(upgrade_level as i32)
     }
 

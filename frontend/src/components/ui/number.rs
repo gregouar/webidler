@@ -51,7 +51,7 @@ pub fn format_number(value: f64) -> String {
 
 pub fn format_number_without_context(value: f64, scientific_notation: bool) -> String {
     if value.is_nan() || value.is_infinite() {
-        return value.to_string();
+        return "Max".to_string();
     }
 
     if value < 0.0 {

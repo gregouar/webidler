@@ -25,8 +25,8 @@ use shared::{
         },
         server::{
             AscendPassivesResponse, BrowseMarketItemsResponse, BuyBenedictionsResponse,
-            BuyMarketItemResponse, CreateCharacterResponse, DeleteAccountResponse,
-            DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
+            BuyMarketItemResponse, ClaimRewardAchievementResponse, CreateCharacterResponse,
+            DeleteAccountResponse, DeleteCharacterResponse, EditMarketItemResponse, ErrorResponse,
             ExchangeGemsStashResponse, ForgeAffixResponse, ForgeImbueResponse, ForgeRerollResponse,
             ForgeSacrificeResponse, ForgeTemperResponse, ForgeUpgradeResponse,
             ForgotPasswordResponse, GambleItemResponse, GetAccountUserUnlocksResponse,
@@ -263,6 +263,14 @@ impl BackendClient {
             &(),
         )
         .await
+    }
+
+    pub async fn post_claim_reward_achievement(
+        &self,
+        achievement_id: &String,
+    ) -> Result<ClaimRewardAchievementResponse, BackendError> {
+        self.post_auth(&format!("achievements/claim/{achievement_id}"), &())
+            .await
     }
 
     pub async fn post_update_character_pets(

@@ -18,9 +18,9 @@ use shared::{
     http::{
         client::{CreateCharacterRequest, UpdateCharacterPetsRequest, UpdateCharacterRequest},
         server::{
-            CreateCharacterResponse, DeleteCharacterResponse, GetCharacterDetailsResponse,
-            GetUserCharactersResponse, ReconcileAchievementsResponse, UpdateCharacterPetsResponse,
-            UpdateCharacterResponse,
+            ClaimRewardAchievementResponse, CreateCharacterResponse, DeleteCharacterResponse,
+            GetCharacterDetailsResponse, GetUserCharactersResponse, ReconcileAchievementsResponse,
+            UpdateCharacterPetsResponse, UpdateCharacterResponse,
         },
     },
     types::Username,
@@ -59,6 +59,10 @@ pub fn routes(app_state: AppState) -> Router<AppState> {
         .route(
             "/characters/{character_id}/achievements/reconcile",
             post(post_reconcile_achievements),
+        )
+        .route(
+            "/achievements/claim/{achievement_id}",
+            post(post_claim_reward_achievement),
         )
         .route("/characters/{character_id}", delete(delete_character))
         .layer(middleware::from_fn_with_state(
@@ -312,7 +316,7 @@ async fn post_reconcile_achievements(
 
     achievements_controller::unlock_achievements(
         &mut tx,
-        &master_store,
+        // &master_store,
         character.user_id,
         &newly_unlocked_achievements,
     )
@@ -327,6 +331,35 @@ async fn post_reconcile_achievements(
         newly_unlocked_achievements,
         achievements_progress,
     }))
+}
+
+async fn post_claim_reward_achievement(
+    State(db_pool): State<db::DbPool>,
+    State(master_store): State<MasterStore>,
+    Path(achievement_id): Path<String>,
+    Extension(user): Extension<User>,
+) -> Result<Json<ClaimRewardAchievementResponse>, AppError> {
+    let mut tx = db_pool.begin().await?;
+
+    let already_unlocked = db::user_unlocks::read_achievements(&mut *tx, &user.user_id).await?;
+
+    if !already_unlocked.contains_key(&achievement_id) {
+        return Err(AppError::Forbidden);
+    }
+
+    achievements_controller::reward_achievement(
+        &mut tx,
+        &master_store.achievements_store,
+        user.user_id,
+        &achievement_id,
+    )
+    .await?;
+
+    tx.commit().await?;
+
+    let user_unlocks = db::user_unlocks::load_user_unlocks(&db_pool, &user.user_id).await?;
+
+    Ok(Json(ClaimRewardAchievementResponse { user_unlocks }))
 }
 
 async fn post_update_character_pets(

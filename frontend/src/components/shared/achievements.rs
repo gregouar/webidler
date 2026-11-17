@@ -1,12 +1,21 @@
-use leptos::prelude::*;
-use shared::data::{achievements::AchievementReward, cosmetics::CosmeticType, user::UserUnlocks};
+use leptos::{prelude::*, task::spawn_local};
+use shared::{
+    data::{
+        achievements::{AchievementReward, AchievementSpecs},
+        cosmetics::CosmeticType,
+        user::UserUnlocks,
+    },
+    http::server::ClaimRewardAchievementResponse,
+};
 use std::collections::HashMap;
 
 use crate::{
     assets::img_asset,
     components::{
+        backend_client::BackendClient,
         data_context::DataContext,
         ui::{
+            buttons::MenuButton,
             card::{CardHeader, CardInset, MenuCard},
             list_row::MenuListRow,
             menu_panel::MenuPanel,
@@ -19,10 +28,11 @@ use crate::{
 #[component]
 pub fn AchievementsPanel(
     open: RwSignal<bool>,
-    #[prop(into)] user_unlocks: Signal<UserUnlocks>,
+    #[prop(into)] user_unlocks: RwSignal<UserUnlocks>,
     #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, usize>>>,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
+
     view! {
         <MenuPanel open w_full=false h_full=false class:items-center>
             <MenuCard class="w-full max-w-5xl mx-auto">
@@ -85,6 +95,16 @@ pub fn AchievementsPanel(
                                             .join(", ")
                                     })
                                 };
+                                let rewards_available = Memo::new({
+                                    let achievement = achievement.clone();
+                                    move |_| {
+                                        achieved.get()
+                                            && user_unlocks
+                                                .with(|user_unlocks| {
+                                                    is_claimable(&achievement, user_unlocks)
+                                                })
+                                    }
+                                });
 
                                 view! {
                                     <MenuListRow
@@ -142,10 +162,10 @@ pub fn AchievementsPanel(
                                                 <div class="mt-1 flex-1 text-sm leading-snug text-zinc-300">
                                                     {achievement.description}
                                                 </div>
-                                                <div class="mt-2 flex items-end justify-between gap-3 pt-2 text-xs">
+                                                <div class="mt-2 flex min-h-[38px] items-end justify-between gap-3 pt-2 text-xs xl:min-h-[50px]">
                                                     <div class="min-w-0">
                                                         <span class="font-semibold tracking-wide text-zinc-500">
-                                                            "Reward: "
+                                                            "Rewards: "
                                                         </span>
                                                         <span class=move || {
                                                             if achieved.get() {
@@ -156,18 +176,32 @@ pub fn AchievementsPanel(
                                                         }>{move || rewards.get()}</span>
                                                     </div>
                                                     {move || {
-                                                        unlocked_at
-                                                            .get()
-                                                            .map(|unlocked_at| {
+                                                        let achievement_id = id.clone();
+                                                        if rewards_available.get() {
+                                                            Some(
                                                                 view! {
-                                                                    <time
-                                                                        class="shrink-0 text-right text-zinc-500"
-                                                                        datetime=unlocked_at.to_rfc3339()
-                                                                    >
-                                                                        {format_local_date(unlocked_at)}
-                                                                    </time>
+                                                                    <MenuButton on:click=move |_| claim_rewards(
+                                                                        user_unlocks,
+                                                                        achievement_id.clone(),
+                                                                    )>"Claim"</MenuButton>
                                                                 }
-                                                            })
+                                                                    .into_any(),
+                                                            )
+                                                        } else {
+                                                            unlocked_at
+                                                                .get()
+                                                                .map(|unlocked_at| {
+                                                                    view! {
+                                                                        <time
+                                                                            class="shrink-0 text-right text-zinc-500"
+                                                                            datetime=unlocked_at.to_rfc3339()
+                                                                        >
+                                                                            {format_local_date(unlocked_at)}
+                                                                        </time>
+                                                                    }
+                                                                        .into_any()
+                                                                })
+                                                        }
                                                     }}
                                                 </div>
                                             </div>
@@ -226,4 +260,55 @@ fn reward_value(kind: &str, value: &str, achieved: bool) -> String {
     } else {
         kind.into()
     }
+}
+
+fn claim_rewards(user_unlocks: RwSignal<UserUnlocks>, achievement_id: String) {
+    let backend = expect_context::<BackendClient>();
+    let toaster = expect_context::<Toasts>();
+    // let previous = player_pets.get_untracked();
+
+    // let mut updated = previous.clone();
+    // if let Some(pet) = pet {
+    //     updated.retain(|_, assigned_pet| assigned_pet != &pet);
+    //     updated.insert(button, pet);
+    // } else {
+    //     updated.remove(&button);
+    // }
+
+    // player_pets.set(updated.clone());
+    spawn_local(async move {
+        match backend.post_claim_reward_achievement(&achievement_id).await {
+            Ok(ClaimRewardAchievementResponse {
+                user_unlocks: new_user_unlocks,
+            }) => user_unlocks.set(new_user_unlocks),
+            Err(error) => {
+                show_toast(
+                    toaster,
+                    format!("Failed to assign pet: {error}"),
+                    ToastVariant::Error,
+                );
+            }
+        }
+    });
+}
+
+fn is_claimable(achievement: &AchievementSpecs, user_unlocks: &UserUnlocks) -> bool {
+    !achievement.rewards.iter().all(|reward| match reward {
+        AchievementReward::Cosmetic(cosmetic_id) => user_unlocks.cosmetics.contains(cosmetic_id),
+        AchievementReward::Pet(pet_id) => user_unlocks.pets.contains(pet_id),
+    })
+}
+
+pub fn are_rewards_available(user_unlock: RwSignal<UserUnlocks>) -> bool {
+    let data_context: DataContext = expect_context();
+    let achievements = data_context.achievements.read();
+    let user_unlocks = user_unlock.read();
+    for (achievement_id, _) in user_unlocks.achievements.iter() {
+        if let Some(achievement) = achievements.get(achievement_id)
+            && is_claimable(achievement, &user_unlocks)
+        {
+            return true;
+        }
+    }
+    false
 }

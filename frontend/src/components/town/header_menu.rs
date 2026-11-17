@@ -10,6 +10,7 @@ use crate::components::{
         StashIcon, TempleIcon,
     },
     shared::{
+        achievements::are_rewards_available,
         inventory::InventoryEquipFilter,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
     },
@@ -205,12 +206,9 @@ pub fn HeaderMenu() -> impl IntoView {
                                     on:click=move |_| open_market()
                                     disabled=disable_panels
                                 >
-                                    <MarketIcon />
-                                    {move || {
-                                        (town_context.market_stash.read().resource_gems > 0.0)
-                                            .then_some(" [!]")
-                                    }}
-
+                                    <MarketIcon class:text-amber-300=move || {
+                                        town_context.market_stash.read().resource_gems > 0.0
+                                    } />
                                 </MenuButton>
                             }
                         })
@@ -283,7 +281,9 @@ pub fn HeaderMenu() -> impl IntoView {
                             .set(!town_context.open_achievements.get_untracked())
                     }
                 >
-                    <AchievementsIcon />
+                    <AchievementsIcon class:text-amber-300=move || are_rewards_available(
+                        town_context.user_unlocks,
+                    ) />
                 // <span class="inline xl:hidden">"Ach."</span>
                 // <span class="hidden xl:inline">"Achievements"</span>
                 </MenuButton>

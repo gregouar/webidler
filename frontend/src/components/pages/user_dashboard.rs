@@ -27,8 +27,11 @@ use crate::{
         icons::header_icons::AchievementsIcon,
         settings::SettingsContext,
         shared::{
-            account::AccountSettingsPanel, achievements::AchievementsPanel,
-            leaderboard::LeaderboardPanel, news::NewsInset, player_count::PlayerCount,
+            account::AccountSettingsPanel,
+            achievements::{AchievementsPanel, are_rewards_available},
+            leaderboard::LeaderboardPanel,
+            news::NewsInset,
+            player_count::PlayerCount,
             settings::SettingsModal,
         },
         ui::{
@@ -126,6 +129,8 @@ pub fn UserDashboardPage() -> impl IntoView {
     let selected_character_title = RwSignal::new(None::<String>);
     let selected_character_badge = RwSignal::new(None::<String>);
 
+    let user_unlocks = RwSignal::new(Default::default());
+
     let chat_context: ChatContext = expect_context();
 
     view! {
@@ -176,7 +181,9 @@ pub fn UserDashboardPage() -> impl IntoView {
                         }
                         title="Achievements"
                     >
-                        <AchievementsIcon />
+                        <AchievementsIcon class:text-amber-300=move || are_rewards_available(
+                            user_unlocks,
+                        ) />
                     </MenuButton>
                     <MenuButton on:click=move |_| {
                         open_account.set(!open_account.get_untracked());
@@ -201,9 +208,10 @@ pub fn UserDashboardPage() -> impl IntoView {
                 }>
                     {move || {
                         Suspend::new(async move {
-                            let (areas, user_details, characters, user_unlocks) = async_data
+                            let (areas, user_details, characters, user_unlocks_data) = async_data
                                 .await
                                 .unwrap_or_default();
+                            user_unlocks.set(user_unlocks_data);
                             let cosmetics = data_context.cosmetics_specs.read_untracked();
                             let portraits = cosmetics
                                 .iter()
@@ -211,7 +219,8 @@ pub fn UserDashboardPage() -> impl IntoView {
                                     matches!(
                                         cosmetic,
                                         CosmeticType::Portrait(specs)
-                                        if !specs.locked || user_unlocks.cosmetics.contains(*id)
+                                        if !specs.locked
+                                            || user_unlocks.read().cosmetics.contains(*id)
                                     )
                                 })
                                 .map(|(id, _)| id.clone())
@@ -219,7 +228,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let titles = cosmetics
                                 .iter()
                                 .filter_map(|(id, cosmetic)| {
-                                    (user_unlocks.cosmetics.contains(id))
+                                    (user_unlocks.read().cosmetics.contains(id))
                                         .then(|| match cosmetic {
                                             CosmeticType::Title(title) => {
                                                 Some((id.clone(), title.clone()))
@@ -232,7 +241,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let badges = cosmetics
                                 .iter()
                                 .filter_map(|(id, cosmetic)| {
-                                    (user_unlocks.cosmetics.contains(id))
+                                    (user_unlocks.read().cosmetics.contains(id))
                                         .then(|| match cosmetic {
                                             CosmeticType::Badge(badge) => {
                                                 Some((id.clone(), badge.name.clone()))
@@ -245,10 +254,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let areas = Arc::new(areas);
 
                             view! {
-                                <AchievementsPanel
-                                    open=open_achievements
-                                    user_unlocks=Signal::from(user_unlocks)
-                                />
+                                <AchievementsPanel open=open_achievements user_unlocks />
                                 <CreateCharacterPanel
                                     open=open_character_panel
                                     user_id=user_details.user.user_id

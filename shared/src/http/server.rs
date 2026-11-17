@@ -158,6 +158,11 @@ pub struct ReconcileAchievementsResponse {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ClaimRewardAchievementResponse {
+    pub user_unlocks: UserUnlocks,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpdateCharacterPetsResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -265,13 +265,9 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
-        let (db_pool, master_store, user_id) = (
-            self.db_pool.clone(),
-            self.master_store.clone(),
-            self.user_id,
-        );
+        let (db_pool, user_id) = (self.db_pool.clone(), self.user_id);
         tokio::spawn(async move {
-            update_achievements_impl(db_pool, &master_store, user_id, new_achievements)
+            update_achievements_impl(db_pool, user_id, new_achievements)
                 .await
                 .unwrap_or_else(|e| {
                     tracing::error!("failed to  update achievements '{}': {}", user_id, e)
@@ -509,13 +505,12 @@ async fn auto_save_impl(
 
 async fn update_achievements_impl(
     db_pool: DbPool,
-    master_store: &MasterStore,
+    // master_store: &MasterStore,
     user_id: UserId,
     new_achievements: Vec<String>,
 ) -> Result<()> {
     let mut tx = db_pool.begin().await?;
-    achievements_controller::unlock_achievements(&mut tx, master_store, user_id, &new_achievements)
-        .await?;
+    achievements_controller::unlock_achievements(&mut tx, user_id, &new_achievements).await?;
     tx.commit().await?;
 
     Ok(())

@@ -30,14 +30,14 @@ pub struct AchievementContext<'a> {
 
 pub async fn unlock_achievements(
     tx: &mut Transaction<'_, Database>,
-    master_store: &MasterStore,
+    // master_store: &MasterStore,
     user_id: UserId,
     new_achievements: &[String],
 ) -> Result<(), AppError> {
     for achievement_id in new_achievements.iter() {
         unlock_achievement(
             tx,
-            &master_store.achievements_store,
+            // &master_store.achievements_store,
             user_id,
             achievement_id,
         )
@@ -233,17 +233,43 @@ fn goal_progress(
 
 async fn unlock_achievement(
     tx: &mut Transaction<'_, Database>,
-    achievements_store: &AchievementsStore,
+    // achievements_store: &AchievementsStore,
     user_id: UserId,
     achievement_id: &str,
 ) -> Result<bool, AppError> {
+    Ok(db::user_unlocks::unlock_achievement(tx, &user_id, achievement_id).await?)
+
+    // let achievement = achievements_store
+    //     .get(achievement_id)
+    //     .ok_or(AppError::NotFound)?;
+
+    // if !db::user_unlocks::unlock_achievement(tx, &user_id, achievement_id).await? {
+    //     return Ok(false);
+    // }
+
+    // for reward in achievement.rewards.iter() {
+    //     match reward {
+    //         AchievementReward::Cosmetic(cosmetic_id) => {
+    //             db::user_unlocks::unlock_cosmetic(tx, &user_id, cosmetic_id).await?;
+    //         }
+    //         AchievementReward::Pet(pet_id) => {
+    //             db::user_unlocks::unlock_pet(tx, &user_id, pet_id).await?;
+    //         }
+    //     }
+    // }
+
+    // Ok(true)
+}
+
+pub async fn reward_achievement(
+    tx: &mut Transaction<'_, Database>,
+    achievements_store: &AchievementsStore,
+    user_id: UserId,
+    achievement_id: &str,
+) -> Result<(), AppError> {
     let achievement = achievements_store
         .get(achievement_id)
         .ok_or(AppError::NotFound)?;
-
-    if !db::user_unlocks::unlock_achievement(tx, &user_id, achievement_id).await? {
-        return Ok(false);
-    }
 
     for reward in achievement.rewards.iter() {
         match reward {
@@ -256,5 +282,5 @@ async fn unlock_achievement(
         }
     }
 
-    Ok(true)
+    Ok(())
 }

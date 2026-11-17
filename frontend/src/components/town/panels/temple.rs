@@ -11,10 +11,7 @@ use crate::components::{
     backend_client::BackendClient,
     data_context::DataContext,
     events::{EventsContext, Key},
-    shared::{
-        resources::{GoldCounter, GoldIcon},
-        tooltips::effects_tooltip,
-    },
+    shared::{resources::GoldCounter, tooltips::effects_tooltip},
     town::TownContext,
     ui::{
         TitleSeparator,
@@ -225,7 +222,7 @@ fn BenedictionCategorySection(
             })
         }
     });
-    let max_level_reached = Signal::derive(move || bought_points.get() >= max_upgrade_level);
+    // let max_level_reached = Signal::derive(move || bought_points.get() >= max_upgrade_level);
     let reset_disabled = Signal::derive(move || allocated_points.get() == 0);
 
     let reset_category = {
@@ -281,25 +278,29 @@ fn BenedictionCategorySection(
                         .then(|| {
                             view! {
                                 <div class="flex items-center gap-1">
-                                    {move || {
-                                        if max_level_reached.get() {
-                                            view! {
-                                                <span class="font-number font-semibold text-amber-200">
-                                                    "Max"
-                                                </span>
-                                                <GoldIcon />
-                                            }
-                                                .into_any()
-                                        } else {
-                                            view! {
-                                                <GoldCounter
-                                                    value=Signal::derive(move || price.get())
-                                                    w_full=true
-                                                />
-                                            }
-                                                .into_any()
-                                        }
-                                    }}
+                                    <GoldCounter
+                                        value=Signal::derive(move || price.get())
+                                        w_full=true
+                                    />
+                                    // {move || {
+                                    //     if max_level_reached.get() {
+                                    //         view! {
+                                    //             <span class="font-number font-semibold text-amber-200">
+                                    //                 "Max"
+                                    //             </span>
+                                    //             <GoldIcon />
+                                    //         }
+                                    //             .into_any()
+                                    //     } else {
+                                    //         view! {
+                                    //             <GoldCounter
+                                    //                 value=Signal::derive(move || price.get())
+                                    //                 w_full=true
+                                    //             />
+                                    //         }
+                                    //             .into_any()
+                                    //     }
+                                    // }}
                                 </div>
                             }
                         })}

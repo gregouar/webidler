@@ -5,7 +5,10 @@ use crate::components::{
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
     icons::header_icons::{AchievementsIcon, InventoryIcon, PassivesIcon, PetsIcon, StatsIcon},
-    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
+    shared::{
+        achievements::are_rewards_available,
+        resources::{GemsCounter, GoldCounter, ShardsCounter},
+    },
     ui::{
         buttons::{MenuButton, MenuButtonRed},
         fullscreen::FullscreenButton,
@@ -254,11 +257,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     message="Click here to spend your Passive Point on a node in your current Grind."
                 >
                     <MenuButton on:click=move |_| open_passives() title="Passives">
-                        <PassivesIcon />
-                        {move || {
-                            let points = resources.get().3;
-                            if points > 0 { format!(" ({points})") } else { "".to_string() }
-                        }}
+                        <PassivesIcon class:text-amber-300=move || { resources.get().3 > 0 } />
                     </MenuButton>
                 </TutorialPopup>
                 <MenuButton on:click=move |_| open_stats() title="Stats">
@@ -272,7 +271,9 @@ pub fn HeaderMenu() -> impl IntoView {
                     <PetsIcon />
                 </MenuButton>
                 <MenuButton on:click=move |_| { open_achievements() } title="Achievements">
-                    <AchievementsIcon />
+                    <AchievementsIcon class:text-amber-300=move || are_rewards_available(
+                        game_context.user_unlocks,
+                    ) />
                 </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
