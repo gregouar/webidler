@@ -34,7 +34,7 @@
                     "target"    : "Me",
                     "effects"   : [
                         { "Restore": {"restore_type": "Life", "value": 100, "modifier": "Percent"} },
-                        { "ApplyStatus": {"status_id": "carrion_feast", "value": 100} }
+                        { "ApplyStatus": {"status_id": "carrion_feast", "value": 100}, "independent_application": true }
                     ]
                 }
             ]

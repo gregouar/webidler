@@ -35,7 +35,7 @@
       "cooldown"  : 5.0,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 3, "escalation": 20} },
             {
@@ -61,7 +61,7 @@
           "target"     : "Me",
           "effects"    : [
             { "Restore": {"restore_type": "Life", "value": 100, "modifier": "Percent"} },
-            { "ApplyStatus": {"status_id": "hunter_vengeance", "value": 100} }
+            { "ApplyStatus": {"status_id": "hunter_vengeance", "value": 100}, "independent_application": true }
           ]
         }
       ]
