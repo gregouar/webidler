@@ -183,7 +183,7 @@ fn BenedictionCategorySection(
 ) -> impl IntoView {
     let category_title = category_specs.title.clone();
     let max_level_text = category_specs.max_upgrade_level.to_string();
-    let max_upgrade_level = category_specs.max_upgrade_level;
+    // l_max_upgrade_levelvel = category_specs.max_upgrade_level;
     let price = Memo::new({
         let category_specs = category_specs.clone();
         let category_id = category_id.clone();

@@ -303,7 +303,7 @@ pub fn are_rewards_available(user_unlock: RwSignal<UserUnlocks>) -> bool {
     let data_context: DataContext = expect_context();
     let achievements = data_context.achievements.read();
     let user_unlocks = user_unlock.read();
-    for (achievement_id, _) in user_unlocks.achievements.iter() {
+    for achievement_id in user_unlocks.achievements.keys() {
         if let Some(achievement) = achievements.get(achievement_id)
             && is_claimable(achievement, &user_unlocks)
         {
