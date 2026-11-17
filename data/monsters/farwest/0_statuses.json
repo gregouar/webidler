@@ -20,7 +20,7 @@
         "name"      : "Carrion Feast",
         "icon"      : "skills/carrion.svg",
         "debuff"    : false,
-        "duration"  : 30,
+        "duration"  : 60,
         "max_stacks": 3,
         "effects"   : [
             {

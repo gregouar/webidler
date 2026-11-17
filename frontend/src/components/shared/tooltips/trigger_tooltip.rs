@@ -597,7 +597,7 @@ fn format_kill_trigger(kill_trigger: &KillTrigger) -> String {
 fn format_target_type(target_type: &TargetType) -> &'static str {
     match target_type {
         TargetType::Enemy => "Enemy ",
-        TargetType::Friend => "Friend ",
+        TargetType::Friend => "Ally ",
         TargetType::Me => "",
     }
 }

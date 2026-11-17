@@ -33,8 +33,11 @@
                     "OnDeath"   : "Friend",
                     "target"    : "Me",
                     "effects"   : [
-                        { "Restore": {"restore_type": "Life", "value": 100, "modifier": "Percent"} },
-                        { "ApplyStatus": {"status_id": "carrion_feast", "value": 100}, "independent_application": true }
+                        {
+                            "ApplyStatus"            : {"status_id": "carrion_feast", "value": 100},
+                            "independent_application": true
+                        },
+                        { "ApplyStatus": {"status_id": "life_regen", "value": 200}, "independent_application": true }
                     ]
                 }
             ]
