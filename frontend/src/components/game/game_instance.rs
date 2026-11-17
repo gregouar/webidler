@@ -5,7 +5,7 @@ use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_use_storage::use_session_storage;
 
 use shared::{
-    data::{area::StartAreaConfig, user::UserCharacterId},
+    data::{area::StartAreaConfig, monster::MonsterSpecsPatch, user::UserCharacterId},
     messages::{
         client::ClientConnectMessage,
         server::{ErrorType, InitGameMessage, ServerMessage, SyncGameStateMessage},
@@ -243,6 +243,7 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
         player_resources,
         player_stamina,
         monster_specs,
+        monster_specs_patch,
         monster_states,
         queued_loot,
         game_stats,
@@ -265,6 +266,25 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.player_stamina.set(player_stamina);
     if let Some(monster_specs) = monster_specs {
         game_context.monster_specs.set(monster_specs);
+    } else if let Some(monster_specs_patch) = monster_specs_patch {
+        game_context.monster_specs.update(|monster_specs| {
+            for (monster_specs_patch, monster_specs) in monster_specs_patch
+                .into_iter()
+                .zip(monster_specs.iter_mut())
+            {
+                let MonsterSpecsPatch {
+                    character_attrs,
+                    skill_specs_targets,
+                } = monster_specs_patch;
+                monster_specs.character_specs.character_attrs = character_attrs;
+                for (targets_patch, skill_specs) in skill_specs_targets
+                    .into_iter()
+                    .zip(monster_specs.character_specs.skills_specs.iter_mut())
+                {
+                    skill_specs.targets = targets_patch;
+                }
+            }
+        });
     }
     game_context.monster_states.set(monster_states);
     game_context.queued_loot.sync(queued_loot);

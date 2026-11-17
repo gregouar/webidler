@@ -104,7 +104,7 @@ fn update_monster_specs(game_data: &mut GameInstanceData, master_store: &MasterS
             .monster_base_specs
             .read()
             .iter()
-            .zip(game_data.monster_specs.iter_mut())
+            .zip(game_data.monster_specs.mutate().iter_mut())
             .zip(game_data.monster_states.iter_mut())
             .enumerate()
         {
@@ -142,9 +142,10 @@ async fn control_entities(
 
     game_data.player_respawn_delay = PLAYER_RESPAWN_PERIOD;
 
-    let monsters_exist = !game_data.monster_specs.is_empty();
+    let monsters_exist = !game_data.monster_specs.read().is_empty();
     let mut monsters_still_alive: Vec<_> = game_data
         .monster_specs
+        .read()
         .iter()
         .zip(game_data.monster_states.iter_mut())
         .enumerate()
@@ -201,7 +202,7 @@ async fn control_entities(
                 game_data.area_state.mutate(),
             )?;
             game_data.monster_base_specs = LazySyncer::new(monster_specs.clone());
-            game_data.monster_specs = monster_specs;
+            game_data.monster_specs = LazySyncer::new(monster_specs);
             game_data.monster_states = monster_states;
             game_data.new_wave = true;
 
@@ -224,7 +225,7 @@ async fn control_entities(
         monsters_controller::control_monsters(
             &master_store.statuses_store,
             events_queue,
-            &game_data.monster_specs,
+            game_data.monster_specs.read(),
             &mut game_data.monster_states,
             game_data.player_specs.read(),
             &mut game_data.player_state,
@@ -285,7 +286,7 @@ async fn update_entities(
         &master_store.statuses_store,
         events_queue,
         elapsed_time,
-        &game_data.monster_specs,
+        game_data.monster_specs.read(),
         &mut game_data.monster_states,
         &game_data.area_threat,
     );
@@ -293,7 +294,7 @@ async fn update_entities(
 
 fn respawn_player(game_data: &mut GameInstanceData, master_store: &MasterStore) {
     game_data.monster_base_specs.mutate().clear();
-    game_data.monster_specs.clear();
+    game_data.monster_specs.mutate().clear();
     game_data.monster_states.clear();
 
     *game_data.player_specs.mutate() = player_updater::update_player_specs(

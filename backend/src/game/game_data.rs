@@ -58,7 +58,7 @@ pub struct GameInstanceData {
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
     pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
-    pub monster_specs: Vec<MonsterSpecs>, // Only use internally, not shared
+    pub monster_specs: LazySyncer<Vec<MonsterSpecs>>, // Only use internally, except for MonsterSpecsPatch
     pub monster_states: Vec<MonsterState>,
     pub monster_wave_delay: Duration,
 
@@ -234,7 +234,7 @@ impl GameInstanceData {
             player_stamina,
 
             monster_base_specs: LazySyncer::new(Vec::new()),
-            monster_specs: Vec::new(),
+            monster_specs: LazySyncer::new(Vec::new()),
             monster_states: Vec::new(),
             monster_wave_delay: Default::default(),
 
@@ -365,6 +365,7 @@ impl GameInstanceData {
             CharacterId::Player => Some(&self.player_specs.read().character_specs),
             CharacterId::Monster(index) => self
                 .monster_specs
+                .read()
                 .get(index)
                 .map(|monster_specs| &monster_specs.character_specs),
         }

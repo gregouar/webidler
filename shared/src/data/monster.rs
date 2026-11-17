@@ -1,6 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-use crate::data::player::{CharacterSpecs, CharacterState};
+use crate::data::{
+    character::CharacterAttrs,
+    player::{CharacterSpecs, CharacterState},
+    skill::SkillTargetsGroup,
+};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum MonsterRarity {
@@ -28,4 +32,10 @@ pub struct MonsterState {
     // pub initiative: f32,
     pub gold_reward: f64,
     pub gems_reward: f64,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct MonsterSpecsPatch {
+    pub character_attrs: CharacterAttrs,
+    pub skill_specs_targets: Vec<Vec<SkillTargetsGroup>>,
 }

@@ -3,6 +3,7 @@ use anyhow::Result;
 use shared::{
     data::{
         cosmetics::CharacterCosmetics,
+        monster::MonsterSpecsPatch,
         passive::PurchasedNodes,
         pets::PlayerPets,
         user::{UserCharacterId, UserUnlocks},
@@ -61,6 +62,26 @@ pub async fn sync_update_game(
         return Ok(false);
     }
 
+    let monster_specs_patch = (game_data.monster_specs.need_to_sync()
+        && !game_data.monster_base_specs.need_to_sync())
+    .then(|| {
+        game_data
+            .monster_specs
+            .read()
+            .iter()
+            .map(|monster_specs| MonsterSpecsPatch {
+                character_attrs: monster_specs.character_specs.character_attrs.clone(),
+                skill_specs_targets: monster_specs
+                    .character_specs
+                    .skills_specs
+                    .iter()
+                    .map(|skills_specs| skills_specs.targets.clone())
+                    .collect(),
+            })
+            .collect()
+    });
+    game_data.monster_specs.mark_synced();
+
     let message = SyncGameStateMessage {
         area_state: game_data.area_state.sync(),
         area_threat: game_data.area_threat.clone(),
@@ -72,12 +93,8 @@ pub async fn sync_update_game(
         auto_skills: game_data.player_controller.auto_skills.sync(),
         player_resources: game_data.player_resources.sync(),
         player_stamina: game_data.player_stamina,
-        // monster_specs: if game_data.tick_number.is_multiple_of(10) {
-        //     Some(game_data.monster_specs.clone())
-        // } else {
-        //     None
-        // },
         monster_specs: game_data.monster_base_specs.sync(),
+        monster_specs_patch,
         monster_states: game_data.monster_states.clone(),
         queued_loot: game_data.queued_loot.sync(),
         game_stats: game_data.game_stats.clone(),

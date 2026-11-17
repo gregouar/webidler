@@ -309,6 +309,7 @@ pub fn apply_trigger_effects(
             CharacterId::Monster(i) => {
                 let mut monsters_still_alive: Vec<_> = game_data
                     .monster_specs
+                    .read()
                     .iter()
                     .zip(game_data.monster_states.iter_mut())
                     .enumerate()
@@ -322,6 +323,7 @@ pub fn apply_trigger_effects(
                     .collect();
                 let (target_position, target_size) = game_data
                     .monster_specs
+                    .read()
                     .get(i)
                     .map(|m| {
                         (
