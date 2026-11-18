@@ -1,33 +1,25 @@
 {
-  "name": "Bog Troll",
-  "portrait": "monsters/peaks/troll.webp",
-  "max_life": 15,
+  "name"      : "Bog Troll",
+  "portrait"  : "monsters/peaks/troll.webp",
+  "max_life"  : 15,
   "life_regen": 50,
-  "size": "Tall",
-  "armor": { "Poison": 100 },
-  "skills": [
+  "size"      : "Tall",
+  "armor"     : {"Poison": 100},
+  "skills"    : [
     {
-      "name": "Acid Foot",
-      "icon": "skills/claw.svg",
-      "cooldown": 5.0,
+      "name"      : "Acid Foot",
+      "icon"      : "skills/stomp.svg",
+      "cooldown"  : 5.0,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 8, 16 ]
-                }
+                "damage": { "Physical": [8, 16] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 10,
-                "escalation": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 10, "escalation": 20} }
           ]
         }
       ]

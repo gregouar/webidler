@@ -70,7 +70,7 @@ pub fn AssignedPet(
                     view! {
                         <div class=move || {
                             format!(
-                                "absolute z-2 bottom-0 xl:bottom-1 transition-transform duration-300 {} {}",
+                                "pointer-events-none absolute z-2 bottom-0 xl:bottom-1 transition-transform duration-300 {} {}",
                                 if pressed.get() { "translate-y-[2px]" } else { "" },
                                 if flipped { "left-0 xl:left-1" } else { "right-0 xl:right-1" },
                             )

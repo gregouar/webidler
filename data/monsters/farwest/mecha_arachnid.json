@@ -1,0 +1,43 @@
+{
+  "name"    : "Mecha Arachnid",
+  "portrait": "monsters/farwest/mecha_arachnid.webp",
+  "max_life": 20,
+  "size"    : "Large",
+  "armor"   : {"Physical": 100, "Storm": 100},
+  "skills"  : [
+    {
+      "name"      : "Mechanical Bite",
+      "icon"      : "skills/mechabite.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 6] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Discharge",
+      "icon"      : "skills/pyroclastic_infusion.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Fire": [6, 12], "Storm": [0, 20] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

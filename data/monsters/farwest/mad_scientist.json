@@ -1,0 +1,21 @@
+{
+  "name"    : "Mad Scientist",
+  "portrait": "monsters/farwest/mad_scientist.webp",
+  "max_life": 7,
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
+    {
+      "name"      : "Acid Grenade",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 3.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "acid_rain", "value": 5} }
+          ]
+        }
+      ]
+    }
+  ]
+}

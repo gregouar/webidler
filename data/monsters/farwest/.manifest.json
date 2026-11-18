@@ -2,9 +2,10 @@
   "meta": {"enabled": true},
   "resources": {
     "monsters": [
-      "bigfoot.json",     "cactus.json",      "chupacabra.json",  "cowboy.json",      "gargoyle.json",
-      "hangman.json",     "piano_mimic.json", "shaman.json",      "vampire.json",     "vulture.json",
-      "wendigo.json",     "werewolf.json"
+      "bigfoot.json",        "cactus.json",         "chupacabra.json",     "cowboy.json",
+      "frank.json",          "gargoyle.json",       "hangman.json",        "mad_scientist.json",
+      "mecha_arachnid.json", "piano_mimic.json",    "shaman.json",         "vampire.json",
+      "vulture.json",        "wendigo.json",        "werewolf.json"
     ],
     "statuses": ["0_statuses.json"]
   }
