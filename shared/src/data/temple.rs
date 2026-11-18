@@ -61,7 +61,6 @@ impl BenedictionsCategory {
             .filter_map(|level| self.compute_price(level))
             .map(|x| x.get())
             .sum::<f64>()
-            .into()
     }
 }
 

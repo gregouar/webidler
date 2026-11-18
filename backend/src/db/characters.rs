@@ -320,7 +320,6 @@ pub async fn update_character<'c>(
 }
 
 /// Add/remove resources and played time to character.pub async fn update_character_resources<'c>(
-
 pub async fn update_character_resources<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,

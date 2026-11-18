@@ -124,8 +124,7 @@ pub fn SkillMasteryCard(
         match (skill_mastery_state.as_ref(), experience_gained) {
             (Some(skill_mastery_state), Some(experience_gained)) => {
                 let mut previous_skill_mastery_state = skill_mastery_state.clone();
-                previous_skill_mastery_state.experience =
-                    previous_skill_mastery_state.experience - experience_gained;
+                previous_skill_mastery_state.experience -= experience_gained;
 
                 mastery_progress(
                     previous_skill_mastery_state.relative_experience(max_level),

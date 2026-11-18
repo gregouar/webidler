@@ -529,7 +529,7 @@ fn BenedictionRow(
                 }
                 category.upgrade_level = category.upgrade_level.saturating_sub(points_to_refund);
             });
-            cost.update(|cost| *cost = *cost - refund);
+            cost.update(|cost| *cost -= refund);
         }
     };
 

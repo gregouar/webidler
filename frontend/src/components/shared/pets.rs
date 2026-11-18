@@ -62,17 +62,19 @@ fn PetImg(pet_specs: PetSpecs, class: Option<&'static str>, flipped: bool) -> im
         <img
             src=img_asset(&pet_specs.icon)
             alt=pet_specs.name.clone()
-            class=format!(
-                "z-20 w-12 xl:w-20 max-w-none object-contain
+            class=move || {
+                format!(
+                    "z-20 w-12 xl:w-20 max-w-none object-contain
                         {} {} {}",
-                if settings.uses_surface_effects() {
-                    "xl:[filter:drop-shadow(0_0_3px_rgba(190,160,0,0.7))_drop-shadow(0_4px_12px_rgba(0,0,0,0.7))]"
-                } else {
-                    ""
-                },
-                if flipped { "-scale-x-100" } else { "" },
-                class.unwrap_or(""),
-            )
+                    if settings.uses_surface_effects() {
+                        "xl:[filter:drop-shadow(0_0_3px_rgba(190,160,0,0.7))_drop-shadow(0_4px_12px_rgba(0,0,0,0.7))]"
+                    } else {
+                        ""
+                    },
+                    if flipped { "-scale-x-100" } else { "" },
+                    class.unwrap_or(""),
+                )
+            }
         />
     }
 }

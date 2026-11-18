@@ -203,7 +203,7 @@ fn compute_damage(
         })
         .unwrap_or(1.0);
 
-    (damage_taken * armor_factor * crit_factor * amount.get()).into()
+    damage_taken * armor_factor * crit_factor * amount.get()
 }
 
 #[allow(clippy::too_many_arguments)]

@@ -922,7 +922,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     {
         *damage_factors = damage
             .iter()
-            .map(|(damage_type, value)| (damage_type, value.max.factor().into()))
+            .map(|(damage_type, value)| (damage_type, value.max.factor()))
             .collect();
     }
 
