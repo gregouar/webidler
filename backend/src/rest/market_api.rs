@@ -125,12 +125,12 @@ pub async fn post_buy_market_item(
 
         market_buy_entry.price
     } else {
-        0.0
+        Default::default()
     };
 
     let resource_gems = buy_with_gems(&mut tx, &payload.character_id, price).await?;
 
-    db::stashes::update_stash_gems(&mut *tx, &item_bought.stash_id, price).await?;
+    db::stashes::update_stash_gems(&mut *tx, &item_bought.stash_id, price.get()).await?;
 
     let (inventory_data, _, _, _) =
         db::characters_data::load_character_data(&mut *tx, &payload.character_id)
@@ -144,7 +144,7 @@ pub async fn post_buy_market_item(
         && let Err(err) = chat_integration
             .send_private_message(
                 item_bought.user_id,
-                format!("Sold to {} for {:.0} Gems.", user.username, price),
+                format!("Sold to {} for {:.0} Gems.", user.username, price.get()),
                 Some(&item_bought.item_specs),
             )
             .await

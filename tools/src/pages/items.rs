@@ -360,7 +360,7 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs 
         rune_specs: base.rune_specs.clone(),
         modifiers,
         affixes,
-        gold_price: 0.0,
+        gold_price: Default::default(),
     }
 }
 

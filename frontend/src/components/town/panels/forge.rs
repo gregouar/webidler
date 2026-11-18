@@ -272,7 +272,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
     let confirm_context: ConfirmContext = expect_context();
     let auto_confirm_destructive_actions = RwSignal::new(false);
 
-    let user_gems = move || town_context.character.read().resource_gems;
+    let user_gems = move || town_context.character.read().resource_gems.get();
 
     let item_level = move || {
         selected_item.with(|selected_item| match selected_item {
@@ -601,7 +601,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                             move |_| try_add_affix(None)
                         }
                         disabled=Signal::derive({
-                            move || affix_price().map(|price| price > user_gems()).unwrap_or(true)
+                            move || {
+                                affix_price().map(|price| price.get() > user_gems()).unwrap_or(true)
+                            }
                         })
                         class:w-full
                     >
@@ -612,7 +614,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -626,7 +630,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                         }
                         disabled=Signal::derive({
                             move || {
-                                replace_price(None).map(|price| price > user_gems()).unwrap_or(true)
+                                replace_price(None)
+                                    .map(|price| price.get() > user_gems())
+                                    .unwrap_or(true)
                             }
                         })
                         class:w-full
@@ -638,7 +644,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -653,7 +661,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                             move |_| try_add_affix(Some(AffixType::Prefix))
                         }
                         disabled=Signal::derive({
-                            move || prefix_price().map(|price| price > user_gems()).unwrap_or(true)
+                            move || {
+                                prefix_price()
+                                    .map(|price| price.get() > user_gems())
+                                    .unwrap_or(true)
+                            }
                         })
                         class:w-full
                     >
@@ -664,7 +676,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -679,7 +693,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                         disabled=Signal::derive({
                             move || {
                                 replace_price(Some(AffixType::Prefix))
-                                    .map(|price| price > user_gems())
+                                    .map(|price| price.get() > user_gems())
                                     .unwrap_or(true)
                             }
                         })
@@ -692,7 +706,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -704,7 +720,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     <MenuButton
                         on:click=move |_| try_add_affix(Some(AffixType::Suffix))
                         disabled=Signal::derive({
-                            move || suffix_price().map(|price| price > user_gems()).unwrap_or(true)
+                            move || {
+                                suffix_price()
+                                    .map(|price| price.get() > user_gems())
+                                    .unwrap_or(true)
+                            }
                         })
                         class:w-full
                     >
@@ -715,7 +735,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -727,7 +749,7 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                         disabled=Signal::derive({
                             move || {
                                 replace_price(Some(AffixType::Suffix))
-                                    .map(|price| price > user_gems())
+                                    .map(|price| price.get() > user_gems())
                                     .unwrap_or(true)
                             }
                         })
@@ -740,7 +762,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -754,7 +778,11 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                     <MenuButtonRed
                         on:click=move |_| try_remove_affix()
                         disabled=Signal::derive({
-                            move || remove_price().map(|price| price > user_gems()).unwrap_or(true)
+                            move || {
+                                remove_price()
+                                    .map(|price| price.get() > user_gems())
+                                    .unwrap_or(true)
+                            }
                         })
                         class:w-full
                     >
@@ -765,7 +793,9 @@ pub fn ForgeAffixDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView
                                     .map(|price| {
                                         view! {
                                             "for "
-                                            <span class="text-fuchsia-300 font-bold">{price}</span>
+                                            <span class="text-fuchsia-300 font-bold">
+                                                {price.get()}
+                                            </span>
                                             <GemsIcon />
                                         }
                                     })
@@ -854,7 +884,7 @@ pub fn RerollDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     reforging.get()
                         || reroll_price()
                             .is_none_or(|price| {
-                                price > town_context.character.read().resource_gems
+                                price.get() > town_context.character.read().resource_gems.get()
                             })
                 })
             >
@@ -867,7 +897,9 @@ pub fn RerollDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                 Some(price) => {
                                     view! {
                                         "Reroll for "
-                                        <span class="font-bold text-fuchsia-300">{price}</span>
+                                        <span class="font-bold text-fuchsia-300">
+                                            {price.get()}
+                                        </span>
                                         <GemsIcon />
                                     }
                                         .into_any()
@@ -985,7 +1017,7 @@ pub fn TemperDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                     tempering.get()
                         || temper_price()
                             .is_none_or(|price| {
-                                price > town_context.character.read().resource_gems
+                                price.get() > town_context.character.read().resource_gems.get()
                             })
                 })
             >
@@ -1000,7 +1032,9 @@ pub fn TemperDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
                                         "Add "
                                         <span class="text-white font-bold">"1-5% Quality"</span>
                                         " for "
-                                        <span class="font-bold text-fuchsia-300">{price}</span>
+                                        <span class="font-bold text-fuchsia-300">
+                                            {price.get()}
+                                        </span>
                                         <GemsIcon />
                                     }
                                         .into_any()
@@ -1153,7 +1187,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
                     disabled=Signal::derive(move || {
                         sacrifice_price()
                             .is_none_or(|price| {
-                                price > town_context.character.read().resource_gems
+                                price.get() > town_context.character.read().resource_gems.get()
                             })
                     })
                     class:w-full
@@ -1164,7 +1198,9 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
                                 Some(price) => {
                                     view! {
                                         "Sacrifice for "
-                                        <span class="font-bold text-fuchsia-300">{price}</span>
+                                        <span class="font-bold text-fuchsia-300">
+                                            {price.get()}
+                                        </span>
                                         <GemsIcon />
                                     }
                                         .into_any()
@@ -1312,7 +1348,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
     let toaster: Toasts = expect_context();
     let confirm_context: ConfirmContext = expect_context();
 
-    let user_gems = move || town_context.character.read().resource_gems;
+    let user_gems = move || town_context.character.read().resource_gems.get();
 
     let wrong_item = move || {
         selected_item.with(|selected_item| match selected_item {
@@ -1436,7 +1472,9 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                 <MenuButton
                     on:click=move |_| try_upgrade_item()
                     disabled=Signal::derive({
-                        move || upgrade_price().map(|price| price > user_gems()).unwrap_or(true)
+                        move || {
+                            upgrade_price().map(|price| price.get() > user_gems()).unwrap_or(true)
+                        }
                     })
                 >
                     // class:mb-1
@@ -1454,7 +1492,7 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
                                         view! {
                                             "Empower for "
                                             <span class="text-fuchsia-300 font-bold">
-                                                {upgrade_price}
+                                                {upgrade_price.get()}
                                             </span>
                                             <GemsIcon />
                                         }
@@ -1505,9 +1543,10 @@ pub fn GambleDetails(
     let town_context: TownContext = expect_context();
     let toaster: Toasts = expect_context();
 
-    let user_gems = move || town_context.character.read().resource_gems;
+    let user_gems = move || town_context.character.read().resource_gems.get();
 
-    let gamble_price = move || forge::gamble_price(town_context.character.read().max_area_level);
+    let gamble_price =
+        move || forge::gamble_price(town_context.character.read().max_area_level).get();
 
     let do_gamble = {
         let character_id = town_context.character.read_untracked().character_id;

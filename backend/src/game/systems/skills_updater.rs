@@ -23,7 +23,7 @@ use shared::data::{
         StatConverterSpecs, StatEffect, StatSkillEffectType, StatType, compare_options,
     },
     trigger::TriggerEffect,
-    values::NonNegative,
+    values::{Damage, NonNegative},
 };
 
 use crate::game::{
@@ -229,20 +229,21 @@ fn apply_weapon_effects(target_groups: &mut [SkillTargetsGroup], inventory: &Pla
 fn weapon_skill_effect(
     item_slot: ItemSlot,
     weapon_specs: &WeaponSpecs,
-    factor: f64,
+    factor: NonNegative,
     damage_type: Option<DamageType>,
 ) -> [SkillEffect; 2] {
+    let factor = factor.get();
     let converted_damage = damage_type.map(|damage_type| {
-        let (min, max) = weapon_specs
+        let (min, max): (Damage, Damage) = weapon_specs
             .damage
             .values()
-            .fold((0.0, 0.0), |(min, max), value| {
-                (min + value.min.get(), max + value.max.get())
+            .fold(Default::default(), |(min, max), value| {
+                (min + *value.min, max + *value.max)
             });
 
         ChanceRange {
-            min: NonNegative::new(min).multiply_value(factor).into(),
-            max: NonNegative::new(max).multiply_value(factor).into(),
+            min: (min * factor).into(),
+            max: (max * factor).into(),
             lucky_chance: weapon_specs
                 .damage
                 .get(damage_type)
@@ -702,7 +703,7 @@ fn compute_skill_modifier_effects(
                                 FactorType::Single(weapon_specs.crit_chance.value.get() as f64)
                             }
                             (ItemStatsSource::CritDamage, Some(weapon_specs), _) => {
-                                FactorType::Single(*weapon_specs.crit_damage)
+                                FactorType::Single(weapon_specs.crit_damage.get())
                             }
                             (
                                 ItemStatsSource::Damage {
@@ -756,7 +757,7 @@ fn compute_skill_modifier_effects(
                     };
 
                     if base_factor.is_non_zero() {
-                        let factor = base_factor.multiply(modifier_effect.factor);
+                        let factor = base_factor.multiply(modifier_effect.factor.get());
                         Some((modifier_effect, factor))
                     } else {
                         None
@@ -772,7 +773,7 @@ fn compute_skill_modifier_effects(
             ModifierEffectSource::CharacterStats(stat_converter) => Some((
                 me.clone(),
                 FactorType::Single(
-                    me.factor
+                    me.factor.get()
                         * characters_updater::compute_stat_converter(
                             character_attrs,
                             stat_converter,
@@ -921,7 +922,7 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
     {
         *damage_factors = damage
             .iter()
-            .map(|(damage_type, value)| (damage_type, value.max.factor()))
+            .map(|(damage_type, value)| (damage_type, value.max.factor().into()))
             .collect();
     }
 
@@ -1009,7 +1010,9 @@ pub fn compute_skill_specs_effect_with_extra<'a, 'b>(
                     StatConverterSource::CritDamage,
                     SkillEffectType::FlatDamage { crit_damage, .. },
                 ) => {
-                    let amount = crit_damage.convert_value(factor, specs.is_extra, false);
+                    let amount = crit_damage
+                        .convert_value(factor, specs.is_extra, false)
+                        .get();
 
                     (amount > 0.0).then(|| StatEffect {
                         stat: (*specs.stat).clone(),

@@ -156,8 +156,8 @@ impl GameInstanceData {
         }
 
         if area_specs.training {
-            player_resources.experience = 1e70;
-            player_resources.gold = 1e160;
+            player_resources.experience = 1e70.into();
+            player_resources.gold = 1e160.into();
             player_stamina = Duration::from_hours(24);
         }
 

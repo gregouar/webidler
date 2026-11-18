@@ -501,11 +501,12 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> im
                 "text-white"
             };
 
-            let crit_damage_color = if specs.crit_damage.round() != base_specs.crit_damage.round() {
-                "text-blue-400"
-            } else {
-                "text-white"
-            };
+            let crit_damage_color =
+                if specs.crit_damage.get().round() != base_specs.crit_damage.get().round() {
+                    "text-blue-400"
+                } else {
+                    "text-white"
+                };
 
             view! {
                 {(!damage_lines.is_empty())
@@ -513,7 +514,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> im
                         view! { <li class="text-zinc-400 text-xs xl:text-sm ">{range} {shape}</li> }
                     })}
                 {damage_lines}
-                {(specs.crit_chance.value.get() > 0.0 && *specs.crit_damage > 0.0)
+                {(specs.crit_chance.value.get() > 0.0 && specs.crit_damage.get() > 0.0)
                     .then(|| {
                         view! {
                             <li class="text-zinc-400 text-xs xl:text-sm ">
@@ -529,7 +530,10 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> im
                                     "{} font-semibold",
                                     crit_damage_color,
                                 )>
-                                    {format!("+{}%", number::format_number(*specs.crit_damage))}
+                                    {format!(
+                                        "+{}%",
+                                        number::format_number(specs.crit_damage.get()),
+                                    )}
                                 </span>
                             </li>
                         }

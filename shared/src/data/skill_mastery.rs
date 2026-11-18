@@ -13,6 +13,7 @@ use crate::{
         skill::{ModifierEffect, SkillEffect, SkillTargetsGroup},
         stat_effect::{StatEffect, StatType},
         trigger::TriggerSpecs,
+        values::NonNegative,
     },
 };
 
@@ -88,7 +89,7 @@ pub struct PlayerSkillMasteries {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
 pub struct SkillMasteryState {
-    pub experience: f64,
+    pub experience: NonNegative,
     pub upgrades_bought: HashMap<String, u16>,
 }
 
@@ -103,7 +104,7 @@ impl SkillMasteryState {
     }
 
     pub fn relative_experience(&self, max_level: u16) -> f64 {
-        self.experience - self.level_cost(max_level)
+        self.experience.get() - self.level_cost(max_level)
     }
 
     pub fn level_cost(&self, max_level: u16) -> f64 {
@@ -111,7 +112,7 @@ impl SkillMasteryState {
     }
 
     pub fn level(&self, max_level: u16) -> u16 {
-        computations::skill_mastery_level(self.experience).clamp(0, max_level)
+        computations::skill_mastery_level(self.experience.get()).clamp(0, max_level)
     }
 }
 impl SkillMasteryUpgrade {

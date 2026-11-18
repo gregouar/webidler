@@ -305,7 +305,7 @@ impl<'a> GameInstance<'a> {
                     .masteries
                     .entry(skill_id.clone())
                     .or_default()
-                    .experience += experience;
+                    .experience += *experience;
             }
             db::characters_data::save_character_skill_masteries(
                 &mut *tx,
@@ -317,9 +317,9 @@ impl<'a> GameInstance<'a> {
             let character_resources = db::characters::update_character_resources(
                 &mut *tx,
                 self.character_id,
-                self.game_data.player_resources.read().gems,
-                self.game_data.player_resources.read().shards,
-                self.game_data.player_resources.read().gold_total
+                self.game_data.player_resources.read().gems.get(),
+                self.game_data.player_resources.read().shards.get(),
+                self.game_data.player_resources.read().gold_total.get()
                     * computations::exponential(
                         *self.game_data.area_specs.item_level_modifier
                             + *self.game_data.area_specs.power_level,

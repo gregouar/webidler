@@ -604,8 +604,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                 .map(|weapon_specs| {
                     let weapon_crit_damage = *weapon_specs.crit_damage;
                     match rule_type {
-                        FilterRuleType::Pickup => weapon_crit_damage < item_crit_damage,
-                        FilterRuleType::Sell => weapon_crit_damage > item_crit_damage,
+                        FilterRuleType::Pickup => weapon_crit_damage.get() < item_crit_damage,
+                        FilterRuleType::Sell => weapon_crit_damage.get() > item_crit_damage,
                     }
                 })
                 .unwrap_or(true)

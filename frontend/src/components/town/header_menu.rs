@@ -32,7 +32,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
     let show_ascension_tutorial = Signal::derive(move || {
-        town_context.character.read().resource_shards >= 1.0
+        town_context.character.read().resource_shards.get() >= 1.0
             && town_context
                 .passives_tree_ascension
                 .read()
@@ -42,7 +42,7 @@ pub fn HeaderMenu() -> impl IntoView {
             && !town_context.open_ascend.get()
     });
     let show_temple_tutorial = Signal::derive(move || {
-        town_context.character.read().resource_gold >= 100.0
+        town_context.character.read().resource_gold.get() >= 100.0
             && !has_bought_extra_skill_slot(town_context, data_context)
             && !town_context.open_temple.get()
             && !town_context.open_ascend.get()
@@ -57,9 +57,9 @@ pub fn HeaderMenu() -> impl IntoView {
             && !show_temple_tutorial.get()
     });
 
-    let gold = Signal::derive(move || town_context.character.read().resource_gold);
-    let gems = Signal::derive(move || town_context.character.read().resource_gems);
-    let shards = Signal::derive(move || town_context.character.read().resource_shards);
+    let gold = Signal::derive(move || town_context.character.read().resource_gold.get());
+    let gems = Signal::derive(move || town_context.character.read().resource_gems.get());
+    let shards = Signal::derive(move || town_context.character.read().resource_shards.get());
 
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
@@ -207,7 +207,7 @@ pub fn HeaderMenu() -> impl IntoView {
                                     disabled=disable_panels
                                 >
                                     <MarketIcon class:text-amber-300=move || {
-                                        town_context.market_stash.read().resource_gems > 0.0
+                                        town_context.market_stash.read().resource_gems.get() > 0.0
                                     } />
                                 </MenuButton>
                             }

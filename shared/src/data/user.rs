@@ -7,7 +7,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    data::{area::AreaLevel, cosmetics::CharacterCosmetics, realms::Realm},
+    data::{area::AreaLevel, cosmetics::CharacterCosmetics, realms::Realm, values::NonNegative},
     types::Email,
 };
 
@@ -49,9 +49,9 @@ pub struct UserCharacter {
 
     pub is_ssf: bool,
 
-    pub resource_gems: f64,
-    pub resource_shards: f64,
-    pub resource_gold: f64,
+    pub resource_gems: NonNegative,
+    pub resource_shards: NonNegative,
+    pub resource_gold: NonNegative,
     pub resource_stamina: Duration,
 
     pub activity: UserCharacterActivity,

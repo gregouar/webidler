@@ -4,7 +4,7 @@ use rand::{self, seq::IteratorRandom};
 
 use shared::data::{
     character::CharacterId,
-    modifier::{Modifier, invert_formatted_effect_value},
+    modifier::{ModifiableValue, Modifier, invert_formatted_effect_value},
     skill::{RepeatedSkillEffect, SkillTargetsGroup, SkillType},
     stat_effect::{StatEffect, StatStatusFilter, compare_options},
     trigger::{OwnedTrigger, TriggerEffectModifierSource, TriggerTarget},
@@ -107,16 +107,23 @@ pub fn apply_trigger_effects(
                             trigger_context
                                 .hit_context
                                 .as_ref()
-                                .and_then(|hit| hit.damage.get(*damage_type))
+                                .and_then(|hit| hit.damage.get(*damage_type).cloned())
                         }
                         TriggerEffectModifierSource::TriggeringStatusValue => trigger_context
                             .status_context
                             .as_ref()
-                            .map(|status| &status.value),
-                        TriggerEffectModifierSource::TriggeringStatusDuration => trigger_context
-                            .status_context
-                            .as_ref()
-                            .map(|status| &status.duration),
+                            .map(|status| status.value),
+                        TriggerEffectModifierSource::TriggeringStatusDuration => {
+                            trigger_context.status_context.as_ref().map(|status| {
+                                ModifiableValue::new(
+                                    status.duration.base().get().into(),
+                                    status.duration.increased(),
+                                    status.duration.decreased(),
+                                    status.duration.more(),
+                                    status.duration.converted(),
+                                )
+                            })
+                        }
                         _ => None,
                     })
                     .flatten();
@@ -169,7 +176,7 @@ pub fn apply_trigger_effects(
                     TriggerEffectModifierSource::HitCritDamage => trigger_context
                         .hit_context
                         .as_ref()
-                        .and_then(|hit| hit.crit_damage)
+                        .and_then(|hit| hit.crit_damage.map(|x| x.get()))
                         .unwrap_or_default(),
                     TriggerEffectModifierSource::AreaLevel => {
                         trigger_context.level as f64 + *game_data.area_specs.power_level as f64

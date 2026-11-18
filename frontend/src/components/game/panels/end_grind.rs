@@ -53,16 +53,17 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let stats = move || game_context.game_stats.read();
 
     let gold_donation_value = Signal::derive(move || {
-        game_context.player_resources.read().gold_total
+        (game_context.player_resources.read().gold_total
             * computations::exponential(
                 *game_context.area_specs.read().item_level_modifier
                     + *game_context.area_specs.read().power_level,
                 constants::MONSTER_REWARD_INCREASE_FACTOR,
-            )
+            ))
+        .get()
     });
 
-    let gems_value = Signal::derive(move || game_context.player_resources.read().gems);
-    let shards_value = Signal::derive(move || game_context.player_resources.read().shards);
+    let gems_value = Signal::derive(move || game_context.player_resources.read().gems.get());
+    let shards_value = Signal::derive(move || game_context.player_resources.read().shards.get());
     let stamina_kept =
         Signal::derive(move || computations::stamina_spill(game_context.player_stamina.get()));
 
@@ -413,7 +414,7 @@ fn SkillMasteryRewards() -> impl IntoView {
                     .get(&skill_specs.skill_id)
                     .copied()
                     .unwrap_or_default();
-                if experience_gained <= 0.0 {
+                if experience_gained.get() <= 0.0 {
                     return None;
                 }
 

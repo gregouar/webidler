@@ -13,6 +13,7 @@ use shared::{
             DamageStatType, LuckyRollType, Matchable, MinMax, StatEffect, StatSkillFilter,
             StatType, ToDamageTypes, compare_options,
         },
+        values::NonNegative,
     },
 };
 
@@ -25,14 +26,16 @@ pub fn init_item_specs_from_store(
     items_store
         .items
         .get(&item_modifiers.base_item_id)
-        .map(|item_base| create_item_specs(items_store, item_base, item_modifiers, 0.0))
+        .map(|item_base| {
+            create_item_specs(items_store, item_base, item_modifiers, Default::default())
+        })
 }
 
 pub fn create_item_specs(
     items_store: &ItemsStore,
     item_base: &ItemBase,
     mut modifiers: ItemModifiers,
-    gold_price: f64,
+    gold_price: NonNegative,
     // signature_key: &HmacKey,
 ) -> ItemSpecs {
     items_store.items.attach_key(&mut modifiers.base_item_id);

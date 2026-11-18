@@ -16,7 +16,7 @@ use crate::{
         passive::PassiveNodeId,
         skill::{RestoreModifier, RestoreType, SkillRepeatTarget},
         trigger::TriggerEffectModifierSource,
-        values::NonNegative,
+        values::Damage,
     },
     serde_utils::is_false,
 };
@@ -54,7 +54,7 @@ impl Matchable for DamageType {
 }
 
 pub type DamageTypeMap<T> = fixed_map::Map<DamageType, T>;
-pub type DamageMap = DamageTypeMap<ChanceRange<ModifiableValue<NonNegative>>>;
+pub type DamageMap = DamageTypeMap<ChanceRange<ModifiableValue<Damage>>>;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum MinMax {

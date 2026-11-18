@@ -17,7 +17,7 @@ use shared::data::{
     },
     stat_effect::{Matchable, MinMax, StatEffect, StatSkillFilter, StatStatusFilter, StatType},
     trigger::{StatusTrigger, TriggerEffectModifier, TriggerEffectModifierSource, TriggerSpecs},
-    values::NonNegative,
+    values::Damage,
 };
 use strum::IntoEnumIterator;
 
@@ -142,7 +142,7 @@ pub fn SkillTooltip(
                         ..
                     }
                 )
-                .then_some(modifier_effect.factor.abs() * 100.0)
+                .then_some(modifier_effect.factor.get().abs() * 100.0)
             })
     });
 
@@ -283,7 +283,7 @@ pub fn SkillTooltip(
             {player_base_skill
                 .as_ref()
                 .filter(|player_base_skill| {
-                    player_base_skill.next_upgrade_cost > 0.0 && display_skill_upgrades
+                    player_base_skill.next_upgrade_cost.get() > 0.0 && display_skill_upgrades
                 })
                 .map(|player_base_skill| {
                     let upgrade_level = player_base_skill.upgrade_level;
@@ -327,7 +327,7 @@ pub fn SkillTooltip(
                                 view! { <span class="text-stone-100">{upgrade_level}</span> }
                             }} " | Upgrade Cost: "
                             <span class="text-stone-100">
-                                {format_number(next_upgrade_cost)}" Gold"
+                                {format_number(next_upgrade_cost.get())}" Gold"
                             </span>
                         </p>
                     }
@@ -454,7 +454,7 @@ pub(super) fn format_damage_trigger_modifier(
     factor: Option<f64>,
     damage_color: &'static str,
     trigger_status_name: Option<&str>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
     triggering_status: Option<&StatusTrigger>,
 ) -> Option<impl IntoView + use<>> {
     let modifier_for_bound = |bound| {
@@ -577,7 +577,7 @@ pub fn format_skill_effect(
     modifiers: Option<&[TriggerEffectModifier]>,
     // effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
     triggering_status: Option<&StatusTrigger>,
 ) -> impl IntoView + use<> {
     if skill_effect.success_chance.value.get() <= 0.0 {
@@ -616,8 +616,9 @@ pub fn format_skill_effect(
             view! {
                 <EffectLi>
                     "Deal "
-                    <span class="font-semibold">{number::format_number(*factor * 100.0)}%</span>
-                    " of " {item_slot_str}" Damage" {converted_damage}
+                    <span class="font-semibold">
+                        {number::format_number(factor.get() * 100.0)}%
+                    </span> " of " {item_slot_str}" Damage" {converted_damage}
                 </EffectLi>
             }
             .into_any()
@@ -686,7 +687,7 @@ pub fn format_skill_effect(
                         <EffectLi>
                             "Critical Hit Damage: "
                             <span class="font-semibold">
-                                {format!("+{}%", number::format_number(*crit_damage))}
+                                {format!("+{}%", number::format_number(crit_damage.get()))}
                             </span>
                         </EffectLi>
                     }
@@ -826,14 +827,14 @@ pub fn format_skill_effect(
             let max = *value.max;
 
             match modifier {
-                RestoreModifier::Percent if min == 100.0 && max == 100.0 => view! { <EffectLi>{success_chance}"Refresh "{status_filter_str}" Duration"</EffectLi> }
+                RestoreModifier::Percent if min.get() == 100.0 && max.get() == 100.0 => view! { <EffectLi>{success_chance}"Refresh "{status_filter_str}" Duration"</EffectLi> }
                 .into_any(),
-                RestoreModifier::Percent if min == -100.0 && max == -100.0 => view! { <EffectLi>{success_chance}"Remove "{status_filter_str}</EffectLi> }
+                RestoreModifier::Percent if min.get() == -100.0 && max.get() == -100.0 => view! { <EffectLi>{success_chance}"Remove "{status_filter_str}</EffectLi> }
                 .into_any(),
-                RestoreModifier::Percent if max < 0.0 => view! {
+                RestoreModifier::Percent if max.get() < 0.0 => view! {
                     <EffectLi>
                         {success_chance}"Reduce "{status_filter_str}" Duration by "
-                        {format_min_max_f64(-max, -min)}"%"
+                        {format_min_max_f64(-max.get(), -min.get())}"%"
                     </EffectLi>
                 }
                 .into_any(),
@@ -844,17 +845,17 @@ pub fn format_skill_effect(
                     </EffectLi>
                 }
                 .into_any(),
-                RestoreModifier::Flat if max < 0.0 => view! {
+                RestoreModifier::Flat if max.get() < 0.0 => view! {
                     <EffectLi>
                         {success_chance}"Reduce "{status_filter_str}" Duration by "
-                        {format_min_max_f64(-max, -min)}" seconds"
+                        {format_min_max_f64(-max.get(), -min.get())}" seconds"
                     </EffectLi>
                 }
                 .into_any(),
                 RestoreModifier::Flat => view! {
                     <EffectLi>
                         {success_chance}"Extend "{status_filter_str}" Duration by "
-                        {format_min_max_f64(min, max)}" seconds"
+                        {format_min_max_f64(min.get(), max.get())}" seconds"
                     </EffectLi>
                 }
                 .into_any(),
@@ -913,7 +914,7 @@ pub fn format_skill_effect(
             modifier,
         } => {
             let value_str = (!(matches!(modifier, RestoreModifier::Percent)
-                && *value.min == 100.0))
+                && value.min.get() == 100.0))
                 .then(|| match modifier {
                     RestoreModifier::Percent => view! {
                         {format_min_max(value)}
@@ -1074,7 +1075,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
         } => {
             format!(
                 "Per {}{} on equipped {}:",
-                format_number(1.0 / skill_modifier.factor),
+                format_number(1.0 / skill_modifier.factor.get()),
                 match item_stats {
                     ItemStatsSource::Armor => " Physical Defense".to_string(),
                     ItemStatsSource::Block => "% Block".to_string(),
@@ -1106,7 +1107,7 @@ pub fn format_skill_modifier(skill_modifier: ModifierEffect) -> impl IntoView {
         }
         ModifierEffectSource::CharacterStats(stat_converter) => format!(
             "Per {} {}:",
-            format_number(1.0 / skill_modifier.factor),
+            format_number(1.0 / skill_modifier.factor.get()),
             effects_tooltip::stat_converter_source_str(&stat_converter, false),
         ),
     };
@@ -1184,7 +1185,7 @@ fn format_status_damage_modifier(skill_modifier: &ModifierEffect) -> Option<Stri
     Some(format!(
         "{} Damage gains {}% of the equipped {}'s {}Damage{}",
         status_specs.name,
-        format_number(scaling),
+        format_number(scaling.get()),
         item_name,
         damage_type_str(*source_damage_type),
         conversion.unwrap_or_default(),
@@ -1278,7 +1279,7 @@ pub fn skill_effect_text(
             ..
         } => format!(
             "{} {}",
-            if *value.max < 0.0 {
+            if value.max.get() < 0.0 {
                 "Expire"
             } else {
                 "Refresh"

@@ -248,7 +248,6 @@ pub async fn post_buy_benedictions(
         &mut tx,
         &master_store,
         &payload.character_id,
-        character.resource_gold,
         &payload.player_benedictions,
     )
     .await?;

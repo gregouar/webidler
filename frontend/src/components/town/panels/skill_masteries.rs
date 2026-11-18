@@ -10,7 +10,7 @@ use shared::{
             PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade,
             SkillMasteryUpgradeEffect, SkillMasteryUpgradeEffectType,
         },
-        values::NonNegative,
+        values::Damage,
     },
     http::client::{SaveFavoriteSkillsRequest, SaveSkillMasteryUpgradesRequest},
 };
@@ -324,7 +324,7 @@ fn MasterySkillShop(
                 let mastery = player_skill_masteries
                     .masteries
                     .get(skill_id)
-                    .filter(|mastery| mastery.experience > 0.0)
+                    .filter(|mastery| mastery.experience.get() > 0.0)
                     .cloned();
                 let base_skill_specs = skill_specs.get(skill_id)?;
                 if mastery.is_none() && (!show_all_skills.get() || base_skill_specs.hidden) {
@@ -1002,7 +1002,7 @@ fn format_mastery_upgrade_effect(
             let old_status_str = data_context.status_name(old_status_id);
             let new_status_str = data_context.status_name(new_status_id);
             let status_specs = data_context.statuses_specs.read().get(new_status_id).cloned()?;
-            let value: ModifiableValue<_> = NonNegative::new(100.0).into();
+            let value: ModifiableValue<_> = Damage::new(100.0).into();
             Some(view! {
                 <EffectLi>"Apply "{new_status_str}" instead of "{old_status_str}</EffectLi>
                 {status_tooltip::format_status_effects(

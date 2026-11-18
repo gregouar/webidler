@@ -8,7 +8,7 @@ use shared::data::{
     monster::MonsterRarity,
     skill::DamageType,
     trigger::TriggerEffect,
-    values::NonNegative,
+    values::Damage,
 };
 
 use crate::{
@@ -90,14 +90,15 @@ pub fn CharacterPortrait(
 
     let statuses_map = Memo::new(move |_| {
         statuses.read().iter().fold(
-            HashMap::<StatusId, (usize, f64)>::new(),
+            HashMap::<StatusId, (usize, Damage)>::new(),
             |mut acc, (status_id, status_states)| {
                 let entry = acc.entry(status_id.clone()).or_default();
                 entry.0 += status_states.len();
                 entry.1 += status_states
                     .iter()
                     .map(|status_state| status_state.value.get())
-                    .sum::<f64>();
+                    .sum::<f64>()
+                    .into();
                 acc
             },
         )
@@ -573,7 +574,7 @@ fn has_damage_status(
 fn StatusIcon(
     status_id: StatusId,
     status_specs: Option<StatusSpecs>,
-    stack: Signal<(usize, f64)>,
+    stack: Signal<(usize, Damage)>,
     tooltip_position: StaticTooltipPosition,
     character_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
@@ -648,11 +649,10 @@ fn StatusIcon(
     }
 }
 
-fn status_value_range(value: f64) -> ChanceRange<ModifiableValue<NonNegative>> {
-    let value: ModifiableValue<NonNegative> = NonNegative::new(value).into();
+fn status_value_range(value: Damage) -> ChanceRange<ModifiableValue<Damage>> {
     ChanceRange {
-        min: value,
-        max: value,
+        min: value.into(),
+        max: value.into(),
         lucky_chance: Default::default(),
     }
 }

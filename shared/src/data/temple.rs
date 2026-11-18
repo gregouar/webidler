@@ -6,13 +6,14 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     modifier::Modifier,
     stat_effect::{StatEffect, StatType},
+    values::NonNegative,
 };
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct BenedictionsCategory {
     pub title: String,
 
-    pub price: f64,
+    pub price: NonNegative,
     pub price_increase_factor: f64,
     pub max_upgrade_level: u64,
 
@@ -48,17 +49,19 @@ pub struct PlayerBenedictionsCategory {
 }
 
 impl BenedictionsCategory {
-    pub fn compute_price(&self, upgrade_level: u64) -> f64 {
+    pub fn compute_price(&self, upgrade_level: u64) -> Option<NonNegative> {
         if upgrade_level >= self.max_upgrade_level {
-            return f64::INFINITY;
+            return None;
         }
-        self.price * self.price_increase_factor.powi(upgrade_level as i32)
+        Some(self.price * self.price_increase_factor.powi(upgrade_level as i32))
     }
 
     pub fn compute_total_price(&self, upgrade_level: u64) -> f64 {
         (0..upgrade_level)
-            .map(|level| self.compute_price(level))
-            .sum()
+            .filter_map(|level| self.compute_price(level))
+            .map(|x| x.get())
+            .sum::<f64>()
+            .into()
     }
 }
 

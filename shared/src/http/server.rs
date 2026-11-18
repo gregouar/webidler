@@ -21,6 +21,7 @@ use crate::data::{
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
     user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId, UserUnlocks},
+    values::NonNegative,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -236,7 +237,7 @@ pub struct EditMarketItemResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BuyMarketItemResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
@@ -247,13 +248,13 @@ pub struct RejectMarketItemResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpgradeStashResponse {
-    pub resource_gold: f64,
+    pub resource_gold: NonNegative,
     pub stash: Stash,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct ExchangeGemsStashResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub stash: Stash,
 }
 // #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -288,31 +289,31 @@ pub struct TakeStashItemResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeAffixResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeUpgradeResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeTemperResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeRerollResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeSacrificeResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
@@ -323,7 +324,7 @@ pub struct ForgeImbueResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GambleItemResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
@@ -342,10 +343,10 @@ pub struct InventoryUnequipResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryDeleteResponse {
     pub inventory: PlayerInventory,
-    pub resource_gold: f64,
-    pub resource_gems: f64,
-    pub gold_reward: f64,
-    pub gems_reward: f64,
+    pub resource_gold: NonNegative,
+    pub resource_gems: NonNegative,
+    pub gold_reward: NonNegative,
+    pub gems_reward: NonNegative,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

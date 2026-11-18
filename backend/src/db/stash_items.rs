@@ -121,7 +121,7 @@ pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemF
         item_crit_damage: item_specs
             .weapon_specs
             .as_ref()
-            .map(|weapon_specs| *weapon_specs.crit_damage),
+            .map(|weapon_specs| weapon_specs.crit_damage.get()),
     }
 }
 

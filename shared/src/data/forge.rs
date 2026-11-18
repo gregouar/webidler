@@ -3,6 +3,7 @@ use crate::{
         area::AreaLevel,
         item::{ItemBase, ItemCategory, ItemModifiers, ItemRarity, ItemSpecs},
         item_affix::{AffixType, ItemAffix},
+        values::NonNegative,
     },
     http::client::ForgeAffixOperation,
 };
@@ -22,15 +23,15 @@ fn affix_price(amount: usize) -> Option<f64> {
     }
 }
 
-fn remove_price(amount: usize) -> Option<f64> {
-    if amount > 0 { Some(5.0) } else { None }
+fn remove_price(amount: usize) -> Option<NonNegative> {
+    if amount > 0 { Some(5.0.into()) } else { None }
 }
 
 pub fn affix_operation_price(
     operation: ForgeAffixOperation,
     affixes_amount: usize,
     item_specs: &ItemSpecs,
-) -> Option<f64> {
+) -> Option<NonNegative> {
     if item_specs.categories.contains(&ItemCategory::Soul)
         || item_specs.categories.contains(&ItemCategory::Remnant)
     {
@@ -50,17 +51,17 @@ pub fn affix_operation_price(
                 }
         }),
         ForgeAffixOperation::Remove => {
-            remove_price(affixes_amount).map(|price| price_base_factor * price)
+            remove_price(affixes_amount).map(|price| price_base_factor * price.get())
         }
     }
-    .map(|x| x.round())
+    .map(|x| x.round().into())
 }
 
-pub fn gamble_price(item_level: AreaLevel) -> f64 {
-    (item_level as f64 / 10.0).floor() + 10.0
+pub fn gamble_price(item_level: AreaLevel) -> NonNegative {
+    ((item_level as f64 / 10.0).floor() + 10.0).into()
 }
 
-pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
+pub fn sacrifice_price(affixes: &[ItemAffix]) -> NonNegative {
     (affixes
         .iter()
         .filter(|affix| {
@@ -74,6 +75,7 @@ pub fn sacrifice_price(affixes: &[ItemAffix]) -> f64 {
         .unwrap_or_default()
         / 5.0)
         .round()
+        .into()
 }
 
 pub fn can_reroll(item: &ItemSpecs) -> bool {
@@ -82,7 +84,7 @@ pub fn can_reroll(item: &ItemSpecs) -> bool {
         && !item.categories.contains(&ItemCategory::Remnant)
 }
 
-pub fn reroll_price(affixes: &[ItemAffix]) -> f64 {
+pub fn reroll_price(affixes: &[ItemAffix]) -> NonNegative {
     (affixes
         .iter()
         .map(|affix| affix.item_level as f64)
@@ -90,20 +92,29 @@ pub fn reroll_price(affixes: &[ItemAffix]) -> f64 {
         .unwrap_or_default()
         / 20.0)
         .round()
+        .into()
 }
 
-pub fn upgrade_item_price(item_base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<f64> {
+pub fn upgrade_item_price(
+    item_base: &ItemBase,
+    item_modifiers: &ItemModifiers,
+) -> Option<NonNegative> {
     item_base
         .upgrade_levels
         .get(item_modifiers.upgrade_level as usize)
         .and_then(|next_upgrade_level| {
             (*next_upgrade_level <= item_modifiers.level)
                 .then_some((*next_upgrade_level / 2 + item_base.min_area_level) as f64)
+                .map(Into::into)
         })
 }
 
-pub fn temper_item_price(item_base: &ItemBase, item_modifiers: &ItemModifiers) -> Option<f64> {
+pub fn temper_item_price(
+    item_base: &ItemBase,
+    item_modifiers: &ItemModifiers,
+) -> Option<NonNegative> {
     let quality = item_modifiers.quality.clamp(0.0, MAX_TEMPERED_ITEM_QUALITY);
     (!item_base.ignore_quality && quality < MAX_TEMPERED_ITEM_QUALITY)
         .then(|| ((f64::from(quality) / 5.0).floor() + 1.0).powi(2))
+        .map(Into::into)
 }

@@ -140,9 +140,9 @@ pub fn HeaderMenu() -> impl IntoView {
             )
         })
     });
-    let gold = Signal::derive(move || resources.get().0);
-    let gems = Signal::derive(move || resources.get().1);
-    let shards = Signal::derive(move || resources.get().2);
+    let gold = Signal::derive(move || resources.get().0.get());
+    let gems = Signal::derive(move || resources.get().1.get());
+    let shards = Signal::derive(move || resources.get().2.get());
 
     let shard_level_exceeded = Signal::derive(move || {
         let area_specs = game_context.area_specs.read();

@@ -6,6 +6,7 @@ use axum::{
 use shared::data::{
     player::PlayerInventory,
     user::{User, UserCharacterId},
+    values::NonNegative,
 };
 use sqlx::Transaction;
 
@@ -73,15 +74,17 @@ pub async fn load_player_town_inventory(
 pub async fn buy_with_gems(
     tx: &mut Transaction<'_, Database>,
     character_id: &UserCharacterId,
-    price: f64,
-) -> Result<f64, AppError> {
-    let character_resources =
-        db::characters::update_character_resources(&mut **tx, character_id, -price, 0.0, 0.0, 0.0)
-            .await?;
-
-    if character_resources.resource_gems < 0.0 {
-        return Err(AppError::UserError("not enough gems".into()));
-    }
+    price: NonNegative,
+) -> Result<NonNegative, AppError> {
+    let character_resources = db::characters::update_character_resources(
+        &mut **tx,
+        character_id,
+        -price.get(),
+        0.0,
+        0.0,
+        0.0,
+    )
+    .await?;
 
     Ok(character_resources.resource_gems)
 }

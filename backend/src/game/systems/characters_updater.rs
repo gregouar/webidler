@@ -15,6 +15,7 @@ use shared::{
             compare_options,
         },
         trigger::TriggerEffectModifierSource,
+        values::Damage,
     },
 };
 
@@ -84,17 +85,15 @@ pub fn update_character_state(
     characters_controller::regenerate_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Life,
-        elapsed_time_f64 * *character_specs.character_attrs.life_regen * 0.1,
+        *character_specs.character_attrs.life_regen * elapsed_time_f64 * 0.1,
         RestoreModifier::Percent,
-        true,
     );
 
     characters_controller::regenerate_character(
         &mut (character_id, (character_specs, character_state)),
         RestoreType::Mana,
-        elapsed_time_f64 * *character_specs.character_attrs.mana_regen * 0.1,
+        *character_specs.character_attrs.mana_regen * elapsed_time_f64 * 0.1,
         RestoreModifier::Percent,
-        true,
     );
 
     for monitored_condition in character_state.monitored_conditions.values_mut() {
@@ -338,7 +337,7 @@ fn compute_character_specs(
                         character_attrs
                             .damage_taken
                             .entry((skill, damage))
-                            .or_insert(100.0.into())
+                            .or_insert(Damage(100.0).into())
                             .apply_effect(effect);
                     }
                 }
@@ -353,7 +352,7 @@ fn compute_character_specs(
                     character_attrs
                         .crit_damage_taken
                         .entry(skill_type)
-                        .or_insert(100.0.into())
+                        .or_insert(Damage(100.0).into())
                         .apply_effect(effect);
                 }
             }
@@ -490,16 +489,14 @@ fn compute_character_specs(
                     .max_mana
                     .convert_value(factor, specs.is_extra, false)
                     .get(),
-                StatConverterSource::ManaRegen => {
-                    character_attrs
-                        .mana_regen
-                        .convert_value(factor, specs.is_extra, false)
-                }
-                StatConverterSource::LifeRegen => {
-                    character_attrs
-                        .life_regen
-                        .convert_value(factor, specs.is_extra, false)
-                }
+                StatConverterSource::ManaRegen => character_attrs
+                    .mana_regen
+                    .convert_value(factor, specs.is_extra, false)
+                    .get(),
+                StatConverterSource::LifeRegen => character_attrs
+                    .life_regen
+                    .convert_value(factor, specs.is_extra, false)
+                    .get(),
                 StatConverterSource::Block(skill_type) => {
                     if let Some(block) = character_attrs.block.get_mut(&skill_type) {
                         let bounded_value =
@@ -542,9 +539,9 @@ fn compute_character_specs(
                     .iter_mut()
                     .map(|(armor_type, value)| {
                         if compare_options(&Some(armor_type), &damage_type) {
-                            value.convert_value(factor, specs.is_extra, false)
+                            value.convert_value(factor, specs.is_extra, false).get()
                         } else {
-                            0.0
+                            Default::default()
                         }
                     })
                     .sum(),
@@ -578,8 +575,8 @@ pub fn compute_stat_converter(
     match source {
         StatConverterSource::MaxLife => character_attrs.max_life.get(),
         StatConverterSource::MaxMana => character_attrs.max_mana.get(),
-        StatConverterSource::ManaRegen => *character_attrs.mana_regen,
-        StatConverterSource::LifeRegen => *character_attrs.life_regen,
+        StatConverterSource::ManaRegen => character_attrs.mana_regen.get(),
+        StatConverterSource::LifeRegen => character_attrs.life_regen.get(),
         StatConverterSource::Block(skill_type) => {
             if let Some(block) = character_attrs.block.get(skill_type) {
                 if uncapped {
@@ -619,9 +616,9 @@ pub fn compute_stat_converter(
             .iter()
             .map(|(armor_type, value)| {
                 if compare_options(&Some(armor_type), damage_type) {
-                    **value
+                    value.get()
                 } else {
-                    0.0
+                    Default::default()
                 }
             })
             .sum(),

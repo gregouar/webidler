@@ -4,7 +4,7 @@ use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     computations,
-    data::area::AreaLevel,
+    data::{area::AreaLevel, values::NonNegative},
     http::{
         client::{
             InventoryDeleteRequest, InventoryEquipRequest, InventorySortRequest,
@@ -120,8 +120,8 @@ pub async fn post_delete_items(
     let mut item_indexes = payload.item_indexes;
     item_indexes.sort_by_key(|&i| i);
 
-    let mut gold_reward = 0.0;
-    let mut gems_reward = 0.0;
+    let mut gold_reward: NonNegative = Default::default();
+    let mut gems_reward: NonNegative = Default::default();
     for &item_index in item_indexes.iter().rev() {
         let item_specs = inventory_controller::remove_item_from_bag(&mut inventory, item_index)?;
         gold_reward +=
@@ -136,9 +136,9 @@ pub async fn post_delete_items(
     let character_resources = db::characters::update_character_resources(
         &mut *tx,
         &payload.character_id,
-        gems_reward,
+        gems_reward.get(),
         0.0,
-        gold_reward,
+        gold_reward.get(),
         0.0,
     )
     .await?;

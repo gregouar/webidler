@@ -4,9 +4,13 @@ use shared::data::{
     cosmetics::CharacterCosmetics,
     realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
+    values::NonNegative,
 };
 
-use crate::db::{self, pool::Database};
+use crate::{
+    db::{self, pool::Database},
+    rest::AppError,
+};
 
 use super::{
     pool::{DbExecutor, DbPool},
@@ -42,10 +46,18 @@ pub struct CharacterEntry {
 }
 
 #[derive(Debug, FromRow)]
-pub struct CharacterResources {
+pub struct CharacterResourcesEntry {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
+    pub played_time_seconds: f64,
+}
+
+#[derive(Debug, FromRow)]
+pub struct CharacterResources {
+    pub resource_gems: NonNegative,
+    pub resource_shards: NonNegative,
+    pub resource_gold: NonNegative,
     pub played_time_seconds: f64,
 }
 
@@ -307,7 +319,8 @@ pub async fn update_character<'c>(
     }
 }
 
-/// Add/remove resources and played time to character.
+/// Add/remove resources and played time to character.pub async fn update_character_resources<'c>(
+
 pub async fn update_character_resources<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
@@ -315,9 +328,14 @@ pub async fn update_character_resources<'c>(
     resource_shards: f64,
     resource_gold: f64,
     played_time_seconds: f64,
-) -> Result<CharacterResources, sqlx::Error> {
-    sqlx::query_as!(
-        CharacterResources,
+) -> Result<CharacterResources, AppError> {
+    let CharacterResourcesEntry {
+        resource_gems,
+        resource_shards,
+        resource_gold,
+        played_time_seconds,
+    } = sqlx::query_as!(
+        CharacterResourcesEntry,
         r#"
         UPDATE characters
         SET
@@ -336,8 +354,56 @@ pub async fn update_character_resources<'c>(
         played_time_seconds,
     )
     .fetch_one(executor)
-    .await
+    .await?;
+
+    if resource_gold < 0.0 {
+        return Err(AppError::UserError("not enough gold".to_string()));
+    }
+    if resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".to_string()));
+    }
+    if resource_shards < 0.0 {
+        return Err(AppError::UserError("not enough power shards".to_string()));
+    }
+
+    Ok(CharacterResources {
+        resource_gems: resource_gems.into(),
+        resource_shards: resource_shards.into(),
+        resource_gold: resource_gold.into(),
+        played_time_seconds,
+    })
 }
+
+// pub async fn update_character_resources<'c>(
+//     executor: impl DbExecutor<'c>,
+//     character_id: &UserCharacterId,
+//     resource_gems: Finite,
+//     resource_shards: Finite,
+//     resource_gold: Finite,
+//     played_time_seconds: f64,
+// ) -> Result<CharacterResources, sqlx::Error> {
+//     let resources = sqlx::query_as!(
+//         CharacterResourcesEntry,
+//         r#"
+//         UPDATE characters
+//         SET
+//             resource_gems = resource_gems + $2,
+//             resource_shards = resource_shards + $3,
+//             resource_gold = resource_gold + $4,
+//             played_time_seconds = played_time_seconds + $5,
+//             updated_at = CURRENT_TIMESTAMP
+//         WHERE character_id = $1
+//         RETURNING resource_gems, resource_shards, resource_gold, played_time_seconds
+//         "#,
+//         character_id,
+//         resource_gems.get(),
+//         resource_shards.get(),
+//         resource_gold.get(),
+//         played_time_seconds,
+//     )
+//     .fetch_one(executor)
+//     .await
+// }
 
 pub async fn set_character_stamina<'c>(
     executor: impl DbExecutor<'c>,

@@ -13,7 +13,7 @@ use crate::{
         modifier::ModifiableValue,
         skill::DamageType,
         trigger::TriggerSpecs,
-        values::{NonNegative, Percent},
+        values::{Damage, NonNegative, Percent},
     },
     serde_utils::default_true,
 };
@@ -289,7 +289,7 @@ pub struct ItemSpecs {
     pub rune_specs: Option<RuneSpecs>,
 
     pub required_level: AreaLevel,
-    pub gold_price: f64,
+    pub gold_price: NonNegative,
     // #[serde(default)]
     // pub signature: ItemSignature,
 }
@@ -307,7 +307,7 @@ pub struct WeaponSpecs {
     pub damage: DamageMap,
 
     pub crit_chance: Chance,
-    pub crit_damage: ModifiableValue<f64>,
+    pub crit_damage: ModifiableValue<Damage>,
 }
 
 impl WeaponSpecs {
@@ -322,7 +322,7 @@ impl WeaponSpecs {
                 .damage.get(damage_type)
                 .map(|value| 1.0 / self.cooldown.get()
             // TODO: Lucky?
-            * (1.0 + *self.crit_damage * self.crit_chance.value.get() as f64 * 0.0001)*(value.min.get() + value.max.get()) * 0.5).unwrap_or_default()
+            * (1.0 + self.crit_damage.get() * self.crit_chance.value.get() as f64 * 0.0001)*(value.min.get() + value.max.get()) * 0.5).unwrap_or_default()
     }
 }
 

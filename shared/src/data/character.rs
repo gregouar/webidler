@@ -11,7 +11,7 @@ use crate::data::{
     skill::{DamageType, RepeatedSkillEffect, SkillType},
     stat_effect::{DamageTypeMap, StatEffect},
     trigger::TriggersMap,
-    values::{AtLeastOne, NonNegative, Percent},
+    values::{AtLeastOne, Damage, Finite, NonNegative, Percent},
 };
 
 use super::character_status::StatusMap;
@@ -89,12 +89,12 @@ pub struct CharacterStatic {
 pub struct CharacterAttrs {
     pub max_life: ModifiableValue<AtLeastOne>,
     #[serde(default)]
-    pub life_regen: ModifiableValue<f64>,
+    pub life_regen: ModifiableValue<Finite>,
 
     #[serde(default)]
     pub max_mana: ModifiableValue<NonNegative>,
     #[serde(default)]
-    pub mana_regen: ModifiableValue<f64>,
+    pub mana_regen: ModifiableValue<Finite>,
 
     #[serde(default)]
     pub take_from_mana_before_life: ModifiableValue<Percent>,
@@ -102,7 +102,7 @@ pub struct CharacterAttrs {
     pub take_from_life_before_mana: ModifiableValue<Percent>,
 
     #[serde(default)]
-    pub armor: DamageTypeMap<ModifiableValue<f64>>,
+    pub armor: DamageTypeMap<ModifiableValue<NonNegative>>,
 
     #[serde(default)]
     pub block: HashMap<SkillType, BoundedChance>,
@@ -114,17 +114,18 @@ pub struct CharacterAttrs {
     #[serde(default)]
     pub evade_damage: ModifiableValue<Percent>,
 
+    // TODO: Allow negative resistances later to increased time of status taken?
     #[serde(default)]
-    pub status_resistances: HashMap<(SkillType, Option<StatusId>), ModifiableValue<f64>>,
+    pub status_resistances: HashMap<(SkillType, Option<StatusId>), ModifiableValue<Percent>>,
     #[serde(default)]
     pub stun_lockout: ModifiableValue<NonNegative>,
 
     // #[serde(default)]
     // pub damage_resistance: HashMap<(SkillType, DamageType), ModifiableValue<BoundedValue<f64>>>,
     #[serde(default)]
-    pub damage_taken: HashMap<(SkillType, DamageType), ModifiableValue<f64>>,
+    pub damage_taken: HashMap<(SkillType, DamageType), ModifiableValue<Damage>>,
     #[serde(default)]
-    pub crit_damage_taken: HashMap<SkillType, ModifiableValue<f64>>,
+    pub crit_damage_taken: HashMap<SkillType, ModifiableValue<Damage>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -3,7 +3,10 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
-    data::temple::{BenedictionEffect, BenedictionSpecs, BenedictionsCategory, PlayerBenedictions},
+    data::{
+        temple::{BenedictionEffect, BenedictionSpecs, BenedictionsCategory, PlayerBenedictions},
+        values::NonNegative,
+    },
     http::client::BuyBenedictionsRequest,
 };
 
@@ -30,11 +33,11 @@ pub fn TemplePanel(
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let cost = RwSignal::new(0.0);
+    let cost = RwSignal::new(NonNegative(0.0));
     let player_benedictions = RwSignal::new(PlayerBenedictions::default());
 
     let reset = move || {
-        cost.set(0.0);
+        cost.set(Default::default());
         player_benedictions.set(town_context.player_benedictions.get_untracked());
     };
 
@@ -54,7 +57,8 @@ pub fn TemplePanel(
                                 <div class="flex-1" />
 
                                 <div class="flex h-full items-center gap-1 text-sm xl:text-base text-zinc-300 mb-1">
-                                    "Benedictions Cost: " <GoldCounter value=cost w_full=true />
+                                    "Benedictions Cost: "
+                                    <GoldCounter value=move || cost.get().get() w_full=true />
                                 </div>
 
                                 <div class="flex-1" />
@@ -62,7 +66,7 @@ pub fn TemplePanel(
                                 <div class="flex  h-full items-center gap-2">
                                     <MenuButton
                                         on:click=move |_| reset()
-                                        disabled=Signal::derive(move || cost.get() == 0.0)
+                                        disabled=Signal::derive(move || cost.get().get() == 0.0)
                                     >
                                         "Cancel"
                                     </MenuButton>
@@ -149,7 +153,7 @@ fn ConfirmButton(
 #[component]
 fn BenedictionsList(
     player_benedictions: RwSignal<PlayerBenedictions>,
-    cost: RwSignal<f64>,
+    cost: RwSignal<NonNegative>,
     view_only: bool,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
@@ -178,7 +182,7 @@ fn BenedictionCategorySection(
     category_id: String,
     category_specs: BenedictionsCategory,
     player_benedictions: RwSignal<PlayerBenedictions>,
-    cost: RwSignal<f64>,
+    cost: RwSignal<NonNegative>,
     view_only: bool,
 ) -> impl IntoView {
     let category_title = category_specs.title.clone();
@@ -279,7 +283,7 @@ fn BenedictionCategorySection(
                             view! {
                                 <div class="flex items-center gap-1">
                                     <GoldCounter
-                                        value=Signal::derive(move || price.get())
+                                        value=move || price.get().map(|x| x.get()).unwrap_or(f64::INFINITY)
                                         w_full=true
                                     />
                                     // {move || {
@@ -335,7 +339,7 @@ fn BenedictionRow(
     benediction_specs: BenedictionSpecs,
     category_specs: BenedictionsCategory,
     player_benedictions: RwSignal<PlayerBenedictions>,
-    cost: RwSignal<f64>,
+    cost: RwSignal<NonNegative>,
     view_only: bool,
 ) -> impl IntoView {
     let events_context: EventsContext = expect_context();
@@ -383,7 +387,10 @@ fn BenedictionRow(
             let next_price = category_specs.compute_price(bought_points);
 
             bought_points < max_upgrade_level
-                && cost.get() + next_price <= town_context.character.read().resource_gold
+                && next_price.is_some_and(|next_price| {
+                    (cost.get() + next_price).get()
+                        <= town_context.character.read().resource_gold.get()
+                })
         }
     });
     let can_add = Signal::derive(move || {
@@ -425,13 +432,18 @@ fn BenedictionRow(
                 town_context.character.read_untracked().resource_gold - cost.get_untracked();
 
             let mut bought_points_to_allocate = 0;
-            let mut purchase_cost = 0.0;
+            let mut purchase_cost = NonNegative(0.0);
             while bought_points_to_allocate < points_to_buy
                 && bought_points + bought_points_to_allocate < max_upgrade_level
             {
                 let next_price =
                     category_specs.compute_price(bought_points + bought_points_to_allocate);
-                if purchase_cost + next_price > available_gold {
+
+                let Some(next_price) = next_price else {
+                    break;
+                };
+
+                if (purchase_cost + next_price).get() > available_gold.get() {
                     break;
                 }
 
@@ -495,10 +507,12 @@ fn BenedictionRow(
                 .saturating_sub(confirmed_bought_points);
             let points_to_refund = amount_to_remove.min(refundable_points);
             let refund = (0..points_to_refund)
-                .map(|offset| {
+                .filter_map(|offset| {
                     category_specs.compute_price(current_category.upgrade_level - offset - 1)
                 })
-                .sum::<f64>();
+                .map(|x| x.get())
+                .sum::<f64>()
+                .into();
 
             player_benedictions.update(|player_benedictions| {
                 let Some(category) = player_benedictions.categories.get_mut(&category_id) else {
@@ -515,7 +529,7 @@ fn BenedictionRow(
                 }
                 category.upgrade_level = category.upgrade_level.saturating_sub(points_to_refund);
             });
-            cost.update(|cost| *cost = (*cost - refund).max(0.0));
+            cost.update(|cost| *cost = *cost - refund);
         }
     };
 

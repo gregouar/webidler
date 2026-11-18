@@ -8,7 +8,7 @@ use crate::data::{
     modifier::Modifier,
     skill::SkillType,
     trigger::TriggerSpecs,
-    values::{NonNegative, Percent},
+    values::{Damage, NonNegative, Percent},
 };
 
 use super::{skill::DamageType, stat_effect::StatType};
@@ -42,12 +42,12 @@ pub struct StatusSpecs {
 pub struct StatusEffect {
     #[serde(flatten)]
     pub status_effect_type: StatusEffectType,
-    pub value: NonNegative,
+    pub value: Damage,
     pub modifier: StatusModifier,
 }
 
 impl StatusEffect {
-    pub fn computed_value(&self, status_value: NonNegative) -> NonNegative {
+    pub fn computed_value(&self, status_value: Damage) -> Damage {
         match self.modifier {
             StatusModifier::Flat => self.value,
             StatusModifier::Percent => status_value * (self.value.get() * 0.01),
@@ -145,11 +145,11 @@ pub enum StatusModifier {
 pub struct StatusState {
     pub owner: CharacterId,
 
-    pub value: NonNegative,
+    pub value: Damage,
     pub duration: NonNegative, // Remaining duration
     pub skill_type: SkillType, // TODO: Should move to status specs???
 
-    pub base_value: NonNegative,
+    pub base_value: Damage,
     pub elapsed_escalation: NonNegative,
     pub max_duration: NonNegative,
     pub escalation: NonNegative,

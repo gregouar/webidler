@@ -91,8 +91,8 @@ impl DataInit<&MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
         let mut monster_state = MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            gold_reward: 0.0,
-            gems_reward: 0.0,
+            gold_reward: Default::default(),
+            gems_reward: Default::default(),
         };
 
         for skill_state in monster_state.character_state.skills_states.iter_mut() {

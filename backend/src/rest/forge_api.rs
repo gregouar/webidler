@@ -162,7 +162,7 @@ pub async fn post_affix(
         &master_store.items_store,
         item_base,
         item.modifiers.clone(),
-        0.0,
+        Default::default(),
     );
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)

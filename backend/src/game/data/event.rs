@@ -6,7 +6,7 @@ use shared::data::{
     modifier::ModifiableValue,
     skill::{DamageType, RestoreType, SkillRange, SkillType},
     stat_effect::DamageTypeMap,
-    values::NonNegative,
+    values::{Damage, NonNegative},
 };
 
 #[derive(Debug, Clone)]
@@ -39,11 +39,11 @@ pub struct HitEvent {
 
     pub skill_type: SkillType,
     pub range: SkillRange,
-    pub crit_damage: Option<f64>,
+    pub crit_damage: Option<Damage>,
     pub is_blocked: bool,
     pub is_hurt: bool,
 
-    pub damage: DamageTypeMap<ModifiableValue<NonNegative>>,
+    pub damage: DamageTypeMap<ModifiableValue<Damage>>,
 }
 #[derive(Debug, Clone)]
 pub struct StatusEvent {
@@ -61,7 +61,7 @@ pub struct StatusEvent {
     pub is_evaded: bool,
     pub is_max_stacks: bool,
 
-    pub value: ModifiableValue<NonNegative>,
+    pub value: ModifiableValue<Damage>,
     pub duration: ModifiableValue<NonNegative>,
     pub stacks: usize,
 }

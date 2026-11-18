@@ -17,7 +17,7 @@ use crate::{
             StatStatusFilter, StatType,
         },
         trigger::{TriggerEffect, TriggerSpecs},
-        values::{Cooldown, NonNegative, Percent},
+        values::{Cooldown, Damage, Finite, NonNegative, Percent},
     },
     serde_utils::default_1f64,
 };
@@ -42,7 +42,7 @@ pub struct BaseSkillSpecs {
     pub required_item: Option<SkillRequiredItem>,
 
     #[serde(default)]
-    pub upgrade_cost: f64,
+    pub upgrade_cost: NonNegative,
     #[serde(default)]
     pub upgrade_effects: Vec<SkillUpgradeEffect>,
 
@@ -148,7 +148,7 @@ impl SkillRequiredItem {
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
     pub source: ModifierEffectSource,
-    pub factor: f64,
+    pub factor: Finite,
     #[serde(default)]
     pub hidden: bool,
 }
@@ -257,7 +257,7 @@ pub enum SkillEffectType {
     WeaponEffect {
         item_slot: ItemSlot,
         #[serde(default)]
-        factor: ModifiableValue<f64>,
+        factor: ModifiableValue<NonNegative>,
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
@@ -268,7 +268,7 @@ pub enum SkillEffectType {
         #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]
-        crit_damage: ModifiableValue<f64>,
+        crit_damage: ModifiableValue<Damage>,
         #[serde(default)]
         unblockable: bool,
         #[serde(default)]
@@ -279,7 +279,7 @@ pub enum SkillEffectType {
     ApplyStatus {
         status_id: StatusId,
 
-        value: ChanceRange<ModifiableValue<NonNegative>>,
+        value: ChanceRange<ModifiableValue<Damage>>,
         #[serde(default = "default_1f64")]
         value_factor: f64, // For tooltip purposes
 
@@ -306,12 +306,12 @@ pub enum SkillEffectType {
     RefreshStatus {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<ModifiableValue<Finite>>,
         modifier: RestoreModifier,
     },
     Restore {
         restore_type: RestoreType,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<ModifiableValue<NonNegative>>,
         modifier: RestoreModifier,
     },
     Resurrect,
@@ -319,7 +319,7 @@ pub enum SkillEffectType {
     RefreshCooldown {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<ModifiableValue<Finite>>,
         modifier: RestoreModifier,
     },
 }

@@ -720,7 +720,7 @@ pub fn level_up_skill(
     player_base_skill: &mut PlayerBaseSkill,
     player_resources: &mut PlayerResources,
 ) {
-    if player_resources.gold < player_base_skill.next_upgrade_cost
+    if player_resources.gold.get() < player_base_skill.next_upgrade_cost.get()
         || player_base_skill.upgrade_level >= MAX_SKILL_LEVEL
     {
         return;

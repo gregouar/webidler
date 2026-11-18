@@ -131,14 +131,10 @@ pub async fn post_upgrade_stash(
         &payload.character_id,
         0.0,
         0.0,
-        -cost,
+        -cost.get(),
         0.0,
     )
     .await?;
-
-    if character_resources.resource_gold < 0.0 {
-        return Err(AppError::UserError("not enough gold".to_string()));
-    }
 
     db::stashes::update_stash_size(&mut *tx, &stash.stash_id, max_items).await?;
 
@@ -354,7 +350,7 @@ impl From<db::stashes::StashEntry> for Stash {
             title: value.title,
             items_amount: value.items_amount as usize,
             max_items: value.max_items as usize,
-            resource_gems: value.resource_gems,
+            resource_gems: value.resource_gems.into(),
         }
     }
 }

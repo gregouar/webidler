@@ -257,16 +257,24 @@ fn generate_monster_specs(
     };
 
     // Level power
-    monster_specs.experience_reward *= computations::exponential(
-        area_state.area_level + *area_specs.power_level / 2,
-        MONSTER_REWARD_INCREASE_FACTOR,
-    );
-    monster_specs.gold_reward *=
-        computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR);
-    monster_specs.skill_reward *= computations::exponential(
-        area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,
-        SKILL_REWARD_INCREASE_FACTOR,
-    );
+    monster_specs.experience_reward = (monster_specs.experience_reward.get()
+        * computations::exponential(
+            area_state.area_level + *area_specs.power_level / 2,
+            MONSTER_REWARD_INCREASE_FACTOR,
+        ))
+    .round()
+    .into();
+    monster_specs.gold_reward = (monster_specs.gold_reward.get()
+        * computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR))
+    .round()
+    .into();
+    monster_specs.skill_reward = (monster_specs.skill_reward.get()
+        * computations::exponential(
+            area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,
+            SKILL_REWARD_INCREASE_FACTOR,
+        ))
+    .round()
+    .into();
     monster_specs
         .character_specs
         .character_attrs

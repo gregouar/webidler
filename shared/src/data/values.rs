@@ -10,22 +10,48 @@ macro_rules! bounded_value {
         $(min = $min:expr;)?
         $(max = $max:expr;)?
     ) => {
-        #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Default)]
+        #[derive( Debug, Clone, Copy, PartialEq, Default)]
         $vis struct $name(pub $inner);
 
         impl $name {
-            pub fn new(v: $inner) -> Self {
-                Self(v)
+            pub fn new(value: $inner) -> Self {
+                Self(Self::normalize(value))
             }
 
             pub fn get(&self) -> $inner {
-                let mut val = self.0;
+                Self::normalize(self.0)
+            }
+
+            fn normalize(mut val: $inner) -> $inner {
+                if val.is_nan(){
+                    return 0.0;
+                }
 
                 #[allow(clippy::manual_clamp)]
                 $( if val < $min { val = $min; } )?
                 $( if val > $max { val = $max; } )?
 
                 val
+            }
+
+        }
+
+        impl Serialize for $name {
+            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+            where
+                S: Serializer,
+            {
+                self.get().serialize(serializer)
+            }
+        }
+
+        impl<'de> Deserialize<'de> for $name {
+            fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+            where
+                D: Deserializer<'de>,
+            {
+                let value = <$inner>::deserialize(deserializer)?;
+                Ok(Self::new(value))
             }
         }
 
@@ -109,11 +135,19 @@ bounded_value! {
 bounded_value! {
     pub struct Damage(f64);
     min = 0.0;
+    max = 1e300;
+}
+
+bounded_value! {
+    pub struct Finite(f64);
+    min = -1e301;
+    max = 1e301;
 }
 
 bounded_value! {
     pub struct NonNegative(f64);
     min = 0.0;
+    max = 1e301;
 }
 
 bounded_value! {
@@ -125,6 +159,7 @@ bounded_value! {
 bounded_value! {
     pub struct AtLeastOne(f64);
     min = 1.0;
+    max = 1e301;
 }
 
 // Runtime bounds

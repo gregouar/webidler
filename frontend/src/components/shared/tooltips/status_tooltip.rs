@@ -8,7 +8,7 @@ use shared::data::{
     modifier::{ModifiableValue, Modifier},
     stat_effect::StatEffect,
     trigger::{TriggerEffect, TriggerEffectModifier, TriggerSpecs},
-    values::NonNegative,
+    values::Damage,
 };
 
 use crate::components::{
@@ -26,13 +26,13 @@ use crate::components::{
 pub fn format_status_effects(
     status_id: &StatusId,
     status_specs: StatusSpecs,
-    value: &ChanceRange<ModifiableValue<NonNegative>>,
+    value: &ChanceRange<ModifiableValue<Damage>>,
     value_factor: Option<f64>,
     stacks: usize,
     modifiers: Option<&[TriggerEffectModifier]>,
     // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
 ) -> Option<impl IntoView + use<>> {
     // let value_factor = effects_map.map(|effects_map| {
     //     stats_computations::compute_stats_effects_status_value(
@@ -141,7 +141,7 @@ fn group_status_triggers_by_id(status_effects: Vec<StatusEffect>) -> Vec<Vec<Sta
 fn format_status_trigger_group(
     status_name: &str,
     status_effects: Vec<StatusEffect>,
-    skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
+    skill_value: &ChanceRange<ModifiableValue<Damage>>,
     modifiers: Option<&[TriggerEffectModifier]>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
     stacks: usize,
@@ -181,13 +181,13 @@ fn format_status_trigger_group(
 fn format_status_effect_line(
     status_name: &str,
     status_effect: StatusEffect,
-    skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
+    skill_value: &ChanceRange<ModifiableValue<Damage>>,
     value_factor: Option<f64>,
     modifiers: Option<&[TriggerEffectModifier]>,
     // effects_map: Option<&EffectsMap>,
     character_triggers: Option<&HashMap<String, TriggerEffect>>,
     stacks: usize,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
 ) -> Option<impl IntoView + use<>> {
     let value = computed_status_effect_value(&status_effect, skill_value, stacks);
     match status_effect.status_effect_type {
@@ -392,7 +392,7 @@ fn format_status_effect_line(
 
 fn computed_status_effect_value(
     status_effect: &StatusEffect,
-    skill_value: &ChanceRange<ModifiableValue<NonNegative>>,
+    skill_value: &ChanceRange<ModifiableValue<Damage>>,
     stacks: usize,
 ) -> (f64, f64) {
     match status_effect.modifier {

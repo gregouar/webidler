@@ -35,7 +35,7 @@ pub fn upgrade_item(
             upgrade_level: item_specs.modifiers.upgrade_level.saturating_add(1),
             ..item_specs.modifiers.clone()
         },
-        0.0,
+        Default::default(),
     ))
 }
 
@@ -264,6 +264,6 @@ pub fn imbue(
         items_store,
         item_base,
         item_modifiers,
-        0.0,
+        Default::default(),
     ))
 }

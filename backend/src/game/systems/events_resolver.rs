@@ -514,7 +514,7 @@ fn handle_area_completed_event(
         && area_state.area_level <= game_data.area_specs.max_power_shard_level
     {
         area_state.max_power_shard_level_ever = area_level;
-        game_data.player_resources.mutate().shards += 1.0;
+        game_data.player_resources.mutate().shards += 1.0.into();
     }
 
     let power_level = area_state

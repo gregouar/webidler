@@ -176,7 +176,7 @@ pub fn PlayerCard() -> impl IntoView {
         if max_level.get() {
             0.0
         } else {
-            level_progress.get().1
+            level_progress.get().1.get()
         }
     });
     let xp = Memo::new(move |_| game_context.player_resources.read().experience);
@@ -187,7 +187,7 @@ pub fn PlayerCard() -> impl IntoView {
         } else {
             view! {
                 "Experience: "
-                {format_number(xp.get())}
+                {format_number(xp.get().get())}
                 "/"
                 {format_number(max_xp.get())}
             }
@@ -198,7 +198,7 @@ pub fn PlayerCard() -> impl IntoView {
     let xp_percent = Signal::derive(move || {
         let max_xp = max_xp.get();
         if max_xp > 0.0 {
-            quantize_percent(xp.get() / max_xp * 100.0) as f32
+            quantize_percent(xp.get().get() / max_xp * 100.0) as f32
         } else {
             0.0
         }
@@ -208,7 +208,7 @@ pub fn PlayerCard() -> impl IntoView {
         game_context.player_base_specs.update(|player_base_specs| {
             game_context.player_resources.update(|player_resources| {
                 for _ in 0..amount {
-                    if player_resources.experience < player_base_specs.experience_needed
+                    if player_resources.experience.get() < player_base_specs.experience_needed.get()
                         || player_base_specs.level
                             >= game_context.player_specs.read_untracked().max_level
                     {
@@ -226,7 +226,7 @@ pub fn PlayerCard() -> impl IntoView {
         conn.send(&LevelUpPlayerMessage { amount }.into());
     });
     let disable_level_up = Memo::new(move |_| {
-        max_xp.get() > game_context.player_resources.read().experience || max_level.get()
+        max_xp.get() > game_context.player_resources.read().experience.get() || max_level.get()
     });
 
     let show_level_up_tutorial = Signal::derive(move || {
@@ -788,13 +788,13 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         if let Some(player_base_skill) = player_base_skill.get() {
             let mut player_base_skill = (*player_base_skill).clone();
             for _ in 0..10 {
-                if total_cost + player_base_skill.next_upgrade_cost > gold
+                if total_cost + player_base_skill.next_upgrade_cost.get() > gold.get()
                     || player_base_skill.upgrade_level >= MAX_SKILL_LEVEL
                 {
                     break;
                 }
                 total_level += 1;
-                total_cost += player_base_skill.next_upgrade_cost;
+                total_cost += player_base_skill.next_upgrade_cost.get();
                 player_base_skill.upgrade_level += 1;
                 player_base_skill.next_upgrade_cost = skill_cost_increase(&player_base_skill);
             }
@@ -810,7 +810,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             if let Some(skill_id) = player_base_specs.skills_in_use.get(index)
                 && let Some(player_base_skill) = player_base_specs.skills.get_mut(skill_id)
             {
-                game_context.player_resources.write().gold -= cost;
+                game_context.player_resources.write().gold -= cost.into();
                 for _ in 0..amount {
                     player_base_skill.upgrade_level =
                         player_base_skill.upgrade_level.saturating_add(1);
@@ -833,14 +833,14 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
             let (amount, cost) = if events_context.key_pressed(Key::Ctrl) {
                 level_up_batch.get()
             } else {
-                (1, level_up_cost.get())
+                (1, level_up_cost.get().get())
             };
             upgrade_skill(amount, cost);
         }
     };
 
     let disable_level_up = Memo::new(move |_| {
-        level_up_cost.get() > game_context.player_resources.read().gold
+        level_up_cost.get().get() > game_context.player_resources.read().gold.get()
             || player_base_skill
                 .read()
                 .as_ref()
@@ -882,7 +882,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
                 <div class="flex flex-col xl:space-y-1 text-sm max-w-xs">
                     <span class="font-semibold text-white">{"Upgrade Cost"}</span>
                     <span class="text-zinc-300">
-                        <Number class:font-semibold value=level_up_cost />
+                        <Number class:font-semibold value=move || level_up_cost.get().get() />
                         " Gold"
                     </span>
                     <span class="text-xs italic text-zinc-400">

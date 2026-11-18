@@ -321,7 +321,7 @@ fn new_skill_specs() -> BaseSkillSpecs {
         skill_type: SkillType::Other,
         cooldown: NonNegative::new(1.0),
         mana_cost: NonNegative::default(),
-        upgrade_cost: 0.0,
+        upgrade_cost: Default::default(),
         upgrade_effects: Default::default(),
         modifier_effects: Default::default(),
         targets: Default::default(),

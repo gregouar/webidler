@@ -445,7 +445,8 @@ fn MonsterCard(
                 .unwrap_or_default();
 
             let current_reward = resource_reward.get_untracked();
-            if (gold > 0.0 || gems > 0.0) && (gold != current_reward.1 || gems != current_reward.2)
+            if (gold.get() > 0.0 || gems.get() > 0.0)
+                && (gold != current_reward.1 || gems != current_reward.2)
             {
                 show_resource_reward(resource_reward, gold, gems);
             }
@@ -586,7 +587,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
     let armor_values = DamageType::iter()
         .filter_map(|damage_type| {
             let value = *attrs.armor.get(damage_type).copied().unwrap_or_default();
-            (value > 0.0).then_some((damage_type, value))
+            (value.get() > 0.0).then_some((damage_type, value))
         })
         .collect::<Vec<_>>();
     let is_armored = !armor_values.is_empty();
@@ -599,7 +600,7 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
                     .map(|(damage_type, value)| {
                         view! {
                             <span>
-                                <span class="font-semibold">{format!("{:.0}", value)}</span>
+                                <span class="font-semibold">{format!("{:.0}", value.get())}</span>
                                 {format!(
                                     " {}Armor",
                                     effects_tooltip::damage_type_str(Some(*damage_type)),
@@ -702,14 +703,14 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
 
     let mut grouped: HashMap<StatStatusFilter, Vec<(SkillType, f64)>> = HashMap::new();
     for ((skill_type, status_id), value) in attrs.status_resistances.iter() {
-        if **value > 0.0 {
+        if value.get() > 0.0 {
             grouped
                 .entry(StatStatusFilter {
                     status_id: status_id.clone(),
                     ..Default::default()
                 })
                 .or_default()
-                .push((*skill_type, **value));
+                .push((*skill_type, value.get() as f64));
         }
     }
 
@@ -775,13 +776,13 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
     };
 
     let life_regen = *attrs.life_regen * 0.1;
-    let is_regenerating = life_regen > 0.0;
+    let is_regenerating = life_regen.get() > 0.0;
     let regenerating_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
-                    <span class="font-semibold">{format!("{:.1}%", life_regen)}</span>
+                    <span class="font-semibold">{format!("{:.1}%", life_regen.get())}</span>
                     " Life Regenerated per second"
                 </span>
             </div>

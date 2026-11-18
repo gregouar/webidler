@@ -27,7 +27,7 @@ pub struct PlayerBaseSpecs {
     pub skill_masteries: PlayerSkillMasteries,
 
     pub level: u8,
-    pub experience_needed: f64,
+    pub experience_needed: NonNegative,
     pub max_level: u8,
 
     pub movement_cooldown: AtLeastOne,
@@ -54,7 +54,7 @@ pub struct PlayerBaseSkill {
     pub item_slot: Option<ItemSlot>,
 
     pub upgrade_level: u16,
-    pub next_upgrade_cost: f64,
+    pub next_upgrade_cost: NonNegative,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -64,16 +64,16 @@ pub struct PlayerState {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerResources {
-    pub experience: f64,
+    pub experience: NonNegative,
     pub passive_points: u16,
 
-    pub gold: f64,
-    pub gems: f64,
-    pub shards: f64,
+    pub gold: NonNegative,
+    pub gems: NonNegative,
+    pub shards: NonNegative,
 
-    pub gold_total: f64,
+    pub gold_total: NonNegative,
 
-    pub skill_masteries_experience: HashMap<String, f64>,
+    pub skill_masteries_experience: HashMap<String, NonNegative>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

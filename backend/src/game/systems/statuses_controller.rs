@@ -6,7 +6,7 @@ use shared::data::{
     player::CharacterState,
     skill::SkillType,
     stat_effect::{DamageTypeMap, StatEffect},
-    values::NonNegative,
+    values::{Damage, NonNegative},
 };
 
 use crate::game::data::master_store::StatusesStore;
@@ -195,7 +195,7 @@ pub fn generate_effects_from_statuses(
 pub fn initialize_status_state(
     owner: CharacterId,
     skill_type: SkillType,
-    value: NonNegative,
+    value: Damage,
     duration: NonNegative,
     escalation: NonNegative,
 ) -> StatusState {

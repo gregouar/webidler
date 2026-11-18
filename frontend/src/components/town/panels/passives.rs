@@ -9,11 +9,13 @@ use shared::{
     constants::DEFAULT_MAX_LEVEL,
     data::{
         item_affix::{AffixEffectScope, aggregate_effects},
+        modifier::BaseModifiableValue,
         passive::{
             PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassivesTreeAscension,
             PassivesTreeSpecs, PurchasedNodes,
         },
         stat_effect::StatType,
+        values::{Finite, NonNegative},
     },
     http::client::{AscendPassivesRequest, SavePassivesRequest, SocketPassiveRequest},
 };
@@ -57,7 +59,7 @@ pub fn PassivesPanel(
     let town_context = expect_context::<TownContext>();
     let data_context = expect_context::<DataContext>();
 
-    let ascension_cost = RwSignal::new(0.0);
+    let ascension_cost = RwSignal::new(Default::default());
     let passives_tree_ascension = RwSignal::new(PassivesTreeAscension::default());
     let passives_tree_build = RwSignal::new(PurchasedNodes::default());
 
@@ -65,7 +67,7 @@ pub fn PassivesPanel(
         Memo::new(move |_| data_context.passives_tree_specs.with(compute_connections));
 
     Effect::new(move || {
-        let mut initial_cost = 0.0;
+        let mut initial_cost = Finite(0.0);
 
         let temp = town_context.passives_tree_ascension.get();
         if passives_tree_ascension
@@ -86,7 +88,7 @@ pub fn PassivesPanel(
                         .nodes
                         .contains_key(node_id);
                     if !keep {
-                        initial_cost -= *v as f64;
+                        initial_cost -= Finite(*v as f64);
                     }
                     keep
                 });
@@ -370,14 +372,14 @@ fn PassiveTreeJsonButtons(
 pub fn AscendPanelHeader(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     invalid_tree: Signal<bool>,
-    ascension_cost: RwSignal<f64>,
+    ascension_cost: RwSignal<Finite>,
     #[prop(default = false)] view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
     let data_context = expect_context::<DataContext>();
 
     let reset = move || {
-        let mut initial_cost = 0.0;
+        let mut initial_cost: Finite = Default::default();
         passives_tree_ascension.update(|passives_tree_ascension| {
             *passives_tree_ascension = town_context.passives_tree_ascension.get_untracked();
             passives_tree_ascension.ascended_nodes.retain(|node_id, v| {
@@ -387,7 +389,7 @@ pub fn AscendPanelHeader(
                     .nodes
                     .contains_key(node_id);
                 if !keep {
-                    initial_cost -= *v as f64;
+                    initial_cost -= (*v as f64).into();
                 }
                 keep
             });
@@ -420,7 +422,7 @@ pub fn AscendPanelHeader(
                                     .into_any()
                             }
                             false => view! { "Cost:" }.into_any(),
-                        }} <ShardsCounter w_full=true value=ascension_cost.into() />
+                        }} <ShardsCounter w_full=true value=move || ascension_cost.get().into() />
                     </div>
 
                     <div class="flex-1" />
@@ -454,7 +456,7 @@ pub fn AscendPanelHeader(
 fn ConfirmAscendButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
     invalid_tree: Signal<bool>,
-    ascension_cost: RwSignal<f64>,
+    ascension_cost: RwSignal<Finite>,
     has_changed: Memo<bool>,
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
@@ -479,7 +481,7 @@ fn ConfirmAscendButton(
                         Ok(response) => {
                             town_context.character.set(response.character);
                             town_context.passives_tree_ascension.set(response.ascension);
-                            ascension_cost.set(0.0);
+                            ascension_cost.set(Default::default());
                             show_toast(toaster, "Ascension successful!", ToastVariant::Success)
                         }
                         Err(e) => show_toast(
@@ -515,7 +517,7 @@ fn ConfirmAscendButton(
 #[component]
 fn RefundAscendButton(
     passives_tree_ascension: RwSignal<PassivesTreeAscension>,
-    ascension_cost: RwSignal<f64>,
+    ascension_cost: RwSignal<Finite>,
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
     let town_context = expect_context::<TownContext>();
@@ -534,7 +536,7 @@ fn RefundAscendButton(
                     {
                         Ok(response) => {
                             passives_tree_ascension.set(response.ascension.clone());
-                            ascension_cost.set(0.0);
+                            ascension_cost.set(Default::default());
                             town_context.character.set(response.character);
                             town_context.passives_tree_ascension.set(response.ascension);
                         }
@@ -759,7 +761,7 @@ fn PassiveSkillTree(
     passives_tree_build: RwSignal<PurchasedNodes>,
     tree_connections: Memo<TreeConnections>,
     invalid_nodes: Signal<HashSet<PassiveNodeId>>,
-    ascension_cost: RwSignal<f64>,
+    ascension_cost: RwSignal<Finite>,
     view_only: bool,
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
@@ -788,9 +790,11 @@ fn PassiveSkillTree(
 
     let points_available = Memo::new(move |_| {
         if view_only {
-            0.0
+            0.0.into()
         } else {
-            (town_context.character.read().resource_shards - ascension_cost.get()).round()
+            (town_context.character.read().resource_shards.get() - ascension_cost.get().get())
+                .round()
+                .into()
         }
     });
 
@@ -892,8 +896,8 @@ fn PassiveSkillTree(
 fn AscendNode(
     node_id: PassiveNodeId,
     node_specs: PassiveNodeSpecs,
-    points_available: Memo<f64>,
-    ascension_cost: RwSignal<f64>,
+    points_available: Memo<NonNegative>,
+    ascension_cost: RwSignal<Finite>,
     active_tab: RwSignal<PassivesTab>,
     selected_socket_node: RwSignal<Option<PassiveNodeId>>,
     search_node: RwSignal<Option<String>>,
@@ -1044,7 +1048,7 @@ fn AscendNode(
                     && node_level.get() > 0
                 {
                     PurchaseStatus::Purchased
-                } else if (points_available.get() > 0.0 && upgradable)
+                } else if (points_available.get().get() > 0.0 && upgradable)
                     || (node_specs.socket && (!node_specs.locked || node_level.get() > 0))
                 {
                     PurchaseStatus::Purchaseable
@@ -1084,7 +1088,7 @@ fn AscendNode(
                             .entry(node_id)
                             .or_default();
                         ascension_cost.update(|ascension_cost| {
-                            *ascension_cost += node_specs.next_ascend_cost(*entry) as f64
+                            *ascension_cost += (node_specs.next_ascend_cost(*entry) as f64).into()
                         });
                         *entry = entry.saturating_add(1);
                     });
@@ -1139,7 +1143,7 @@ fn AscendNode(
                     if *entry > 0 {
                         *entry = entry.saturating_sub(1);
                         ascension_cost.update(|ascension_cost| {
-                            *ascension_cost -= node_specs.next_ascend_cost(*entry) as f64
+                            *ascension_cost -= (node_specs.next_ascend_cost(*entry) as f64).into()
                         });
                     }
                 });
@@ -1248,7 +1252,7 @@ fn compute_ascension_cost_delta(
     passives_tree_specs: &PassivesTreeSpecs,
     base_ascension: &PassivesTreeAscension,
     target_ascension: &PassivesTreeAscension,
-) -> f64 {
+) -> Finite {
     let node_ids = base_ascension
         .ascended_nodes
         .keys()
@@ -1277,6 +1281,7 @@ fn compute_ascension_cost_delta(
         })
         .sum::<f64>()
         .round()
+        .into()
 }
 
 fn validate_ascension(

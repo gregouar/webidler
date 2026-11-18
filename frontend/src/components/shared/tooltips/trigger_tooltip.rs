@@ -12,7 +12,7 @@ use shared::data::{
         EventTrigger, HitTrigger, KillTrigger, RestoreTrigger, StatusTrigger,
         TriggerEffectModifier, TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
     },
-    values::NonNegative,
+    values::Damage,
 };
 
 use crate::components::{
@@ -33,7 +33,7 @@ pub fn format_trigger(
     show_details: bool,
     // effects_map: Option<&EffectsMap>,
     trigger_status_name: Option<&str>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
 ) -> impl IntoView + use<> {
     format_triggers(
         vec![trigger],
@@ -47,7 +47,7 @@ pub fn format_triggers(
     triggers: Vec<TriggerSpecs>,
     show_details: bool,
     trigger_status_name: Option<&str>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
 ) -> impl IntoView + use<> {
     let trigger_events = triggers
         .iter()
@@ -153,7 +153,7 @@ pub fn format_triggers(
 pub fn get_trigger_modifier_value(
     modifier: &TriggerEffectModifier,
     factor: Option<f64>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
 ) -> Option<ChanceRange<ModifiableValue<f64>>> {
     if let TriggerEffectModifierSource::TriggerStatusValue = modifier.source
         && let Some(trigger_status_value) = trigger_status_value
@@ -176,7 +176,7 @@ pub fn format_trigger_modifier(
     factor: Option<f64>,
     value_color: Option<&str>,
     trigger_status_name: Option<&str>,
-    trigger_status_value: Option<&ChanceRange<ModifiableValue<NonNegative>>>,
+    trigger_status_value: Option<&ChanceRange<ModifiableValue<Damage>>>,
     triggering_status: Option<&StatusTrigger>,
 ) -> Option<impl IntoView + use<>> {
     modifier.and_then(|modifier| {

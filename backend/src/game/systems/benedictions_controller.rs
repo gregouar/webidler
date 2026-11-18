@@ -73,7 +73,6 @@ pub async fn update_benedictions(
     tx: &mut Transaction<'_, Database>,
     master_store: &MasterStore,
     character_id: &UserCharacterId,
-    resource_gold: f64,
     player_benedictions: &PlayerBenedictions,
 ) -> Result<(), AppError> {
     let (_, _, mut prev_benedictions, _) =
@@ -91,10 +90,6 @@ pub async fn update_benedictions(
 
     let cost = compute_benedictions_cost(&master_store.benedictions_store, player_benedictions)
         - compute_benedictions_cost(&master_store.benedictions_store, &prev_benedictions);
-
-    if cost > resource_gold {
-        return Err(AppError::UserError("not enough gold".to_string()));
-    }
 
     db::characters::update_character_resources(&mut **tx, character_id, 0.0, 0.0, -cost, 0.0)
         .await?;

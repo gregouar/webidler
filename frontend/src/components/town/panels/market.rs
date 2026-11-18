@@ -232,7 +232,7 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
         move |_| {
             let stash_id = stash.read_untracked().stash_id;
             let amount =
-                ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default();
+                ItemPrice::try_new(stash.read_untracked().resource_gems.get()).unwrap_or_default();
             spawn_local({
                 async move {
                     match backend
@@ -261,14 +261,14 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
         }
     };
 
-    let disabled = Signal::derive(move || value.get() == 0.0);
+    let disabled = Signal::derive(move || value.get().get() == 0.0);
 
     view! {
         <div class="flex gap-2 items-center">
             <span class="hidden xl:inline text-zinc-400 text-xs xl:text-base font-medium">
                 "Revenue:"
             </span>
-            <GemsCounter value w_full=true />
+            <GemsCounter value=move || value.get().get() w_full=true />
             <MenuButton on:click=do_take disabled>
                 "Take"
             </MenuButton>
@@ -284,8 +284,9 @@ fn MarketStashUpgradeButton() -> impl IntoView {
     let stash = town.market_stash;
     let busy = RwSignal::new(false);
     let upgrade = Memo::new(move |_| computations::stash_upgrade(&stash.get()));
-    let disabled =
-        Signal::derive(move || busy.get() || upgrade.get().1 > town.character.read().resource_gold);
+    let disabled = Signal::derive(move || {
+        busy.get() || upgrade.get().1.get() > town.character.read().resource_gold.get()
+    });
     let do_upgrade = move |_| {
         if disabled.get_untracked() {
             return;
@@ -317,7 +318,7 @@ fn MarketStashUpgradeButton() -> impl IntoView {
         <MenuButton on:click=do_upgrade disabled>
             <span class="flex items-center gap-1 whitespace-nowrap">
                 {move || if stash.read().max_items == 0 { "Buy Stash" } else { "Upgrade Stash" }}
-                " (" {move || format_number(upgrade.get().1).to_string()}<GoldIcon />")"
+                " (" {move || format_number(upgrade.get().1.get()).to_string()}<GoldIcon />")"
             </span>
         </MenuButton>
     }
@@ -501,7 +502,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             !own_item()
                 && selected_item.with(|selected_item| match selected_item {
                     SelectedItem::InMarket(selected_item) => {
-                        selected_item.price > town_context.character.read().resource_gems
+                        selected_item.price > town_context.character.read().resource_gems.get()
                     }
                     _ => true,
                 })

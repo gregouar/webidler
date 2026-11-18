@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use shared::{
     computations,
-    data::item::ItemSlot,
+    data::{item::ItemSlot, values::NonNegative},
     messages::client::{
         EquipItemMessage, SellItemsMessage, SheathItemMessage, SortInventoryMessage,
         UnequipItemMessage,
@@ -54,14 +54,14 @@ pub fn GameInventoryPanel(open: RwSignal<bool>) -> impl IntoView {
     let sell = {
         let conn = conn.clone();
         move |item_indexes: Vec<u8>| {
-            let (gold_reward, gems_reward) = game_context
+            let (gold_reward, gems_reward): (NonNegative, NonNegative) = game_context
                 .player_inventory
                 .read_untracked()
                 .bag
                 .iter()
                 .enumerate()
                 .filter(|(index, _)| item_indexes.contains(&(*index as u8)))
-                .fold((0.0, 0.0), |(gold, gems), (_, item_specs)| {
+                .fold(Default::default(), |(gold, gems), (_, item_specs)| {
                     (
                         gold + item_specs.gold_price,
                         gems + computations::item_gems_price(

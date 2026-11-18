@@ -8,12 +8,14 @@ use shared::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
         item::{ItemSlot, ItemSpecs},
+        modifier::BaseModifiableValue,
         monster::{MonsterRarity, MonsterSpecs},
         player::{
             EquippedSlot, PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources,
             PlayerSpecs, PlayerState,
         },
         skill::{BaseSkillSpecs, SkillType},
+        values::NonNegative,
     },
 };
 
@@ -180,12 +182,14 @@ pub fn reward_player(
     monster_specs: &MonsterSpecs,
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
-) -> (f64, f64) {
+) -> (NonNegative, NonNegative) {
     let gold_reward = if area_specs.can_reward_gold() {
         // (monster_specs.gold_reward * player_specs.gold_find.get() * *area_specs.gold_find * 0.0001)
-        (monster_specs.gold_reward * player_specs.gold_find.get() * 0.01).round()
+        (monster_specs.gold_reward.get() * player_specs.gold_find.get() * 0.01)
+            .round()
+            .into()
     } else {
-        0.0
+        Default::default()
     };
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity
         && area_specs.can_reward_gems()
@@ -198,8 +202,9 @@ pub fn reward_player(
             .floor()
             + 1.0
     } else {
-        0.0
-    };
+        Default::default()
+    }
+    .into();
 
     player_resources.gold += gold_reward;
     player_resources.gold_total += gold_reward;
@@ -235,7 +240,7 @@ pub fn level_up(
     player_state: &mut PlayerState,
     player_resources: &mut PlayerResources,
 ) -> bool {
-    if player_resources.experience < player_base_specs.experience_needed
+    if player_resources.experience.get() < player_base_specs.experience_needed.get()
         || player_base_specs.level >= player_specs.max_level
     {
         return false;
@@ -383,11 +388,12 @@ pub fn sell_item_from_bag(
     }
 }
 
+/// Return (Gold,Gems)
 pub fn sell_item(
     player_resources: &mut PlayerResources,
     item_specs: &ItemSpecs,
     is_ssf: bool,
-) -> (f64, f64) {
+) -> (NonNegative, NonNegative) {
     let gems_reward = computations::item_gems_price(
         item_specs.modifiers.level,
         item_specs.modifiers.rarity,

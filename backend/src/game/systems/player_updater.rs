@@ -18,7 +18,7 @@ use shared::{
         skill_mastery::PlayerSkillMasteries,
         stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
         trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
-        values::{AtLeastOne, NonNegative},
+        values::{AtLeastOne, Damage, Finite, NonNegative},
     },
 };
 use strum::IntoEnumIterator;
@@ -39,9 +39,9 @@ pub fn base_player_character_attrs(level: u8) -> CharacterAttrs {
     CharacterAttrs {
         max_life: AtLeastOne::new(100.0 + PLAYER_LIFE_PER_LEVEL * (level.saturating_sub(1)) as f64)
             .into(),
-        life_regen: 10.0.into(),
+        life_regen: Finite(10.0).into(),
         max_mana: NonNegative::new(100.0).into(),
-        mana_regen: 10.0.into(),
+        mana_regen: Finite(10.0).into(),
         ..Default::default()
     }
 }
@@ -69,7 +69,7 @@ pub fn init_player_base_specs(
         skills_in_use: Default::default(),
         skills: Default::default(),
         level: 1,
-        experience_needed: 20.0,
+        experience_needed: 20.0.into(),
         movement_cooldown: 3.0.into(),
         gold_find: 100.0.into(),
         threat_gain: 100.0.into(),
@@ -435,8 +435,8 @@ struct ModifiablePlayerSpecs {
     gold_find: ModifiableValue<NonNegative>,
     threat_gain: ModifiableValue<NonNegative>,
 
-    restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<f64>>,
-    status_on_hit: HashMap<(StatusId, Option<SkillType>), ModifiableValue<NonNegative>>,
+    restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<NonNegative>>,
+    status_on_hit: HashMap<(StatusId, Option<SkillType>), ModifiableValue<Damage>>,
 }
 
 fn modify_player_specs(

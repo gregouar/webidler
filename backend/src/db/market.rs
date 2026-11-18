@@ -6,6 +6,7 @@ use shared::data::{
     realms::{Realm, RealmId},
     stash::StashId,
     user::{UserCharacterId, UserId},
+    values::NonNegative,
 };
 
 use crate::db::{
@@ -46,7 +47,7 @@ pub struct MarketBuyEntry {
 
     pub recipient_id: Option<UserId>, // For private offers
 
-    pub price: f64,
+    pub price: NonNegative,
 }
 
 pub async fn sell_item<'c>(

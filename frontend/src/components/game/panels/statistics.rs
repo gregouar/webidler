@@ -369,10 +369,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .character_specs
                                             .character_attrs
                                             .life_regen * 0.1;
-                                        if value == 0.0 {
+                                        if value.get() == 0.0 {
                                             "-".into()
                                         } else {
-                                            format!("{:.1}%", value)
+                                            format!("{:.1}%", value.get())
                                         }
                                     }
                                 />
@@ -399,10 +399,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .character_specs
                                             .character_attrs
                                             .mana_regen * 0.1;
-                                        if value == 0.0 {
+                                        if value.get() == 0.0 {
                                             "-".into()
                                         } else {
-                                            format!("{:.1}%", value)
+                                            format!("{:.1}%", value.get())
                                         }
                                     }
                                 />
@@ -434,7 +434,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
@@ -442,7 +442,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .armor
                                                 .get(DamageType::Physical)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -451,7 +452,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
@@ -459,7 +460,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .armor
                                                 .get(DamageType::Fire)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -468,7 +470,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
@@ -476,7 +478,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .armor
                                                 .get(DamageType::Poison)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -485,7 +488,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
@@ -493,7 +496,8 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .armor
                                                 .get(DamageType::Storm)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -658,7 +662,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .character_attrs
                                                 .damage_taken
                                                 .get(&(SkillType::Attack, damage_type))
-                                                .map(|x| **x)
+                                                .map(|x| x.get())
                                                 .unwrap_or(100.0);
                                             (value != 100.0)
                                                 .then(|| {
@@ -688,7 +692,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                         .character_attrs
                                                         .crit_damage_taken
                                                         .get(&skill_type)
-                                                        .map(|value| **value)
+                                                        .map(|value| value.get())
                                                         .unwrap_or(100.0)
                                                         .max(0.0),
                                                 )

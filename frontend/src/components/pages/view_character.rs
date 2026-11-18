@@ -149,9 +149,9 @@ pub fn HeaderMenu() -> impl IntoView {
     let chat_context: ChatContext = expect_context();
     let backend = expect_context::<BackendClient>();
 
-    let gems = Signal::derive(move || town_context.character.read().resource_gems);
-    let shards = Signal::derive(move || town_context.character.read().resource_shards);
-    let gold = Signal::derive(move || town_context.character.read().resource_gold);
+    let gems = Signal::derive(move || town_context.character.read().resource_gems.get());
+    let shards = Signal::derive(move || town_context.character.read().resource_shards.get());
+    let gold = Signal::derive(move || town_context.character.read().resource_gold.get());
 
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
