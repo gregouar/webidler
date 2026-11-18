@@ -63,6 +63,18 @@
                 { "monster": "shaman.json",     "quantity": 1      },
                 { "monster": "chupacabra.json", "quantity": 1      }
             ]
+        },
+        {
+            "min_level":   30,
+            "weight"   : 1000,
+            "spawns"   : [
+                { "monster": "gargoyle.json", "quantity": [1, 2] },
+                { "monster": "vampire.json",  "quantity": [1, 2] },
+                { "monster": "werewolf.json", "quantity": [1, 2] },
+                { "monster": "gargoyle.json", "quantity": [1, 2] },
+                { "monster": "vampire.json",  "quantity": [1, 2] },
+                { "monster": "werewolf.json", "quantity": [1, 2] }
+            ]
         }
     ]
 }

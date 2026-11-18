@@ -1,7 +1,7 @@
 {
   "name"    : "Bigfoot",
   "portrait": "monsters/farwest/bigfoot.webp",
-  "max_life": 20,
+  "max_life": 30,
   "size"    : "Tall",
   "armor"   : {"Physical": 50, "Storm": 50},
   "skills"  : [

@@ -1,7 +1,7 @@
 {
   "name"              : "Wendigo",
   "portrait"          : "monsters/farwest/wendigo.webp",
-  "max_life"          : 15,
+  "max_life"          : 25,
   "size"              : "Tall",
   "armor"             : {"Storm": 100},
   "status_resistances": [ {"status_id": "chill", "value": 100} ],
