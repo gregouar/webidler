@@ -266,6 +266,9 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
     game_context.player_stamina.set(player_stamina);
     if let Some(monster_specs) = monster_specs {
         game_context.monster_specs.set(monster_specs);
+        game_context
+            .monster_specs_generation
+            .update(|generation| *generation = generation.wrapping_add(1));
     } else if let Some(monster_specs_patch) = monster_specs_patch {
         game_context.monster_specs.update(|monster_specs| {
             for (monster_specs_patch, monster_specs) in monster_specs_patch

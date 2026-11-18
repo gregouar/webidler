@@ -57,7 +57,7 @@ pub struct GameContext {
     pub player_auto_skills: RwSignal<Vec<bool>>,
     pub player_pets: RwSignal<PlayerPets>,
 
-    // pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
+    pub monster_specs_generation: RwSignal<usize>,
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
@@ -118,7 +118,7 @@ impl GameContext {
             player_auto_skills: Default::default(),
             player_pets: Default::default(),
 
-            // monster_wave: RwSignal::new(0),
+            monster_specs_generation: RwSignal::new(0),
             monster_specs: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
 

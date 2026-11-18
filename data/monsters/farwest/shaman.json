@@ -1,0 +1,36 @@
+{
+  "name"    : "Skinwalker Shaman",
+  "portrait": "monsters/farwest/shaman.webp",
+  "max_life": 7,
+  "armor"   : {"Poison": 100},
+  "skills"  : [
+    {
+      "name"      : "Blazing Finger",
+      "icon"      : "skills/fireball.svg",
+      "skill_type": "Spell",
+      "cooldown"  : 3.0,
+      "targets"   : [
+        {
+          "effects": [
+            { "ApplyStatus": {"status_id": "burn", "value": 5} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Call of the Pack",
+      "icon"      : "skills/wolf_howl.svg",
+      "skill_type": "Blessing",
+      "cooldown"  : 8.0,
+      "targets"   : [
+        {
+          "target_type": "Friend",
+          "shape"      : "All",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "wolf_howl", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

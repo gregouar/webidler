@@ -134,9 +134,10 @@ pub fn MonstersGrid() -> impl IntoView {
                             game_context.monster_specs.read().get(index).is_some()
                         }>
                             {move || {
+                                let _ = game_context.monster_specs_generation.get();
                                 let specs = game_context
                                     .monster_specs
-                                    .read()
+                                    .read_untracked()
                                     .get(index)
                                     .cloned()
                                     .expect("checked by Show");
@@ -406,17 +407,26 @@ fn MonsterCard(
         }
     });
 
+    let max_life = Signal::derive(move || {
+        game_context
+            .monster_specs
+            .read()
+            .get(index)
+            .map(|specs| specs.character_specs.character_attrs.max_life.get())
+            .unwrap_or_default()
+    });
+
     let life_tooltip = move || {
         view! {
             "Life: "
             {format_number(life.get())}
             "/"
-            {format_number(specs.character_specs.character_attrs.max_life.get())}
+            {format_number(max_life.get())}
         }
     };
 
     let life_percent = Memo::new(move |_| {
-        let max_life = specs.character_specs.character_attrs.max_life.get();
+        let max_life = max_life.get();
         if max_life > 0.0 {
             (life.get() / max_life * 100.0) as f32
         } else {
@@ -553,10 +563,20 @@ fn MonsterCard(
             </div>
 
             <div class="w-full flex flex-col justify-center gap-1">
-                <MonsterTags
-                    attrs=specs.character_specs.character_attrs
-                    size=specs.character_specs.character_static.size
-                />
+                {move || {
+                    game_context
+                        .monster_specs
+                        .read()
+                        .get(index)
+                        .map(|specs| {
+                            view! {
+                                <MonsterTags
+                                    attrs=specs.character_specs.character_attrs.clone()
+                                    size=specs.character_specs.character_static.size
+                                />
+                            }
+                        })
+                }}
                 <div class=format!(
                     "flex-1 flex flex-col justify-evenly {skill_size} mx-auto",
                 )>
@@ -867,7 +887,15 @@ fn MonsterSkill(
     let game_context = expect_context::<GameContext>();
     let skill_type = skill_specs.skill_type;
     let skill_icon = skill_specs.icon.clone();
-    let skill_specs = Arc::new(skill_specs);
+    let current_skill_specs = Signal::derive(move || {
+        game_context
+            .monster_specs
+            .read()
+            .get(monster_index)
+            .and_then(|monster_specs| monster_specs.character_specs.skills_specs.get(index))
+            .cloned()
+            .map(Arc::new)
+    });
 
     let is_dead = Memo::new(move |_| {
         game_context
@@ -910,13 +938,19 @@ fn MonsterSkill(
     let tooltip_context = expect_context::<DynamicTooltipContext>();
     let tooltip_id = RwSignal::new(0);
     let show_tooltip = {
-        let skill_specs = skill_specs.clone();
         move || {
-            let skill_specs = skill_specs.clone();
             tooltip_id.set(tooltip_context.set_content(
                 move || {
-                    let skill_specs = skill_specs.clone();
-                    view! { <SkillTooltip skill_specs=skill_specs /> }.into_any()
+                    view! {
+                        {move || {
+                            current_skill_specs
+                                .get()
+                                .map(|skill_specs| {
+                                    view! { <SkillTooltip skill_specs=skill_specs /> }
+                                })
+                        }}
+                    }
+                    .into_any()
                 },
                 DynamicTooltipPosition::Auto,
             ));

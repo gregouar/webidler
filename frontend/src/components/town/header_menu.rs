@@ -277,11 +277,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 </MenuButton>
                 <MenuButton
                     title="Achievements"
-                    on:click=move |_| {
-                        town_context
-                            .open_achievements
-                            .set(!town_context.open_achievements.get_untracked())
-                    }
+                    on:click=move |_| { switch_panel(town_context.open_achievements) }
                 >
                     <AchievementsIcon class:text-amber-300=move || are_rewards_available(
                         town_context.user_unlocks,
