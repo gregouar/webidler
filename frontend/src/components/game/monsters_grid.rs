@@ -4,7 +4,6 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*};
 
 use rand::RngExt;
-use shared::data::character::CharacterAttrs;
 use shared::data::monster::MonsterRarity;
 use shared::data::skill::{DamageType, SkillEffectType, SkillType};
 use shared::data::stat_effect::{StatSkillFilter, StatStatusFilter};
@@ -563,20 +562,10 @@ fn MonsterCard(
             </div>
 
             <div class="w-full flex flex-col justify-center gap-1">
-                {move || {
-                    game_context
-                        .monster_specs
-                        .read()
-                        .get(index)
-                        .map(|specs| {
-                            view! {
-                                <MonsterTags
-                                    attrs=specs.character_specs.character_attrs.clone()
-                                    size=specs.character_specs.character_static.size
-                                />
-                            }
-                        })
-                }}
+                <MonsterTags
+                    monster_index=index
+                    size=specs.character_specs.character_static.size
+                />
                 <div class=format!(
                     "flex-1 flex flex-col justify-evenly {skill_size} mx-auto",
                 )>
@@ -603,206 +592,248 @@ fn MonsterCard(
 }
 
 #[component]
-fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
-    let armor_values = DamageType::iter()
-        .filter_map(|damage_type| {
-            let value = *attrs.armor.get(damage_type).copied().unwrap_or_default();
-            (value.get() > 0.0).then_some((damage_type, value))
+fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
+    let game_context = expect_context::<GameContext>();
+    let attrs = Signal::derive(move || {
+        game_context
+            .monster_specs
+            .read()
+            .get(monster_index)
+            .map(|specs| specs.character_specs.character_attrs.clone())
+            .unwrap_or_default()
+    });
+
+    let armor_values = Signal::derive(move || {
+        attrs.with(|attrs| {
+            DamageType::iter()
+                .filter_map(|damage_type| {
+                    let value = *attrs.armor.get(damage_type).copied().unwrap_or_default();
+                    (value.get() > 0.0).then_some((damage_type, value))
+                })
+                .collect::<Vec<_>>()
         })
-        .collect::<Vec<_>>();
-    let is_armored = !armor_values.is_empty();
+    });
     let armored_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Armored"}</span>
-                {armor_values
-                    .iter()
-                    .map(|(damage_type, value)| {
-                        view! {
-                            <span>
-                                <span class="font-semibold">{format!("{:.0}", value.get())}</span>
-                                {format!(
-                                    " {}Armor",
-                                    effects_tooltip::damage_type_str(Some(*damage_type)),
-                                )}
-                            </span>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+                {move || {
+                    armor_values
+                        .read()
+                        .iter()
+                        .map(|(damage_type, value)| {
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}", value.get())}</span>
+                                    {format!(
+                                        " {}Armor",
+                                        effects_tooltip::damage_type_str(Some(*damage_type)),
+                                    )}
+                                </span>
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                }}
             </div>
         }
     };
 
-    let shield_values = [SkillType::Attack, SkillType::Spell]
-        .into_iter()
-        .filter_map(|skill_type| {
-            let value = attrs
-                .block
-                .get(&skill_type)
-                .copied()
-                .unwrap_or_default()
-                .value
-                .get();
-            (value > 0.0).then_some((skill_type, value))
+    let shield_values = Signal::derive(move || {
+        attrs.with(|attrs| {
+            let values = [SkillType::Attack, SkillType::Spell]
+                .into_iter()
+                .filter_map(|skill_type| {
+                    let value = attrs
+                        .block
+                        .get(&skill_type)
+                        .copied()
+                        .unwrap_or_default()
+                        .value
+                        .get();
+                    (value > 0.0).then_some((skill_type, value))
+                })
+                .collect::<Vec<_>>();
+            (values, attrs.block_damage.get())
         })
-        .collect::<Vec<_>>();
-    let block_damage = attrs.block_damage.get();
-    let is_shielded = !shield_values.is_empty();
+    });
     let shielded_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Shielded"}</span>
-                {shield_values
-                    .iter()
-                    .map(|(skill_type, value)| {
-                        view! {
-                            <span>
-                                <span class="font-semibold">{format!("{:.0}%", value)}</span>
-                                {format!(" {} Block Chance", skill_type_str(Some(*skill_type)))}
-                            </span>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
-                {(block_damage > 0.0)
-                    .then(|| {
-                        view! {
-                            <span>
-                                <span class="font-semibold">{format!("{:.0}%", block_damage)}</span>
-                                " Blocked Damage Taken"
-                            </span>
-                        }
-                    })}
+                {move || {
+                    shield_values
+                        .read()
+                        .0
+                        .iter()
+                        .map(|(skill_type, value)| {
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                    {format!(" {} Block Chance", skill_type_str(Some(*skill_type)))}
+                                </span>
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                }}
+                {move || {
+                    let block_damage = shield_values.read().1;
+                    (block_damage > 0.0)
+                        .then(|| {
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}%", block_damage)}</span>
+                                    " Blocked Damage Taken"
+                                </span>
+                            }
+                        })
+                }}
             </div>
         }
     };
 
-    let evade_values = DamageType::iter()
-        .filter_map(|damage_type| {
-            let value = attrs
-                .evade
-                .get(damage_type)
-                .copied()
-                .unwrap_or_default()
-                .value
-                .get();
-            (value > 0.0 && damage_type != DamageType::Storm).then_some((damage_type, value))
+    let evade_values = Signal::derive(move || {
+        attrs.with(|attrs| {
+            let values = DamageType::iter()
+                .filter_map(|damage_type| {
+                    let value = attrs
+                        .evade
+                        .get(damage_type)
+                        .copied()
+                        .unwrap_or_default()
+                        .value
+                        .get();
+                    (value > 0.0 && damage_type != DamageType::Storm)
+                        .then_some((damage_type, value))
+                })
+                .collect::<Vec<_>>();
+            (values, attrs.evade_damage.get())
         })
-        .collect::<Vec<_>>();
-    let evade_damage = attrs.evade_damage.get();
-    let is_evasive = !evade_values.is_empty();
+    });
     let evasive_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Evasive"}</span>
-                {evade_values
-                    .iter()
-                    .map(|(damage_type, value)| {
-                        view! {
-                            <span>
-                                <span class="font-semibold">{format!("{:.0}%", value)}</span>
-                                {format!(
-                                    " {} Evade Chance",
-                                    effects_tooltip::damage_over_time_type_str(Some(*damage_type)),
-                                )}
-                            </span>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
-                {(evade_damage > 0.0)
-                    .then(|| {
-                        view! {
-                            <span>
-                                <span class="font-semibold">{format!("{:.0}%", evade_damage)}</span>
-                                " Evaded Damage Taken"
-                            </span>
-                        }
-                    })}
+                {move || {
+                    evade_values
+                        .read()
+                        .0
+                        .iter()
+                        .map(|(damage_type, value)| {
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                    {format!(
+                                        " {} Evade Chance",
+                                        effects_tooltip::damage_over_time_type_str(Some(*damage_type)),
+                                    )}
+                                </span>
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                }}
+                {move || {
+                    let evade_damage = evade_values.read().1;
+                    (evade_damage > 0.0)
+                        .then(|| {
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}%", evade_damage)}</span>
+                                    " Evaded Damage Taken"
+                                </span>
+                            }
+                        })
+                }}
             </div>
         }
     };
 
-    let mut grouped: HashMap<StatStatusFilter, Vec<(SkillType, f64)>> = HashMap::new();
-    for ((skill_type, status_id), value) in attrs.status_resistances.iter() {
-        if value.get() > 0.0 {
-            grouped
-                .entry(StatStatusFilter {
-                    status_id: status_id.clone(),
-                    ..Default::default()
-                })
-                .or_default()
-                .push((*skill_type, value.get() as f64));
-        }
-    }
+    let resilient_values = Signal::derive(move || {
+        attrs.with(|attrs| {
+            let mut grouped: HashMap<StatStatusFilter, Vec<(SkillType, f64)>> = HashMap::new();
+            for ((skill_type, status_id), value) in attrs.status_resistances.iter() {
+                if value.get() > 0.0 {
+                    grouped
+                        .entry(StatStatusFilter {
+                            status_id: status_id.clone(),
+                            ..Default::default()
+                        })
+                        .or_default()
+                        .push((*skill_type, value.get() as f64));
+                }
+            }
 
-    let skill_type_count = SkillType::iter().count();
-    let mut resilient_values = Vec::new();
-    for (status_filter, mut entries) in grouped {
-        entries.sort_by_key(|(skill_type, _)| *skill_type);
-        if entries.len() == skill_type_count
-            && entries
-                .iter()
-                .map(|(_, v)| *v)
-                .collect::<Vec<_>>()
-                .windows(2)
-                .all(|w| w[0] == w[1])
-        {
-            resilient_values.push((
-                entries[0].1,
-                format!(
-                    "{} Resilience",
-                    effects_tooltip::status_filter_str(&status_filter),
-                ),
-            ));
-        } else {
-            resilient_values.extend(entries.into_iter().map(|(skill_type, value)| {
-                (
-                    value,
-                    format!(
-                        "{} Resilience",
-                        effects_tooltip::skill_status_filter_str(
-                            &StatSkillFilter {
-                                skill_type: Some(skill_type),
-                                ..Default::default()
-                            },
-                            &status_filter,
-                            true,
+            let skill_type_count = SkillType::iter().count();
+            let mut values = Vec::new();
+            for (status_filter, mut entries) in grouped {
+                entries.sort_by_key(|(skill_type, _)| *skill_type);
+                if entries.len() == skill_type_count
+                    && entries
+                        .iter()
+                        .map(|(_, v)| *v)
+                        .collect::<Vec<_>>()
+                        .windows(2)
+                        .all(|w| w[0] == w[1])
+                {
+                    values.push((
+                        entries[0].1,
+                        format!(
+                            "{} Resilience",
+                            effects_tooltip::status_filter_str(&status_filter),
                         ),
-                    ),
-                )
-            }));
-        }
-    }
-
-    let is_resilient = !resilient_values.is_empty();
+                    ));
+                } else {
+                    values.extend(entries.into_iter().map(|(skill_type, value)| {
+                        (
+                            value,
+                            format!(
+                                "{} Resilience",
+                                effects_tooltip::skill_status_filter_str(
+                                    &StatSkillFilter {
+                                        skill_type: Some(skill_type),
+                                        ..Default::default()
+                                    },
+                                    &status_filter,
+                                    true,
+                                ),
+                            ),
+                        )
+                    }));
+                }
+            }
+            values
+        })
+    });
     let resilient_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Resilient"}</span>
 
-                {resilient_values
-                    .iter()
-                    .map(|(value, label)| {
-                        let label = label.clone();
-                        view! {
-                            <span>
-                                <span class="font-semibold">{format!("{:.0}%", value)}</span>
-                                {format!(" {label}")}
-                            </span>
-                        }
-                    })
-                    .collect::<Vec<_>>()}
+                {move || {
+                    resilient_values
+                        .read()
+                        .iter()
+                        .map(|(value, label)| {
+                            let label = label.clone();
+                            view! {
+                                <span>
+                                    <span class="font-semibold">{format!("{:.0}%", value)}</span>
+                                    {format!(" {label}")}
+                                </span>
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                }}
             </div>
         }
     };
 
-    let life_regen = *attrs.life_regen * 0.1;
-    let is_regenerating = life_regen.get() > 0.0;
+    let life_regen = Signal::derive(move || attrs.with(|attrs| (*attrs.life_regen * 0.1).get()));
     let regenerating_tooltip = move || {
         view! {
             <div class="flex flex-col xl:space-y-1 text-sm max-w-xs text-zinc-300">
                 <span class="font-semibold text-white">{"Regenerating"}</span>
                 <span>
-                    <span class="font-semibold">{format!("{:.1}%", life_regen.get())}</span>
+                    <span class="font-semibold">{move || format!("{:.1}%", life_regen.get())}</span>
                     " Life Regenerated per second"
                 </span>
             </div>
@@ -818,61 +849,31 @@ fn MonsterTags(attrs: CharacterAttrs, size: CharacterSize) -> impl IntoView {
         <div class=format!(
             "h-5 xl:h-8 grid {grid_size} text-zinc-300",
         )>
-            {(is_armored)
-                .then(|| {
-                    view! {
-                        <StaticTooltip
-                            tooltip=armored_tooltip
-                            position=StaticTooltipPosition::Bottom
-                        >
-                            <ArmorIcon />
-                        </StaticTooltip>
-                    }
-                })}
-            {(is_shielded)
-                .then(|| {
-                    view! {
-                        <StaticTooltip
-                            tooltip=shielded_tooltip
-                            position=StaticTooltipPosition::Bottom
-                        >
-                            <ShieldIcon />
-                        </StaticTooltip>
-                    }
-                })}
-            {(is_evasive)
-                .then(|| {
-                    view! {
-                        <StaticTooltip
-                            tooltip=evasive_tooltip
-                            position=StaticTooltipPosition::Bottom
-                        >
-                            <EvadeIcon />
-                        </StaticTooltip>
-                    }
-                })}
-            {(is_resilient)
-                .then(|| {
-                    view! {
-                        <StaticTooltip
-                            tooltip=resilient_tooltip
-                            position=StaticTooltipPosition::Bottom
-                        >
-                            <ResilientIcon />
-                        </StaticTooltip>
-                    }
-                })}
-            {(is_regenerating)
-                .then(|| {
-                    view! {
-                        <StaticTooltip
-                            tooltip=regenerating_tooltip
-                            position=StaticTooltipPosition::Bottom
-                        >
-                            <LifeRegenIcon />
-                        </StaticTooltip>
-                    }
-                })}
+            <Show when=move || !armor_values.read().is_empty()>
+                <StaticTooltip tooltip=armored_tooltip position=StaticTooltipPosition::Bottom>
+                    <ArmorIcon />
+                </StaticTooltip>
+            </Show>
+            <Show when=move || !shield_values.read().0.is_empty()>
+                <StaticTooltip tooltip=shielded_tooltip position=StaticTooltipPosition::Bottom>
+                    <ShieldIcon />
+                </StaticTooltip>
+            </Show>
+            <Show when=move || !evade_values.read().0.is_empty()>
+                <StaticTooltip tooltip=evasive_tooltip position=StaticTooltipPosition::Bottom>
+                    <EvadeIcon />
+                </StaticTooltip>
+            </Show>
+            <Show when=move || !resilient_values.read().is_empty()>
+                <StaticTooltip tooltip=resilient_tooltip position=StaticTooltipPosition::Bottom>
+                    <ResilientIcon />
+                </StaticTooltip>
+            </Show>
+            <Show when={move || life_regen.get() > 0.0}>
+                <StaticTooltip tooltip=regenerating_tooltip position=StaticTooltipPosition::Bottom>
+                    <LifeRegenIcon />
+                </StaticTooltip>
+            </Show>
         </div>
     }
 }
