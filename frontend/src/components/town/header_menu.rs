@@ -14,7 +14,7 @@ use crate::components::{
         inventory::InventoryEquipFilter,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
     },
-    town::TownContext,
+    town::{TownContext, panels::temple},
     ui::{
         buttons::MenuButton,
         fullscreen::FullscreenButton,
@@ -241,7 +241,9 @@ pub fn HeaderMenu() -> impl IntoView {
                         on:click=move |_| open_temple()
                         disabled=disable_panels
                     >
-                        <TempleIcon />
+                        <TempleIcon class:text-amber-300=move || {
+                            temple::are_benedictions_available()
+                        } />
                     </MenuButton>
                 </TutorialPopup>
                 <TutorialPopup

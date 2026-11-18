@@ -197,6 +197,15 @@
         ],
         "rewards": [ {"Pet": "pet_scarab"}, {"Cosmetic": "title_mummy_lover"} ]
     },
+    "edict_wanted"           : {
+        "icon"       : "achievements/wanted.svg",
+        "name"       : "Wanted",
+        "description": "Reach Area Level 500 as the Outlaws enforce their own law.",
+        "goals"      : [
+            { "AreaLevel": {"value": 500, "area_id": "farwest_wanted.json"} }
+        ],
+        "rewards": [ {"Pet": "pet_crow"}, {"Cosmetic": "title_wanted"} ]
+    },
     "edict_witch"            : {
         "icon"       : "achievements/spider.svg",
         "name"       : "Broodkiller",

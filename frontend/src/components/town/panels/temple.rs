@@ -691,3 +691,30 @@ pub fn EffectDescription(
         </ul>
     }
 }
+
+pub fn are_benedictions_available() -> bool {
+    let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
+
+    data_context
+        .benedictions_specs
+        .read()
+        .iter()
+        .any(|(category_id, category_specs)| {
+            let bought_points = town_context
+                .player_benedictions
+                .with(|player_benedictions| {
+                    player_benedictions
+                        .categories
+                        .get(category_id)
+                        .map(|category| category.upgrade_level)
+                        .unwrap_or_default()
+                });
+            let next_price = category_specs.compute_price(bought_points);
+
+            bought_points < category_specs.max_upgrade_level
+                && next_price.is_some_and(|next_price| {
+                    next_price.get() <= town_context.character.read().resource_gold.get()
+                })
+        })
+}
