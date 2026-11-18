@@ -28,7 +28,19 @@
   ],
   "waves"      : [
     {
-      "weight": 10000,
+      "weight": 2000,
+      "spawns": [
+        { "monster": "regular_patron_1.json", "quantity": [1, 2] },
+        { "monster": "regular_patron_2.json", "quantity": [1, 2] },
+        { "monster": "regular_patron_3.json", "quantity": 1      },
+        { "monster": "waitress.json",         "quantity": 1      },
+        { "monster": "regular_patron_1.json", "quantity": [1, 2] },
+        { "monster": "regular_patron_2.json", "quantity": [1, 2] },
+        { "monster": "regular_patron_3.json", "quantity": [1, 2] }
+      ]
+    },
+    {
+      "weight": 2000,
       "spawns": [
         { "monster": "regular_patron_1.json", "quantity": [1, 2] },
         { "monster": "regular_patron_2.json", "quantity": [1, 2] },

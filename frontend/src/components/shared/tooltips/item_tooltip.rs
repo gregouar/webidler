@@ -886,7 +886,7 @@ pub fn formatted_affixes_list(
                     Some(view! {
                         <li class="whitespace-pre-line">
                             <span class="text-blue-400">{effect}</span>
-                            <span class="text-xs text-zinc-400 inline-block whitespace-nowrap">
+                            <span class="ml-1 text-xs text-zinc-400 inline-block whitespace-nowrap">
                                 "  ·  " {scope_str(affix_effect.scope)}
                                 {range
                                     .map(|(min, max)| {

@@ -26,6 +26,25 @@
             }
         ]
     },
+    "wanted"  : {
+        "name"      : "Wanted",
+        "icon"      : "statuses/wanted.svg",
+        "debuff"    : true,
+        "duration"  : 1e300,
+        "max_stacks": 100,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 5.0,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": {"stat": "GoldFind", "modifier": "More", "debuff": false},
+                "value"       : 5.0,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
     "enwebbed": {
         "name"      : "Enwebbed",
         "icon"      : "statuses/spider_web.svg",

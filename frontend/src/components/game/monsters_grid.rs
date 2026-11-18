@@ -324,7 +324,13 @@ fn MonsterCard(
                 .monster_states
                 .read()
                 .get(index)
-                .map(|s| s.character_state.life.get())
+                .map(|s| {
+                    if s.character_state.is_alive {
+                        s.character_state.life.get().round()
+                    } else {
+                        0.0
+                    }
+                })
                 .unwrap_or_default();
 
             let diff = (old_life - new_life).round();

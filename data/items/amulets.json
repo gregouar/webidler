@@ -603,15 +603,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -629,12 +620,22 @@
                   "min_max": null,
                   "is_hit": null
                 }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1472,6 +1473,36 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
+    "affixes": {
+      "base_gold_find": {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": 180.0,
+        "is_unique": false
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "sheriff_star": {
+    "name": "Sheriff Star",
+    "icon": "items/amulets/sheriff_star.webp",
+    "description": "Look at me, I'm the Law now!",
+    "slot": "Amulet",
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 500,
+    "rarity": "Unique",
     "affixes": {
       "base_gold_find": {
         "stat": "GoldFind",

@@ -2,7 +2,7 @@
     "specs"      : {
         "name": "Grim Frontier",
         "description": "The mines unearthed more than gold. They awakened an ancient hunger that spread from the mountains into every lonely trail.",
-        "power_level": 8,
+        "power_level": 85,
         "required_level": 500,
         "item_level_modifier": 165,
         "header_background": "areas/farwest_header.webp",

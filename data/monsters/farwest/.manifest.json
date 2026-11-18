@@ -2,10 +2,12 @@
   "meta": {"enabled": true},
   "resources": {
     "monsters": [
-      "bigfoot.json",        "cactus.json",         "chupacabra.json",     "cowboy.json",
-      "deep_borer.json",     "frank.json",          "gargoyle.json",       "hangman.json",
-      "mad_scientist.json",  "mecha_arachnid.json", "piano_mimic.json",    "prospector.json",
-      "shaman.json",         "vampire.json",        "vulture.json",        "wendigo.json",        "werewolf.json"
+      "bigfoot.json",         "cactus.json",          "chupacabra.json",      "cowboy.json",
+      "deep_borer.json",      "frank.json",           "gargoyle.json",        "hangman.json",
+      "mad_scientist.json",   "mecha_arachnid.json",  "outlaw_1.json",        "outlaw_2.json",
+      "outlaw_3.json",        "outlaw_4.json",        "outlaw_heavy.json",    "outlaw_dynamite.json",
+      "piano_mimic.json",     "prospector.json",      "shaman.json",          "train.json",
+      "vampire.json",         "vulture.json",         "wendigo.json",         "werewolf.json"
     ],
     "statuses": ["0_statuses.json"]
   }

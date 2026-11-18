@@ -14,8 +14,52 @@
         "tier_6.json",       "tier_7.json",       "tier_8.json",       "tier_9.json",       "tier_10.json",
         "area_farwest.json", "edict_wanted.json"
     ],
-    "bosses": [],
+    "bosses"     : [
+        {
+            "level"   : 50,
+            "interval": 50,
+            "spawns"  : [ {"monster": "train.json", "quantity": 1} ]
+        }
+    ],
     "waves"      : [
+        {
+            "min_level":    1,
+            "max_level": null,
+            "weight"   : 2000,
+            "spawns"   : [
+                { "monster": "outlaw_1.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_2.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_3.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_4.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_heavy.json",    "quantity": [0, 1] },
+                { "monster": "outlaw_dynamite.json", "quantity": [0, 1] },
+                { "monster": "outlaw_1.json",        "quantity": 1      },
+                { "monster": "outlaw_2.json",        "quantity": 1      },
+                { "monster": "outlaw_3.json",        "quantity": 1      },
+                { "monster": "outlaw_4.json",        "quantity": 1      },
+                { "monster": "outlaw_heavy.json",    "quantity": 1      },
+                { "monster": "outlaw_dynamite.json", "quantity": 1      }
+            ]
+        },
+        {
+            "min_level":    1,
+            "max_level": null,
+            "weight"   : 2000,
+            "spawns"   : [
+                { "monster": "outlaw_1.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_2.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_3.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_4.json",        "quantity": [0, 1] },
+                { "monster": "outlaw_heavy.json",    "quantity": [0, 1] },
+                { "monster": "outlaw_dynamite.json", "quantity": [0, 1] },
+                { "monster": "outlaw_1.json",        "quantity": 1      },
+                { "monster": "outlaw_2.json",        "quantity": 1      },
+                { "monster": "outlaw_3.json",        "quantity": 1      },
+                { "monster": "outlaw_4.json",        "quantity": 1      },
+                { "monster": "outlaw_heavy.json",    "quantity": 1      },
+                { "monster": "outlaw_dynamite.json", "quantity": 1      }
+            ]
+        },
         {
             "min_level":    1,
             "max_level": null,

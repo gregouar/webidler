@@ -1,0 +1,85 @@
+{
+  "name"              : "Armored Freight Train",
+  "portrait"          : "monsters/farwest/train.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 2000,
+  "size"              : "Gargantuan",
+  "armor"             : {"Physical": 500, "Fire": 500, "Poison": 500, "Storm": 500},
+  "block"             : {"Attack": 30, "Spell": 20},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
+    {
+      "name"      : "Mortar",
+      "icon"      : "skills/turret.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [15, 30], "Fire": [15, 30] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Machine Gun",
+      "icon"      : "skills/machine_gun.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "repeat" : { "value": [8, 12], "target": "Same", "repeat_cooldown": 0.3 },
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Tesla Gun",
+      "icon"      : "skills/tesla.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 40] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Flamethrower",
+      "icon"      : "skills/burning_ray.svg",
+      "cooldown"  : 5.0,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "repeat" : { "value": [6, 10], "target": "Same", "repeat_cooldown": 0.5 },
+          "effects": [
+            {
+              "ApplyStatus": { "status_id": "burn", "value": [4, 8] }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

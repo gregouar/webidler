@@ -1,0 +1,26 @@
+{
+  "name"    : "Outlaw",
+  "portrait": "monsters/farwest/outlaw_heavy.webp",
+  "max_life": 20,
+  "skills"  : [
+    {
+      "name"      : "Barrage",
+      "icon"      : "skills/machine_gun.svg",
+      "cooldown"  : 6.0,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range"  : "Distance",
+          "repeat" : { "value": [6, 10], "target": "Same", "repeat_cooldown": 0.3 },
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
