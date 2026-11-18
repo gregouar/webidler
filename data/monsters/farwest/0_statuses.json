@@ -34,5 +34,19 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "prospect"     : {
+        "name"      : "Analyzed",
+        "icon"      : "skills/prospect.svg",
+        "debuff"    : true,
+        "duration"  : 60,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
     }
 }

@@ -19,7 +19,13 @@
         "tier_6.json",       "tier_7.json",       "tier_8.json",       "tier_9.json",       "tier_10.json",
         "area_farwest.json"
     ],
-    "bosses": [],
+    "bosses"     : [
+        {
+            "level"   : 50,
+            "interval": 50,
+            "spawns"  : [ {"monster": "deep_borer.json", "quantity": 1}, {"monster": "prospector.json", "quantity": 1} ]
+        }
+    ],
     "waves"      : [
         {
             "min_level":    1,
@@ -77,7 +83,7 @@
             ]
         },
         {
-            "min_level":    1,
+            "min_level":   40,
             "weight"   : 1000,
             "spawns"   : [
                 { "monster": "frank.json",          "quantity": [0, 1] },
