@@ -562,10 +562,7 @@ fn MonsterCard(
             </div>
 
             <div class="w-full flex flex-col justify-center gap-1">
-                <MonsterTags
-                    monster_index=index
-                    size=specs.character_specs.character_static.size
-                />
+                <MonsterTags monster_index=index size=specs.character_specs.character_static.size />
                 <div class=format!(
                     "flex-1 flex flex-col justify-evenly {skill_size} mx-auto",
                 )>
@@ -624,7 +621,9 @@ fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
                         .map(|(damage_type, value)| {
                             view! {
                                 <span>
-                                    <span class="font-semibold">{format!("{:.0}", value.get())}</span>
+                                    <span class="font-semibold">
+                                        {format!("{:.0}", value.get())}
+                                    </span>
                                     {format!(
                                         " {}Armor",
                                         effects_tooltip::damage_type_str(Some(*damage_type)),
@@ -681,7 +680,9 @@ fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
                         .then(|| {
                             view! {
                                 <span>
-                                    <span class="font-semibold">{format!("{:.0}%", block_damage)}</span>
+                                    <span class="font-semibold">
+                                        {format!("{:.0}%", block_damage)}
+                                    </span>
                                     " Blocked Damage Taken"
                                 </span>
                             }
@@ -724,7 +725,9 @@ fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
                                     <span class="font-semibold">{format!("{:.0}%", value)}</span>
                                     {format!(
                                         " {} Evade Chance",
-                                        effects_tooltip::damage_over_time_type_str(Some(*damage_type)),
+                                        effects_tooltip::damage_over_time_type_str(
+                                            Some(*damage_type),
+                                        ),
                                     )}
                                 </span>
                             }
@@ -737,7 +740,9 @@ fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
                         .then(|| {
                             view! {
                                 <span>
-                                    <span class="font-semibold">{format!("{:.0}%", evade_damage)}</span>
+                                    <span class="font-semibold">
+                                        {format!("{:.0}%", evade_damage)}
+                                    </span>
                                     " Evaded Damage Taken"
                                 </span>
                             }
@@ -846,9 +851,7 @@ fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
     };
 
     view! {
-        <div class=format!(
-            "h-5 xl:h-8 grid {grid_size} text-zinc-300",
-        )>
+        <div class=format!("h-5 xl:h-8 grid {grid_size} text-zinc-300")>
             <Show when=move || !armor_values.read().is_empty()>
                 <StaticTooltip tooltip=armored_tooltip position=StaticTooltipPosition::Bottom>
                     <ArmorIcon />
@@ -869,7 +872,7 @@ fn MonsterTags(monster_index: usize, size: CharacterSize) -> impl IntoView {
                     <ResilientIcon />
                 </StaticTooltip>
             </Show>
-            <Show when={move || life_regen.get() > 0.0}>
+            <Show when=move || { life_regen.get() > 0.0 }>
                 <StaticTooltip tooltip=regenerating_tooltip position=StaticTooltipPosition::Bottom>
                     <LifeRegenIcon />
                 </StaticTooltip>
@@ -1000,10 +1003,7 @@ fn MonsterSkill(
             bar_width
             icon_class="w-full h-full flex-no-shrink fill-current invert"
 
-            on:touchstart={
-                let show_tooltip = show_tooltip.clone();
-                move |_| show_tooltip()
-            }
+            on:touchstart=move |_| show_tooltip()
             on:contextmenu=move |ev| {
                 ev.prevent_default();
             }

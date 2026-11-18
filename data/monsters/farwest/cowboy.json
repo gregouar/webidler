@@ -1,5 +1,5 @@
 {
-  "name"    : "Cowboy",
+  "name"    : "Nasty Cowboy",
   "portrait": "monsters/farwest/cowboy.webp",
   "max_life": 8,
   "armor"   : {"Fire": 50},
