@@ -50,13 +50,10 @@ pub fn SkillMasteriesPanel(
     let skill_masteries = RwSignal::new(PlayerSkillMasteries::default());
     let show_all_skills = RwSignal::new(false);
 
-    let reset = move || {
-        skill_masteries.set(town_context.player_skill_masteries.get_untracked());
-    };
-
     Effect::new(move || {
+        let player_skill_masteries = town_context.player_skill_masteries.get();
         if open.get() {
-            reset();
+            skill_masteries.set(player_skill_masteries);
         }
     });
 
