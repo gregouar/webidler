@@ -278,20 +278,19 @@ fn sync_game(game_context: &GameContext, sync_message: SyncGameStateMessage) {
             .update(|generation| *generation = generation.wrapping_add(1));
     } else if let Some(monster_specs_patch) = monster_specs_patch {
         game_context.monster_specs.update(|monster_specs| {
-            for (monster_specs_patch, monster_specs) in monster_specs_patch
-                .into_iter()
-                .zip(monster_specs.iter_mut())
-            {
-                let MonsterSpecsPatch {
-                    character_attrs,
-                    skill_specs_targets,
-                } = monster_specs_patch;
-                monster_specs.character_specs.character_attrs = character_attrs;
-                for (targets_patch, skill_specs) in skill_specs_targets
-                    .into_iter()
-                    .zip(monster_specs.character_specs.skills_specs.iter_mut())
-                {
-                    skill_specs.targets = targets_patch;
+            for (index, monster_specs_patch) in monster_specs_patch {
+                if let Some(monster_specs) = monster_specs.get_mut(index as usize) {
+                    let MonsterSpecsPatch {
+                        character_attrs,
+                        skill_specs_targets,
+                    } = monster_specs_patch;
+                    monster_specs.character_specs.character_attrs = character_attrs;
+                    for (targets_patch, skill_specs) in skill_specs_targets
+                        .into_iter()
+                        .zip(monster_specs.character_specs.skills_specs.iter_mut())
+                    {
+                        skill_specs.targets = targets_patch;
+                    }
                 }
             }
         });

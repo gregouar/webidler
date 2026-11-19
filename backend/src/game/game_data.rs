@@ -32,6 +32,28 @@ use crate::{
     },
 };
 
+#[derive(Debug, Clone, Copy, Default)]
+pub struct MonsterSpecsPatchMask(u8);
+
+impl MonsterSpecsPatchMask {
+    pub fn is_empty(&self) -> bool {
+        self.0 == 0
+    }
+
+    pub fn insert(&mut self, index: usize) {
+        assert!(
+            index < u8::BITS as usize,
+            "monster index exceeds patch mask capacity"
+        );
+        self.0 |= 1 << index;
+    }
+
+    pub fn take_indices(&mut self) -> impl Iterator<Item = u8> {
+        let bits = std::mem::take(&mut self.0);
+        (0..u8::BITS as u8).filter(move |index| bits & (1 << index) != 0)
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
     pub realm: Realm,
@@ -61,7 +83,8 @@ pub struct GameInstanceData {
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
     pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
-    pub monster_specs: LazySyncer<Vec<MonsterSpecs>>, // Only use internally, except for MonsterSpecsPatch
+    pub monster_specs: Vec<MonsterSpecs>, // Only use internally, except for MonsterSpecsPatch
+    pub monster_specs_to_patch: MonsterSpecsPatchMask,
     pub monster_states: Vec<MonsterState>,
     pub monster_wave_delay: Duration,
 
@@ -238,9 +261,10 @@ impl GameInstanceData {
             player_respawn_delay: Default::default(),
             player_stamina,
 
-            monster_base_specs: LazySyncer::new(Vec::new()),
-            monster_specs: LazySyncer::new(Vec::new()),
-            monster_states: Vec::new(),
+            monster_base_specs: LazySyncer::new(Vec::with_capacity(6)),
+            monster_specs: Vec::with_capacity(6),
+            monster_specs_to_patch: MonsterSpecsPatchMask::default(),
+            monster_states: Vec::with_capacity(6),
             monster_wave_delay: Default::default(),
 
             wave_completed: false,
@@ -373,7 +397,6 @@ impl GameInstanceData {
             CharacterId::Player => Some(&self.player_specs.read().character_specs),
             CharacterId::Monster(index) => self
                 .monster_specs
-                .read()
                 .get(index)
                 .map(|monster_specs| &monster_specs.character_specs),
         }

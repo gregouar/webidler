@@ -85,14 +85,19 @@ fn handle_tick_event<'a>(
     game_data: &mut GameInstanceData,
     tick_number: usize,
 ) {
-    let characters =
-        iter::once((
-            CharacterId::Player,
-            &game_data.player_specs.read().character_specs,
-        ))
-        .chain(game_data.monster_specs.read().iter().enumerate().map(
-            |(idx, monster_specs)| (CharacterId::Monster(idx), &monster_specs.character_specs),
-        ));
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
@@ -127,14 +132,19 @@ fn handle_hit_event<'a>(
     master_store: &MasterStore,
     hit_event: &'a HitEvent,
 ) {
-    let characters =
-        iter::once((
-            CharacterId::Player,
-            &game_data.player_specs.read().character_specs,
-        ))
-        .chain(game_data.monster_specs.read().iter().enumerate().map(
-            |(idx, monster_specs)| (CharacterId::Monster(idx), &monster_specs.character_specs),
-        ));
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
@@ -153,7 +163,6 @@ fn handle_hit_event<'a>(
                 CharacterId::Monster(idx) => {
                     match game_data
                         .monster_specs
-                        .read()
                         .get(idx)
                         .zip(game_data.monster_states.get(idx))
                     {
@@ -234,14 +243,19 @@ fn handle_status_event<'a>(
     master_store: &MasterStore,
     status_event: &'a StatusEvent,
 ) {
-    let characters =
-        iter::once((
-            CharacterId::Player,
-            &game_data.player_specs.read().character_specs,
-        ))
-        .chain(game_data.monster_specs.read().iter().enumerate().map(
-            |(idx, monster_specs)| (CharacterId::Monster(idx), &monster_specs.character_specs),
-        ));
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
@@ -268,7 +282,6 @@ fn handle_status_event<'a>(
                 CharacterId::Monster(idx) => {
                     match game_data
                         .monster_specs
-                        .read()
                         .get(idx)
                         .zip(game_data.monster_states.get(idx))
                     {
@@ -334,14 +347,19 @@ fn handle_restore_event<'a>(
     game_data: &mut GameInstanceData,
     restore_event: &'a RestoreEvent,
 ) {
-    let characters =
-        iter::once((
-            CharacterId::Player,
-            &game_data.player_specs.read().character_specs,
-        ))
-        .chain(game_data.monster_specs.read().iter().enumerate().map(
-            |(idx, monster_specs)| (CharacterId::Monster(idx), &monster_specs.character_specs),
-        ));
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
@@ -398,7 +416,7 @@ fn handle_kill_event(
     match target {
         CharacterId::Monster(monster_index) => {
             let (Some(monster_specs), Some(monster_state)) = (
-                game_data.monster_specs.read().get(monster_index),
+                game_data.monster_specs.get(monster_index),
                 game_data.monster_states.get_mut(monster_index),
             ) else {
                 return;
@@ -460,7 +478,6 @@ fn handle_kill_event(
 
             for (idx, (monster_specs, monster_state)) in game_data
                 .monster_specs
-                .read()
                 .iter()
                 .zip(game_data.monster_states.iter())
                 .enumerate()

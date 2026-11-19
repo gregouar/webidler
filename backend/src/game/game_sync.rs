@@ -63,25 +63,34 @@ pub async fn sync_update_game(
         return Ok(false);
     }
 
-    let monster_specs_patch = (game_data.monster_specs.need_to_sync()
-        && !game_data.monster_base_specs.need_to_sync())
-    .then(|| {
+    let monster_specs_patch = (!game_data.monster_specs_to_patch.is_empty()).then(|| {
         game_data
-            .monster_specs
-            .read()
-            .iter()
-            .map(|monster_specs| MonsterSpecsPatch {
-                character_attrs: monster_specs.character_specs.character_attrs.clone(),
-                skill_specs_targets: monster_specs
-                    .character_specs
-                    .skills_specs
-                    .iter()
-                    .map(|skills_specs| skills_specs.targets.clone())
-                    .collect(),
+            .monster_specs_to_patch
+            .take_indices()
+            .filter_map(|monster_idx| {
+                game_data
+                    .monster_specs
+                    .get(monster_idx as usize)
+                    .map(|monster_specs| {
+                        (
+                            monster_idx,
+                            MonsterSpecsPatch {
+                                character_attrs: monster_specs
+                                    .character_specs
+                                    .character_attrs
+                                    .clone(),
+                                skill_specs_targets: monster_specs
+                                    .character_specs
+                                    .skills_specs
+                                    .iter()
+                                    .map(|skills_specs| skills_specs.targets.clone())
+                                    .collect(),
+                            },
+                        )
+                    })
             })
             .collect()
     });
-    game_data.monster_specs.mark_synced();
 
     let message = SyncGameStateMessage {
         area_state: game_data.area_state.sync(),
