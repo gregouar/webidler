@@ -1,7 +1,7 @@
 use leptos::{prelude::*, task::spawn_local};
 use shared::{
     data::{
-        achievements::{AchievementReward, AchievementSpecs},
+        achievements::{AchievementCategory, AchievementReward, AchievementSpecs},
         cosmetics::CosmeticType,
         user::UserUnlocks,
     },
@@ -15,7 +15,7 @@ use crate::{
         backend_client::BackendClient,
         data_context::DataContext,
         ui::{
-            buttons::MenuButton,
+            buttons::{MenuButton, TabButton},
             card::{CardHeader, CardInset, MenuCard},
             list_row::MenuListRow,
             menu_panel::MenuPanel,
@@ -25,6 +25,9 @@ use crate::{
     },
 };
 
+const ACHIEVEMENT_CATEGORIES: [AchievementCategory; 2] =
+    [AchievementCategory::Global, AchievementCategory::Grind];
+
 #[component]
 pub fn AchievementsPanel(
     open: RwSignal<bool>,
@@ -32,18 +35,58 @@ pub fn AchievementsPanel(
     #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, u64>>>,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
+    let active_category = RwSignal::new(AchievementCategory::Global);
+
+    let achieved_count = move || {
+        data_context
+            .achievements
+            .read()
+            .iter()
+            .filter(|(achievement_id, specs)| {
+                specs.category == active_category.get()
+                    && user_unlocks
+                        .read()
+                        .achievements
+                        .contains_key(*achievement_id)
+            })
+            .count()
+    };
 
     view! {
-        <MenuPanel open w_full=false h_full=false class:items-center>
-            <MenuCard class="w-full max-w-5xl mx-auto">
+        <MenuPanel open w_full=false h_full=true class:items-center>
+            <MenuCard class="w-5xl mx-auto" gap=false>
                 <CardHeader title="Achievements" on_close=move || open.set(false)>
+                    <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 overflow-clip">
+                        {ACHIEVEMENT_CATEGORIES
+                            .into_iter()
+                            .map(|category| {
+                                view! {
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            active_category.get() == category
+                                        })
+                                        on:click=move |_| active_category.set(category)
+                                    >
+                                        {achievement_category_label(category)}
+                                    </TabButton>
+                                }
+                            })
+                            .collect_view()}
+                    </div>
                     <div class="flex-1" />
                     <div class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
-                        "("{move || user_unlocks.read().achievements.len()}" / "
-                        {move || data_context.achievements.read().len()}")"
+                        {achieved_count}" / "
+                        {move || {
+                            data_context
+                                .achievements
+                                .read()
+                                .values()
+                                .filter(|specs| specs.category == active_category.get())
+                                .count()
+                        }}
                     </div>
                 </CardHeader>
-                <CardInset class="min-h-0 overflow-y-auto">
+                <CardInset class="h-full">
                     <div class="grid grid-cols-1 items-stretch gap-2 xl:grid-cols-2 xl:gap-3">
                         <For
                             each=move || {
@@ -51,6 +94,7 @@ pub fn AchievementsPanel(
                                     .achievements
                                     .read()
                                     .iter()
+                                    .filter(|(_, specs)| specs.category == active_category.get())
                                     .map(|(id, specs)| (id.clone(), specs.clone()))
                                     .collect::<Vec<_>>()
                             }
@@ -218,6 +262,13 @@ pub fn AchievementsPanel(
                 </CardInset>
             </MenuCard>
         </MenuPanel>
+    }
+}
+
+fn achievement_category_label(category: AchievementCategory) -> &'static str {
+    match category {
+        AchievementCategory::Global => "Global",
+        AchievementCategory::Grind => "Grind",
     }
 }
 

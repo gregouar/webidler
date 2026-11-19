@@ -1,5 +1,6 @@
 {
     "kill_monsters": {
+        "category"   : "Grind",
         "icon"       : "achievements/meat_grinder.svg",
         "name"       : "Meat Grinder",
         "description": "Kill 5,000,000 Monsters with a single Character.",
@@ -9,6 +10,7 @@
         "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
     },
     "edicts_100"   : {
+        "category"   : "Grind",
         "icon"       : "achievements/scroll.svg",
         "name"       : "Addict to Edicts",
         "description": "Use 100 Edicts with a single Character.",

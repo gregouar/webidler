@@ -603,16 +603,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
@@ -628,6 +618,16 @@
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
                 }
               }
             ],
@@ -1518,8 +1518,19 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      }
+    ]
   },
   "amulet_10": {
     "name": "Royal Parure",

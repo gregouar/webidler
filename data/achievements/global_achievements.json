@@ -1,5 +1,6 @@
 {
     "max_player_level"       : {
+        "category"   : "Global",
         "icon"       : "achievements/big_gear.svg",
         "name"       : "Let the Grind begin",
         "description": "Reach Player Level 70 during any Grind.",
@@ -7,6 +8,7 @@
         "rewards"    : [ {"Pet": "pet_chicken"} ]
     },
     "all_base_areas"         : {
+        "category"   : "Global",
         "icon"       : "achievements/big_gear.svg",
         "name"       : "Main Story",
         "description": "Complete all Grind Quests.",
@@ -25,6 +27,7 @@
         "rewards": [ {"Pet": "pet_octopus"} ]
     },
     "power_level_600"        : {
+        "category"   : "Global",
         "icon"       : "achievements/trophy.svg",
         "name"       : "Endgame",
         "description": "Reach Power Level 600.",
@@ -32,6 +35,7 @@
         "rewards"    : [ {"Pet": "pet_cat_dog"} ]
     },
     "power_level_900"        : {
+        "category"   : "Global",
         "icon"       : "achievements/trophy.svg",
         "name"       : "True Player",
         "description": "Reach Power Level 1000.",
@@ -39,6 +43,7 @@
         "rewards"    : [ {"Cosmetic": "title_true_player"} ]
     },
     "max_skill_level"        : {
+        "category"   : "Global",
         "icon"       : "achievements/star_altar.svg",
         "name"       : "Skill Master",
         "description": "Reach Skill Mastery 100 with any Skill.",
@@ -48,6 +53,7 @@
         "rewards": [ {"Pet": "pet_lizard"} ]
     },
     "max_various_skill_level": {
+        "category"   : "Global",
         "icon"       : "achievements/star_altar.svg",
         "name"       : "Jack of All Trades",
         "description": "Reach Skill Mastery 100 with an Attack, a Spell, a Blessing and a Curse.",
@@ -60,6 +66,7 @@
         "rewards": [ {"Cosmetic": "title_max_various_skill_level"} ]
     },
     "all_passives"           : {
+        "category"   : "Global",
         "icon"       : "achievements/nodes.svg",
         "name"       : "Ascension",
         "description": "Ascend 70 Passives.",
@@ -69,6 +76,7 @@
         "rewards": [ {"Pet": "pet_rat"} ]
     },
     "all_max_passives"       : {
+        "category"   : "Global",
         "icon"       : "achievements/nodes.svg",
         "name"       : "Apotheosis",
         "description": "Ascend 70 Passives to Level 5.",
@@ -78,6 +86,7 @@
         "rewards": [ {"Cosmetic": "title_all_max_passives"} ]
     },
     "all_runes"              : {
+        "category"   : "Global",
         "icon"       : "achievements/rune_stone.svg",
         "name"       : "Rune you Fool",
         "description": "Equip a Rune in 8 different Sockets.",
@@ -87,6 +96,7 @@
         "rewards": [ {"Cosmetic": "title_all_runes"} ]
     },
     "all_unique_runes"       : {
+        "category"   : "Global",
         "icon"       : "achievements/rune_stone.svg",
         "name"       : "Runes Connoisseur",
         "description": "Equip a Unique Rune in 8 different Sockets.",
@@ -103,6 +113,7 @@
         "rewards": [ {"Cosmetic": "title_all_unique_runes"} ]
     },
     "uniques_collector"      : {
+        "category"   : "Global",
         "icon"       : "achievements/battle_gear.svg",
         "name"       : "Bizarre Equipment",
         "description": "Equip a Unique Item in each Equipment Slot.",
@@ -120,6 +131,7 @@
         "rewards": [ {"Cosmetic": "title_uniques_collector"} ]
     },
     "max_equipment"          : {
+        "category"   : "Global",
         "icon"       : "achievements/battle_gear.svg",
         "name"       : "Legendary Equipment",
         "description": "Equip a Power Level 600 Item in each Equipment Slot.",
@@ -137,6 +149,7 @@
         "rewards": [ {"Cosmetic": "title_max_equipment"} ]
     },
     "unique_edicts"          : {
+        "category"    : "Global",
         "icon"        : "achievements/arrowhead.svg",
         "name"        : "Bizarre Adventure",
         "description" : "Complete 10 different named Grind variants using Unique Edicts.",
@@ -156,6 +169,7 @@
         "rewards": [ {"Cosmetic": "title_unique_edicts"} ]
     },
     "edict_menu"             : {
+        "category"   : "Global",
         "icon"       : "achievements/tavern_sign.svg",
         "name"       : "Vanquisher of Tavernus",
         "description": "Kill the Bosses of the Regular's Menu Unique Edict.",
@@ -165,6 +179,7 @@
         "rewards": [ {"Pet": "pet_otter"}, {"Cosmetic": "title_regular_patron"} ]
     },
     "edict_mosquito"         : {
+        "category"   : "Global",
         "icon"       : "achievements/amber_mosquito.svg",
         "name"       : "Pest Eradicator",
         "description": "Reach Area Level 500 during Mosquito Season.",
@@ -174,6 +189,7 @@
         "rewards": [ {"Pet": "pet_mosquito"} ]
     },
     "edict_treasure"         : {
+        "category"    : "Global",
         "icon"        : "achievements/treasure_map.svg",
         "name"        : "Treasure Hunting",
         "description" : "Equip 4 of the 6 Cursed Treasures.",
@@ -189,6 +205,7 @@
         "rewards": [ {"Pet": "pet_crab"}, {"Cosmetic": "title_treasure_hunter"} ]
     },
     "edict_mummy"            : {
+        "category"   : "Global",
         "icon"       : "achievements/mummy_head.svg",
         "name"       : "Mummies I'd Like to Fight",
         "description": "Reach Area Level 500 during a Mummy Invasion.",
@@ -198,6 +215,7 @@
         "rewards": [ {"Pet": "pet_scarab"}, {"Cosmetic": "title_mummy_lover"} ]
     },
     "edict_wanted"           : {
+        "category"   : "Global",
         "icon"       : "achievements/wanted.svg",
         "name"       : "Wanted",
         "description": "Reach Area Level 500 as the Outlaws enforce their own law.",
@@ -207,6 +225,7 @@
         "rewards": [ {"Pet": "pet_crow"}, {"Cosmetic": "title_wanted"} ]
     },
     "edict_witch"            : {
+        "category"   : "Global",
         "icon"       : "achievements/spider.svg",
         "name"       : "Broodkiller",
         "description": "Accomplish the Profane Ritual.",
@@ -216,6 +235,7 @@
         "rewards": [ {"Pet": "pet_witch"}, {"Cosmetic": "badge_witch"} ]
     },
     "edict_dragon"           : {
+        "category"   : "Global",
         "icon"       : "achievements/egg.svg",
         "name"       : "Child Care",
         "description": "Bring the Egg to the top of the Peaks.",
@@ -225,6 +245,7 @@
         "rewards": [ {"Pet": "pet_dragon_duck"}, {"Cosmetic": "badge_dragon"} ]
     },
     "edict_stars"            : {
+        "category"   : "Global",
         "icon"       : "achievements/telescope.svg",
         "name"       : "The Stars are Aligned",
         "description": "Kill what comes when the stars are aligned...",

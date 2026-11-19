@@ -8,9 +8,18 @@ use crate::data::{
     skill::SkillType,
 };
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum AchievementCategory {
+    Global,
+    Grind,
+    // Exotic
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct AchievementSpecs {
     // pub scope: AchievementScope, Could be User, Character, Realm etc later
+    pub category: AchievementCategory,
+
     pub icon: String,
     pub name: String,
     pub description: String,
