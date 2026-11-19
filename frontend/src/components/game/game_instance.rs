@@ -117,6 +117,7 @@ pub fn GameInstance() -> impl IntoView {
                     <AchievementsPanel
                         open=game_context.open_achievements
                         user_unlocks=game_context.user_unlocks
+                        achievements=game_context.achievements
                     />
                     <PetsPanel
                         open=game_context.open_pets
@@ -156,6 +157,10 @@ fn handle_message(
                     .write()
                     .achievements
                     .insert(achievement_id.clone(), Utc::now());
+                game_context
+                    .achievements
+                    .write()
+                    .insert(achievement_id.clone(), Utc::now());
             }
             achievements::notify_newly_unlocked_achievements(
                 data_context,
@@ -190,6 +195,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         character_id,
         character_cosmetics,
         user_unlocks,
+        achievements,
         realm,
         area_id,
         map_item,
@@ -211,6 +217,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.character_cosmetics.set(character_cosmetics);
     game_context.player_pets.set(player_pets);
     game_context.user_unlocks.set(user_unlocks);
+    game_context.achievements.set(achievements);
     game_context.area_id.set(area_id);
     game_context.realm.set(realm);
     game_context.map_item.set(map_item);

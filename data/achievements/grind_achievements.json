@@ -12,7 +12,7 @@
     "edicts_100"   : {
         "category"   : "Grind",
         "icon"       : "achievements/scroll.svg",
-        "name"       : "Addict to Edicts",
+        "name"       : "Edicts Addict",
         "description": "Use 100 Edicts with a single Character.",
         "goals"      : [
             { "AreaCompleted": {"value": 100, "with_edict": true} }

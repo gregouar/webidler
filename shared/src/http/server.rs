@@ -134,7 +134,8 @@ pub struct GetCharacterDetailsResponse {
     pub skill_masteries: PlayerSkillMasteries,
     pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
 
-    pub user_unlocks: UserUnlocks,
+    pub user_unlocks: UserUnlocks, // Needed for claim rewards...
+    pub achievements: HashMap<String, DateTime<Utc>>,
     pub pets: PlayerPets,
 
     pub character_stash: Option<Stash>,
@@ -153,6 +154,7 @@ pub struct GetAccountUserUnlocksResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct ReconcileAchievementsResponse {
     pub user_unlocks: UserUnlocks,
+    pub achievements: HashMap<String, DateTime<Utc>>,
     pub newly_unlocked_achievements: Vec<String>,
     // Specific to current character
     pub achievements_progress: HashMap<String, u64>,

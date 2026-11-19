@@ -171,6 +171,7 @@ async fn read_character_details(
 
     let (
         user_unlocks,
+        achievements,
         pets,
         areas_completed,
         character_data,
@@ -180,6 +181,7 @@ async fn read_character_details(
         market_stash,
     ) = tokio::join!(
         db::user_unlocks::load_user_unlocks(&db_pool, &character.user_id),
+        db::character_achievements::read_achievements(&db_pool, &character_id),
         db::characters_data::load_character_pets(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
@@ -190,6 +192,7 @@ async fn read_character_details(
     );
 
     let user_unlocks = user_unlocks?;
+    let achievements = achievements?;
     let pets = pets?;
     let areas_completed = areas_completed?;
     let (inventory_data, ascension_data, mut benedictions, mut skill_masteries) =
@@ -264,6 +267,7 @@ async fn read_character_details(
         skill_masteries,
         skill_mastery_skill_specs,
         user_unlocks,
+        achievements,
         pets,
     }))
 }
@@ -288,7 +292,7 @@ async fn post_reconcile_achievements(
             .await?
             .ok_or(AppError::NotFound)?;
     let already_unlocked =
-        db::user_unlocks::read_achievements(&mut *tx, &character.user_id).await?;
+        db::character_achievements::read_achievements(&mut *tx, &character_id).await?;
 
     let area_levels = areas
         .iter()
@@ -319,6 +323,7 @@ async fn post_reconcile_achievements(
         &mut tx,
         // &master_store,
         character.user_id,
+        character_id,
         &newly_unlocked_achievements,
     )
     .await?;
@@ -326,9 +331,12 @@ async fn post_reconcile_achievements(
     tx.commit().await?;
 
     let user_unlocks = db::user_unlocks::load_user_unlocks(&db_pool, &user.user_id).await?;
+    let achievements =
+        db::character_achievements::read_achievements(&db_pool, &character_id).await?;
 
     Ok(Json(ReconcileAchievementsResponse {
         user_unlocks,
+        achievements,
         newly_unlocked_achievements,
         achievements_progress,
     }))

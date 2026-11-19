@@ -228,7 +228,7 @@ impl<'a> GameInstance<'a> {
             ascension: &self.game_data.passives_tree_state.read().ascension,
             inventory: self.game_data.player_inventory.read(),
             area_statistics: AreaAchievementStatistics::with_current_grind(
-                &self.game_data.achievement_area_statistics,
+                &self.game_data.old_areas_statistics,
                 &self.game_data.area_id,
                 &self.game_data.game_stats,
                 self.game_data.player_resources.read().gems.get(),
@@ -238,7 +238,7 @@ impl<'a> GameInstance<'a> {
 
         let new_achievements = achievements_controller::check_achievements(
             &self.master_store,
-            &self.game_data.user_achievements,
+            &self.game_data.achievements,
             &context,
         );
 
@@ -248,20 +248,9 @@ impl<'a> GameInstance<'a> {
 
         for achievement_id in new_achievements.iter() {
             self.game_data
-                .user_achievements
+                .achievements
                 .insert(achievement_id.clone(), Utc::now());
         }
-
-        // let mut tx = self.db_pool.begin().await?;
-        // let achievement_ids = achievements_controller::update_achievements(
-        //     &mut tx,
-        //     &self.master_store,
-        //     self.user_id,
-        //     &mut self.game_data.user_achievements,
-        //     &context,
-        // )
-        // .await?;
-        // tx.commit().await?;
 
         self.client_conn
             .send(
@@ -272,12 +261,17 @@ impl<'a> GameInstance<'a> {
             )
             .await?;
 
-        let (db_pool, user_id) = (self.db_pool.clone(), self.user_id);
+        let (db_pool, user_id, character_id) =
+            (self.db_pool.clone(), self.user_id, *self.character_id);
         tokio::spawn(async move {
-            update_achievements_impl(db_pool, user_id, new_achievements)
+            update_achievements_impl(db_pool, user_id, character_id, new_achievements)
                 .await
-                .unwrap_or_else(|e| {
-                    tracing::error!("failed to  update achievements '{}': {}", user_id, e)
+                .unwrap_or_else(|error| {
+                    tracing::error!(
+                        "failed to update achievements for character '{}': {}",
+                        character_id,
+                        error
+                    )
                 });
         });
 
@@ -521,12 +515,13 @@ async fn auto_save_impl(
 
 async fn update_achievements_impl(
     db_pool: DbPool,
-    // master_store: &MasterStore,
     user_id: UserId,
+    character_id: UserCharacterId,
     new_achievements: Vec<String>,
 ) -> Result<()> {
     let mut tx = db_pool.begin().await?;
-    achievements_controller::unlock_achievements(&mut tx, user_id, &new_achievements).await?;
+    achievements_controller::unlock_achievements(&mut tx, user_id, character_id, &new_achievements)
+        .await?;
     tx.commit().await?;
 
     Ok(())

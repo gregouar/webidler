@@ -10,7 +10,7 @@ use shared::data::{
     passive::PassivesTreeAscension,
     player::PlayerInventory,
     skill_mastery::PlayerSkillMasteries,
-    user::UserId,
+    user::{UserCharacterId, UserId},
 };
 
 use crate::{
@@ -101,18 +101,13 @@ impl<'a> AreaAchievementStatistics<'a> {
 
 pub async fn unlock_achievements(
     tx: &mut Transaction<'_, Database>,
-    // master_store: &MasterStore,
     user_id: UserId,
+    character_id: UserCharacterId,
     new_achievements: &[String],
 ) -> Result<(), AppError> {
     for achievement_id in new_achievements.iter() {
-        unlock_achievement(
-            tx,
-            // &master_store.achievements_store,
-            user_id,
-            achievement_id,
-        )
-        .await?;
+        db::user_unlocks::unlock_achievement(tx, &user_id, achievement_id).await?;
+        db::character_achievements::unlock_achievement(tx, &character_id, achievement_id).await?;
     }
 
     Ok(())
@@ -346,15 +341,6 @@ fn sum_area_stat(
         .fold(0_u64, |total, area| {
             total.saturating_add(value(area) as u64)
         })
-}
-
-async fn unlock_achievement(
-    tx: &mut Transaction<'_, Database>,
-    // achievements_store: &AchievementsStore,
-    user_id: UserId,
-    achievement_id: &str,
-) -> Result<bool, AppError> {
-    Ok(db::user_unlocks::unlock_achievement(tx, &user_id, achievement_id).await?)
 }
 
 pub async fn reward_achievement(

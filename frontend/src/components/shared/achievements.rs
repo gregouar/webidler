@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use leptos::{prelude::*, task::spawn_local};
 use shared::{
     data::{
@@ -32,29 +33,37 @@ const ACHIEVEMENT_CATEGORIES: [AchievementCategory; 2] =
 pub fn AchievementsPanel(
     open: RwSignal<bool>,
     #[prop(into)] user_unlocks: RwSignal<UserUnlocks>,
+    #[prop(optional, into)] achievements: Option<Signal<HashMap<String, DateTime<Utc>>>>,
     #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, u64>>>,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
     let active_category = RwSignal::new(AchievementCategory::Global);
 
     let achieved_count = move || {
+        let contains_achievement = |achievement_id: &String| {
+            achievements.map_or_else(
+                || {
+                    user_unlocks
+                        .read()
+                        .achievements
+                        .contains_key(achievement_id)
+                },
+                |achievements| achievements.read().contains_key(achievement_id),
+            )
+        };
         data_context
             .achievements
             .read()
             .iter()
             .filter(|(achievement_id, specs)| {
-                specs.category == active_category.get()
-                    && user_unlocks
-                        .read()
-                        .achievements
-                        .contains_key(*achievement_id)
+                specs.category == active_category.get() && contains_achievement(achievement_id)
             })
             .count()
     };
 
     view! {
         <MenuPanel open w_full=false h_full=true class:items-center>
-            <MenuCard class="w-5xl mx-auto" gap=false>
+            <MenuCard class="h-full w-5xl mx-auto" gap=false>
                 <CardHeader title="Achievements" on_close=move || open.set(false)>
                     <div class="flex self-end justify-center h-full ml-2 xl:ml-4 gap-2 xl:gap-4 overflow-clip">
                         {ACHIEVEMENT_CATEGORIES
@@ -102,11 +111,27 @@ pub fn AchievementsPanel(
                             children=move |(id, achievement)| {
                                 let achieved_id = id.clone();
                                 let achieved = Memo::new(move |_| {
-                                    user_unlocks.read().achievements.contains_key(&achieved_id)
+                                    achievements
+                                        .map_or_else(
+                                            || {
+                                                user_unlocks.read().achievements.contains_key(&achieved_id)
+                                            },
+                                            |achievements| {
+                                                achievements.read().contains_key(&achieved_id)
+                                            },
+                                        )
                                 });
                                 let unlocked_id = id.clone();
                                 let unlocked_at = Memo::new(move |_| {
-                                    user_unlocks.read().achievements.get(&unlocked_id).cloned()
+                                    achievements
+                                        .map_or_else(
+                                            || {
+                                                user_unlocks.read().achievements.get(&unlocked_id).cloned()
+                                            },
+                                            |achievements| {
+                                                achievements.read().get(&unlocked_id).cloned()
+                                            },
+                                        )
                                 });
                                 let required_goal_count = achievement.required_goal_count();
                                 let progress_id = id.clone();

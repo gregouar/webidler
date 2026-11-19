@@ -70,8 +70,8 @@ pub struct GameInstanceData {
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
-    pub achievement_area_statistics: Vec<CharacterAreaEntry>,
-    pub user_achievements: HashMap<String, DateTime<Utc>>,
+    pub old_areas_statistics: Vec<CharacterAreaEntry>,
+    pub achievements: HashMap<String, DateTime<Utc>>,
 
     pub end_grind: bool, // Initiate end, generate rewards
     pub grind_rewards: LazySyncer<Option<GrindRewards>>,
@@ -133,8 +133,8 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
         mut player_stamina: Duration,
         player_controller: PlayerController,
-        achievement_area_statistics: Vec<CharacterAreaEntry>,
-        user_achievements: HashMap<String, DateTime<Utc>>,
+        old_areas_statistics: Vec<CharacterAreaEntry>,
+        achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
             .area_blueprints_store
@@ -248,8 +248,8 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
-            achievement_area_statistics,
-            user_achievements,
+            old_areas_statistics,
+            achievements,
 
             end_grind: false,
             grind_rewards: LazySyncer::new(None),
@@ -289,8 +289,8 @@ impl GameInstanceData {
     pub fn from_bytes(
         master_store: &master_store::MasterStore,
         bytes: &[u8],
-        achievement_area_statistics: Vec<CharacterAreaEntry>,
-        user_achievements: HashMap<String, DateTime<Utc>>,
+        old_areas_statistics: Vec<CharacterAreaEntry>,
+        achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let SavedGameData {
             realm_id,
@@ -331,8 +331,8 @@ impl GameInstanceData {
             player_inventory,
             player_stamina,
             player_controller,
-            achievement_area_statistics,
-            user_achievements,
+            old_areas_statistics,
+            achievements,
         )?;
 
         s.area_state.mutate().area_level = area_level;

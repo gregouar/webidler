@@ -1,3 +1,4 @@
+pub mod character_achievements;
 pub mod characters;
 pub mod characters_builds;
 pub mod characters_data;

@@ -65,6 +65,7 @@ pub struct InitGameMessage {
     pub character_id: UserCharacterId,
     pub character_cosmetics: CharacterCosmetics,
     pub user_unlocks: UserUnlocks,
+    pub achievements: HashMap<String, DateTime<Utc>>,
     pub realm: Realm,
     pub area_id: String,
     pub map_item: Option<ItemSpecs>,

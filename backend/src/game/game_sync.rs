@@ -31,6 +31,7 @@ pub async fn sync_init_game(
                 character_id: *character_id,
                 character_cosmetics,
                 user_unlocks,
+                achievements: game_data.achievements.clone(),
                 realm: game_data.realm,
                 area_id: game_data.area_id.clone(),
                 map_item: game_data.map_item.clone(),

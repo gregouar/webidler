@@ -66,6 +66,7 @@ pub fn TownPage() -> impl IntoView {
                 match backend.post_reconcile_achievements(&character_id).await {
                     Ok(response) => {
                         town_context.user_unlocks.set(response.user_unlocks);
+                        town_context.achievements.set(response.achievements);
                         town_context
                             .achievements_progress
                             .set(response.achievements_progress);
@@ -135,6 +136,7 @@ pub fn TownPage() -> impl IntoView {
                     skill_masteries,
                     skill_mastery_skill_specs,
                     user_unlocks,
+                    achievements,
                     pets,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
@@ -156,6 +158,7 @@ pub fn TownPage() -> impl IntoView {
                         .set(skill_mastery_skill_specs);
 
                     town_context.user_unlocks.set(user_unlocks);
+                    town_context.achievements.set(achievements);
                     if let Some(character_stash) = character_stash {
                         town_context.character_stash.set(character_stash);
                     }
@@ -201,6 +204,7 @@ pub fn TownPage() -> impl IntoView {
                             <AchievementsPanel
                                 open=town_context.open_achievements
                                 user_unlocks=town_context.user_unlocks
+                                achievements=town_context.achievements
                                 achievements_progress=town_context.achievements_progress
                             />
                             <PetsPanel

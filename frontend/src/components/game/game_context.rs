@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use std::{collections::HashMap, time::Duration};
 
 use leptos::prelude::{
@@ -34,6 +35,7 @@ pub struct GameContext {
     pub character_id: RwSignal<UserCharacterId>,
     pub character_cosmetics: RwSignal<CharacterCosmetics>,
     pub user_unlocks: RwSignal<UserUnlocks>,
+    pub achievements: RwSignal<HashMap<String, DateTime<Utc>>>,
 
     pub realm: RwSignal<Realm>,
     pub area_id: RwSignal<String>,
@@ -95,6 +97,7 @@ impl GameContext {
             character_id: Default::default(),
             character_cosmetics: Default::default(),
             user_unlocks: Default::default(),
+            achievements: Default::default(),
 
             realm: Default::default(),
             area_id: Default::default(),

@@ -10,7 +10,7 @@ use shared::data::{
 use crate::{
     app_state::MasterStore,
     constants::DATA_VERSION,
-    db::{characters, user_unlocks, utc_datetime::UtcDateTime},
+    db::{character_achievements, characters, utc_datetime::UtcDateTime},
     game::{data::master_store, game_data::GameInstanceData},
 };
 
@@ -76,10 +76,9 @@ pub async fn load_game_instance_data(
     db_pool: &DbPool,
     master_store: &master_store::MasterStore,
     character_id: &UserCharacterId,
-    user_id: UserId,
 ) -> anyhow::Result<Option<(GameInstanceData, DateTime<Utc>)>> {
     let saved_game_instance = load_saved_game_instance(db_pool, character_id).await?;
-    let user_achievements = user_unlocks::read_achievements(db_pool, &user_id).await?;
+    let achievements = character_achievements::read_achievements(db_pool, character_id).await?;
     let area_statistics = characters::read_character_areas_completed(db_pool, character_id).await?;
     if let Some(instance) = saved_game_instance {
         Ok(Some((
@@ -87,7 +86,7 @@ pub async fn load_game_instance_data(
                 master_store,
                 &instance.game_data,
                 area_statistics,
-                user_achievements,
+                achievements,
             )?,
             instance.saved_at.into(),
         )))
@@ -144,13 +143,7 @@ pub async fn peek_game_instances(
     .await?;
 
     for entry in entries {
-        load_game_instance_data(
-            db_pool,
-            master_store,
-            &entry.character_id,
-            Default::default(),
-        )
-        .await?;
+        load_game_instance_data(db_pool, master_store, &entry.character_id).await?;
     }
 
     Ok(())

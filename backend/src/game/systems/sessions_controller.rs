@@ -13,7 +13,7 @@ use shared::{
         realms::Realm,
         skill_mastery::PlayerSkillMasteries,
         temple::{BenedictionEffect, PlayerBenedictions},
-        user::{UserCharacterId, UserId},
+        user::UserCharacterId,
     },
 };
 
@@ -76,7 +76,7 @@ pub async fn create_session(
 
     // If not available, try from saved games, otherwise start new game
     let game_instance_data = if let Some(saved_instance) =
-        load_game_instance(db_pool, master_store, &character_id, character.user_id).await
+        load_game_instance(db_pool, master_store, &character_id).await
     {
         saved_instance
     } else {
@@ -101,11 +101,8 @@ async fn load_game_instance(
     db_pool: &db::DbPool,
     master_store: &MasterStore,
     character_id: &UserCharacterId,
-    user_id: UserId,
 ) -> Option<GameInstanceData> {
-    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id, user_id)
-        .await
-    {
+    match db::game_instances::load_game_instance_data(db_pool, master_store, character_id).await {
         Ok(Some((mut game_instance, saved_at))) => {
             // Maybe move this somewhere else
             game_instance.player_stamina += Duration::from_secs(
@@ -247,23 +244,22 @@ async fn new_game_instance(
         .and_then(|map_specs| map_specs.replace_area_id.clone())
         .unwrap_or(area_config.area_id);
 
-    let achievement_area_statistics =
+    let old_areas_statistics =
         db::characters::read_character_areas_completed(db_pool, &character.character_id).await?;
-    let (max_area_level_ever, max_power_shard_level_ever, quest_completed) =
-        achievement_area_statistics
-            .iter()
-            .find(|area_completed| area_completed.area_id == area_id)
-            .map(|area_completed| {
-                (
-                    area_completed.max_area_level,
-                    area_completed.max_power_shard_level,
-                    area_completed.quest_completed,
-                )
-            })
-            .unwrap_or_default();
+    let (max_area_level_ever, max_power_shard_level_ever, quest_completed) = old_areas_statistics
+        .iter()
+        .find(|area_completed| area_completed.area_id == area_id)
+        .map(|area_completed| {
+            (
+                area_completed.max_area_level,
+                area_completed.max_power_shard_level,
+                area_completed.quest_completed,
+            )
+        })
+        .unwrap_or_default();
 
-    let user_achievements =
-        db::user_unlocks::read_achievements(db_pool, &character.user_id).await?;
+    let achievements =
+        db::character_achievements::read_achievements(db_pool, &character.character_id).await?;
 
     let player_controller = PlayerController::init(&player_base_specs);
     let mut game_data = GameInstanceData::init_from_store(
@@ -281,8 +277,8 @@ async fn new_game_instance(
         player_inventory,
         Duration::from_secs_f64(character.resource_stamina),
         player_controller,
-        achievement_area_statistics,
-        user_achievements,
+        old_areas_statistics,
+        achievements,
     )?;
 
     if game_data.area_specs.coming_soon {
