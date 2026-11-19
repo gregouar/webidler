@@ -18,6 +18,7 @@ use crate::{
         ui::{
             buttons::{MenuButton, TabButton},
             card::{CardHeader, CardInset, MenuCard},
+            checkbox::Checkbox,
             list_row::MenuListRow,
             menu_panel::MenuPanel,
             number::{comma_format, format_local_date},
@@ -38,25 +39,20 @@ pub fn AchievementsPanel(
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
     let active_category = RwSignal::new(AchievementCategory::Global);
+    let display_user_achievements = RwSignal::new(false);
+    let displayed_achievements = Memo::new(move |_| match achievements {
+        Some(achievements) if !display_user_achievements.get() => achievements.get(),
+        _ => user_unlocks.read().achievements.clone(),
+    });
 
     let achieved_count = move || {
-        let contains_achievement = |achievement_id: &String| {
-            achievements.map_or_else(
-                || {
-                    user_unlocks
-                        .read()
-                        .achievements
-                        .contains_key(achievement_id)
-                },
-                |achievements| achievements.read().contains_key(achievement_id),
-            )
-        };
         data_context
             .achievements
             .read()
             .iter()
             .filter(|(achievement_id, specs)| {
-                specs.category == active_category.get() && contains_achievement(achievement_id)
+                specs.category == active_category.get()
+                    && displayed_achievements.read().contains_key(*achievement_id)
             })
             .count()
     };
@@ -83,7 +79,21 @@ pub fn AchievementsPanel(
                             .collect_view()}
                     </div>
                     <div class="flex-1" />
-                    <div class="text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
+                    {achievements
+                        .is_some()
+                        .then(|| {
+                            view! {
+                                <Checkbox
+                                    label="User achievements".to_string()
+                                    checked=Signal::from(display_user_achievements)
+                                    on_change=move |checked| {
+                                        display_user_achievements.set(checked)
+                                    }
+                                />
+                                <div class="flex-1" />
+                            }
+                        })}
+                    <div class="w-20 flex justify-end text-shadow-md shadow-gray-950 text-zinc-400 text-xs xl:text-base font-medium">
                         {achieved_count}" / "
                         {move || {
                             data_context
@@ -111,32 +121,18 @@ pub fn AchievementsPanel(
                             children=move |(id, achievement)| {
                                 let achieved_id = id.clone();
                                 let achieved = Memo::new(move |_| {
-                                    achievements
-                                        .map_or_else(
-                                            || {
-                                                user_unlocks.read().achievements.contains_key(&achieved_id)
-                                            },
-                                            |achievements| {
-                                                achievements.read().contains_key(&achieved_id)
-                                            },
-                                        )
+                                    displayed_achievements.read().contains_key(&achieved_id)
                                 });
                                 let unlocked_id = id.clone();
                                 let unlocked_at = Memo::new(move |_| {
-                                    achievements
-                                        .map_or_else(
-                                            || {
-                                                user_unlocks.read().achievements.get(&unlocked_id).cloned()
-                                            },
-                                            |achievements| {
-                                                achievements.read().get(&unlocked_id).cloned()
-                                            },
-                                        )
+                                    displayed_achievements.read().get(&unlocked_id).cloned()
                                 });
                                 let required_goal_count = achievement.required_goal_count();
                                 let progress_id = id.clone();
                                 let goal_progress = Memo::new(move |_| {
-                                    achievements_progress
+                                    (!display_user_achievements.get())
+                                        .then_some(achievements_progress)
+                                        .flatten()
                                         .map(|achievements_progress| {
                                             if achieved.get() {
                                                 required_goal_count
@@ -181,7 +177,7 @@ pub fn AchievementsPanel(
                                         selected=Signal::from(achieved)
                                         class:brightness-50=move || !achieved.get()
                                     >
-                                        <article class="flex min-h-32 gap-3 p-3 text-left">
+                                        <article class="flex h-full min-h-32 gap-3 p-3 text-left">
                                             <div
                                                 class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden"
                                                 class:brightness-50=move || !achieved.get()
