@@ -23,7 +23,7 @@ pub struct TownContext {
     pub areas: RwSignal<Vec<UserGrindArea>>,
     pub inventory: RwSignal<PlayerInventory>,
     pub user_unlocks: RwSignal<UserUnlocks>,
-    pub achievements_progress: RwSignal<HashMap<String, usize>>,
+    pub achievements_progress: RwSignal<HashMap<String, u64>>,
 
     pub character_stash: RwSignal<Stash>,
     pub user_stash: RwSignal<Stash>,

@@ -21,7 +21,7 @@ use crate::{
         game_data::GameInstanceData,
         game_inputs, game_orchestrator, game_sync,
         game_timer::GameTimer,
-        systems::achievements_controller::{self, AchievementContext},
+        systems::achievements_controller::{self, AchievementContext, AreaAchievementStatistics},
     },
     integration::chat::ChatIntegration,
     websocket::WebSocketConnection,
@@ -227,6 +227,13 @@ impl<'a> GameInstance<'a> {
             skill_masteries: &self.game_data.player_base_specs.read().skill_masteries,
             ascension: &self.game_data.passives_tree_state.read().ascension,
             inventory: self.game_data.player_inventory.read(),
+            area_statistics: AreaAchievementStatistics::with_current_grind(
+                &self.game_data.achievement_area_statistics,
+                &self.game_data.area_id,
+                &self.game_data.game_stats,
+                self.game_data.player_resources.read().gems.get(),
+                self.game_data.map_item.is_some(),
+            ),
         };
 
         let new_achievements = achievements_controller::check_achievements(
@@ -360,9 +367,18 @@ impl<'a> GameInstance<'a> {
                 &mut tx,
                 self.character_id,
                 &self.game_data.area_id,
-                max_area_level_ever,
-                max_power_shard_level_ever,
-                quest_completed,
+                &db::characters::CharacterAreaProgressUpdate {
+                    max_area_level_ever,
+                    max_power_shard_level_ever,
+                    quest_completed,
+                    monsters_killed: self.game_data.game_stats.monsters_killed as i64,
+                    champion_monsters_killed: self.game_data.game_stats.champion_monsters_killed
+                        as i64,
+                    bosses_killed: self.game_data.game_stats.bosses_killed as i64,
+                    areas_completed: self.game_data.game_stats.areas_completed as i64,
+                    edicts_spent: i64::from(self.game_data.map_item.is_some()),
+                    gems_obtained: self.game_data.player_resources.read().gems.get() as i64,
+                },
             )
             .await?;
 

@@ -155,7 +155,7 @@ pub struct ReconcileAchievementsResponse {
     pub user_unlocks: UserUnlocks,
     pub newly_unlocked_achievements: Vec<String>,
     // Specific to current character
-    pub achievements_progress: HashMap<String, usize>,
+    pub achievements_progress: HashMap<String, u64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]

@@ -6,6 +6,7 @@ use shared::{
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
+        monster::MonsterRarity,
         skill::TargetType,
         stat_effect::compare_options,
         trigger::EventTrigger,
@@ -408,6 +409,9 @@ fn handle_kill_event(
             }
 
             game_data.game_stats.monsters_killed += 1;
+            if monster_specs.rarity == MonsterRarity::Champion {
+                game_data.game_stats.champion_monsters_killed += 1;
+            }
 
             let (gold_reward, gems_reward) = player_controller::reward_player(
                 game_data.player_resources.mutate(),
@@ -572,6 +576,9 @@ fn handle_area_completed_event(
     area_controller::auto_increase_area_level(area_state, 1);
 
     game_data.game_stats.areas_completed += 1;
+    if is_boss_level {
+        game_data.game_stats.bosses_killed += 1;
+    }
 }
 
 fn handle_wave_completed_event(

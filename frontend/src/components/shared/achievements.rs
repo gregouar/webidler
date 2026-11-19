@@ -19,7 +19,7 @@ use crate::{
             card::{CardHeader, CardInset, MenuCard},
             list_row::MenuListRow,
             menu_panel::MenuPanel,
-            number::format_local_date,
+            number::{comma_format, format_local_date},
             toast::{ToastVariant, Toasts, show_toast},
         },
     },
@@ -29,7 +29,7 @@ use crate::{
 pub fn AchievementsPanel(
     open: RwSignal<bool>,
     #[prop(into)] user_unlocks: RwSignal<UserUnlocks>,
-    #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, usize>>>,
+    #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, u64>>>,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
 
@@ -151,7 +151,11 @@ pub fn AchievementsPanel(
                                                                         )
                                                                     }>
                                                                         {move || {
-                                                                            format!("{} / {}", goal_progress, required_goal_count)
+                                                                            format!(
+                                                                                "{} / {}",
+                                                                                comma_format(goal_progress as f64),
+                                                                                comma_format(required_goal_count as f64),
+                                                                            )
                                                                         }}
                                                                     </span>
                                                                 }

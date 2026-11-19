@@ -20,13 +20,16 @@ use shared::data::{
     skill::SkillSpecs,
 };
 
-use crate::game::{
-    data::{DataInit, area::AreaBlueprint, master_store},
-    systems::{
-        area_controller, passives_controller, player_controller::PlayerController, player_updater,
-        skills_updater,
+use crate::{
+    db::characters::CharacterAreaEntry,
+    game::{
+        data::{DataInit, area::AreaBlueprint, master_store},
+        systems::{
+            area_controller, passives_controller, player_controller::PlayerController,
+            player_updater, skills_updater,
+        },
+        utils::LazySyncer,
     },
-    utils::LazySyncer,
 };
 
 #[derive(Debug, Clone)]
@@ -67,6 +70,7 @@ pub struct GameInstanceData {
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
+    pub achievement_area_statistics: Vec<CharacterAreaEntry>,
     pub user_achievements: HashMap<String, DateTime<Utc>>,
 
     pub end_grind: bool, // Initiate end, generate rewards
@@ -129,6 +133,7 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
         mut player_stamina: Duration,
         player_controller: PlayerController,
+        achievement_area_statistics: Vec<CharacterAreaEntry>,
         user_achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
@@ -243,6 +248,7 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
+            achievement_area_statistics,
             user_achievements,
 
             end_grind: false,
@@ -283,6 +289,7 @@ impl GameInstanceData {
     pub fn from_bytes(
         master_store: &master_store::MasterStore,
         bytes: &[u8],
+        achievement_area_statistics: Vec<CharacterAreaEntry>,
         user_achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let SavedGameData {
@@ -324,6 +331,7 @@ impl GameInstanceData {
             player_inventory,
             player_stamina,
             player_controller,
+            achievement_area_statistics,
             user_achievements,
         )?;
 

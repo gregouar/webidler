@@ -36,7 +36,7 @@ use crate::{
             passives::ascension_data_to_passives_tree_ascension,
         },
         systems::{
-            achievements_controller::{self, AchievementContext},
+            achievements_controller::{self, AchievementContext, AreaAchievementStatistics},
             benedictions_controller, skill_masteries_controller, skills_updater,
         },
     },
@@ -291,8 +291,8 @@ async fn post_reconcile_achievements(
         db::user_unlocks::read_achievements(&mut *tx, &character.user_id).await?;
 
     let area_levels = areas
-        .into_iter()
-        .map(|area| (area.area_id, area.max_area_level as AreaLevel))
+        .iter()
+        .map(|area| (area.area_id.clone(), area.max_area_level as AreaLevel))
         .collect();
     let inventory = inventory_data_to_player_inventory(&master_store.items_store, inventory_data);
     let ascension =
@@ -305,6 +305,7 @@ async fn post_reconcile_achievements(
         skill_masteries: &skill_masteries,
         ascension: &ascension,
         inventory: &inventory,
+        area_statistics: AreaAchievementStatistics::persisted(&areas),
     };
     let newly_unlocked_achievements = achievements_controller::check_achievements(
         &master_store,

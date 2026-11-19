@@ -61,7 +61,7 @@ pub struct CharacterResources {
     pub played_time_seconds: f64,
 }
 
-#[derive(Debug, FromRow)]
+#[derive(Debug, Clone, FromRow)]
 pub struct CharacterAreaEntry {
     pub character_id: UserCharacterId,
     pub area_id: String,
@@ -69,8 +69,27 @@ pub struct CharacterAreaEntry {
     pub max_power_shard_level: i32,
     pub quest_completed: bool,
 
+    pub monsters_killed: i64,
+    pub champion_monsters_killed: i64,
+    pub bosses_killed: i64,
+    pub areas_completed: i64,
+    pub edicts_spent: i64,
+    pub gems_obtained: i64,
+
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
+}
+
+pub struct CharacterAreaProgressUpdate {
+    pub max_area_level_ever: i32,
+    pub max_power_shard_level_ever: i32,
+    pub quest_completed: bool,
+    pub monsters_killed: i64,
+    pub champion_monsters_killed: i64,
+    pub bosses_killed: i64,
+    pub areas_completed: i64,
+    pub edicts_spent: i64,
+    pub gems_obtained: i64,
 }
 
 pub async fn create_character<'c>(
@@ -195,6 +214,12 @@ pub async fn read_character_area_completed<'c>(
             max_area_level as "max_area_level!: i32",
             max_power_shard_level as "max_power_shard_level!: i32",
             quest_completed as "quest_completed!: bool",
+            monsters_killed as "monsters_killed!: i64",
+            champion_monsters_killed as "champion_monsters_killed!: i64",
+            bosses_killed as "bosses_killed!: i64",
+            areas_completed as "areas_completed!: i64",
+            edicts_spent as "edicts_spent!: i64",
+            gems_obtained as "gems_obtained!: i64",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -220,6 +245,12 @@ pub async fn read_character_areas_completed<'c>(
             max_area_level as "max_area_level!: i32",
             max_power_shard_level as "max_power_shard_level!: i32",
             quest_completed as "quest_completed!: bool",
+            monsters_killed as "monsters_killed!: i64",
+            champion_monsters_killed as "champion_monsters_killed!: i64",
+            bosses_killed as "bosses_killed!: i64",
+            areas_completed as "areas_completed!: i64",
+            edicts_spent as "edicts_spent!: i64",
+            gems_obtained as "gems_obtained!: i64",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -452,13 +483,14 @@ pub async fn update_character_area_progress<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
     area_id: &str,
-    max_area_level_ever: i32,
-    max_power_shard_level_ever: i32,
-    quest_completed: bool,
+    progress: &CharacterAreaProgressUpdate,
 ) -> Result<(), sqlx::Error> {
-    if max_area_level_ever > 0 || quest_completed {
-        sqlx::query!(
-        "INSERT INTO character_area_completed (character_id, area_id, max_area_level,max_power_shard_level,quest_completed) VALUES ($1, $2, $3, $4, $5)
+    sqlx::query!(
+        "INSERT INTO character_area_completed (
+            character_id, area_id, max_area_level, max_power_shard_level, quest_completed,
+            monsters_killed, champion_monsters_killed, bosses_killed, areas_completed,
+            edicts_spent, gems_obtained
+         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
          ON CONFLICT(character_id, area_id) DO UPDATE 
          SET max_area_level = CASE
             WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
@@ -474,16 +506,27 @@ pub async fn update_character_area_progress<'c>(
             WHEN EXCLUDED.quest_completed THEN TRUE
             ELSE character_area_completed.quest_completed
          END,
+         monsters_killed = character_area_completed.monsters_killed + EXCLUDED.monsters_killed,
+         champion_monsters_killed = character_area_completed.champion_monsters_killed + EXCLUDED.champion_monsters_killed,
+         bosses_killed = character_area_completed.bosses_killed + EXCLUDED.bosses_killed,
+         areas_completed = character_area_completed.areas_completed + EXCLUDED.areas_completed,
+         edicts_spent = character_area_completed.edicts_spent + EXCLUDED.edicts_spent,
+         gems_obtained = character_area_completed.gems_obtained + EXCLUDED.gems_obtained,
          updated_at = CURRENT_TIMESTAMP;",
         character_id,
         area_id,
-        max_area_level_ever,
-        max_power_shard_level_ever,
-        quest_completed
+        progress.max_area_level_ever,
+        progress.max_power_shard_level_ever,
+        progress.quest_completed,
+        progress.monsters_killed,
+        progress.champion_monsters_killed,
+        progress.bosses_killed,
+        progress.areas_completed,
+        progress.edicts_spent,
+        progress.gems_obtained,
     )
     .execute(&mut **executor)
     .await?;
-    }
 
     Ok(())
 }

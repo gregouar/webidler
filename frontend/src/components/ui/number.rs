@@ -103,7 +103,7 @@ fn format_scientific_number(value: f64) -> String {
     }
 }
 
-fn comma_format(value: f64) -> String {
+pub fn comma_format(value: f64) -> String {
     let value_str = value.round().to_string();
     let n_chars = value_str.chars().count();
 

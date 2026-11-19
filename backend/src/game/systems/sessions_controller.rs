@@ -247,9 +247,12 @@ async fn new_game_instance(
         .and_then(|map_specs| map_specs.replace_area_id.clone())
         .unwrap_or(area_config.area_id);
 
+    let achievement_area_statistics =
+        db::characters::read_character_areas_completed(db_pool, &character.character_id).await?;
     let (max_area_level_ever, max_power_shard_level_ever, quest_completed) =
-        db::characters::read_character_area_completed(db_pool, &character.character_id, &area_id)
-            .await?
+        achievement_area_statistics
+            .iter()
+            .find(|area_completed| area_completed.area_id == area_id)
             .map(|area_completed| {
                 (
                     area_completed.max_area_level,
@@ -278,6 +281,7 @@ async fn new_game_instance(
         player_inventory,
         Duration::from_secs_f64(character.resource_stamina),
         player_controller,
+        achievement_area_statistics,
         user_achievements,
     )?;
 

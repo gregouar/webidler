@@ -4,6 +4,7 @@ use uuid::Uuid;
 use crate::data::{
     area::AreaLevel,
     item::{BaseItemId, ItemCategory, ItemRarity, ItemSlot},
+    monster::MonsterRarity,
     skill::SkillType,
 };
 
@@ -22,8 +23,8 @@ pub struct AchievementSpecs {
 }
 
 impl AchievementSpecs {
-    pub fn required_goal_count(&self) -> usize {
-        self.goals_amount.map(usize::from).unwrap_or_else(|| {
+    pub fn required_goal_count(&self) -> u64 {
+        self.goals_amount.map(u64::from).unwrap_or_else(|| {
             self.goals
                 .iter()
                 .map(AchievementGoal::required_amount)
@@ -79,14 +80,36 @@ pub enum AchievementGoal {
         #[serde(default = "default_one")]
         amount: u8,
     },
+    MonstersKilled {
+        value: u64,
+        #[serde(default)]
+        monster_rarity: Option<MonsterRarity>,
+        #[serde(default)]
+        area_id: Option<String>,
+    },
+    AreaCompleted {
+        value: u64,
+        #[serde(default)]
+        area_id: Option<String>,
+        #[serde(default)]
+        with_edict: bool,
+    },
+    GemsObtained {
+        value: u64,
+        #[serde(default)]
+        area_id: Option<String>,
+    },
 }
 
 impl AchievementGoal {
-    pub fn required_amount(&self) -> usize {
+    pub fn required_amount(&self) -> u64 {
         match self {
             Self::SkillLevel { amount, .. }
             | Self::PassiveLevel { amount, .. }
-            | Self::EquippedItem { amount, .. } => usize::from(*amount),
+            | Self::EquippedItem { amount, .. } => u64::from(*amount),
+            Self::MonstersKilled { value, .. }
+            | Self::AreaCompleted { value, .. }
+            | Self::GemsObtained { value, .. } => *value,
             Self::AreaLevel { .. } | Self::PowerLevel(_) | Self::PlayerLevel(_) => 1,
         }
     }

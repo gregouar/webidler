@@ -1,0 +1,20 @@
+{
+    "kill_monsters": {
+        "icon"       : "achievements/meat_grinder.svg",
+        "name"       : "Meat Grinder",
+        "description": "Kill 5,000,000 Monsters with a single Character.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
+    },
+    "edicts_100"   : {
+        "icon"       : "achievements/scroll.svg",
+        "name"       : "Addict to Edicts",
+        "description": "Use 100 Edicts with a single Character.",
+        "goals"      : [
+            { "AreaCompleted": {"value": 100, "with_edict": true} }
+        ],
+        "rewards": [ {"Cosmetic": "title_edicts_100"} ]
+    }
+}

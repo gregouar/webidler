@@ -10,7 +10,7 @@ use shared::data::{
 use crate::{
     app_state::MasterStore,
     constants::DATA_VERSION,
-    db::{user_unlocks, utc_datetime::UtcDateTime},
+    db::{characters, user_unlocks, utc_datetime::UtcDateTime},
     game::{data::master_store, game_data::GameInstanceData},
 };
 
@@ -80,9 +80,15 @@ pub async fn load_game_instance_data(
 ) -> anyhow::Result<Option<(GameInstanceData, DateTime<Utc>)>> {
     let saved_game_instance = load_saved_game_instance(db_pool, character_id).await?;
     let user_achievements = user_unlocks::read_achievements(db_pool, &user_id).await?;
+    let area_statistics = characters::read_character_areas_completed(db_pool, character_id).await?;
     if let Some(instance) = saved_game_instance {
         Ok(Some((
-            GameInstanceData::from_bytes(master_store, &instance.game_data, user_achievements)?,
+            GameInstanceData::from_bytes(
+                master_store,
+                &instance.game_data,
+                area_statistics,
+                user_achievements,
+            )?,
             instance.saved_at.into(),
         )))
     } else {

@@ -1,4 +1,4 @@
 {
-    "meta": { "enabled": true },
-    "resources": { "achievements": ["global_achievements.json"] }
+    "meta"     : { "enabled": true                                                                          },
+    "resources": {                  "achievements": ["global_achievements.json", "grind_achievements.json"] }
 }
