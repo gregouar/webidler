@@ -1505,8 +1505,8 @@
       },
       "more_spins" : {
         "title"       : "Dervish Training",
-        "base_cost"   : 0,
-        "upgrade_cost": 0,
+        "base_cost"   : 3,
+        "upgrade_cost": 3,
         "max_level"   : 3,
         "effects"     : [
           {
