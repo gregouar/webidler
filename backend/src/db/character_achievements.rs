@@ -1,5 +1,5 @@
 use chrono::{DateTime, Utc};
-use sqlx::{Transaction, types::Json};
+use sqlx::Transaction;
 use std::collections::HashMap;
 
 use shared::data::{achievements::AchievementCounter, user::UserCharacterId};
@@ -70,7 +70,7 @@ pub async fn read_counters<'c>(
     .await?
     .into_iter()
     .map(|row| {
-        let counter = serde_json::from_str::<AchievementCounter>(&row.counter_id)
+        let counter = serde_plain::from_str::<AchievementCounter>(&row.counter_id)
             .map_err(|error| sqlx::Error::Decode(Box::new(error)))?;
         let amount =
             u64::try_from(row.amount).map_err(|error| sqlx::Error::Decode(Box::new(error)))?;
@@ -85,7 +85,8 @@ pub async fn increase_counter(
     counter: AchievementCounter,
     amount: u64,
 ) -> Result<bool, sqlx::Error> {
-    let counter_id = serde_json::to_value(Json(counter)).unwrap();
+    let counter_id =
+        serde_plain::to_string(&counter).map_err(|error| sqlx::Error::Encode(Box::new(error)))?;
     let amount = i64::try_from(amount).map_err(|error| sqlx::Error::Decode(Box::new(error)))?;
     Ok(sqlx::query!(
         "INSERT INTO character_achievements_counters (character_id, counter_id, amount)
@@ -111,7 +112,8 @@ pub async fn write_counters(
     counters: &HashMap<AchievementCounter, u64>,
 ) -> Result<(), sqlx::Error> {
     for (counter, amount) in counters.iter() {
-        let counter_id = serde_json::to_value(Json(counter)).unwrap();
+        let counter_id = serde_plain::to_string(counter)
+            .map_err(|error| sqlx::Error::Encode(Box::new(error)))?;
         let amount =
             i64::try_from(*amount).map_err(|error| sqlx::Error::Decode(Box::new(error)))?;
         sqlx::query!(

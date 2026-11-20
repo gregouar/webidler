@@ -7,6 +7,7 @@ use shared::{
     data::{
         achievements::AchievementCounter,
         forge::{self, affix_operation_price},
+        item::ItemRarity,
     },
     http::{
         client::{
@@ -315,7 +316,7 @@ pub async fn post_gamble(
     )
     .await?;
 
-    match loot_generator::generate_loot(
+    let item_specs = loot_generator::generate_loot(
         &master_store.gamble_table.loot_table,
         &master_store.items_store,
         &GenerateLootTemplate {
@@ -331,10 +332,20 @@ pub async fn post_gamble(
         master_store.gamble_table.item_rarity,
         0.0,
         None,
-    ) {
-        Some(item_specs) => inventory_controller::store_item_to_bag(&mut inventory, item_specs)?,
-        None => return Err(AppError::UserError("not item found".into())),
+    )
+    .ok_or(AppError::NotFound)?;
+
+    if item_specs.modifiers.rarity == ItemRarity::Unique {
+        db::character_achievements::increase_counter(
+            &mut tx,
+            &payload.character_id,
+            AchievementCounter::GambleUnique,
+            1,
+        )
+        .await?;
     }
+
+    inventory_controller::store_item_to_bag(&mut inventory, item_specs)?;
 
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;

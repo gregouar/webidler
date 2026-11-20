@@ -28,5 +28,15 @@
             { "Counter": {"counter": "SacrificeEquipment600", "value": 100} }
         ],
         "rewards": [ {"Cosmetic": "title_sacrifice_equipment_600"} ]
+    },
+    "gamble_uniques"         : {
+        "category"   : "Grind",
+        "icon"       : "achievements/slot_machine.svg",
+        "name"       : "Certified Gambler",
+        "description": "Obtain 20 Unique Items through Gambling.",
+        "goals"      : [
+            { "Counter": {"counter": "GambleUnique", "value": 20} }
+        ],
+        "rewards": [ {"Cosmetic": "title_gambler"} ]
     }
 }

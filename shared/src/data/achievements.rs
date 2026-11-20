@@ -11,6 +11,7 @@ use crate::data::{
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum AchievementCounter {
     SacrificeEquipment600,
+    GambleUnique,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

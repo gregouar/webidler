@@ -62,7 +62,7 @@ pub fn gamble_price(item_level: AreaLevel) -> NonNegative {
 }
 
 pub fn sacrifice_price(affixes: &[ItemAffix]) -> NonNegative {
-    (affixes
+    let max_level = affixes
         .iter()
         .filter(|affix| {
             matches!(
@@ -72,11 +72,26 @@ pub fn sacrifice_price(affixes: &[ItemAffix]) -> NonNegative {
         })
         .map(|affix| affix.item_level as f64)
         .max_by(|a, b| a.total_cmp(b))
-        .unwrap_or_default()
-        / 5.0)
-        .round()
-        .into()
+        .unwrap_or_default();
+
+    (((max_level.powf(1.2) - 2.0) / 20.0 / 5.0).round() * 5.0).into()
 }
+// pub fn sacrifice_price(affixes: &[ItemAffix]) -> NonNegative {
+//     (affixes
+//         .iter()
+//         .filter(|affix| {
+//             matches!(
+//                 affix.affix_type,
+//                 AffixType::Prefix | AffixType::Suffix | AffixType::Soul
+//             )
+//         })
+//         .map(|affix| affix.item_level as f64)
+//         .max_by(|a, b| a.total_cmp(b))
+//         .unwrap_or_default()
+//         / 5.0)
+//         .round()
+//         .into()
+// }
 
 pub fn can_reroll(item: &ItemSpecs) -> bool {
     item.modifiers.rarity != ItemRarity::Normal
