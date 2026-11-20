@@ -1,0 +1,27 @@
+{
+  "name"    : "Hybrid",
+  "portrait": "monsters/mythos/deep_one_hybrid.webp",
+  "max_life": 12,
+  "skills"  : [
+    {
+      "name"      : "Deep Scratches",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 40,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [8, 12] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "bleed", "value": [2, 4] }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

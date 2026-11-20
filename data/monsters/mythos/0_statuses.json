@@ -1,0 +1,16 @@
+{
+    "shell_protection": {
+        "name"      : "Protective Shell",
+        "icon"      : "skills/shell.svg",
+        "debuff"    : false,
+        "duration"  : 50,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    }
+}
