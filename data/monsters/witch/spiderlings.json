@@ -6,7 +6,7 @@
     {
       "name"      : "Itchy Bity",
       "icon"      : "statuses/spider.svg",
-      "cooldown"  : 1.0,
+      "cooldown"  : 10,
       "skill_type": "Attack",
       "targets"   : [
         {

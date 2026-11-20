@@ -1,36 +1,24 @@
 {
-  "name": "Zeed Peeps",
-  "portrait": "monsters/inn/adventurer_sorcerer.webp",
-  "rarity": "Boss",
-  "max_life": 100,
-  "stun_lockout": 5,
-  "armor": {
-    "Fire": 500
-  },
-  "status_resistances": [
+  "name"              : "Zeed Peeps",
+  "portrait"          : "monsters/inn/adventurer_sorcerer.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 100,
+  "stun_lockout"      : 5,
+  "armor"             : {"Fire": 500},
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Bolt of Fire",
-      "icon": "skills/fireball.svg",
-      "cooldown": 2,
+      "name"      : "Bolt of Fire",
+      "icon"      : "skills/fireball.svg",
+      "cooldown"  : 20,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Fire": [
-                    10,
-                    20
-                  ]
-                }
+                "damage": { "Fire": [10, 20] }
               }
             }
           ]
@@ -38,22 +26,15 @@
       ]
     },
     {
-      "name": "Blight",
-      "icon": "skills/poison_cloud.svg",
-      "cooldown": 5,
+      "name"      : "Blight",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 50,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "range": "Distance",
           "effects": [
-            {
-              "ApplyStatus": {
-                "duration": 5,
-                "status_id": "poison",
-                "value": 3,
-                "escalation": 100
-              }
-            }
+            { "ApplyStatus": {"duration": 50, "status_id": "poison", "value": 3, "escalation": 100} }
           ]
         }
       ]

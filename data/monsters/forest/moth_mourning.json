@@ -1,29 +1,22 @@
 {
-  "name": "Mourning Moth",
+  "name"    : "Mourning Moth",
   "portrait": "monsters/forest/moth_mourning.webp",
   "max_life": 7,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Lamenting Embrace",
-      "icon": "skills/curse_frailty.svg",
+      "name"      : "Lamenting Embrace",
+      "icon"      : "skills/curse_frailty.svg",
       "skill_type": "Spell",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 8 ]
-                }
+                "damage": { "Storm": [0, 8] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "moth_cry",
-                "value": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "moth_cry", "value": 50} }
           ]
         }
       ]

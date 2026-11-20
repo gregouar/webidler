@@ -1,65 +1,48 @@
 {
-  "name": "Vintorus, the Corkscrewed Warden",
-  "portrait": "monsters/inn/haunted_wine_rack.webp",
-  "rarity": "Boss",
-  "max_life": 200,
-  "size": "Huge",
-  "armor": { "Physical": 50, "Fire": 50, "Poison": 50, "Storm": 50 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Vintorus, the Corkscrewed Warden",
+  "portrait"          : "monsters/inn/haunted_wine_rack.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 200,
+  "size"              : "Huge",
+  "armor"             : {"Physical": 50, "Fire": 50, "Poison": 50, "Storm": 50},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Corkscrew Crush",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Corkscrew Crush",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 4 ]
-                }
+                "damage": { "Physical": [2, 4] }
               }
             },
             {
-              "ApplyStatus": {
-                "duration": 3,
-                "status_id": "bleed",
-                "value": [ 1, 2 ]
-              }
+              "ApplyStatus": { "duration": 30, "status_id": "bleed", "value": [1, 2] }
             }
           ]
         }
       ]
     },
     {
-      "name": "Boiling Vintage Spray",
-      "icon": "skills/fireball.svg",
+      "name"      : "Boiling Vintage Spray",
+      "icon"      : "skills/fireball.svg",
       "skill_type": "Spell",
-      "cooldown": 5.0,
-      "targets": [
+      "cooldown"  : 50,
+      "targets"   : [
         {
           "range": "Distance",
           "effects": [
             {
-              "ApplyStatus": {
-                "duration": 2,
-                "status_id": "burn",
-                "value": [ 2, 4 ]
-              }
+              "ApplyStatus": { "duration": 20, "status_id": "burn", "value": [2, 4] }
             },
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 8 ]
-                }
+                "damage": { "Storm": [0, 8] }
               }
             }
           ]
@@ -67,19 +50,15 @@
       ]
     },
     {
-      "name": "Summon Oathbound Bottles",
-      "icon": "skills/heal.svg",
-      "cooldown": 10.0,
+      "name"      : "Summon Oathbound Bottles",
+      "icon"      : "skills/heal.svg",
+      "cooldown"  : 100,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "target_type": "Friend",
           "target_dead": true,
-          "effects": [
-            {
-              "Resurrect": null
-            }
-          ]
+          "effects"    : [ {"Resurrect": null} ]
         }
       ]
     }

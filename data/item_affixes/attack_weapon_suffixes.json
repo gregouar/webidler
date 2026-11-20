@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_speed_local_t1"       : {
     "name"        : "of Hurry",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t2"       : {
     "name"        : "of Velocity",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t3"       : {
     "name"        : "of Urgency",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t4"       : {
     "name"        : "of Acceleration",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t5"       : {
     "name"        : "of Haste",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t6"       : {
     "name"        : "of Frenzy",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t7"       : {
     "name"        : "of Tantrum",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t8"       : {
     "name"        : "of Craze",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t9"       : {
     "name"        : "of Madness",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "item_inc_speed_local_t10"      : {
     "name"        : "of Hysteria",
     "family"      : "inc_speed",
     "tags"        : ["Attack", "Speed"],
@@ -179,7 +179,7 @@
       }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t1" : {
     "name"        : "of Aim",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -192,7 +192,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [15, 20] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t2" : {
     "name"        : "of Rigor",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -205,7 +205,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [25, 30] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t3" : {
     "name"        : "of Accuracy",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -218,7 +218,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [35, 40] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t4" : {
     "name"        : "of Efficiency",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -231,7 +231,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [45, 50] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t5" : {
     "name"        : "of Precision",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -244,7 +244,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [55, 60] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t6" : {
     "name"        : "of Incisiveness",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -257,7 +257,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [65, 70] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t7" : {
     "name"        : "of Exactitude",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -270,7 +270,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [75, 85] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t8" : {
     "name"        : "of Meticulousness",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -283,7 +283,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [95, 105] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t9" : {
     "name"        : "of Certainty",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -296,7 +296,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [115, 125] }
     ]
   },
-  {
+  "item_inc_crit_chance_local_t10": {
     "name"        : "of Perfection",
     "family"      : "inc_crit_chance",
     "tags"        : ["Attack", "Critical"],
@@ -309,7 +309,7 @@
       { "scope": "Local", "stat": {"CritChance": {}}, "modifier": "Increased", "value": [135, 150] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t1" : {
     "name"        : "of Destruction",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -322,7 +322,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [25, 45] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t2" : {
     "name"        : "of Havoc",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -335,7 +335,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [55, 70] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t3" : {
     "name"        : "of Demolition",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -348,7 +348,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [80, 95] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t4" : {
     "name"        : "of Annihilation",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -361,7 +361,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [105, 120] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t5" : {
     "name"        : "of Obliteration",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -374,7 +374,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [130, 145] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t6" : {
     "name"        : "of Rampage",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -387,7 +387,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [160, 180] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t7" : {
     "name"        : "of Ruination",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -400,7 +400,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [195, 220] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t8" : {
     "name"        : "of Devastation",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -413,7 +413,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [235, 265] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t9" : {
     "name"        : "of Extermination",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -426,7 +426,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [280, 320] }
     ]
   },
-  {
+  "item_inc_crit_damage_local_t10": {
     "name"        : "of Oblivion",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -439,7 +439,7 @@
       { "scope": "Local", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [350, 400] }
     ]
   },
-  {
+  "item_life_leech_t1"            : {
     "name"        : "of the Flea",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -457,7 +457,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t2"            : {
     "name"        : "of the Tick",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -475,7 +475,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t3"            : {
     "name"        : "of the Mosquito",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -493,7 +493,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t4"            : {
     "name"        : "of the Bat",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -511,7 +511,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t5"            : {
     "name"        : "of the Leech",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -529,7 +529,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t6"            : {
     "name"        : "of the Finch",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -547,7 +547,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t7"            : {
     "name"        : "of the Candiru",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -565,7 +565,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t8"            : {
     "name"        : "of the Oxpecker",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -583,7 +583,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t9"            : {
     "name"        : "of the Lamprey",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -601,7 +601,7 @@
       }
     ]
   },
-  {
+  "item_life_leech_t10"           : {
     "name"        : "of the Vampire",
     "family"      : "life_leech",
     "tags"        : ["Attack", "Life"],
@@ -619,7 +619,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t1"            : {
     "name"        : "of the Carp",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -637,7 +637,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t2"            : {
     "name"        : "of the Eel",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -655,7 +655,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t3"            : {
     "name"        : "of the Tuna",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -673,7 +673,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t4"            : {
     "name"        : "of the Octopus",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -691,7 +691,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t5"            : {
     "name"        : "of the Dolphin",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -709,7 +709,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t6"            : {
     "name"        : "of the Moray",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -727,7 +727,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t7"            : {
     "name"        : "of the Barracuda",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -745,7 +745,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t8"            : {
     "name"        : "of the Shark",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -763,7 +763,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t9"            : {
     "name"        : "of the Kraken",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -781,7 +781,7 @@
       }
     ]
   },
-  {
+  "item_mana_leech_t10"           : {
     "name"        : "of the Leviathan",
     "family"      : "mana_leech",
     "tags"        : ["Attack", "Mana"],
@@ -799,4 +799,4 @@
       }
     ]
   }
-]
+}

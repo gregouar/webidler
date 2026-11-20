@@ -1,0 +1,68 @@
+{
+  "name"              : "The Prospector",
+  "portrait"          : "monsters/farwest/prospector.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 200,
+  "size"              : "Tall",
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "evade"             : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"            : [
+    {
+      "name"      : "Shoot",
+      "icon"      : "skills/reticule.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4], "Fire": [5, 10] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "burn", "value": [5, 10] }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Shoot",
+      "icon"      : "skills/reticule.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4], "Fire": [5, 10] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "burn", "value": [5, 10] }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Prospect",
+      "icon"      : "skills/prospect.svg",
+      "cooldown"  : 50,
+      "skill_type": "Curse",
+      "targets"   : [
+        {
+          "range": "Any",
+          "effects": [
+            { "ApplyStatus": {"status_id": "prospect", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

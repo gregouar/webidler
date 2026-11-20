@@ -8,7 +8,7 @@
     {
       "name"      : "Crocodile Munch",
       "icon"      : "skills/croc_jaws.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -26,7 +26,7 @@
       "name"      : "Devour the Dead",
       "icon"      : "skills/swallow.svg",
       "skill_type": "Blessing",
-      "cooldown"  : 0.0,
+      "cooldown"  : 0,
       "triggers"  : [
         {
           "trigger_id": "ammit_swallow",

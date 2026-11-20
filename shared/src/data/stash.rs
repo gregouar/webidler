@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     item::ItemSpecs,
     user::{UserCharacterId, UserId},
+    values::NonNegative,
 };
 
 pub type StashId = uuid::Uuid;
@@ -26,7 +27,7 @@ pub struct Stash {
 
     pub items_amount: usize,
     pub max_items: usize,
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -45,9 +46,9 @@ pub struct StashItem {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StashPrice {
-    pub start_price: f64,
+    pub start_price: NonNegative,
     pub start_size: usize,
 
-    pub upgrade_price: f64,
+    pub upgrade_price: NonNegative,
     pub upgrade_size: usize,
 }

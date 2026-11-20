@@ -4,7 +4,7 @@ use std::{
 };
 
 use leptos::{html::*, prelude::*};
-use leptos_use::{WatchDebouncedOptions, watch_debounced_with_options};
+use leptos_use_watch_debounce_throttle::{WatchDebouncedOptions, watch_debounced_with_options};
 use serde::Serialize;
 use shared::data::passive::{
     PassiveConnection, PassiveNodeId, PassiveNodeSpecs, PassiveNodeType, PassivesTreeSpecs,
@@ -709,16 +709,17 @@ fn EditNodeMenu(
                     );
                     let pending_history = RwSignal::new(false);
                     Effect::new(move || {
-                        if let Some(latest_node_specs) =
-                            passives_tree_specs.read().nodes.get(&node_id).cloned()
-                            && node_specs.get_untracked() != latest_node_specs
+                        if let Some(latest_node_specs) = passives_tree_specs
+                            .read()
+                            .nodes
+                            .get(&node_id)
+                            .cloned() && node_specs.get_untracked() != latest_node_specs
                         {
                             node_specs.set(latest_node_specs);
                         }
                     });
                     Effect::new(move || {
                         let value = node_specs.get();
-
                         if let SelectedNode::Single(node_id) = selected_node.get_untracked()
                             && passives_tree_specs
                                 .read_untracked()
@@ -751,6 +752,7 @@ fn EditNodeMenu(
                         WatchDebouncedOptions::default().immediate(false),
                     );
                     Some(
+
                         view! {
                             <CardHeader
                                 title="Edit Node"
@@ -831,6 +833,13 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
         node_specs.write().locked = node_locked.get();
     });
 
+    let node_upgrade_cost = RwSignal::new(Some(node_specs.read_untracked().upgrade_extra_cost));
+    Effect::new(move || {
+        if let Some(upgrade_cost) = node_upgrade_cost.get() {
+            node_specs.write().upgrade_extra_cost = upgrade_cost;
+        }
+    });
+
     let node_socket = RwSignal::new(node_specs.read_untracked().socket);
     Effect::new(move || {
         node_specs.write().socket = node_socket.get();
@@ -860,7 +869,7 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
 
     view! {
         <CardInset class="flex-1">
-            <div class="text-amber-300">{node_id.to_string()}</div>
+            <div class="text-amber-300 select-text">{node_id.to_string()}</div>
             <ValidatedInput label="Name" id="node_name" input_type="text" bind=node_name />
             <ValidatedInput label="Icon" id="node_icon" input_type="text" bind=node_icon />
             <div class="flex justify-between gap-2">
@@ -916,12 +925,20 @@ fn EditNode(node_id: PassiveNodeId, node_specs: RwSignal<PassiveNodeSpecs>) -> i
                     </label>
                 </div>
             </div>
-            <ValidatedInput
-                label="Max Level"
-                id="max_level"
-                input_type="number"
-                bind=node_max_level
-            />
+            <div class="flex justify-between gap-2 w-full">
+                <ValidatedInput
+                    label="Max Level"
+                    id="max_level"
+                    input_type="number"
+                    bind=node_max_level
+                />
+                <ValidatedInput
+                    label="Upgrade Cost"
+                    id="upgrade_cost"
+                    input_type="number"
+                    bind=node_upgrade_cost
+                />
+            </div>
             <JsonEditor label="Effects" value=node_effects h_size="h-96" />
             <JsonEditor label="Upgrade Effects" value=node_upgrades h_size="h-96" />
             <JsonEditor label="Triggers" value=node_triggers h_size="h-96" />

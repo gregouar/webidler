@@ -1,0 +1,27 @@
+{
+  "name"    : "Frank Monster",
+  "portrait": "monsters/farwest/frank.webp",
+  "max_life": 20,
+  "size"    : "Tall",
+  "armor"   : {"Poison": 200, "Storm": 200},
+  "skills"  : [
+    {
+      "name"      : "Monster Foot",
+      "icon"      : "skills/stomp.svg",
+      "cooldown"  : 50,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 20] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "poison", "value": 10, "escalation": 20} }
+          ]
+        }
+      ]
+    }
+  ]
+}

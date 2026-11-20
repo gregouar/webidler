@@ -1,0 +1,25 @@
+{
+  "name"    : "Deep Shaman",
+  "portrait": "monsters/mythos/deep_one_shaman.webp",
+  "max_life": 8,
+  "armor"   : {"Storm": 200},
+  "skills"  : [
+    {
+      "name"      : "Storm Call",
+      "icon"      : "skills/chain_lightning.svg",
+      "cooldown"  : 50,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 10] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

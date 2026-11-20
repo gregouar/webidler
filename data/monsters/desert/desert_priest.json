@@ -7,11 +7,11 @@
     {
       "name"      : "Moonstruck",
       "icon"      : "skills/crescent_staff.svg",
-      "cooldown"  : 3,
+      "cooldown"  : 30,
       "skill_type": "Spell",
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
@@ -25,11 +25,11 @@
     {
       "name"      : "Anubis Judgment",
       "icon"      : "skills/anubis.svg",
-      "cooldown"  : 8,
+      "cooldown"  : 80,
       "skill_type": "Curse",
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "desert_priest_curse", "value": 50} }
           ]

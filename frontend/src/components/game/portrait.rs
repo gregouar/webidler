@@ -8,7 +8,7 @@ use shared::data::{
     monster::MonsterRarity,
     skill::DamageType,
     trigger::TriggerEffect,
-    values::NonNegative,
+    values::Damage,
 };
 
 use crate::{
@@ -78,17 +78,27 @@ pub fn CharacterPortrait(
     });
 
     let data_context: DataContext = expect_context();
+    let image_uri = data_context
+        .cosmetics_specs
+        .read_untracked()
+        .get(&image_uri)
+        .and_then(|cosmetic| match cosmetic {
+            shared::data::cosmetics::CosmeticType::Portrait(specs) => Some(specs.image.clone()),
+            _ => None,
+        })
+        .unwrap_or(image_uri);
 
     let statuses_map = Memo::new(move |_| {
         statuses.read().iter().fold(
-            HashMap::<StatusId, (usize, f64)>::new(),
+            HashMap::<StatusId, (usize, Damage)>::new(),
             |mut acc, (status_id, status_states)| {
                 let entry = acc.entry(status_id.clone()).or_default();
                 entry.0 += status_states.len();
                 entry.1 += status_states
                     .iter()
                     .map(|status_state| status_state.value.get())
-                    .sum::<f64>();
+                    .sum::<f64>()
+                    .into();
                 acc
             },
         )
@@ -290,7 +300,17 @@ pub fn CharacterPortrait(
                     // <div class="pointer-events-none absolute inset-0 z-1 bg-[radial-gradient(circle_at_50%_15%,rgba(255,241,210,0.04),transparent_34%),linear-gradient(180deg,transparent_68%,rgba(0,0,0,0.14))]"></div>
                     <img
                         draggable="false"
-                        src=img_asset(&image_uri)
+                        // TODO: Move to backend authority later
+                        src={
+                            let wolf_curse = "wolf_curse".to_string().into();
+                            move || {
+                                if statuses_map.read().contains_key(&wolf_curse) {
+                                    img_asset("adventurers/werewolf_male.webp")
+                                } else {
+                                    img_asset(&image_uri)
+                                }
+                            }
+                        }
                         alt=character_name
                         class=move || {
                             format!(
@@ -554,7 +574,7 @@ fn has_damage_status(
 fn StatusIcon(
     status_id: StatusId,
     status_specs: Option<StatusSpecs>,
-    stack: Signal<(usize, f64)>,
+    stack: Signal<(usize, Damage)>,
     tooltip_position: StaticTooltipPosition,
     character_triggers: Option<Memo<HashMap<String, TriggerEffect>>>,
 ) -> impl IntoView {
@@ -590,6 +610,7 @@ fn StatusIcon(
                     view! {
                         <div class="max-w-xl text-center list-none">
                             {format_status_effects(
+                                &status_id,
                                 status_specs,
                                 &value,
                                 None,
@@ -598,6 +619,7 @@ fn StatusIcon(
                                 character_triggers
                                     .map(|character_triggers| character_triggers.read())
                                     .as_deref(),
+                                None,
                             )}
                         </div>
                     }
@@ -627,11 +649,10 @@ fn StatusIcon(
     }
 }
 
-fn status_value_range(value: f64) -> ChanceRange<ModifiableValue<NonNegative>> {
-    let value: ModifiableValue<NonNegative> = NonNegative::new(value).into();
+fn status_value_range(value: Damage) -> ChanceRange<ModifiableValue<Damage>> {
     ChanceRange {
-        min: value,
-        max: value,
+        min: value.into(),
+        max: value.into(),
         lucky_chance: Default::default(),
     }
 }

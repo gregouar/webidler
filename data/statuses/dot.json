@@ -1,59 +1,41 @@
 {
-    "bleed": {
-        "name": "Bleed",
-        "adjective": "Bleeding",
-        "icon": "statuses/bleed.svg",
-        "debuff": true,
+    "bleed" : {
+        "name"       : "Bleed",
+        "adjective"  : "Bleeding",
+        "icon"       : "statuses/bleed.svg",
+        "debuff"     : true,
         "damage_type": "Physical",
-        "avoidable": true,
-        "duration": 4.0,
-        "max_stacks": 1,
-        "effects": [
-            {
-                "DamageOverTime": {
-                    "damage_type": "Physical"
-                },
-                "value": 100,
-                "modifier": "Percent"
-            }
+        "avoidable"  : true,
+        "duration"   : 40,
+        "max_stacks" : 1,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
         ]
     },
-    "burn": {
-        "name": "Burn",
-        "adjective": "Burning",
-        "icon": "statuses/burning.svg",
-        "debuff": true,
+    "burn"  : {
+        "name"       : "Burn",
+        "adjective"  : "Burning",
+        "icon"       : "statuses/burning.svg",
+        "debuff"     : true,
         "damage_type": "Fire",
-        "avoidable": true,
-        "duration": 2.0,
-        "max_stacks": 10,
-        "effects": [
-            {
-                "DamageOverTime": {
-                    "damage_type": "Fire"
-                },
-                "value": 100,
-                "modifier": "Percent"
-            }
+        "avoidable"  : true,
+        "duration"   : 20,
+        "max_stacks" : 10,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Fire"}, "value": 100, "modifier": "Percent" }
         ]
     },
     "poison": {
-        "name": "Poison",
-        "adjective": "Poisoned",
-        "icon": "statuses/poison.svg",
-        "debuff": true,
+        "name"       : "Poison",
+        "adjective"  : "Poisoned",
+        "icon"       : "statuses/poison.svg",
+        "debuff"     : true,
         "damage_type": "Poison",
-        "avoidable": true,
-        "duration": 3.0,
-        "max_stacks": 1,
-        "effects": [
-            {
-                "DamageOverTime": {
-                    "damage_type": "Poison"
-                },
-                "value": 100,
-                "modifier": "Percent"
-            }
+        "avoidable"  : true,
+        "duration"   : 30,
+        "max_stacks" : 1,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
         ]
     }
 }

@@ -1,37 +1,24 @@
 {
-  "name": "Cloud Elemental",
+  "name"    : "Cloud Elemental",
   "portrait": "monsters/peaks/cloud.webp",
   "max_life": 5,
-  "armor": { "Storm": 100 },
-  "evade": {
-    "Physical": 20,
-    "Fire": 20,
-    "Storm": 20,
-    "Poison": 20
-  },
-  "skills": [
+  "armor"   : {"Storm": 100},
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
     {
-      "name": "Blizzard",
-      "icon": "skills/chain_lightning.svg",
+      "name"      : "Blizzard",
+      "icon"      : "skills/chain_lightning.svg",
       "skill_type": "Spell",
-      "cooldown": 2.0,
-      "targets": [
+      "cooldown"  : 20,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 15 ]
-                }
+                "damage": { "Storm": [0, 15] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "chill",
-                "duration": 3,
-                "value": 10
-              }
-            }
+            { "ApplyStatus": {"status_id": "chill", "duration": 30, "value": 10} }
           ]
         }
       ]

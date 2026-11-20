@@ -198,8 +198,9 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         });
     });
     let upgrade = Memo::new(move |_| computations::stash_upgrade(&stash.get().get()));
-    let upgrade_disabled =
-        Signal::derive(move || busy.get() || upgrade.get().1 > town.character.read().resource_gold);
+    let upgrade_disabled = Signal::derive(move || {
+        busy.get() || upgrade.get().1.get() > town.character.read().resource_gold.get()
+    });
     let do_upgrade = move |_| {
         if upgrade_disabled.get_untracked() {
             return;
@@ -304,7 +305,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             <span class="flex items-center gap-1">
                                 {move || {
                                     if stash_capacity.get() == 0 { "Buy" } else { "Upgrade" }
-                                }} " ("{move || format_number(upgrade.get().1).to_string()}
+                                }} " ("{move || format_number(upgrade.get().1.get()).to_string()}
                                 <GoldIcon />")"
                             </span>
                         </MenuButton>
@@ -391,7 +392,8 @@ fn Gems(stash: RwSignal<Stash>, busy: RwSignal<bool>) -> impl IntoView {
             let stash_id = stash.read_untracked().stash_id;
             if let Some(amount) = amount.get() {
                 let amount = amount.unwrap_or(
-                    ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default(),
+                    ItemPrice::try_new(stash.read_untracked().resource_gems.get())
+                        .unwrap_or_default(),
                 );
                 busy.set(true);
                 spawn_local({
@@ -431,7 +433,7 @@ fn Gems(stash: RwSignal<Stash>, busy: RwSignal<bool>) -> impl IntoView {
             let stash_id = stash.read_untracked().stash_id;
             if let Some(amount) = amount.get() {
                 let amount = amount.unwrap_or(
-                    ItemPrice::try_new(town_context.character.read_untracked().resource_gems)
+                    ItemPrice::try_new(town_context.character.read_untracked().resource_gems.get())
                         .unwrap_or_default(),
                 );
                 busy.set(true);
@@ -466,13 +468,14 @@ fn Gems(stash: RwSignal<Stash>, busy: RwSignal<bool>) -> impl IntoView {
         }
     };
 
-    let disable_take =
-        Signal::derive(move || busy.get() || value.get() == 0.0 || stash.read().max_items == 0);
+    let disable_take = Signal::derive(move || {
+        busy.get() || value.get().get() == 0.0 || stash.read().max_items == 0
+    });
     let disable_store = Signal::derive(move || busy.get() || stash.read().max_items == 0);
 
     view! {
         <div class="flex min-w-0 items-center gap-2">
-            <GemsCounter value w_full=true />
+            <GemsCounter value=move || value.get().get() w_full=true />
             <MenuButton on:click=do_store disabled=disable_store>
                 "Store"
             </MenuButton>

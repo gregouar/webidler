@@ -1,26 +1,21 @@
 {
-  "name": "Lava Beetle",
+  "name"    : "Lava Beetle",
   "portrait": "monsters/peaks/beetle_lava.webp",
   "max_life": 5,
-  "armor": { "Fire": 50 },
-  "block": {
-    "Attack": 30,
-    "Spell": 20
-  },
-  "skills": [
+  "armor"   : {"Fire": 50},
+  "block"   : {"Attack": 30, "Spell": 20},
+  "skills"  : [
     {
-      "name": "Scratch",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Scratch",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 6 ]
-                }
+                "damage": { "Physical": [2, 6] }
               }
             }
           ]
@@ -28,26 +23,19 @@
       ]
     },
     {
-      "name": "Lavastick",
-      "icon": "skills/fireball.svg",
-      "cooldown": 10.0,
+      "name"      : "Lavastick",
+      "icon"      : "skills/fireball.svg",
+      "cooldown"  : 100,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Fire": [ 10, 20 ]
-                }
+                "damage": { "Fire": [10, 20] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "value": 3
-              }
-            }
+            { "ApplyStatus": {"status_id": "burn", "value": 3} }
           ]
         }
       ]

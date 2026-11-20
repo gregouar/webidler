@@ -1,0 +1,26 @@
+{
+  "name"    : "Deep One",
+  "portrait": "monsters/mythos/deep_one_warrior.webp",
+  "max_life": 10,
+  "armor"   : {"Physical": 100, "Poison": 50},
+  "skills"  : [
+    {
+      "name"      : "Slam",
+      "icon"      : "skills/trident.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 6] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 20} }
+          ]
+        }
+      ]
+    }
+  ]
+}

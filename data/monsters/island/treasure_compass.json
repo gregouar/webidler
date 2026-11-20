@@ -1,48 +1,36 @@
 {
-  "name": "Compass of Ruin",
-  "portrait": "monsters/island/treasure_compass.webp",
-  "rarity": "Boss",
-  "max_life": 150,
-  "armor": { "Fire": 50, "Storm": 50 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Compass of Ruin",
+  "portrait"          : "monsters/island/treasure_compass.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 150,
+  "armor"             : {"Fire": 50, "Storm": 50},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Spread the Curse",
-      "icon": "skills/pirate_grave.svg",
-      "cooldown": 5.0,
+      "name"      : "Spread the Curse",
+      "icon"      : "skills/pirate_grave.svg",
+      "cooldown"  : 50,
       "skill_type": "Curse",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "pirate_curse",
-                "value": 30.0
-              }
-            }
+            { "ApplyStatus": {"status_id": "pirate_curse", "value": 30.0} }
           ]
         }
       ]
     },
     {
-      "name": "Electrostatic Discharge",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name"      : "Electrostatic Discharge",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 20,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 1 ]
-                }
+                "damage": { "Storm": [0, 1] }
               }
             }
           ]

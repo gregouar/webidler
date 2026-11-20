@@ -1,42 +1,31 @@
 {
-  "name": "Pine Trickster",
+  "name"    : "Pine Trickster",
   "portrait": "monsters/peaks/pine_trickster.webp",
   "max_life": 7,
-  "armor": { "Poison": 50 },
-  "skills": [
+  "armor"   : {"Poison": 50},
+  "skills"  : [
     {
-      "name": "Touchy Touchy",
-      "icon": "skills/poison_coating.svg",
+      "name"      : "Touchy Touchy",
+      "icon"      : "skills/poison_coating.svg",
       "skill_type": "Spell",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 3,
-                "escalation": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 3, "escalation": 20} }
           ]
         }
       ]
     },
     {
-      "name": "Dirty Trick",
-      "icon": "skills/curse_putridity.svg",
+      "name"      : "Dirty Trick",
+      "icon"      : "skills/curse_putridity.svg",
       "skill_type": "Curse",
-      "cooldown": 5.0,
-      "targets": [
+      "cooldown"  : 50,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "vulnerability_poison",
-                "value": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "vulnerability_poison", "value": 50} }
           ]
         }
       ]

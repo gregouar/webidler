@@ -10,13 +10,14 @@ use crate::{
         character_status::StatusId,
         conditional_modifier::{Condition, ConditionalModifier},
         item::{ItemCategory, ItemSpecs},
+        item_affix::AffixEffectScope,
         modifier::ModifiableValue,
         stat_effect::{
-            Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter, StatStatusFilter,
-            StatType,
+            DamageTypeMap, Matchable, MinMax, StatConverterSource, StatEffect, StatSkillFilter,
+            StatStatusFilter, StatType,
         },
         trigger::{TriggerEffect, TriggerSpecs},
-        values::{Cooldown, NonNegative, Percent},
+        values::{Cooldown, Damage, Finite, NonNegative, Percent},
     },
     serde_utils::default_1f64,
 };
@@ -41,7 +42,7 @@ pub struct BaseSkillSpecs {
     pub required_item: Option<SkillRequiredItem>,
 
     #[serde(default)]
-    pub upgrade_cost: f64,
+    pub upgrade_cost: NonNegative,
     #[serde(default)]
     pub upgrade_effects: Vec<SkillUpgradeEffect>,
 
@@ -67,6 +68,8 @@ pub struct BaseSkillSpecs {
 pub struct SkillUpgradeEffect {
     #[serde(flatten)]
     pub stat_effect: StatEffect,
+    #[serde(default)]
+    pub scope: AffixEffectScope,
     #[serde(default)]
     pub description: Option<String>,
     #[serde(default)]
@@ -133,20 +136,19 @@ pub struct SkillRequiredItem {
 impl SkillRequiredItem {
     pub fn is_match(&self, item_slot: ItemSlot, item_specs: &ItemSpecs) -> bool {
         self.slot
-            .map(|slot| slot == item_slot || item_specs.base.extra_slots.contains(&slot))
+            .map(|slot| slot == item_slot || item_specs.extra_slots.contains(&slot))
             .unwrap_or(true)
             && self
                 .category
-                .map(|category| item_specs.base.categories.contains(&category))
+                .map(|category| item_specs.categories.contains(&category))
                 .unwrap_or(true)
     }
 }
-
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ModifierEffect {
     pub effects: Vec<StatEffect>,
     pub source: ModifierEffectSource,
-    pub factor: f64,
+    pub factor: Finite,
     #[serde(default)]
     pub hidden: bool,
 }
@@ -244,6 +246,9 @@ pub struct SkillEffect {
 
     #[serde(default)]
     pub description: Option<String>,
+
+    #[serde(default)]
+    pub as_skill_type: Option<SkillType>,
 }
 
 #[allow(clippy::large_enum_variant)]
@@ -252,27 +257,29 @@ pub enum SkillEffectType {
     WeaponEffect {
         item_slot: ItemSlot,
         #[serde(default)]
-        factor: ModifiableValue<f64>,
+        factor: ModifiableValue<NonNegative>,
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
     FlatDamage {
         damage: DamageMap,
         #[serde(default)]
-        damage_factors: HashMap<DamageType, f64>, // For tooltip purposes
+        damage_factors: DamageTypeMap<f64>, // For tooltip purposes
         #[serde(default)]
         crit_chance: Chance,
         #[serde(default)]
-        crit_damage: ModifiableValue<f64>,
+        crit_damage: ModifiableValue<Damage>,
         #[serde(default)]
         unblockable: bool,
         #[serde(default)]
         armor_penetration: Percent,
+        #[serde(default, skip_serializing_if = "Option::is_none")]
+        item_slot: Option<ItemSlot>,
     },
     ApplyStatus {
         status_id: StatusId,
 
-        value: ChanceRange<ModifiableValue<NonNegative>>,
+        value: ChanceRange<ModifiableValue<Damage>>,
         #[serde(default = "default_1f64")]
         value_factor: f64, // For tooltip purposes
 
@@ -299,12 +306,12 @@ pub enum SkillEffectType {
     RefreshStatus {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<ModifiableValue<Finite>>,
         modifier: RestoreModifier,
     },
     Restore {
         restore_type: RestoreType,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<ModifiableValue<NonNegative>>,
         modifier: RestoreModifier,
     },
     Resurrect,
@@ -312,7 +319,7 @@ pub enum SkillEffectType {
     RefreshCooldown {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
-        value: ChanceRange<ModifiableValue<f64>>,
+        value: ChanceRange<ModifiableValue<Finite>>,
         modifier: RestoreModifier,
     },
 }

@@ -8,7 +8,7 @@
     {
       "name"      : "Nasty Bite",
       "icon"      : "skills/insect_jaws.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {

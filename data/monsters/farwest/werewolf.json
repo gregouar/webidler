@@ -1,0 +1,49 @@
+{
+  "name"      : "Werewolf",
+  "portrait"  : "monsters/farwest/werewolf.webp",
+  "life_regen": 30,
+  "max_life"  : 10,
+  "armor"     : {"Fire": 100},
+  "skills"    : [
+    {
+      "name"      : "Lacerate",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 20,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [3, 6] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "bleed", "max_stacks": 5, "value": [2, 4] }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Lacerate",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 20,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [3, 6] }
+              }
+            },
+            {
+              "ApplyStatus": { "status_id": "bleed", "max_stacks": 5, "value": [2, 4] }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

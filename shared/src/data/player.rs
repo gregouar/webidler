@@ -1,6 +1,5 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
@@ -14,7 +13,7 @@ use crate::data::{
 };
 
 pub use super::character::{CharacterSpecs, CharacterState};
-use super::item::{ItemSlot, ItemSpecs};
+use super::item::{ItemSlot, ItemSlotSet, ItemSpecs};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerBaseSpecs {
@@ -22,15 +21,13 @@ pub struct PlayerBaseSpecs {
     pub character_attrs: CharacterAttrs,
     pub effects: Vec<StatEffect>,
 
-    // Kept for backwards-compatible game-instance deserialization. Skills no longer cost gold.
-    // TODO: Remove in later game data version
-    pub buy_skill_cost: f64,
     pub max_skills: u8,
-    pub skills: IndexMap<String, PlayerBaseSkill>,
+    pub skills: HashMap<String, PlayerBaseSkill>,
+    pub skills_in_use: Vec<String>,
     pub skill_masteries: PlayerSkillMasteries,
 
     pub level: u8,
-    pub experience_needed: f64,
+    pub experience_needed: NonNegative,
     pub max_level: u8,
 
     pub movement_cooldown: AtLeastOne,
@@ -44,6 +41,8 @@ pub struct PlayerBaseSpecs {
 pub struct PlayerSpecs {
     pub character_specs: CharacterSpecs,
 
+    pub max_level: u8,
+
     pub movement_cooldown: AtLeastOne,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,
@@ -55,7 +54,7 @@ pub struct PlayerBaseSkill {
     pub item_slot: Option<ItemSlot>,
 
     pub upgrade_level: u16,
-    pub next_upgrade_cost: f64,
+    pub next_upgrade_cost: NonNegative,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -65,16 +64,16 @@ pub struct PlayerState {
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct PlayerResources {
-    pub experience: f64,
+    pub experience: NonNegative,
     pub passive_points: u16,
 
-    pub gold: f64,
-    pub gems: f64,
-    pub shards: f64,
+    pub gold: NonNegative,
+    pub gems: NonNegative,
+    pub shards: NonNegative,
 
-    pub gold_total: f64,
+    pub gold_total: NonNegative,
 
-    pub skill_masteries_experience: HashMap<String, f64>,
+    pub skill_masteries_experience: HashMap<String, NonNegative>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -92,7 +91,7 @@ pub struct PlayerInventory {
 
     // TODO: Have proper migration and have sheathed as part of EquippedSlot
     #[serde(default)]
-    pub sheathed: HashSet<ItemSlot>,
+    pub sheathed: ItemSlotSet,
 }
 
 impl PlayerInventory {
@@ -146,31 +145,5 @@ impl PlayerInventory {
                 })
                 .map(|(_, item_specs)| item_specs.as_mut()),
         )
-    }
-
-    pub fn nth(&self, index: usize) -> Option<&ItemSpecs> {
-        if index < 9 {
-            self.equipped
-                .get(&index.try_into().ok()?)
-                .and_then(|equipped_item| match equipped_item {
-                    EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_ref()),
-                    _ => None,
-                })
-        } else {
-            self.bag.get(index.saturating_sub(9))
-        }
-    }
-
-    pub fn nth_mut(&mut self, index: usize) -> Option<&mut ItemSpecs> {
-        if index < 9 {
-            self.equipped
-                .get_mut(&index.try_into().ok()?)
-                .and_then(|equipped_item| match equipped_item {
-                    EquippedSlot::MainSlot(item_specs) => Some(item_specs.as_mut()),
-                    _ => None,
-                })
-        } else {
-            self.bag.get_mut(index.saturating_sub(9))
-        }
     }
 }

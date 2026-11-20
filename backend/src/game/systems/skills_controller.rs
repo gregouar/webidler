@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 use rand::{self, seq::IteratorRandom};
 
@@ -14,6 +14,7 @@ use shared::{
             RepeatedSkillEffect, RestoreType, SkillEffect, SkillEffectType, SkillRepeatTarget,
             SkillTargetsGroup, SkillType, TargetType,
         },
+        stat_effect::DamageTypeMap,
         values::NonNegative,
     },
 };
@@ -526,6 +527,8 @@ fn apply_skill_effect_on_target(
         return false;
     }
 
+    let skill_type = skill_effect.as_skill_type.unwrap_or(skill_type);
+
     match &skill_effect.effect_type {
         SkillEffectType::WeaponEffect { .. } => {
             // Should already have been converted
@@ -538,28 +541,22 @@ fn apply_skill_effect_on_target(
             unblockable,
             armor_penetration,
             damage_factors: _,
+            item_slot,
         } => {
             let crit_marble_bag = attacker_marble_bags
                 .entry(MarbleRollType::CritChance)
                 .or_default();
             let is_crit = crit_chance.roll_with_marble_rolls(seed, crit_marble_bag);
 
-            let damage: HashMap<_, _> = damage
+            let damage: DamageTypeMap<_> = damage
                 .iter()
                 .map(|(damage_type, value)| {
                     let damage_marble_bag = attacker_marble_bags
-                        .entry(MarbleRollType::Damage {
-                            damage_type: *damage_type,
-                        })
+                        .entry(MarbleRollType::Damage { damage_type })
                         .or_default();
                     (
-                        *damage_type,
-                        (*value).roll_with_marble_rolls(seed, damage_marble_bag)
-                            * (if is_crit {
-                                1.0 + **crit_damage * 0.01
-                            } else {
-                                1.0
-                            }),
+                        damage_type,
+                        (*value).roll_with_marble_rolls(seed, damage_marble_bag),
                     )
                 })
                 .collect();
@@ -575,6 +572,7 @@ fn apply_skill_effect_on_target(
                 *unblockable,
                 *armor_penetration,
                 skill_id,
+                item_slot,
                 trigger_depth,
             )
         }
@@ -621,7 +619,7 @@ fn apply_skill_effect_on_target(
             statuses_store,
             target,
             status_filter,
-            value.roll_with_seed(seed),
+            *value.roll_with_seed(seed),
             modifier,
         ),
         SkillEffectType::Restore {
@@ -648,7 +646,7 @@ fn apply_skill_effect_on_target(
         } => characters_controller::refresh_skills_cooldown(
             target,
             skill_filter,
-            value.roll_with_seed(seed),
+            *value.roll_with_seed(seed),
             modifier,
         ),
     }
@@ -684,7 +682,6 @@ fn repeat_skill<'a>(
     friends: &mut [Target<'a>],
     enemies: &mut [Target<'a>],
 ) -> bool {
-    // TODO: Check cooldown
     if repeated_skill_effect
         .targets_group
         .repeat
@@ -723,7 +720,7 @@ pub fn level_up_skill(
     player_base_skill: &mut PlayerBaseSkill,
     player_resources: &mut PlayerResources,
 ) {
-    if player_resources.gold < player_base_skill.next_upgrade_cost
+    if player_resources.gold.get() < player_base_skill.next_upgrade_cost.get()
         || player_base_skill.upgrade_level >= MAX_SKILL_LEVEL
     {
         return;

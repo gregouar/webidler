@@ -8,14 +8,14 @@
     {
       "name"      : "Anubis' Cremation",
       "icon"      : "skills/burning_ray.svg",
-      "cooldown"  : 1.0,
+      "cooldown"  : 10,
       "skill_type": "Spell",
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
-              "ApplyStatus": { "status_id": "burn", "value": [3, 6], "duration": 4 }
+              "ApplyStatus": { "status_id": "burn", "value": [3, 6], "duration": 40 }
             }
           ]
         }

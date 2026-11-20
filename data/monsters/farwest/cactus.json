@@ -1,0 +1,49 @@
+{
+  "name"    : "Dancing Cactus",
+  "portrait": "monsters/farwest/cactus.webp",
+  "max_life": 5,
+  "armor"   : {"Poison": 50},
+  "skills"  : [
+    {
+      "name"      : "Ouch!",
+      "icon"      : "skills/thorn.svg",
+      "cooldown"  : 30,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [1, 2] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "bleed",  "value": 3} },
+            { "ApplyStatus": {"status_id": "poison", "value": 3} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Don't Touch It",
+      "icon"      : "skills/cactus.svg",
+      "cooldown"  : 0,
+      "skill_type": "Attack",
+      "targets"   : [],
+      "triggers"  : [
+        {
+          "trigger_id": "cactus",
+          "OnTakeHit" : {"is_hurt": true},
+          "target"    : "Source",
+          "skill_type": "Attack",
+          "effects"   : [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,7 +3,7 @@
         "name"      : "Blessing of Haste",
         "icon"      : "skills/haste.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -30,7 +30,7 @@
         "name"      : "Blessing of Precision",
         "icon"      : "skills/blessing_crit.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -44,7 +44,7 @@
             },
             {
                 "replace_on_value_only": true,
-                "StatModifier"         : { "stat": {"CritDamage": {}}, "modifier": "Increased" },
+                "StatModifier"         : { "stat": {"CritDamage": {}}, "modifier": "More" },
                 "value"                : 100,
                 "modifier"             : "Percent"
             }
@@ -54,7 +54,7 @@
         "name"      : "Blessing of Fortification",
         "icon"      : "skills/blessing_protection.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -75,7 +75,7 @@
         "name"      : "Blessing of Renewal",
         "icon"      : "skills/blessing_renewal.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -90,7 +90,7 @@
         "name"      : "Blessing of Greed",
         "icon"      : "skills/blessing_gold.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -105,7 +105,7 @@
         "name"      : "Fortune Favors the Swift",
         "icon"      : "skills/gold_shell.svg",
         "debuff"    : false,
-        "duration"  : 4,
+        "duration"  : 40,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -121,7 +121,7 @@
         "adjective" : "Enlightened",
         "icon"      : "statuses/enlightenment.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {

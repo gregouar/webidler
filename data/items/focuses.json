@@ -10,15 +10,15 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 20.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -39,15 +39,15 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 30.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -68,15 +68,15 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 40.0,
-        "ignore_quality": false
+        "is_unique": false
       },
-      {
+      "unique_1": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -92,9 +92,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "StatusPower": {
             "status_id": null,
@@ -111,9 +111,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": "ManaRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -121,9 +121,9 @@
           3.0,
           5.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Armor": "Poison"
         },
@@ -133,9 +133,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -155,7 +155,6 @@
         "trigger_id": "vile_codex",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -268,15 +267,15 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 40.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -297,15 +296,15 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 40.0,
-        "ignore_quality": false
+        "is_unique": false
       },
-      {
+      "unique_1": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -321,9 +320,9 @@
           80.0,
           120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "CritChance": {
             "skill_type": "Spell",
@@ -336,9 +335,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "CritDamage": {
             "skill_type": "Spell",
@@ -351,9 +350,9 @@
           50.0,
           100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "Armor": "Fire"
         },
@@ -363,9 +362,9 @@
           100.0,
           140.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "SkillTargetModifier": {
             "skill_type": null,
@@ -382,9 +381,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 1.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -474,15 +473,15 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -503,15 +502,15 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": false
+        "is_unique": false
       },
-      {
+      "unique_1": {
         "stat": {
           "Armor": "Poison"
         },
@@ -521,9 +520,9 @@
           100.0,
           150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -539,9 +538,9 @@
           120.0,
           160.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatusDuration": {
             "status_id": null,
@@ -557,9 +556,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "StatusEscalation": {
             "status_id": "bleed",
@@ -572,9 +571,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 50.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -585,7 +584,8 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": "Physical",
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
@@ -606,10 +606,10 @@
             "factor": 0.5,
             "source": {
               "HitDamage": "Physical"
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
         "skill_range": "Melee",
@@ -731,15 +731,15 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 60.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -760,15 +760,15 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 60.0,
-        "ignore_quality": false
+        "is_unique": false
       },
-      {
+      "unique_1": {
         "stat": "Mana",
         "modifier": "Increased",
         "scope": "Global",
@@ -776,9 +776,9 @@
           12.0,
           16.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": "ManaRegen",
         "modifier": "Flat",
         "scope": "Global",
@@ -786,9 +786,9 @@
           8.0,
           12.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "StatusDuration": {
             "status_id": null,
@@ -804,9 +804,9 @@
           40.0,
           60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "StatConditionalModifier": {
             "stat": {
@@ -827,9 +827,9 @@
         "modifier": "More",
         "scope": "Global",
         "value": 400.0,
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "StatConditionalModifier": {
             "stat": {
@@ -853,9 +853,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": -10000.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -865,13 +865,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "treasure_idol",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -908,15 +908,6 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -924,6 +915,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -1010,15 +1010,15 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 70.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1039,15 +1039,15 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 70.0,
-        "ignore_quality": false
+        "is_unique": false
       },
-      {
+      "unique_1": {
         "stat": {
           "Damage": {
             "skill_type": null,
@@ -1063,9 +1063,9 @@
           100.0,
           200.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_2": {
         "stat": {
           "Damage": {
             "skill_type": "Spell",
@@ -1081,9 +1081,9 @@
           200.0,
           240.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_3": {
         "stat": {
           "CritChance": {
             "skill_type": null,
@@ -1096,9 +1096,9 @@
           60.0,
           80.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_4": {
         "stat": {
           "CritDamage": {
             "skill_type": null,
@@ -1111,9 +1111,9 @@
           50.0,
           100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
+      "unique_5": {
         "stat": {
           "Lucky": {
             "skill_type": null,
@@ -1128,9 +1128,9 @@
         "modifier": "Flat",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1197,15 +1197,15 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 80.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1226,15 +1226,15 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 90.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1255,15 +1255,15 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 100.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1284,15 +1284,15 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [
-      {
+    "affixes": {
+      "base_mana": {
         "stat": "Mana",
         "modifier": "Flat",
         "scope": "Global",
         "value": 120.0,
-        "ignore_quality": false
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,

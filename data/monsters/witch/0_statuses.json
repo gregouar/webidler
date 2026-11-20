@@ -4,7 +4,7 @@
         "icon"       : "statuses/spider.svg",
         "debuff"     : true,
         "damage_type": "Physical",
-        "duration"   : 2,
+        "duration"   : 20,
         "max_stacks" : 10,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
@@ -14,7 +14,7 @@
         "name"      : "Witch's Curse",
         "icon"      : "skills/pointy_hat.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -28,7 +28,7 @@
         "name"      : "Child's Play",
         "icon"      : "skills/carousel.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             { "StatModifier": {"stat": "ManaRegen", "debuff": true}, "value": 100, "modifier": "Percent" }

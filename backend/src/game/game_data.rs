@@ -1,8 +1,10 @@
 use anyhow::Result;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
+    achievements::AchievementCounter,
     area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
     character::CharacterId,
     game_stats::GameStats,
@@ -19,14 +21,39 @@ use shared::data::{
     skill::SkillSpecs,
 };
 
-use crate::game::{
-    data::{DataInit, area::AreaBlueprint, master_store},
-    systems::{
-        area_controller, passives_controller, player_controller::PlayerController, player_updater,
-        skills_updater,
+use crate::{
+    db::characters::CharacterAreaEntry,
+    game::{
+        data::{DataInit, area::AreaBlueprint, master_store},
+        systems::{
+            area_controller, passives_controller, player_controller::PlayerController,
+            player_updater, skills_updater,
+        },
+        utils::LazySyncer,
     },
-    utils::LazySyncer,
 };
+
+#[derive(Debug, Clone, Copy, Default)]
+pub struct MonsterSpecsPatchMask(u8);
+
+impl MonsterSpecsPatchMask {
+    pub fn is_empty(&self) -> bool {
+        self.0 == 0
+    }
+
+    pub fn insert(&mut self, index: usize) {
+        assert!(
+            index < u8::BITS as usize,
+            "monster index exceeds patch mask capacity"
+        );
+        self.0 |= 1 << index;
+    }
+
+    pub fn take_indices(&mut self) -> impl Iterator<Item = u8> {
+        let bits = std::mem::take(&mut self.0);
+        (0..u8::BITS as u8).filter(move |index| bits & (1 << index) != 0)
+    }
+}
 
 #[derive(Debug, Clone)]
 pub struct GameInstanceData {
@@ -57,7 +84,8 @@ pub struct GameInstanceData {
     // TODO: Need to find better more granular way to handle these things...
     // Probably need to split more between static and computed specs
     pub monster_base_specs: LazySyncer<Vec<MonsterSpecs>>,
-    pub monster_specs: Vec<MonsterSpecs>, // Only use internally, not shared
+    pub monster_specs: Vec<MonsterSpecs>, // Only use internally, except for MonsterSpecsPatch
+    pub monster_specs_to_patch: MonsterSpecsPatchMask,
     pub monster_states: Vec<MonsterState>,
     pub monster_wave_delay: Duration,
 
@@ -66,11 +94,16 @@ pub struct GameInstanceData {
     pub queued_loot: LazySyncer<Vec<QueuedLoot>>,
 
     pub game_stats: GameStats,
+    pub old_areas_statistics: Vec<CharacterAreaEntry>,
+    pub achievements_counters: HashMap<AchievementCounter, u64>,
+    pub achievements: HashMap<String, DateTime<Utc>>,
 
     pub end_grind: bool, // Initiate end, generate rewards
     pub grind_rewards: LazySyncer<Option<GrindRewards>>,
     pub terminate_grind: bool, // Actually close the grind
     pub quest_completed: bool, // Was the quest already completed in a PREVIOUS grind
+
+    pub tick_number: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -94,9 +127,8 @@ pub struct SavedGameData {
     max_area_level: AreaLevel,
     player_stamina: Duration,
 
-    // TODO: Rename to grind
-    end_quest: bool,
-    quest_rewards: Option<GrindRewards>,
+    end_grind: bool,
+    grind_rewards: Option<GrindRewards>,
     #[serde(default)]
     quest_completed: bool,
 }
@@ -126,6 +158,9 @@ impl GameInstanceData {
         player_inventory: PlayerInventory,
         mut player_stamina: Duration,
         player_controller: PlayerController,
+        old_areas_statistics: Vec<CharacterAreaEntry>,
+        achievements_counters: HashMap<AchievementCounter, u64>,
+        achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
             .area_blueprints_store
@@ -134,6 +169,7 @@ impl GameInstanceData {
             .ok_or_else(|| anyhow::anyhow!("couldn't load area: {}", area_id))?;
 
         let area_specs = area_controller::init_area_specs(
+            &master_store.items_store,
             &master_store.loot_tables_store,
             &mut area_blueprint,
             &map_item,
@@ -142,7 +178,7 @@ impl GameInstanceData {
         if area_specs.hidden
             && !map_item
                 .as_ref()
-                .and_then(|map_item| map_item.base.map_specs.as_ref())
+                .and_then(|map_item| map_item.map_specs.as_ref())
                 .and_then(|map_specs| map_specs.replace_area_id.as_ref())
                 .map(|replace_area_id| replace_area_id == &area_id)
                 .unwrap_or_default()
@@ -151,8 +187,8 @@ impl GameInstanceData {
         }
 
         if area_specs.training {
-            player_resources.experience = 1e70;
-            player_resources.gold = 1e160;
+            player_resources.experience = 1e70.into();
+            player_resources.gold = 1e160.into();
             player_stamina = Duration::from_hours(24);
         }
 
@@ -166,6 +202,7 @@ impl GameInstanceData {
             .cloned()
             .ok_or_else(|| anyhow::anyhow!("couldn't load passives tree: {}", passives_tree_id))?;
         passives_controller::compute_passives_tree_specs(
+            &master_store.items_store,
             &mut passives_tree_specs,
             &passives_tree_state.ascension,
         );
@@ -187,10 +224,10 @@ impl GameInstanceData {
         let player_state = PlayerState::init(&player_specs);
         // Two step init to have max life etc
         let player_specs = player_updater::update_player_specs(
+            &master_store.items_store,
             &master_store.skill_masteries_store,
             &master_store.statuses_store,
             &player_base_specs,
-            // &player_specs,
             &player_state,
             &player_inventory,
             &passives_tree_specs,
@@ -227,9 +264,10 @@ impl GameInstanceData {
             player_respawn_delay: Default::default(),
             player_stamina,
 
-            monster_base_specs: LazySyncer::new(Vec::new()),
-            monster_specs: Vec::new(),
-            monster_states: Vec::new(),
+            monster_base_specs: LazySyncer::new(Vec::with_capacity(6)),
+            monster_specs: Vec::with_capacity(6),
+            monster_specs_to_patch: MonsterSpecsPatchMask::default(),
+            monster_states: Vec::with_capacity(6),
             monster_wave_delay: Default::default(),
 
             wave_completed: false,
@@ -237,11 +275,16 @@ impl GameInstanceData {
             queued_loot: LazySyncer::new(Default::default()),
 
             game_stats: Default::default(),
+            old_areas_statistics,
+            achievements_counters,
+            achievements,
 
             end_grind: false,
             grind_rewards: LazySyncer::new(None),
             terminate_grind: false,
             quest_completed,
+
+            tick_number: 0,
         })
     }
 
@@ -265,13 +308,19 @@ impl GameInstanceData {
             game_stats: self.game_stats,
             last_champion_spawn: self.area_state.read().last_champion_spawn,
             auto_progress: self.area_state.read().auto_progress,
-            end_quest: self.end_grind,
-            quest_rewards: self.grind_rewards.read().clone(),
+            end_grind: self.end_grind,
+            grind_rewards: self.grind_rewards.read().clone(),
             quest_completed: self.quest_completed,
         })?)
     }
 
-    pub fn from_bytes(master_store: &master_store::MasterStore, bytes: &[u8]) -> Result<Self> {
+    pub fn from_bytes(
+        master_store: &master_store::MasterStore,
+        bytes: &[u8],
+        old_areas_statistics: Vec<CharacterAreaEntry>,
+        achievements_counters: HashMap<AchievementCounter, u64>,
+        achievements: HashMap<String, DateTime<Utc>>,
+    ) -> Result<Self> {
         let SavedGameData {
             realm_id,
             area_id,
@@ -291,8 +340,8 @@ impl GameInstanceData {
             game_stats,
             last_champion_spawn,
             auto_progress,
-            end_quest,
-            quest_rewards,
+            end_grind: end_quest,
+            grind_rewards: quest_rewards,
             quest_completed,
         } = rmp_serde::from_slice::<SavedGameData>(bytes)?;
 
@@ -311,6 +360,9 @@ impl GameInstanceData {
             player_inventory,
             player_stamina,
             player_controller,
+            old_areas_statistics,
+            achievements_counters,
+            achievements,
         )?;
 
         s.area_state.mutate().area_level = area_level;

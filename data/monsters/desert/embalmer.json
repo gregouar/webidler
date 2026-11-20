@@ -7,7 +7,7 @@
     {
       "name"      : "Knife Cut",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -25,7 +25,7 @@
       "name"      : "Prepare the Body",
       "icon"      : "skills/bandaged.svg",
       "skill_type": "Curse",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "targets"   : [
         {
           "effects": [

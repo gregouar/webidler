@@ -12,10 +12,10 @@
       "name"      : "Envious Stare",
       "icon"      : "skills/poison_cloud.svg",
       "skill_type": "Spell",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "poison", "value": 7, "escalation": 20} }
           ]
@@ -25,7 +25,7 @@
     {
       "name"      : "Loving Embrace",
       "icon"      : "skills/heal.svg",
-      "cooldown"  : 10.0,
+      "cooldown"  : 100,
       "skill_type": "Spell",
       "targets"   : [
         {

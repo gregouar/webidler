@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use crate::data::{
     character::CharacterId,
     conditional_modifier::Condition,
-    item::SkillShape,
+    item::{ItemSlot, SkillShape},
     modifier::Modifier,
     skill::{RestoreType, SkillRepeat, TargetType},
     stat_effect::StatStatusFilter,
@@ -96,6 +96,7 @@ pub enum EventTrigger {
     OnApplyStatus(StatusTrigger),
     OnReceiveStatus(StatusTrigger),
     OnRestored(RestoreTrigger),
+    OnTick(TickTrigger),
 }
 
 // TODO: replace by simple tag system?
@@ -116,7 +117,9 @@ pub struct HitTrigger {
     #[serde(default)]
     pub damage_type: Option<DamageType>,
     #[serde(default)]
-    pub skill_ids: Option<Vec<String>>,
+    pub skill_id: Option<String>,
+    #[serde(default)]
+    pub item_slot: Option<ItemSlot>,
     #[serde(default)]
     pub conditions: Vec<Condition>,
 }
@@ -131,6 +134,8 @@ pub struct StatusTrigger {
     pub is_triggered: Option<bool>,
     #[serde(default)]
     pub is_evaded: Option<bool>,
+    #[serde(default)]
+    pub is_max_stacks: Option<bool>,
     #[serde(default)]
     pub conditions: Vec<Condition>,
 }
@@ -150,14 +155,19 @@ pub struct RestoreTrigger {
     pub is_triggered: Option<bool>,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
+pub struct TickTrigger {
+    pub tick_interval: usize,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct TriggerEffect {
     pub trigger_id: String,
     pub target: TriggerTarget,
     #[serde(default)]
     pub modifiers: Vec<TriggerEffectModifier>,
-    #[serde(default)]
-    pub inherit_source_effects: bool,
+    // #[serde(default)]
+    // pub inherit_source_effects: bool,
     #[serde(default)]
     pub trigger_propagate: bool, // If true, will reset trigger depth
 
@@ -178,25 +188,33 @@ pub struct TriggerEffectModifier {
     pub modifier: Modifier,
     pub factor: f64,
     pub source: TriggerEffectModifierSource,
+    #[serde(default)]
+    pub hidden: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum TriggerEffectModifierSource {
     HitDamage(Option<DamageType>),
+    TriggeringStatusValue,
+    TriggeringStatusDuration,
+    TriggeringStatusStacks {
+        #[serde(default)]
+        ignore_initial: bool,
+    },
     AreaLevel,
-    StatusValue {
+    TargetStatusValue {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
-    StatusDuration {
+    TargetStatusDuration {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
     },
-    StatusStacks {
+    TargetStatusStacks {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
@@ -204,6 +222,10 @@ pub enum TriggerEffectModifierSource {
     },
     TriggerStatusDuration,
     TriggerStatusValue,
+    TriggerStatusStacks {
+        #[serde(default)]
+        ignore_initial: bool,
+    },
     HitCrit,
     HitCritDamage,
     RestoreValue,

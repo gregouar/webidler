@@ -3,7 +3,7 @@
         "name"      : "Entrancing Song",
         "icon"      : "skills/double_quaver.svg",
         "debuff"    : false,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 1,
         "effects"   : [
             {
@@ -19,7 +19,7 @@
         "name"      : "Lamenting Cry",
         "icon"      : "skills/curse_frailty.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -47,7 +47,7 @@
         "icon"      : "skills/broken_heart.svg",
         "debuff"    : false,
         "max_stacks": 2,
-        "duration"  : 1e200,
+        "duration"  : 1e300,
         "effects"   : [
             {
                 "StatModifier": { "stat": {"Damage": {}} },

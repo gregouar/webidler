@@ -8,7 +8,7 @@
     {
       "name"      : "Pinch",
       "icon"      : "skills/crab_claw.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {

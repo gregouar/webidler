@@ -7,7 +7,7 @@
       "name"      : "Hungry Bite",
       "icon"      : "skills/bite.svg",
       "skill_type": "Attack",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "targets"   : [
         {
           "effects": [
@@ -24,7 +24,7 @@
       "name"      : "Call of the Pack",
       "icon"      : "skills/wolf_howl.svg",
       "skill_type": "Blessing",
-      "cooldown"  : 8.0,
+      "cooldown"  : 80,
       "targets"   : [
         {
           "target_type": "Friend",

@@ -8,7 +8,7 @@
       "name"      : "Blessed Cucumber",
       "icon"      : "skills/pickle.svg",
       "skill_type": "Blessing",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "targets"   : [
         {
           "effects": [

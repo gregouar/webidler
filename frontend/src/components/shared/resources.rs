@@ -1,5 +1,7 @@
 use leptos::{html::*, prelude::*};
 
+use shared::data::values::NonNegative;
+
 use crate::{
     assets::img_asset,
     components::ui::{
@@ -8,9 +10,13 @@ use crate::{
     },
 };
 
-pub type ResourceReward = (u64, f64, f64);
+pub type ResourceReward = (u64, NonNegative, NonNegative);
 
-pub fn show_resource_reward(reward: RwSignal<ResourceReward>, gold: f64, gems: f64) {
+pub fn show_resource_reward(
+    reward: RwSignal<ResourceReward>,
+    gold: NonNegative,
+    gems: NonNegative,
+) {
     reward.update(|reward| {
         *reward = (reward.0.wrapping_add(1), gold, gems);
     });
@@ -20,13 +26,15 @@ pub fn show_resource_reward(reward: RwSignal<ResourceReward>, gold: f64, gems: f
 pub fn ResourceRewardOverlay(#[prop(into)] reward: Signal<ResourceReward>) -> impl IntoView {
     view! {
         <For each=move || vec![reward.get()] key=|reward| reward.0 let(reward)>
-            <Show when=move || { reward.1 > 0.0 }>
-                <div class="
-                reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
-                absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
-                flex items-center gap-1 font-number"
-                style="top: calc(50% - 1.5rem);">
-                    <span>+{format_number(reward.1)}</span>
+            <Show when=move || { reward.1.get() > 0.0 }>
+                <div
+                    class="
+                    reward-float gold-text text-amber-400 text-lg xl:text-2xl text-shadow-md
+                    absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    flex items-center gap-1 font-number"
+                    style="top: calc(50% - 1.5rem);"
+                >
+                    <span>+{format_number(reward.1.get())}</span>
                     <img
                         draggable="false"
                         src=img_asset("ui/gold.webp")
@@ -36,13 +44,15 @@ pub fn ResourceRewardOverlay(#[prop(into)] reward: Signal<ResourceReward>) -> im
                 </div>
             </Show>
 
-            <Show when=move || { reward.2 > 0.0 }>
-                <div class="
-                reward-float gems-text text-fuchsia-400 text-lg xl:text-2xl text-shadow-md
-                absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
-                flex items-center gap-1 font-number"
-                style="top: calc(50% + 1.5rem);">
-                    <span>+{format_number(reward.2)}</span>
+            <Show when=move || { reward.2.get() > 0.0 }>
+                <div
+                    class="
+                    reward-float gems-text text-fuchsia-400 text-lg xl:text-2xl text-shadow-md
+                    absolute left-1/2 transform -translate-y-1/2 -translate-x-1/2
+                    flex items-center gap-1 font-number"
+                    style="top: calc(50% + 1.5rem);"
+                >
+                    <span>+{format_number(reward.2.get())}</span>
                     <img
                         draggable="false"
                         src=img_asset("ui/gems.webp")
@@ -107,7 +117,7 @@ pub fn ResourceCounter(
                         if disabled.get() { "text-zinc-300" } else { text_color },
                     )
                 }>
-                    <Number value=value />
+                    <Number value />
                 </div>
             </NumberInset>
             <ResourceIcon
@@ -174,7 +184,7 @@ pub fn GemsIcon() -> impl IntoView {
 }
 #[component]
 pub fn GemsCounter(
-    value: Signal<f64>,
+    #[prop(into)] value: Signal<f64>,
     #[prop(default = false)] w_full: bool,
     #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
 ) -> impl IntoView {
@@ -206,7 +216,7 @@ pub fn ShardsIcon() -> impl IntoView {
 }
 #[component]
 pub fn ShardsCounter(
-    value: Signal<f64>,
+    #[prop(into)] value: Signal<f64>,
     #[prop(default = false)] w_full: bool,
     #[prop(default= Signal::derive(|| false))] disabled: Signal<bool>,
     #[prop(default = Signal::derive(|| None))] disabled_description: Signal<Option<String>>,

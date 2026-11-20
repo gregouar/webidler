@@ -17,14 +17,14 @@
   ],
   "bosses"     : [
     {
-      "level"   : 30,
+      "level"   : 50,
       "interval": 10,
       "spawns"  : [ {"monster": "witch_2.json", "quantity": 1} ]
     }
   ],
   "waves"      : [
     {
-      "min_level": 1,
+      "min_level":    1,
       "max_level": null,
       "weight"   : 1000,
       "spawns"   : [
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "min_level": 10,
+      "min_level":   10,
       "max_level": null,
       "weight"   : 1000,
       "spawns"   : [
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "min_level": 20,
+      "min_level":   20,
       "max_level": null,
       "weight"   : 1000,
       "spawns"   : [

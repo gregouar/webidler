@@ -6,6 +6,7 @@ use shared::data::{
     player::PlayerBaseSkill,
     skill::{BaseSkillSpecs, SkillSpecs, SkillType},
     skill_mastery::SkillMasteryState,
+    values::NonNegative,
 };
 
 use crate::{
@@ -61,7 +62,7 @@ pub fn SkillMasteryCard(
     #[prop(optional)] skill_specs: Option<SkillSpecs>,
     #[prop(optional)] skill_mastery_state: Option<SkillMasteryState>,
     #[prop(default = 0)] level_delta: u16,
-    #[prop(optional)] experience_gained: Option<f64>,
+    #[prop(optional)] experience_gained: Option<NonNegative>,
     #[prop(optional)] empty_label: Option<String>,
     #[prop(optional)] on_click: Option<Callback<()>>,
     #[prop(default = false)] compact: bool,
@@ -123,8 +124,7 @@ pub fn SkillMasteryCard(
         match (skill_mastery_state.as_ref(), experience_gained) {
             (Some(skill_mastery_state), Some(experience_gained)) => {
                 let mut previous_skill_mastery_state = skill_mastery_state.clone();
-                previous_skill_mastery_state.experience =
-                    (previous_skill_mastery_state.experience - experience_gained).max(0.0);
+                previous_skill_mastery_state.experience -= experience_gained;
 
                 mastery_progress(
                     previous_skill_mastery_state.relative_experience(max_level),
@@ -548,7 +548,7 @@ fn mastery_card_xp_tooltip(
     relative_experience: f64,
     next_level_cost: f64,
     is_max_level: bool,
-    experience_gained: Option<f64>,
+    experience_gained: Option<NonNegative>,
 ) -> AnyView {
     if is_max_level {
         view! { "Max Level" }.into_any()
@@ -560,7 +560,7 @@ fn mastery_card_xp_tooltip(
                 .map(|experience_gained| {
                     view! {
                         " (+"
-                        {format_number(experience_gained)}
+                        {format_number(experience_gained.get())}
                         ")"
                     }
                 })}

@@ -1,10 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-use shared::data::area::AreaLevel;
+use shared::data::{area::AreaLevel, item::BaseItemId};
 
 use crate::game::utils::json::LoadJsonFromFile;
-
-use super::items_store::ItemId;
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct LootTable {
@@ -14,7 +12,7 @@ pub struct LootTable {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct LootTableEntry {
-    pub item_id: ItemId,
+    pub item_id: BaseItemId,
 
     pub weight: u64,
     pub min_area_level: Option<AreaLevel>,

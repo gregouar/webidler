@@ -1,22 +1,20 @@
 {
-  "name": "Cogspinner Imp",
+  "name"    : "Cogspinner Imp",
   "portrait": "monsters/castle/cogspinner_imp.webp",
   "max_life": 7,
-  "armor": { "Physical": 50, "Storm": 50 },
-  "skills": [
+  "armor"   : {"Physical": 50, "Storm": 50},
+  "skills"  : [
     {
-      "name": "Tick Tack",
-      "icon": "skills/attack.svg",
-      "cooldown": 1.5,
+      "name"      : "Tick Tack",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 15,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 6 ]
-                }
+                "damage": { "Physical": [3, 6] }
               }
             }
           ]

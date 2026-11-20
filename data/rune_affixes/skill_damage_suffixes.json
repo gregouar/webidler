@@ -1,5 +1,5 @@
-[
-  {
+{
+  "rune_inc_attack_damage_t1" : {
     "name"        : "of Ire",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t2" : {
     "name"        : "of Temper",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t3" : {
     "name"        : "of Wrath",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t4" : {
     "name"        : "of Belligerence",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t5" : {
     "name"        : "of Ferocity",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t6" : {
     "name"        : "of Aggression",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t7" : {
     "name"        : "of Rage",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t8" : {
     "name"        : "of Hatred",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t9" : {
     "name"        : "of Fury",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "rune_inc_attack_damage_t10": {
     "name"        : "of Bloodlust",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -179,7 +179,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t1"  : {
     "name"        : "of Spellcasting",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -197,7 +197,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t2"  : {
     "name"        : "of Wizardry",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -215,7 +215,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t3"  : {
     "name"        : "of Sorcery",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -233,7 +233,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t4"  : {
     "name"        : "of Thaumaturgy",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -251,7 +251,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t5"  : {
     "name"        : "of Arcanum",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -269,7 +269,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t6"  : {
     "name"        : "of Theurgy",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -287,7 +287,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t7"  : {
     "name"        : "of Enchantment",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -305,7 +305,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t8"  : {
     "name"        : "of Incantation",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -323,7 +323,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t9"  : {
     "name"        : "of Conjuration",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -341,7 +341,7 @@
       }
     ]
   },
-  {
+  "rune_inc_spell_damage_t10" : {
     "name"        : "of Invocation",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -359,4 +359,4 @@
       }
     ]
   }
-]
+}

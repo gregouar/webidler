@@ -8,11 +8,11 @@
     {
       "name"      : "Osiris' Decree",
       "icon"      : "skills/ankh_attack.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Spell",
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {

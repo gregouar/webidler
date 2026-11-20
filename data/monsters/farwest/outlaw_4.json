@@ -1,0 +1,25 @@
+{
+  "name"    : "Outlaw",
+  "portrait": "monsters/farwest/outlaw_4.webp",
+  "max_life": 10,
+  "skills"  : [
+    {
+      "name"      : "Shoot",
+      "icon"      : "skills/reticule.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [2, 4], "Fire": [3, 6] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

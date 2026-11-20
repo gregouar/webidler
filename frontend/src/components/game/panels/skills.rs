@@ -280,7 +280,7 @@ fn SkillCard(
         let skill_id = skill_id.clone();
         let max_level = data_context
             .skill_mastery_specs
-            .read()
+            .read_untracked()
             .get(&skill_id)
             .map(|mastery_specs| mastery_specs.max_level)
             .unwrap_or_default();

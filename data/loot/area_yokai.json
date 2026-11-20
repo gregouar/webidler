@@ -7,6 +7,7 @@
         {"item_id": "kerden_dance",   "weight": 9999},
         {"item_id": "evil_eye",       "weight": 9999},
         {"item_id": "raven_feather",  "weight": 9999},
+        {"item_id": "acid_bow",       "weight": 9999},
         {"item_id": "monk_vest",      "weight": 9999}
     ]
 }

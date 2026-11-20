@@ -7,7 +7,7 @@
     {
       "name"      : "Jackal Smite",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {

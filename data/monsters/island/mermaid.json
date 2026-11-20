@@ -1,21 +1,19 @@
 {
-  "name": "Enthralling Mermaid",
+  "name"    : "Enthralling Mermaid",
   "portrait": "monsters/island/mermaid.webp",
   "max_life": 10,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Mermaid's Kiss",
-      "icon": "skills/bite.svg",
-      "cooldown": 3.0,
+      "name"      : "Mermaid's Kiss",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 1, 3 ]
-                }
+                "damage": { "Physical": [1, 3] }
               }
             }
           ]
@@ -23,41 +21,30 @@
       ]
     },
     {
-      "name": "Healing Serenade",
-      "icon": "skills/heal.svg",
-      "cooldown": 10.0,
+      "name"      : "Healing Serenade",
+      "icon"      : "skills/heal.svg",
+      "cooldown"  : 100,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "target_type": "Friend",
-          "range": "Melee",
-          "shape": "Contact",
-          "effects": [
-            {
-              "Restore": {
-                "restore_type": "Life",
-                "value": 25,
-                "modifier": "Percent"
-              }
-            }
+          "range"      : "Melee",
+          "shape"      : "Contact",
+          "effects"    : [
+            { "Restore": {"restore_type": "Life", "value": 25, "modifier": "Percent"} }
           ]
         }
       ]
     },
     {
-      "name": "Appeasing Song",
-      "icon": "skills/double_quaver.svg",
-      "cooldown": 5.0,
+      "name"      : "Appeasing Song",
+      "icon"      : "skills/double_quaver.svg",
+      "cooldown"  : 50,
       "skill_type": "Curse",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "mermaid_song",
-                "value": 100
-              }
-            }
+            { "ApplyStatus": {"status_id": "mermaid_song", "value": 100} }
           ]
         }
       ]

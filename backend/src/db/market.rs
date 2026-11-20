@@ -6,6 +6,7 @@ use shared::data::{
     realms::{Realm, RealmId},
     stash::StashId,
     user::{UserCharacterId, UserId},
+    values::NonNegative,
 };
 
 use crate::db::{
@@ -46,7 +47,7 @@ pub struct MarketBuyEntry {
 
     pub recipient_id: Option<UserId>, // For private offers
 
-    pub price: f64,
+    pub price: NonNegative,
 }
 
 pub async fn sell_item<'c>(
@@ -83,7 +84,7 @@ pub async fn sell_item<'c>(
             realm_id
         )
         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
-        RETURNING market_id
+        RETURNING market_id as "market_id!"
         "#,
         stash_item_id,
         recipient_id,
@@ -119,8 +120,8 @@ pub async fn read_full_market_stash_items<'c>(
     sqlx::query_as::<_, MarketEntry>(
         r#"
         SELECT 
-            market.market_id, 
-            stash_items.stash_item_id,
+            market.market_id as "market_id!",
+            stash_items.stash_item_id as "stash_item_id!",
             owner.user_id AS owner_id, 
             owner.username AS owner_name,
             market.recipient_id, 
@@ -241,12 +242,24 @@ pub async fn read_market_items<'c>(
             .unwrap_or_default()
     });
 
+    let affix_filters = filters.affix_filters.map(|affix_filter| {
+        affix_filter
+            .map(|affix_filter| {
+                (
+                    affix_filter.base_item_id.map(|x| x.to_string()),
+                    affix_filter.affix_group_id,
+                    affix_filter.min_level.map(i32::from).unwrap_or_default(),
+                )
+            })
+            .unwrap_or_default()
+    });
+
     let raw_items = sqlx::query_as!(
         MarketEntry,
         r#"
         SELECT 
-            market.market_id,
-            stash_items.stash_item_id, 
+            market.market_id as "market_id!",
+            stash_items.stash_item_id as "stash_item_id!",
             owner.user_id as "owner_id!: UserId", 
             owner.username as "owner_name!: String",
             market.recipient_id as "recipient_id?: UserId",
@@ -480,6 +493,66 @@ pub async fn read_market_items<'c>(
                     )
                 )
             )
+            AND ($70 = '' OR market.stash_item_id IN (
+                SELECT affix.stash_item_id
+                FROM stash_items_affixes affix
+                WHERE affix.deleted_at IS NULL
+                  AND affix.realm_id = $66
+                  AND (
+                    ($69::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $69::TEXT
+                  )
+                  AND affix.affix_group_id = $70
+                  AND affix.affix_level >= $71
+            ))
+            AND ($73 = '' OR market.stash_item_id IN (
+                SELECT affix.stash_item_id
+                FROM stash_items_affixes affix
+                WHERE affix.deleted_at IS NULL
+                  AND affix.realm_id = $66
+                  AND (
+                    ($72::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $72::TEXT
+                  )
+                  AND affix.affix_group_id = $73
+                  AND affix.affix_level >= $74
+            ))
+            AND ($76 = '' OR market.stash_item_id IN (
+                SELECT affix.stash_item_id
+                FROM stash_items_affixes affix
+                WHERE affix.deleted_at IS NULL
+                  AND affix.realm_id = $66
+                  AND (
+                    ($75::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $75::TEXT
+                  )
+                  AND affix.affix_group_id = $76
+                  AND affix.affix_level >= $77
+            ))
+            AND ($79 = '' OR market.stash_item_id IN (
+                SELECT affix.stash_item_id
+                FROM stash_items_affixes affix
+                WHERE affix.deleted_at IS NULL
+                  AND affix.realm_id = $66
+                  AND (
+                    ($78::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $78::TEXT
+                  )
+                  AND affix.affix_group_id = $79
+                  AND affix.affix_level >= $80
+            ))
+            AND ($82 = '' OR market.stash_item_id IN (
+                SELECT affix.stash_item_id
+                FROM stash_items_affixes affix
+                WHERE affix.deleted_at IS NULL
+                  AND affix.realm_id = $66
+                  AND (
+                    ($81::TEXT IS NULL AND affix.base_item_id IS NULL) 
+                    OR affix.base_item_id = $81::TEXT
+                  )
+                  AND affix.affix_group_id = $82
+                  AND affix.affix_level >= $83
+            ))
             AND (market.price <= $58)
         ORDER BY 
             COALESCE(market.recipient_id = $4, false) DESC, 
@@ -578,7 +651,22 @@ pub async fn read_market_items<'c>(
         item_cooldown, // $65
         realm_id,
         no_filter_max_power_shard_level,
-        min_max_power_shard_level // $68
+        min_max_power_shard_level, // $68
+        affix_filters[0].0,
+        affix_filters[0].1,
+        affix_filters[0].2, // $71
+        affix_filters[1].0,
+        affix_filters[1].1,
+        affix_filters[1].2, // $74
+        affix_filters[2].0,
+        affix_filters[2].1,
+        affix_filters[2].2, // $77
+        affix_filters[3].0,
+        affix_filters[3].1,
+        affix_filters[3].2, // $80
+        affix_filters[4].0,
+        affix_filters[4].1,
+        affix_filters[4].2 // $83
     )
     .fetch_all(executor)
     .await?;
@@ -645,8 +733,8 @@ pub async fn buy_item<'c>(
             AND market.realm_id = $3
             AND market.deleted_at IS NULL
         RETURNING
-            market.market_id, 
-            market.stash_item_id,
+            market.market_id as "market_id!",
+            market.stash_item_id as "stash_item_id!",
             market.recipient_id as "recipient_id?: UserCharacterId", 
             market.price as "price: f64"
         "#,

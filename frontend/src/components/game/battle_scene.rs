@@ -9,6 +9,7 @@ use shared::{
 use crate::{
     assets::img_asset,
     components::{
+        chat::chat_panel::ChatPanel,
         events::{EventsContext, Key},
         game::{
             GameContext, loot_queue::LootQueue, monsters_grid::MonstersGrid,
@@ -33,7 +34,12 @@ pub fn BattleScene() -> impl IntoView {
     view! {
         <div class="absolute inset-0 p-1 xl:p-4">
             <div class="relative w-full max-h-full flex justify-between gap-1 xl:gap-4 ">
-                <PlayerCard />
+                <div class="relative w-1/3 min-w-0">
+                    <div class="absolute inset-0 flex flex-col gap-1 xl:gap-4">
+                        <PlayerCard />
+                        <ChatPanel character_id=game_context.character_id.get_untracked() pinnable=true />
+                    </div>
+                </div>
                 <Card class="w-2/3 aspect-[12/8]" pad=false gap=false>
                     // <div class="w-2/3 aspect-[12/8] flex flex-col shadow-xl/30 rounded-md overflow-clip">
                     <BattleSceneHeader />

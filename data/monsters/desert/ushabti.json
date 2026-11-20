@@ -9,7 +9,7 @@
     {
       "name"      : "Heavy Slice",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -27,7 +27,7 @@
     {
       "name"      : "Slab Bash",
       "icon"      : "skills/shield_bash.svg",
-      "cooldown"  : 10.0,
+      "cooldown"  : 100,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -37,7 +37,7 @@
                 "damage": { "Physical": [10, 20] }
               }
             },
-            { "ApplyStatus": {"status_id": "stun", "value": 1, "duration": 2} }
+            { "ApplyStatus": {"status_id": "stun", "value": 1, "duration": 20} }
           ]
         }
       ]

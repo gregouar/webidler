@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_status_power_t1" : {
     "name"        : "Odd",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t2" : {
     "name"        : "Weird",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t3" : {
     "name"        : "Curious",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t4" : {
     "name"        : "Freaky",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t5" : {
     "name"        : "Eerie",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t6" : {
     "name"        : "Uncanny",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t7" : {
     "name"        : "Quirky",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t8" : {
     "name"        : "Bizarre",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t9" : {
     "name"        : "Unusual",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "item_inc_status_power_t10": {
     "name"        : "Fantastic",
     "family"      : "inc_status_power",
     "tags"        : ["Spell", "Status"],
@@ -179,4 +179,4 @@
       }
     ]
   }
-]
+}

@@ -1,0 +1,62 @@
+{
+    "kill_monsters"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/meat_grinder.svg",
+        "name"       : "Meat Grinder",
+        "description": "Kill 5,000,000 Monsters across your Grinds.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
+    },
+    "edicts_100"             : {
+        "category"   : "Grind",
+        "icon"       : "achievements/scroll.svg",
+        "name"       : "Edicts Addict",
+        "description": "Use a total of 100 Edicts.",
+        "goals"      : [
+            { "AreaCompleted": {"value": 100, "with_edict": true} }
+        ],
+        "rewards": [ {"Cosmetic": "title_edicts_100"} ]
+    },
+    "sacrifice_equipment_600": {
+        "category"   : "Grind",
+        "icon"       : "achievements/hammer_break.svg",
+        "name"       : "Garbage Collector",
+        "description": "Sacrifice 100 Equipment Items requiring Power Level 600.",
+        "goals"      : [
+            { "Counter": {"counter": "SacrificeEquipment600", "value": 100} }
+        ],
+        "rewards": [ {"Cosmetic": "title_sacrifice_equipment_600"} ]
+    },
+    "gamble_uniques"         : {
+        "category"   : "Grind",
+        "icon"       : "achievements/slot_machine.svg",
+        "name"       : "Certified Gambler",
+        "description": "Obtain 20 Unique Items through Gambling.",
+        "goals"      : [
+            { "Counter": {"counter": "GambleUnique", "value": 20} }
+        ],
+        "rewards": [ {"Cosmetic": "title_gambler"} ]
+    },
+    "imbue_unique"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/soul.svg",
+        "name"       : "Soul Binder",
+        "description": "Imbue 10 Unique Souls into Items.",
+        "goals"      : [
+            { "Counter": {"counter": "ImbueUniqueSoul", "value": 10} }
+        ],
+        "rewards": [ {"Cosmetic": "title_imbue_unique"} ]
+    },
+    "kill_dragons"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/dragon_head.svg",
+        "name"       : "Imagine no Dragons",
+        "description": "Kill 1,000 Adult Dragons.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
+    }
+}

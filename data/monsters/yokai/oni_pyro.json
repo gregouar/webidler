@@ -1,41 +1,31 @@
 {
-  "name": "Oni Pyromaniac",
+  "name"    : "Oni Pyromaniac",
   "portrait": "monsters/yokai/oni_pyro.webp",
   "max_life": 7,
-  "armor": { "Fire": 100 },
-  "skills": [
+  "armor"   : {"Fire": 100},
+  "skills"  : [
     {
-      "name": "Fire Throw",
-      "icon": "skills/fireball.svg",
+      "name"      : "Fire Throw",
+      "icon"      : "skills/fireball.svg",
       "skill_type": "Spell",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "value": 5
-              }
-            }
+            { "ApplyStatus": {"status_id": "burn", "value": 5} }
           ]
         }
       ]
     },
     {
-      "name": "Oni's Mark",
-      "icon": "skills/curse_flammability.svg",
+      "name"      : "Oni's Mark",
+      "icon"      : "skills/curse_flammability.svg",
       "skill_type": "Curse",
-      "cooldown": 5.0,
-      "targets": [
+      "cooldown"  : 50,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "vulnerability_fire",
-                "value": 30
-              }
-            }
+            { "ApplyStatus": {"status_id": "vulnerability_fire", "value": 30} }
           ]
         }
       ]

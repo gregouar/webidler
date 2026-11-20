@@ -1,0 +1,7 @@
+{
+  "meta": {"enabled": true},
+  "resources": {
+    "monsters": ["deep_one_conch.json", "deep_one_hybrid.json", "deep_one_shaman.json", "deep_one_warrior.json"],
+    "statuses": ["0_statuses.json"                                                                             ]
+  }
+}

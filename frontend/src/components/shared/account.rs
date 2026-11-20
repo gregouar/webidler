@@ -3,7 +3,8 @@ use nutype::nutype;
 
 use leptos::{html::*, prelude::*, task::spawn_local};
 use leptos_router::hooks::use_navigate;
-use leptos_use::storage;
+use leptos_use_on_click_outside::on_click_outside;
+use leptos_use_storage::use_local_storage;
 
 use shared::{data::user::UserId, http::client::UpdateAccountRequest, types::Username};
 
@@ -24,7 +25,7 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
     let backend = expect_context::<BackendClient>();
 
     let (get_username_storage, set_username_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("username");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("username");
 
     let user_id = RwSignal::new(None);
 
@@ -35,10 +36,10 @@ pub fn AccountSettingsPanel(open: RwSignal<bool>, refresh_trigger: RwSignal<u64>
     let email = RwSignal::new(Some(None));
 
     let (get_guest_username_storage, set_guest_username_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("guest_username");
 
     let (get_guest_password_storage, set_guest_password_storage, _) =
-        storage::use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
+        use_local_storage::<Option<_>, JsonSerdeCodec>("guest_password");
 
     let old_password = RwSignal::new(get_guest_password_storage.get_untracked());
     let password = RwSignal::new(None);
@@ -291,13 +292,13 @@ pub fn ConfirmAccountDeletionModal(
 ) -> impl IntoView {
     let confirm_input = RwSignal::new(None::<DeleteInput>);
     let node_ref = NodeRef::new();
-    let _ = leptos_use::on_click_outside(node_ref, move |_| open.set(false));
+    let _ = on_click_outside(node_ref, move |_| open.set(false));
 
     let (get_username_storage, set_username_storage, _) =
-        storage::use_local_storage::<Option<Username>, JsonSerdeCodec>("username");
+        use_local_storage::<Option<Username>, JsonSerdeCodec>("username");
 
     let (get_guest_username_storage, set_guest_username_storage, _) =
-        storage::use_local_storage::<Option<Username>, JsonSerdeCodec>("guest_username");
+        use_local_storage::<Option<Username>, JsonSerdeCodec>("guest_username");
 
     let do_delete = {
         let toaster = expect_context::<Toasts>();

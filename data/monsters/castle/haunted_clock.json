@@ -1,45 +1,38 @@
 {
-  "name": "Hollow Chime",
+  "name"    : "Hollow Chime",
   "portrait": "monsters/castle/haunted_clock.webp",
   "max_life": 15,
-  "size": "Tall",
-  "armor": { "Storm": 50 },
-  "skills": [
+  "size"    : "Tall",
+  "armor"   : {"Storm": 50},
+  "skills"  : [
     {
-      "name": "Time to Chime",
-      "icon": "skills/haste.svg",
-      "cooldown": 5.0,
+      "name"      : "Time to Chime",
+      "icon"      : "skills/haste.svg",
+      "cooldown"  : 50,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "target_type": "Friend",
-          "shape": "All",
-          "effects": [
+          "shape"      : "All",
+          "effects"    : [
             {
-              "ApplyStatus": {
-                "status_id": "blessing_haste",
-                "duration": [ 5, 10 ],
-                "value": 100
-              }
+              "ApplyStatus": { "status_id": "blessing_haste", "duration": [50, 100], "value": 100 }
             }
           ]
         }
       ]
     },
     {
-      "name": "Timely Attack",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Timely Attack",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 10 ],
-                  "Physical": [ 2, 4 ]
-                }
+                "damage": { "Storm": [0, 10], "Physical": [2, 4] }
               }
             }
           ]

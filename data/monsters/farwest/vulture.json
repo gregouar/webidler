@@ -1,0 +1,46 @@
+{
+    "name"    : "Carrion Vulture",
+    "portrait": "monsters/farwest/Vulture.webp",
+    "max_life": 12,
+    "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+    "skills"  : [
+        {
+            "name"      : "Scratch",
+            "icon"      : "skills/bird_claw.svg",
+            "cooldown"  : 30,
+            "skill_type": "Attack",
+            "targets"   : [
+                {
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Physical": [3, 6] }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name"      : "Carrion Feast",
+            "icon"      : "skills/carrion.svg",
+            "skill_type": "Blessing",
+            "cooldown"  : 0,
+            "triggers"  : [
+                {
+                    "trigger_id": "vulture_feast",
+                    "skill_type": "Blessing",
+                    "OnDeath"   : "Friend",
+                    "target"    : "Me",
+                    "effects"   : [
+                        {
+                            "ApplyStatus"            : {"status_id": "carrion_feast", "value": 100},
+                            "independent_application": true
+                        },
+                        { "ApplyStatus": {"status_id": "life_regen", "value": 200}, "independent_application": true }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+  "area_specific": true,
+  "entries"      : [
+    {"item_id": "rune_soul_physical", "weight": 10, "boss_only": true},
+    {"item_id": "rune_soul_fire",     "weight": 10, "boss_only": true},
+    {"item_id": "rune_soul_storm",    "weight": 10, "boss_only": true},
+    {"item_id": "rune_soul_poison",   "weight": 10, "boss_only": true}
+  ]
+}

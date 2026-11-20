@@ -7,7 +7,7 @@
     {
       "name"      : "Deadly Bite",
       "icon"      : "skills/snake_bite.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -17,7 +17,7 @@
                 "damage": { "Physical": [2, 4] }
               }
             },
-            { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 3, "escalation": 50} }
+            { "ApplyStatus": {"status_id": "poison", "duration": 50, "value": 3, "escalation": 50} }
           ]
         }
       ]

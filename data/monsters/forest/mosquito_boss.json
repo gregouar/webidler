@@ -12,7 +12,7 @@
     {
       "name"      : "Suck Me Dry",
       "icon"      : "skills/needle_drill.svg",
-      "cooldown"  : 4.0,
+      "cooldown"  : 40,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -38,7 +38,7 @@
     {
       "name"      : "Gross Birth",
       "icon"      : "skills/dinosaur_egg.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {

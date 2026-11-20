@@ -1,5 +1,5 @@
-[
-  {
+{
+  "rune_inc_life_t1" : {
     "name"        : "Hefty",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [1, 2] }
     ]
   },
-  {
+  "rune_inc_life_t2" : {
     "name"        : "Robust",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [3, 4] }
     ]
   },
-  {
+  "rune_inc_life_t3" : {
     "name"        : "Stout",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [5, 6] }
     ]
   },
-  {
+  "rune_inc_life_t4" : {
     "name"        : "Beefy",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [7, 8] }
     ]
   },
-  {
+  "rune_inc_life_t5" : {
     "name"        : "Endurant",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [9, 10] }
     ]
   },
-  {
+  "rune_inc_life_t6" : {
     "name"        : "Hulking",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [11, 12] }
     ]
   },
-  {
+  "rune_inc_life_t7" : {
     "name"        : "Resistant",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [13, 14] }
     ]
   },
-  {
+  "rune_inc_life_t8" : {
     "name"        : "Tenacious",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [15, 16] }
     ]
   },
-  {
+  "rune_inc_life_t9" : {
     "name"        : "Resilient",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [17, 18] }
     ]
   },
-  {
+  "rune_inc_life_t10": {
     "name"        : "Stalwart",
     "family"      : "inc_life",
     "tags"        : ["Life"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [19, 20] }
     ]
   }
-]
+}

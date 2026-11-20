@@ -3,7 +3,7 @@
         "name"      : "Pick Pocket",
         "icon"      : "passives/gold_negative.svg",
         "debuff"    : true,
-        "duration"  : 30,
+        "duration"  : 300,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -17,7 +17,7 @@
         "name"      : "Life Regen",
         "icon"      : "passives/life_regen.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             { "StatModifier": {"stat": "LifeRegen", "modifier": "Flat"}, "value": 100, "modifier": "Percent" }
@@ -28,7 +28,7 @@
         "adjective" : "Enraged",
         "icon"      : "statuses/enrage.svg",
         "debuff"    : false,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 1,
         "effects"   : [
             {

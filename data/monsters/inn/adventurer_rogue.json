@@ -1,67 +1,43 @@
 {
-  "name": "Gareth",
-  "portrait": "monsters/inn/adventurer_rogue.webp",
-  "rarity": "Boss",
-  "max_life": 100,
-  "stun_lockout": 5,
-  "evade": {
-    "Physical": 50,
-    "Fire": 50,
-    "Storm": 50,
-    "Poison": 50
-  },
-  "status_resistances": [
+  "name"              : "Gareth",
+  "portrait"          : "monsters/inn/adventurer_rogue.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 100,
+  "stun_lockout"      : 5,
+  "evade"             : {"Physical": 50, "Fire": 50, "Storm": 50, "Poison": 50},
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Sneaky Strike",
-      "icon": "skills/sharpen_weapon.svg",
-      "cooldown": 2,
+      "name"      : "Sneaky Strike",
+      "icon"      : "skills/sharpen_weapon.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [
-                    10,
-                    20
-                  ]
-                },
+                "damage"     : { "Physical": [10, 20] },
                 "crit_chance": 20,
                 "crit_damage": 200
               }
             },
             {
-              "ApplyStatus": {
-                "status_id": "bleed",
-                "duration": 5,
-                "value": [ 5, 10 ]
-              }
+              "ApplyStatus": { "status_id": "bleed", "duration": 50, "value": [5, 10] }
             }
           ]
         }
       ]
     },
     {
-      "name": "Pick Pocket",
-      "icon": "passives/gold_negative.svg",
-      "cooldown": 10.0,
+      "name"      : "Pick Pocket",
+      "icon"      : "passives/gold_negative.svg",
+      "cooldown"  : 100,
       "skill_type": "Curse",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "gold_negative",
-                "value": 100
-              }
-            }
+            { "ApplyStatus": {"status_id": "gold_negative", "value": 100} }
           ]
         }
       ]

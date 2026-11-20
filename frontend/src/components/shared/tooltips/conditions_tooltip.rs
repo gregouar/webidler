@@ -38,7 +38,9 @@ pub fn format_skill_modifier_conditions_pre(
             Condition::MaximumLife => "".into(),
             Condition::MaximumMana => "".into(),
             Condition::LowLife => "".into(),
+            Condition::NotLowLife => "".into(),
             Condition::LowMana => "".into(),
+            Condition::NotLowMana => "".into(),
             Condition::ThreatLevel => "".into(),
             Condition::HasItem { .. } => "".into(),
             // Condition::HasItem {
@@ -60,6 +62,7 @@ pub fn format_skill_modifier_conditions_pre(
 pub fn format_skill_modifier_conditions_post(
     conditions: &[Condition],
     prefix: &'static str,
+    per_suffix: &'static str,
 ) -> String {
     // TODO: sort?
     let on_conditions_str = conditions
@@ -82,7 +85,9 @@ pub fn format_skill_modifier_conditions_post(
             Condition::MaximumLife => Some(" on Maximum Life".to_string()),
             Condition::MaximumMana => Some(" on Maximum Mana".to_string()),
             Condition::LowLife => Some(" on Low Life".to_string()),
+            Condition::NotLowLife => Some(" not on Low Life".to_string()),
             Condition::LowMana => Some(" on Low Mana".to_string()),
+            Condition::NotLowMana => Some(" not on Low Mana".to_string()),
             Condition::ThreatLevel => None,
             // Condition::HasItem { .. } => None,    
              Condition::HasItem {
@@ -106,8 +111,9 @@ pub fn format_skill_modifier_conditions_post(
             Condition::StatusStacks {
                 status_filter,
                 skill_type,
+                min_stacks,
             } => Some(format!(
-                " per Stack of {}", // on them for SkillConditionalModifier ?
+                " per Stack of {}{}{}", // on them for SkillConditionalModifier ?
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -116,12 +122,20 @@ pub fn format_skill_modifier_conditions_post(
                     status_filter,
                     false
                 ),
+                if *min_stacks > 0 {
+                    format!(" if it has {min_stacks} or more")
+                } else {
+                    "".to_string()
+                },
+                per_suffix
             )),
             Condition::StatusDuration {
                 status_filter,
                 skill_type,
+                use_max_duration,
             } => Some(format!(
-                " per second of Duration of {}", // on them for SkillConditionalModifier ?
+                " per second of {}Duration of {}", // on them for SkillConditionalModifier ?
+                if *use_max_duration { "Maximum " } else { "" },
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -135,7 +149,9 @@ pub fn format_skill_modifier_conditions_post(
             | Condition::MaximumLife
             | Condition::MaximumMana
             | Condition::LowLife
+            | Condition::NotLowLife
             | Condition::LowMana
+            | Condition::NotLowMana
             | Condition::HasItem { .. } => None,
             Condition::ThreatLevel => Some(" per Threat Level".into()),
         })

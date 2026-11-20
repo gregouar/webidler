@@ -64,7 +64,6 @@ pub struct PassiveNodeSpecs {
     #[serde(default)]
     pub root_node: bool,
 
-    // TODO: Replace by Asset uri?
     pub node_type: PassiveNodeType,
 
     #[serde(default)]
@@ -78,9 +77,10 @@ pub struct PassiveNodeSpecs {
     pub upgrade_effects: Vec<StatEffect>,
     #[serde(default)]
     pub max_upgrade_level: Option<u8>,
-    // TODO: unlocked & ascend costs?
     #[serde(default)]
     pub socket: bool,
+    #[serde(default)]
+    pub upgrade_extra_cost: u16,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
@@ -120,7 +120,7 @@ impl PassiveNodeSpecs {
     }
 
     pub fn next_ascend_cost(&self, level: u8) -> u16 {
-        (level as u16) / 2 + 1
+        self.upgrade_extra_cost + (level as u16) / 2 + 1
     }
 
     pub fn total_ascend_cost(&self, level: u8) -> u16 {

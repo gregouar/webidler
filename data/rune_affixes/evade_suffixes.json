@@ -1,5 +1,5 @@
-[
-  {
+{
+  "rune_add_evade_t1" : {
     "name"        : "of Dodging",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 1 }
     ]
   },
-  {
+  "rune_add_evade_t2" : {
     "name"        : "of Evasion",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 2 }
     ]
   },
-  {
+  "rune_add_evade_t3" : {
     "name"        : "of Footwork",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 3 }
     ]
   },
-  {
+  "rune_add_evade_t4" : {
     "name"        : "of Agility",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 4 }
     ]
   },
-  {
+  "rune_add_evade_t5" : {
     "name"        : "of Elusion",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 5 }
     ]
   },
-  {
+  "rune_add_evade_t6" : {
     "name"        : "of Fleetness",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 6 }
     ]
   },
-  {
+  "rune_add_evade_t7" : {
     "name"        : "of Phasing",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 7 }
     ]
   },
-  {
+  "rune_add_evade_t8" : {
     "name"        : "of Ghosting",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 8 }
     ]
   },
-  {
+  "rune_add_evade_t9" : {
     "name"        : "of Intangibility",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 9 }
     ]
   },
-  {
+  "rune_add_evade_t10": {
     "name"        : "of Untouchability",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": {"Evade": null}, "modifier": "Flat", "value": 10 }
     ]
   }
-]
+}

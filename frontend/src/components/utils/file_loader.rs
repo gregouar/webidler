@@ -1,7 +1,8 @@
-use leptos::wasm_bindgen::{JsCast, JsValue, closure::Closure};
-use leptos::{prelude::*, web_sys};
 use serde::Serialize;
 use serde::de::DeserializeOwned;
+
+use leptos::wasm_bindgen::{JsCast, JsValue, closure::Closure};
+use leptos::{prelude::*, web_sys};
 
 use crate::components::ui::toast::*;
 

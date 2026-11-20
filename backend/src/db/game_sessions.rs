@@ -58,7 +58,7 @@ pub async fn create_session(
                AND c.deleted_at IS NULL
             WHERE gs.ended_at = '9999-01-01 23:59:59'
         )
-        RETURNING session_id
+        RETURNING session_id as "session_id!"
         "#,
         character_id,
         allow_parallel_characters,

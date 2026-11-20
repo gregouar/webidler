@@ -1,12 +1,12 @@
-use std::{collections::HashMap, time::Duration};
+use std::time::Duration;
 
 use shared::data::{
     character::{CharacterAttrs, CharacterId},
     character_status::{StatusEffectType, StatusMap, StatusSpecs, StatusState},
     player::CharacterState,
     skill::SkillType,
-    stat_effect::StatEffect,
-    values::NonNegative,
+    stat_effect::{DamageTypeMap, StatEffect},
+    values::{Damage, NonNegative},
 };
 
 use crate::game::data::master_store::StatusesStore;
@@ -58,8 +58,8 @@ fn update_status(
 
         status_state.elapsed_escalation += elapsed_time_f64;
 
-        if status_state.elapsed_escalation.get() > status_state.max_duration.get() {
-            status_state.elapsed_escalation = status_state.max_duration;
+        if status_state.elapsed_escalation.get() > status_state.max_duration.get() * 0.1 {
+            status_state.elapsed_escalation = status_state.max_duration * 0.1;
         }
     }
 
@@ -73,19 +73,25 @@ fn update_status(
                 character_attrs,
                 character_life,
                 character_mana,
-                &HashMap::from([(
-                    *damage_type,
-                    (status_effect.computed_value(status_state.value)
-                        * elapsed_time_f64.get().min(status_state.duration.get())),
-                )]),
+                &{
+                    let mut damage = DamageTypeMap::default();
+                    damage.insert(
+                        *damage_type,
+                        status_effect.computed_value(status_state.value)
+                            * elapsed_time_f64
+                                .get()
+                                .min(status_state.duration.get() * 0.1),
+                    );
+                    damage
+                },
                 status_state.skill_type,
-                false,
                 *armor_penetration,
+                None,
             );
         }
     }
 
-    status_state.duration -= elapsed_time_f64;
+    status_state.duration -= elapsed_time_f64 * 10.0;
 
     let remove_status = status_state.duration.get() <= 0.0;
 
@@ -191,7 +197,7 @@ pub fn generate_effects_from_statuses(
 pub fn initialize_status_state(
     owner: CharacterId,
     skill_type: SkillType,
-    value: NonNegative,
+    value: Damage,
     duration: NonNegative,
     escalation: NonNegative,
 ) -> StatusState {

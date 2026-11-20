@@ -3,7 +3,7 @@
         "name"      : "Call of the Pack",
         "icon"      : "skills/wolf_howl.svg",
         "debuff"    : false,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 3,
         "effects"   : [
             {
@@ -19,7 +19,7 @@
         "name"      : "Burned Witch Revenge",
         "icon"      : "skills/curse_flammability.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -37,7 +37,7 @@
         "name"      : "Lost of a Friend",
         "icon"      : "skills/hunting_horn.svg",
         "debuff"    : false,
-        "duration"  : 1e+200,
+        "duration"  : 1e300,
         "max_stacks": 2,
         "effects"   : [
             {
@@ -51,7 +51,7 @@
         "name"      : "Lamenting Embrace",
         "icon"      : "skills/curse_frailty.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -65,22 +65,16 @@
             }
         ]
     },
-    "mosquito_disease"        : {
-        "name"      : "Exotic Disease",
-        "icon"      : "skills/virus.svg",
-        "debuff"    : true,
+    "mosquito_disease": {
+        "name"       : "Exotic Disease",
+        "icon"       : "skills/virus.svg",
+        "debuff"     : true,
         "damage_type": "Poison",
-        "avoidable": true,
-        "duration"  : 60,
-        "max_stacks": 1,
-        "effects": [
-            {
-                "DamageOverTime": {
-                    "damage_type": "Poison"
-                },
-                "value": 100,
-                "modifier": "Percent"
-            }
+        "avoidable"  : true,
+        "duration"   : 600,
+        "max_stacks" : 1,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }
         ]
     }
 }

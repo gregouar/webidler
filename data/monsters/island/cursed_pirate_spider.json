@@ -1,27 +1,22 @@
 {
-  "name": "Brine Crawler",
+  "name"    : "Brine Crawler",
   "portrait": "monsters/island/cursed_pirate_spider.webp",
   "max_life": 20,
-  "size": "Large",
-  "armor": { "Physical": 100, "Storm": 50 },
-  "block": {
-    "Attack": 30,
-    "Spell": 30
-  },
-  "skills": [
+  "size"    : "Large",
+  "armor"   : {"Physical": 100, "Storm": 50},
+  "block"   : {"Attack": 30, "Spell": 30},
+  "skills"  : [
     {
-      "name": "Scimitar Left",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name"      : "Scimitar Left",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 4, 8 ]
-                }
+                "damage": { "Physical": [4, 8] }
               }
             }
           ]
@@ -29,18 +24,16 @@
       ]
     },
     {
-      "name": "Scimitar Right",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.5,
+      "name"      : "Scimitar Right",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 25,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 4, 8 ]
-                }
+                "damage": { "Physical": [4, 8] }
               }
             }
           ]

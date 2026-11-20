@@ -1,12 +1,13 @@
 use codee::string::JsonSerdeCodec;
 use indexmap::IndexMap;
+use leptos_use_storage::use_local_storage;
+use serde::{Deserialize, Serialize};
+use web_sys::Event;
+
 use leptos::prelude::{
     guards::{Plain, ReadGuard},
     *,
 };
-use leptos_use::storage;
-use serde::{Deserialize, Serialize};
-use web_sys::Event;
 
 #[derive(Serialize, Deserialize, Clone, PartialEq)]
 pub struct SettingsData {
@@ -135,7 +136,7 @@ fn request_layout_refresh() {
 
 pub fn provide_settings_context() {
     let (get_settings, set_settings, _) =
-        storage::use_local_storage::<SettingsData, JsonSerdeCodec>("settings");
+        use_local_storage::<SettingsData, JsonSerdeCodec>("settings");
     let settings_data = RwSignal::new(get_settings.get_untracked());
 
     set_animations_enabled(settings_data.read_untracked().enable_animations);

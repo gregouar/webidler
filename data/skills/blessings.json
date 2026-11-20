@@ -1,147 +1,428 @@
 {
-  "blessing_haste"     : {
-    "name"           : "Blessing of Haste",
-    "description"    : "A blessing that increases your speed, allowing quicker actions in battle.",
-    "icon"           : "skills/haste.svg",
-    "skill_type"     : "Blessing",
-    "cooldown"       : 15,
-    "mana_cost"      : 30,
-    "upgrade_cost"   : 50,
+  "blessing_haste": {
+    "name": "Blessing of Haste",
+    "icon": "skills/haste.svg",
+    "description": "A blessing that increases your speed, allowing quicker actions in battle.",
+    "skill_type": "Blessing",
+    "cooldown": 150.0,
+    "mana_cost": 30.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "Speed": {"skill_type": "Blessing"} },
+        "stat": {
+          "Speed": {
+            "skill_type": "Blessing",
+            "skill_id": null
+          }
+        },
         "modifier": "Increased",
-        "value"   : 1
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
-    "targets"        : [
+    "modifier_effects": [],
+    "targets": [
       {
+        "range": "Melee",
         "target_type": "Me",
-        "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_haste", "value": 30} }
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "blessing_haste",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
-  "blessing_crit"      : {
-    "name"           : "Blessing of Precision",
-    "description"    : "A blessing that increase your chance of critical strike, and make them stronger.",
-    "icon"           : "skills/blessing_crit.svg",
-    "skill_type"     : "Blessing",
-    "cooldown"       : 10,
-    "mana_cost"      : 30,
-    "upgrade_cost"   : 50,
+  "blessing_crit": {
+    "name": "Blessing of Precision",
+    "icon": "skills/blessing_crit.svg",
+    "description": "A blessing that increase your chance of critical strike, and make them stronger.",
+    "skill_type": "Blessing",
+    "cooldown": 100.0,
+    "mana_cost": 30.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "blessing_crit"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "blessing_crit",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 2
+        "value": 2.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
-    "targets"        : [
+    "modifier_effects": [],
+    "targets": [
       {
+        "range": "Melee",
         "target_type": "Me",
-        "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_crit", "value": 50} }
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "blessing_crit",
+              "value": 50.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
   "blessing_protection": {
-    "name"           : "Blessing of Fortification",
-    "description"    : "A blessing that massively increase your defenses.",
-    "icon"           : "skills/blessing_protection.svg",
-    "skill_type"     : "Blessing",
-    "cooldown"       : 10,
-    "mana_cost"      : 30,
-    "upgrade_cost"   : 50,
+    "name": "Blessing of Fortification",
+    "icon": "skills/blessing_protection.svg",
+    "description": "A blessing that massively increase your defenses.",
+    "skill_type": "Blessing",
+    "cooldown": 100.0,
+    "mana_cost": 30.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "blessing_protection"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "blessing_protection",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 1
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
-    "targets"        : [
+    "modifier_effects": [],
+    "targets": [
       {
+        "range": "Melee",
         "target_type": "Me",
-        "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_protection", "value": 10}, "ignore_stat_effects": [] }
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "blessing_protection",
+              "value": 10.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
-  "blessing_heal"      : {
-    "name"           : "Blessing of Renewal",
-    "description"    : "A blessing that increase your life regeneration.",
-    "icon"           : "skills/blessing_renewal.svg",
-    "skill_type"     : "Blessing",
-    "cooldown"       : 15,
-    "mana_cost"      : 15,
-    "upgrade_cost"   : 50,
+  "blessing_heal": {
+    "name": "Blessing of Renewal",
+    "icon": "skills/blessing_renewal.svg",
+    "description": "A blessing that increase your life regeneration.",
+    "skill_type": "Blessing",
+    "cooldown": 150.0,
+    "mana_cost": 15.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "blessing_heal"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "blessing_heal",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 1
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       },
-      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
-    ],
-    "targets"        : [
       {
-        "target_type": "Me",
-        "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_heal", "value": 25} }
-        ]
-      }
-    ]
-  },
-  "blessing_gold"      : {
-    "name"           : "Blessing of Greed",
-    "description"    : "A blessing that increase the amount of gold rewarded.",
-    "icon"           : "skills/blessing_gold.svg",
-    "skill_type"     : "Blessing",
-    "cooldown"       : 10,
-    "mana_cost"      : 30,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      {
-        "stat"    : { "StatusPower": {"status_id": "blessing_gold"} },
-        "modifier": "Flat",
-        "value"   : 2
-      }
-    ],
-    "targets"        : [
-      {
-        "target_type": "Me",
-        "effects"    : [
-          { "ApplyStatus": {"status_id": "blessing_gold", "value": 50} }
-        ]
-      }
-    ]
-  },
-  "meditate"           : {
-    "name"           : "Meditate",
-    "description"    : "Focus your mind to recover mana, replenishing your magical energy.",
-    "icon"           : "skills/meditate.svg",
-    "skill_type"     : "Blessing",
-    "cooldown"       : 5,
-    "mana_cost"      : 0,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      {
-        "stat"    : { "Speed": {"skill_id": "meditate"} },
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
         "modifier": "Increased",
-        "value"   : 1
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
-    "targets"        : [
+    "modifier_effects": [],
+    "targets": [
       {
+        "range": "Melee",
         "target_type": "Me",
-        "effects"    : [
-          { "Restore": {"restore_type": "Mana", "value": 5, "modifier": "Percent"} }
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "blessing_heal",
+              "value": 25.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "blessing_gold": {
+    "name": "Blessing of Greed",
+    "icon": "skills/blessing_gold.svg",
+    "description": "A blessing that increase the amount of gold rewarded.",
+    "skill_type": "Blessing",
+    "cooldown": 100.0,
+    "mana_cost": 30.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "StatusPower": {
+            "status_id": "blessing_gold",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 2.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Melee",
+        "target_type": "Me",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "blessing_gold",
+              "value": 50.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "meditate": {
+    "name": "Meditate",
+    "icon": "skills/meditate.svg",
+    "description": "Focus your mind to recover mana, replenishing your magical energy.",
+    "skill_type": "Blessing",
+    "cooldown": 50.0,
+    "mana_cost": 0.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
+      {
+        "stat": {
+          "Speed": {
+            "skill_type": null,
+            "skill_id": "meditate"
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Melee",
+        "target_type": "Me",
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "Restore": {
+              "restore_type": "Mana",
+              "value": 5.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   }
 }

@@ -1,0 +1,8 @@
+{
+    "area_specific": true,
+    "entries"      : [
+        {"item_id": "cactus_hat",   "weight": 9999},
+        {"item_id": "wolf_gloves",  "weight": 9999},
+        {"item_id": "edict_wanted", "weight": 1999}
+    ]
+}

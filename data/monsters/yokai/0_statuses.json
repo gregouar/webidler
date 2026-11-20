@@ -3,7 +3,7 @@
         "name"      : "Lantern Prank",
         "icon"      : "skills/asian_lantern.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             { "StatModifier": {"stat": "ManaRegen", "debuff": true}, "value": 100, "modifier": "Percent" },
@@ -22,7 +22,7 @@
         "name"      : "Ward Evil",
         "icon"      : "skills/blessing_protection.svg",
         "debuff"    : false,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 1,
         "effects"   : [
             {
@@ -36,7 +36,7 @@
         "name"      : "Distracted",
         "icon"      : "skills/lips.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {

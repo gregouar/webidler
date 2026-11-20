@@ -6,6 +6,7 @@ use shared::{
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
+        monster::MonsterRarity,
         skill::TargetType,
         stat_effect::compare_options,
         trigger::EventTrigger,
@@ -40,6 +41,9 @@ pub async fn resolve_events(
     let events = events_queue.consume_events();
     for event in events.iter() {
         match event {
+            GameEvent::Tick { tick_number } => {
+                handle_tick_event(&mut trigger_contexts, game_data, *tick_number)
+            }
             GameEvent::Hit(hit_event) => {
                 handle_hit_event(&mut trigger_contexts, game_data, master_store, hit_event)
             }
@@ -74,6 +78,52 @@ pub async fn resolve_events(
         game_data,
         trigger_contexts,
     );
+}
+
+fn handle_tick_event<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &mut GameInstanceData,
+    tick_number: usize,
+) {
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .enumerate()
+            .map(|(idx, monster_specs)| {
+                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            }),
+    );
+
+    for (character_id, character_specs) in characters {
+        for (trigger, owned_triggers) in character_specs.triggers.iter() {
+            let tick_trigger = match trigger {
+                EventTrigger::OnTick(t) => t,
+                _ => continue,
+            };
+
+            if !tick_number.is_multiple_of(tick_trigger.tick_interval) {
+                continue;
+            }
+
+            trigger_contexts.extend(owned_triggers.iter().cloned().map(|owned_trigger| {
+                TriggerContext {
+                    owned_trigger,
+                    source: CharacterId::Player, // TODO?
+                    target: character_id,
+                    hit_context: None,
+                    status_context: None,
+                    restore_context: None,
+                    level: 0,
+                    trigger_depth: 0,
+                }
+            }));
+        }
+    }
 }
 
 fn handle_hit_event<'a>(
@@ -136,16 +186,20 @@ fn handle_hit_event<'a>(
                     .map(|damage_type| {
                         hit_event
                             .damage
-                            .get(&damage_type)
+                            .get(damage_type)
                             .map(|d| d.get())
                             .unwrap_or_default()
                             <= 0.0
                     })
                     .unwrap_or_default()
+                || !compare_options(&hit_trigger.skill_id.as_ref(), &Some(&hit_event.skill_id))
                 || hit_trigger
-                    .skill_ids
-                    .as_ref()
-                    .map(|skill_ids| !skill_ids.contains(&hit_event.skill_id))
+                    .item_slot
+                    .map(|item_slot| {
+                        !hit_event
+                            .item_slot
+                            .is_some_and(|hit_item_slot| item_slot == hit_item_slot)
+                    })
                     .unwrap_or_default()
                 || hit_trigger.conditions.iter().any(|condition| {
                     check_condition(
@@ -205,15 +259,17 @@ fn handle_status_event<'a>(
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
-            match trigger {
-                EventTrigger::OnApplyStatus(_) if status_event.source == character_id => {}
-                EventTrigger::OnReceiveStatus(_) if status_event.target == character_id => {}
-                _ => continue,
-            };
-
             let status_trigger = match trigger {
                 EventTrigger::OnApplyStatus(status_trigger)
-                | EventTrigger::OnReceiveStatus(status_trigger) => status_trigger,
+                    if status_event.source == character_id =>
+                {
+                    status_trigger
+                }
+                EventTrigger::OnReceiveStatus(status_trigger)
+                    if status_event.target == character_id =>
+                {
+                    status_trigger
+                }
                 _ => continue,
             };
 
@@ -246,6 +302,10 @@ fn handle_status_event<'a>(
                     status_event.debuff,
                 )
                 || !compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
+                || !compare_options(
+                    &status_trigger.is_max_stacks,
+                    &Some(status_event.is_max_stacks),
+                )
                 || status_trigger.conditions.iter().any(|condition| {
                     check_condition(
                         &master_store.statuses_store,
@@ -367,6 +427,9 @@ fn handle_kill_event(
             }
 
             game_data.game_stats.monsters_killed += 1;
+            if monster_specs.rarity == MonsterRarity::Champion {
+                game_data.game_stats.champion_monsters_killed += 1;
+            }
 
             let (gold_reward, gems_reward) = player_controller::reward_player(
                 game_data.player_resources.mutate(),
@@ -472,7 +535,7 @@ fn handle_area_completed_event(
         && area_state.area_level <= game_data.area_specs.max_power_shard_level
     {
         area_state.max_power_shard_level_ever = area_level;
-        game_data.player_resources.mutate().shards += 1.0;
+        game_data.player_resources.mutate().shards += 1.0.into();
     }
 
     let power_level = area_state
@@ -495,9 +558,6 @@ fn handle_area_completed_event(
         match loot_generator::generate_loot(
             &game_data.area_blueprint.loot_table,
             &master_store.items_store,
-            &master_store.item_affixes_table,
-            &master_store.item_adjectives_table,
-            &master_store.item_nouns_table,
             if new_max {
                 &DEFAULT_LOOT_TEMPLATE
             } else {
@@ -513,6 +573,7 @@ fn handle_area_completed_event(
                     1.0
                 },
             game_data.player_specs.read().gold_find.get(),
+            None,
         ) {
             Some(item_specs) => {
                 for item_specs in
@@ -532,6 +593,9 @@ fn handle_area_completed_event(
     area_controller::auto_increase_area_level(area_state, 1);
 
     game_data.game_stats.areas_completed += 1;
+    if is_boss_level {
+        game_data.game_stats.bosses_killed += 1;
+    }
 }
 
 fn handle_wave_completed_event(

@@ -1,0 +1,26 @@
+{
+  "name"    : "Gargoyle",
+  "portrait": "monsters/farwest/gargoyle.webp",
+  "max_life": 15,
+  "armor"   : {"Physical": 200, "Storm": 100},
+  "block"   : {"Attack": 30, "Spell": 20},
+  "skills"  : [
+    {
+      "name"      : "Stone Punch",
+      "icon"      : "skills/punch.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [4, 8], "Storm": [0, 10] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

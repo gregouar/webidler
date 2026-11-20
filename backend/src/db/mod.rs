@@ -1,3 +1,4 @@
+pub mod character_achievements;
 pub mod characters;
 pub mod characters_builds;
 pub mod characters_data;
@@ -11,6 +12,7 @@ pub mod password_reset;
 pub mod pool;
 pub mod stash_items;
 pub mod stashes;
+pub mod user_unlocks;
 pub mod users;
 pub mod utc_datetime;
 

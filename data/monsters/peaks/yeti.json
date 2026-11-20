@@ -1,23 +1,21 @@
 {
-  "name": "Abominable Yeti",
+  "name"    : "Abominable Yeti",
   "portrait": "monsters/peaks/yeti.webp",
   "max_life": 30,
-  "size": "Huge",
-  "armor": { "Physical": 50 },
-  "skills": [
+  "size"    : "Huge",
+  "armor"   : {"Physical": 50},
+  "skills"  : [
     {
-      "name": "Abominable Slam",
-      "icon": "skills/attack.svg",
-      "cooldown": 5.0,
+      "name"      : "Abominable Slam",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 50,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 10, 20 ]
-                }
+                "damage": { "Physical": [10, 20] }
               }
             }
           ]
@@ -25,19 +23,14 @@
       ]
     },
     {
-      "name": "Awful Breath",
-      "icon": "skills/turd.svg",
+      "name"      : "Awful Breath",
+      "icon"      : "skills/turd.svg",
       "skill_type": "Curse",
-      "cooldown": 10.0,
-      "targets": [
+      "cooldown"  : 100,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "stinky",
-                "value": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "stinky", "value": 50} }
           ]
         }
       ]

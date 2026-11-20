@@ -50,6 +50,10 @@ impl<T: Clone> LazySyncer<T> {
     pub fn need_to_sync(&self) -> bool {
         self.need_to_sync
     }
+
+    pub fn mark_synced(&mut self) {
+        self.need_to_sync = false;
+    }
 }
 
 impl<T: Clone> From<T> for LazySyncer<T> {

@@ -1,23 +1,18 @@
 {
-  "name": "Chochin Obake",
+  "name"    : "Chochin Obake",
   "portrait": "monsters/yokai/chochin_obake.webp",
   "max_life": 5,
-  "armor": { "Fire": 100 },
-  "skills": [
+  "armor"   : {"Fire": 100},
+  "skills"  : [
     {
-      "name": "Flame Throw",
-      "icon": "skills/fireball.svg",
+      "name"      : "Flame Throw",
+      "icon"      : "skills/fireball.svg",
       "skill_type": "Spell",
-      "cooldown": 2.0,
-      "targets": [
+      "cooldown"  : 20,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "value": 3
-              }
-            }
+            { "ApplyStatus": {"status_id": "burn", "value": 3} }
           ]
         }
       ]

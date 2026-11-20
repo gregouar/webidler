@@ -1,7 +1,13 @@
 use anyhow::Result;
 
 use shared::{
-    data::{passive::PurchasedNodes, user::UserCharacterId},
+    data::{
+        cosmetics::CharacterCosmetics,
+        monster::MonsterSpecsPatch,
+        passive::PurchasedNodes,
+        pets::PlayerPets,
+        user::{UserCharacterId, UserUnlocks},
+    },
     messages::server::{InitGameMessage, SyncGameStateMessage},
 };
 
@@ -14,12 +20,18 @@ pub async fn sync_init_game(
     character_id: &UserCharacterId,
     game_data: &mut GameInstanceData,
     passives_tree_build: PurchasedNodes,
+    character_cosmetics: CharacterCosmetics,
+    user_unlocks: UserUnlocks,
+    player_pets: PlayerPets,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
         .send(
             &InitGameMessage {
                 character_id: *character_id,
+                character_cosmetics,
+                user_unlocks,
+                achievements: game_data.achievements.clone(),
                 realm: game_data.realm,
                 area_id: game_data.area_id.clone(),
                 map_item: game_data.map_item.clone(),
@@ -33,6 +45,7 @@ pub async fn sync_init_game(
                 skill_mastery_skill_specs: game_data.skill_mastery_skill_specs.clone(),
                 player_specs: game_data.player_specs.read().clone(),
                 player_state: game_data.player_state.clone(),
+                player_pets,
                 auto_skills: game_data.player_controller.auto_skills.read().clone(),
             }
             .into(),
@@ -50,6 +63,35 @@ pub async fn sync_update_game(
         return Ok(false);
     }
 
+    let monster_specs_patch = (!game_data.monster_specs_to_patch.is_empty()).then(|| {
+        game_data
+            .monster_specs_to_patch
+            .take_indices()
+            .filter_map(|monster_idx| {
+                game_data
+                    .monster_specs
+                    .get(monster_idx as usize)
+                    .map(|monster_specs| {
+                        (
+                            monster_idx,
+                            MonsterSpecsPatch {
+                                character_attrs: monster_specs
+                                    .character_specs
+                                    .character_attrs
+                                    .clone(),
+                                skill_specs_targets: monster_specs
+                                    .character_specs
+                                    .skills_specs
+                                    .iter()
+                                    .map(|skills_specs| skills_specs.targets.clone())
+                                    .collect(),
+                            },
+                        )
+                    })
+            })
+            .collect()
+    });
+
     let message = SyncGameStateMessage {
         area_state: game_data.area_state.sync(),
         area_threat: game_data.area_threat.clone(),
@@ -62,6 +104,7 @@ pub async fn sync_update_game(
         player_resources: game_data.player_resources.sync(),
         player_stamina: game_data.player_stamina,
         monster_specs: game_data.monster_base_specs.sync(),
+        monster_specs_patch,
         monster_states: game_data.monster_states.clone(),
         queued_loot: game_data.queued_loot.sync(),
         game_stats: game_data.game_stats.clone(),

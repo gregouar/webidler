@@ -8,7 +8,7 @@ use crate::data::{
     modifier::Modifier,
     skill::SkillType,
     trigger::TriggerSpecs,
-    values::{NonNegative, Percent},
+    values::{Damage, NonNegative, Percent},
 };
 
 use super::{skill::DamageType, stat_effect::StatType};
@@ -16,30 +16,6 @@ use super::{skill::DamageType, stat_effect::StatType};
 pub type StatusId = IndexedKey<String>;
 
 pub type StatusMap = HashMap<StatusId, Vec<StatusState>>;
-
-// // pub type StatusMap = HashMap<StatusSpecs, Vec<StatusState>>;
-// #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-// pub struct StatusMap {
-//     // TODO: Do we want to replace this by a map to indexes ?
-//     // pub unique_statuses: HashMap<StatusId, usize>, // Points to statuses vec
-//     // pub unique_statuses: HashMap<StatusId, (StatusSpecs, StatusState)>,
-//     // pub cumulative_statuses: Vec<(StatusSpecs, StatusState)>,
-//     pub statuses: HashMap<StatusId, Vec<StatusState>>,
-// }
-
-// impl StatusMap {
-//     pub fn iter(&self) -> impl Iterator<Item = &(StatusSpecs, StatusState)> {
-//         self.unique_statuses
-//             .values()
-//             .chain(self.cumulative_statuses.iter())
-//     }
-
-//     pub fn iter_mut(&mut self) -> impl Iterator<Item = &mut (StatusSpecs, StatusState)> {
-//         self.unique_statuses
-//             .values_mut()
-//             .chain(self.cumulative_statuses.iter_mut())
-//     }
-// }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default)]
 pub struct StatusSpecs {
@@ -66,12 +42,12 @@ pub struct StatusSpecs {
 pub struct StatusEffect {
     #[serde(flatten)]
     pub status_effect_type: StatusEffectType,
-    pub value: NonNegative,
+    pub value: Damage,
     pub modifier: StatusModifier,
 }
 
 impl StatusEffect {
-    pub fn computed_value(&self, status_value: NonNegative) -> NonNegative {
+    pub fn computed_value(&self, status_value: Damage) -> Damage {
         match self.modifier {
             StatusModifier::Flat => self.value,
             StatusModifier::Percent => status_value * (self.value.get() * 0.01),
@@ -81,7 +57,6 @@ impl StatusEffect {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum StatusEffectType {
-    // Stun, // TODO: Replace by statmodifier speed
     DamageOverTime {
         damage_type: DamageType,
         #[serde(default)]
@@ -99,6 +74,8 @@ pub enum StatusEffectType {
         trigger_specs: Box<TriggerSpecs>,
         #[serde(default)]
         inherit_owner_effects: bool,
+        #[serde(default)]
+        inherit_player_effects: bool,
     },
 }
 
@@ -168,11 +145,11 @@ pub enum StatusModifier {
 pub struct StatusState {
     pub owner: CharacterId,
 
-    pub value: NonNegative,
+    pub value: Damage,
     pub duration: NonNegative, // Remaining duration
     pub skill_type: SkillType, // TODO: Should move to status specs???
 
-    pub base_value: NonNegative,
+    pub base_value: Damage,
     pub elapsed_escalation: NonNegative,
     pub max_duration: NonNegative,
     pub escalation: NonNegative,

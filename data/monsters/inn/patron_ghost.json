@@ -1,35 +1,23 @@
 {
-  "name": "Restless Patron",
+  "name"    : "Restless Patron",
   "portrait": "monsters/inn/inn_ghost.webp",
   "max_life": 7,
-  "evade": {
-    "Physical": 20,
-    "Fire": 20,
-    "Storm": 20,
-    "Poison": 20
-  },
-  "skills": [
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
     {
-      "name": "Drunken Cheers",
-      "icon": "skills/beer_stein.svg",
+      "name"      : "Drunken Cheers",
+      "icon"      : "skills/beer_stein.svg",
       "skill_type": "Spell",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 8 ]
-                }
+                "damage": { "Storm": [0, 8] }
               }
             },
-            {
-              "ApplyStatus": {
-                "value": 100,
-                "status_id": "drunk"
-              }
-            }
+            { "ApplyStatus": {"value": 100, "status_id": "drunk"} }
           ]
         }
       ]

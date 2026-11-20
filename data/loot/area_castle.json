@@ -11,6 +11,6 @@
         {"item_id": "barbed_collar",        "weight": 9999},
         {"item_id": "blind_bastion",        "weight": 9999},
         {"item_id": "inlaid_ring_unique",   "weight": 4999},
-        {"item_id": "edict_music",          "weight": 2999}
+        {"item_id": "edict_music",          "weight": 1999}
     ]
 }

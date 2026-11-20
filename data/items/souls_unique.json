@@ -1,0 +1,224 @@
+{
+  "rune_soul_physical": {
+    "name": "Iron Soul",
+    "icon": "items/souls/rune_physical_soul.webp",
+    "description": "The world was forged to be broken.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune",
+      "Soul"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Physical",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "CritDamage": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 50.0,
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_soul_fire": {
+    "name": "Ember Soul",
+    "icon": "items/souls/rune_fire_soul.webp",
+    "description": "And only ashes remain.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune",
+      "Soul"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Fire",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "StatusDuration": {
+            "status_id": "burn",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 30.0,
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_soul_storm": {
+    "name": "Tempest Soul",
+    "icon": "items/souls/rune_storm_soul.webp",
+    "description": "A single spark can awaken the storm.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune",
+      "Soul"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Storm",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "StatusPower": {
+            "status_id": "pure_storm",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 20.0,
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "rune_soul_poison": {
+    "name": "Blight Soul",
+    "icon": "items/souls/rune_poison_soul.webp",
+    "description": "Decay is patient. Decay is inevitable.",
+    "slot": null,
+    "extra_slots": [],
+    "categories": [
+      "Rune",
+      "Soul"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Poison",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          30.0,
+          50.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "StatusDuration": {
+            "status_id": null,
+            "damage_type": "Poison",
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 30.0,
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": true,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  }
+}

@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use std::{collections::HashMap, time::Duration};
 
 use leptos::prelude::{
@@ -7,16 +8,18 @@ use leptos::prelude::{
 
 use shared::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
+    cosmetics::CharacterCosmetics,
     game_stats::GameStats,
     grind::GrindRewards,
     item::ItemSpecs,
     loot::QueuedLoot,
     monster::{MonsterSpecs, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
+    pets::PlayerPets,
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     realms::Realm,
     skill::SkillSpecs,
-    user::UserCharacterId,
+    user::{UserCharacterId, UserUnlocks},
 };
 
 use crate::{
@@ -30,6 +33,10 @@ pub struct GameContext {
     pub started: RwSignal<bool>,
 
     pub character_id: RwSignal<UserCharacterId>,
+    pub character_cosmetics: RwSignal<CharacterCosmetics>,
+    pub user_unlocks: RwSignal<UserUnlocks>,
+    pub achievements: RwSignal<HashMap<String, DateTime<Utc>>>,
+
     pub realm: RwSignal<Realm>,
     pub area_id: RwSignal<String>,
 
@@ -50,8 +57,9 @@ pub struct GameContext {
     pub player_resources: Syncable<PlayerResources>,
     pub player_stamina: RwSignal<Duration>,
     pub player_auto_skills: RwSignal<Vec<bool>>,
+    pub player_pets: RwSignal<PlayerPets>,
 
-    // pub monster_wave: RwSignal<usize>, // Used to generate unique key in list
+    pub monster_specs_generation: RwSignal<usize>,
     pub monster_specs: RwSignal<Vec<MonsterSpecs>>,
     pub monster_states: RwSignal<Vec<MonsterState>>,
 
@@ -70,6 +78,8 @@ pub struct GameContext {
     pub open_skills: RwSignal<bool>,
     pub open_end_grind: RwSignal<bool>,
     pub open_settings: RwSignal<bool>,
+    pub open_achievements: RwSignal<bool>,
+    pub open_pets: RwSignal<bool>,
 
     pub loot_filter: RwSignal<LootFilter>,
 }
@@ -85,6 +95,10 @@ impl GameContext {
         GameContext {
             started: RwSignal::new(false),
             character_id: Default::default(),
+            character_cosmetics: Default::default(),
+            user_unlocks: Default::default(),
+            achievements: Default::default(),
+
             realm: Default::default(),
             area_id: Default::default(),
 
@@ -105,8 +119,9 @@ impl GameContext {
             player_resources: Default::default(),
             player_stamina: Default::default(),
             player_auto_skills: Default::default(),
+            player_pets: Default::default(),
 
-            // monster_wave: RwSignal::new(0),
+            monster_specs_generation: RwSignal::new(0),
             monster_specs: RwSignal::new(Vec::new()),
             monster_states: RwSignal::new(Vec::new()),
 
@@ -123,6 +138,8 @@ impl GameContext {
             open_skills: RwSignal::new(false),
             open_end_grind: RwSignal::new(false),
             open_settings: RwSignal::new(false),
+            open_achievements: RwSignal::new(false),
+            open_pets: RwSignal::new(false),
 
             loot_filter: Default::default(),
         }

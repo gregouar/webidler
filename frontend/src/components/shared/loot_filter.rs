@@ -1,35 +1,39 @@
-use std::sync::Arc;
-
 use codee::string::JsonSerdeCodec;
 use indexmap::IndexMap;
-use leptos::{html::*, prelude::*};
-
-use leptos_use::storage;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+use strum::IntoEnumIterator;
+use uuid::Uuid;
+
+use leptos::{html::*, prelude::*};
+use leptos_use_storage::use_local_storage;
+
 use shared::{
     data::{
         area::AreaLevel,
-        item::{ItemCategory, ItemRarity},
-        market::STAT_FILTERS_AMOUNT,
+        item::{BaseItemId, ItemCategory, ItemRarity},
+        market::{AFFIX_FILTERS_AMOUNT, MarketAffixFilter, STAT_FILTERS_AMOUNT},
         modifier::Modifier,
         stat_effect::StatType,
         user::UserCharacterId,
     },
     types::ItemName,
 };
-use strum::IntoEnumIterator;
-use uuid::Uuid;
 
 use crate::components::{
-    shared::inventory::loot_filter_category_to_str,
-    town::panels::market::{StatDropdown, item_rarity_str},
+    shared::{
+        affix_filters::AffixFilters,
+        inventory::loot_filter_category_to_str,
+        stat_filters::{StatFilterSignals, StatFilters},
+    },
+    town::panels::market::item_rarity_str,
     ui::{
         buttons::{FancyButton, MenuButton, Toggle},
         card::{CardHeader, CardInset, MenuCard},
         checkbox::Checkbox,
         confirm::ConfirmContext,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
-        input::{Input, ValidatedInput},
+        input::ValidatedInput,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
         tooltip::{StaticTooltip, StaticTooltipPosition},
@@ -62,9 +66,7 @@ pub struct FilterRule {
     pub item_name: Option<ItemName>,
     pub item_level: Option<AreaLevel>,
     pub req_item_level: Option<AreaLevel>,
-    #[serde(default)]
     pub req_affix_level: Option<AreaLevel>,
-    #[serde(default)]
     pub max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
@@ -82,7 +84,10 @@ pub struct FilterRule {
     pub item_block: Option<f64>,
 
     #[allow(clippy::type_complexity)]
+    // TODO: MarketStatFilter?
     pub stat_filters: [Option<((StatType, Modifier), Option<f64>, bool)>; STAT_FILTERS_AMOUNT],
+    #[serde(default)]
+    pub affix_filters: [Option<MarketAffixFilter>; AFFIX_FILTERS_AMOUNT],
 }
 
 impl FilterRule {
@@ -106,10 +111,8 @@ pub fn LootFilterPanel(
 ) -> impl IntoView {
     let selected_rule = RwSignal::new(None);
 
-    let (get_loot_filter, set_loot_filter, _) = storage::use_local_storage::<
-        LootFilter,
-        JsonSerdeCodec,
-    >(format!("loot_filter_{}", character_id));
+    let (get_loot_filter, set_loot_filter, _) =
+        use_local_storage::<LootFilter, JsonSerdeCodec>(format!("loot_filter_{}", character_id));
 
     loot_filter.set(get_loot_filter.get_untracked());
     let local_loot_filter = RwSignal::new(loot_filter.get_untracked());
@@ -478,7 +481,7 @@ pub fn EditRule(
     rule_field!(item_block);
 
     // Stats
-    let stat_filters: [(_, _, _); STAT_FILTERS_AMOUNT] = std::array::from_fn(|_| {
+    let stat_filters: StatFilterSignals = std::array::from_fn(|_| {
         (
             RwSignal::new(None),
             RwSignal::new(None),
@@ -565,6 +568,44 @@ pub fn EditRule(
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
 
+    let affix_filters: [(_, _); AFFIX_FILTERS_AMOUNT] = std::array::from_fn(|_| {
+        (
+            RwSignal::new(None::<(Option<BaseItemId>, String)>),
+            RwSignal::new(None::<AreaLevel>),
+        )
+    });
+    Effect::new(move |_| {
+        with_selected_rule(selected_rule, loot_filter, move |rule| {
+            for (index, (affix_id, min_level)) in affix_filters.iter().enumerate() {
+                if let Some(filter) = &rule.affix_filters[index] {
+                    affix_id.set(Some((
+                        filter.base_item_id.clone(),
+                        filter.affix_group_id.clone(),
+                    )));
+                    min_level.set(filter.min_level);
+                } else {
+                    affix_id.set(None);
+                    min_level.set(None);
+                }
+            }
+        });
+    });
+
+    Effect::new(move |_| {
+        for (index, (affix_id, min_level)) in affix_filters.iter().enumerate() {
+            update_selected_rule(selected_rule, loot_filter, move |rule| {
+                rule.affix_filters[index] =
+                    affix_id
+                        .get()
+                        .map(|(base_item_id, affix_group_id)| MarketAffixFilter {
+                            base_item_id,
+                            affix_group_id,
+                            min_level: min_level.get(),
+                        });
+            });
+        }
+    });
+
     view! {
         <CardInset>
             <div class="flex justify-between items-center px-4 pb-4 border-b border-zinc-700">
@@ -610,9 +651,9 @@ pub fn EditRule(
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="req_item_level"
-                        label="Required Level:"
+                        label="Required Base Level:"
                         input_type="number"
-                        placeholder="Enter required level"
+                        placeholder="Enter required base level"
                         bind=req_item_level
                     />
 
@@ -631,7 +672,15 @@ pub fn EditRule(
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
+            <div class="border-b border-zinc-700">
+                <StatFilters stat_filters />
+            </div>
+
+            <div class="border-b border-zinc-700">
+                <AffixFilters affix_filters item_category />
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4">
                 <div class="flex flex-col gap-4">
                     <ValidatedInput
                         id="item_damages"
@@ -715,72 +764,6 @@ pub fn EditRule(
                 </div>
             </div>
 
-            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
-                {stat_filters
-                    .map(|(stat_type, stat_value, stat_excluded)| {
-                        view! {
-                            <div class="flex gap-2 xl:gap-4 items-center">
-                                {move || {
-                                    stat_type
-                                        .read()
-                                        .is_some()
-                                        .then(|| {
-                                            view! {
-                                                <MenuButton
-                                                    class:flex-none
-                                                    on:click=move |_| {
-                                                        stat_type.set(None);
-                                                        stat_value.set(None);
-                                                        stat_excluded.set(false);
-                                                    }
-                                                >
-                                                    "❌"
-                                                </MenuButton>
-                                            }
-                                        })
-                                }}
-                                <span class=move || {
-                                    if stat_type.read().is_none() {
-                                        "flex-1 text-center"
-                                    } else {
-                                        "flex-1"
-                                    }
-                                }>
-                                    <StatDropdown chosen_option=stat_type />
-                                </span>
-                                {move || {
-                                    stat_type
-                                        .read()
-                                        .is_some()
-                                        .then(|| {
-                                            view! {
-                                                <div class="w-36">
-                                                    <Input
-                                                        id="stat_value_1"
-                                                        input_type="number"
-                                                        placeholder="Value"
-                                                        bind=stat_value
-                                                    />
-                                                </div>
-                                                <StaticTooltip
-                                                    position=StaticTooltipPosition::Top
-                                                    tooltip=|| {
-                                                        "Require the stat to be absent or below the given value."
-                                                    }
-                                                >
-                                                    <Checkbox
-                                                        label="Exclude".to_string()
-                                                        checked=stat_excluded
-                                                        on_change=move |checked| { stat_excluded.set(checked) }
-                                                    />
-                                                </StaticTooltip>
-                                            }
-                                        })
-                                }}
-                            </div>
-                        }
-                    })}
-            </div>
         </CardInset>
     }
 }
