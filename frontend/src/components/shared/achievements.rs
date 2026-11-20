@@ -123,6 +123,13 @@ pub fn AchievementsPanel(
                                 let achieved = Memo::new(move |_| {
                                     displayed_achievements.read().contains_key(&achieved_id)
                                 });
+                                let achieved_id = id.clone();
+                                let character_achieved = Memo::new(move |_| {
+                                    achievements
+                                        .map(|achievements| {
+                                            achievements.read().contains_key(&achieved_id)
+                                        })
+                                });
                                 let unlocked_id = id.clone();
                                 let unlocked_at = Memo::new(move |_| {
                                     displayed_achievements.read().get(&unlocked_id).cloned()
@@ -130,11 +137,10 @@ pub fn AchievementsPanel(
                                 let required_goal_count = achievement.required_goal_count();
                                 let progress_id = id.clone();
                                 let goal_progress = Memo::new(move |_| {
-                                    (!display_user_achievements.get())
-                                        .then_some(achievements_progress)
-                                        .flatten()
-                                        .map(|achievements_progress| {
-                                            if achieved.get() {
+                                    achievements_progress
+                                        .zip(character_achieved.get())
+                                        .map(|(achievements_progress, character_achieved)| {
+                                            if character_achieved {
                                                 required_goal_count
                                             } else {
                                                 achievements_progress
@@ -170,6 +176,21 @@ pub fn AchievementsPanel(
                                                 })
                                     }
                                 });
+
+                                // (!display_user_achievements.get())
+                                // .then_some(achievements_progress)
+                                // .flatten()
+                                // .map(|achievements_progress| {
+                                // if achieved.get() {
+                                // required_goal_count
+                                // } else {
+                                // achievements_progress
+                                // .read()
+                                // .get(&progress_id)
+                                // .copied()
+                                // .unwrap_or_default()
+                                // .min(required_goal_count)
+                                // }
 
                                 view! {
                                     <MenuListRow
@@ -208,7 +229,7 @@ pub fn AchievementsPanel(
                                                                     <span class=move || {
                                                                         format!(
                                                                             "ml-auto shrink-0 text-sm font-semibold {}",
-                                                                            if achieved.get() {
+                                                                            if character_achieved.get().unwrap_or(achieved.get()) {
                                                                                 "text-amber-200"
                                                                             } else {
                                                                                 "text-zinc-300"
