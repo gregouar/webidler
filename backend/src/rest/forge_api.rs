@@ -284,6 +284,17 @@ pub async fn post_imbue(
         .bag
         .get_mut(item_index)
         .ok_or(AppError::NotFound)?;
+
+    if soul.modifiers.rarity == ItemRarity::Unique {
+        db::character_achievements::increase_counter(
+            &mut tx,
+            &payload.character_id,
+            AchievementCounter::ImbueUniqueSoul,
+            1,
+        )
+        .await?;
+    }
+
     *item = forge_controller::imbue(&master_store.items_store, item, &soul)?;
 
     inventory.bag.remove(soul_index);

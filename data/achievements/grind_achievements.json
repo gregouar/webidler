@@ -38,5 +38,15 @@
             { "Counter": {"counter": "GambleUnique", "value": 20} }
         ],
         "rewards": [ {"Cosmetic": "title_gambler"} ]
+    },
+    "imbue_unique"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/soul.svg",
+        "name"       : "Soul Binder",
+        "description": "Imbue 10 Unique Souls into Items.",
+        "goals"      : [
+            { "Counter": {"counter": "ImbueUniqueSoul", "value": 10} }
+        ],
+        "rewards": [ {"Cosmetic": "title_imbue_unique"} ]
     }
 }
