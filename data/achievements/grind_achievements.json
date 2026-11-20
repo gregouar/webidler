@@ -48,5 +48,15 @@
             { "Counter": {"counter": "ImbueUniqueSoul", "value": 10} }
         ],
         "rewards": [ {"Cosmetic": "title_imbue_unique"} ]
+    },
+    "kill_dragons"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/dragon_head.svg",
+        "name"       : "Imagine no Dragons",
+        "description": "Kill 1,000 Adult Dragons.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
     }
 }

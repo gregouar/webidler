@@ -15,5 +15,6 @@
     "title_edicts_100"             : {"Title": "addicted"           },
     "title_sacrifice_equipment_600": {"Title": "garbage collector"  },
     "title_gambler"                : {"Title": "certified gambler"  },
-    "title_imbue_unique"           : {"Title": "soul binder"        }
+    "title_imbue_unique"           : {"Title": "soul binder"        },
+    "title_kill_dragons"           : {"Title": "dragonless"         }
 }

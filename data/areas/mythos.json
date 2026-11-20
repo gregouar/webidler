@@ -11,7 +11,7 @@
         "quest": {
             "description": "Descend into the Eldritch Depths and confront The Horror lurking beyond the boundaries of reality.",
             "area_level": 30,
-            "reward": { "Item": {"item_id": "edict_3", "item_rarity": "Rare", "max_affixes": true, "level": 600} }
+            "reward": { "Loot": {"item_category": "Remnant", "level": 600} }
         }
     },
     "loot_tables": [
