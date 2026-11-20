@@ -9,7 +9,7 @@
     {
       "name"      : "Hungry Claws",
       "icon"      : "skills/claw.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -32,7 +32,7 @@
     {
       "name"      : "Chilling Presence",
       "icon"      : "skills/blizzard.svg",
-      "cooldown"  : 10,
+      "cooldown"  : 100,
       "skill_type": "Spell",
       "targets"   : [
         {

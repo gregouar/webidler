@@ -1,31 +1,23 @@
 {
-  "name": "Reef Shark",
+  "name"    : "Reef Shark",
   "portrait": "monsters/island/shark.webp",
   "max_life": 20,
-  "size": "Large",
-  "skills": [
+  "size"    : "Large",
+  "skills"  : [
     {
-      "name": "Big Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 4.0,
+      "name"      : "Big Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 40,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 5, 10 ]
-                }
+                "damage": { "Physical": [5, 10] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "bleed",
-                "duration": 5,
-                "value": 7
-              }
-            }
+            { "ApplyStatus": {"status_id": "bleed", "duration": 50, "value": 7} }
           ]
         }
       ]

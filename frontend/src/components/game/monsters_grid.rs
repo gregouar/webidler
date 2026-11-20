@@ -940,7 +940,7 @@ fn MonsterSkill(
                     .read()
                     .get(monster_index)
                     .and_then(|m| m.character_specs.skills_specs.get(index))
-                    .map(|s| s.cooldown.get())
+                    .map(|s| s.cooldown.get() * 0.1)
                     .unwrap_or_default()
         }
     });

@@ -222,7 +222,7 @@ pub fn SkillTooltip(
                     view! {
                         "Cooldown: "
                         <span class="text-stone-100">
-                            {format!("{:.1}s", skill_specs.cooldown.get())}
+                            {format!("{:.1}s", skill_specs.cooldown.get() * 0.1)}
                         </span>
                     }
                         .into_any()
@@ -557,10 +557,10 @@ pub fn format_chance(chance: &Chance, precise: bool) -> String {
     if precise {
         let luck_chance = chance
             .luck_estimate()
-            .map(|luck_estimate| format!(" ({:.2}%)", luck_estimate))
+            .map(|luck_estimate| format!(" ({:.1}%)", luck_estimate))
             .unwrap_or_default();
 
-        format!("{:.2}%{luck_chance}", chance.value.get())
+        format!("{:.1}%{luck_chance}", chance.value.get())
     } else {
         let luck_chance = chance
             .luck_estimate()
@@ -616,9 +616,8 @@ pub fn format_skill_effect(
             view! {
                 <EffectLi>
                     "Deal "
-                    <span class="font-semibold">
-                        {number::format_number(factor.get() * 100.0)}%
-                    </span> " of " {item_slot_str}" Damage" {converted_damage}
+                    <span class="font-semibold">{number::format_number(factor.get())}%</span> " of "
+                    {item_slot_str}" Damage" {converted_damage}
                 </EffectLi>
             }
             .into_any()
@@ -682,7 +681,7 @@ pub fn format_skill_effect(
                     view! {
                         <EffectLi>
                             "Critical Hit Chance: "
-                            <span class="font-semibold">{format_chance(&crit_chance, true)}</span>
+                            <span class="font-semibold">{format_chance(&crit_chance, false)}</span>
                         </EffectLi>
                         <EffectLi>
                             "Critical Hit Damage: "
@@ -717,9 +716,9 @@ pub fn format_skill_effect(
             match status_specs {
                 Some(status_specs) => {
                     let duration = duration
-                        .map(|duration| (duration.min.get(), duration.max.get()))
+                        .map(|duration| (duration.min.get()*0.1, duration.max.get()*0.1))
                         .unwrap_or_else(|| {
-                            (status_specs.duration.min.get(), status_specs.duration.max.get())
+                            (status_specs.duration.min.get()*0.1, status_specs.duration.max.get()*0.1)
                         });
                     let escalation = escalation
                         .map(|escalation| escalation.get())
@@ -848,14 +847,14 @@ pub fn format_skill_effect(
                 RestoreModifier::Flat if max.get() < 0.0 => view! {
                     <EffectLi>
                         {success_chance}"Reduce "{status_filter_str}" Duration by "
-                        {format_min_max_f64(-max.get(), -min.get())}" seconds"
+                        {format_min_max_f64(-max.get() * 0.1, -min.get() * 0.1)}" seconds"
                     </EffectLi>
                 }
                 .into_any(),
                 RestoreModifier::Flat => view! {
                     <EffectLi>
                         {success_chance}"Extend "{status_filter_str}" Duration by "
-                        {format_min_max_f64(min.get(), max.get())}" seconds"
+                        {format_min_max_f64(min.get() * 0.1, max.get() * 0.1)}" seconds"
                     </EffectLi>
                 }
                 .into_any(),
@@ -922,7 +921,7 @@ pub fn format_skill_effect(
                     }
                     .into_any(),
                     RestoreModifier::Flat => view! {
-                        {format_min_max(value)}
+                        {format_min_max_f64(value.min.get() * 0.1, value.max.get() * 0.1)}
                         " seconds from "
                     }
                     .into_any(),

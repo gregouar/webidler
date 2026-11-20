@@ -8,7 +8,7 @@
     {
       "name"      : "Lacerate",
       "icon"      : "skills/claw.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -28,7 +28,7 @@
     {
       "name"      : "Lacerate",
       "icon"      : "skills/claw.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {

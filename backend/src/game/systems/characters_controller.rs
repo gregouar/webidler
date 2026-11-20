@@ -348,7 +348,7 @@ pub fn should_apply_status(
 ) -> bool {
     let (_, (_, target_state)) = target;
 
-    if duration.get() <= 0.1 || !target_state.is_alive {
+    if duration.get() <= 1.0 || !target_state.is_alive {
         return false;
     }
 
@@ -418,7 +418,7 @@ pub fn apply_status(
     // (*duration.base_mut()) = duration.base().multiply_value(factor);
     duration.base_mut(|base| base.multiply_value(factor));
 
-    if duration.get() <= 0.1 || !target_state.is_alive {
+    if duration.get() <= 1.0 || !target_state.is_alive {
         return false;
     }
 
@@ -550,7 +550,7 @@ fn compute_effect_weight(
 ) -> f64 {
     let value = value.get() * (1.0 + escalation.get() * 0.01) + 1.0;
     if value_only {
-        if duration.get() < 0.2 {
+        if duration.get() < 2.0 {
             value * 0.1
         } else {
             value

@@ -3,7 +3,7 @@
         "name"      : "Appeasing Song",
         "icon"      : "skills/double_quaver.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             { "StatModifier": {"stat": "ManaRegen", "debuff": true}, "value": 100, "modifier": "Percent" },
@@ -18,7 +18,7 @@
         "name"      : "Lookout!",
         "icon"      : "skills/crow_nest.svg",
         "debuff"    : false,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 1,
         "effects"   : [
             {
@@ -43,7 +43,7 @@
         "name"      : "Protective Hull",
         "icon"      : "skills/chest.svg",
         "debuff"    : false,
-        "duration"  : 10,
+        "duration"  : 100,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -57,7 +57,7 @@
         "name"      : "Pirates Curse",
         "icon"      : "skills/pirate_grave.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {

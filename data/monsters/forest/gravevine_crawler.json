@@ -1,25 +1,20 @@
 {
-  "name": "Gravevine Crawler",
+  "name"    : "Gravevine Crawler",
   "portrait": "monsters/forest/gravevine_crawler.webp",
   "max_life": 12,
-  "block": {
-    "Attack": 30,
-    "Spell": 20
-  },
-  "skills": [
+  "block"   : {"Attack": 30, "Spell": 20},
+  "skills"  : [
     {
-      "name": "Vine Lash",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Vine Lash",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 2, 5 ]
-                }
+                "damage": { "Physical": [2, 5] }
               }
             }
           ]

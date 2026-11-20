@@ -8,11 +8,11 @@
     {
       "name"      : "Infernal Cyclone",
       "icon"      : "skills/whirlwind.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {
-          "repeat" : { "value": [2, 4], "target": "Same", "repeat_cooldown": 0.5 },
+          "repeat": { "value": [2, 4], "target": "Same", "repeat_cooldown": 0.5 },
           "effects": [
             {
               "FlatDamage": {

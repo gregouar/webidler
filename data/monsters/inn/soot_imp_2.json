@@ -7,11 +7,11 @@
     {
       "name"      : "Burning Throw",
       "icon"      : "skills/fireball.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Spell",
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {

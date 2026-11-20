@@ -5,7 +5,7 @@
         "debuff"     : true,
         "damage_type": "Physical",
         "avoidable"  : true,
-        "duration"   : 2,
+        "duration"   : 20,
         "max_stacks" : 10,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical", "armor_penetration": 100}, "value": 1, "modifier": "Flat" }

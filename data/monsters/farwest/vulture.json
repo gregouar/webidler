@@ -7,7 +7,7 @@
         {
             "name"      : "Scratch",
             "icon"      : "skills/bird_claw.svg",
-            "cooldown"  : 3.0,
+            "cooldown"  : 30,
             "skill_type": "Attack",
             "targets"   : [
                 {
@@ -25,7 +25,7 @@
             "name"      : "Carrion Feast",
             "icon"      : "skills/carrion.svg",
             "skill_type": "Blessing",
-            "cooldown"  : 0.0,
+            "cooldown"  : 0,
             "triggers"  : [
                 {
                     "trigger_id": "vulture_feast",

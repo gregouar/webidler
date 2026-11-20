@@ -49,8 +49,8 @@
                         }
                     },
                     {
-                        "value"        : -0.5,
-                        "upgrade_value": -0.5,
+                        "value"        : -5,
+                        "upgrade_value": -5,
                         "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
                     }
                 ]
@@ -449,8 +449,8 @@
                         }
                     },
                     {
-                        "value"        : -0.5,
-                        "upgrade_value": -0.5,
+                        "value"        : -5,
+                        "upgrade_value": -5,
                         "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "Flat" }
                     },
                     {

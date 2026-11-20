@@ -6,7 +6,7 @@
     {
       "name"      : "Barrage",
       "icon"      : "skills/machine_gun.svg",
-      "cooldown"  : 6.0,
+      "cooldown"  : 60,
       "skill_type": "Attack",
       "targets"   : [
         {

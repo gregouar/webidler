@@ -7,7 +7,7 @@
     {
       "name"      : "Spear",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -24,7 +24,7 @@
     {
       "name"      : "Khopesh",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -41,7 +41,7 @@
     {
       "name"      : "Vehicular Manslaughter",
       "icon"      : "skills/cartwheel.svg",
-      "cooldown"  : 8.0,
+      "cooldown"  : 80,
       "skill_type": "Attack",
       "targets"   : [
         {

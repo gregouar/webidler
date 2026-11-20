@@ -3,7 +3,7 @@
         "name"      : "Melted Cheese",
         "icon"      : "statuses/cheese.svg",
         "debuff"    : true,
-        "duration"  : 5.0,
+        "duration"  : 50,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -48,7 +48,7 @@
         "name"      : "Greed",
         "icon"      : "statuses/snatch.svg",
         "debuff"    : false,
-        "duration"  : 60,
+        "duration"  : 600,
         "max_stacks": 20,
         "effects"   : [
             {
@@ -72,7 +72,7 @@
         "icon"       : "statuses/spider.svg",
         "debuff"     : true,
         "damage_type": "Physical",
-        "duration"   : 5,
+        "duration"   : 50,
         "max_stacks" : 10,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" }
@@ -82,7 +82,7 @@
         "name"      : "Punishment",
         "icon"      : "statuses/whip.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 10,
         "effects"   : [
             {
@@ -109,7 +109,7 @@
         "name"      : "Engorged",
         "icon"      : "passives/muscle_up.svg",
         "debuff"    : false,
-        "duration"  : 10,
+        "duration"  : 100,
         "max_stacks": 50,
         "effects"   : [
             {
@@ -128,7 +128,7 @@
         "name"      : "Drained",
         "icon"      : "passives/leeching_worm.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -149,7 +149,7 @@
         "debuff"     : true,
         "damage_type": "Poison",
         "avoidable"  : true,
-        "duration"   : 1.0,
+        "duration"   : 10,
         "max_stacks" : 50,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" },

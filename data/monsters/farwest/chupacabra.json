@@ -8,7 +8,7 @@
             "name"      : "Vampiric Bite",
             "icon"      : "skills/bite.svg",
             "skill_type": "Attack",
-            "cooldown"  : 3.0,
+            "cooldown"  : 30,
             "targets"   : [
                 {
                     "effects": [
@@ -25,7 +25,7 @@
                 {
                     "target_type": "Me",
                     "effects"    : [
-                        { "ApplyStatus": {"status_id": "life_regen", "value": 100, "duration": 2} }
+                        { "ApplyStatus": {"status_id": "life_regen", "value": 100, "duration": 20} }
                     ]
                 }
             ]

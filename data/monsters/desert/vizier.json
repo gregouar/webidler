@@ -12,7 +12,7 @@
     {
       "name"      : "The Crook and Flail",
       "icon"      : "skills/crook_flail.svg",
-      "cooldown"  : 2.5,
+      "cooldown"  : 25,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -31,7 +31,7 @@
     {
       "name"      : "Pharaoh's Protection",
       "icon"      : "skills/egypt_crown.svg",
-      "cooldown"  : 10,
+      "cooldown"  : 100,
       "skill_type": "Blessing",
       "targets"   : [
         {
@@ -47,7 +47,7 @@
       "name"      : "Canopic Lost",
       "icon"      : "skills/egyptian_urns.svg",
       "skill_type": "Curse",
-      "cooldown"  : 0.0,
+      "cooldown"  : 0,
       "triggers"  : [
         {
           "trigger_id": "vizier_jar",

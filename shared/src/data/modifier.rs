@@ -102,11 +102,10 @@ where
             self.base
         };
 
-        base.multiply_value(self.factor())
+        base.multiply_value(self.factor()).round()
     }
 
     fn compute(&mut self) {
-        // TODO: Round? Would need to rescale cooldowns
         self.evaluated = self.evaluate(true);
     }
 

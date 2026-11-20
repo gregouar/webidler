@@ -3,7 +3,7 @@
     "name"      : "Bonfire",
     "icon"      : "passives/pyre.svg",
     "debuff"    : false,
-    "duration"  : 5,
+    "duration"  : 50,
     "max_stacks": 1,
     "effects"   : [
       {
@@ -28,7 +28,7 @@
     "name"      : "Legionnaire Stance",
     "icon"      : "passives/legionnaire_stance2.svg",
     "debuff"    : false,
-    "duration"  : 5,
+    "duration"  : 50,
     "max_stacks": 20,
     "effects"   : [
       {
@@ -55,7 +55,7 @@
     "name"      : "Open Wound",
     "icon"      : "passives/open_wound.svg",
     "debuff"    : true,
-    "duration"  : 8,
+    "duration"  : 80,
     "max_stacks": 20,
     "effects"   : [
       {
@@ -135,7 +135,7 @@
     "name"      : "Pyromaniac",
     "icon"      : "passives/pyromaniac.svg",
     "debuff"    : false,
-    "duration"  : 3,
+    "duration"  : 30,
     "max_stacks": 20,
     "effects"   : [
       {
@@ -180,7 +180,7 @@
     "adjective" : "Focused",
     "icon"      : "passives/yin_yang.svg",
     "debuff"    : false,
-    "duration"  : 10,
+    "duration"  : 100,
     "max_stacks": 5,
     "effects"   : [
       {

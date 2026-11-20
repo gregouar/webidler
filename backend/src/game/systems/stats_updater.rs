@@ -184,9 +184,9 @@ pub fn check_condition(
             })
             .map(|status_state| {
                 if *use_max_duration {
-                    status_state.max_duration.get()
+                    status_state.max_duration.get() * 0.1
                 } else {
-                    status_state.duration.get()
+                    status_state.duration.get() * 0.1
                 }
             })
             .fold(0.0_f64, f64::max),

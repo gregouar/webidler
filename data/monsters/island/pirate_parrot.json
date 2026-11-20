@@ -1,21 +1,19 @@
 {
-  "name": "Cabin Parrot",
+  "name"    : "Cabin Parrot",
   "portrait": "monsters/island/pirate_parrot.webp",
   "max_life": 3,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Angry Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 2.0,
+      "name"      : "Angry Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 10, 14 ]
-                }
+                "damage": { "Physical": [10, 14] }
               }
             }
           ]

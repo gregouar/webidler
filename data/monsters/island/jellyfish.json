@@ -1,31 +1,23 @@
 {
-  "name": "Poisonous Jellyfish",
+  "name"    : "Poisonous Jellyfish",
   "portrait": "monsters/island/jellyfish.webp",
   "max_life": 5,
-  "armor": { "Poison": 100, "Storm": 100 },
-  "skills": [
+  "armor"   : {"Poison": 100, "Storm": 100},
+  "skills"  : [
     {
-      "name": "Poisoned Tendrils",
-      "icon": "skills/poison_coating.svg",
+      "name"      : "Poisoned Tendrils",
+      "icon"      : "skills/poison_coating.svg",
       "skill_type": "Attack",
-      "cooldown": 2.0,
-      "targets": [
+      "cooldown"  : 20,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 15 ]
-                }
+                "damage": { "Storm": [0, 15] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 5,
-                "escalation": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 50} }
           ]
         }
       ]

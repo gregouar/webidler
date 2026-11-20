@@ -9,10 +9,10 @@
       "name"      : "Seth's Temper",
       "icon"      : "skills/chain_lightning.svg",
       "skill_type": "Spell",
-      "cooldown"  : 4.0,
+      "cooldown"  : 40,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
@@ -27,10 +27,10 @@
       "name"      : "Sekhmet Condemnation",
       "icon"      : "skills/tiger_head.svg",
       "skill_type": "Curse",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "obelisk_vulnerability", "value": 50} }
           ]

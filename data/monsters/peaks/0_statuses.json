@@ -3,7 +3,7 @@
         "name"      : "Evil Eye",
         "icon"      : "skills/beast_eye.svg",
         "debuff"    : true,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 1,
         "effects"   : [
             {
@@ -38,7 +38,7 @@
         "name"      : "Abal's Fury",
         "icon"      : "skills/dragon_head.svg",
         "debuff"    : false,
-        "duration"  : [5, 10],
+        "duration"  : [50, 100],
         "max_stacks": 1,
         "effects"   : [
             {
@@ -62,7 +62,7 @@
         "name"      : "Stinky",
         "icon"      : "skills/turd.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {

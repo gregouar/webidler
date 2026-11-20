@@ -3,7 +3,7 @@
         "name"      : "Tempo",
         "icon"      : "statuses/musical_notes.svg",
         "debuff"    : false,
-        "duration"  : 4,
+        "duration"  : 40,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -26,7 +26,7 @@
         "name"      : "Northwest",
         "icon"      : "statuses/compass.svg",
         "debuff"    : false,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -53,7 +53,7 @@
         "name"      : "Southwest",
         "icon"      : "statuses/compass.svg",
         "debuff"    : false,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -80,7 +80,7 @@
         "name"      : "East",
         "icon"      : "statuses/compass.svg",
         "debuff"    : false,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -99,7 +99,7 @@
         "name"      : "East",
         "icon"      : "statuses/compass.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -118,7 +118,7 @@
         "name"      : "East",
         "icon"      : "statuses/compass.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -136,7 +136,7 @@
         "name"      : "Zael's Voyage",
         "icon"      : "statuses/dragon_spiral.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -163,7 +163,7 @@
         "name"      : "Ghoststep",
         "icon"      : "statuses/footsteps.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 20,
         "effects"   : [
             {

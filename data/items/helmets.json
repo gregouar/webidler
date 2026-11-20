@@ -328,7 +328,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }

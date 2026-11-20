@@ -7,7 +7,7 @@
     {
       "name"      : "Drain Life",
       "icon"      : "skills/vampire.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {
@@ -20,7 +20,7 @@
         {
           "target_type": "Me",
           "effects"    : [
-            { "ApplyStatus": {"status_id": "life_regen", "value": 200, "duration": 3} }
+            { "ApplyStatus": {"status_id": "life_regen", "value": 200, "duration": 30} }
           ]
         }
       ]

@@ -12,7 +12,7 @@
     {
       "name"      : "Mortar",
       "icon"      : "skills/turret.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -30,7 +30,7 @@
     {
       "name"      : "Machine Gun",
       "icon"      : "skills/machine_gun.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -49,7 +49,7 @@
     {
       "name"      : "Tesla Gun",
       "icon"      : "skills/tesla.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {
@@ -67,7 +67,7 @@
     {
       "name"      : "Flamethrower",
       "icon"      : "skills/burning_ray.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {

@@ -3,7 +3,7 @@
         "name"      : "Poison Coating",
         "icon"      : "skills/poison_coating.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -20,7 +20,7 @@
         "name"      : "Pyroclastic Infusion",
         "icon"      : "skills/pyroclastic_infusion.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -73,7 +73,7 @@
         "name"      : "Magmatic Infusion",
         "icon"      : "skills/pyroclastic_infusion.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -104,7 +104,7 @@
         "name"      : "Galvanic Infusion",
         "icon"      : "skills/pyroclastic_infusion.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -135,7 +135,7 @@
         "name"      : "Resentment",
         "icon"      : "skills/angry_eyes.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -149,7 +149,7 @@
         "name"      : "Sharpen Weapon",
         "icon"      : "skills/sharpen_weapon.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -194,7 +194,7 @@
         "name"      : "Distracted",
         "icon"      : "statuses/distraction.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -212,7 +212,7 @@
         "name"      : "Blast Charge",
         "icon"      : "skills/blast_charge.svg",
         "debuff"    : true,
-        "duration"  : 30,
+        "duration"  : 300,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -302,7 +302,7 @@
         "name"      : "Deflecting Spin",
         "icon"      : "skills/whirlwind.svg",
         "debuff"    : false,
-        "duration"  : 0.5,
+        "duration"  : 5,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -321,7 +321,7 @@
         "name"      : "Destabilized",
         "icon"      : "statuses/earth_spit.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -351,7 +351,7 @@
         "name"      : "Taunted",
         "icon"      : "skills/taunt.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -365,7 +365,7 @@
         "name"      : "Reckless",
         "icon"      : "skills/taunt.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 1,
         "effects"   : [
             {

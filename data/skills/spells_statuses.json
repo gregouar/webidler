@@ -3,7 +3,7 @@
         "name"      : "Sparking",
         "icon"      : "skills/spark.svg",
         "debuff"    : false,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -40,7 +40,7 @@
         "name"      : "Critical Accumulation",
         "icon"      : "skills/spark.svg",
         "debuff"    : true,
-        "duration"  : 1,
+        "duration"  : 10,
         "max_stacks": 10,
         "effects"   : [
             {
@@ -56,7 +56,7 @@
         "debuff"     : true,
         "damage_type": "Fire",
         "avoidable"  : true,
-        "duration"   : 2,
+        "duration"   : 20,
         "max_stacks" : 1,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 5, "modifier": "Percent" }
@@ -67,7 +67,7 @@
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
         "damage_type": "Fire",
-        "duration"   : 2,
+        "duration"   : 20,
         "max_stacks" : 1,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Fire"}, "value": 20, "modifier": "Percent" }
@@ -79,7 +79,7 @@
         "debuff"     : true,
         "damage_type": "Poison",
         "avoidable"  : true,
-        "duration"   : 2,
+        "duration"   : 20,
         "max_stacks" : 1,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 5, "modifier": "Percent" }
@@ -90,7 +90,7 @@
         "icon"       : "skills/righteous_fire.svg",
         "debuff"     : true,
         "damage_type": "Poison",
-        "duration"   : 2,
+        "duration"   : 20,
         "max_stacks" : 1,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 20, "modifier": "Percent" }
@@ -100,7 +100,7 @@
         "name"      : "Chilblains",
         "icon"      : "statuses/hand_bandage.svg",
         "debuff"    : true,
-        "duration"  : 10,
+        "duration"  : 100,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -114,7 +114,7 @@
         "name"      : "Scorched",
         "icon"      : "passives/flaming_claw.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -128,7 +128,7 @@
         "name"      : "Flesh Rot",
         "icon"      : "statuses/carrion.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -146,7 +146,7 @@
         "name"      : "Refreshed",
         "icon"      : "statuses/heal_refresh.svg",
         "debuff"    : false,
-        "duration"  : 4,
+        "duration"  : 40,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -160,7 +160,7 @@
         "name"      : "Cleansed",
         "icon"      : "statuses/heal_cleanse.svg",
         "debuff"    : false,
-        "duration"  : 4,
+        "duration"  : 40,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -174,7 +174,7 @@
         "name"      : "Bees",
         "icon"      : "skills/bee.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -214,7 +214,7 @@
         "name"      : "Stinging Bees",
         "icon"      : "skills/bee.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -254,7 +254,7 @@
         "debuff"     : true,
         "damage_type": "Poison",
         "avoidable"  : true,
-        "duration"   : 1,
+        "duration"   : 10,
         "max_stacks" : 20,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Poison"}, "value": 100, "modifier": "Percent" }

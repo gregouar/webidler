@@ -58,8 +58,8 @@ fn update_status(
 
         status_state.elapsed_escalation += elapsed_time_f64;
 
-        if status_state.elapsed_escalation.get() > status_state.max_duration.get() {
-            status_state.elapsed_escalation = status_state.max_duration;
+        if status_state.elapsed_escalation.get() > status_state.max_duration.get() * 0.1 {
+            status_state.elapsed_escalation = status_state.max_duration * 0.1;
         }
     }
 
@@ -78,7 +78,9 @@ fn update_status(
                     damage.insert(
                         *damage_type,
                         status_effect.computed_value(status_state.value)
-                            * elapsed_time_f64.get().min(status_state.duration.get()),
+                            * elapsed_time_f64
+                                .get()
+                                .min(status_state.duration.get() * 0.1),
                     );
                     damage
                 },
@@ -89,7 +91,7 @@ fn update_status(
         }
     }
 
-    status_state.duration -= elapsed_time_f64;
+    status_state.duration -= elapsed_time_f64 * 10.0;
 
     let remove_status = status_state.duration.get() <= 0.0;
 

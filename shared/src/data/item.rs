@@ -320,7 +320,7 @@ impl WeaponSpecs {
     pub fn average_damage_type(&self, damage_type: DamageType) -> f64 {
         self
                 .damage.get(damage_type)
-                .map(|value| 1.0 / self.cooldown.get()
+                .map(|value| 10.0 / self.cooldown.get()
             // TODO: Lucky?
             * (1.0 + self.crit_damage.get() * self.crit_chance.value.get() as f64 * 0.0001)*(value.min.get() + value.max.get()) * 0.5).unwrap_or_default()
     }

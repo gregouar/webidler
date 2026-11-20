@@ -12,7 +12,7 @@
     {
       "name"      : "Boring",
       "icon"      : "skills/drill.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -30,7 +30,7 @@
     {
       "name"      : "Blood Ore",
       "icon"      : "skills/ore.svg",
-      "cooldown"  : 5,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {

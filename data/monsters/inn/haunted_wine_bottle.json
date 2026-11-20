@@ -1,29 +1,20 @@
 {
-  "name": "Oathbound Bottle",
+  "name"    : "Oathbound Bottle",
   "portrait": "monsters/inn/haunted_wine_bottle.webp",
   "max_life": 5,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Sickening Sip",
-      "icon": "skills/skull.svg",
-      "cooldown": 2.0,
+      "name"      : "Sickening Sip",
+      "icon"      : "skills/skull.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 1,
-                "escalation": 20
-              }
-            },
+            { "ApplyStatus": {"status_id": "poison", "value": 1, "escalation": 20} },
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 1, 2 ],
-                  "Fire": [ 1, 2 ]
-                }
+                "damage": { "Physical": [1, 2], "Fire": [1, 2] }
               }
             }
           ]

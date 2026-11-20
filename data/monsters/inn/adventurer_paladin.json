@@ -1,39 +1,23 @@
 {
-  "name": "Tyranus",
-  "portrait": "monsters/inn/adventurer_paladin.webp",
-  "rarity": "Boss",
-  "max_life": 200,
-  "armor": {
-    "Physical": 100
-  },
-  "stun_lockout": 5,
-  "status_resistances": [
+  "name"              : "Tyranus",
+  "portrait"          : "monsters/inn/adventurer_paladin.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 200,
+  "armor"             : {"Physical": 100},
+  "stun_lockout"      : 5,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Divine Smite",
-      "icon": "skills/attack.svg",
-      "cooldown": 3,
+      "name"      : "Divine Smite",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [
-                    5,
-                    10
-                  ],
-                  "Storm": [
-                    0,
-                    30
-                  ]
-                }
+                "damage": { "Physical": [5, 10], "Storm": [0, 30] }
               }
             }
           ]
@@ -41,21 +25,15 @@
       ]
     },
     {
-      "name": "Lay on Hands",
-      "icon": "skills/heal.svg",
+      "name"      : "Lay on Hands",
+      "icon"      : "skills/heal.svg",
       "skill_type": "Blessing",
-      "cooldown": 10,
-      "targets": [
+      "cooldown"  : 100,
+      "targets"   : [
         {
           "target_type": "Friend",
-          "effects": [
-            {
-              "Restore": {
-                "restore_type": "Life",
-                "modifier": "Percent",
-                "value": 50
-              }
-            }
+          "effects"    : [
+            { "Restore": {"restore_type": "Life", "modifier": "Percent", "value": 50} }
           ]
         }
       ]

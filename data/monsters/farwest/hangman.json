@@ -7,7 +7,7 @@
     {
       "name"      : "Cut",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -24,7 +24,7 @@
     {
       "name"      : "Hang",
       "icon"      : "skills/slipknot.svg",
-      "cooldown"  : 10.0,
+      "cooldown"  : 100,
       "skill_type": "Curse",
       "targets"   : [
         {

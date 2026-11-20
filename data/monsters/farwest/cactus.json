@@ -7,7 +7,7 @@
     {
       "name"      : "Ouch!",
       "icon"      : "skills/thorn.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Spell",
       "targets"   : [
         {
@@ -26,7 +26,7 @@
     {
       "name"      : "Don't Touch It",
       "icon"      : "skills/cactus.svg",
-      "cooldown"  : 0.0,
+      "cooldown"  : 0,
       "skill_type": "Attack",
       "targets"   : [],
       "triggers"  : [

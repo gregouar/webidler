@@ -688,7 +688,7 @@ fn PlayerSkill(index: usize, is_dead: Memo<bool>) -> impl IntoView {
         let cooldown = skill_specs.with(|skill_specs| {
             skill_specs
                 .as_ref()
-                .map(|skill_specs| skill_specs.cooldown.get())
+                .map(|skill_specs| skill_specs.cooldown.get() * 0.1)
                 .unwrap_or_default()
         });
 

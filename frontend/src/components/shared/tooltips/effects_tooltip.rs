@@ -987,7 +987,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             } else {
                 format!(
                     "{} seconds Duration to {}",
-                    format_adds_removes(value, true, ""),
+                    format_adds_removes(value.map(|v| v * 0.1), true, ""),
                     skill_status_filter_str(skill_filter, status_filter, true)
                 )
             }
@@ -1053,13 +1053,13 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
             if value.unwrap_or_default() >= 0.0 {
                 format!(
                     "Removes {}s Cooldown{}",
-                    format_flat_number(value, true),
+                    format_flat_number(value.map(|v| v * 0.1), true),
                     skill_filter_str(skill_filter, " to ", true)
                 )
             } else {
                 format!(
                     "Adds {}s Cooldown{}",
-                    format_flat_number(value.map(|v| -v), true),
+                    format_flat_number(value.map(|v| -v * 0.1), true),
                     skill_filter_str(skill_filter, " to ", true)
                 )
             }
@@ -1177,7 +1177,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::RefreshedCooldown { skill_filter } => {
             format!(
                 "{} seconds to Refreshed Cooldown{}",
-                format_adds_removes(value, true, ""),
+                format_adds_removes(value.map(|v| v * 0.1), true, ""),
                 skill_filter_str(skill_filter, " with ", true)
             )
         }

@@ -1,29 +1,22 @@
 {
-  "name": "Hitotsume Kozo",
+  "name"    : "Hitotsume Kozo",
   "portrait": "monsters/yokai/hitotsume_kozo.webp",
   "max_life": 10,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Lantern Prank",
-      "icon": "skills/asian_lantern.svg",
-      "cooldown": 3.0,
+      "name"      : "Lantern Prank",
+      "icon"      : "skills/asian_lantern.svg",
+      "cooldown"  : 30,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 6 ]
-                }
+                "damage": { "Physical": [3, 6] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "lantern_prank",
-                "value": 100
-              }
-            }
+            { "ApplyStatus": {"status_id": "lantern_prank", "value": 100} }
           ]
         }
       ]

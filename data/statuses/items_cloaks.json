@@ -3,7 +3,7 @@
         "name"      : "Stormfeast",
         "icon"      : "statuses/lightning_flame.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -21,7 +21,7 @@
         "name"      : "Backstabbing",
         "icon"      : "statuses/cowled.svg",
         "debuff"    : false,
-        "duration"  : 6.0,
+        "duration"  : 60,
         "max_stacks": 1,
         "effects"   : [
             {

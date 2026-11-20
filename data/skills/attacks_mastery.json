@@ -161,8 +161,8 @@
             }
           },
           {
-            "value"        : -0.5,
-            "upgrade_value":  0  ,
+            "value"        : -5,
+            "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : {
                 "StatConditionalModifier": {
@@ -370,8 +370,8 @@
         "max_level"   : 20,
         "effects"     : [
           {
-            "value"        : 0.1,
-            "upgrade_value": 0.1,
+            "value"        : 1,
+            "upgrade_value": 1,
             "StatEffect"   : {
               "stat"    : { "StatusDuration": {"status_id": "poison"} },
               "modifier": "Flat"
@@ -407,8 +407,8 @@
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 0.1,
-            "upgrade_value": 0.1,
+            "value"        : 1,
+            "upgrade_value": 1,
             "StatEffect"   : {
               "stat"    : { "StatusDuration": {"status_id": "poison", "skill_type": "Attack"} },
               "modifier": "Flat",
@@ -733,8 +733,8 @@
         "max_level"   : 10,
         "effects"     : [
           {
-            "value"        : 0.2,
-            "upgrade_value": 0.2,
+            "value"        : 2,
+            "upgrade_value": 2,
             "StatEffect"   : {
               "stat"    : { "StatusDuration": {"status_id": "bleed", "skill_type": null, "skill_id": null} },
               "modifier": "Flat",
@@ -1639,8 +1639,11 @@
           },
           {
             "value"        : -25,
-            "upgrade_value": 0,
-            "StatEffect"   : { "stat": {"Speed": {}}, "modifier": "More" }
+            "upgrade_value":   0,
+            "StatEffect"   : {
+              "stat"    : { "Speed": {"skill_type": "Attack"} },
+              "modifier": "More"
+            }
           }
         ]
       },
@@ -1675,7 +1678,7 @@
               "effects"    : [
                 {
                   "success_chance"         : {"value": 100.0, "lucky_chance": 0.0},
-                  "WeaponEffect"           : {"item_slot": "Weapon", "factor": 0.2, "damage_type": "Fire"},
+                  "WeaponEffect"           : {"item_slot": "Weapon", "factor": 20, "damage_type": "Fire"},
                   "ignore_stat_effects"    : [],
                   "conditional_modifiers"  : [],
                   "independent_application": false,
@@ -1715,8 +1718,8 @@
         "max_level"   : 3,
         "effects"     : [
           {
-            "value"        : 1,
-            "upgrade_value": 1,
+            "value"        : 10,
+            "upgrade_value": 10,
             "StatEffect"   : { "stat": {"RefreshedCooldown": {}}, "modifier": "Flat" }
           },
           {

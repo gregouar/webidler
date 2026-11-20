@@ -1,43 +1,26 @@
 {
-  "name": "Pistol of the Damned",
-  "portrait": "monsters/island/treasure_gun.webp",
-  "rarity": "Boss",
-  "max_life": 150,
-  "armor": {
-    "Physical": 100
-  },
-  "stun_lockout": 3,
-  "status_resistances": [
+  "name"              : "Pistol of the Damned",
+  "portrait"          : "monsters/island/treasure_gun.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 150,
+  "armor"             : {"Physical": 100},
+  "stun_lockout"      : 3,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Explosive Round",
-      "icon": "skills/burning_ray.svg",
-      "cooldown": 3,
+      "name"      : "Explosive Round",
+      "icon"      : "skills/burning_ray.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Fire": [
-                    10,
-                    20
-                  ]
-                }
+                "damage": { "Fire": [10, 20] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "value": 3
-              }
-            }
+            { "ApplyStatus": {"status_id": "burn", "value": 3} }
           ]
         }
       ]

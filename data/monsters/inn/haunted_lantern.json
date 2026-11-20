@@ -8,11 +8,11 @@
       "name"      : "Flame Throw",
       "icon"      : "skills/burning_ray.svg",
       "skill_type": "Spell",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "targets"   : [
         {
           "effects": [
-            { "ApplyStatus": {"duration": 3, "status_id": "burn", "value": 3} }
+            { "ApplyStatus": {"duration": 30, "status_id": "burn", "value": 3} }
           ]
         }
       ]

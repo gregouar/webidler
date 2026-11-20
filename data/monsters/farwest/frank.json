@@ -8,7 +8,7 @@
     {
       "name"      : "Monster Foot",
       "icon"      : "skills/stomp.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {

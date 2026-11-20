@@ -8,7 +8,7 @@
     {
       "name"      : "Ash Blizzard",
       "icon"      : "skills/pyroclastic_infusion.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {
@@ -25,7 +25,7 @@
     {
       "name"      : "Stomp",
       "icon"      : "skills/stomp.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {

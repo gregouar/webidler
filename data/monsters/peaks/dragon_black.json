@@ -1,32 +1,25 @@
 {
-  "name": "Zael, the Father Drake",
-  "portrait": "monsters/peaks/dragon_black.webp",
-  "rarity": "Boss",
-  "max_life": 1000,
-  "size": "Gargantuan",
-  "armor": { "Poison": 100, "Storm": 100 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Zael, the Father Drake",
+  "portrait"          : "monsters/peaks/dragon_black.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 1000,
+  "size"              : "Gargantuan",
+  "armor"             : {"Poison": 100, "Storm": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Tempest Talon",
-      "icon": "skills/chain_lightning.svg",
+      "name"      : "Tempest Talon",
+      "icon"      : "skills/chain_lightning.svg",
       "skill_type": "Attack",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "range": "Melee",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 60 ]
-                }
+                "damage": { "Storm": [0, 60] }
               }
             }
           ]
@@ -34,47 +27,34 @@
       ]
     },
     {
-      "name": "Poison Spike",
-      "icon": "skills/poison_cloud.svg",
+      "name"      : "Poison Spike",
+      "icon"      : "skills/poison_cloud.svg",
       "skill_type": "Attack",
-      "cooldown": 5.0,
-      "targets": [
+      "cooldown"  : 50,
+      "targets"   : [
         {
           "range": "Melee",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 5, 10 ]
-                }
+                "damage": { "Physical": [5, 10] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 20,
-                "escalation": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 20, "escalation": 20} }
           ]
         }
       ]
     },
     {
-      "name": "Evil Eye",
-      "icon": "skills/beast_eye.svg",
-      "cooldown": 15.0,
+      "name"      : "Evil Eye",
+      "icon"      : "skills/beast_eye.svg",
+      "cooldown"  : 150,
       "skill_type": "Blessing",
-      "targets": [
+      "targets"   : [
         {
           "target_type": "Me",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "dragon_eye",
-                "value": 200
-              }
-            }
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "dragon_eye", "value": 200} }
           ]
         }
       ]

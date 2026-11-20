@@ -281,7 +281,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -289,7 +290,7 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
-      "cooldown": 1.5,
+      "cooldown": 15.0,
       "damage": {
         "Physical": [
           5.0,
@@ -764,7 +765,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -996,12 +998,6 @@
             },
             "ignore_stat_effects": [
               {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
@@ -1009,12 +1005,19 @@
                   "min_max": null,
                   "is_hit": null
                 }
+              },
+              {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1232,7 +1235,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1441,7 +1445,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       },
@@ -1482,7 +1487,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1490,7 +1496,7 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",
-      "cooldown": 1.5,
+      "cooldown": 15.0,
       "damage": {
         "Physical": [
           26.0,

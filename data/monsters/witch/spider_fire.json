@@ -1,22 +1,20 @@
 {
-  "name": "Charred Spider",
+  "name"    : "Charred Spider",
   "portrait": "monsters/witch/spider_fire.webp",
   "max_life": 10,
-  "armor": { "Fire": 100 },
-  "skills": [
+  "armor"   : {"Fire": 100},
+  "skills"  : [
     {
-      "name": "Burning Bite",
-      "icon": "skills/fireball.svg",
-      "cooldown": 2.0,
+      "name"      : "Burning Bite",
+      "icon"      : "skills/fireball.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Fire": [ 4, 8 ]
-                }
+                "damage": { "Fire": [4, 8] }
               }
             }
           ]

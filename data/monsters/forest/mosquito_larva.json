@@ -6,7 +6,7 @@
     {
       "name"      : "Decomposing Injection",
       "icon"      : "skills/poison_cloud.svg",
-      "cooldown"  : 4.0,
+      "cooldown"  : 40,
       "skill_type": "Spell",
       "targets"   : [
         {

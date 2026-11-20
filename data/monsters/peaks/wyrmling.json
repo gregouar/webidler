@@ -1,21 +1,19 @@
 {
-  "name": "Wyrmling",
+  "name"    : "Wyrmling",
   "portrait": "monsters/peaks/wyrmling.webp",
   "max_life": 8,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Playful Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 3.0,
+      "name"      : "Playful Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 4, 6 ]
-                }
+                "damage": { "Physical": [4, 6] }
               }
             }
           ]

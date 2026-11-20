@@ -5,7 +5,7 @@
         "damage_type": "Physical",
         "avoidable"  : true,
         "debuff"     : true,
-        "duration"   : 5,
+        "duration"   : 50,
         "max_stacks" : 1,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" },
@@ -20,7 +20,7 @@
         "name"      : "Carrion Feast",
         "icon"      : "skills/carrion.svg",
         "debuff"    : false,
-        "duration"  : 60,
+        "duration"  : 600,
         "max_stacks": 3,
         "effects"   : [
             {
@@ -39,7 +39,7 @@
         "name"      : "Analyzed",
         "icon"      : "skills/prospect.svg",
         "debuff"    : true,
-        "duration"  : 60,
+        "duration"  : 600,
         "max_stacks": 10,
         "effects"   : [
             {

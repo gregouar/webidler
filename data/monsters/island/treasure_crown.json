@@ -1,34 +1,24 @@
 {
-  "name": "Crown of Tides Storm",
-  "portrait": "monsters/island/treasure_crown.webp",
-  "rarity": "Boss",
-  "max_life": 100,
-  "armor": { "Storm": 100 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Crown of Tides Storm",
+  "portrait"          : "monsters/island/treasure_crown.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 100,
+  "armor"             : {"Storm": 100},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 100} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 100
-    }
-  ],
-  "skills": [
-    {
-      "name": "Dagon's Revenge",
-      "icon": "skills/magic_missile.svg",
-      "cooldown": 4.0,
+      "name"      : "Dagon's Revenge",
+      "icon"      : "skills/magic_missile.svg",
+      "cooldown"  : 40,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
-          "repeat": {
-            "value": 3,
-            "target": "Same"
-          },
+          "repeat": {"value": 3, "target": "Same"},
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 12 ]
-                }
+                "damage": { "Storm": [0, 12] }
               }
             }
           ]

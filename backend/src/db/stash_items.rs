@@ -66,7 +66,7 @@ pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemF
     let item_cooldown = item_specs
         .weapon_specs
         .as_ref()
-        .map(|weapon_specs| weapon_specs.cooldown.get());
+        .map(|weapon_specs| weapon_specs.cooldown.get() * 0.1);
     let item_damages = item_specs
         .weapon_specs
         .as_ref()

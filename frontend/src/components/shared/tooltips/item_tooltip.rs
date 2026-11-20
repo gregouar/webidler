@@ -522,7 +522,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> im
                                 <span class=format!(
                                     "{} font-semibold",
                                     crit_chance_color,
-                                )>{format!("{:.2}%", specs.crit_chance.value.get())}</span>
+                                )>{format!("{:.0}%", specs.crit_chance.value.get())}</span>
                             </li>
                             <li class="text-zinc-400 text-xs xl:text-sm ">
                                 "Critical Hit Damage: "
@@ -546,7 +546,7 @@ pub fn WeaponTooltip(item_specs: Arc<ItemSpecs>, item_base: Arc<ItemBase>) -> im
                                 <span class=format!(
                                     "{} font-semibold",
                                     cooldown_color,
-                                )>{format!("{:.2}s", specs.cooldown.get())}</span>
+                                )>{format!("{:.1}s", specs.cooldown.get() * 0.1)}</span>
                             </li>
                         }
                     })}

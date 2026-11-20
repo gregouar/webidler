@@ -222,7 +222,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -432,7 +433,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -951,7 +953,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1220,7 +1223,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": -99999999.0,
+        "value": -1e+300,
         "is_unique": true
       },
       "unique_5": {

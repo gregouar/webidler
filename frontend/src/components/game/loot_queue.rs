@@ -621,7 +621,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                 .weapon_specs
                 .as_ref()
                 .map(|weapon_specs| {
-                    let weapon_cooldown = weapon_specs.cooldown.get();
+                    let weapon_cooldown = weapon_specs.cooldown.get() * 0.1;
                     match rule_type {
                         FilterRuleType::Pickup => weapon_cooldown > item_cooldown,
                         FilterRuleType::Sell => weapon_cooldown < item_cooldown,

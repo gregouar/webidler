@@ -1,23 +1,21 @@
 {
-  "name": "Ushi Oni",
+  "name"    : "Ushi Oni",
   "portrait": "monsters/yokai/ushi_oni.webp",
   "max_life": 20,
-  "size": "Large",
-  "armor": { "Physical": 100, "Poison": 50 },
-  "skills": [
+  "size"    : "Large",
+  "armor"   : {"Physical": 100, "Poison": 50},
+  "skills"  : [
     {
-      "name": "Bull's Head",
-      "icon": "skills/attack.svg",
-      "cooldown": 3.0,
+      "name"      : "Bull's Head",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 6, 12 ]
-                }
+                "damage": { "Physical": [6, 12] }
               }
             }
           ]
@@ -25,20 +23,14 @@
       ]
     },
     {
-      "name": "Toxic Breath",
-      "icon": "skills/poison_cloud.svg",
-      "cooldown": 5.0,
+      "name"      : "Toxic Breath",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 50,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 5,
-                "escalation": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 20} }
           ]
         }
       ]

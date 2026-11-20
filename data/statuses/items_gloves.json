@@ -3,7 +3,7 @@
         "name"      : "Fangbreaking",
         "icon"      : "statuses/punch_blast.svg",
         "debuff"    : false,
-        "duration"  : 5.0,
+        "duration"  : 50,
         "max_stacks": 10,
         "effects"   : [
             {
@@ -30,7 +30,7 @@
         "name"      : "Curse of Lycanthropy",
         "icon"      : "statuses/werewolf.svg",
         "debuff"    : false,
-        "duration"  : 2.0,
+        "duration"  : 20,
         "max_stacks": 1,
         "effects"   : [
             {

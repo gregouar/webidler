@@ -8,7 +8,7 @@
         {
             "name"      : "Sostenuto Stab",
             "icon"      : "skills/needle_drill.svg",
-            "cooldown"  : 5.0,
+            "cooldown"  : 50,
             "skill_type": "Attack",
             "targets"   : [
                 {
@@ -28,7 +28,7 @@
         {
             "name"      : "Entrancing Song",
             "icon"      : "skills/double_quaver.svg",
-            "cooldown"  : 10.0,
+            "cooldown"  : 100,
             "skill_type": "Blessing",
             "targets"   : [
                 {

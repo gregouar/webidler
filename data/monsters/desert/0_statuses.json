@@ -3,7 +3,7 @@
         "name"      : "Sekhmet Condemnation",
         "icon"      : "skills/tiger_head.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -21,7 +21,7 @@
         "name"      : "Embalmed",
         "icon"      : "skills/bandaged.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -44,7 +44,7 @@
         "name"      : "Anubis Judgment",
         "icon"      : "skills/anubis.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -67,7 +67,7 @@
         "name"      : "Devour the Dead",
         "icon"      : "skills/swallow.svg",
         "debuff"    : false,
-        "duration"  : 60,
+        "duration"  : 600,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -83,7 +83,7 @@
         "damage_type": "Physical",
         "avoidable"  : true,
         "debuff"     : true,
-        "duration"   : 3,
+        "duration"   : 30,
         "max_stacks" : 5,
         "effects"    : [
             { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" },
@@ -98,7 +98,7 @@
         "name"      : "Canopic Lost",
         "icon"      : "skills/egyptian_urns.svg",
         "debuff"    : true,
-        "duration"  : 1e200,
+        "duration"  : 1e300,
         "max_stacks": 4,
         "effects"   : [
             {
@@ -112,7 +112,7 @@
         "name"      : "Pharaoh's Protection",
         "icon"      : "skills/egypt_crown.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {

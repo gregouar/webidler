@@ -4,7 +4,7 @@
     "icon": "skills/magic_missile.svg",
     "description": "A quick spell that fires a bolt of energy at a random enemy.",
     "skill_type": "Spell",
-    "cooldown": 2.0,
+    "cooldown": 20.0,
     "mana_cost": 1.0,
     "required_item": null,
     "upgrade_cost": 20.0,
@@ -77,7 +77,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -92,7 +93,7 @@
     "icon": "skills/chain_lightning.svg",
     "description": "A powerful spell that hit randomly multiple enemies.",
     "skill_type": "Spell",
-    "cooldown": 4.0,
+    "cooldown": 40.0,
     "mana_cost": 6.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -165,7 +166,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -180,7 +182,7 @@
     "icon": "skills/blizzard.svg",
     "description": "Summon a mighty storm that repeatedly hit enemies.",
     "skill_type": "Spell",
-    "cooldown": 7.0,
+    "cooldown": 70.0,
     "mana_cost": 10.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -253,7 +255,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -268,7 +271,7 @@
     "icon": "skills/spark.svg",
     "description": "Imbue yourself with electricity to electrocute a random foe on a regular basis.",
     "skill_type": "Spell",
-    "cooldown": 3.0,
+    "cooldown": 30.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -335,7 +338,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -350,7 +354,7 @@
     "icon": "skills/fireball.svg",
     "description": "Hurl a blazing fireball that explodes on impact, damaging multiple enemies within its area.",
     "skill_type": "Spell",
-    "cooldown": 4.0,
+    "cooldown": 40.0,
     "mana_cost": 6.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -423,7 +427,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -438,7 +443,7 @@
     "icon": "skills/burning_ray.svg",
     "description": "Release a horizontal beam of fire that burns enemies over time.",
     "skill_type": "Spell",
-    "cooldown": 3.0,
+    "cooldown": 30.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -508,7 +513,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -523,7 +529,7 @@
     "icon": "skills/righteous_fire.svg",
     "description": "Remove your pants and burn everything, including yourself.",
     "skill_type": "Spell",
-    "cooldown": 1.5,
+    "cooldown": 15.0,
     "mana_cost": 2.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -668,7 +674,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       },
@@ -727,15 +734,6 @@
                 }
               },
               {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Any",
@@ -744,12 +742,22 @@
                   "skill_id": null,
                   "min_max": null
                 }
+              },
+              {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -764,7 +772,7 @@
     "icon": "skills/poison_cloud.svg",
     "description": "Summon a toxic cloud that poisons all enemies in its area multiple times, dealing damage over time.",
     "skill_type": "Spell",
-    "cooldown": 7.0,
+    "cooldown": 70.0,
     "mana_cost": 10.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -834,7 +842,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -849,7 +858,7 @@
     "icon": "skills/irradiate.svg",
     "description": "Unleashes a vertical column of volatile energy, dealing Storm damage on impact and inflicting Poison over time.",
     "skill_type": "Spell",
-    "cooldown": 3.0,
+    "cooldown": 30.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -922,7 +931,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1002,7 +1012,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1016,7 +1027,7 @@
     "icon": "skills/voodoo.svg",
     "description": "Stab your Voodoo Doll to inflict physical pain to all enemies.",
     "skill_type": "Spell",
-    "cooldown": 1.2,
+    "cooldown": 12.0,
     "mana_cost": 2.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -1086,7 +1097,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -1098,7 +1110,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1113,7 +1126,7 @@
     "icon": "skills/heal.svg",
     "description": "Restore a portion of your life with this simple yet effective healing spell.",
     "skill_type": "Spell",
-    "cooldown": 12.0,
+    "cooldown": 120.0,
     "mana_cost": 10.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -1174,7 +1187,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1189,7 +1203,7 @@
     "icon": "skills/bee.svg",
     "description": "Summon a swarm of bees onto enemies, stinging them repeatedly for the duration of the spell.",
     "skill_type": "Spell",
-    "cooldown": 2.0,
+    "cooldown": 20.0,
     "mana_cost": 4.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -1274,7 +1288,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }

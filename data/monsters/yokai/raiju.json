@@ -9,7 +9,7 @@
       "name"      : "Lightning Strike",
       "icon"      : "skills/magic_missile.svg",
       "skill_type": "Attack",
-      "cooldown"  : 1.0,
+      "cooldown"  : 10,
       "targets"   : [
         {
           "effects": [

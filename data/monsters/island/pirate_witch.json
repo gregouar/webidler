@@ -1,22 +1,20 @@
 {
-  "name": "Occult Tidecaller",
+  "name"    : "Occult Tidecaller",
   "portrait": "monsters/island/pirate_witch.webp",
   "max_life": 7,
-  "armor": { "Storm": 100 },
-  "skills": [
+  "armor"   : {"Storm": 100},
+  "skills"  : [
     {
-      "name": "Call of the Sea",
-      "icon": "skills/chain_lightning.svg",
-      "cooldown": 7.0,
+      "name"      : "Call of the Sea",
+      "icon"      : "skills/chain_lightning.svg",
+      "cooldown"  : 70,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 20 ]
-                }
+                "damage": { "Storm": [0, 20] }
               }
             }
           ]

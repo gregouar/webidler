@@ -1,22 +1,20 @@
 {
-  "name": "Ugly Spider",
+  "name"    : "Ugly Spider",
   "portrait": "monsters/witch/spider_phys.webp",
   "max_life": 8,
-  "armor": { "Physical": 100 },
-  "skills": [
+  "armor"   : {"Physical": 100},
+  "skills"  : [
     {
-      "name": "Ugly Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 3.0,
+      "name"      : "Ugly Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 4, 6 ]
-                }
+                "damage": { "Physical": [4, 6] }
               }
             }
           ]

@@ -7,7 +7,7 @@
     {
       "name"      : "Acid Grenade",
       "icon"      : "skills/poison_cloud.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Spell",
       "targets"   : [
         {

@@ -1,48 +1,36 @@
 {
-  "name": "Nure Onna",
+  "name"    : "Nure Onna",
   "portrait": "monsters/yokai/nure_onna.webp",
   "max_life": 20,
-  "size": "Tall",
-  "skills": [
+  "size"    : "Tall",
+  "skills"  : [
     {
-      "name": "Forbidden Kiss",
-      "icon": "skills/bite.svg",
-      "cooldown": 5.0,
+      "name"      : "Forbidden Kiss",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 50,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 5, 10 ]
-                }
+                "damage": { "Physical": [5, 10] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "bleed",
-                "value": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "bleed", "value": 20} }
           ]
         }
       ]
     },
     {
-      "name": "Distracting Pose",
-      "icon": "skills/lips.svg",
+      "name"      : "Distracting Pose",
+      "icon"      : "skills/lips.svg",
       "skill_type": "Curse",
-      "cooldown": 10.0,
-      "targets": [
+      "cooldown"  : 100,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "distracted",
-                "value": 17
-              }
-            }
+            { "ApplyStatus": {"status_id": "distracted", "value": 17} }
           ]
         }
       ]

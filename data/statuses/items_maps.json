@@ -3,7 +3,7 @@
         "name"      : "Drunk",
         "icon"      : "skills/beer_stein.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -49,7 +49,7 @@
         "name"      : "Enwebbed",
         "icon"      : "statuses/spider_web.svg",
         "debuff"    : true,
-        "duration"  : 5.0,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {

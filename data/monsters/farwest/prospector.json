@@ -11,7 +11,7 @@
     {
       "name"      : "Shoot",
       "icon"      : "skills/reticule.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -32,7 +32,7 @@
     {
       "name"      : "Shoot",
       "icon"      : "skills/reticule.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -53,7 +53,7 @@
     {
       "name"      : "Prospect",
       "icon"      : "skills/prospect.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Curse",
       "targets"   : [
         {

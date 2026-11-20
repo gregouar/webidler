@@ -1,162 +1,458 @@
 {
   "curse_putridity_hit": {
-    "name"       : "Putrefaction",
+    "name": "Putrefaction",
+    "icon": "",
     "description": "",
-    "skill_type" : "Other",
-    "cooldown"   : 0,
-    "icon"       : "",
-    "targets"    : [],
-    "hidden"     : true
+    "skill_type": "Other",
+    "cooldown": 0.0,
+    "mana_cost": 0.0,
+    "required_item": null,
+    "upgrade_cost": 0.0,
+    "upgrade_effects": [],
+    "modifier_effects": [],
+    "targets": [],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": true
   },
-  "curse_frailty"      : {
-    "name"           : "Curse of Frailty",
-    "description"    : "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
-    "icon"           : "skills/curse_frailty.svg",
-    "skill_type"     : "Curse",
-    "cooldown"       : 10,
-    "mana_cost"      : 20,
-    "upgrade_cost"   : 50,
+  "curse_frailty": {
+    "name": "Curse of Frailty",
+    "icon": "skills/curse_frailty.svg",
+    "description": "Curse enemies to weaken their defenses, making them take more damage from physical damage.",
+    "skill_type": "Curse",
+    "cooldown": 100.0,
+    "mana_cost": 20.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "curse_frailty"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "curse_frailty",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 3
+        "value": 3.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
-    "targets"        : [
+    "modifier_effects": [],
+    "targets": [
       {
-        "range"  : "Any",
-        "shape"  : "All",
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
-          { "ApplyStatus": {"status_id": "curse_frailty", "value": 30} }
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "curse_frailty",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
-  "curse_conductivity" : {
+  "curse_conductivity": {
     "name": "Curse of Conductivity",
-    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "icon": "skills/curse_conductivity.svg",
+    "description": "Curse your foes with the storm's fury, making their bodies living conduits that draw lightning to strike all around them, and trigger a Maelstrom in case of critical hit.",
     "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 20,
-    "upgrade_cost": 50,
+    "cooldown": 100.0,
+    "mana_cost": 20.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "curse_conductivity"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "curse_conductivity",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 3
+        "value": 3.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
+    "modifier_effects": [],
     "targets": [
       {
-        "range"  : "Any",
-        "shape"  : "All",
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
-          { "ApplyStatus": {"status_id": "curse_conductivity", "value": 30} }
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "curse_conductivity",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
-      }
-    ]
-  },
-  "curse_putridity"    : {
-    "name"           : "Curse of Putridity",
-    "description"    : "Curse your foes with the rot, making their bodies crumble.",
-    "icon"           : "skills/curse_putridity.svg",
-    "skill_type"     : "Curse",
-    "cooldown"       : 10,
-    "mana_cost"      : 20,
-    "upgrade_cost"   : 50,
-    "upgrade_effects": [
-      {
-        "stat"    : { "StatusPower": {"status_id": "curse_putridity"} },
-        "modifier": "Flat",
-        "value"   : 3
       }
     ],
-    "targets"        : [
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
+  },
+  "curse_putridity": {
+    "name": "Curse of Putridity",
+    "icon": "skills/curse_putridity.svg",
+    "description": "Curse your foes with the rot, making their bodies crumble.",
+    "skill_type": "Curse",
+    "cooldown": 100.0,
+    "mana_cost": 20.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
+    "upgrade_effects": [
       {
-        "range"  : "Any",
-        "shape"  : "All",
+        "stat": {
+          "StatusPower": {
+            "status_id": "curse_putridity",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 3.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
-          { "ApplyStatus": {"status_id": "curse_putridity", "value": 30} }
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "curse_putridity",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
-  "curse_flammability" : {
+  "curse_flammability": {
     "name": "Curse of Flammability",
-    "description": "Unleash infernal flames upon your enemies, intensifying the fire damage they suffer the longer they burn.",
     "icon": "skills/curse_flammability.svg",
+    "description": "Unleash infernal flames upon your enemies, intensifying the fire damage they suffer the longer they burn.",
     "skill_type": "Curse",
-    "cooldown": 10,
-    "mana_cost": 20,
-    "upgrade_cost": 50,
+    "cooldown": 100.0,
+    "mana_cost": 20.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "curse_flammability"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "curse_flammability",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 3
+        "value": 3.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
+    "modifier_effects": [],
     "targets": [
       {
-        "range"  : "Any",
-        "shape"  : "All",
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
-          { "ApplyStatus": {"status_id": "curse_flammability", "value": 30} }
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "curse_flammability",
+              "value": 30.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
-  "curse_weakness"     : {
-    "name"           : "Curse of Weakness",
-    "description"    : "A debilitating curse that reduces enemies' damage output.",
-    "icon"           : "skills/curse_weakness.svg",
-    "skill_type"     : "Curse",
-    "cooldown"       : 10,
-    "mana_cost"      : 20,
-    "upgrade_cost"   : 50,
+  "curse_weakness": {
+    "name": "Curse of Weakness",
+    "icon": "skills/curse_weakness.svg",
+    "description": "A debilitating curse that reduces enemies' damage output.",
+    "skill_type": "Curse",
+    "cooldown": 100.0,
+    "mana_cost": 20.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"    : { "StatusPower": {"status_id": "curse_weakness"} },
+        "stat": {
+          "StatusPower": {
+            "status_id": "curse_weakness",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
         "modifier": "Flat",
-        "value"   : 1
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
       }
     ],
-    "targets"        : [
+    "modifier_effects": [],
+    "targets": [
       {
-        "range"  : "Any",
-        "shape"  : "All",
+        "range": "Any",
+        "target_type": "Enemy",
+        "shape": "All",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
         "effects": [
-          { "ApplyStatus": {"status_id": "curse_weakness", "value": 17} }
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "curse_weakness",
+              "value": 17.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   },
-  "curse_vampirism"    : {
-    "name"           : "Curse of Vampirism",
-    "description"    : "Afflict yourself with the curse of the Vampire, draining enemies blood with every attack.",
-    "icon"           : "skills/curse_vampirism.svg",
-    "skill_type"     : "Curse",
-    "cooldown"       : 10,
-    "mana_cost"      : 10,
-    "upgrade_cost"   : 50,
+  "curse_vampirism": {
+    "name": "Curse of Vampirism",
+    "icon": "skills/curse_vampirism.svg",
+    "description": "Afflict yourself with the curse of the Vampire, draining enemies blood with every attack.",
+    "skill_type": "Curse",
+    "cooldown": 100.0,
+    "mana_cost": 10.0,
+    "required_item": null,
+    "upgrade_cost": 50.0,
     "upgrade_effects": [
       {
-        "stat"       : { "StatusPower": {"status_id": "curse_vampirism"} },
-        "modifier"   : "Flat",
-        "value"      : 5,
-        "description": "Gain +0.1 additional Life"
+        "stat": {
+          "StatusPower": {
+            "status_id": "curse_vampirism",
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": null,
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Flat",
+        "value": 5.0,
+        "scope": "Local",
+        "description": "Gain +0.1 additional Life",
+        "hidden": false
       },
-      { "stat": {"ManaCost": {}}, "modifier": "Increased", "value": 1 }
-    ],
-    "targets"        : [
       {
+        "stat": {
+          "ManaCost": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "value": 1.0,
+        "scope": "Local",
+        "description": null,
+        "hidden": false
+      }
+    ],
+    "modifier_effects": [],
+    "targets": [
+      {
+        "range": "Melee",
         "target_type": "Me",
-        "effects"    : [
-          { "ApplyStatus": {"status_id": "curse_vampirism", "value": 150} }
+        "shape": "Single",
+        "target_dead": false,
+        "repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "curse_vampirism",
+              "value": 150.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
         ]
       }
-    ]
+    ],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": false
   }
 }

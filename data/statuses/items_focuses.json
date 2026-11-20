@@ -3,7 +3,7 @@
         "name"      : "Vile Incantation",
         "icon"      : "statuses/evil_book.svg",
         "debuff"    : false,
-        "duration"  : 10,
+        "duration"  : 100,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -30,7 +30,7 @@
         "name"      : "Venom of the Serpent Queen",
         "icon"      : "statuses/cobra.svg",
         "debuff"    : false,
-        "duration"  : 4,
+        "duration"  : 40,
         "max_stacks": 20,
         "effects"   : [
             {

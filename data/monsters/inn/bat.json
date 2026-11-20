@@ -6,7 +6,7 @@
     {
       "name"      : "Angry Bite",
       "icon"      : "skills/bite.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {

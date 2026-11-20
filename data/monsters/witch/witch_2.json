@@ -12,7 +12,7 @@
       "name"      : "Evil Cackling",
       "icon"      : "skills/pointy_hat.svg",
       "skill_type": "Curse",
-      "cooldown"  : 10.0,
+      "cooldown"  : 100,
       "targets"   : [
         {
           "effects": [
@@ -25,10 +25,10 @@
       "name"      : "Grandmother's Slap",
       "icon"      : "skills/claw.svg",
       "skill_type": "Attack",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "targets"   : [
         {
-          "range"  : "Melee",
+          "range": "Melee",
           "effects": [
             {
               "FlatDamage": {
@@ -43,10 +43,10 @@
       "name"      : "Witch's Zap",
       "icon"      : "skills/chain_lightning.svg",
       "skill_type": "Spell",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
@@ -61,10 +61,10 @@
       "name"      : "Tasty Soup",
       "icon"      : "skills/poison_cloud.svg",
       "skill_type": "Spell",
-      "cooldown"  : 8.0,
+      "cooldown"  : 80,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             { "ApplyStatus": {"status_id": "poison", "value": 32, "escalation": 30} }
           ]

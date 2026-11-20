@@ -1,22 +1,20 @@
 {
-  "name": "Thorn Sprite",
+  "name"    : "Thorn Sprite",
   "portrait": "monsters/forest/thorn_sprite.webp",
   "max_life": 5,
-  "armor": { "Poison": 50 },
-  "skills": [
+  "armor"   : {"Poison": 50},
+  "skills"  : [
     {
-      "name": "Spiked Slap",
-      "icon": "skills/claw.svg",
-      "cooldown": 2.0,
+      "name"      : "Spiked Slap",
+      "icon"      : "skills/claw.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 4 ]
-                }
+                "damage": { "Physical": [3, 4] }
               }
             }
           ]

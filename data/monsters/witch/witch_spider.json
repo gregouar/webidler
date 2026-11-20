@@ -1,30 +1,22 @@
 {
-  "name": "Amelia's Baby",
+  "name"    : "Amelia's Baby",
   "portrait": "monsters/witch/witch_spider.webp",
   "max_life": 10,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Baby Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 2.0,
+      "name"      : "Baby Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 6 ]
-                }
+                "damage": { "Physical": [3, 6] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 3,
-                "escalation": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 3, "escalation": 50} }
           ]
         }
       ]

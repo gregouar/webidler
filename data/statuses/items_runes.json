@@ -3,7 +3,7 @@
         "name"      : "Berserker",
         "icon"      : "statuses/enrage.svg",
         "debuff"    : false,
-        "duration"  : 5.0,
+        "duration"  : 50,
         "max_stacks": 20,
         "effects"   : [
             {
@@ -30,7 +30,7 @@
         "name"      : "Gathering Storm",
         "icon"      : "statuses/surge.svg",
         "debuff"    : false,
-        "duration"  : 1.0,
+        "duration"  : 10,
         "max_stacks": 100,
         "effects"   : [
             {
@@ -62,7 +62,7 @@
         "name"      : "Madness",
         "icon"      : "statuses/madness.svg",
         "debuff"    : false,
-        "duration"  : 5.0,
+        "duration"  : 50,
         "max_stacks": 20,
         "effects"   : [
             {

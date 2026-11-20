@@ -109,14 +109,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Gloves",
-              "factor": 1.0,
+              "factor": 100.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -205,7 +206,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       },
@@ -256,7 +258,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -270,7 +273,7 @@
     "icon": "skills/poison_coating.svg",
     "description": "Coat your weapon with venom, causing your attacks to inflict poison damage over time.",
     "skill_type": "Attack",
-    "cooldown": 4.0,
+    "cooldown": 40.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -338,7 +341,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -478,7 +482,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -499,7 +504,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": true,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -618,14 +624,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 1.0,
+              "factor": 100.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -745,14 +752,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 1.0,
+              "factor": 100.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -767,7 +775,7 @@
     "icon": "skills/pyroclastic_infusion.svg",
     "description": "Infuse your weapon with the power of Fire and Storm.",
     "skill_type": "Attack",
-    "cooldown": 4.0,
+    "cooldown": 40.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -869,7 +877,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -973,14 +982,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 2.0,
+              "factor": 200.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1096,14 +1106,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.4,
+              "factor": 40.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1249,14 +1260,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.7,
+              "factor": 70.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -1274,7 +1286,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": true,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -1298,7 +1311,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1415,14 +1429,15 @@
             },
             "WeaponEffect": {
               "item_slot": "Weapon",
-              "factor": 0.7,
+              "factor": 70.0,
               "damage_type": null
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1437,7 +1452,7 @@
     "icon": "skills/shield_bash.svg",
     "description": "Slams the target with your shield, dealing damage based on your equipped shield's Armor.",
     "skill_type": "Attack",
-    "cooldown": 3.0,
+    "cooldown": 30.0,
     "mana_cost": 2.0,
     "required_item": {
       "slot": null,
@@ -1549,7 +1564,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -1570,7 +1586,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": true,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1585,7 +1602,7 @@
     "icon": "skills/sharpen_weapon.svg",
     "description": "Sharpen your weapon, making it likely to bleed your foes.",
     "skill_type": "Attack",
-    "cooldown": 4.0,
+    "cooldown": 40.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -1653,7 +1670,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1675,7 +1693,7 @@
     "icon": "skills/taunt.svg",
     "description": "Taunt enemies to attack you faster, at the cost of taking more damage.",
     "skill_type": "Attack",
-    "cooldown": 3.0,
+    "cooldown": 30.0,
     "mana_cost": 5.0,
     "required_item": null,
     "upgrade_cost": 50.0,
@@ -1732,14 +1750,15 @@
             "RefreshCooldown": {
               "skill_type": null,
               "skill_id": null,
-              "value": 2.0,
+              "value": 20.0,
               "modifier": "Flat"
             },
             "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -1760,7 +1779,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }

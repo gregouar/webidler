@@ -39,7 +39,7 @@ pub fn update_skills_states(
     for (skill_specs, skill_state) in skills_specs.iter().zip(skills_states.iter_mut()) {
         if skill_specs.cooldown.get() > 0.0 && skill_specs.usable {
             skill_state.elapsed_cooldown +=
-                (elapsed_time.as_secs_f64() / skill_specs.cooldown.get()).into();
+                (elapsed_time.as_secs_f64() * 10.0 / skill_specs.cooldown.get()).into();
             skill_state.is_ready = skill_state.elapsed_cooldown.get() >= 1.0;
         }
     }
@@ -232,7 +232,7 @@ fn weapon_skill_effect(
     factor: NonNegative,
     damage_type: Option<DamageType>,
 ) -> [SkillEffect; 2] {
-    let factor = factor.get();
+    let factor = factor.get() * 0.01;
     let converted_damage = damage_type.map(|damage_type| {
         let (min, max): (Damage, Damage) = weapon_specs
             .damage
