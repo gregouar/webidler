@@ -12,5 +12,6 @@
     "title_wanted"                 : {"Title": "most wanted"        },
     "title_unique_edicts"          : {"Title": "jobro"              },
     "title_kill_monsters"          : {"Title": "meat grinder"       },
-    "title_edicts_100"             : {"Title": "addicted"           }
+    "title_edicts_100"             : {"Title": "addicted"           },
+    "title_sacrifice_equipment_600": {"Title": "garbage collector"  }
 }

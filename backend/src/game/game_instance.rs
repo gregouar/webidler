@@ -221,6 +221,7 @@ impl<'a> GameInstance<'a> {
             self.game_data.area_state.read().max_area_level_ever,
         )]);
         let context = AchievementContext {
+            counters: &self.game_data.achievements_counters,
             area_levels: &area_levels,
             power_level: self.game_data.player_base_specs.read().max_area_level,
             player_level: self.game_data.player_base_specs.read().level,
@@ -372,7 +373,15 @@ impl<'a> GameInstance<'a> {
                     areas_completed: self.game_data.game_stats.areas_completed as i64,
                     edicts_spent: i64::from(self.game_data.map_item.is_some()),
                     gems_obtained: self.game_data.player_resources.read().gems.get() as i64,
+                    player_deaths: self.game_data.game_stats.player_deaths as i64,
+                    elapsed_time_seconds: self.game_data.game_stats.elapsed_time.as_secs() as i64,
                 },
+            )
+            .await?;
+            db::character_achievements::write_counters(
+                &mut tx,
+                self.character_id,
+                &self.game_data.achievements_counters,
             )
             .await?;
 

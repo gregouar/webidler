@@ -1,22 +1,32 @@
 {
-    "kill_monsters": {
+    "kill_monsters"          : {
         "category"   : "Grind",
         "icon"       : "achievements/meat_grinder.svg",
         "name"       : "Meat Grinder",
-        "description": "Kill 5,000,000 Monsters with a single Character.",
+        "description": "Kill 5,000,000 Monsters across your Grinds.",
         "goals"      : [
             { "MonstersKilled": {"value": 5000000} }
         ],
         "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
     },
-    "edicts_100"   : {
+    "edicts_100"             : {
         "category"   : "Grind",
         "icon"       : "achievements/scroll.svg",
         "name"       : "Edicts Addict",
-        "description": "Use 100 Edicts with a single Character.",
+        "description": "Use a total of 100 Edicts.",
         "goals"      : [
             { "AreaCompleted": {"value": 100, "with_edict": true} }
         ],
         "rewards": [ {"Cosmetic": "title_edicts_100"} ]
+    },
+    "sacrifice_equipment_600": {
+        "category"   : "Grind",
+        "icon"       : "achievements/hammer_break.svg",
+        "name"       : "Garbage Collector",
+        "description": "Sacrifice 100 Equipment Items requiring Power Level 600.",
+        "goals"      : [
+            { "Counter": {"counter": "SacrificeEquipment600", "value": 100} }
+        ],
+        "rewards": [ {"Cosmetic": "title_sacrifice_equipment_600"} ]
     }
 }

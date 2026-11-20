@@ -78,6 +78,8 @@ pub async fn load_game_instance_data(
     character_id: &UserCharacterId,
 ) -> anyhow::Result<Option<(GameInstanceData, DateTime<Utc>)>> {
     let saved_game_instance = load_saved_game_instance(db_pool, character_id).await?;
+    let achievements_counters =
+        character_achievements::read_counters(db_pool, character_id).await?;
     let achievements = character_achievements::read_achievements(db_pool, character_id).await?;
     let area_statistics = characters::read_character_areas_completed(db_pool, character_id).await?;
     if let Some(instance) = saved_game_instance {
@@ -86,6 +88,7 @@ pub async fn load_game_instance_data(
                 master_store,
                 &instance.game_data,
                 area_statistics,
+                achievements_counters,
                 achievements,
             )?,
             instance.saved_at.into(),

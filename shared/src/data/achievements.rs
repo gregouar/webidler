@@ -8,11 +8,9 @@ use crate::data::{
     skill::SkillType,
 };
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum AchievementCategory {
-    Global,
-    Grind,
-    // Exotic
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum AchievementCounter {
+    SacrificeEquipment600,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
@@ -42,6 +40,13 @@ impl AchievementSpecs {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+pub enum AchievementCategory {
+    Global,
+    Grind,
+    // Exotic
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum AchievementReward {
     Cosmetic(String),
@@ -50,6 +55,10 @@ pub enum AchievementReward {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum AchievementGoal {
+    Counter {
+        counter: AchievementCounter,
+        value: u64,
+    },
     AreaLevel {
         value: AreaLevel,
         #[serde(default)]
@@ -118,7 +127,8 @@ impl AchievementGoal {
             | Self::EquippedItem { amount, .. } => u64::from(*amount),
             Self::MonstersKilled { value, .. }
             | Self::AreaCompleted { value, .. }
-            | Self::GemsObtained { value, .. } => *value,
+            | Self::GemsObtained { value, .. }
+            | Self::Counter { value, .. } => *value,
             Self::AreaLevel { .. } | Self::PowerLevel(_) | Self::PlayerLevel(_) => 1,
         }
     }

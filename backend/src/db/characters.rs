@@ -75,6 +75,8 @@ pub struct CharacterAreaEntry {
     pub areas_completed: i64,
     pub edicts_spent: i64,
     pub gems_obtained: i64,
+    pub player_deaths: i64,
+    pub elapsed_time_seconds: i64,
 
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
@@ -90,6 +92,8 @@ pub struct CharacterAreaProgressUpdate {
     pub areas_completed: i64,
     pub edicts_spent: i64,
     pub gems_obtained: i64,
+    pub player_deaths: i64,
+    pub elapsed_time_seconds: i64,
 }
 
 pub async fn create_character<'c>(
@@ -220,6 +224,8 @@ pub async fn read_character_area_completed<'c>(
             areas_completed as "areas_completed!: i64",
             edicts_spent as "edicts_spent!: i64",
             gems_obtained as "gems_obtained!: i64",
+            player_deaths as "player_deaths!: i64",
+            elapsed_time_seconds as "elapsed_time_seconds!: i64",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -251,6 +257,8 @@ pub async fn read_character_areas_completed<'c>(
             areas_completed as "areas_completed!: i64",
             edicts_spent as "edicts_spent!: i64",
             gems_obtained as "gems_obtained!: i64",
+            player_deaths as "player_deaths!: i64",
+            elapsed_time_seconds as "elapsed_time_seconds!: i64",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -489,8 +497,8 @@ pub async fn update_character_area_progress<'c>(
         "INSERT INTO character_area_completed (
             character_id, area_id, max_area_level, max_power_shard_level, quest_completed,
             monsters_killed, champion_monsters_killed, bosses_killed, areas_completed,
-            edicts_spent, gems_obtained
-         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+            edicts_spent, gems_obtained, player_deaths, elapsed_time_seconds
+         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
          ON CONFLICT(character_id, area_id) DO UPDATE 
          SET max_area_level = CASE
             WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
@@ -512,6 +520,8 @@ pub async fn update_character_area_progress<'c>(
          areas_completed = character_area_completed.areas_completed + EXCLUDED.areas_completed,
          edicts_spent = character_area_completed.edicts_spent + EXCLUDED.edicts_spent,
          gems_obtained = character_area_completed.gems_obtained + EXCLUDED.gems_obtained,
+         player_deaths = character_area_completed.player_deaths + EXCLUDED.player_deaths,
+         elapsed_time_seconds = character_area_completed.elapsed_time_seconds + EXCLUDED.elapsed_time_seconds,
          updated_at = CURRENT_TIMESTAMP;",
         character_id,
         area_id,
@@ -524,6 +534,8 @@ pub async fn update_character_area_progress<'c>(
         progress.areas_completed,
         progress.edicts_spent,
         progress.gems_obtained,
+        progress.player_deaths,
+        progress.elapsed_time_seconds,
     )
     .execute(&mut **executor)
     .await?;

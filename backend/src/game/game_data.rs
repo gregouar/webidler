@@ -4,6 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, time::Duration};
 
 use shared::data::{
+    achievements::AchievementCounter,
     area::{AreaLevel, AreaSpecs, AreaState, AreaThreat},
     character::CharacterId,
     game_stats::GameStats,
@@ -94,6 +95,7 @@ pub struct GameInstanceData {
 
     pub game_stats: GameStats,
     pub old_areas_statistics: Vec<CharacterAreaEntry>,
+    pub achievements_counters: HashMap<AchievementCounter, u64>,
     pub achievements: HashMap<String, DateTime<Utc>>,
 
     pub end_grind: bool, // Initiate end, generate rewards
@@ -157,6 +159,7 @@ impl GameInstanceData {
         mut player_stamina: Duration,
         player_controller: PlayerController,
         old_areas_statistics: Vec<CharacterAreaEntry>,
+        achievements_counters: HashMap<AchievementCounter, u64>,
         achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let mut area_blueprint = master_store
@@ -273,6 +276,7 @@ impl GameInstanceData {
 
             game_stats: Default::default(),
             old_areas_statistics,
+            achievements_counters,
             achievements,
 
             end_grind: false,
@@ -314,6 +318,7 @@ impl GameInstanceData {
         master_store: &master_store::MasterStore,
         bytes: &[u8],
         old_areas_statistics: Vec<CharacterAreaEntry>,
+        achievements_counters: HashMap<AchievementCounter, u64>,
         achievements: HashMap<String, DateTime<Utc>>,
     ) -> Result<Self> {
         let SavedGameData {
@@ -356,6 +361,7 @@ impl GameInstanceData {
             player_stamina,
             player_controller,
             old_areas_statistics,
+            achievements_counters,
             achievements,
         )?;
 

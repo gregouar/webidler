@@ -286,6 +286,7 @@ async fn post_reconcile_achievements(
     verify_character_user(&character, &user)?;
     verify_character_in_town(&character)?;
 
+    let counters = db::character_achievements::read_counters(&mut *tx, &character_id).await?;
     let areas = db::characters::read_character_areas_completed(&mut *tx, &character_id).await?;
     let (inventory_data, ascension_data, _, skill_masteries) =
         db::characters_data::load_character_data(&mut *tx, &character_id)
@@ -303,6 +304,7 @@ async fn post_reconcile_achievements(
         ascension_data_to_passives_tree_ascension(&master_store.items_store, ascension_data);
 
     let achievement_context = AchievementContext {
+        counters: &counters,
         area_levels: &area_levels,
         power_level: character.max_area_level as AreaLevel,
         player_level: 0,

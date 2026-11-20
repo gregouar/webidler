@@ -3,7 +3,7 @@ use sqlx::Transaction;
 use std::collections::HashMap;
 
 use shared::data::{
-    achievements::{AchievementGoal, AchievementReward, AchievementSpecs},
+    achievements::{AchievementCounter, AchievementGoal, AchievementReward, AchievementSpecs},
     area::AreaLevel,
     item::ItemSpecs,
     monster::MonsterRarity,
@@ -21,6 +21,7 @@ use crate::{
 };
 
 pub struct AchievementContext<'a> {
+    pub counters: &'a HashMap<AchievementCounter, u64>,
     pub area_levels: &'a HashMap<String, AreaLevel>,
     pub power_level: AreaLevel,
     pub player_level: u8,
@@ -190,6 +191,9 @@ fn goal_progress(
     context: &AchievementContext<'_>,
 ) -> u64 {
     match goal {
+        AchievementGoal::Counter { counter, value: _ } => {
+            context.counters.get(counter).copied().unwrap_or_default()
+        }
         AchievementGoal::AreaLevel { value, area_id } => area_id
             .as_ref()
             .map(|id| context.area_levels.get(id).copied().unwrap_or_default() >= *value)

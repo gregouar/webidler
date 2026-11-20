@@ -4,7 +4,10 @@ use axum::{Extension, Json, Router, extract::State, middleware, routing::post};
 
 use shared::{
     constants,
-    data::forge::{self, affix_operation_price},
+    data::{
+        achievements::AchievementCounter,
+        forge::{self, affix_operation_price},
+    },
     http::{
         client::{
             ForgeAffixOperation, ForgeAffixRequest, ForgeImbueRequest, ForgeRerollRequest,
@@ -228,6 +231,16 @@ pub async fn post_sacrifice(
 
     let bag_index = payload.item_index as usize;
     let item = inventory.bag.get(bag_index).ok_or(AppError::NotFound)?;
+
+    if item.slot.is_some() && item.required_level == 600 {
+        db::character_achievements::increase_counter(
+            &mut tx,
+            &payload.character_id,
+            AchievementCounter::SacrificeEquipment600,
+            1,
+        )
+        .await?;
+    }
 
     let resource_gems = buy_with_gems(
         &mut tx,

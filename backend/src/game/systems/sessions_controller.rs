@@ -258,6 +258,9 @@ async fn new_game_instance(
         })
         .unwrap_or_default();
 
+    let achievements_counters =
+        db::character_achievements::read_counters(db_pool, &character.character_id).await?;
+
     let achievements =
         db::character_achievements::read_achievements(db_pool, &character.character_id).await?;
 
@@ -278,6 +281,7 @@ async fn new_game_instance(
         Duration::from_secs_f64(character.resource_stamina),
         player_controller,
         old_areas_statistics,
+        achievements_counters,
         achievements,
     )?;
 
