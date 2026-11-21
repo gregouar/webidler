@@ -310,6 +310,7 @@ async fn post_reconcile_achievements(
         player_level: 0,
         skill_masteries: &skill_masteries,
         ascension: &ascension,
+        purchased_nodes: None,
         inventory: &inventory,
         area_statistics: AreaAchievementStatistics::persisted(&areas),
         player_state: None,

@@ -55,7 +55,7 @@
     "title"                : "Defenses",
     "price"                : 1e7,
     "price_increase_factor": 6,
-    "max_upgrade_level"    : 200,
+    "max_upgrade_level"    : 300,
     "benedictions"         : {
       "armor_physical": {
         "value": 5,
@@ -95,7 +95,7 @@
     "title"                : "Damages",
     "price"                : 1e8,
     "price_increase_factor": 6,
-    "max_upgrade_level"    : 200,
+    "max_upgrade_level"    : 300,
     "benedictions"         : {
       "damage_physical": {
         "value": 5,

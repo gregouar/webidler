@@ -85,6 +85,11 @@ pub enum AchievementGoal {
         #[serde(default = "default_one")]
         amount: u8,
     },
+    PassiveAllocated {
+        amount: u8,
+        #[serde(default)]
+        socket: bool,
+    },
     EquippedItem {
         #[serde(default)]
         item_id: Option<BaseItemId>,
@@ -134,6 +139,7 @@ impl AchievementGoal {
         match self {
             Self::SkillLevel { amount, .. }
             | Self::PassiveLevel { amount, .. }
+            | Self::PassiveAllocated { amount, .. }
             | Self::EquippedItem { amount, .. } => u64::from(*amount),
             Self::MonstersKilled { value, .. }
             | Self::AreaCompleted { value, .. }

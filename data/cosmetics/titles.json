@@ -4,7 +4,9 @@
     "title_max_quality"            : {"Title": "tempered"           },
     "title_all_runes"              : {"Title": "runic"              },
     "title_all_unique_runes"       : {"Title": "runes connoisseur"  },
+    "title_more_runes"             : {"Title": "runesmaxxer"        },
     "title_all_max_passives"       : {"Title": "ascended"           },
+    "title_more_passives"          : {"Title": "over powered"       },
     "title_true_player"            : {"Title": "true player"        },
     "title_max_various_skill_level": {"Title": "jack of all trades" },
     "title_regular_patron"         : {"Title": "regular patron"     },
@@ -13,11 +15,12 @@
     "title_tempo"                  : {"Title": "golden ear"         },
     "title_mummy_lover"            : {"Title": "mummy lover"        },
     "title_wanted"                 : {"Title": "most wanted"        },
+    "title_austerity"              : {"Title": "austere"            },
     "title_unique_edicts"          : {"Title": "jobro"              },
     "title_kill_monsters"          : {"Title": "meat grinder"       },
     "title_edicts_100"             : {"Title": "addicted"           },
     "title_sacrifice_equipment_600": {"Title": "garbage collector"  },
     "title_gambler"                : {"Title": "certified gambler"  },
     "title_imbue_unique"           : {"Title": "soul binder"        },
-    "title_kill_dragons"           : {"Title": "dragonless"         }
+    "title_kill_dragons"           : {"Title": "dragooner"          }
 }

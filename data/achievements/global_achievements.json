@@ -85,6 +85,17 @@
         ],
         "rewards": [ {"Cosmetic": "title_all_max_passives"} ]
     },
+    "more_passives"          : {
+        "category"    : "Global",
+        "icon"        : "achievements/nodes.svg",
+        "name"        : "Passive Aggressive",
+        "description" : "Allocate 75 Passives during a Grind.",
+        "goals_amount": 1,
+        "goals"       : [
+            { "PassiveAllocated": {"amount": 75} }
+        ],
+        "rewards": [ {"Cosmetic": "title_more_passives"} ]
+    },
     "all_runes"              : {
         "category"   : "Global",
         "icon"       : "achievements/rune_stone.svg",
@@ -111,6 +122,17 @@
             }
         ],
         "rewards": [ {"Cosmetic": "title_all_unique_runes"} ]
+    },
+    "more_runes"             : {
+        "category"    : "Global",
+        "icon"        : "achievements/rune_stone.svg",
+        "name"        : "Runesmaxxing",
+        "description" : "Allocate 12 Socketed Passives during a Grind.",
+        "goals_amount": 1,
+        "goals"       : [
+            { "PassiveAllocated": {"amount": 12, "socket": true} }
+        ],
+        "rewards": [ {"Cosmetic": "title_more_runes"} ]
     },
     "uniques_collector"      : {
         "category"   : "Global",
@@ -150,9 +172,9 @@
     },
     "max_quality"            : {
         "category"   : "Global",
-        "icon"       : "achievements/anvil_impact.svg",
+        "icon"       : "achievements/battle_gear.svg",
         "name"       : "Quality Gears",
-        "description": "Equip a Item with 50% Quality in each Equipment Slot.",
+        "description": "Equip an Item with 50% Quality in each Equipment Slot.",
         "goals"      : [
             { "EquippedItem": {"item_quality": 50, "item_slot": "Accessory"} },
             { "EquippedItem": {"item_quality": 50, "item_slot": "Helmet"   } },
@@ -252,6 +274,16 @@
             { "CharacterStatusStacks": {"value": 100, "status_id": "wanted", "target": "Me"} }
         ],
         "rewards": [ {"Pet": "pet_crow"}, {"Cosmetic": "title_wanted"} ]
+    },
+    "edict_gold"             : {
+        "category"   : "Global",
+        "icon"       : "achievements/tied_scroll.svg",
+        "name"       : "The Invitation",
+        "description": "Accept the Trial and reach Area Level 300 without spending any Gold.",
+        "goals"      : [
+            { "AreaLevel": {"value": 300, "area_id": "chaos_gold.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_austerity"} ]
     },
     "edict_witch"            : {
         "category"   : "Global",

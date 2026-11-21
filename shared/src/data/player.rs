@@ -6,6 +6,7 @@ use strum::IntoEnumIterator;
 use crate::data::{
     area::AreaLevel,
     character::{CharacterAttrs, CharacterStatic},
+    passive::PurchasedNodes,
     skill::BaseSkillSpecs,
     skill_mastery::PlayerSkillMasteries,
     stat_effect::StatEffect,
@@ -46,6 +47,9 @@ pub struct PlayerSpecs {
     pub movement_cooldown: AtLeastOne,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,
+
+    #[serde(default, skip_serializing, skip_deserializing)]
+    pub purchased_nodes: PurchasedNodes,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

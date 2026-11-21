@@ -220,7 +220,10 @@ pub fn UserDashboardPage() -> impl IntoView {
                                         cosmetic,
                                         CosmeticType::Portrait(specs)
                                         if !specs.locked
-                                            || user_unlocks.read().cosmetics.contains(*id)
+                                            || user_unlocks
+                                                .read_untracked()
+                                                .cosmetics
+                                                .contains(*id)
                                     )
                                 })
                                 .map(|(id, _)| id.clone())
@@ -228,7 +231,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let titles = cosmetics
                                 .iter()
                                 .filter_map(|(id, cosmetic)| {
-                                    (user_unlocks.read().cosmetics.contains(id))
+                                    (user_unlocks.read_untracked().cosmetics.contains(id))
                                         .then(|| match cosmetic {
                                             CosmeticType::Title(title) => {
                                                 Some((id.clone(), title.clone()))
@@ -241,7 +244,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                             let badges = cosmetics
                                 .iter()
                                 .filter_map(|(id, cosmetic)| {
-                                    (user_unlocks.read().cosmetics.contains(id))
+                                    (user_unlocks.read_untracked().cosmetics.contains(id))
                                         .then(|| match cosmetic {
                                             CosmeticType::Badge(badge) => {
                                                 Some((id.clone(), badge.name.clone()))

@@ -227,6 +227,7 @@ impl<'a> GameInstance<'a> {
             player_level: self.game_data.player_base_specs.read().level,
             skill_masteries: &self.game_data.player_base_specs.read().skill_masteries,
             ascension: &self.game_data.passives_tree_state.read().ascension,
+            purchased_nodes: Some(&self.game_data.player_specs.read().purchased_nodes),
             inventory: self.game_data.player_inventory.read(),
             area_statistics: AreaAchievementStatistics::with_current_grind(
                 &self.game_data.old_areas_statistics,

@@ -75,6 +75,7 @@ impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
             movement_cooldown: specs.movement_cooldown,
             gold_find: specs.gold_find,
             threat_gain: specs.threat_gain,
+            purchased_nodes: Default::default(),
         }
     }
 }

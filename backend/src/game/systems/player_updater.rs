@@ -170,6 +170,7 @@ pub fn update_player_specs(
         player_inventory,
         effects,
     );
+    player_specs.purchased_nodes = purchased_nodes;
     let effects = &player_specs.character_specs.effects;
 
     for trigger_specs in passives_tree_state

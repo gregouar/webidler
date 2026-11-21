@@ -7,7 +7,7 @@ use shared::data::{
     area::AreaLevel,
     item::ItemSpecs,
     monster::MonsterRarity,
-    passive::PassivesTreeAscension,
+    passive::{PassivesTreeAscension, PurchasedNodes},
     player::{PlayerInventory, PlayerState},
     skill::TargetType,
     skill_mastery::PlayerSkillMasteries,
@@ -28,6 +28,7 @@ pub struct AchievementContext<'a> {
     pub player_level: u8,
     pub skill_masteries: &'a PlayerSkillMasteries,
     pub ascension: &'a PassivesTreeAscension,
+    pub purchased_nodes: Option<&'a PurchasedNodes>,
     pub inventory: &'a PlayerInventory,
     pub area_statistics: AreaAchievementStatistics<'a>,
     pub player_state: Option<&'a PlayerState>,
@@ -244,6 +245,25 @@ fn goal_progress(
                     **level >= *value && passive_id.is_none_or(|required| **id == required)
                 })
                 .count() as u64)
+                .min(required)
+        }
+        AchievementGoal::PassiveAllocated { amount, socket } => {
+            let required = u64::from(*amount);
+            (context
+                .purchased_nodes
+                .map(|purchased_nodes| {
+                    if *socket {
+                        purchased_nodes
+                            .iter()
+                            .filter(|passive_id| {
+                                context.ascension.socketed_nodes.contains_key(*passive_id)
+                            })
+                            .count()
+                    } else {
+                        purchased_nodes.len()
+                    }
+                })
+                .unwrap_or_default() as u64)
                 .min(required)
         }
         AchievementGoal::EquippedItem {
