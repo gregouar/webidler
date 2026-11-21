@@ -1,0 +1,58 @@
+{
+  "name"    : "Yithian",
+  "portrait": "monsters/mythos/yithian.webp",
+  "max_life": 20,
+  "size"    : "Tall",
+  "skills"  : [
+    {
+      "name"      : "Probe",
+      "icon"      : "skills/crab_claw.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [3, 5] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Alien Technology",
+      "icon"      : "skills/tesla_turret.svg",
+      "skill_type": "Spell",
+      "cooldown"  : 50,
+      "targets"   : [
+        {
+          "repeat" : { "value": [4, 8], "target": "Same", "repeat_cooldown": 0.3 },
+          "range"  : "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 5] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Temporal Disturbance",
+      "icon"      : "skills/time_trap.svg",
+      "skill_type": "Curse",
+      "cooldown"  : 100,
+      "targets"   : [
+        {
+          "range": "Any",
+          "effects": [
+            { "ApplyStatus": {"status_id": "time_trap", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

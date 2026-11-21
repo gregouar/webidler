@@ -7,7 +7,7 @@
   "skills"  : [
     {
       "name"      : "Lightning Strike",
-      "icon"      : "skills/magic_missile.svg",
+      "icon"      : "skills/lightning_slashes.svg",
       "skill_type": "Attack",
       "cooldown"  : 10,
       "targets"   : [

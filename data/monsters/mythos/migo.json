@@ -1,0 +1,44 @@
+{
+  "name"    : "Mi-Go",
+  "portrait": "monsters/mythos/migo.webp",
+  "max_life": 15,
+  "block"   : {"Attack": 30, "Spell": 20},
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
+    {
+      "name"      : "Pinch",
+      "icon"      : "skills/crab_claw.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [3, 5] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Extract Brain",
+      "icon"      : "skills/frontal_lobe.svg",
+      "cooldown"  : 100,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [10, 30] }
+              }
+            },
+            { "ApplyStatus": {"status_id": "brainless", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}
