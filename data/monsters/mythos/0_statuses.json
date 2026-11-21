@@ -40,5 +40,24 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "terror"          : {
+        "name"      : "Terror",
+        "icon"      : "skills/terror.svg",
+        "debuff"    : true,
+        "duration"  : 30,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"SuccessChance": {}}, "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"CritChance": {}}, "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
     }
 }

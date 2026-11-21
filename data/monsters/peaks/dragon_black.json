@@ -11,7 +11,7 @@
     {
       "name"      : "Tempest Talon",
       "icon"      : "skills/chain_lightning.svg",
-      "skill_type": "Attack",
+      "skill_type": "Spell",
       "cooldown"  : 30,
       "targets"   : [
         {

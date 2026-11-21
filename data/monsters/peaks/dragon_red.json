@@ -10,7 +10,7 @@
   "skills"            : [
     {
       "name"      : "Crushing Tail",
-      "icon"      : "skills/attack.svg",
+      "icon"      : "skills/spiked_ball.svg",
       "skill_type": "Attack",
       "cooldown"  : 30,
       "targets"   : [
