@@ -19,6 +19,26 @@
         ],
         "rewards": [ {"Cosmetic": "title_edicts_100"} ]
     },
+    "unique_grinds"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/seal.svg",
+        "name"       : "Only the fFinest Things in Life",
+        "description": "Complete 30 Unique Edicts.",
+        "goals"      : [
+            { "Counter": {"value": 30, "counter": "UniqueGrindCompleted"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_unique_grinds"} ]
+    },
+    "area_levels"            : {
+        "category"   : "Grind",
+        "icon"       : "achievements/doorway.svg",
+        "name"       : "Are We There Yet!?",
+        "description": "Complete 50,000 Area Levels.",
+        "goals"      : [
+            { "AreaCompleted": {"value": 50000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_area_levels"} ]
+    },
     "sacrifice_equipment_600": {
         "category"   : "Grind",
         "icon"       : "achievements/hammer_break.svg",
@@ -49,13 +69,23 @@
         ],
         "rewards": [ {"Cosmetic": "title_imbue_unique"} ]
     },
+    "kill_mummies"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/mummy_head.svg",
+        "name"       : "Goodnight Mummy",
+        "description": "Kill 50,000 Mummies.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 50000, "area_id": "desert_mummy.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_mummies"} ]
+    },
     "kill_dragons"           : {
         "category"   : "Grind",
         "icon"       : "achievements/dragon_head.svg",
         "name"       : "Imagine no Dragons",
         "description": "Kill 1,000 Adult Dragons.",
         "goals"      : [
-            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json"} }
+            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json", "monster_rarity": "Boss"} }
         ],
         "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
     }

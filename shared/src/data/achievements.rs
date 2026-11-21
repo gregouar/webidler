@@ -14,6 +14,7 @@ pub enum AchievementCounter {
     GambleUnique,
     ImbueUniqueSoul,
     SacrificeEquipment600,
+    UniqueGrindCompleted,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use shared::{
     constants::{ITEM_REWARDS_MAP_MIN_LEVEL, ITEM_REWARDS_MIN_LEVEL, ITEM_REWARDS_RARE_FACTOR},
     data::{
+        achievements::AchievementCounter,
         grind::{GrindRewards, QuestReward},
         item::{ItemRarity, ItemSpecs},
     },
@@ -28,6 +29,18 @@ pub fn end_grind(master_store: &MasterStore, game_data: &mut GameInstanceData) {
         game_data.end_grind = true;
         *game_data.grind_rewards.mutate() =
             Some(generate_end_grind_rewards(master_store, game_data));
+
+        // TODO: Move elsewhere? Should we generate events and hook achievements resolver into it?
+        if game_data
+            .map_item
+            .as_ref()
+            .is_some_and(|map_item| map_item.modifiers.rarity == ItemRarity::Unique)
+        {
+            *game_data
+                .achievements_counters
+                .entry(AchievementCounter::UniqueGrindCompleted)
+                .or_default() += 1;
+        }
     }
 }
 

@@ -221,7 +221,7 @@
     "edict_mosquito"         : {
         "category"   : "Global",
         "icon"       : "achievements/amber_mosquito.svg",
-        "name"       : "Pest Eradicator",
+        "name"       : "Pest Eradication",
         "description": "Reach Area Level 500 during Mosquito Season.",
         "goals"      : [
             { "AreaLevel": {"value": 500, "area_id": "forest_mosquito.json"} }
