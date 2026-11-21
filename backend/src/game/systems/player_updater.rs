@@ -7,7 +7,7 @@ use shared::{
         chance::{Chance, ChanceRange},
         character::{CharacterAttrs, CharacterId, CharacterSize, CharacterStatic},
         character_status::StatusId,
-        item::{SkillRange, SkillShape},
+        item::{ItemSlot, SkillRange, SkillShape},
         item_affix::{AffixEffectScope, aggregate_effects},
         modifier::{ModifiableValue, Modifier},
         passive::{self, PassivesTreeSpecs, PassivesTreeState},
@@ -16,9 +16,12 @@ use shared::{
             DamageType, RestoreModifier, RestoreType, SkillEffect, SkillEffectType, SkillType,
         },
         skill_mastery::PlayerSkillMasteries,
-        stat_effect::{EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType},
+        stat_effect::{
+            EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
+            StatusOnHitValueType,
+        },
         trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
-        values::{AtLeastOne, Damage, Finite, NonNegative},
+        values::{AtLeastOne, Damage, Finite, NonNegative, Percent},
     },
 };
 use strum::IntoEnumIterator;
@@ -357,7 +360,7 @@ fn compute_player_specs(
         );
     }
 
-    for ((status_id, skill_type), value) in status_on_hit.into_iter() {
+    for ((status_id, value_type, skill_type, _item_slot), value) in status_on_hit.into_iter() {
         player_specs.character_specs.triggers.push(
             EventTrigger::OnHit(HitTrigger {
                 skill_type,
@@ -374,13 +377,30 @@ fn compute_player_specs(
                 skill_repeat: Default::default(),
                 modifiers: Vec::new(),
                 effects: vec![SkillEffect {
-                    success_chance: Chance::new_sure(),
+                    success_chance: if value_type == StatusOnHitValueType::Chance {
+                        Chance {
+                            value: ModifiableValue::new(
+                                Percent::new(value.base().get() as f32),
+                                value.increased(),
+                                value.decreased(),
+                                value.more(),
+                                value.converted(),
+                            ),
+                            lucky_chance: Default::default(),
+                        }
+                    } else {
+                        Chance::new_sure()
+                    },
                     effect_type: SkillEffectType::ApplyStatus {
                         status_id,
-                        value: ChanceRange {
-                            min: value,
-                            max: value,
-                            lucky_chance: Default::default(),
+                        value: if value_type == StatusOnHitValueType::Power {
+                            ChanceRange {
+                                min: value,
+                                max: value,
+                                lucky_chance: Default::default(),
+                            }
+                        } else {
+                            ChanceRange::from(ModifiableValue::from(Damage::new(100.0)))
                         },
                         value_factor: 1.0,
                         duration: None,
@@ -437,7 +457,15 @@ struct ModifiablePlayerSpecs {
     threat_gain: ModifiableValue<NonNegative>,
 
     restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<NonNegative>>,
-    status_on_hit: HashMap<(StatusId, Option<SkillType>), ModifiableValue<Damage>>,
+    status_on_hit: HashMap<
+        (
+            StatusId,
+            StatusOnHitValueType,
+            Option<SkillType>,
+            Option<ItemSlot>,
+        ),
+        ModifiableValue<Damage>,
+    >,
 }
 
 fn modify_player_specs(
@@ -470,8 +498,8 @@ fn modify_player_specs(
                         .apply_effect(effect);
                 }
             }
-            StatType::StatusOnHit { status_id, skill_type } => {
-                modifiable_player_specs.status_on_hit.entry((status_id.clone(),*skill_type)).or_default().apply_effect(effect);
+            StatType::StatusOnHit { status_id, skill_type, item_slot, value_type } => {
+                modifiable_player_specs.status_on_hit.entry((status_id.clone(),*value_type,*skill_type,*item_slot)).or_default().apply_effect(effect);
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character

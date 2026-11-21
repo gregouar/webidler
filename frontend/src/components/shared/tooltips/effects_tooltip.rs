@@ -13,7 +13,7 @@ use shared::data::{
     stat_effect::{
         DamageStatType, LuckyRollType, MinMax, StatConverterSource, StatEffect,
         StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType, StatusDamageType,
-        ToDamageTypes,
+        StatusOnHitValueType, ToDamageTypes,
     },
 };
 
@@ -772,13 +772,24 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
         StatType::StatusOnHit {
             status_id,
             skill_type,
+            item_slot,
+            value_type,
         } => {
             let status_name = data_context.status_name(status_id);
-            format!(
-                "{} Effects on {}Hit",
-                status_name,
-                skill_type_str(*skill_type)
-            )
+            match value_type {
+                StatusOnHitValueType::Power => format!(
+                    "{} Effects on {}Hit{}",
+                    status_name,
+                    skill_type_str(*skill_type),
+                    with_item_slot_str(item_slot)
+                ),
+                StatusOnHitValueType::Chance => format!(
+                    "Chance to Apply {} on {}Hit{}",
+                    status_name,
+                    skill_type_str(*skill_type),
+                    with_item_slot_str(item_slot)
+                ),
+            }
         }
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
@@ -1193,14 +1204,27 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
         StatType::StatusOnHit {
             status_id,
             skill_type,
+            item_slot,
+            value_type,
         } => {
             let status_name = data_context.status_name(status_id);
-            format!(
-                "Apply {} at {}% Effectiveness on {}Hit",
-                status_name,
-                format_flat_number(value, false),
-                skill_type_str(*skill_type)
-            )
+
+            match value_type {
+                StatusOnHitValueType::Power => format!(
+                    "Apply {} at {}% Effectiveness on {}Hit{}",
+                    status_name,
+                    format_flat_number(value, false),
+                    skill_type_str(*skill_type),
+                    with_item_slot_str(item_slot),
+                ),
+                StatusOnHitValueType::Chance => format!(
+                    "{}% Chance to Inflict {} on {}Hit{}",
+                    format_flat_number(value, false),
+                    status_name,
+                    skill_type_str(*skill_type),
+                    with_item_slot_str(item_slot),
+                ),
+            }
         }
         StatType::SkillLevel(skill_filter) => {
             let mut r = format!(
@@ -1461,4 +1485,10 @@ fn format_passive_str(passive_id: &PassiveNodeId) -> String {
         .get(passive_id)
         .map(|passive_specs| passive_specs.name.clone())
         .unwrap_or(passive_id.to_string())
+}
+
+fn with_item_slot_str(item_slot: &Option<ItemSlot>) -> String {
+    item_slot
+        .map(|item_slot| format!(" with {}", item_tooltip::item_slot_str(item_slot)))
+        .unwrap_or("".to_string())
 }

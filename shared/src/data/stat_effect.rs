@@ -294,11 +294,18 @@ pub enum StatType {
         restore_type: RestoreType,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        // TODO?
+        // #[serde(default)]
+        // item_slot: Option<ItemSlot>,
     },
     StatusOnHit {
         status_id: StatusId,
         #[serde(default)]
+        value_type: StatusOnHitValueType,
+        #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        item_slot: Option<ItemSlot>,
     },
     SkillConditionalModifier {
         stat: Box<StatType>,
@@ -764,6 +771,14 @@ pub enum StatConverterSource {
         #[serde(default)]
         damage_type: Option<DamageType>,
     },
+}
+#[derive(
+    Serialize, Deserialize, Default, Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord,
+)]
+pub enum StatusOnHitValueType {
+    #[default]
+    Power,
+    Chance,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
