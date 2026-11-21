@@ -9,26 +9,6 @@
         ],
         "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
     },
-    "edicts_100"             : {
-        "category"   : "Grind",
-        "icon"       : "achievements/scroll.svg",
-        "name"       : "Edicts Addict",
-        "description": "Use a total of 100 Edicts.",
-        "goals"      : [
-            { "AreaCompleted": {"value": 100, "with_edict": true} }
-        ],
-        "rewards": [ {"Cosmetic": "title_edicts_100"} ]
-    },
-    "unique_grinds"          : {
-        "category"   : "Grind",
-        "icon"       : "achievements/seal.svg",
-        "name"       : "Only the fFinest Things in Life",
-        "description": "Complete 30 Unique Edicts.",
-        "goals"      : [
-            { "Counter": {"value": 30, "counter": "UniqueGrindCompleted"} }
-        ],
-        "rewards": [ {"Cosmetic": "title_unique_grinds"} ]
-    },
     "area_levels"            : {
         "category"   : "Grind",
         "icon"       : "achievements/doorway.svg",
@@ -38,6 +18,16 @@
             { "AreaCompleted": {"value": 50000} }
         ],
         "rewards": [ {"Cosmetic": "title_area_levels"} ]
+    },
+    "gems_hoarder"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/gems.svg",
+        "name"       : "Gems Hoarder",
+        "description": "Collect a grand total of 50,000 Gems across your Grinds.",
+        "goals"      : [
+            { "GemsObtained": {"value": 50000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_gems_hoarder"} ]
     },
     "sacrifice_equipment_600": {
         "category"   : "Grind",
@@ -52,7 +42,7 @@
     "gamble_uniques"         : {
         "category"   : "Grind",
         "icon"       : "achievements/slot_machine.svg",
-        "name"       : "Certified Gambler",
+        "name"       : "Slot Machine",
         "description": "Obtain 20 Unique Items through Gambling.",
         "goals"      : [
             { "Counter": {"counter": "GambleUnique", "value": 20} }
@@ -68,6 +58,26 @@
             { "Counter": {"counter": "ImbueUniqueSoul", "value": 10} }
         ],
         "rewards": [ {"Cosmetic": "title_imbue_unique"} ]
+    },
+    "edicts_100"             : {
+        "category"   : "Grind",
+        "icon"       : "achievements/scroll.svg",
+        "name"       : "Edicts Addiction",
+        "description": "Use a total of 100 Edicts.",
+        "goals"      : [
+            { "AreaCompleted": {"value": 100, "with_edict": true} }
+        ],
+        "rewards": [ {"Cosmetic": "title_edicts_100"} ]
+    },
+    "unique_grinds"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/seal.svg",
+        "name"       : "Only the Finest Things in Life",
+        "description": "Complete 30 Unique Edicts.",
+        "goals"      : [
+            { "Counter": {"value": 30, "counter": "UniqueGrindCompleted"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_unique_grinds"} ]
     },
     "kill_mummies"           : {
         "category"   : "Grind",
