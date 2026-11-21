@@ -1,0 +1,47 @@
+{
+  "name"      : "Shoggoth",
+  "portrait"  : "monsters/mythos/shoggoth.webp",
+  "max_life"  : 35,
+  "size"      : "Huge",
+  "life_regen": 30,
+  "armor"     : {"Physical": 50, "Poison": 50, "Storm": 50},
+  "skills"    : [
+    {
+      "name"      : "Tekeli-li",
+      "icon"      : "skills/foam.svg",
+      "cooldown"  : 50,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus": { "status_id": "burn", "value": [7, 13] }
+            },
+            {
+              "ApplyStatus": { "status_id": "poison", "value": [7, 13], "escalation": 30 }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Indescribable Appendage",
+      "icon"      : "skills/tentacle.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Melee",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [5, 10] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
