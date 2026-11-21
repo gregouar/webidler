@@ -11,6 +11,6 @@
     "pet_crab"       : {"name": "Treasure Crab", "icon": "pets/pet_crab.webp"       },
     "pet_scarab"     : {"name": "Desert Scarab", "icon": "pets/pet_scarab.webp"     },
     "pet_witch"      : {"name": "Witchderling",  "icon": "pets/pet_witch.webp"      },
-    "pet_dragon_duck": {"name": "Dragon-Duck",   "icon": "pets/pet_dragon_duck.webp"},
+    "pet_dragon_duck": {"name": "Sir Duckwyrm",  "icon": "pets/pet_dragon_duck.webp"},
     "pet_mythos"     : {"name": "Chubithulhu",   "icon": "pets/pet_mythos.webp"     }
 }

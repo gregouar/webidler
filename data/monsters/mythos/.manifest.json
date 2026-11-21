@@ -4,7 +4,7 @@
     "monsters": [
       "deep_one_conch.json",   "deep_one_hybrid.json",  "deep_one_shaman.json",  "deep_one_warrior.json",
       "elder_thing.json",      "hound_tindalos.json",   "migo.json",             "shoggoth.json",
-      "the_horror.json",       "yithian.json"
+      "the_horror.json",       "yithian.json",          "yog_zathoth.json"
     ],
     "statuses": ["0_statuses.json"]
   }

@@ -1,0 +1,84 @@
+{
+  "name"              : "Yog-Zathoth, the Cosmic Horror",
+  "portrait"          : "monsters/mythos/yog_zathoth.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 3000000,
+  "life_regen"        : 10,
+  "size"              : "Gargantuan",
+  "armor"             : {"Physical": 200, "Fire": 200, "Storm": 200, "Poison": 200},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
+    {
+      "name"      : "Cosmic Tear",
+      "icon"      : "skills/disintegrate.svg",
+      "cooldown"  : 30,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [20, 40] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Eldritch Discharge",
+      "icon"      : "skills/fission.svg",
+      "cooldown"  : 40,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 60], "Fire": [20, 40] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Foam from Outer Space",
+      "icon"      : "skills/foam.svg",
+      "cooldown"  : 50,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "ApplyStatus"            : { "status_id": "burn", "value": [20, 40] },
+              "independent_application": true
+            },
+            {
+              "ApplyStatus"            : { "status_id": "poison", "value": [10, 20], "escalation": 20 },
+              "independent_application": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Unfathomable Presence",
+      "icon"      : "skills/terror.svg",
+      "skill_type": "Curse",
+      "cooldown"  : 10,
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            { "ApplyStatus": {"status_id": "terror", "value": 33} }
+          ]
+        }
+      ]
+    }
+  ]
+}

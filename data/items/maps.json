@@ -961,6 +961,15 @@
     "min_area_level": 600,
     "rarity": "Unique",
     "affixes": {
+      "unique_1": {
+        "stat": {
+          "Description": "Reward with an Elemental Soul"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "is_unique": true
+      },
       "unique_2": {
         "stat": "ItemLevel",
         "modifier": "Flat",

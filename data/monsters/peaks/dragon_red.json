@@ -29,7 +29,7 @@
     {
       "name"      : "Incinerating Breath",
       "icon"      : "skills/burning_ray.svg",
-      "skill_type": "Attack",
+      "skill_type": "Spell",
       "cooldown"  : 100,
       "targets"   : [
         {

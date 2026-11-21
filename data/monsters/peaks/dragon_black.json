@@ -28,7 +28,7 @@
     },
     {
       "name"      : "Poison Spike",
-      "icon"      : "skills/poison_cloud.svg",
+      "icon"      : "skills/spiked_tail.svg",
       "skill_type": "Attack",
       "cooldown"  : 50,
       "targets"   : [

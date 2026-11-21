@@ -2,45 +2,46 @@
   "name"              : "The Child",
   "portrait"          : "monsters/peaks/dragon_hybrid.webp",
   "rarity"            : "Boss",
-  "max_life"          : 1200,
+  "max_life"          : 2000000,
   "size"              : "Gargantuan",
-  "armor"             : {"Physical": 100, "Fire": 100},
+  "armor"             : {"Physical": 100, "Fire": 100, "Storm": 100, "Poison": 100},
   "stun_lockout"      : 3.0,
   "status_resistances": [ {"status_id": "stun", "value": 30} ],
   "skills"            : [
     {
-      "name"      : "Crushing Tail",
-      "icon"      : "skills/attack.svg",
+      "name"      : "Tail Spike",
+      "icon"      : "skills/spiked_tail.svg",
       "skill_type": "Attack",
-      "cooldown"  : 30,
+      "cooldown"  : 50,
       "targets"   : [
         {
           "range": "Melee",
           "effects": [
             {
               "FlatDamage": {
-                "damage": { "Physical": [20, 40] }
+                "damage": { "Physical": [20, 30] }
               }
-            }
+            },
+            { "ApplyStatus": {"status_id": "poison", "value": 40, "escalation": 20} }
           ]
         }
       ]
     },
     {
-      "name"      : "Incinerating Breath",
-      "icon"      : "skills/burning_ray.svg",
-      "skill_type": "Attack",
-      "cooldown"  : 100,
+      "name"      : "Pyroclastic Breath",
+      "icon"      : "skills/pyroclastic_infusion.svg",
+      "skill_type": "Spell",
+      "cooldown"  : 50,
       "targets"   : [
         {
           "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
-                "damage": { "Fire": [10, 20] }
+                "damage": { "Storm": [0, 60] }
               }
             },
-            { "ApplyStatus": {"status_id": "burn", "duration": 100, "value": 15} }
+            { "ApplyStatus": {"status_id": "burn", "duration": 100, "value": 30} }
           ]
         }
       ]
@@ -55,6 +56,20 @@
           "target_type": "Me",
           "effects"    : [
             { "ApplyStatus": {"status_id": "dragon_rage", "value": 100} }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Evil Eye",
+      "icon"      : "skills/beast_eye.svg",
+      "cooldown"  : 150,
+      "skill_type": "Blessing",
+      "targets"   : [
+        {
+          "target_type": "Me",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "dragon_eye", "value": 200} }
           ]
         }
       ]
