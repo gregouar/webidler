@@ -312,6 +312,7 @@ async fn post_reconcile_achievements(
         ascension: &ascension,
         inventory: &inventory,
         area_statistics: AreaAchievementStatistics::persisted(&areas),
+        player_state: None,
     };
     let newly_unlocked_achievements = achievements_controller::check_achievements(
         &master_store,

@@ -235,6 +235,7 @@ impl<'a> GameInstance<'a> {
                 self.game_data.player_resources.read().gems.get(),
                 self.game_data.map_item.is_some(),
             ),
+            player_state: Some(&self.game_data.player_state),
         };
 
         let new_achievements = achievements_controller::check_achievements(

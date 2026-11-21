@@ -8,7 +8,8 @@ use shared::data::{
     item::ItemSpecs,
     monster::MonsterRarity,
     passive::PassivesTreeAscension,
-    player::PlayerInventory,
+    player::{PlayerInventory, PlayerState},
+    skill::TargetType,
     skill_mastery::PlayerSkillMasteries,
     user::{UserCharacterId, UserId},
 };
@@ -29,6 +30,7 @@ pub struct AchievementContext<'a> {
     pub ascension: &'a PassivesTreeAscension,
     pub inventory: &'a PlayerInventory,
     pub area_statistics: AreaAchievementStatistics<'a>,
+    pub player_state: Option<&'a PlayerState>,
 }
 
 #[derive(Clone, Copy)]
@@ -248,6 +250,7 @@ fn goal_progress(
             item_id,
             item_slot,
             item_level,
+            item_quality,
             item_rarity,
             item_category,
             in_passives_tree,
@@ -262,6 +265,7 @@ fn goal_progress(
                 //     return false;
                 // };
                 item_level.is_none_or(|required| item.modifiers.level >= required)
+                    && item_quality.is_none_or(|required| item.modifiers.quality >= required)
                     && item_rarity.is_none_or(|required| item.modifiers.rarity == required)
                     && item_id
                         .as_ref()
@@ -330,6 +334,24 @@ fn goal_progress(
         AchievementGoal::GemsObtained { area_id, .. } => {
             sum_area_stat(context, area_id.as_deref(), |area| area.gems_obtained)
         }
+        AchievementGoal::CharacterStatusStacks {
+            value: _,
+            status_id,
+            target,
+        } => match target {
+            TargetType::Enemy => todo!(),
+            TargetType::Friend | TargetType::Me => context
+                .player_state
+                .map(|player_state| {
+                    player_state
+                        .character_state
+                        .statuses
+                        .get(status_id)
+                        .map(|status_stacks| status_stacks.len() as u64)
+                })
+                .flatten()
+                .unwrap_or_default(),
+        },
     }
 }
 

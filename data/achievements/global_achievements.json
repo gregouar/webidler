@@ -148,6 +148,24 @@
         ],
         "rewards": [ {"Cosmetic": "title_max_equipment"} ]
     },
+    "max_quality"            : {
+        "category"   : "Global",
+        "icon"       : "achievements/anvil_impact.svg",
+        "name"       : "Quality Gears",
+        "description": "Equip a Item with 50% Quality in each Equipment Slot.",
+        "goals"      : [
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Accessory"} },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Helmet"   } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Amulet"   } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Weapon"   } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Body"     } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Shield"   } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Gloves"   } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Boots"    } },
+            { "EquippedItem": {"item_quality": 50, "item_slot": "Ring"     } }
+        ],
+        "rewards": [ {"Cosmetic": "title_max_quality"} ]
+    },
     "unique_edicts"          : {
         "category"    : "Global",
         "icon"        : "achievements/arrowhead.svg",
@@ -186,7 +204,17 @@
         "goals"      : [
             { "AreaLevel": {"value": 500, "area_id": "forest_mosquito.json"} }
         ],
-        "rewards": [ {"Pet": "pet_mosquito"} ]
+        "rewards": [ {"Pet": "pet_mosquito"}, {"Cosmetic": "title_mosquito"} ]
+    },
+    "edict_music"            : {
+        "category"   : "Global",
+        "icon"       : "achievements/musical_score.svg",
+        "name"       : "Saturday Night",
+        "description": "Reach Area Level 500 on the Devil's Tempo.",
+        "goals"      : [
+            { "AreaLevel": {"value": 500, "area_id": "castle_music.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_tempo"} ]
     },
     "edict_treasure"         : {
         "category"    : "Global",
@@ -215,12 +243,13 @@
         "rewards": [ {"Pet": "pet_scarab"}, {"Cosmetic": "title_mummy_lover"} ]
     },
     "edict_wanted"           : {
-        "category"   : "Global",
-        "icon"       : "achievements/wanted.svg",
-        "name"       : "Wanted",
-        "description": "Reach Area Level 500 as the Outlaws enforce their own law.",
-        "goals"      : [
-            { "AreaLevel": {"value": 500, "area_id": "farwest_wanted.json"} }
+        "category"    : "Global",
+        "icon"        : "achievements/wanted.svg",
+        "name"        : "Dead or Alive",
+        "description" : "Reach maximum Wanted Status as the Outlaws enforce their own law.",
+        "goals_amount": 1,
+        "goals"       : [
+            { "CharacterStatusStacks": {"value": 100, "status_id": "wanted", "target": "Me"} }
         ],
         "rewards": [ {"Pet": "pet_crow"}, {"Cosmetic": "title_wanted"} ]
     },

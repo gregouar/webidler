@@ -3,9 +3,10 @@ use uuid::Uuid;
 
 use crate::data::{
     area::AreaLevel,
+    character_status::StatusId,
     item::{BaseItemId, ItemCategory, ItemRarity, ItemSlot},
     monster::MonsterRarity,
-    skill::SkillType,
+    skill::{SkillType, TargetType},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -92,6 +93,8 @@ pub enum AchievementGoal {
         #[serde(default)]
         item_level: Option<AreaLevel>,
         #[serde(default)]
+        item_quality: Option<f32>,
+        #[serde(default)]
         item_rarity: Option<ItemRarity>,
         #[serde(default)]
         item_category: Option<ItemCategory>,
@@ -119,6 +122,11 @@ pub enum AchievementGoal {
         #[serde(default)]
         area_id: Option<String>,
     },
+    CharacterStatusStacks {
+        value: u64,
+        status_id: StatusId,
+        target: TargetType,
+    },
 }
 
 impl AchievementGoal {
@@ -130,7 +138,8 @@ impl AchievementGoal {
             Self::MonstersKilled { value, .. }
             | Self::AreaCompleted { value, .. }
             | Self::GemsObtained { value, .. }
-            | Self::Counter { value, .. } => *value,
+            | Self::Counter { value, .. }
+            | Self::CharacterStatusStacks { value, .. } => *value,
             Self::AreaLevel { .. } | Self::PowerLevel(_) | Self::PlayerLevel(_) => 1,
         }
     }

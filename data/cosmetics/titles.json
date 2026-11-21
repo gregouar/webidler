@@ -1,6 +1,7 @@
 {
     "title_uniques_collector"      : {"Title": "oddities collector" },
     "title_max_equipment"          : {"Title": "legendary collector"},
+    "title_max_quality"            : {"Title": "tempered"           },
     "title_all_runes"              : {"Title": "runic"              },
     "title_all_unique_runes"       : {"Title": "runes connoisseur"  },
     "title_all_max_passives"       : {"Title": "ascended"           },
@@ -8,6 +9,8 @@
     "title_max_various_skill_level": {"Title": "jack of all trades" },
     "title_regular_patron"         : {"Title": "regular patron"     },
     "title_treasure_hunter"        : {"Title": "treasure hunter"    },
+    "title_mosquito"               : {"Title": "scratchy"           },
+    "title_tempo"                  : {"Title": "golden ear"         },
     "title_mummy_lover"            : {"Title": "mummy lover"        },
     "title_wanted"                 : {"Title": "most wanted"        },
     "title_unique_edicts"          : {"Title": "jobro"              },
