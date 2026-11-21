@@ -1061,7 +1061,7 @@ pub fn SacrificeDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView 
             SelectedItem::InMarket(item)
                 if !item.item_specs.categories.contains(&ItemCategory::Soul) =>
             {
-                Some(forge::sacrifice_price(&item.item_specs.affixes))
+                Some(forge::sacrifice_price(&item.item_specs))
             }
             _ => None,
         })

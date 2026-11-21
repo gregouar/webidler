@@ -38,7 +38,14 @@ pub fn affix_operation_price(
         return None;
     }
 
-    let price_base_factor = 1.0 + item_specs.modifiers.level as f64 * 0.005;
+    let price_base_factor = 1.0
+        + item_specs.modifiers.level as f64
+            * 0.005
+            * (if item_specs.map_specs.is_some() {
+                0.5
+            } else {
+                1.0
+            });
 
     match operation {
         ForgeAffixOperation::Add(affix_type) => affix_price(affixes_amount).map(|price| {
@@ -61,8 +68,9 @@ pub fn gamble_price(item_level: AreaLevel) -> NonNegative {
     ((item_level as f64 / 10.0).floor() + 10.0).into()
 }
 
-pub fn sacrifice_price(affixes: &[ItemAffix]) -> NonNegative {
-    let max_level = affixes
+pub fn sacrifice_price(item_specs: &ItemSpecs) -> NonNegative {
+    let max_level = item_specs
+        .affixes
         .iter()
         .filter(|affix| {
             matches!(
@@ -72,7 +80,12 @@ pub fn sacrifice_price(affixes: &[ItemAffix]) -> NonNegative {
         })
         .map(|affix| affix.item_level as f64)
         .max_by(|a, b| a.total_cmp(b))
-        .unwrap_or_default();
+        .unwrap_or_default()
+        * (if item_specs.map_specs.is_some() {
+            0.4
+        } else {
+            1.0
+        });
 
     (((max_level.powf(1.2) - 2.0) / 20.0 / 5.0).round() * 5.0).into()
 }
