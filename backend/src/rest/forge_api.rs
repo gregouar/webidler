@@ -246,7 +246,7 @@ pub async fn post_sacrifice(
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        forge::sacrifice_price(&item),
+        forge::sacrifice_price(item),
     )
     .await?;
 

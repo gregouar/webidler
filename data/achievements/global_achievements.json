@@ -277,8 +277,8 @@
     },
     "edict_gold"             : {
         "category"   : "Global",
-        "icon"       : "achievements/tied_scroll.svg",
-        "name"       : "The Invitation",
+        "icon"       : "achievements/bank.svg",
+        "name"       : "Bankruptcy",
         "description": "Accept the Trial and reach Area Level 300 without spending any Gold.",
         "goals"      : [
             { "AreaLevel": {"value": 300, "area_id": "chaos_gold.json"} }

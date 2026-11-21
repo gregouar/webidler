@@ -362,14 +362,13 @@ fn goal_progress(
             TargetType::Enemy => todo!(),
             TargetType::Friend | TargetType::Me => context
                 .player_state
-                .map(|player_state| {
+                .and_then(|player_state| {
                     player_state
                         .character_state
                         .statuses
                         .get(status_id)
                         .map(|status_stacks| status_stacks.len() as u64)
                 })
-                .flatten()
                 .unwrap_or_default(),
         },
     }
