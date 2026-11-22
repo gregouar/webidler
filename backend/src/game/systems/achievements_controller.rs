@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use shared::data::{
     achievements::{AchievementCounter, AchievementGoal, AchievementReward, AchievementSpecs},
     area::AreaLevel,
+    game_stats::GameStats,
     item::ItemSpecs,
     monster::MonsterRarity,
     passive::{PassivesTreeAscension, PurchasedNodes},
@@ -43,6 +44,7 @@ struct AreaAchievementStatisticsEntry<'a> {
     pub areas_completed: i64,
     pub edicts_spent: i64,
     pub gems_obtained: i64,
+    pub player_deaths: i64,
 }
 
 impl<'a> From<&'a CharacterAreaEntry> for AreaAchievementStatisticsEntry<'a> {
@@ -55,6 +57,7 @@ impl<'a> From<&'a CharacterAreaEntry> for AreaAchievementStatisticsEntry<'a> {
             areas_completed: area.areas_completed,
             edicts_spent: area.edicts_spent,
             gems_obtained: area.gems_obtained,
+            player_deaths: area.player_deaths,
         }
     }
 }
@@ -76,7 +79,7 @@ impl<'a> AreaAchievementStatistics<'a> {
     pub fn with_current_grind(
         persisted: &'a [CharacterAreaEntry],
         area_id: &'a str,
-        game_stats: &shared::data::game_stats::GameStats,
+        game_stats: &GameStats,
         gems_obtained: f64,
         with_edict: bool,
     ) -> Self {
@@ -91,6 +94,7 @@ impl<'a> AreaAchievementStatistics<'a> {
                 areas_completed: to_i64(game_stats.areas_completed),
                 edicts_spent: i64::from(with_edict),
                 gems_obtained: gems_obtained.min(i64::MAX as f64) as i64,
+                player_deaths: to_i64(game_stats.player_deaths),
             }),
         }
     }
@@ -353,6 +357,9 @@ fn goal_progress(
         }),
         AchievementGoal::GemsObtained { area_id, .. } => {
             sum_area_stat(context, area_id.as_deref(), |area| area.gems_obtained)
+        }
+        AchievementGoal::PlayerDeath { area_id, .. } => {
+            sum_area_stat(context, area_id.as_deref(), |area| area.player_deaths)
         }
         AchievementGoal::CharacterStatusStacks {
             value: _,

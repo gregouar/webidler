@@ -9,6 +9,16 @@
         ],
         "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
     },
+    "many_deaths"            : {
+        "category"   : "Grind",
+        "icon"       : "achievements/grave.svg",
+        "name"       : "Skill Issue",
+        "description": "Die 5,000 times.",
+        "goals"      : [
+            { "PlayerDeath": {"value": 5000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_many_deaths"} ]
+    },
     "area_levels"            : {
         "category"   : "Grind",
         "icon"       : "achievements/doorway.svg",
@@ -19,15 +29,45 @@
         ],
         "rewards": [ {"Cosmetic": "title_area_levels"} ]
     },
+    "many_grinds"            : {
+        "category"   : "Grind",
+        "icon"       : "achievements/big_gear.svg",
+        "name"       : "Grind to Grind",
+        "description": "Complete 500 Grinds.",
+        "goals"      : [
+            { "Counter": {"value": 500, "counter": "GrindCompleted"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_many_grinds"} ]
+    },
     "gems_hoarder"           : {
         "category"   : "Grind",
         "icon"       : "achievements/gems.svg",
-        "name"       : "Gems Hoarder",
+        "name"       : "Gems Are a Grind's Best Friend",
         "description": "Collect a grand total of 50,000 Gems across your Grinds.",
         "goals"      : [
             { "GemsObtained": {"value": 50000} }
         ],
         "rewards": [ {"Cosmetic": "title_gems_hoarder"} ]
+    },
+    "kill_champions"         : {
+        "category"   : "Grind",
+        "icon"       : "achievements/crown.svg",
+        "name"       : "Champion of Champions",
+        "description": "Defeat 1,000 Champion Monsters.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 1000, "monster_rarity": "Champion"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_champions"} ]
+    },
+    "add_affix_600"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/magic_axe.svg",
+        "name"       : "Fine, I'll Do It Myself",
+        "description": "Affix 10 Prefixes or Suffixes requiring Power Level 600 on Equipment Items.",
+        "goals"      : [
+            { "Counter": {"counter": "AddAffix600", "value": 10} }
+        ],
+        "rewards": [ {"Cosmetic": "title_add_affix_600"} ]
     },
     "sacrifice_equipment_600": {
         "category"   : "Grind",
@@ -79,6 +119,26 @@
         ],
         "rewards": [ {"Cosmetic": "title_unique_grinds"} ]
     },
+    "kill_dragons"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/dragon_head.svg",
+        "name"       : "Imagine no Dragons",
+        "description": "Kill 1,000 Adult Dragons.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
+    },
+    "kill_mosquitoes"        : {
+        "category"   : "Grind",
+        "icon"       : "achievements/amber_mosquito.svg",
+        "name"       : "Swat and Awe",
+        "description": "Kill 50,000 Mosquitoes.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 50000, "area_id": "forest_mosquito.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_mosquitoes"} ]
+    },
     "kill_mummies"           : {
         "category"   : "Grind",
         "icon"       : "achievements/mummy_head.svg",
@@ -89,14 +149,16 @@
         ],
         "rewards": [ {"Cosmetic": "title_kill_mummies"} ]
     },
-    "kill_dragons"           : {
+    "kill_uber_bosses"       : {
         "category"   : "Grind",
-        "icon"       : "achievements/dragon_head.svg",
-        "name"       : "Imagine no Dragons",
-        "description": "Kill 1,000 Adult Dragons.",
+        "icon"       : "achievements/daemon_skull.svg",
+        "name"       : "Who is the Boss now?",
+        "description": "Kill 500 times each Uber Boss.",
         "goals"      : [
-            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json", "monster_rarity": "Boss"} }
+            { "MonstersKilled": {"value": 500, "area_id": "witch_lair_2.json", "monster_rarity": "Boss"} },
+            { "MonstersKilled": {"value": 500, "area_id": "peaks_dragon.json", "monster_rarity": "Boss"} },
+            { "MonstersKilled": {"value": 500, "area_id": "mythos_stars.json", "monster_rarity": "Boss"} }
         ],
-        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
+        "rewards": [ {"Cosmetic": "title_kill_uber_bosses"} ]
     }
 }

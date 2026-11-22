@@ -35,10 +35,18 @@ pub fn end_grind(master_store: &MasterStore, game_data: &mut GameInstanceData) {
             .map_item
             .as_ref()
             .is_some_and(|map_item| map_item.modifiers.rarity == ItemRarity::Unique)
+            && game_data.area_state.read().max_area_level > ITEM_REWARDS_MIN_LEVEL
         {
             *game_data
                 .achievements_counters
                 .entry(AchievementCounter::UniqueGrindCompleted)
+                .or_default() += 1;
+        }
+
+        if game_data.area_state.read().max_area_level > ITEM_REWARDS_MIN_LEVEL {
+            *game_data
+                .achievements_counters
+                .entry(AchievementCounter::GrindCompleted)
                 .or_default() += 1;
         }
     }

@@ -1510,22 +1510,75 @@
         "scope": "Global",
         "value": 180.0,
         "is_unique": false
+      },
+      "unique_1": {
+        "stat": {
+          "SkillLevel": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 6.0,
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "Armor": null
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "CritDamage": {
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          300.0,
+          400.0
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": "ThreatGain",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 100.0,
+        "is_unique": true
+      },
+      "unique_5": {
+        "stat": "GoldFind",
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          250.0,
+          500.0
+        ],
+        "is_unique": true
       }
     },
     "triggers": [
       {
-        "OnTakeDamage": {
-          "skill_type": null,
-          "damage_type": null
-        },
+        "OnThreatIncreased": null,
         "description": null,
         "trigger_id": "sheriff_star",
-        "target": "Source",
+        "target": "Enemy",
         "modifiers": [],
         "trigger_propagate": false,
         "skill_type": "Other",
-        "skill_range": "Melee",
-        "skill_shape": "Single",
+        "skill_range": "Any",
+        "skill_shape": "All",
         "skill_repeat": {
           "value": 1,
           "target": "Same",
@@ -1539,11 +1592,11 @@
             },
             "ApplyStatus": {
               "status_id": "wanted",
-              "value": 100.0,
+              "value": 2000.0,
               "value_factor": 1.0,
               "duration": null,
               "escalation": null,
-              "max_stacks": null,
+              "max_stacks": 10,
               "avoidable": null,
               "replace_on_value_only": false
             },
@@ -1572,6 +1625,19 @@
           "stat": "GoldFind",
           "modifier": "More",
           "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillLevel": {
+              "skill_type": null,
+              "skill_id": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
         }
       }
     ]

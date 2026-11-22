@@ -152,20 +152,6 @@ pub fn AchievementsPanel(
                                             }
                                         })
                                 });
-                                let rewards = {
-                                    let achievement_rewards = achievement.rewards.clone();
-                                    Memo::new(move |_| {
-                                        achievement_rewards
-                                            .iter()
-                                            .map(|reward| reward_label(
-                                                reward,
-                                                achieved.get(),
-                                                data_context,
-                                            ))
-                                            .collect::<Vec<_>>()
-                                            .join(", ")
-                                    })
-                                };
                                 let rewards_available = Memo::new({
                                     let achievement = achievement.clone();
                                     move |_| {
@@ -176,6 +162,20 @@ pub fn AchievementsPanel(
                                                 })
                                     }
                                 });
+                                let rewards = {
+                                    let achievement_rewards = achievement.rewards.clone();
+                                    Memo::new(move |_| {
+                                        achievement_rewards
+                                            .iter()
+                                            .map(|reward| reward_label(
+                                                reward,
+                                                achieved.get() && !rewards_available.get(),
+                                                data_context,
+                                            ))
+                                            .collect::<Vec<_>>()
+                                            .join(", ")
+                                    })
+                                };
 
                                 // (!display_user_achievements.get())
                                 // .then_some(achievements_progress)
@@ -195,13 +195,15 @@ pub fn AchievementsPanel(
                                 view! {
                                     <MenuListRow
                                         class="h-full min-h-32 overflow-hidden"
-                                        selected=Signal::from(achieved)
-                                        class:brightness-50=move || !achieved.get()
+                                        selected=move || rewards_available.get()
+                                        class:brightness-50=move || { !achieved.get() }
                                     >
                                         <article class="flex h-full min-h-32 gap-3 p-3 text-left">
                                             <div
                                                 class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden"
-                                                class:brightness-50=move || !achieved.get()
+                                                class:brightness-50=move || {
+                                                    !achieved.get() && !rewards_available.get()
+                                                }
                                             >
                                                 <img
                                                     src=img_asset(&achievement.icon)
@@ -258,7 +260,7 @@ pub fn AchievementsPanel(
                                                             "Rewards: "
                                                         </span>
                                                         <span class=move || {
-                                                            if achieved.get() {
+                                                            if achieved.get() && !rewards_available.get() {
                                                                 "text-amber-300"
                                                             } else {
                                                                 "text-zinc-400"

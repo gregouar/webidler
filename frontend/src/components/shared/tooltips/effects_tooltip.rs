@@ -495,6 +495,7 @@ pub fn format_stat(effect: &StatEffect) -> String {
             };
             let value = if let StatConverterSource::LifeRegen | StatConverterSource::ManaRegen =
                 stat_converter_specs.source
+                && effect.modifier != Modifier::Flat
             {
                 effect.value * 10.0
             } else {

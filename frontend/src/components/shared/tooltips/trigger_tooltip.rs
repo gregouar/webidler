@@ -402,7 +402,7 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         }
         EventTrigger::OnKill(kill_trigger) => format_kill_trigger(kill_trigger),
         EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
-        EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),
+        EventTrigger::OnThreatIncreased => "On Threat increase".to_string(),
         EventTrigger::OnDeath(target_type) => {
             format!("On {}Death", format_target_type(target_type))
         }

@@ -169,6 +169,20 @@ pub async fn post_affix(
         Default::default(),
     );
 
+    if let ForgeAffixOperation::Add(_) = payload.operation
+        && let Some(last_affix) = item.affixes.last()
+        && last_affix.item_level == 600
+        && item.slot.is_some()
+    {
+        db::character_achievements::increase_counter(
+            &mut tx,
+            &payload.character_id,
+            AchievementCounter::AddAffix600,
+            1,
+        )
+        .await?;
+    }
+
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)
         .await?;
 
@@ -243,12 +257,8 @@ pub async fn post_sacrifice(
         .await?;
     }
 
-    let resource_gems = buy_with_gems(
-        &mut tx,
-        &payload.character_id,
-        forge::sacrifice_price(item),
-    )
-    .await?;
+    let resource_gems =
+        buy_with_gems(&mut tx, &payload.character_id, forge::sacrifice_price(item)).await?;
 
     inventory.bag[bag_index] = forge_controller::sacrifice(&master_store.items_store, item)?;
     db::characters_data::save_character_inventory(&mut *tx, &payload.character_id, &inventory)

@@ -36,12 +36,12 @@
             {
                 "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
                 "value"       : 10.0,
-                "modifier"    : "Flat"
+                "modifier"    : "Percent"
             },
             {
                 "StatModifier": {"stat": "GoldFind", "modifier": "More", "debuff": false},
                 "value"       : 5.0,
-                "modifier"    : "Flat"
+                "modifier"    : "Percent"
             }
         ]
     },

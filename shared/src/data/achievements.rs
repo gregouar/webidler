@@ -14,6 +14,8 @@ pub enum AchievementCounter {
     GambleUnique,
     ImbueUniqueSoul,
     SacrificeEquipment600,
+    AddAffix600,
+    GrindCompleted,
     UniqueGrindCompleted,
 }
 
@@ -133,6 +135,11 @@ pub enum AchievementGoal {
         status_id: StatusId,
         target: TargetType,
     },
+    PlayerDeath {
+        value: u64,
+        #[serde(default)]
+        area_id: Option<String>,
+    },
 }
 
 impl AchievementGoal {
@@ -145,6 +152,7 @@ impl AchievementGoal {
             Self::MonstersKilled { value, .. }
             | Self::AreaCompleted { value, .. }
             | Self::GemsObtained { value, .. }
+            | Self::PlayerDeath { value, .. }
             | Self::Counter { value, .. }
             | Self::CharacterStatusStacks { value, .. } => *value,
             Self::AreaLevel { .. } | Self::PowerLevel(_) | Self::PlayerLevel(_) => 1,

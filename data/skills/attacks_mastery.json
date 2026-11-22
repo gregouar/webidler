@@ -907,7 +907,7 @@
           },
           {
             "value"        :  0,
-            "upgrade_value": 15,
+            "upgrade_value": 25,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "retaliate_vulnerability"} },
               "modifier": "Increased"

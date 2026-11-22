@@ -22,9 +22,15 @@
     "title_unique_grinds"          : {"Title": "edicts snob"        },
     "title_area_levels"            : {"Title": "wanderer"           },
     "title_gems_hoarder"           : {"Title": "gems hoarder"       },
+    "title_many_grinds"            : {"Title": "rusty"              },
+    "title_kill_champions"         : {"Title": "champion"           },
+    "title_add_affix_600"          : {"Title": "affixionado"        },
     "title_sacrifice_equipment_600": {"Title": "garbage collector"  },
     "title_gambler"                : {"Title": "certified gambler"  },
     "title_imbue_unique"           : {"Title": "soul binder"        },
+    "title_kill_mosquitoes"        : {"Title": "swatter"            },
     "title_kill_mummies"           : {"Title": "mummy complex"      },
-    "title_kill_dragons"           : {"Title": "dragooner"          }
+    "title_kill_dragons"           : {"Title": "dragooner"          },
+    "title_kill_uber_bosses"       : {"Title": "uber hate"          },
+    "title_many_deaths"            : {"Title": "dead serious"       }
 }

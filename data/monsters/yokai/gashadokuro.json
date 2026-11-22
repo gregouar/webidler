@@ -20,7 +20,7 @@
                     "effects": [
                         {
                             "FlatDamage": {
-                                "damage": { "Physical": [20, 40] }
+                                "damage": { "Physical": [10, 30] }
                             }
                         }
                     ]
@@ -38,7 +38,7 @@
                     "effects": [
                         {
                             "FlatDamage": {
-                                "damage": { "Physical": [20, 40] }
+                                "damage": { "Physical": [10, 30] }
                             }
                         }
                     ]
