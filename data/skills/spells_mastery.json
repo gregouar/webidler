@@ -9,8 +9,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -129,8 +129,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -231,8 +231,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -329,8 +329,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "Damage": {"skill_id": "spark"} },
               "modifier": "More",
@@ -454,8 +454,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -580,8 +580,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -694,16 +694,16 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "righteous_fire"} },
               "modifier": "More"
             }
           },
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "unrighteous_fire"} },
               "modifier": "More"
@@ -885,8 +885,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -989,8 +989,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -1077,7 +1077,7 @@
         "max_level"   : 1,
         "effects"     : [
           {
-            "value"        : 30,
+            "value"        : 20,
             "upgrade_value":  0,
             "StatEffect"   : {
               "stat"    : {
@@ -1107,8 +1107,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -1430,16 +1430,16 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "bees"} },
               "modifier": "More"
             }
           },
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "hidden"       : true,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "bees_poison"} },

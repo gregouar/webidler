@@ -9,8 +9,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -127,8 +127,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -276,8 +276,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -391,8 +391,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "poison_coating"} },
               "modifier": "Increased"
@@ -822,8 +822,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -967,8 +967,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -1082,8 +1082,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -1191,8 +1191,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           },
           {
@@ -1336,16 +1336,16 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "Damage": {"skill_id": "blast_arrow"} },
               "modifier": "More"
             }
           },
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : {
               "stat"    : { "StatusPower": {"status_id": "blast_charge"} },
               "modifier": "More"
@@ -1468,8 +1468,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
@@ -1580,8 +1580,8 @@
         "max_level"   : 100,
         "effects"     : [
           {
-            "value"        : 10,
-            "upgrade_value": 10,
+            "value"        : 20,
+            "upgrade_value": 20,
             "StatEffect"   : { "stat": {"Damage": {}}, "modifier": "More" }
           }
         ]
