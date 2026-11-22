@@ -9,7 +9,7 @@ use shared::data::{
     skill::{SkillType, TargetType},
     stat_effect::{StatEffect, StatSkillFilter, StatType},
     trigger::{
-        EventTrigger, HitTrigger, KillTrigger, RestoreTrigger, StatusTrigger,
+        DamageTrigger, EventTrigger, HitTrigger, KillTrigger, RestoreTrigger, StatusTrigger,
         TriggerEffectModifier, TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
     },
     values::Damage,
@@ -397,6 +397,9 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
                 )
             }
         },
+        EventTrigger::OnTakeDamage(damage_trigger) => {
+            format!("On {}", format_damage_trigger(damage_trigger))
+        }
         EventTrigger::OnKill(kill_trigger) => format_kill_trigger(kill_trigger),
         EventTrigger::OnWaveCompleted => "At the end of each Wave completed".to_string(),
         EventTrigger::OnThreatIncreased => "On Threat increased".to_string(),
@@ -473,6 +476,18 @@ fn format_hit_trigger(hit_trigger: &HitTrigger) -> String {
         damage_type_str(hit_trigger.damage_type),
         skills_str.unwrap_or_default(),
         item_slot_str.unwrap_or_default(),
+    )
+}
+
+fn format_damage_trigger(damage_trigger: &DamageTrigger) -> String {
+    let DamageTrigger {
+        skill_type,
+        damage_type,
+    } = damage_trigger;
+    format!(
+        "Taking {}{}Damage",
+        skill_type_str(*skill_type),
+        damage_type_str(*damage_type)
     )
 }
 

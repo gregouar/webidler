@@ -1514,17 +1514,9 @@
     },
     "triggers": [
       {
-        "OnTakeHit": {
+        "OnTakeDamage": {
           "skill_type": null,
-          "range": null,
-          "is_crit": null,
-          "is_blocked": null,
-          "is_hurt": null,
-          "is_triggered": null,
-          "damage_type": null,
-          "skill_id": null,
-          "item_slot": null,
-          "conditions": []
+          "damage_type": null
         },
         "description": null,
         "trigger_id": "sheriff_star",

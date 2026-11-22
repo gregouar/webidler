@@ -95,8 +95,17 @@ pub enum EventTrigger {
     OnDeath(TargetType),
     OnApplyStatus(StatusTrigger),
     OnReceiveStatus(StatusTrigger),
+    OnTakeDamage(DamageTrigger),
     OnRestored(RestoreTrigger),
     OnTick(TickTrigger),
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
+pub struct DamageTrigger {
+    #[serde(default)]
+    pub skill_type: Option<SkillType>,
+    #[serde(default)]
+    pub damage_type: Option<DamageType>,
 }
 
 // TODO: replace by simple tag system?
