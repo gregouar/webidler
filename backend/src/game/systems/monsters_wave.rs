@@ -264,10 +264,11 @@ fn generate_monster_specs(
         ))
     .round()
     .into();
-    monster_specs.gold_reward = (monster_specs.gold_reward.get()
-        * computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR))
-    .round()
-    .into();
+    monster_specs.gold_reward.apply_modifier(
+        (computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR) - 1.0)
+            * 100.0,
+        Modifier::More,
+    );
     monster_specs.skill_reward = (monster_specs.skill_reward.get()
         * computations::exponential(
             area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,

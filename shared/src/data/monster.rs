@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     character::CharacterAttrs,
+    modifier::ModifiableValue,
     player::{CharacterSpecs, CharacterState},
     skill::SkillTargetsGroup,
     values::NonNegative,
@@ -22,7 +23,7 @@ pub struct MonsterSpecs {
     pub rarity: MonsterRarity,
     // pub initiative: ChanceRange<f32>,
     pub experience_reward: NonNegative,
-    pub gold_reward: NonNegative,
+    pub gold_reward: ModifiableValue<NonNegative>,
     pub skill_reward: NonNegative,
 }
 

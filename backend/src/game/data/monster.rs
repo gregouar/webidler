@@ -49,7 +49,7 @@ impl DataInit<&BaseMonsterSpecs> for MonsterSpecs {
             character_specs: specs.character_specs.clone(),
             rarity: specs.rarity,
             experience_reward: reward_factor,
-            gold_reward: reward_factor,
+            gold_reward: reward_factor.into(),
             skill_reward: reward_factor,
         };
 

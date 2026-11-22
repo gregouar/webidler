@@ -8,7 +8,7 @@ use shared::{
         area::{AreaSpecs, AreaState, AreaThreat},
         character::CharacterId,
         item::{ItemSlot, ItemSpecs},
-        modifier::BaseModifiableValue,
+        modifier::{BaseModifiableValue, Modifier},
         monster::{MonsterRarity, MonsterSpecs},
         player::{
             EquippedSlot, PlayerBaseSkill, PlayerBaseSpecs, PlayerInventory, PlayerResources,
@@ -184,10 +184,9 @@ pub fn reward_player(
     area_state: &mut AreaState,
 ) -> (NonNegative, NonNegative) {
     let gold_reward = if area_specs.can_reward_gold() {
-        // (monster_specs.gold_reward * player_specs.gold_find.get() * *area_specs.gold_find * 0.0001)
-        (monster_specs.gold_reward.get() * player_specs.gold_find.get() * 0.01)
-            .round()
-            .into()
+        let mut gold_reward = monster_specs.gold_reward.clone();
+        gold_reward.apply_modifier(player_specs.gold_find.get() - 100.0, Modifier::More);
+        *gold_reward
     } else {
         Default::default()
     };
@@ -301,9 +300,10 @@ pub fn equip_item_from_bag(
         );
     }
 
-    characters_controller::reset_buff_statuses(
+    characters_controller::reset_statuses(
         &master_store.statuses_store,
         &mut player_state.character_state,
+        false,
     );
 
     Ok(())
@@ -327,7 +327,7 @@ pub fn unequip_item_to_bag(
         );
     }
 
-    characters_controller::reset_buff_statuses(statuses_store, &mut player_state.character_state);
+    characters_controller::reset_statuses(statuses_store, &mut player_state.character_state, false);
 
     Ok(())
 }

@@ -1,6 +1,6 @@
 {
     "pet_cat_dog"    : {"name": "Cat-Dog",       "icon": "pets/pet_catdog.webp"          },
-    "pet_crow"       : {"name": "Presscrow",     "icon": "pets/pet_crow.webp"            },
+    "pet_crow"       : {"name": "Presscrow",     "icon": "pets/pet_crow_llod.webp"       },
     "pet_lizard"     : {"name": "Lizard",        "icon": "pets/pet_lizard.webp"          },
     "pet_chicken"    : {"name": "Chimken",       "icon": "pets/pet_chicken.webp"         },
     "pet_rat"        : {"name": "Ratislava",     "icon": "pets/pet_rat.webp"             },

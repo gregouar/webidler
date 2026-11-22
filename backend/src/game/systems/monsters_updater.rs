@@ -82,6 +82,13 @@ pub fn update_monster_specs(
 
     let effects = &monster_specs.character_specs.effects;
 
+    monster_specs.gold_reward = base_specs.gold_reward.clone();
+    for effect in effects.iter() {
+        if let StatType::GoldFind = &effect.stat {
+            monster_specs.gold_reward.apply_effect(effect);
+        }
+    }
+
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
         skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
     }

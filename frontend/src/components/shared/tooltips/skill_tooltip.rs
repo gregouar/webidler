@@ -1029,7 +1029,7 @@ fn format_duration_values(min: f64, max: f64) -> impl IntoView {
     };
 
     if min > 9999.0f64 {
-        view! { "forever" }.into_any()
+        view! { "permanently" }.into_any()
     } else if min >= 60.0f64 {
         view! {
             "for "

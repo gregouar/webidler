@@ -200,7 +200,7 @@
         "stat"    : { "StatusOnHit": {"status_id": "stun", "item_slot": "Weapon", "value_type": "Chance"} },
         "modifier": "Flat",
         "scope"   : "Global",
-        "value"   : 20
+        "value"   : [10, 20]
       }
     ]
   },

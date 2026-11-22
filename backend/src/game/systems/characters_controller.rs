@@ -626,11 +626,15 @@ pub fn spend_mana(
     character_state.mana -= take_from_mana.into();
 }
 
-pub fn reset_buff_statuses(statuses_store: &StatusesStore, character_state: &mut CharacterState) {
+pub fn reset_statuses(
+    statuses_store: &StatusesStore,
+    character_state: &mut CharacterState,
+    debuff: bool,
+) {
     character_state.statuses.retain(|status_id, _| {
         statuses_store
             .get(status_id)
-            .map(|status_specs| status_specs.debuff)
+            .map(|status_specs| status_specs.debuff != debuff)
             .unwrap_or_default()
     });
 }

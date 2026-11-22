@@ -10,7 +10,10 @@ use shared::{
 };
 
 use crate::{
-    game::{data::master_store::MasterStore, systems::grind_controller},
+    game::{
+        data::master_store::MasterStore,
+        systems::{characters_controller, grind_controller},
+    },
     websocket::WebSocketConnection,
 };
 
@@ -130,6 +133,13 @@ fn handle_client_message(
                     must_disconnect: false,
                 });
             }
+            for monster_state in game_data.monster_states.iter_mut() {
+                characters_controller::reset_statuses(
+                    &master_store.statuses_store,
+                    &mut monster_state.character_state,
+                    true,
+                )
+            }
         }
         ClientMessage::UnequipItem(m) => {
             if let Err(err) = player_controller::unequip_item_to_bag(
@@ -145,6 +155,13 @@ fn handle_client_message(
                     message: err.to_string(),
                     must_disconnect: false,
                 });
+            }
+            for monster_state in game_data.monster_states.iter_mut() {
+                characters_controller::reset_statuses(
+                    &master_store.statuses_store,
+                    &mut monster_state.character_state,
+                    true,
+                )
             }
         }
         ClientMessage::SheathItem(m) => {
