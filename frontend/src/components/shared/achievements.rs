@@ -15,6 +15,7 @@ use crate::{
     components::{
         backend_client::BackendClient,
         data_context::DataContext,
+        settings::{GraphicsQuality, SettingsContext},
         ui::{
             buttons::{MenuButton, TabButton},
             card::{CardHeader, CardInset, MenuCard},
@@ -30,6 +31,21 @@ use crate::{
 const ACHIEVEMENT_CATEGORIES: [AchievementCategory; 2] =
     [AchievementCategory::Global, AchievementCategory::Grind];
 
+const ACHIEVEMENT_SPARKLES: [&str; 12] = [
+    "--sparkle-x: 8%; --sparkle-y: 68%; --sparkle-delay: 80ms; --sparkle-size: 5px;",
+    "--sparkle-x: 16%; --sparkle-y: 24%; --sparkle-delay: 360ms; --sparkle-size: 7px;",
+    "--sparkle-x: 27%; --sparkle-y: 78%; --sparkle-delay: 510ms; --sparkle-size: 4px;",
+    "--sparkle-x: 36%; --sparkle-y: 38%; --sparkle-delay: 180ms; --sparkle-size: 6px;",
+    "--sparkle-x: 47%; --sparkle-y: 16%; --sparkle-delay: 580ms; --sparkle-size: 4px;",
+    "--sparkle-x: 55%; --sparkle-y: 72%; --sparkle-delay: 290ms; --sparkle-size: 8px;",
+    "--sparkle-x: 65%; --sparkle-y: 34%; --sparkle-delay: 690ms; --sparkle-size: 5px;",
+    "--sparkle-x: 73%; --sparkle-y: 82%; --sparkle-delay: 430ms; --sparkle-size: 4px;",
+    "--sparkle-x: 81%; --sparkle-y: 18%; --sparkle-delay: 230ms; --sparkle-size: 7px;",
+    "--sparkle-x: 88%; --sparkle-y: 58%; --sparkle-delay: 620ms; --sparkle-size: 5px;",
+    "--sparkle-x: 94%; --sparkle-y: 30%; --sparkle-delay: 460ms; --sparkle-size: 4px;",
+    "--sparkle-x: 42%; --sparkle-y: 88%; --sparkle-delay: 760ms; --sparkle-size: 5px;",
+];
+
 #[component]
 pub fn AchievementsPanel(
     open: RwSignal<bool>,
@@ -38,6 +54,7 @@ pub fn AchievementsPanel(
     #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, u64>>>,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
+    let settings = expect_context::<SettingsContext>();
     let active_category = RwSignal::new(AchievementCategory::Global);
     let display_user_achievements = RwSignal::new(false);
     let displayed_achievements = Memo::new(move |_| match achievements {
@@ -119,6 +136,7 @@ pub fn AchievementsPanel(
                             }
                             key=|(id, _)| id.clone()
                             children=move |(id, achievement)| {
+                                let show_claim_effect = RwSignal::new(false);
                                 let achieved_id = id.clone();
                                 let achieved = Memo::new(move |_| {
                                     displayed_achievements.read().contains_key(&achieved_id)
@@ -198,7 +216,7 @@ pub fn AchievementsPanel(
                                         selected=move || rewards_available.get()
                                         class:brightness-50=move || { !achieved.get() }
                                     >
-                                        <article class="flex h-full min-h-32 gap-3 p-3 text-left">
+                                        <article class="relative flex h-full min-h-32 gap-3 p-3 text-left">
                                             <div
                                                 class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden"
                                                 class:brightness-50=move || {
@@ -275,6 +293,7 @@ pub fn AchievementsPanel(
                                                                     <MenuButton on:click=move |_| claim_rewards(
                                                                         user_unlocks,
                                                                         achievement_id.clone(),
+                                                                        show_claim_effect,
                                                                     )>"Claim"</MenuButton>
                                                                 }
                                                                     .into_any(),
@@ -297,6 +316,33 @@ pub fn AchievementsPanel(
                                                     }}
                                                 </div>
                                             </div>
+                                            <Show when=move || show_claim_effect.get()>
+                                                <div
+                                                    class="achievement-claim-effect pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[7px]"
+                                                    aria-hidden="true"
+                                                >
+                                                    <div class="achievement-claim-glow absolute inset-0" />
+                                                    <div class="achievement-claim-sweep absolute inset-y-0" />
+                                                    {move || {
+                                                        let sparkle_count = match settings.graphics_quality() {
+                                                            GraphicsQuality::High => 12,
+                                                            GraphicsQuality::Medium => 8,
+                                                            GraphicsQuality::Low => 4,
+                                                        };
+                                                        ACHIEVEMENT_SPARKLES[..sparkle_count]
+                                                            .iter()
+                                                            .map(|style| {
+                                                                view! {
+                                                                    <span
+                                                                        class="achievement-claim-sparkle absolute"
+                                                                        style=*style
+                                                                    />
+                                                                }
+                                                            })
+                                                            .collect_view()
+                                                    }}
+                                                </div>
+                                            </Show>
                                         </article>
                                     </MenuListRow>
                                 }
@@ -361,9 +407,14 @@ fn reward_value(kind: &str, value: &str, achieved: bool) -> String {
     }
 }
 
-fn claim_rewards(user_unlocks: RwSignal<UserUnlocks>, achievement_id: String) {
+fn claim_rewards(
+    user_unlocks: RwSignal<UserUnlocks>,
+    achievement_id: String,
+    show_claim_effect: RwSignal<bool>,
+) {
     let backend = expect_context::<BackendClient>();
     let toaster = expect_context::<Toasts>();
+    let settings = expect_context::<SettingsContext>();
     // let previous = player_pets.get_untracked();
 
     // let mut updated = previous.clone();
@@ -379,7 +430,16 @@ fn claim_rewards(user_unlocks: RwSignal<UserUnlocks>, achievement_id: String) {
         match backend.post_claim_reward_achievement(&achievement_id).await {
             Ok(ClaimRewardAchievementResponse {
                 user_unlocks: new_user_unlocks,
-            }) => user_unlocks.set(new_user_unlocks),
+            }) => {
+                if settings.animations_enabled() {
+                    show_claim_effect.set(true);
+                    set_timeout(
+                        move || show_claim_effect.set(false),
+                        std::time::Duration::from_millis(1400),
+                    );
+                }
+                user_unlocks.set(new_user_unlocks);
+            }
             Err(error) => {
                 show_toast(
                     toaster,
