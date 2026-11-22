@@ -10,14 +10,8 @@
     "item_level"  : 100,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 40
       },
@@ -36,14 +30,8 @@
     "item_level"  : 200,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 80
       },
@@ -62,14 +50,8 @@
     "item_level"  : 300,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 120
       },
@@ -88,14 +70,8 @@
     "item_level"  : 400,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 160
       },
@@ -114,14 +90,8 @@
     "item_level"  : 500,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 200
       },
@@ -140,14 +110,8 @@
     "item_level"  : 600,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 240
       },
@@ -166,14 +130,8 @@
     "item_level"  : 700,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 280
       },
@@ -192,14 +150,8 @@
     "item_level"  : 800,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 320
       },
@@ -218,14 +170,8 @@
     "item_level"  : 900,
     "effects"     : [
       {
-        "scope": "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "scope"   : "Local",
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 400
       },

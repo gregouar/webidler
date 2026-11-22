@@ -171,6 +171,7 @@ impl GameInstanceData {
         let area_specs = area_controller::init_area_specs(
             &master_store.items_store,
             &master_store.loot_tables_store,
+            &master_store.statuses_store,
             &mut area_blueprint,
             &map_item,
         );

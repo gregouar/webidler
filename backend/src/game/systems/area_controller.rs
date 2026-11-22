@@ -2,15 +2,24 @@ use shared::{
     constants::{MAX_AREA_LEVEL, MAX_POWER_SHARD_LEVEL_BASE},
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
-        item::ItemSpecs,
+        chance::{Chance, ChanceRange},
+        item::{ItemSpecs, SkillRange, SkillShape},
         item_affix::{AffixEffectScope, aggregate_effects},
-        modifier::ModifiableValue,
-        stat_effect::{EffectsMap, StatType},
+        modifier::{ModifiableValue, Modifier},
+        skill::{SkillEffect, SkillEffectType, SkillType},
+        stat_effect::{EffectsMap, StatType, StatusOnHitValueType},
+        trigger::{
+            EventTrigger, HitTrigger, TriggerEffect, TriggerEffectModifier,
+            TriggerEffectModifierSource, TriggerTarget,
+        },
+        values::{Damage, Percent},
     },
 };
 
 use crate::game::data::{
-    area::AreaBlueprint, items_store::ItemsStore, master_store::LootTablesStore,
+    area::AreaBlueprint,
+    items_store::ItemsStore,
+    master_store::{LootTablesStore, StatusesStore},
 };
 
 pub fn decrease_area_level(area_state: &mut AreaState, amount: i32) {
@@ -34,6 +43,7 @@ pub fn auto_increase_area_level(area_state: &mut AreaState, amount: i32) {
 pub fn init_area_specs(
     items_store: &ItemsStore,
     loot_tables_store: &LootTablesStore,
+    statuses_store: &StatusesStore,
     area_blueprint: &mut AreaBlueprint,
     map_item: &Option<ItemSpecs>,
 ) -> AreaSpecs {
@@ -92,6 +102,113 @@ pub fn init_area_specs(
     } else {
         Default::default()
     };
+
+    // TODO: Proper aggregation of on hit stats to cumulate
+    for effect in map_effects
+        .iter()
+        .filter(|effect| effect.modifier == Modifier::Flat)
+    {
+        if let StatType::RestoreOnHit { .. } = &effect.stat {
+            // TODO
+        }
+
+        if let StatType::StatusOnHit {
+            status_id,
+            value_type,
+            skill_type,
+            item_slot: _,
+        } = &effect.stat
+        {
+            let Some(status_specs) = statuses_store.get(status_id) else {
+                continue;
+            };
+            let value = ModifiableValue::from(Damage::new(effect.value));
+            let status_value = if *value_type == StatusOnHitValueType::Power {
+                value
+            } else {
+                ModifiableValue::from(Damage::new(100.0))
+            };
+            let (modifiers, status_value) = if status_specs.damage_type.is_some() {
+                (
+                    [TriggerEffectModifier {
+                        stat: StatType::Damage {
+                            skill_filter: Default::default(),
+                            damage_type: Default::default(),
+                            min_max: Default::default(),
+                            is_hit: Default::default(),
+                        },
+                        modifier: Modifier::Flat,
+                        factor: status_value.get() * 0.01,
+                        source: TriggerEffectModifierSource::HitDamage(None),
+                        hidden: false,
+                    }]
+                    .into(),
+                    ModifiableValue::from(Damage::new(0.0)),
+                )
+            } else {
+                (Vec::new(), status_value)
+            };
+
+            area_specs.triggers.push(
+                EventTrigger::OnHit(HitTrigger {
+                    skill_type: *skill_type,
+                    is_hurt: Some(true),
+                    is_triggered: Some(false),
+                    ..Default::default()
+                }),
+                TriggerEffect {
+                    trigger_id: format!("status_on_hit_{:?}_{:?}", status_id, skill_type),
+                    target: TriggerTarget::SameTarget,
+                    skill_range: SkillRange::Any,
+                    skill_type: SkillType::Other,
+                    skill_shape: SkillShape::Single,
+                    skill_repeat: Default::default(),
+                    modifiers,
+                    effects: vec![SkillEffect {
+                        success_chance: if *value_type == StatusOnHitValueType::Chance {
+                            Chance {
+                                value: ModifiableValue::new(
+                                    Percent::new(value.base().get() as f32),
+                                    value.increased(),
+                                    value.decreased(),
+                                    value.more(),
+                                    value.converted(),
+                                ),
+                                lucky_chance: Default::default(),
+                            }
+                        } else {
+                            Chance::new_sure()
+                        },
+                        effect_type: SkillEffectType::ApplyStatus {
+                            status_id: status_id.clone(),
+                            value: ChanceRange::from(status_value),
+                            value_factor: 1.0,
+                            duration: None,
+                            escalation: None,
+                            max_stacks: None,
+                            avoidable: None,
+                            replace_on_value_only: false,
+                            computed_status_triggers: None,
+                        },
+                        ignore_stat_effects: [StatType::Damage {
+                            skill_filter: Default::default(),
+                            damage_type: Default::default(),
+                            min_max: Default::default(),
+                            is_hit: Some(true),
+                        }]
+                        .into(),
+                        conditional_modifiers: Default::default(),
+                        independent_application: false,
+                        optional_application: false,
+                        description: None,
+                        as_skill_type: None,
+                    }],
+                    trigger_propagate: false,
+                },
+                None,
+            )
+        }
+    }
 
     area_specs.effects = EffectsMap::combine_all(
         std::iter::once(map_effects).chain(std::iter::once(area_specs.effects)),
