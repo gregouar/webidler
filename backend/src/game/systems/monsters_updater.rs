@@ -82,7 +82,7 @@ pub fn update_monster_specs(
 
     let effects = &monster_specs.character_specs.effects;
 
-    monster_specs.gold_reward = base_specs.gold_reward.clone();
+    monster_specs.gold_reward = base_specs.gold_reward;
     for effect in effects.iter() {
         if let StatType::GoldFind = &effect.stat {
             monster_specs.gold_reward.apply_effect(effect);

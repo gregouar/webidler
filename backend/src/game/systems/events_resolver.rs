@@ -789,10 +789,10 @@ fn handle_threat_increased_event(
     }
 }
 
-fn resolve_target<'a>(
-    game_data: &'a GameInstanceData,
+fn resolve_target(
+    game_data: &GameInstanceData,
     target: CharacterId,
-) -> Option<(&'a CharacterSpecs, &'a CharacterState)> {
+) -> Option<(&CharacterSpecs, &CharacterState)> {
     match target {
         CharacterId::Player => Some((
             &game_data.player_specs.read().character_specs,

@@ -184,7 +184,7 @@ pub fn reward_player(
     area_state: &mut AreaState,
 ) -> (NonNegative, NonNegative) {
     let gold_reward = if area_specs.can_reward_gold() {
-        let mut gold_reward = monster_specs.gold_reward.clone();
+        let mut gold_reward = monster_specs.gold_reward;
         gold_reward.apply_modifier(player_specs.gold_find.get() - 100.0, Modifier::More);
         *gold_reward
     } else {

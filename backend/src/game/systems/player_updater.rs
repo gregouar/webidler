@@ -449,6 +449,16 @@ fn compute_player_specs(
     player_specs
 }
 
+type StatusOnHitMap = HashMap<
+    (
+        StatusId,
+        StatusOnHitValueType,
+        Option<SkillType>,
+        Option<ItemSlot>,
+    ),
+    ModifiableValue<Damage>,
+>;
+
 #[derive(Clone, Default)]
 struct ModifiablePlayerSpecs {
     max_player_level: ModifiableValue<f64>,
@@ -457,15 +467,7 @@ struct ModifiablePlayerSpecs {
     threat_gain: ModifiableValue<NonNegative>,
 
     restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<NonNegative>>,
-    status_on_hit: HashMap<
-        (
-            StatusId,
-            StatusOnHitValueType,
-            Option<SkillType>,
-            Option<ItemSlot>,
-        ),
-        ModifiableValue<Damage>,
-    >,
+    status_on_hit: StatusOnHitMap,
 }
 
 fn modify_player_specs(
