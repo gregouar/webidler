@@ -98,146 +98,174 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
                 .collect::<Vec<_>>()}
         </div>
 
-        <Suspense fallback=move || {
-            view! {
-                <div class="flex flex-1 items-center justify-center text-zinc-400">
-                    "Loading leaderboard..."
-                </div>
-            }
-        }>
-            {move || {
-                Suspend::new(async move {
-                    let (leaderboard, areas) = leaderboard_and_areas.await;
-                    let leaderboard_per_area = leaderboard
-                        .entries
-                        .into_iter()
-                        .fold(
-                            HashMap::new(),
-                            |mut entries: HashMap<String, Vec<LeaderboardEntry>>, entry| {
-                                entries.entry(entry.area_id.clone()).or_default().push(entry);
-                                entries
-                            },
-                        );
-
-                    let mut crucible_area_ids = areas
-                        .iter()
-                        .filter(|(_, area)| area.crucible && !area.hidden)
-                        .map(|(area_id, area)| {
-                            (area_id.clone(), area.required_level, area.name.clone())
-                        })
-                        .collect::<Vec<_>>();
-                    crucible_area_ids.sort_by(|left, right| {
-                        right
-                            .1
-                            .cmp(&left.1)
-                            .then_with(|| left.2.cmp(&right.2))
-                            .then_with(|| left.0.cmp(&right.0))
-                    });
-                    let crucible_area_id = crucible_area_ids
-                        .first()
-                        .map(|(area_id, _, _)| area_id.clone());
-
-                    let mut other_area_ids = leaderboard_per_area
-                        .keys()
-                        .filter(|area_id| {
-                            area_id.as_str() != POWER_LEVEL_LEADERBOARD_AREA_ID
-                                && areas
-                                    .get(*area_id)
-                                    .is_none_or(|area| !area.crucible)
-                        })
-                        .cloned()
-                        .collect::<Vec<_>>();
-                    other_area_ids.sort_by(|left, right| {
-                        let left_area = areas.get(left);
-                        let right_area = areas.get(right);
-                        right_area
-                            .map(|area| area.required_level)
-                            .unwrap_or_default()
-                            .cmp(
-                                &left_area
-                                    .map(|area| area.required_level)
-                                    .unwrap_or_default(),
-                            )
-                            .then_with(|| {
-                                left_area
-                                    .map(|area| area.name.as_str())
-                                    .unwrap_or(left.as_str())
-                                    .cmp(
-                                        right_area
-                                            .map(|area| area.name.as_str())
-                                            .unwrap_or(right.as_str()),
-                                    )
-                            })
-                    });
-
-                    let other_area_names = other_area_ids
-                        .iter()
-                        .map(|area_id| {
-                            (
-                                area_id.clone(),
-                                areas
-                                    .get(area_id)
-                                    .map(|area| area.name.clone())
-                                    .unwrap_or_else(|| area_id.clone()),
-                            )
-                        })
-                        .collect::<HashMap<_, _>>();
-
-                    selectable_area_ids.set(other_area_ids.clone());
-
-                    if !other_area_names.contains_key(&selected_area_id.get_untracked()) {
-                        selected_area_id.set(
-                            other_area_ids
-                                .first()
-                                .cloned()
-                                .unwrap_or_default(),
-                        );
-                    }
-
-                    let power_level_entries = leaderboard_per_area
-                        .get(POWER_LEVEL_LEADERBOARD_AREA_ID)
-                        .cloned()
-                        .unwrap_or_default();
-                    let crucible_name = crucible_area_id
-                        .as_ref()
-                        .and_then(|area_id| areas.get(area_id))
-                        .map(|area| area.name.clone())
-                        .unwrap_or_else(|| "Crucible".to_string());
-                    let crucible_entries = crucible_area_id
-                        .as_ref()
-                        .and_then(|area_id| leaderboard_per_area.get(area_id))
-                        .cloned()
-                        .unwrap_or_default();
-
-                    let leaderboard_per_area = Arc::new(leaderboard_per_area);
-                    let other_area_ids = Arc::new(other_area_ids);
-                    let other_area_names = Arc::new(other_area_names);
-
+        <div class="flex min-h-0 flex-1 flex-col gap-2 px-1 xl:gap-3 xl:px-3">
+            <div class="grid min-h-0 flex-1 grid-cols-1 gap-2 overflow-y-auto lg:grid-cols-3 lg:overflow-hidden xl:gap-4">
+                <Suspense fallback=move || {
                     view! {
-                        <div class="flex min-h-0 flex-1 flex-col gap-2 px-1 xl:gap-3 xl:px-3">
-                            <div class="grid min-h-0 flex-1 grid-cols-1 gap-2 overflow-y-auto lg:grid-cols-3 lg:overflow-hidden xl:gap-4">
-                                <LeaderboardColumn
-                                    area_name="Power Level".to_string()
-                                    entries=power_level_entries
-                                    power_level=true
-                                />
-                                <LeaderboardColumn
-                                    area_name=crucible_name
-                                    entries=crucible_entries
-                                    power_level=false
-                                />
-                                <SelectableLeaderboardColumn
-                                    area_names=other_area_names
-                                    area_ids=other_area_ids
-                                    selected_area_id
-                                    leaderboard_per_area
-                                />
-                            </div>
-                        </div>
+                        <LeaderboardLoadingColumn area_name="Power Level" show_arrows=false />
+                        <LeaderboardLoadingColumn
+                            area_name="The Chaos Dimension"
+                            show_arrows=false
+                        />
+                        <LeaderboardLoadingColumn area_name="No Areas" show_arrows=true />
                     }
-                })
-            }}
-        </Suspense>
+                }>
+                    {move || Suspend::new(async move {
+                        let (leaderboard, areas) = leaderboard_and_areas.await;
+                        let leaderboard_per_area = leaderboard
+                            .entries
+                            .into_iter()
+                            .fold(
+                                HashMap::new(),
+                                |mut entries: HashMap<String, Vec<LeaderboardEntry>>, entry| {
+                                    entries.entry(entry.area_id.clone()).or_default().push(entry);
+                                    entries
+                                },
+                            );
+                        let mut crucible_area_ids = areas
+                            .iter()
+                            .filter(|(_, area)| area.crucible && !area.hidden)
+                            .map(|(area_id, area)| {
+                                (area_id.clone(), area.required_level, area.name.clone())
+                            })
+                            .collect::<Vec<_>>();
+                        crucible_area_ids
+                            .sort_by(|left, right| {
+                                right
+                                    .1
+                                    .cmp(&left.1)
+                                    .then_with(|| left.2.cmp(&right.2))
+                                    .then_with(|| left.0.cmp(&right.0))
+                            });
+                        let crucible_area_id = crucible_area_ids
+                            .first()
+                            .map(|(area_id, _, _)| area_id.clone());
+                        let mut other_area_ids = leaderboard_per_area
+                            .keys()
+                            .filter(|area_id| {
+                                area_id.as_str() != POWER_LEVEL_LEADERBOARD_AREA_ID
+                                    && areas.get(*area_id).is_none_or(|area| !area.crucible)
+                            })
+                            .cloned()
+                            .collect::<Vec<_>>();
+                        other_area_ids
+                            .sort_by(|left, right| {
+                                let left_area = areas.get(left);
+                                let right_area = areas.get(right);
+                                right_area
+                                    .map(|area| area.required_level)
+                                    .unwrap_or_default()
+                                    .cmp(
+                                        &left_area
+                                            .map(|area| area.required_level)
+                                            .unwrap_or_default(),
+                                    )
+                                    .then_with(|| {
+                                        left_area
+                                            .map(|area| area.name.as_str())
+                                            .unwrap_or(left.as_str())
+                                            .cmp(
+                                                right_area
+                                                    .map(|area| area.name.as_str())
+                                                    .unwrap_or(right.as_str()),
+                                            )
+                                    })
+                            });
+                        let other_area_names = other_area_ids
+                            .iter()
+                            .map(|area_id| {
+                                (
+                                    area_id.clone(),
+                                    areas
+                                        .get(area_id)
+                                        .map(|area| area.name.clone())
+                                        .unwrap_or_else(|| area_id.clone()),
+                                )
+                            })
+                            .collect::<HashMap<_, _>>();
+                        selectable_area_ids.set(other_area_ids.clone());
+                        if !other_area_names.contains_key(&selected_area_id.get_untracked()) {
+                            selected_area_id
+                                .set(other_area_ids.first().cloned().unwrap_or_default());
+                        }
+                        let power_level_entries = leaderboard_per_area
+                            .get(POWER_LEVEL_LEADERBOARD_AREA_ID)
+                            .cloned()
+                            .unwrap_or_default();
+                        let crucible_name = crucible_area_id
+                            .as_ref()
+                            .and_then(|area_id| areas.get(area_id))
+                            .map(|area| area.name.clone())
+                            .unwrap_or_else(|| "Crucible".to_string());
+                        let crucible_entries = crucible_area_id
+                            .as_ref()
+                            .and_then(|area_id| leaderboard_per_area.get(area_id))
+                            .cloned()
+                            .unwrap_or_default();
+                        let leaderboard_per_area = Arc::new(leaderboard_per_area);
+                        let other_area_ids = Arc::new(other_area_ids);
+                        let other_area_names = Arc::new(other_area_names);
+
+                        view! {
+                            <LeaderboardColumn
+                                area_name="Power Level".to_string()
+                                entries=power_level_entries
+                                power_level=true
+                            />
+                            <LeaderboardColumn
+                                area_name=crucible_name
+                                entries=crucible_entries
+                                power_level=false
+                            />
+                            <SelectableLeaderboardColumn
+                                area_names=other_area_names
+                                area_ids=other_area_ids
+                                selected_area_id
+                                leaderboard_per_area
+                            />
+                        }
+                    })}
+                </Suspense>
+            </div>
+        </div>
+    }
+}
+
+#[component]
+fn LeaderboardLoadingColumn(area_name: &'static str, show_arrows: bool) -> impl IntoView {
+    view! {
+        <CardInset class="min-h-[18rem] lg:min-h-0" pad=false>
+            <div class="sticky top-0 z-10 px-3 pt-2">
+                <CardInsetTitle>
+                    <div class="flex w-full items-center justify-center gap-1 xl:gap-2">
+                        <button
+                            class="btn flex w-8 shrink-0 justify-center text-2xl font-bold xl:w-12 xl:text-4xl"
+                            tabindex="-1"
+                            aria-hidden="true"
+                            disabled=true
+                            class:invisible=!show_arrows
+                        >
+                            "←"
+                        </button>
+                        <div class="min-w-0 flex-1 truncate text-center">{area_name}</div>
+                        <button
+                            class="btn flex w-8 shrink-0 justify-center text-2xl font-bold xl:w-12 xl:text-4xl"
+                            tabindex="-1"
+                            aria-hidden="true"
+                            disabled=true
+                            class:invisible=!show_arrows
+                        >
+                            "→"
+                        </button>
+                    </div>
+                </CardInsetTitle>
+            </div>
+            <div class="flex flex-col gap-2 px-2 pb-2">
+                <div class="flex min-h-32 items-center justify-center px-4 text-center text-sm text-zinc-500">
+                    "Loading..."
+                </div>
+            </div>
+        </CardInset>
     }
 }
 
@@ -299,7 +327,6 @@ fn SelectableLeaderboardColumn(
                                 if previous_area_ids.is_empty() {
                                     return;
                                 }
-
                                 let current = selected_area_id.get_untracked();
                                 let previous_index = previous_area_ids
                                     .iter()
@@ -309,8 +336,7 @@ fn SelectableLeaderboardColumn(
                                             % previous_area_ids.len()
                                     })
                                     .unwrap_or_default();
-                                selected_area_id
-                                    .set(previous_area_ids[previous_index].clone());
+                                selected_area_id.set(previous_area_ids[previous_index].clone());
                             }
                         >
                             "←"
@@ -320,7 +346,7 @@ fn SelectableLeaderboardColumn(
                                 area_names
                                     .get(&selected_area_id.get())
                                     .cloned()
-                                    .unwrap_or_else(|| "No areas".to_string())
+                                    .unwrap_or_else(|| "No Areas".to_string())
                             }}
                         </div>
                         <button
@@ -331,7 +357,6 @@ fn SelectableLeaderboardColumn(
                                 if next_area_ids.is_empty() {
                                     return;
                                 }
-
                                 let current = selected_area_id.get_untracked();
                                 let next_index = next_area_ids
                                     .iter()
@@ -417,7 +442,6 @@ fn LeaderboardEntries(entries: Vec<LeaderboardEntry>, power_level: bool) -> impl
                     }
                 })
                 .collect::<Vec<_>>()}
-
             {(!has_entries)
                 .then(|| {
                     view! {
