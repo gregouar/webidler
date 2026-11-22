@@ -184,7 +184,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -649,7 +650,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -899,12 +901,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
+                "Damage": {
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -918,12 +920,12 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
+                "StatusDuration": {
+                  "status_id": null,
                   "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
@@ -939,7 +941,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1244,6 +1247,232 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "hive": {
+    "name": "Firewasp Nest",
+    "icon": "items/focuses/hive.webp",
+    "description": "Their stings burn as fiercely as the desert from which they came.",
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": {
+      "base_mana": {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 90.0,
+        "is_unique": false
+      },
+      "unique_1": {
+        "stat": {
+          "Armor": "Fire"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          200.0,
+          250.0
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "Damage": {
+            "skill_type": null,
+            "skill_id": null,
+            "damage_type": "Fire",
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          150.0,
+          250.0
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": {
+          "StatusDuration": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": true,
+            "skill_type": null,
+            "skill_id": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": 100.0,
+        "is_unique": true
+      }
+    },
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_id": "bees",
+          "item_slot": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "hive",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.3,
+            "source": {
+              "HitDamage": "Physical"
+            },
+            "hidden": false
+          }
+        ],
+        "trigger_propagate": false,
+        "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 25.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "burn",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Spell",
+                  "skill_id": "bees",
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": true
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Fire",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      }
+    ]
+  },
   "focus_9": {
     "name": "Alchemical Jewel",
     "icon": "items/focuses/alchemical_jewel.webp",
@@ -1273,6 +1502,46 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "life_focus": {
+    "name": "Wendigo",
+    "icon": "items/focuses/life_focus.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 500,
+    "rarity": "Unique",
+    "affixes": {
+      "base_mana": {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "is_unique": false
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      }
+    ]
+  },
   "focus_10": {
     "name": "Phylactery",
     "icon": "items/focuses/phylactery.webp",
@@ -1284,6 +1553,35 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
+    "affixes": {
+      "base_mana": {
+        "stat": "Mana",
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 120.0,
+        "is_unique": false
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "brain_jar": {
+    "name": "Brain in a Jar",
+    "icon": "items/focuses/brain_jar.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
     "affixes": {
       "base_mana": {
         "stat": "Mana",

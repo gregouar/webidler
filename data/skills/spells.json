@@ -707,12 +707,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusFaster": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
+                "Damage": {
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -725,12 +725,21 @@
                 }
               },
               {
-                "Damage": {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
+                  "skill_id": null
+                }
+              },
+              {
+                "StatusFaster": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
@@ -741,15 +750,6 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
-                }
-              },
-              {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],
@@ -1298,5 +1298,22 @@
     "auto_use_conditions": [],
     "ignore_stat_effects": [],
     "hidden": false
+  },
+  "bees": {
+    "name": "Bees",
+    "icon": "",
+    "description": "",
+    "skill_type": "Other",
+    "cooldown": 0.0,
+    "mana_cost": 0.0,
+    "required_item": null,
+    "upgrade_cost": 0.0,
+    "upgrade_effects": [],
+    "modifier_effects": [],
+    "targets": [],
+    "triggers": [],
+    "auto_use_conditions": [],
+    "ignore_stat_effects": [],
+    "hidden": true
   }
 }
