@@ -22,6 +22,7 @@ pub fn format_skill_modifier_conditions_pre(
                 status_filter,
                 skill_type,
                 not,
+                counting: false,
             } => format_adjective_status_condition(status_filter, *skill_type)
                 .map(|status_str| {
                     format!(
@@ -32,6 +33,7 @@ pub fn format_skill_modifier_conditions_pre(
                     )
                 })
                 .unwrap_or("".into()),
+            Condition::HasStatus { counting: true, .. } => "".into(),
             Condition::StatusStacks { .. } => "".into(),
             Condition::StatusDuration { .. } => "".into(),
             Condition::Slowed => "Slowed ".into(),
@@ -72,12 +74,10 @@ pub fn format_skill_modifier_conditions_post(
                 status_filter,
                 skill_type: _,
                 not,
-            } => format_affected_by_status_condition(status_filter).map(|status_str| format!(
-                " {}{}",
-                if *not { "not " } else { "" },
-                status_str,
-            ))
-            ,
+                counting: false,
+            } => format_affected_by_status_condition(status_filter)
+                .map(|status_str| format!(" {}{}", if *not { "not " } else { "" }, status_str,)),
+            Condition::HasStatus { counting: true, .. } => None,
             // Condition::HasStatus { .. } => None,
             Condition::StatusStacks { .. } => None,
             Condition::StatusDuration { .. } => None,
@@ -89,25 +89,42 @@ pub fn format_skill_modifier_conditions_post(
             Condition::LowMana => Some(" on Low Mana".to_string()),
             Condition::NotLowMana => Some(" not on Low Mana".to_string()),
             Condition::ThreatLevel => None,
-            // Condition::HasItem { .. } => None,    
-             Condition::HasItem {
+            // Condition::HasItem { .. } => None,
+            Condition::HasItem {
                 item_slot,
                 item_category,
                 not,
-            } => {
-               Some(format!(
-                    " {}equipped with {}",
-                    if *not { "not " } else { "" },
-                    format_has_item_condition(*item_slot, *item_category),
-                ))
-            }
+            } => Some(format!(
+                " {}equipped with {}",
+                if *not { "not " } else { "" },
+                format_has_item_condition(*item_slot, *item_category),
+            )),
         })
         .collect::<Vec<_>>();
 
     let per_conditions_str = conditions
         .iter()
         .filter_map(|condition| match condition {
-            Condition::HasStatus { .. } => None,
+            Condition::HasStatus {
+                counting: false, ..
+            } => None,
+            Condition::HasStatus {
+                status_filter,
+                skill_type,
+                not: _,
+                counting: true,
+            } => Some(format!(
+                " per Different {}{}",
+                effects_tooltip::skill_status_filter_str(
+                    &StatSkillFilter {
+                        skill_type: *skill_type,
+                        ..Default::default()
+                    },
+                    status_filter,
+                    false
+                ),
+                per_suffix
+            )),
             Condition::StatusStacks {
                 status_filter,
                 skill_type,

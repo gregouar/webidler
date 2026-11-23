@@ -25,6 +25,8 @@ pub enum Condition {
         skill_type: Option<SkillType>,
         #[serde(default)]
         not: bool,
+        #[serde(default)]
+        counting: bool,
     },
     StatusStacks {
         #[serde(flatten)]

@@ -1364,13 +1364,13 @@
               "conditional_modifiers"  : [
                 {
                   "conditions": [
-                    { "StatusStacks": {"debuff": false} }
+                    { "HasStatus": {"debuff": false, "counting": true} }
                   ],
                   "effects"   : [
                     {
                       "stat"    : { "StatusPower": {"status_id": "heal_buff_damage"} },
                       "modifier": "Flat",
-                      "value"   : 5
+                      "value"   : 100
                     }
                   ]
                 }

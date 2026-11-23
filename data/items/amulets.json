@@ -612,15 +612,6 @@
                 }
               },
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -628,6 +619,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
@@ -936,12 +936,13 @@
             },
             "conditions": [
               {
-                "StatusStacks": {
+                "HasStatus": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": "Curse",
-                  "min_stacks": 0
+                  "not": false,
+                  "counting": true
                 }
               }
             ],
@@ -975,7 +976,8 @@
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": "Blessing",
-                  "not": false
+                  "not": false,
+                  "counting": false
                 }
               }
             ],
@@ -1008,7 +1010,8 @@
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": "Curse",
-                  "not": false
+                  "not": false,
+                  "counting": false
                 }
               }
             ]
@@ -1109,7 +1112,8 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": "Curse",
-                    "not": false
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]

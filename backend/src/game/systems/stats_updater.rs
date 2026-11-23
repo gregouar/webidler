@@ -105,11 +105,12 @@ pub fn check_condition(
             status_filter,
             skill_type,
             not,
+            counting,
         } => {
-            (character_state
+            let statuses_count = character_state
                 .statuses
                 .iter()
-                .any(|(status_id, status_states)| {
+                .filter(|(status_id, status_states)| {
                     let Some(status_specs) = statuses_store.get(status_id) else {
                         return false;
                     };
@@ -125,7 +126,15 @@ pub fn check_condition(
                         })
                         .unwrap_or(true)
                 })
-                != *not) as usize as f64
+                .count();
+
+            (if *counting {
+                statuses_count
+            } else if *not {
+                (statuses_count <= 0) as usize
+            } else {
+                (statuses_count > 0) as usize
+            }) as f64
         }
         Condition::StatusStacks {
             status_filter,
