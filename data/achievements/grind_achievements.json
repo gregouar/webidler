@@ -119,16 +119,6 @@
         ],
         "rewards": [ {"Cosmetic": "title_unique_grinds"} ]
     },
-    "kill_dragons"           : {
-        "category"   : "Grind",
-        "icon"       : "achievements/dragon_head.svg",
-        "name"       : "Imagine no Dragons",
-        "description": "Kill 1,000 Adult Dragons.",
-        "goals"      : [
-            { "MonstersKilled": {"value": 1000, "area_id": "peaks.json", "monster_rarity": "Boss"} }
-        ],
-        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
-    },
     "kill_mosquitoes"        : {
         "category"   : "Grind",
         "icon"       : "achievements/amber_mosquito.svg",
@@ -148,6 +138,36 @@
             { "MonstersKilled": {"value": 50000, "area_id": "desert_mummy.json"} }
         ],
         "rewards": [ {"Cosmetic": "title_kill_mummies"} ]
+    },
+    "kill_witches"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/cauldron.svg",
+        "name"       : "Arach-nope",
+        "description": "Kill 5,000 Spider Witches before they complete their ritual.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "area_id": "witch_lair.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_witches"} ]
+    },
+    "kill_dragons"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/dragon_head.svg",
+        "name"       : "Imagine no Dragons",
+        "description": "Kill 5,000 Adult Dragons.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "area_id": "peaks.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
+    },
+    "kill_horrors"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/worms.svg",
+        "name"       : "Die, maggot!",
+        "description": "Kill 5,000 Horrors from the Depths.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "area_id": "mythos.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_horrors"} ]
     },
     "kill_uber_bosses"       : {
         "category"   : "Grind",

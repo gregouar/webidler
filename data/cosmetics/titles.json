@@ -30,7 +30,9 @@
     "title_imbue_unique"           : {"Title": "soul binder"        },
     "title_kill_mosquitoes"        : {"Title": "swatter"            },
     "title_kill_mummies"           : {"Title": "mummy complex"      },
+    "title_kill_witches"           : {"Title": "soup drinker"       },
     "title_kill_dragons"           : {"Title": "dragooner"          },
+    "title_kill_horrors"           : {"Title": "terrified"          },
     "title_kill_uber_bosses"       : {"Title": "uber hate"          },
     "title_many_deaths"            : {"Title": "dead serious"       }
 }
