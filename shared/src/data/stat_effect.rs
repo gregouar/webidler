@@ -307,6 +307,12 @@ pub enum StatType {
         #[serde(default)]
         item_slot: Option<ItemSlot>,
     },
+    KillOnHit {
+        #[serde(default)]
+        skill_type: Option<SkillType>,
+        #[serde(default)]
+        conditions: Vec<Condition>,
+    },
     SkillConditionalModifier {
         stat: Box<StatType>,
         #[serde(flatten)]

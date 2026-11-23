@@ -131,7 +131,7 @@ pub fn check_condition(
             (if *counting {
                 statuses_count
             } else if *not {
-                (statuses_count <= 0) as usize
+                (statuses_count == 0) as usize
             } else {
                 (statuses_count > 0) as usize
             }) as f64

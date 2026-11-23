@@ -792,6 +792,7 @@ pub fn format_multiplier_stat_name(stat: &StatType) -> String {
                 ),
             }
         }
+        StatType::KillOnHit { .. } => "todo".to_string(),
         StatType::SkillLevel(skill_filter) => {
             format!("{} Skill Level", skill_filter_str(skill_filter, "", false))
         }
@@ -1226,6 +1227,17 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                     with_item_slot_str(item_slot),
                 ),
             }
+        }
+        StatType::KillOnHit {
+            skill_type,
+            conditions,
+        } => {
+            format!(
+                "{} Kill {}Enemies{}",
+                skills_type_str(*skill_type),
+                conditions_tooltip::format_skill_modifier_conditions_pre(conditions, ""),
+                conditions_tooltip::format_skill_modifier_conditions_post(conditions, "", "")
+            )
         }
         StatType::SkillLevel(skill_filter) => {
             let mut r = format!(

@@ -20,7 +20,7 @@ use shared::{
             EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
             StatusOnHitValueType,
         },
-        trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerTarget},
+        trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerSpecs, TriggerTarget},
         values::{AtLeastOne, Damage, Finite, NonNegative, Percent},
     },
 };
@@ -302,6 +302,7 @@ fn compute_player_specs(
         threat_gain,
         restore_on_hit,
         status_on_hit,
+        extra_triggers,
     } = modify_player_specs(
         ModifiablePlayerSpecs {
             max_player_level: (player_base_specs.max_level as f64).into(),
@@ -310,6 +311,7 @@ fn compute_player_specs(
             threat_gain: player_specs.threat_gain.into(),
             restore_on_hit: Default::default(),
             status_on_hit: Default::default(),
+            extra_triggers: Default::default(),
         },
         effects,
     );
@@ -318,6 +320,14 @@ fn compute_player_specs(
     player_specs.movement_cooldown = *movement_cooldown;
     player_specs.gold_find = *gold_find * *area_specs.gold_find * 0.01;
     player_specs.threat_gain = *threat_gain;
+
+    for trigger in extra_triggers {
+        player_specs.character_specs.triggers.push(
+            trigger.trigger,
+            trigger.trigger_effect,
+            Some(CharacterId::Player),
+        );
+    }
 
     for ((restore_type, skill_type), value) in restore_on_hit.into_iter() {
         player_specs.character_specs.triggers.push(
@@ -468,6 +478,7 @@ struct ModifiablePlayerSpecs {
 
     restore_on_hit: HashMap<(RestoreType, SkillType), ModifiableValue<NonNegative>>,
     status_on_hit: StatusOnHitMap,
+    extra_triggers: Vec<TriggerSpecs>,
 }
 
 fn modify_player_specs(
@@ -500,8 +511,62 @@ fn modify_player_specs(
                         .apply_effect(effect);
                 }
             }
-            StatType::StatusOnHit { status_id, skill_type, item_slot, value_type } => {
-                modifiable_player_specs.status_on_hit.entry((status_id.clone(),*value_type,*skill_type,*item_slot)).or_default().apply_effect(effect);
+            StatType::StatusOnHit {
+                status_id,
+                skill_type,
+                item_slot,
+                value_type,
+            } => {
+                modifiable_player_specs
+                    .status_on_hit
+                    .entry((
+                        status_id.clone(),
+                        *value_type,
+                        *skill_type,
+                        *item_slot,
+                    ))
+                    .or_default()
+                    .apply_effect(effect);
+            }
+            StatType::KillOnHit {
+                skill_type,
+                conditions,
+            } => {
+                modifiable_player_specs.extra_triggers.push(TriggerSpecs {
+                    trigger: EventTrigger::OnHit(HitTrigger {
+                        skill_type: *skill_type,
+                        range: None,
+                        is_crit: None,
+                        is_blocked: None,
+                        is_hurt: Some(true),
+                        is_triggered: None,
+                        damage_type: None,
+                        skill_id: None,
+                        item_slot: None,
+                        conditions: conditions.clone(),
+                    }),
+                    description: None,
+                    trigger_effect: TriggerEffect {
+                        trigger_id: format!("kill_on_hit_{:?}",skill_type),
+                        target: TriggerTarget::SameTarget,
+                        modifiers: Default::default(),
+                        trigger_propagate: false,
+                        skill_type: SkillType::Other,
+                        skill_range: SkillRange::Any,
+                        skill_shape: SkillShape::Single,
+                        skill_repeat: Default::default(),
+                        effects: vec![SkillEffect{
+                            success_chance: Chance::new_sure(),
+                            effect_type: SkillEffectType::Kill,
+                            ignore_stat_effects: Default::default(),
+                            conditional_modifiers: Default::default(),
+                            independent_application: false,
+                            optional_application: false,
+                            description: None,
+                            as_skill_type: None,
+                        }],
+                    },
+                })
             }
             // /!\ No magic _ to be sure we don't forget when adding new Stats
             // Handled by character

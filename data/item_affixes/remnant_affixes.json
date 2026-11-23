@@ -204,6 +204,26 @@
       }
     ]
   },
+  "remnant_culling_attack"        : {
+    "name"        : "Culling",
+    "family"      : "remnant_affix",
+    "tags"        : ["Attack", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["RangedWeapon", "Accessory"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "KillOnHit": { "skill_type": "Attack", "conditions": ["LowLife"] }
+        },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 100
+      }
+    ]
+  },
   "remnant_allocate_rune"         : {
     "name"        : "Innate",
     "family"      : "remnant_affix",
