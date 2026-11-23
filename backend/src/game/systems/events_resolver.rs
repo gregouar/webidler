@@ -43,7 +43,7 @@ pub async fn resolve_events(
     for event in events.iter() {
         match event {
             GameEvent::Tick { tick_number } => {
-                handle_tick_event(&mut trigger_contexts, game_data, *tick_number)
+                handle_tick_event(&mut trigger_contexts, game_data, master_store, *tick_number)
             }
             GameEvent::Hit(hit_event) => {
                 handle_hit_event(&mut trigger_contexts, game_data, master_store, hit_event)
@@ -84,23 +84,30 @@ pub async fn resolve_events(
 fn handle_tick_event<'a>(
     trigger_contexts: &mut Vec<TriggerContext<'a>>,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
     tick_number: usize,
 ) {
     let characters = iter::once((
         CharacterId::Player,
         &game_data.player_specs.read().character_specs,
+        &game_data.player_state.character_state,
     ))
     .chain(
         game_data
             .monster_specs
             .iter()
+            .zip(game_data.monster_states.iter())
             .enumerate()
-            .map(|(idx, monster_specs)| {
-                (CharacterId::Monster(idx), &monster_specs.character_specs)
+            .map(|(idx, (monster_specs, monster_state))| {
+                (
+                    CharacterId::Monster(idx),
+                    &monster_specs.character_specs,
+                    &monster_state.character_state,
+                )
             }),
     );
 
-    for (character_id, character_specs) in characters {
+    for (character_id, character_specs, character_state) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
             let tick_trigger = match trigger {
                 EventTrigger::OnTick(t) => t,
@@ -108,6 +115,19 @@ fn handle_tick_event<'a>(
             };
 
             if !tick_number.is_multiple_of(tick_trigger.tick_interval) {
+                continue;
+            }
+
+            if tick_trigger.conditions.iter().any(|condition| {
+                check_condition(
+                    &master_store.statuses_store,
+                    &game_data.area_threat,
+                    &character_specs.character_attrs,
+                    character_state,
+                    None,
+                    condition,
+                ) <= 0.0
+            }) {
                 continue;
             }
 

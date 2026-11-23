@@ -447,8 +447,9 @@ fn format_trigger_event(event_trigger: &EventTrigger) -> String {
         EventTrigger::OnRestored(restore_trigger) => format_restore_trigger(restore_trigger),
         EventTrigger::OnTick(tick_trigger) => {
             format!(
-                "Every {:.1} seconds",
-                0.1 * tick_trigger.tick_interval as f64
+                "Every {:.1} seconds{}",
+                0.1 * tick_trigger.tick_interval as f64,
+                format_target_conditions(&tick_trigger.conditions, " when ", "")
             )
         }
     }

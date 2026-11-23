@@ -167,6 +167,9 @@ pub struct RestoreTrigger {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default, PartialOrd, Ord)]
 pub struct TickTrigger {
     pub tick_interval: usize,
+
+    #[serde(default)]
+    pub conditions: Vec<Condition>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

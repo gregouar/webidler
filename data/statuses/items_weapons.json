@@ -1,6 +1,6 @@
 {
     "cheese"               : {
-        "name"      : "Melted Cheese",
+        "name"      : "Melted Cheese Curse",
         "icon"      : "statuses/cheese.svg",
         "debuff"    : true,
         "duration"  : 50,

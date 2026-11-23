@@ -901,25 +901,6 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
-                "StatusPower": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
                 "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
@@ -935,6 +916,25 @@
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
+                }
+              },
+              {
+                "StatusPower": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null,
+                  "min_max": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
                 }
               }
             ],
@@ -1503,9 +1503,9 @@
     "upgrade_effects": []
   },
   "life_focus": {
-    "name": "Wendigo",
+    "name": "Wendigo's Hunger",
     "icon": "items/focuses/life_focus.webp",
-    "description": null,
+    "description": "His cold heart can only be satiated with fresh meat.",
     "slot": "Shield",
     "extra_slots": [],
     "categories": [
@@ -1515,14 +1515,204 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
+        "stat": "Life",
         "modifier": "Flat",
         "scope": "Global",
         "value": 100.0,
         "is_unique": false
+      },
+      "unique_1": {
+        "stat": {
+          "Description": "Grant Life instead of Mana"
+        },
+        "modifier": "Flat",
+        "scope": "Local",
+        "value": 1.0,
+        "is_unique": true
+      },
+      "unique_2": {
+        "stat": {
+          "Armor": "Storm"
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": [
+          300.0,
+          350.0
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "stat": {
+          "Damage": {
+            "skill_type": "Attack",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "stat": {
+          "Damage": {
+            "skill_type": "Spell",
+            "skill_id": null,
+            "damage_type": null,
+            "min_max": null,
+            "is_hit": null
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": [
+          200.0,
+          300.0
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "stat": {
+          "StatusPower": {
+            "status_id": null,
+            "damage_type": null,
+            "debuff": null,
+            "skill_type": "Curse",
+            "skill_id": null,
+            "min_max": null
+          }
+        },
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          80.0,
+          100.0
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "stat": "Life",
+        "modifier": "Increased",
+        "scope": "Global",
+        "value": [
+          25.0,
+          30.0
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "stat": {
+          "StatConditionalModifier": {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "conditions": [
+              "LowLife"
+            ],
+            "conditions_duration": 0
+          }
+        },
+        "modifier": "More",
+        "scope": "Global",
+        "value": 500.0,
+        "is_unique": true
+      },
+      "unique_8": {
+        "stat": {
+          "StatConverter": {
+            "source": "ManaRegen",
+            "stat": "LifeRegen",
+            "is_extra": false,
+            "skill_type": null,
+            "skill_id": null,
+            "uncapped": false
+          }
+        },
+        "modifier": "Flat",
+        "scope": "Global",
+        "value": 100.0,
+        "is_unique": true
       }
     },
-    "triggers": [],
+    "triggers": [
+      {
+        "OnTick": {
+          "tick_interval": 10,
+          "conditions": [
+            "NotLowLife"
+          ]
+        },
+        "description": null,
+        "trigger_id": "life_focus",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "hunger",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "hunger",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,
@@ -1535,9 +1725,41 @@
       {
         "scope": "Global",
         "stat_effect": {
-          "stat": "Mana",
+          "stat": "Life",
           "modifier": "Flat",
           "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
         }
       }
     ]

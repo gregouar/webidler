@@ -57,5 +57,24 @@
                 "modifier"    : "Flat"
             }
         ]
+    },
+    "hunger"       : {
+        "name"      : "Curse of Hunger",
+        "icon"      : "statuses/hunger.svg",
+        "debuff"    : false,
+        "duration"  : 15,
+        "max_stacks": 50,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "Flat", "debuff": true},
+                "value"       : 10,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 30,
+                "modifier"    : "Percent"
+            }
+        ]
     }
 }
