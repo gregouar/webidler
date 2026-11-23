@@ -867,7 +867,7 @@
         },
         "modifier": "Flat",
         "scope": "Global",
-        "value": 30.0,
+        "value": 20.0,
         "is_unique": true
       }
     },

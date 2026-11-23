@@ -46,6 +46,19 @@
       { "stat": {"CritDamageTaken": {}}, "modifier": "More", "scope": "Global", "value": -1e300 }
     ]
   },
+  "remnant_mana_cost"             : {
+    "name"        : "Minded",
+    "family"      : "remnant_affix",
+    "tags"        : ["Mana", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Helmet", "Focus"],
+    "item_level"  : 600,
+    "effects"     : [
+      { "stat": {"ManaCost": {}}, "modifier": "More", "scope": "Global", "value": -100 }
+    ]
+  },
   "remnant_more_armor"            : {
     "name"        : "Armored",
     "family"      : "remnant_affix",
@@ -141,6 +154,56 @@
         "modifier": "Flat",
         "scope"   : "Global",
         "value"   : 100
+      }
+    ]
+  },
+  "remnant_storm_poison"          : {
+    "name"        : "Voltrachian",
+    "family"      : "remnant_affix",
+    "tags"        : ["Poison", "Storm", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Helmet", "Ring"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "SkillConditionalModifier": {
+            "stat": { "Damage": {"damage_type": "Storm"} },
+            "conditions": [
+              { "HasStatus": {"damage_type": "Poison"} }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope"   : "Global",
+        "value"   : [100, 200]
+      }
+    ]
+  },
+  "remnant_chill_crit_damage"     : {
+    "name"        : "Icebreaker",
+    "family"      : "remnant_affix",
+    "tags"        : ["Storm", "Status", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Gloves"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "SkillConditionalModifier": {
+            "stat": {"CritDamage": {}},
+            "conditions": [
+              { "StatusStacks": {"status_id": "chill"} }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope"   : "Global",
+        "value"   : 50
       }
     ]
   },
