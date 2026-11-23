@@ -204,6 +204,24 @@
       }
     ]
   },
+  "remnant_bleed_attack"          : {
+    "name"        : "Serrated",
+    "family"      : "remnant_affix",
+    "tags"        : ["Attack", "Physical", "Status", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["RangedWeapon"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusOnHit": {"status_id": "bleed", "item_slot": "Weapon", "value_type": "Chance"} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 30
+      }
+    ]
+  },
   "remnant_culling_attack"        : {
     "name"        : "Culling",
     "family"      : "remnant_affix",

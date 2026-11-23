@@ -922,7 +922,8 @@
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "not": false
+                  "not": false,
+                  "counting": false
                 }
               }
             ]
@@ -998,18 +999,18 @@
             },
             "ignore_stat_effects": [
               {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": null,
                   "skill_id": null,
                   "damage_type": "Storm",
                   "min_max": null,
                   "is_hit": null
-                }
-              },
-              {
-                "CritChance": {
-                  "skill_type": null,
-                  "skill_id": null
                 }
               }
             ],
@@ -1165,7 +1166,8 @@
                   "damage_type": "Poison",
                   "debuff": null,
                   "skill_type": null,
-                  "not": false
+                  "not": false,
+                  "counting": false
                 }
               }
             ],
@@ -1399,7 +1401,7 @@
               }
             },
             "modifier": "Flat",
-            "factor": 0.5,
+            "factor": 1.0,
             "source": {
               "HitDamage": "Physical"
             },
@@ -1452,7 +1454,8 @@
       },
       {
         "OnTick": {
-          "tick_interval": 10
+          "tick_interval": 10,
+          "conditions": []
         },
         "description": null,
         "trigger_id": "wolf_curse",

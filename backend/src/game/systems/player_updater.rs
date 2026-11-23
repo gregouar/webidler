@@ -17,10 +17,13 @@ use shared::{
         },
         skill_mastery::PlayerSkillMasteries,
         stat_effect::{
-            EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatType,
-            StatusOnHitValueType,
+            EffectsMap, StatConverterSource, StatConverterSpecs, StatEffect, StatSkillFilter,
+            StatType, StatusOnHitValueType,
         },
-        trigger::{EventTrigger, HitTrigger, TriggerEffect, TriggerSpecs, TriggerTarget},
+        trigger::{
+            EventTrigger, HitTrigger, TriggerEffect, TriggerEffectModifier,
+            TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
+        },
         values::{AtLeastOne, Damage, Finite, NonNegative, Percent},
     },
 };
@@ -370,12 +373,42 @@ fn compute_player_specs(
         );
     }
 
-    for ((status_id, value_type, skill_type, _item_slot), value) in status_on_hit.into_iter() {
+    for ((status_id, value_type, skill_type, item_slot), value) in status_on_hit.into_iter() {
+        let Some(status_specs) = statuses_store.get(&status_id) else {
+            continue;
+        };
+        let status_value = if value_type == StatusOnHitValueType::Power {
+            value
+        } else {
+            ModifiableValue::from(Damage::new(100.0))
+        };
+        let (modifiers, status_value) = if let Some(damage_type) = status_specs.damage_type {
+            (
+                [TriggerEffectModifier {
+                    stat: StatType::Damage {
+                        skill_filter: Default::default(),
+                        damage_type: None,
+                        min_max: Default::default(),
+                        is_hit: Default::default(),
+                    },
+                    modifier: Modifier::Flat,
+                    factor: status_value.get() * 0.01,
+                    source: TriggerEffectModifierSource::HitDamage(Some(damage_type)),
+                    hidden: false,
+                }]
+                .into(),
+                ModifiableValue::from(Damage::new(0.0)),
+            )
+        } else {
+            (Vec::new(), status_value)
+        };
+
         player_specs.character_specs.triggers.push(
             EventTrigger::OnHit(HitTrigger {
                 skill_type,
                 is_hurt: Some(true),
                 is_triggered: Some(false),
+                item_slot,
                 ..Default::default()
             }),
             TriggerEffect {
@@ -385,7 +418,7 @@ fn compute_player_specs(
                 skill_type: SkillType::Other,
                 skill_shape: SkillShape::Single,
                 skill_repeat: Default::default(),
-                modifiers: Vec::new(),
+                modifiers,
                 effects: vec![SkillEffect {
                     success_chance: if value_type == StatusOnHitValueType::Chance {
                         Chance {
@@ -403,15 +436,7 @@ fn compute_player_specs(
                     },
                     effect_type: SkillEffectType::ApplyStatus {
                         status_id,
-                        value: if value_type == StatusOnHitValueType::Power {
-                            ChanceRange {
-                                min: value,
-                                max: value,
-                                lucky_chance: Default::default(),
-                            }
-                        } else {
-                            ChanceRange::from(ModifiableValue::from(Damage::new(100.0)))
-                        },
+                        value: status_value.into(),
                         value_factor: 1.0,
                         duration: None,
                         escalation: None,
@@ -420,7 +445,16 @@ fn compute_player_specs(
                         replace_on_value_only: false,
                         computed_status_triggers: None,
                     },
-                    ignore_stat_effects: Default::default(),
+                    ignore_stat_effects: [StatType::Damage {
+                        skill_filter: StatSkillFilter {
+                            skill_type,
+                            skill_id: None,
+                        },
+                        damage_type: Default::default(),
+                        min_max: Default::default(),
+                        is_hit: Some(true),
+                    }]
+                    .into(),
                     conditional_modifiers: Default::default(),
                     independent_application: false,
                     optional_application: false,

@@ -180,7 +180,7 @@
                         {
                             "stat"    : {"Damage": {}},
                             "modifier": "Flat",
-                            "factor"  : 0.5,
+                            "factor"  : 1.0,
                             "source"  : {"HitDamage": "Physical"}
                         }
                     ]
