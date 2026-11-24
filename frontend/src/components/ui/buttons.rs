@@ -348,8 +348,8 @@ pub fn Toggle(
         if checked.get() {
             match settings.graphics_quality() {
                 GraphicsQuality::High => {
-                    "text-zinc-100 
-                    border-[#b28a4f] 
+                    "text-zinc-100
+                    border-[#b28a4f]
                     shadow-[0_6px_14px_rgba(0,0,0,0.52),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(255,231,183,0.30),inset_0_-1px_0_rgba(0,0,0,0.5)]"
                 }
                 GraphicsQuality::Medium => {
@@ -462,7 +462,7 @@ pub fn TabButton(
     children: Children,
     #[prop(into)] is_active: Signal<bool>,
     #[prop(optional, into)] disabled: Option<Signal<bool>>,
-    #[prop(optional)] title: Option<&'static str>,
+    #[prop(optional, into)] title: Option<Signal<&'static str>>,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
     let active_class = |active| {

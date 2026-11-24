@@ -16,29 +16,32 @@ use shared::{
     },
 };
 
-use crate::components::{
-    backend_client::BackendClient,
-    data_context::DataContext,
-    shared::{
-        bag_grid::BagSortButton, inventory::loot_filter_category_to_str, resources::GemsIcon,
-    },
-    town::{
-        TownContext,
-        items_browser::{
-            InventoryItemEligibility, InventoryItemGrid, ItemDetails, SelectedItem,
-            SelectedMarketItem, inventory_grid_item,
+use crate::{
+    assets::img_asset,
+    components::{
+        backend_client::BackendClient,
+        data_context::DataContext,
+        shared::{
+            bag_grid::BagSortButton, inventory::loot_filter_category_to_str, resources::GemsIcon,
         },
-    },
-    ui::{
-        Separator,
-        buttons::{MenuButton, MenuButtonRed, TabButton},
-        card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
-        checkbox::Checkbox,
-        confirm::ConfirmContext,
-        dropdown::SearchableDropdownMenu,
-        menu_panel::MenuPanel,
-        toast::*,
-        tooltip::HelpTooltip,
+        town::{
+            TownContext,
+            items_browser::{
+                InventoryItemEligibility, InventoryItemGrid, ItemDetails, SelectedItem,
+                SelectedMarketItem, inventory_grid_item,
+            },
+        },
+        ui::{
+            Separator,
+            buttons::{MenuButton, MenuButtonRed, TabButton},
+            card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
+            checkbox::Checkbox,
+            confirm::ConfirmContext,
+            list_row::MenuListRow,
+            menu_panel::MenuPanel,
+            toast::*,
+            tooltip::{HelpTooltip, StaticTooltip, StaticTooltipPosition},
+        },
     },
 };
 
@@ -76,6 +79,26 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
             selected_item.set(SelectedItem::None);
             selected_soul.set(SelectedItem::None);
             town_context.selected_item_index.set(None);
+        }
+    });
+
+    Effect::new(move || {
+        let inventory = town_context.inventory.read();
+        let selection_is_current = |selected: &SelectedItem| match selected {
+            SelectedItem::None => true,
+            SelectedItem::InMarket(item) => inventory
+                .bag
+                .get(item.index)
+                .is_some_and(|current_item| current_item == item.item_specs.as_ref()),
+            SelectedItem::Removed(_) => false,
+        };
+
+        if town_context.open_inventory.get_untracked()
+            || !selected_item.with_untracked(selection_is_current)
+            || !selected_soul.with_untracked(selection_is_current)
+        {
+            selected_item.set(SelectedItem::None);
+            selected_soul.set(SelectedItem::None);
         }
     });
 
@@ -168,15 +191,41 @@ pub fn ForgePanel(open: RwSignal<bool>) -> impl IntoView {
                         >
                             <div class="mx-1">"Reroll"</div>
                         </TabButton>
-                        <TabButton
-                            is_active=Signal::derive(move || {
-                                active_tab.get() == ForgeTab::Gamble
-                            })
-                            on:click=move |_| { switch_tab(ForgeTab::Gamble) }
-                            class:py-3
-                        >
-                            <div class="mx-1">"Gamble"</div>
-                        </TabButton>
+                        {move || {
+                            if town_context.character.read().max_area_level < 100 {
+                                view! {
+                                    <StaticTooltip
+                                        position=StaticTooltipPosition::Bottom
+                                        tooltip=|| "Gambling becomes available at Power Level 100"
+                                    >
+                                        <TabButton
+                                            is_active=Signal::derive(move || {
+                                                active_tab.get() == ForgeTab::Gamble
+                                            })
+                                            on:click=move |_| { switch_tab(ForgeTab::Gamble) }
+                                            class:py-3
+                                            disabled=true
+                                        >
+                                            <div class="mx-1">"Gamble"</div>
+                                        </TabButton>
+                                    </StaticTooltip>
+                                }
+                                    .into_any()
+                            } else {
+                                view! {
+                                    <TabButton
+                                        is_active=Signal::derive(move || {
+                                            active_tab.get() == ForgeTab::Gamble
+                                        })
+                                        on:click=move |_| { switch_tab(ForgeTab::Gamble) }
+                                        class:py-3
+                                    >
+                                        <div class="mx-1">"Gamble"</div>
+                                    </TabButton>
+                                }
+                                    .into_any()
+                            }
+                        }}
                     </div>
                     <div class="flex-1 mb-2" />
                     <div class="mb-2">
@@ -1515,22 +1564,73 @@ pub fn UpgradeUniqueDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoV
 
 #[component]
 fn GambleBrowser(gamble_category: RwSignal<Option<ItemCategory>>) -> impl IntoView {
-    let set_gamble_category = move |item_category| gamble_category.set(item_category);
+    // let settings: SettingsContext = expect_context();
+
     view! {
-        <div class="w-full flex flex-col gap-1 p-2">
+        <div class="grid h-full min-h-0 w-full grid-cols-3 sm:grid-cols-6 content-start overflow-y-auto
+        gap-1 xl:gap-x-3 xl:gap-y-2 px-2 xl:px-3 py-1 xl:py-2">
             {GAMBLE_ITEM_CATEGORIES
                 .map(|item_category| {
+                    let label = loot_filter_category_to_str(item_category);
                     view! {
-                        <MenuButton
-                            class:w-full
-                            on:click=move |_| set_gamble_category(item_category)
-                        >
-                            {loot_filter_category_to_str(item_category)}
-                        </MenuButton>
+                        <div class="relative aspect-[2/3] w-full min-w-0">
+                            <MenuListRow
+                                class="group h-full min-w-0 overflow-hidden"
+                                selected=Signal::derive(move || {
+                                    gamble_category.get() == item_category
+                                })
+                                on_click=move || gamble_category.set(item_category)
+                                title=label
+                            >
+                                <div class="flex h-full flex-col items-center">
+                                    <div class="relative min-h-0 w-full flex-1">
+                                        <img
+                                            draggable="false"
+                                            src=img_asset(gamble_category_icon(item_category))
+                                            alt=format!("{label} gamble category")
+                                            class="absolute sepia-70 brightness-70 inset-0 h-full w-full object-contain p-1 opacity-80 transition-opacity duration-150 group-hover:opacity-100 xl:p-2"
+                                        />
+                                        <div
+                                            aria-hidden="true"
+                                            class="pointer-events-none absolute inset-0 flex items-center justify-center"
+                                        >
+                                            <span class="relative font-display text-7xl font-bold text-black/50 [-webkit-text-stroke:1px_rgba(254,243,199,0.35)] [text-shadow:0_4px_4px_rgba(0,0,0,0.95),0_0_12px_rgba(245,158,11,0.4)] xl:text-8xl">
+                                                "?"
+                                            </span>
+                                        </div>
+                                    </div>
+                                // <div class="flex h-10 w-full shrink-0 items-center justify-center overflow-hidden px-1 pb-1.5 text-center text-[0.55rem] font-semibold leading-[1.05] text-zinc-200 xl:h-11 xl:text-[0.65rem]">
+                                // {label}
+                                // </div>
+                                </div>
+                            </MenuListRow>
+                        </div>
                     }
                 })}
-
         </div>
+    }
+}
+
+fn gamble_category_icon(item_category: Option<ItemCategory>) -> &'static str {
+    use ItemCategory::*;
+
+    match item_category {
+        None => "ui/gamble/any_item.webp",
+        Some(MeleeWeapon1H | AttackWeapon | MeleeWeapon) => "ui/gamble/melee_weapon_1h.webp",
+        Some(MeleeWeapon2H) => "ui/gamble/melee_weapon_2h.webp",
+        Some(RangedWeapon) => "ui/gamble/ranged_weapon.webp",
+        Some(SpellWeapon) => "ui/gamble/spell_weapon.webp",
+        Some(Shield) => "ui/gamble/shield.webp",
+        Some(Focus) => "ui/gamble/focus.webp",
+        Some(Helmet) => "ui/gamble/helmet.webp",
+        Some(Body | Armor) => "ui/gamble/body.webp",
+        Some(Gloves) => "ui/gamble/gloves.webp",
+        Some(Boots) => "ui/gamble/boots.webp",
+        Some(Accessory | Cloak) => "ui/gamble/accessory.webp",
+        Some(Amulet) => "ui/gamble/amulet.webp",
+        Some(Ring | Jewelry) => "ui/gamble/ring.webp",
+        Some(Map) => "ui/gamble/edict.webp",
+        Some(Rune | Soul | Remnant) => "ui/gamble/any_item.webp",
     }
 }
 
@@ -1545,8 +1645,13 @@ pub fn GambleDetails(
 
     let user_gems = move || town_context.character.read().resource_gems.get();
 
-    let gamble_price =
-        move || forge::gamble_price(town_context.character.read().max_area_level).get();
+    let gamble_price = move || {
+        forge::gamble_price(
+            town_context.character.read().max_area_level,
+            gamble_category.get(),
+        )
+        .get()
+    };
 
     let do_gamble = {
         let character_id = town_context.character.read_untracked().character_id;
@@ -1593,18 +1698,24 @@ pub fn GambleDetails(
 
     let do_sell_and_gamble = {
         let character_id = town_context.character.read_untracked().character_id;
-        move || {
-            if let SelectedItem::InMarket(selected_item) = selected_item.get() {
+        move |retry| {
+            if let SelectedItem::InMarket(in_selected_item) = selected_item.get() {
                 spawn_local({
                     async move {
                         match backend
                             .inventory_delete(&InventoryDeleteRequest {
                                 character_id,
-                                item_indexes: [selected_item.index as u8].into(),
+                                item_indexes: [in_selected_item.index as u8].into(),
                             })
                             .await
                         {
-                            Ok(_) => do_gamble(),
+                            Ok(_) => {
+                                if retry {
+                                    do_gamble()
+                                } else {
+                                    selected_item.set(SelectedItem::None);
+                                }
+                            }
                             Err(e) => show_toast(
                                 toaster,
                                 format!("Failed to sell item: {e}"),
@@ -1630,23 +1741,26 @@ pub fn GambleDetails(
                 // <div class="w-full flex items-center justify-center text-sm xl:text-base text-amber-400 font-bold gap-2">
                 // {move || { loot_filter_category_to_str(gamble_category.get()) }}
                 // </div>
-                <div class="w-full p-2 gap-2 flex items-center justify-center text-zinc-400 text-sm">
-                    <span>"Item Category:"</span>
-                    <SearchableDropdownMenu
-                        options=GAMBLE_ITEM_CATEGORIES
-                            .iter()
-                            .map(|item_category| (
-                                *item_category,
-                                loot_filter_category_to_str(*item_category).to_string(),
-                            ))
-                            .collect()
-                        chosen_option=gamble_category
-                    />
-                </div>
+                // <div class="w-full p-2 gap-2 flex items-center justify-center text-zinc-400 text-sm">
+                // <span>"Item Category:"</span>
+                // <SearchableDropdownMenu
+                // options=GAMBLE_ITEM_CATEGORIES
+                // .iter()
+                // .map(|item_category| (
+                // *item_category,
+                // loot_filter_category_to_str(*item_category).to_string(),
+                // ))
+                // .collect()
+                // chosen_option=gamble_category
+                // />
+                // </div>
                 <ItemDetails selected_item show_affixes=true />
             </div>
 
             <div class="flex flex-col gap-2 w-full">
+                <div class="w-full flex items-center justify-center text-sm xl:text-base text-amber-300 font-display gap-2">
+                    {move || { loot_filter_category_to_str(gamble_category.get()) }}
+                </div>
                 <Separator />
                 <div class="w-full flex items-center gap-1 text-lg text-zinc-400 p-2">
                     "Price: "
@@ -1654,7 +1768,7 @@ pub fn GambleDetails(
                         {move || format!("{:.0}", gamble_price())}
                     </span> <GemsIcon />
                 </div>
-                <div class="flex gap-1 xl:gap-2 w-full text-white mb-2">
+                <div class="flex gap-1 xl:gap-2 w-full text-white">
                     <MenuButton
                         on:click=move |_| do_gamble()
                         disabled=Signal::derive({ move || gamble_price() > user_gems() })
@@ -1666,7 +1780,7 @@ pub fn GambleDetails(
                     </MenuButton>
 
                     <MenuButtonRed
-                        on:click=move |_| do_sell_and_gamble()
+                        on:click=move |_| do_sell_and_gamble(true)
                         disabled=Signal::derive({
                             move || {
                                 gamble_price() > user_gems() || selected_item.read().is_empty()
@@ -1675,6 +1789,18 @@ pub fn GambleDetails(
                         class:w-full
                     >
                         "Discard & Retry"
+                    </MenuButtonRed>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1 xl:gap-2 w-full xl:mt-2 mb-1">
+                    <div></div>
+
+                    <MenuButtonRed
+                        on:click=move |_| do_sell_and_gamble(false)
+                        disabled=Signal::derive({ move || { selected_item.read().is_empty() } })
+                        class:w-full
+                    >
+                        "Discard"
                     </MenuButtonRed>
                 </div>
             </div>

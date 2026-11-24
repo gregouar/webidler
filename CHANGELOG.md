@@ -26,6 +26,7 @@ Balance Changes:
 - Increased Buffs Duration affixes are now available on Helmets as well.
 - Terminal Illness Passive now do More Toxic Damage Escalation based on Duration but remove all Hit Damage.
 - Various Unique Items, Passives & Skill Masteries tweaks.
+- Gamble Edicts!
 
 Fixes:
 

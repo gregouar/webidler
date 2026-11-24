@@ -64,8 +64,15 @@ pub fn affix_operation_price(
     .map(|x| x.round().into())
 }
 
-pub fn gamble_price(item_level: AreaLevel) -> NonNegative {
-    ((item_level as f64 / 10.0).floor() + 10.0).into()
+pub fn gamble_price(item_level: AreaLevel, item_category: Option<ItemCategory>) -> NonNegative {
+    let factor = match item_category {
+        Some(item_category) => match item_category {
+            ItemCategory::Map => 1.5,
+            _ => 1.0,
+        },
+        None => 0.5,
+    };
+    ((item_level as f64 * factor / 10.0).floor() + 10.0).into()
 }
 
 pub fn sacrifice_price(item_specs: &ItemSpecs) -> NonNegative {

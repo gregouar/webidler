@@ -7,7 +7,7 @@ use shared::{
     data::{
         achievements::AchievementCounter,
         forge::{self, affix_operation_price},
-        item::ItemRarity,
+        item::{ItemCategory, ItemRarity},
     },
     http::{
         client::{
@@ -330,10 +330,14 @@ pub async fn post_gamble(
     let (character, mut inventory) =
         load_player_town_inventory(&mut tx, &master_store, &user, &payload.character_id).await?;
 
+    if character.max_area_level < 100 {
+        return Err(AppError::UserError("too low level".into()));
+    }
+
     let resource_gems = buy_with_gems(
         &mut tx,
         &payload.character_id,
-        forge::gamble_price(character.max_area_level as u16),
+        forge::gamble_price(character.max_area_level as u16, payload.item_category),
     )
     .await?;
 
@@ -342,7 +346,10 @@ pub async fn post_gamble(
         &master_store.items_store,
         &GenerateLootTemplate {
             allow_unique: true,
-            max_base: payload.item_category.is_some(),
+            max_base: payload.item_category.is_some()
+                && !payload
+                    .item_category
+                    .is_some_and(|item_category| item_category == ItemCategory::Map),
             max_affixes: true,
             filter_category: payload.item_category,
             prevent_categories: Default::default(),

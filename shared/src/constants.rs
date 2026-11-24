@@ -79,7 +79,7 @@ pub const STASH_MARKET_PRICE: StashPrice = StashPrice {
     upgrade_size: 10,
 };
 
-pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 14] = [
+pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 15] = [
     None,
     Some(ItemCategory::MeleeWeapon1H),
     Some(ItemCategory::MeleeWeapon2H),
@@ -94,4 +94,5 @@ pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 14] = [
     Some(ItemCategory::Accessory),
     Some(ItemCategory::Amulet),
     Some(ItemCategory::Ring),
+    Some(ItemCategory::Map),
 ];

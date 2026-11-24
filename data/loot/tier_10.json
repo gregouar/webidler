@@ -40,6 +40,6 @@
         {"item_id": "boots_remnant",           "weight":   5120                       },
         {"item_id": "ring_remnant",            "weight":   5120                       },
         {"item_id": "rune_remnant",            "weight":   5120                       },
-        {"item_id": "map_remnant",             "weight":   5120                       }
+        {"item_id": "map_remnant",             "weight":   1600                       }
     ]
 }
