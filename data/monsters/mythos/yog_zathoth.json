@@ -3,7 +3,7 @@
   "portrait"          : "monsters/mythos/yog_zathoth.webp",
   "rarity"            : "Boss",
   "max_life"          : 3000000,
-  "life_regen"        : 10,
+  "life_regen"        : 5,
   "size"              : "Gargantuan",
   "armor"             : {"Physical": 200, "Fire": 200, "Storm": 200, "Poison": 200},
   "stun_lockout"      : 3.0,

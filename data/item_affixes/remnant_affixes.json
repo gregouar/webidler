@@ -19,6 +19,24 @@
       }
     ]
   },
+  "remnant_blessing_effects"      : {
+    "name"        : "Blessed",
+    "family"      : "remnant_affix",
+    "tags"        : ["Status", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Boots", "Body"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusPower": {"skill_type": "Blessing"} },
+        "modifier": "Increased",
+        "scope"   : "Global",
+        "value"   : [50.0, 100.0]
+      }
+    ]
+  },
   "remnant_2h_to_1h"              : {
     "name"        : "Balanced",
     "family"      : "remnant_affix",
@@ -207,6 +225,31 @@
       }
     ]
   },
+  "remnant_burning_damage"        : {
+    "name"        : "Arsonist",
+    "family"      : "remnant_affix",
+    "tags"        : ["Fire", "Status", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Ring"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "SkillConditionalModifier": {
+            "stat": {"Damage": {}},
+            "conditions": [
+              { "StatusStacks": {"status_id": "burn"} }
+            ]
+          }
+        },
+        "modifier": "More",
+        "scope"   : "Global",
+        "value"   : 10
+      }
+    ]
+  },
   "remnant_1h_multi"              : {
     "name"        : "Flickering",
     "family"      : "remnant_affix",
@@ -339,6 +382,24 @@
         "modifier": "Flat",
         "scope"   : "Global",
         "value"   : 1
+      }
+    ]
+  },
+  "remnant_open_wound_effects"    : {
+    "name"        : "Spiked",
+    "family"      : "remnant_affix",
+    "tags"        : ["Physical", "Status", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Rune"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "StatusPower": {"status_id": "open_wound"} },
+        "modifier": "Increased",
+        "scope"   : "Global",
+        "value"   : [50, 100]
       }
     ]
   },
