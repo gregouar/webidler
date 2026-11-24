@@ -1674,7 +1674,7 @@
             },
             "modifier": "More",
             "scope": "Global",
-            "value": 30.0
+            "value": 50.0
           }
         ],
         "is_unique": true

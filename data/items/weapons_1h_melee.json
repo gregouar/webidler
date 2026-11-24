@@ -920,6 +920,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1069,6 +1070,7 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
+                    "min_stacks": 0,
                     "not": false,
                     "counting": false
                   }
@@ -1873,6 +1875,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -2475,8 +2478,192 @@
     ],
     "min_area_level": 600,
     "rarity": "Unique",
-    "affixes": {},
-    "triggers": [],
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": -1e+300
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "spark_crit_vuln",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_id": null,
+          "item_slot": "Weapon",
+          "conditions": [
+            {
+              "HasStatus": {
+                "status_id": "spark_crit_vuln",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "min_stacks": 5,
+                "not": false,
+                "counting": false
+              }
+            }
+          ]
+        },
+        "description": null,
+        "trigger_id": "resonator",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.5,
+            "source": {
+              "HitDamage": "Storm"
+            },
+            "hidden": false
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "factor": 100.0,
+            "source": {
+              "TargetStatusStacks": {
+                "status_id": "spark_crit_vuln",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null
+              }
+            },
+            "hidden": false
+          }
+        ],
+        "trigger_propagate": false,
+        "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Square4",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "FlatDamage": {
+              "damage": {
+                "Storm": 0.0
+              },
+              "damage_factors": {},
+              "crit_chance": {
+                "value": 0.0,
+                "lucky_chance": 0.0
+              },
+              "crit_damage": 0.0,
+              "unblockable": false,
+              "armor_penetration": 0.0
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "damage_type": "Storm",
+                  "min_max": null,
+                  "is_hit": null
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "spark_crit_vuln",
+              "damage_type": null,
+              "debuff": null,
+              "value": -100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Single",

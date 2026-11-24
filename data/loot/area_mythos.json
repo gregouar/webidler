@@ -1,11 +1,12 @@
 {
     "area_specific": true,
     "entries"      : [
-        {"item_id": "rune_yellow_sign",     "weight": 9999, "boss_only": true},
-        {"item_id": "resonator",            "weight": 9999, "boss_only": true},
-        {"item_id": "silver_twilight_ring", "weight": 9999, "boss_only": true},
-        {"item_id": "brain_jar",            "weight": 9999, "boss_only": true},
-        {"item_id": "elder_sign",           "weight": 9999, "boss_only": true},
-        {"item_id": "edict_stars",          "weight":  999                   }
+        {"item_id": "rune_yellow_sign",     "weight": 29999, "boss_only": true},
+        {"item_id": "resonator",            "weight": 99999, "boss_only": true},
+        {"item_id": "silver_twilight_ring", "weight": 99999, "boss_only": true},
+        {"item_id": "brain_jar",            "weight": 99999, "boss_only": true},
+        {"item_id": "elder_sign",           "weight": 99999, "boss_only": true},
+        {"item_id": "gas_mask",             "weight":  9999                   },
+        {"item_id": "edict_stars",          "weight":   999                   }
     ]
 }

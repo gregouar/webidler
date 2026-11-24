@@ -32,8 +32,8 @@ use crate::components::{
         frame::{TooltipFrame, TooltipFramePalette},
         item_tooltip, status_tooltip,
         trigger_tooltip::{
-            format_extra_trigger_modifiers, format_trigger_modifier, format_trigger_modifier_per,
-            format_triggers, get_trigger_modifier_value,
+            format_trigger_modifier, format_trigger_modifier_per, format_triggers,
+            get_trigger_modifier_value,
         },
     },
     ui::{
@@ -938,7 +938,7 @@ pub fn format_skill_effect(
         }}
     };
 
-    let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
+    // let formatted_modifiers = modifiers.map(format_extra_trigger_modifiers);
 
     let mut conditional_modifiers = skill_effect.conditional_modifiers.clone();
     conditional_modifiers.sort_by_key(|conditional_modifier| {
@@ -971,7 +971,6 @@ pub fn format_skill_effect(
         Some(view! {
             {base_effects}
             {conditional_modifiers_str}
-            {formatted_modifiers}
         })
     }
 }

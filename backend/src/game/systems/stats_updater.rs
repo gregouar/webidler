@@ -106,6 +106,7 @@ pub fn check_condition(
             skill_type,
             not,
             counting,
+            min_stacks,
         } => {
             let statuses_count = character_state
                 .statuses
@@ -125,6 +126,7 @@ pub fn check_condition(
                                 .any(|status_state| status_state.skill_type == skill_type)
                         })
                         .unwrap_or(true)
+                        && status_states.len() >= *min_stacks as usize
                 })
                 .count();
 

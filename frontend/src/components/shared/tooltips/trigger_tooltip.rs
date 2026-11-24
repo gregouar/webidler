@@ -126,6 +126,7 @@ pub fn format_triggers(
     });
 
     // let name_str = trigger_status_name.map(|name| format!("{} do ", name));
+    let formatted_modifiers = format_extra_trigger_modifiers(&trigger.trigger_effect.modifiers);
 
     view! {
         <EffectLi>
@@ -141,7 +142,13 @@ pub fn format_triggers(
                             .map(|description| {
                                 view! { <EffectLi>{description}</EffectLi> }.into_any()
                             })
-                            .unwrap_or(view! { {effects} }.into_any())}
+                            .unwrap_or(
+                                view! {
+                                    {effects}
+                                    {formatted_modifiers}
+                                }
+                                    .into_any(),
+                            )}
                     </ul>
                 </EffectLi>
             </ul>
@@ -232,7 +239,7 @@ pub fn format_extra_trigger_modifiers(
     let modifiers_str: Vec<_> = modifiers
         .iter()
         .filter(|modifier| match modifier.stat {
-            StatType::Damage { .. } => modifier.modifier == Modifier::Increased,
+            StatType::Damage { .. } => modifier.modifier == Modifier::Increased ||modifier.modifier ==  Modifier::More,
             StatType::StatusDuration { .. } => modifier.modifier == Modifier::Increased,
             StatType::StatusPower { .. } => modifier.modifier == Modifier::Increased,
             StatType::Restore { .. } => modifier.modifier == Modifier::Increased,

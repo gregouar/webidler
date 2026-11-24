@@ -24,6 +24,8 @@ pub enum Condition {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
+        min_stacks: u8,
+        #[serde(default)]
         not: bool,
         #[serde(default)]
         counting: bool,

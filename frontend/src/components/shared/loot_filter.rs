@@ -63,24 +63,41 @@ pub struct FilterRule {
 
     pub enabled: bool,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_name: Option<ItemName>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_level: Option<AreaLevel>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub req_item_level: Option<AreaLevel>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub req_affix_level: Option<AreaLevel>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_power_shard_level: Option<AreaLevel>,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_rarity: Option<ItemRarity>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_category: Option<ItemCategory>,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_damages: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_damage_physical: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_damage_fire: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_damage_poison: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_damage_storm: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_crit_chance: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_crit_damage: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_cooldown: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_armor: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub item_block: Option<f64>,
 
     #[allow(clippy::type_complexity)]

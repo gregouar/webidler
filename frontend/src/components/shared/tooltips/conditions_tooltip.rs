@@ -23,13 +23,19 @@ pub fn format_skill_modifier_conditions_pre(
                 skill_type,
                 not,
                 counting: false,
+                min_stacks,
             } => format_adjective_status_condition(status_filter, *skill_type)
                 .map(|status_str| {
                     format!(
-                        " {}{}{} ",
+                        " {}{}{}{} ",
                         prefix,
                         if *not { "Non-" } else { "" },
                         status_str,
+                        if *min_stacks > 0 {
+                            format!(" if it has {min_stacks} or more")
+                        } else {
+                            "".to_string()
+                        },
                     )
                 })
                 .unwrap_or("".into()),
@@ -75,8 +81,19 @@ pub fn format_skill_modifier_conditions_post(
                 skill_type: _,
                 not,
                 counting: false,
-            } => format_affected_by_status_condition(status_filter)
-                .map(|status_str| format!(" {}{}", if *not { "not " } else { "" }, status_str,)),
+                min_stacks,
+            } => format_affected_by_status_condition(status_filter).map(|status_str| {
+                format!(
+                    " {}{}{}",
+                    if *not { "not " } else { "" },
+                    status_str,
+                    if *min_stacks > 0 {
+                        format!(" if it has {min_stacks} or more")
+                    } else {
+                        "".to_string()
+                    },
+                )
+            }),
             Condition::HasStatus { counting: true, .. } => None,
             // Condition::HasStatus { .. } => None,
             Condition::StatusStacks { .. } => None,
@@ -113,8 +130,9 @@ pub fn format_skill_modifier_conditions_post(
                 skill_type,
                 not: _,
                 counting: true,
+                min_stacks,
             } => Some(format!(
-                " per Different {}{}",
+                " per Different {}{}{}",
                 effects_tooltip::skill_status_filter_str(
                     &StatSkillFilter {
                         skill_type: *skill_type,
@@ -123,6 +141,11 @@ pub fn format_skill_modifier_conditions_post(
                     status_filter,
                     false
                 ),
+                if *min_stacks > 0 {
+                    format!(" if it has {min_stacks} or more")
+                } else {
+                    "".to_string()
+                },
                 per_suffix
             )),
             Condition::StatusStacks {
