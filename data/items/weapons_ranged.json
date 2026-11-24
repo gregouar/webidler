@@ -1985,6 +1985,99 @@
     "upgrade_levels": [],
     "upgrade_effects": []
   },
+  "grenade_launcher": {
+    "name": "Grenade Launcher",
+    "icon": "items/weapons_ranged/grenade_launcher.webp",
+    "description": null,
+    "slot": "Weapon",
+    "extra_slots": [
+      "Shield"
+    ],
+    "categories": [
+      "AttackWeapon",
+      "RangedWeapon"
+    ],
+    "min_area_level": 500,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "weapon_skill",
+                "range": null,
+                "shape": "Square4",
+                "repeat": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": "Min",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              20.0,
+              25.0
+            ]
+          },
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              30.0,
+              35.0
+            ]
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": {
+      "range": "Distance",
+      "shape": "Horizontal2",
+      "cooldown": 25.0,
+      "damage": {
+        "Physical": [
+          35.0,
+          39.0
+        ]
+      },
+      "crit_chance": {
+        "value": 10.0,
+        "lucky_chance": 0.0
+      },
+      "crit_damage": 100.0
+    },
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
   "weapon_ranged_10": {
     "name": "Ballista",
     "icon": "items/weapons_ranged/ballista.webp",

@@ -1010,6 +1010,24 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -1026,24 +1044,6 @@
                   "debuff": null,
                   "skill_type": null,
                   "skill_id": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
                 }
               }
             ],
@@ -2024,9 +2024,79 @@
           }
         ],
         "is_unique": false
+      },
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": "ManaRegen",
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "madness",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 3.0
+          }
+        ],
+        "is_unique": true
       }
     },
-    "triggers": [],
+    "triggers": [
+      {
+        "OnKill": {
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "brain_jar",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "madness",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "duration": 200.0,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,

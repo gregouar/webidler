@@ -1139,5 +1139,46 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "elder_sign": {
+    "name": "Elder Sign",
+    "icon": "items/shields/elder_sign.webp",
+    "description": null,
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Shield"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "StatusResistance": {
+                "status_id": "terror",
+                "skill_type": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 250.0,
+      "block": 33.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }

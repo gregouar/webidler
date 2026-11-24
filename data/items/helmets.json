@@ -1371,5 +1371,47 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "gas_mask": {
+    "name": "Gas Mask",
+    "icon": "items/helmets/gas_mask.webp",
+    "description": null,
+    "slot": "Helmet",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Helmet"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "DamageTaken": {
+                "skill_type": null,
+                "damage_type": "Poison"
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": -100.0
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 150.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
   }
 }
