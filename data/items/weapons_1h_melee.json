@@ -2612,6 +2612,25 @@
               "value": 100.0,
               "lucky_chance": 0.0
             },
+            "RefreshStatus": {
+              "status_id": "spark_crit_vuln",
+              "damage_type": null,
+              "debuff": null,
+              "value": -100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
             "FlatDamage": {
               "damage": {
                 "Storm": 0.0
@@ -2636,25 +2655,6 @@
                 }
               }
             ],
-            "conditional_modifiers": [],
-            "independent_application": false,
-            "optional_application": false,
-            "description": null,
-            "as_skill_type": null
-          },
-          {
-            "success_chance": {
-              "value": 100.0,
-              "lucky_chance": 0.0
-            },
-            "RefreshStatus": {
-              "status_id": "spark_crit_vuln",
-              "damage_type": null,
-              "debuff": null,
-              "value": -100.0,
-              "modifier": "Percent"
-            },
-            "ignore_stat_effects": [],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
