@@ -473,6 +473,7 @@ pub fn apply_effects_to_skill_specs<'a>(
 
         if let StatType::SkillRepeat { skill_filter } = &effect.stat
             && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
+        // && (effect.bypass_ignore || skill_specs.)
         {
             repeat_modifier.apply_effect(effect);
         }

@@ -44,7 +44,7 @@
     },
     "max_skill_level"        : {
         "category"   : "Global",
-        "icon"       : "achievements/star_altar.svg",
+        "icon"       : "achievements/star_medal.svg",
         "name"       : "Skill Master",
         "description": "Reach Skill Mastery 100 with any Skill.",
         "goals"      : [
@@ -54,7 +54,7 @@
     },
     "max_various_skill_level": {
         "category"   : "Global",
-        "icon"       : "achievements/star_altar.svg",
+        "icon"       : "achievements/star_medal.svg",
         "name"       : "Jack of All Trades",
         "description": "Reach Skill Mastery 100 with an Attack, a Spell, a Blessing and a Curse.",
         "goals"      : [

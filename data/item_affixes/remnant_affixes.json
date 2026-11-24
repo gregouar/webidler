@@ -285,6 +285,24 @@
       }
     ]
   },
+  "remnant_repeat_spell"          : {
+    "name"        : "Echoing",
+    "family"      : "remnant_affix",
+    "tags"        : ["Spell", "Speed", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["SpellWeapon"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "SkillRepeat": {"skill_type": "Spell"} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
+      }
+    ]
+  },
   "remnant_culling_attack"        : {
     "name"        : "Culling",
     "family"      : "remnant_affix",

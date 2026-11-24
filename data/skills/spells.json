@@ -398,7 +398,7 @@
         "target_dead": false,
         "repeat": {
           "value": 1,
-          "target": "Any",
+          "target": "Same",
           "repeat_cooldown": 0.5
         },
         "effects": [
@@ -707,24 +707,6 @@
             },
             "ignore_stat_effects": [
               {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": "Any",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusEscalation": {
                   "status_id": null,
                   "damage_type": "Any",
@@ -743,6 +725,15 @@
                 }
               },
               {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Any",
@@ -750,6 +741,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": "Any",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],

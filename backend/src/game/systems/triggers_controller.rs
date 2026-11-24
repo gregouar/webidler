@@ -376,7 +376,12 @@ pub fn apply_trigger_effects(
         if applied && max_repeat > 1 {
             let owner = match owner_id {
                 CharacterId::Player => &mut game_data.player_state.character_state,
-                CharacterId::Monster(_) => todo!(),
+                CharacterId::Monster(idx) => {
+                    let Some(monster_state) = game_data.monster_states.get_mut(idx) else {
+                        return;
+                    };
+                    &mut monster_state.character_state
+                }
             };
             owner.repeated_skills.push(RepeatedSkillEffect {
                 skill_id: trigger_effect.trigger_id.clone(),
