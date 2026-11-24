@@ -60,38 +60,50 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          40.0,
-          60.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Block": null
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          15.0,
-          20.0
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              15.0,
+              20.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          50.0,
-          80.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              50.0,
+              80.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -143,7 +155,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -280,86 +293,110 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "StatConditionalModifier": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
               }
             },
-            "conditions": [
-              "ThreatLevel"
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": 140.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 140.0,
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ThreatGain",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
+        "effects": [
+          {
+            "stat": "ThreatGain",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          80.0,
-          120.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_6": {
-        "stat": {
-          "StatusPower": {
-            "status_id": "taunt",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "taunt",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
+        ],
         "is_unique": true
       }
     },
@@ -482,64 +519,80 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          40.0,
-          60.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Damage": {
-            "skill_type": "Attack",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "shield_bash",
-            "range": "Any",
-            "shape": null,
-            "repeat": {
-              "min_value": 2,
-              "max_value": 4,
-              "target": "Different"
-            }
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "shield_bash",
+                "range": "Any",
+                "shape": null,
+                "repeat": {
+                  "min_value": 2,
+                  "max_value": 4,
+                  "target": "Different"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        ],
         "is_unique": true
       }
     },
@@ -635,42 +688,58 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": "Life",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 20.0,
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -733,6 +802,15 @@
             },
             "ignore_stat_effects": [
               {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -741,21 +819,13 @@
                   "skill_id": null,
                   "min_max": null
                 }
-              },
-              {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -884,63 +954,83 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": -1e+200,
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": -1e+200
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Block": null
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 20.0,
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 20.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Block": null
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          40.0,
-          60.0
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": "shield_bash",
-            "damage_type": "Storm",
-            "min_max": "Max",
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": "shield_bash",
+                "damage_type": "Storm",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 400.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 400.0,
+        ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": "retaliate",
-            "damage_type": "Storm",
-            "min_max": "Max",
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": "retaliate",
+                "damage_type": "Storm",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 240.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 240.0,
+        ],
         "is_unique": true
       }
     },

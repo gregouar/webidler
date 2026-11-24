@@ -52,32 +52,40 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": "Max",
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              8.0,
+              10.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          8.0,
-          10.0
         ],
         "is_unique": true
       }
@@ -190,99 +198,119 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Min",
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": "Min",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 4.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 4.0,
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Max",
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 4.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 4.0,
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              20.0,
+              40.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          20.0,
-          40.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              5.0,
+              10.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          5.0,
-          10.0
         ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "SkillConditionalModifier": {
+        "effects": [
+          {
             "stat": {
-              "StatusPower": {
-                "status_id": "poison",
-                "damage_type": null,
-                "debuff": null,
-                "skill_type": "Attack",
+              "SkillConditionalModifier": {
+                "stat": {
+                  "StatusPower": {
+                    "status_id": "poison",
+                    "damage_type": null,
+                    "debuff": null,
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "min_max": null
+                  }
+                },
+                "skill_type": null,
                 "skill_id": null,
-                "min_max": null
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "open_wound",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ]
               }
             },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "open_wound",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "min_stacks": 0
-                }
-              }
-            ]
+            "modifier": "More",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
+        ],
         "is_unique": true
       }
     },
@@ -467,100 +495,119 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          50.0,
-          100.0
-        ],
-        "is_unique": true
-      },
-      "unique_2": {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
-        "is_unique": true
-      },
-      "unique_3": {
-        "stat": {
-          "StatusPower": {
-            "status_id": "open_wound",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "bypass_ignore": true,
-        "is_unique": true
-      },
-      "unique_4": {
-        "stat": {
-          "SuccessChance": {
-            "skill_type": null,
-            "skill_id": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_id": "open_wound",
-                "debuff": null
-              }
-            }
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
-        "is_unique": true
-      },
-      "unique_5": {
-        "stat": {
-          "SkillConditionalModifier": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
-                "skill_type": "Attack",
+                "skill_type": null,
                 "skill_id": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
               }
             },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "open_wound",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "min_stacks": 0
-                }
-              }
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              50.0,
+              100.0
             ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 20.0,
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "skill_id": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "open_wound",
+                    "debuff": null
+                  }
+                }
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "open_wound",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -712,146 +759,179 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Min",
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 6.0,
-        "is_unique": true
-      },
-      "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Max",
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 12.0,
-        "is_unique": true
-      },
-      "unique_3": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": -400.0,
-        "is_unique": true
-      },
-      "unique_4": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "is_unique": true
-      },
-      "unique_5": {
-        "stat": {
-          "StatusDuration": {
-            "status_id": "poison",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          40.0
-        ],
-        "is_unique": true
-      },
-      "unique_6": {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Mana",
-            "skill_type": "Attack"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          1.0,
-          2.0
-        ],
-        "is_unique": true
-      },
-      "unique_7": {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Life",
-            "skill_type": "Attack"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          1.0,
-          2.0
-        ],
-        "is_unique": true
-      },
-      "unique_8": {
-        "stat": {
-          "SkillConditionalModifier": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": null,
+                "damage_type": "Poison",
+                "min_max": "Min",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 6.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 12.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
                 "min_max": null,
                 "is_hit": null
               }
             },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": "sickening_concoction",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "not": false
-                }
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": -400.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
               }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              150.0
             ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "poison",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              20.0,
+              40.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Mana",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              2.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              2.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_8": {
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "sickening_concoction",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -989,7 +1069,8 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
-                    "not": false
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]
@@ -1054,81 +1135,101 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              10.0,
+              20.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          10.0,
-          20.0
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 5.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
         ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Mana",
-            "skill_type": "Attack"
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Mana",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              4.0,
+              7.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          4.0,
-          7.0
         ],
         "is_unique": true
       }
@@ -1399,108 +1500,138 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "Do only 1 Damage"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Do only 1 Damage"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Block": null
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          30.0,
-          50.0
+        "effects": [
+          {
+            "stat": {
+              "Block": null
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_7": {
-        "stat": {
-          "StatusPower": {
-            "status_id": "double_strike_feint",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "double_strike_feint",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "StatConditionalModifier": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "Shield",
+                      "not": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
               }
             },
-            "conditions": [
-              {
-                "HasItem": {
-                  "item_slot": null,
-                  "item_category": "Shield",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              120.0,
+              160.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          120.0,
-          160.0
         ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "SkillRepeat": {
-            "skill_type": null,
-            "skill_id": "retaliate"
+        "effects": [
+          {
+            "stat": {
+              "SkillRepeat": {
+                "skill_type": null,
+                "skill_id": "retaliate",
+                "apply_triggers": false
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        ],
         "is_unique": true
       },
       "unique_6": {
-        "stat": {
-          "SkillRepeat": {
-            "skill_type": null,
-            "skill_id": "shield_bash"
+        "effects": [
+          {
+            "stat": {
+              "SkillRepeat": {
+                "skill_type": null,
+                "skill_id": "shield_bash",
+                "apply_triggers": false
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        ],
         "is_unique": true
       }
     },
@@ -1638,76 +1769,24 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 5.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          180.0,
-          240.0
-        ],
-        "is_unique": true
-      },
-      "unique_3": {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
-        "is_unique": true
-      },
-      "unique_4": {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
-        ],
-        "is_unique": true
-      },
-      "unique_5": {
-        "stat": {
-          "StatConditionalModifier": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": null,
@@ -1717,23 +1796,96 @@
                 "is_hit": null
               }
             },
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": "blessing_gold",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              180.0,
+              240.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "blessing_gold",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -1966,75 +2118,95 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 33.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 33.0,
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              200.0,
+              250.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          200.0,
-          250.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Speed": {
-            "skill_type": null,
-            "skill_id": "weapon_skill"
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": null,
+                "skill_id": "weapon_skill"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": -20.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": -20.0,
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "weapon_skill",
-            "range": null,
-            "shape": "Square4",
-            "repeat": null
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "weapon_skill",
+                "range": null,
+                "shape": "Square4",
+                "repeat": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "double_strike",
-            "range": null,
-            "shape": "Vertical2",
-            "repeat": null
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "double_strike",
+                "range": null,
+                "shape": "Vertical2",
+                "repeat": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        ],
         "is_unique": true
       }
     },

@@ -296,7 +296,7 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs 
         .affixes
         .iter()
         .filter_map(|(effect_id, blueprint)| {
-            let effect = &blueprint.effect;
+            let effects = &blueprint.effects;
             modifiers
                 .affixes
                 .iter()
@@ -310,24 +310,27 @@ pub fn create_item_specs(base: ItemBase, modifiers: ItemModifiers) -> ItemSpecs 
                         base_item_id: Some(modifiers.base_item_id.clone()),
                         affix_id: effect_id.clone(),
                         affix_type,
-                        effects: vec![AffixEffect {
-                            scope: effect.scope,
-                            stat_effect: StatEffect {
-                                stat: effect.stat.clone(),
-                                modifier: effect.modifier,
-                                value: ((effect.value.min
-                                    + (effect.value.max - effect.value.min)
-                                        * f64::from(roll.value)
-                                        * 0.01)
-                                    * if affix_type == AffixType::Base {
-                                        1.0 + f64::from(modifiers.quality.max(0.0)) * 0.01
-                                    } else {
-                                        1.0
-                                    })
-                                .round(),
-                                bypass_ignore: effect.bypass_ignore,
-                            },
-                        }],
+                        effects: effects
+                            .iter()
+                            .map(|effect| AffixEffect {
+                                scope: effect.scope,
+                                stat_effect: StatEffect {
+                                    stat: effect.stat.clone(),
+                                    modifier: effect.modifier,
+                                    value: ((effect.value.min
+                                        + (effect.value.max - effect.value.min)
+                                            * f64::from(roll.value)
+                                            * 0.01)
+                                        * if affix_type == AffixType::Base {
+                                            1.0 + f64::from(modifiers.quality.max(0.0)) * 0.01
+                                        } else {
+                                            1.0
+                                        })
+                                    .round(),
+                                    bypass_ignore: effect.bypass_ignore,
+                                },
+                            })
+                            .collect(),
                         item_level: base.min_area_level,
                     }
                 })

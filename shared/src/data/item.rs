@@ -244,8 +244,7 @@ pub struct ItemBase {
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct ItemAffixEffectBlueprint {
-    #[serde(flatten)]
-    pub effect: AffixEffectBlueprint,
+    pub effects: Vec<AffixEffectBlueprint>,
 
     #[serde(default = "default_true")]
     pub is_unique: bool,

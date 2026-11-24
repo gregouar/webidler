@@ -311,15 +311,17 @@ fn affix_groups(
             })
             .map(|(base_item_id, level, affix_id, affix)| {
                 (
+                    // TODO: Replace [0] by first()
                     (
-                        affix.effect.stat.clone(),
+                        affix.effects[0].stat.clone(),
                         (Some(base_item_id.clone()), affix_id.clone()),
                     ),
                     AffixGroupOption {
                         label: format!(
                             "({}) {}",
                             affix_type_str(AffixType::Soul),
-                            affix_effect_label(&affix.effect, true)
+                            // TODO: Replace [0] by first()
+                            affix_effect_label(&affix.effects[0], true)
                         ),
                         levels: vec![level],
                     },

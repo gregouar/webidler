@@ -207,7 +207,7 @@ pub fn SkillTooltip(
         .collect();
 
     view! {
-        <TooltipFrame palette class="max-w-xs">
+        <TooltipFrame palette class="max-w-sm">
             <strong class="text-sm xl:text-base font-bold text-violet-300 font-display text-shadow-md/80">
                 <ul class="list-none xl:space-y-1 mb-2">
                     <li class=" whitespace-pre-line">{skill_specs.name.clone()}</li>

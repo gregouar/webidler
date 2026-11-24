@@ -119,11 +119,17 @@ pub fn compute_affixes(
                     base_item_id: roll.base_item_id.clone(),
                     affix_id: roll.affix_id.clone(),
                     affix_type: roll.affix_type,
-                    effects: vec![compute_affix_effect(
-                        &effect.effect,
-                        roll.value,
-                        (roll.affix_type == AffixType::Base).then_some(modifiers.quality),
-                    )],
+                    effects: effect
+                        .effects
+                        .iter()
+                        .map(|blueprint| {
+                            compute_affix_effect(
+                                blueprint,
+                                roll.value,
+                                (roll.affix_type == AffixType::Base).then_some(modifiers.quality),
+                            )
+                        })
+                        .collect(),
                     item_level: source_base.min_area_level,
                 });
             }

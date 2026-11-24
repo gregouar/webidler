@@ -271,8 +271,8 @@ fn verify_store_integrity(master_store: &MasterStore) -> Result<()> {
         .iter()
         .filter(|(_, item)| item.categories.contains(&ItemCategory::Soul))
     {
-        for affix in item.affixes.values() {
-            let StatType::AllocatePassive(passive_id) = &affix.effect.stat else {
+        for affix_effect in item.affixes.values().flat_map(|affix| affix.effects.iter()) {
+            let StatType::AllocatePassive(passive_id) = &affix_effect.stat else {
                 continue;
             };
 

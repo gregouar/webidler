@@ -331,12 +331,12 @@ fn find_blueprint<'a>(
             .affixes
             .iter()
             .filter(|(effect_id, _)| !is_used(Some(base_item_id), effect_id))
-            .find(|(_, blueprint)| effect_matches(old_effect, &blueprint.effect));
+            .find(|(_, blueprint)| effect_matches(old_effect, &blueprint.effects[0]));
         if let Some((effect_id, blueprint)) = candidate {
             return Some((
                 Some(base_item_id.to_string()),
                 effect_id.clone(),
-                &blueprint.effect,
+                &blueprint.effects[0],
                 !blueprint.is_unique,
             ));
         }

@@ -96,28 +96,40 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": "GemsFind",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 1000.0,
+        "effects": [
+          {
+            "stat": "GemsFind",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 1000.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Armor": null
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 500.0,
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 500.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Block": "Attack"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 50.0,
+        "effects": [
+          {
+            "stat": {
+              "Block": "Attack"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 50.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -150,36 +162,52 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "Meet Regular Patrons"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Meet Regular Patrons"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          80.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              50.0,
+              80.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "Life",
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 100.0
+          }
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 10.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 10.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -264,26 +292,38 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "Enemies Drop no Item"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Enemies Drop no Item"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 20.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 500.0,
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 500.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -386,31 +426,43 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Speed": {
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": 300.0
           }
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": 300.0,
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 20.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -444,67 +496,91 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "May drop Cursed Treasures"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "May drop Cursed Treasures"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 30.0
+          }
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "Life",
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 500.0,
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 500.0
+          }
+        ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
+        ],
         "is_unique": true
       },
       "unique_6": {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 100.0,
+        ],
         "is_unique": true
       }
     },
@@ -589,47 +665,67 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "The Desert is Invaded by Mummies"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "The Desert is Invaded by Mummies"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "DamageTaken": {
-            "skill_type": null,
-            "damage_type": "Fire"
+        "effects": [
+          {
+            "stat": {
+              "DamageTaken": {
+                "skill_type": null,
+                "damage_type": "Fire"
+              }
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": 100.0
           }
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": 100.0,
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 50.0,
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 50.0
+          }
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -663,20 +759,28 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              100.0,
+              200.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
         "is_unique": true
       }
     },
@@ -750,35 +854,51 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "The Spider Witch has finished her ritual..."
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "The Spider Witch has finished her ritual..."
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "PowerLevel",
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 90.0,
+        "effects": [
+          {
+            "stat": "PowerLevel",
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 90.0
+          }
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -864,26 +984,38 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": "ItemAreaChance",
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 2000.0,
+        "effects": [
+          {
+            "stat": "ItemAreaChance",
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 2000.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "PowerLevel",
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 80.0,
+        "effects": [
+          {
+            "stat": "PowerLevel",
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 80.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              100.0,
+              200.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -917,19 +1049,27 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "Contains no Boss"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Contains no Boss"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "GoldFind",
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": -1e+200,
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": -1e+200
+          }
+        ],
         "is_unique": true
       }
     },
@@ -962,35 +1102,51 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "Reward with an Elemental Soul"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Reward with an Elemental Soul"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 150.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 150.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "PowerLevel",
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 120.0,
+        "effects": [
+          {
+            "stat": "PowerLevel",
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 120.0
+          }
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -1024,35 +1180,51 @@
     "rarity": "Unique",
     "affixes": {
       "unique_1": {
-        "stat": {
-          "Description": "Reward with an Eldritch Soul"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Reward with an Eldritch Soul"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ItemLevel",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 190.0,
+        "effects": [
+          {
+            "stat": "ItemLevel",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 190.0
+          }
+        ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "PowerLevel",
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 140.0,
+        "effects": [
+          {
+            "stat": "PowerLevel",
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 140.0
+          }
+        ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": "ItemRarity",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          150.0,
-          200.0
+        "effects": [
+          {
+            "stat": "ItemRarity",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              150.0,
+              200.0
+            ]
+          }
         ],
         "is_unique": true
       }

@@ -12,10 +12,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 20.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -41,10 +45,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 30.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -70,68 +78,88 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 40.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null,
-            "min_max": null
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          3.0,
-          5.0
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              3.0,
+              5.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
         "is_unique": true
       }
@@ -146,7 +174,8 @@
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": "Curse",
-                "not": false
+                "not": false,
+                "counting": false
               }
             }
           ]
@@ -270,10 +299,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 40.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -299,89 +332,113 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 40.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "CritChance": {
-            "skill_type": "Spell",
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "CritDamage": {
-            "skill_type": "Spell",
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          140.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              140.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "fireball",
-            "range": null,
-            "shape": null,
-            "repeat": {
-              "min_value": 2,
-              "max_value": 2,
-              "target": "Any"
-            }
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "fireball",
+                "range": null,
+                "shape": null,
+                "repeat": {
+                  "min_value": 2,
+                  "max_value": 2,
+                  "target": "Any"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
+        ],
         "is_unique": true
       }
     },
@@ -476,10 +533,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -505,73 +566,93 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              120.0,
+              160.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          120.0,
-          160.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": "bleed",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "StatusEscalation": {
+                "status_id": "bleed",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
+        ],
         "is_unique": true
       }
     },
@@ -735,10 +816,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 60.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 60.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -764,97 +849,121 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 60.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 60.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": "Mana",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          12.0,
-          16.0
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              12.0,
+              16.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": "Poison",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Poison",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "StatConditionalModifier": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": "Poison",
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
               }
             },
-            "conditions": [
-              "LowLife"
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": 400.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 400.0,
+        ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "StatConditionalModifier": {
+        "effects": [
+          {
             "stat": {
-              "SuccessChance": {
-                "skill_type": null,
-                "skill_id": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_id": "treasure_idol",
-                    "debuff": null
+              "StatConditionalModifier": {
+                "stat": {
+                  "SuccessChance": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "effect_type": {
+                      "ApplyStatus": {
+                        "status_id": "treasure_idol",
+                        "debuff": null
+                      }
+                    }
                   }
-                }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
               }
             },
-            "conditions": [
-              "LowLife"
-            ],
-            "conditions_duration": 0
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": -10000.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": -10000.0,
+        ],
         "is_unique": true
       }
     },
@@ -901,12 +1010,13 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
+                "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "min_max": null
                 }
               },
               {
@@ -919,13 +1029,12 @@
                 }
               },
               {
-                "StatusPower": {
+                "StatusDuration": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
+                  "skill_id": null
                 }
               },
               {
@@ -1015,10 +1124,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 70.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 70.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -1044,93 +1157,117 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 70.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 70.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": "Max",
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              200.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              240.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          240.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              60.0,
+              80.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          60.0,
-          80.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "CritDamage": {
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
         "is_unique": true
       },
       "unique_5": {
-        "stat": {
-          "Lucky": {
-            "skill_type": null,
-            "skill_id": null,
-            "roll_type": {
-              "Damage": {
-                "damage_type": null
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "skill_type": null,
+                "skill_id": null,
+                "roll_type": {
+                  "Damage": {
+                    "damage_type": null
+                  }
+                }
               }
-            }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
+        ],
         "is_unique": true
       }
     },
@@ -1202,10 +1339,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 80.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 80.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -1231,10 +1372,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 90.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 90.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -1260,73 +1405,93 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 90.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 90.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          200.0,
-          250.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              200.0,
+              250.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              150.0,
+              250.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          150.0,
-          250.0
         ],
         "is_unique": true
       },
       "unique_4": {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": true,
-            "skill_type": null,
-            "skill_id": null
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": true,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
+        ],
         "is_unique": true
       }
     },
@@ -1486,10 +1651,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -1515,135 +1684,171 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Life",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
         "is_unique": false
       },
       "unique_1": {
-        "stat": {
-          "Description": "Grant Life instead of Mana"
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 1.0,
+        "effects": [
+          {
+            "stat": {
+              "Description": "Grant Life instead of Mana"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
         "is_unique": true
       },
       "unique_2": {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          300.0,
-          350.0
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              300.0,
+              350.0
+            ]
+          }
         ],
         "is_unique": true
       },
       "unique_3": {
-        "stat": {
-          "Damage": {
-            "skill_type": "Attack",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
-        ],
-        "is_unique": true
-      },
-      "unique_4": {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
-        ],
-        "is_unique": true
-      },
-      "unique_5": {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          80.0,
-          100.0
-        ],
-        "is_unique": true
-      },
-      "unique_6": {
-        "stat": "Life",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          25.0,
-          30.0
-        ],
-        "is_unique": true
-      },
-      "unique_7": {
-        "stat": {
-          "StatConditionalModifier": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
-                "skill_type": null,
+                "skill_type": "Attack",
                 "skill_id": null,
                 "damage_type": null,
                 "min_max": null,
                 "is_hit": null
               }
             },
-            "conditions": [
-              "LowLife"
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 500.0,
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              80.0,
+              100.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 500.0
+          }
+        ],
         "is_unique": true
       },
       "unique_8": {
-        "stat": {
-          "StatConverter": {
-            "source": "ManaRegen",
-            "stat": "LifeRegen",
-            "is_extra": false,
-            "skill_type": null,
-            "skill_id": null,
-            "uncapped": false
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ManaRegen",
+                "stat": "LifeRegen",
+                "is_extra": false,
+                "skill_type": null,
+                "skill_id": null,
+                "uncapped": false
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
+        ],
         "is_unique": true
       }
     },
@@ -1777,10 +1982,14 @@
     "rarity": "Normal",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 120.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 120.0
+          }
+        ],
         "is_unique": false
       }
     },
@@ -1806,10 +2015,14 @@
     "rarity": "Unique",
     "affixes": {
       "base_mana": {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 120.0,
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 120.0
+          }
+        ],
         "is_unique": false
       }
     },

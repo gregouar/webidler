@@ -43,7 +43,7 @@ pub fn ItemTooltip(
     let palette = tooltip_rarity_palette(item_specs.modifiers.rarity);
 
     view! {
-        <TooltipFrame palette class="max-w-xs">
+        <TooltipFrame palette class="max-w-sm">
             <span class="pointer-events-none absolute inset-x-4 top-[1px] h-px bg-gradient-to-r from-transparent via-[#edd39a]/45 to-transparent"></span>
             <ItemTooltipContent
                 item_specs=item_specs.clone()
@@ -851,11 +851,11 @@ pub fn formatted_affixes_list(
                 .as_ref()
                 .and_then(|item_id| item_bases.get(item_id))
                 .and_then(|item_base| item_base.affixes.get(&affix.affix_id))
-                .map(|blueprint| vec![&blueprint.effect])
+                .map(|blueprint| blueprint.effects.clone())
                 .or_else(|| {
                     item_affixes
                         .get(&affix.affix_id)
-                        .map(|blueprint| blueprint.effects.iter().collect())
+                        .map(|blueprint| blueprint.effects.clone())
                 })
                 .unwrap_or_default();
 
