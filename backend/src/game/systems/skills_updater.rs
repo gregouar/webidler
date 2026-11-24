@@ -159,6 +159,7 @@ pub fn update_skill_specs(
     apply_effects_to_skill_specs(
         statuses_store,
         &mut skill_specs,
+        false,
         local_effects.iter().chain(effects),
     );
 
@@ -421,6 +422,7 @@ fn compute_skill_mastery_stat_effects(
 pub fn apply_effects_to_skill_specs<'a>(
     statuses_store: &StatusesStore,
     skill_specs: &mut SkillSpecs,
+    is_triggered: bool,
     effects: impl Iterator<Item = &'a StatEffect> + Clone,
 ) {
     let effects = effects.filter(|effect| {
@@ -471,9 +473,12 @@ pub fn apply_effects_to_skill_specs<'a>(
             }
         }
 
-        if let StatType::SkillRepeat { skill_filter } = &effect.stat
+        if let StatType::SkillRepeat {
+            skill_filter,
+            apply_triggers,
+        } = &effect.stat
             && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
-        // && (effect.bypass_ignore || skill_specs.)
+            && (*apply_triggers || !is_triggered)
         {
             repeat_modifier.apply_effect(effect);
         }
@@ -525,7 +530,10 @@ pub fn apply_effects_to_skill_specs<'a>(
                 }
             }
 
-            if let StatType::SkillRepeat { skill_filter } = &effect.stat
+            if let StatType::SkillRepeat {
+                skill_filter,
+                apply_triggers: true,
+            } = &effect.stat
                 && skill_filter
                     .is_match_with_skill(trigger_effect.skill_type, &trigger_effect.trigger_id)
             {

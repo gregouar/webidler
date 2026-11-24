@@ -353,7 +353,12 @@ fn generate_monster_specs(
 
     let effects = &monster_specs.character_specs.effects;
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(
+            statuses_store,
+            skill_specs,
+            false,
+            effects.iter(),
+        );
     }
 
     monster_specs

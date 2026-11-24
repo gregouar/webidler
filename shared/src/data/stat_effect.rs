@@ -340,6 +340,8 @@ pub enum StatType {
     SkillRepeat {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
+        #[serde(default)]
+        apply_triggers: bool,
     },
     SkillEffectModifier {
         #[serde(flatten)]

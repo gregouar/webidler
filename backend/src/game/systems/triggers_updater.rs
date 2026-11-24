@@ -13,7 +13,10 @@ pub fn compute_trigger_specs_effects<'a>(
 ) {
     let mut repeat_modifier: ModifiableValue<f64> = 1.0.into();
     for effect in effects.clone() {
-        if let StatType::SkillRepeat { skill_filter } = &effect.stat
+        if let StatType::SkillRepeat {
+            skill_filter,
+            apply_triggers: true,
+        } = &effect.stat
             && skill_filter
                 .is_match_with_skill(trigger_effect.skill_type, &trigger_effect.trigger_id)
         {

@@ -826,7 +826,10 @@ impl From<OldStatType> for StatType {
                 shape,
                 repeat,
             },
-            OldStatType::SkillRepeat { skill_filter } => Self::SkillRepeat { skill_filter },
+            OldStatType::SkillRepeat { skill_filter } => Self::SkillRepeat {
+                skill_filter,
+                apply_triggers: false,
+            },
             OldStatType::SkillEffectModifier {
                 skill_filter,
                 unblockable,

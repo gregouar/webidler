@@ -23,7 +23,7 @@
                     ],
                     "modifiers"            : [
                         {
-                            "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark"} },
+                            "stat"    : { "SkillRepeat": {"amount": 1, "skill_id": "spark", "apply_triggers": true} },
                             "modifier": "Flat",
                             "factor"  : 1,
                             "source"  : { "TriggerStatusStacks": {"ignore_initial": true} },

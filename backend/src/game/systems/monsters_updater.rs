@@ -90,7 +90,12 @@ pub fn update_monster_specs(
     }
 
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(
+            statuses_store,
+            skill_specs,
+            false,
+            effects.iter(),
+        );
     }
 
     for trigger_effect in monster_specs.character_specs.triggers.effects_iter_mut() {
