@@ -1171,7 +1171,7 @@
         ],
         "is_unique": true
       },
-      "unique_2e": {
+      "unique_2": {
         "effects": [
           {
             "stat": {
@@ -1193,35 +1193,7 @@
         ],
         "is_unique": true
       },
-      "unique_sa": {
-        "effects": [
-          {
-            "stat": "Life",
-            "modifier": "Increased",
-            "scope": "Global",
-            "value": [
-              25.0,
-              30.0
-            ]
-          }
-        ],
-        "is_unique": true
-      },
-      "unique_a": {
-        "effects": [
-          {
-            "stat": "LifeRegen",
-            "modifier": "Flat",
-            "scope": "Global",
-            "value": [
-              20.0,
-              30.0
-            ]
-          }
-        ],
-        "is_unique": true
-      },
-      "unique_da": {
+      "unique_3": {
         "effects": [
           {
             "stat": {
@@ -1236,6 +1208,56 @@
             "modifier": "Flat",
             "scope": "Global",
             "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_madness": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "madness",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              5.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              20.0,
+              30.0
+            ]
           }
         ],
         "is_unique": true

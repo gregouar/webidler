@@ -276,6 +276,7 @@
               "status_id": "berserker",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -479,6 +480,7 @@
               "status_id": "burn",
               "value": 0.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": 0.0,
               "escalation": null,
               "max_stacks": null,
@@ -487,15 +489,6 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusDuration": {
-                  "status_id": null,
-                  "damage_type": "Poison",
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": "Poison",
@@ -503,6 +496,15 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
+                }
+              },
+              {
+                "StatusDuration": {
+                  "status_id": null,
+                  "damage_type": "Poison",
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
                 }
               },
               {
@@ -715,6 +717,7 @@
               "status_id": "poison",
               "value": 0.0,
               "value_factor": 0.3,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -951,6 +954,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -987,6 +991,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1064,6 +1069,28 @@
         ],
         "is_unique": false
       },
+      "unique_madness": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "madness",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              5.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
       "unique_1": {
         "effects": [
           {
@@ -1113,6 +1140,7 @@
               "status_id": "madness",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1494,6 +1522,7 @@
               "status_id": "pure_storm",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,

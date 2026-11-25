@@ -204,6 +204,7 @@
               "status_id": "vile_codex",
               "value": 200.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -713,6 +714,7 @@
               "status_id": "bleed",
               "value": 0.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1004,6 +1006,7 @@
               "status_id": "treasure_idol",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1552,6 +1555,7 @@
               "status_id": "burn",
               "value": 0.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1904,6 +1908,7 @@
               "status_id": "hunger",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -2031,6 +2036,69 @@
         "effects": [
           {
             "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              300.0,
+              400.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_madness": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "madness",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              5.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
               "StatConditionalModifier": {
                 "stat": "ManaRegen",
                 "conditions": [
@@ -2050,47 +2118,6 @@
             "modifier": "Flat",
             "scope": "Global",
             "value": 3.0
-          }
-        ],
-        "is_unique": true
-      },
-      "unique_X": {
-        "effects": [
-          {
-            "stat": {
-              "Damage": {
-                "skill_type": "Spell",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "modifier": "More",
-            "scope": "Global",
-            "value": [
-              300.0,
-              400.0
-            ]
-          }
-        ],
-        "is_unique": true
-      },
-      "unique_dX": {
-        "effects": [
-          {
-            "stat": {
-              "Speed": {
-                "skill_type": "Spell",
-                "skill_id": null
-              }
-            },
-            "modifier": "Increased",
-            "scope": "Global",
-            "value": [
-              25.0,
-              30.0
-            ]
           }
         ],
         "is_unique": true
@@ -2124,6 +2151,7 @@
               "status_id": "madness",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": 200.0,
               "escalation": null,
               "max_stacks": null,
