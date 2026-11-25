@@ -2468,7 +2468,7 @@
   "resonator": {
     "name": "Tillinghast Resonator",
     "icon": "items/weapons_1h/resonator.webp",
-    "description": null,
+    "description": "I have struck depths that your little brain can't picture!",
     "slot": "Weapon",
     "extra_slots": [],
     "categories": [
@@ -2646,6 +2646,12 @@
             },
             "ignore_stat_effects": [
               {
+                "CritChance": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
+              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
@@ -2656,7 +2662,7 @@
               }
             ],
             "conditional_modifiers": [],
-            "independent_application": false,
+            "independent_application": true,
             "optional_application": false,
             "description": null,
             "as_skill_type": null
