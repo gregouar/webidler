@@ -660,7 +660,7 @@ fn Author(
                 let title = character_title.as_ref().and_then(|title| {
                     data_context
                         .cosmetics_specs
-                        .read()
+                        .read_untracked()
                         .get(title)
                         .and_then(|cosmetic| match cosmetic {
                             CosmeticType::Title(title) => Some(title.clone()),

@@ -36,6 +36,7 @@ pub fn LootQueue() -> impl IntoView {
     let accessibility: AccessibilityContext = expect_context();
     let settings: SettingsContext = expect_context();
     let game_context: GameContext = expect_context();
+    let data_context: DataContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let pickup_loot = {
@@ -159,7 +160,7 @@ pub fn LootQueue() -> impl IntoView {
             let sell_loot = sell_loot.clone();
             move |queued_loot: &Option<QueuedLoot>, _, _| {
                 if let Some(queued_loot) = queued_loot {
-                    match filter_loot(loot_filter, &queued_loot.item_specs) {
+                    match filter_loot(data_context, loot_filter, &queued_loot.item_specs) {
                         Some(FilterRuleType::Pickup) => {
                             if game_context.player_inventory.read_untracked().bag.len()
                                 < game_context.player_inventory.read_untracked().max_bag_size
@@ -338,6 +339,7 @@ pub fn LootQueue() -> impl IntoView {
 }
 
 fn filter_loot(
+    data_context: DataContext,
     loot_filter: RwSignal<LootFilter>,
     item_specs: &ItemSpecs,
 ) -> Option<FilterRuleType> {
@@ -347,14 +349,18 @@ fn filter_loot(
         .values()
         .filter(|rule| rule.enabled)
     {
-        if verify_filter_rule(rule, item_specs) {
+        if verify_filter_rule(data_context, rule, item_specs) {
             return Some(rule.rule_type);
         }
     }
     None
 }
 
-fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool {
+fn verify_filter_rule(
+    data_context: DataContext,
+    filter_rule: &FilterRule,
+    item_specs: &ItemSpecs,
+) -> bool {
     let FilterRule {
         rule_type,
         rule_name: _,
@@ -384,7 +390,6 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return true;
     }
 
-    let data_context: DataContext = expect_context();
     let item_base = data_context.get_item_base(item_specs);
 
     if item_name
