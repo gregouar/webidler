@@ -145,6 +145,7 @@
               "status_id": "stun",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -795,6 +796,7 @@
               "status_id": "king_oath",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1169,6 +1171,28 @@
         ],
         "is_unique": true
       },
+      "unique_2e": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              250.0,
+              350.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
       "unique_sa": {
         "effects": [
           {
@@ -1252,6 +1276,7 @@
               "status_id": "focus",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
