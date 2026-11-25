@@ -183,6 +183,7 @@ pub fn init_area_specs(
                             status_id: status_id.clone(),
                             value: ChanceRange::from(status_value),
                             value_factor: 1.0,
+                            stacks: 1,
                             duration: None,
                             escalation: None,
                             max_stacks: None,

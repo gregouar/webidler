@@ -56,6 +56,32 @@ pub fn HeaderMenu() -> impl IntoView {
             && !show_ascension_tutorial.get()
             && !show_temple_tutorial.get()
     });
+    let favorite_skill_has_unspent_mastery_points = Signal::derive(move || {
+        let mastery_specs = data_context.skill_mastery_specs.read();
+        let skill_masteries = town_context.player_skill_masteries.read();
+
+        skill_masteries.favorite_skills.iter().any(|skill_id| {
+            let Some(mastery) = skill_masteries.masteries.get(skill_id) else {
+                return false;
+            };
+            let Some(specs) = mastery_specs.get(skill_id) else {
+                return false;
+            };
+
+            let spent_points = mastery
+                .upgrades_bought
+                .iter()
+                .filter_map(|(upgrade_id, upgrade_level)| {
+                    specs
+                        .upgrades
+                        .get(upgrade_id)
+                        .map(|upgrade| upgrade.compute_cost(*upgrade_level))
+                })
+                .fold(0u16, u16::saturating_add);
+
+            mastery.level(specs.max_level) > spent_points
+        })
+    });
 
     let gold = Signal::derive(move || town_context.character.read().resource_gold.get());
     let gems = Signal::derive(move || town_context.character.read().resource_gems.get());
@@ -259,7 +285,9 @@ pub fn HeaderMenu() -> impl IntoView {
                                 || town_context.player_skill_masteries.read().masteries.is_empty()
                         }
                     >
-                        <SkillsIcon />
+                        <SkillsIcon class:text-amber-300=move || {
+                            favorite_skill_has_unspent_mastery_points.get()
+                        } />
                     </MenuButton>
                 </TutorialPopup>
                 <MenuButton

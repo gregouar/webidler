@@ -153,6 +153,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let open_inventory = move || {
         if !game_context.open_inventory.get_untracked() {
             inventory_tip_triggered.set(false);
+            game_context.has_unseen_filtered_loot.set(false);
         }
         switch_panel(game_context.open_inventory);
     };
@@ -248,7 +249,9 @@ pub fn HeaderMenu() -> impl IntoView {
                     message="You picked up your first item. Click here to equip it."
                 >
                     <MenuButton on:click=move |_| open_inventory() title="Inventory">
-                        <InventoryIcon />
+                        <InventoryIcon class:text-amber-300=move || {
+                            game_context.has_unseen_filtered_loot.get()
+                        } />
                     </MenuButton>
                 </TutorialPopup>
                 <TutorialPopup

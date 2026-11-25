@@ -80,6 +80,7 @@ pub struct GameContext {
     pub open_settings: RwSignal<bool>,
     pub open_achievements: RwSignal<bool>,
     pub open_pets: RwSignal<bool>,
+    pub has_unseen_filtered_loot: RwSignal<bool>,
 
     pub loot_filter: RwSignal<LootFilter>,
 }
@@ -140,6 +141,7 @@ impl GameContext {
             open_settings: RwSignal::new(false),
             open_achievements: RwSignal::new(false),
             open_pets: RwSignal::new(false),
+            has_unseen_filtered_loot: RwSignal::new(false),
 
             loot_filter: Default::default(),
         }

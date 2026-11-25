@@ -22,7 +22,10 @@ use shared::{
 use crate::game::{
     data::{event::EventsQueue, master_store::StatusesStore},
     systems::{skills_updater, stats_updater},
-    utils::rng::{self, MarbleRollable, RngSeed, Rollable, flip_coin},
+    utils::{
+        AnyAll,
+        rng::{self, MarbleRollable, RngSeed, Rollable, flip_coin},
+    },
 };
 
 use super::{characters_controller, characters_controller::Target};
@@ -455,6 +458,7 @@ fn is_skill_effect_applicable_on_target(skill_effect: &SkillEffect, target: &Tar
             status_id,
             value,
             value_factor: _,
+            stacks: _,
             duration,
             escalation,
             max_stacks,
@@ -580,6 +584,7 @@ fn apply_skill_effect_on_target(
             status_id,
             value,
             value_factor: _,
+            stacks,
             duration,
             escalation,
             max_stacks,
@@ -587,7 +592,7 @@ fn apply_skill_effect_on_target(
             // damage_type,
             replace_on_value_only: _,
             computed_status_triggers: _,
-        } => {
+        } => (0..*stacks).any_all(|_| {
             let value = value.roll_with_seed(seed);
             let duration = duration.unwrap_or_default().roll_with_seed(seed);
 
@@ -610,7 +615,7 @@ fn apply_skill_effect_on_target(
                 skill_id,
                 trigger_depth,
             )
-        }
+        }),
         SkillEffectType::RefreshStatus {
             status_filter,
             value,

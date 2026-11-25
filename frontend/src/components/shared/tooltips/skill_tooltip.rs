@@ -697,6 +697,7 @@ pub fn format_skill_effect(
             status_id,
             value,
             value_factor,
+            stacks,
             duration,
             escalation,
             // damage_type: _,
@@ -751,7 +752,12 @@ pub fn format_skill_effect(
                         "Apply"
                     };
 
-                    let stacks_str = (max_stacks > 1).then(|| view! {
+                    let stacks_str = (stacks > 1).then(|| view! {
+                        <span class="font-semibold">{stacks}</span>
+                        " Stacks of "
+                    });
+
+                    let max_stacks_str = (max_stacks > 1).then(|| view! {
                         ", up to "
                         <span class="font-semibold">{max_stacks}</span>
                         " Stacks"
@@ -789,10 +795,11 @@ pub fn format_skill_effect(
 
                      view! {
                          <EffectLi>
-                             {success_chance}{apply_str}" "{status_name} {modified_value_str}" "
+                             {success_chance}{apply_str}" "{stacks_str}{status_name}
+                             {modified_value_str}" "
                              {format_duration_values(duration.0, duration.1)}
                              {trigger_modifier_duration_str}{format_escalation(escalation)}
-                             {stacks_str}
+                             {max_stacks_str}
                          </EffectLi>
                          {status_effects_str
                              .map(|status_effects| view! { <EffectLi>{status_effects}</EffectLi> })}

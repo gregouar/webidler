@@ -37,7 +37,10 @@ pub fn BattleScene() -> impl IntoView {
                 <div class="relative w-1/3 min-w-0">
                     <div class="absolute inset-0 flex flex-col gap-1 xl:gap-4">
                         <PlayerCard />
-                        <ChatPanel character_id=game_context.character_id.get_untracked() pinnable=true />
+                        <ChatPanel
+                            character_id=game_context.character_id.get_untracked()
+                            pinnable=true
+                        />
                     </div>
                 </div>
                 <Card class="w-2/3 aspect-[12/8]" pad=false gap=false>
@@ -161,7 +164,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 >
                     <button
                         class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
-                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
+                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
                         active:scale-90 active:brightness-125 transition"
                         title="Go Back One Level"
                         on:click=go_back
@@ -188,7 +191,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                                     >
                                         <button
                                             class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
-                                            hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
+                                            hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
                                             active:scale-90 active:brightness-125 transition"
                                             title="Go Forth One Level"
                                             on:click=go_forth
@@ -325,7 +328,7 @@ pub fn BattleSceneHeader() -> impl IntoView {
                     <button
                         class="btn text-xl xl:text-3xl text-amber-300 font-bold
                         drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
-                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)] 
+                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
                         active:scale-90 active:brightness-125 transition
                         items-center"
                         title="Toggle Auto Progress"
@@ -449,7 +452,7 @@ pub fn NewAreaLevel() -> impl IntoView {
 
     let tooltip = move || {
         if new_area_level.get() {
-            "New Area Level, Unique Items & Runes can drop."
+            "Area Level not yet Cleared, Unique Items & Runes can drop."
         } else {
             "Cleared Area Level, Unique Items & Runes cannot drop."
         }

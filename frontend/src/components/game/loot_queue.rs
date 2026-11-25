@@ -166,6 +166,9 @@ pub fn LootQueue() -> impl IntoView {
                                     as usize
                             {
                                 pickup_loot(queued_loot.identifier);
+                                if !game_context.open_inventory.get_untracked() {
+                                    game_context.has_unseen_filtered_loot.set(true);
+                                }
                                 no_more_space.set(false);
                             } else {
                                 no_more_space.set(true);

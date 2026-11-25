@@ -6,6 +6,7 @@
         {"item_id": "silver_twilight_ring", "weight": 99999, "boss_only": true},
         {"item_id": "brain_jar",            "weight": 99999, "boss_only": true},
         {"item_id": "elder_sign",           "weight": 99999, "boss_only": true},
+        {"item_id": "mad_boots",            "weight": 99999, "boss_only": true},
         {"item_id": "gas_mask",             "weight":  9999                   },
         {"item_id": "edict_stars",          "weight":   999                   }
     ]

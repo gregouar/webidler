@@ -438,6 +438,7 @@ fn compute_player_specs(
                         status_id,
                         value: status_value.into(),
                         value_factor: 1.0,
+                        stacks: 1,
                         duration: None,
                         escalation: None,
                         max_stacks: None,

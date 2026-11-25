@@ -19,7 +19,7 @@ use crate::{
         trigger::{TriggerEffect, TriggerSpecs},
         values::{Cooldown, Damage, Finite, NonNegative, Percent},
     },
-    serde_utils::default_1f64,
+    serde_utils::{default_1f64, default_one},
 };
 
 pub use super::stat_effect::DamageType;
@@ -282,6 +282,9 @@ pub enum SkillEffectType {
         value: ChanceRange<ModifiableValue<Damage>>,
         #[serde(default = "default_1f64")]
         value_factor: f64, // For tooltip purposes
+
+        #[serde(default = "default_one")]
+        stacks: u8,
 
         // On skill definition, overwrite default status value when some
         // On skill computed specs, get derived values

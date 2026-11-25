@@ -1,12 +1,15 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::data::{
-    area::AreaLevel,
-    character_status::StatusId,
-    item::{BaseItemId, ItemCategory, ItemRarity, ItemSlot},
-    monster::MonsterRarity,
-    skill::{SkillType, TargetType},
+use crate::{
+    data::{
+        area::AreaLevel,
+        character_status::StatusId,
+        item::{BaseItemId, ItemCategory, ItemRarity, ItemSlot},
+        monster::MonsterRarity,
+        skill::{SkillType, TargetType},
+    },
+    serde_utils::default_one,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -158,8 +161,4 @@ impl AchievementGoal {
             Self::AreaLevel { .. } | Self::PowerLevel(_) | Self::PlayerLevel(_) => 1,
         }
     }
-}
-
-fn default_one() -> u8 {
-    1
 }
