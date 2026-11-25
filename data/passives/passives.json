@@ -718,7 +718,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -745,7 +747,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -779,7 +783,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -806,7 +812,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -1328,7 +1336,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -1362,7 +1372,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -2095,7 +2107,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -3560,7 +3574,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -3590,7 +3606,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -3624,7 +3642,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -3654,7 +3674,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -4567,7 +4589,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -5930,7 +5953,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -5960,7 +5985,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -5994,7 +6021,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -6024,7 +6053,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -7008,7 +7039,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -7038,7 +7071,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -7072,7 +7107,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -7102,7 +7139,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -7299,7 +7338,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -7394,7 +7434,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -7894,7 +7935,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -7924,7 +7967,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -7958,7 +8003,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -7988,7 +8035,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -8218,7 +8267,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -9028,7 +9078,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           },
@@ -9078,7 +9129,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           },
@@ -9126,7 +9178,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -10140,7 +10193,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -10174,7 +10229,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -10690,7 +10747,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -11017,7 +11075,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -11051,7 +11111,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -11189,7 +11251,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -11732,7 +11795,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -11759,7 +11824,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -11793,7 +11860,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -11820,7 +11889,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -12040,7 +12111,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -12193,7 +12265,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -13384,7 +13457,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -13618,8 +13692,8 @@
               "skill_type": null,
               "range": null,
               "is_crit": null,
-              "is_blocked": null,
-              "is_hurt": true,
+              "is_blocked": false,
+              "is_hurt": null,
               "is_triggered": false,
               "damage_type": null,
               "skill_id": null,
@@ -13678,7 +13752,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -14133,7 +14208,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -14163,7 +14240,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -14197,7 +14276,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -14227,7 +14308,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -14558,7 +14641,9 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
-                    "not": false
+                    "min_stacks": 0,
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]
@@ -14639,6 +14724,15 @@
                 },
                 "ignore_stat_effects": [
                   {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14658,24 +14752,6 @@
                     }
                   },
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14683,12 +14759,22 @@
                       "skill_type": null,
                       "skill_id": null
                     }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
                   }
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           },
@@ -14701,7 +14787,9 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
-                    "not": false
+                    "min_stacks": 0,
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]
@@ -14782,33 +14870,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14826,12 +14887,40 @@
                       "skill_id": null,
                       "min_max": null
                     }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "Damage": {
+                      "skill_type": null,
+                      "skill_id": null,
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
+                    }
                   }
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           },
@@ -14844,7 +14933,9 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
-                    "not": false
+                    "min_stacks": 0,
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]
@@ -14925,15 +15016,6 @@
                 },
                 "ignore_stat_effects": [
                   {
-                    "Damage": {
-                      "skill_type": null,
-                      "skill_id": null,
-                      "damage_type": null,
-                      "min_max": null,
-                      "is_hit": null
-                    }
-                  },
-                  {
                     "StatusEscalation": {
                       "status_id": null,
                       "damage_type": null,
@@ -14952,13 +15034,12 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
+                    "Damage": {
                       "skill_type": null,
                       "skill_id": null,
-                      "min_max": null
+                      "damage_type": null,
+                      "min_max": null,
+                      "is_hit": null
                     }
                   },
                   {
@@ -14969,12 +15050,23 @@
                       "skill_type": null,
                       "skill_id": null
                     }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
+                    }
                   }
                 ],
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -15815,7 +15907,8 @@
                 "conditional_modifiers": [],
                 "independent_application": false,
                 "optional_application": false,
-                "description": null
+                "description": null,
+                "as_skill_type": null
               }
             ]
           }
@@ -16072,7 +16165,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -16106,7 +16201,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17165,7 +17262,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17192,7 +17291,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17223,7 +17324,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17250,7 +17353,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17338,7 +17443,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17368,7 +17475,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]
@@ -17402,7 +17511,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
                     }
                   }
                 ]
@@ -17432,7 +17543,9 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": true
+                      "min_stacks": 0,
+                      "not": true,
+                      "counting": false
                     }
                   }
                 ]

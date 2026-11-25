@@ -1018,6 +1018,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1365,9 +1366,12 @@
             },
             "ignore_stat_effects": [
               {
-                "CritDamage": {
-                  "skill_type": null,
-                  "skill_id": null
+                "Damage": {
+                  "skill_type": "Attack",
+                  "skill_id": null,
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": null
                 }
               },
               {
@@ -1377,12 +1381,9 @@
                 }
               },
               {
-                "Damage": {
-                  "skill_type": "Attack",
-                  "skill_id": null,
-                  "damage_type": "Physical",
-                  "min_max": null,
-                  "is_hit": null
+                "CritDamage": {
+                  "skill_type": null,
+                  "skill_id": null
                 }
               }
             ],
@@ -1590,6 +1591,7 @@
               "SkillTargetModifier": {
                 "skill_type": null,
                 "skill_id": "whirlwind",
+                "item_slot": null,
                 "range": null,
                 "shape": null,
                 "repeat": {
@@ -1845,20 +1847,17 @@
         "effects": [
           {
             "stat": {
-              "SuccessChance": {
-                "skill_type": "Spell",
-                "skill_id": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_id": "open_wound",
-                    "debuff": null
-                  }
-                }
+              "Damage": {
+                "skill_type": null,
+                "skill_id": "voodoo_doll",
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
               }
             },
             "modifier": "More",
             "scope": "Global",
-            "value": -1e+200
+            "value": -1e+300
           }
         ],
         "is_unique": true
@@ -1899,6 +1898,7 @@
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
+                "min_stacks": 0,
                 "not": false,
                 "counting": false
               }

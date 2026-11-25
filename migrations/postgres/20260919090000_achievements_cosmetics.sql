@@ -8,7 +8,7 @@ CREATE TABLE
         FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE
     );
 
-CREATE INDEX idx_user_achievements_data_version ON stashes (data_version);
+CREATE INDEX idx_user_achievements_data_version ON user_achievements (data_version);
 
 CREATE TABLE
     user_cosmetics (

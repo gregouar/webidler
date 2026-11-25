@@ -238,38 +238,31 @@ fn goal_progress(
         AchievementGoal::PassiveLevel {
             value,
             passive_id,
-            amount,
-        } => {
-            let required = u64::from(*amount);
-            (context
-                .ascension
-                .ascended_nodes
-                .iter()
-                .filter(|(id, level)| {
-                    **level >= *value && passive_id.is_none_or(|required| **id == required)
-                })
-                .count() as u64)
-                .min(required)
-        }
-        AchievementGoal::PassiveAllocated { amount, socket } => {
-            let required = u64::from(*amount);
-            (context
-                .purchased_nodes
-                .map(|purchased_nodes| {
-                    if *socket {
-                        purchased_nodes
-                            .iter()
-                            .filter(|passive_id| {
-                                context.ascension.socketed_nodes.contains_key(*passive_id)
-                            })
-                            .count()
-                    } else {
-                        purchased_nodes.len()
-                    }
-                })
-                .unwrap_or_default() as u64)
-                .min(required)
-        }
+            amount: _,
+        } => context
+            .ascension
+            .ascended_nodes
+            .iter()
+            .filter(|(id, level)| {
+                **level >= *value && passive_id.is_none_or(|required| **id == required)
+            })
+            .count() as u64,
+        AchievementGoal::PassiveAllocated { amount: _, socket } => context
+            .purchased_nodes
+            .map(|purchased_nodes| {
+                if *socket {
+                    purchased_nodes
+                        .iter()
+                        .filter(|passive_id| {
+                            context.ascension.socketed_nodes.contains_key(*passive_id)
+                        })
+                        .count()
+                } else {
+                    purchased_nodes.len()
+                }
+            })
+            .unwrap_or_default()
+            as u64,
         AchievementGoal::EquippedItem {
             item_id,
             item_slot,
@@ -278,7 +271,7 @@ fn goal_progress(
             item_rarity,
             item_category,
             in_passives_tree,
-            amount,
+            amount: _,
         } => {
             let matches = |item: &ItemSpecs| {
                 // let Some(item_base) = master_store
@@ -296,7 +289,6 @@ fn goal_progress(
                         .is_none_or(|id| item.modifiers.base_item_id == *id)
                     && item_category.is_none_or(|required| item.categories.contains(&required))
             };
-            let required = *amount as u64;
 
             let progress = if *in_passives_tree {
                 if item_slot.is_none() {
@@ -324,7 +316,7 @@ fn goal_progress(
                     .count()
             };
 
-            (progress as u64).min(required)
+            progress as u64
         }
         AchievementGoal::MonstersKilled {
             monster_rarity,
@@ -379,6 +371,7 @@ fn goal_progress(
                 .unwrap_or_default(),
         },
     }
+    .min(goal.required_amount())
 }
 
 fn sum_area_stat(

@@ -1012,22 +1012,12 @@
             },
             "ignore_stat_effects": [
               {
-                "StatusPower": {
+                "StatusEscalation": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "skill_id": null,
-                  "min_max": null
-                }
-              },
-              {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
+                  "skill_id": null
                 }
               },
               {
@@ -1040,12 +1030,22 @@
                 }
               },
               {
-                "StatusEscalation": {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
+                "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
                   "debuff": null,
                   "skill_type": null,
-                  "skill_id": null
+                  "skill_id": null,
+                  "min_max": null
                 }
               }
             ],
@@ -2007,7 +2007,7 @@
   "brain_jar": {
     "name": "Brain in a Jar",
     "icon": "items/focuses/brain_jar.webp",
-    "description": null,
+    "description": "The visiting beings have methods which make these extractions easy and almost normal.",
     "slot": "Shield",
     "extra_slots": [],
     "categories": [
@@ -2071,6 +2071,25 @@
             "value": [
               300.0,
               400.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_dX": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
             ]
           }
         ],

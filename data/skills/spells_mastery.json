@@ -1229,7 +1229,6 @@
               "skill_type": "Spell",
               "OnHit"     : {
                 "skill_id": "voodoo_doll",
-                "is_hurt" : true,
                 "conditions": [
                   { "HasStatus": {"damage_type": "Poison"} }
                 ]
