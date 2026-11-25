@@ -1182,6 +1182,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1281,6 +1282,7 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
+                    "min_stacks": 0,
                     "not": false,
                     "counting": false
                   }
@@ -1448,6 +1450,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1623,7 +1626,7 @@
   "silver_twilight_ring": {
     "name": "Silver Twilight Lodge Signet",
     "icon": "items/rings/silver_twilight_ring.webp",
-    "description": null,
+    "description": "That which we call substance and reality is shadow and illusion, and that which we call shadow and illusion is substance and reality.",
     "slot": "Ring",
     "extra_slots": [],
     "categories": [
@@ -1645,6 +1648,42 @@
         "is_unique": false
       },
       "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "madness",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
         "effects": [
           {
             "stat": {
@@ -1675,6 +1714,42 @@
             "modifier": "More",
             "scope": "Global",
             "value": 50.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "NotLowMana"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 300.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              400.0,
+              600.0
+            ]
           }
         ],
         "is_unique": true
