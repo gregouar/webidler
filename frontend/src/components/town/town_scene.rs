@@ -238,7 +238,7 @@ pub fn PlayerName() -> impl IntoView {
                     <TownAssignedPet button=PetButton::LevelUp flipped=true />
                 </div>
                 <div class="flex flex-col">
-                    <div class="flex">
+                    <div class="flex items-center justify-center gap-1 font-bold">
                         {move || {
                             town_context
                                 .character
@@ -262,32 +262,33 @@ pub fn PlayerName() -> impl IntoView {
                                     )
                                 })
                         }} <span class="font-bold font-display">{character_name}</span>
+                        <span class="hidden xl:block text-sm xl:text-base italic">
+                            {move || {
+                                town_context
+                                    .character
+                                    .read()
+                                    .cosmetics
+                                    .title
+                                    .as_ref()
+                                    .and_then(|id| {
+                                        let cosmetics = data_context.cosmetics_specs.read();
+                                        let shared::data::cosmetics::CosmeticType::Title(title) = cosmetics
+                                            .get(id)? else { return None };
+                                        Some(format!(" — {}", title))
+                                    })
+                            }}
+                        </span>
+                    </div>
+                    <div class="hidden xl:block text-sm text-zinc-300">
                         {move || {
                             (max_area_level() > 0)
                                 .then(|| {
                                     view! {
                                         <span class="text-shadow-md shadow-gray-950 text-amber-200 text-base xl:text-lg">
-                                            " — Power Level: "
+                                            "Power Level: "
                                             <span class="font-semibold">{max_area_level()}</span>
                                         </span>
                                     }
-                                })
-                        }}
-                    </div>
-                    <div class="hidden xl:block text-sm italic text-zinc-300">
-                        {move || {
-                            town_context
-                                .character
-                                .read()
-                                .cosmetics
-                                .title
-                                .as_ref()
-                                .and_then(|id| {
-                                    let cosmetics = data_context.cosmetics_specs.read();
-                                    let CosmeticType::Title(title) = cosmetics.get(id)? else {
-                                        return None
-                                    };
-                                    Some(title.clone())
                                 })
                         }}
                     </div>

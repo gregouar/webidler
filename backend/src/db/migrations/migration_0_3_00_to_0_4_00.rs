@@ -822,6 +822,7 @@ impl From<OldStatType> for StatType {
                 repeat,
             } => Self::SkillTargetModifier {
                 skill_filter,
+                item_slot: None,
                 range,
                 shape,
                 repeat,

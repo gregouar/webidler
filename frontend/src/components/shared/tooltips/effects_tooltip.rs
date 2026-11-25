@@ -1256,6 +1256,7 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
 
         StatType::SkillTargetModifier {
             skill_filter,
+            item_slot,
             range,
             shape,
             repeat,
@@ -1296,8 +1297,11 @@ pub fn format_flat_stat(stat: &StatType, value: Option<f64>) -> String {
                 .join(", ");
 
             format!(
-                "{} becomes {result_str}",
-                skill_filter_str(skill_filter, "", false),
+                "{}{} become {result_str}",
+                skill_filter_str(skill_filter, "", true),
+                item_slot
+                    .map(|item_slot| format!(" with {}", item_tooltip::item_slot_str(item_slot)))
+                    .unwrap_or("".to_string())
             )
         }
         StatType::SkillRepeat {

@@ -433,7 +433,7 @@ pub fn apply_effects_to_skill_specs<'a>(
                 .all(|ignore| !effect.stat.is_match(ignore))
     });
 
-    let mut repeat_modifier: ModifiableValue<f64> = 1.0.into();
+    let mut repeat_modifier: ModifiableValue<f64> = 100.0.into();
     for effect in effects.clone() {
         if let StatType::Speed(skill_filter) = &effect.stat
             && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
@@ -449,13 +449,26 @@ pub fn apply_effects_to_skill_specs<'a>(
 
         if let StatType::SkillTargetModifier {
             skill_filter,
+            item_slot,
             range,
             shape,
             repeat,
         } = &effect.stat
             && skill_filter.is_match_with_skill(skill_specs.skill_type, &skill_specs.skill_id)
         {
-            for target in skill_specs.targets.iter_mut() {
+            for target in skill_specs.targets.iter_mut().filter(|target| {
+                item_slot.is_none_or(|stat_item_slot| {
+                    target.effects.iter().any(|effect| {
+                        matches!(
+                            effect.effect_type,
+                            SkillEffectType::FlatDamage {
+                                item_slot: Some(item_slot),
+                                ..
+                            } if item_slot == stat_item_slot
+                        )
+                    })
+                })
+            }) {
                 if let Some(range) = range {
                     target.range = *range;
                 }
@@ -484,19 +497,17 @@ pub fn apply_effects_to_skill_specs<'a>(
         }
     }
 
-    if *repeat_modifier != 1.0 {
+    if *repeat_modifier != 100.0 {
         for repeat in skill_specs
             .targets
             .iter_mut()
             .map(|target| &mut target.repeat)
         {
-            repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(1);
-            repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(1);
+            repeat.value.min += (*repeat_modifier.base() as u8).saturating_sub(100);
+            repeat.value.max += (*repeat_modifier.base() as u8).saturating_sub(100);
 
-            repeat.value.min =
-                (repeat.value.min as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
-            repeat.value.max =
-                (repeat.value.max as f64 * *repeat_modifier / *repeat_modifier.base()) as u8;
+            repeat.value.min = (repeat.value.min as f64 * repeat_modifier.factor()).max(1.0) as u8;
+            repeat.value.max = (repeat.value.max as f64 * repeat_modifier.factor()).max(1.0) as u8;
         }
     }
 
@@ -507,6 +518,7 @@ pub fn apply_effects_to_skill_specs<'a>(
         for effect in effects.clone() {
             if let StatType::SkillTargetModifier {
                 skill_filter,
+                item_slot: None,
                 range,
                 shape,
                 repeat,

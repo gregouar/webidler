@@ -330,6 +330,9 @@ pub enum StatType {
     SkillTargetModifier {
         #[serde(flatten)]
         skill_filter: StatSkillFilter,
+        // TODO: Move to filter?
+        #[serde(default)]
+        item_slot: Option<ItemSlot>,
         #[serde(default)]
         range: Option<SkillRange>,
         #[serde(default)]

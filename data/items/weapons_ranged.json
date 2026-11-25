@@ -170,13 +170,12 @@
                 "skill_id": null,
                 "conditions": [
                   {
-                    "HasStatus": {
+                    "StatusStacks": {
                       "status_id": "bleed",
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": null,
-                      "not": false,
-                      "counting": false
+                      "min_stacks": 0
                     }
                   }
                 ]
@@ -200,6 +199,7 @@
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
+                "min_stacks": 0,
                 "not": false,
                 "counting": false
               }
@@ -317,40 +317,6 @@
           },
           "modifier": "Increased",
           "value": 35.0
-        }
-      },
-      {
-        "scope": "Global",
-        "stat_effect": {
-          "stat": {
-            "SkillConditionalModifier": {
-              "stat": {
-                "Damage": {
-                  "skill_type": "Attack",
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
-              },
-              "skill_type": null,
-              "skill_id": null,
-              "conditions": [
-                {
-                  "HasStatus": {
-                    "status_id": "bleed",
-                    "damage_type": null,
-                    "debuff": null,
-                    "skill_type": null,
-                    "not": false,
-                    "counting": false
-                  }
-                }
-              ]
-            }
-          },
-          "modifier": "More",
-          "value": 25.0
         }
       }
     ]
@@ -1988,7 +1954,7 @@
   "grenade_launcher": {
     "name": "Grenade Launcher",
     "icon": "items/weapons_ranged/grenade_launcher.webp",
-    "description": null,
+    "description": "Sometimes, force is the anwser.",
     "slot": "Weapon",
     "extra_slots": [
       "Shield"
@@ -2002,20 +1968,6 @@
     "affixes": {
       "unique_1": {
         "effects": [
-          {
-            "stat": {
-              "SkillTargetModifier": {
-                "skill_type": null,
-                "skill_id": "weapon_skill",
-                "range": null,
-                "shape": "Square4",
-                "repeat": null
-              }
-            },
-            "modifier": "Flat",
-            "scope": "Global",
-            "value": 1.0
-          },
           {
             "stat": {
               "Damage": {
@@ -2052,12 +2004,65 @@
           }
         ],
         "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "item_slot": "Weapon",
+                "range": null,
+                "shape": "Square4",
+                "repeat": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
+          },
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": -5.0
+          }
+        ],
+        "is_unique": true
       }
     },
     "triggers": [],
     "weapon_specs": {
       "range": "Distance",
-      "shape": "Horizontal2",
+      "shape": "Square4",
       "cooldown": 25.0,
       "damage": {
         "Physical": [
@@ -2075,8 +2080,75 @@
     "rune_specs": null,
     "map_specs": null,
     "ignore_quality": false,
-    "upgrade_levels": [],
-    "upgrade_effects": []
+    "upgrade_levels": [
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Physical",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Fire",
+              "min_max": "Min",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      },
+      {
+        "scope": "Local",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Fire",
+              "min_max": "Max",
+              "is_hit": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 4.0
+        }
+      }
+    ]
   },
   "weapon_ranged_10": {
     "name": "Ballista",
