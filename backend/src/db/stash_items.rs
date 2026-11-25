@@ -90,7 +90,7 @@ pub fn flatten_stats(item_base: &ItemBase, item_specs: &ItemSpecs) -> StashItemF
 
     StashItemFlattenStats {
         base_item_id: item_specs.modifiers.base_item_id.clone().into(),
-        item_name: format!("{} {}", item_specs.modifiers.name, item_base.name),
+        item_name: item_base.name.clone(),
         item_rarity: serde_plain::to_string(&item_specs.modifiers.rarity).unwrap_or("".into()),
         item_level: item_specs.required_level as i32,
         item_power_level: item_specs.modifiers.level as i32,

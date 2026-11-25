@@ -164,10 +164,7 @@ pub async fn read_market_items<'c>(
     let realm_id = realm.realm_id();
 
     let no_filter_by_name = filters.item_name.is_none();
-    let item_name = filters
-        .item_name
-        .map(|x| format!("%{}%", x.to_uppercase()))
-        .unwrap_or_default();
+    let item_name = filters.item_name.map(|x| x.to_string()).unwrap_or_default();
 
     let min_req_level = filters.min_req_level.map(|x| x as i32).unwrap_or(0);
     let max_req_level = filters.max_req_level.map(|x| x as i32).unwrap_or(i32::MAX);
@@ -334,7 +331,7 @@ pub async fn read_market_items<'c>(
                     AND NOT rejected
                 )
             )
-            AND ($5 OR UPPER(market.item_name) LIKE $6)
+            AND ($5 OR market.item_name = $6)
             AND (market.item_level >= $7)
             AND (market.item_level <= $61)
             AND (market.item_power_level >= $62)

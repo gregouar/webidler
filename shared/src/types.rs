@@ -4,6 +4,7 @@ use regex::Regex;
 
 lazy_static::lazy_static! {
     static ref ALPHANUMERIC_RE: Regex = Regex::new(r"^[a-zA-Z0-9_ ]+$").unwrap();
+    static ref ITEM_NAME_RE: Regex = Regex::new(r"^[a-zA-Z0-9_' -]+$").unwrap();
 }
 
 lazy_static::lazy_static! {
@@ -14,6 +15,16 @@ fn is_alphanumeric(s: &str) -> anyhow::Result<()> {
     if !ALPHANUMERIC_RE.is_match(s) {
         return Err(anyhow!(
             "Only alphanumeric characters and underscores are allowed."
+        ));
+    }
+
+    Ok(())
+}
+
+fn is_item_name(s: &str) -> anyhow::Result<()> {
+    if !ITEM_NAME_RE.is_match(s) {
+        return Err(anyhow!(
+            "Only alphanumeric characters, spaces, underscores, apostrophes, and hyphens are allowed."
         ));
     }
 
@@ -102,7 +113,7 @@ pub struct ItemPrice(f64);
 fn validate_item_name(s: &str) -> anyhow::Result<()> {
     is_not_empty(s)?;
     is_not_too_long(s, 100)?;
-    is_alphanumeric(s)?;
+    is_item_name(s)?;
 
     Ok(())
 }
@@ -110,7 +121,7 @@ fn validate_item_name(s: &str) -> anyhow::Result<()> {
 #[nutype(
     sanitize(trim),
     validate(with = validate_item_name, error = anyhow::Error),
-    derive(Deserialize, Serialize, Debug, PartialEq, Clone, Deref)
+    derive(Deserialize, Serialize, Debug, PartialEq, Eq, Hash, Clone, Deref)
 )]
 pub struct ItemName(String);
 

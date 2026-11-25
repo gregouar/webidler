@@ -21,9 +21,11 @@ use shared::{
 };
 
 use crate::components::{
+    data_context::DataContext,
     shared::{
         affix_filters::AffixFilters,
         inventory::loot_filter_category_to_str,
+        item_filters::item_name_options,
         stat_filters::{StatFilterSignals, StatFilters},
     },
     town::panels::market::item_rarity_str,
@@ -481,7 +483,6 @@ pub fn EditRule(
     }
 
     rule_field!(rule_name);
-    rule_field!(item_name);
     rule_field!(req_item_level);
     rule_field!(req_affix_level);
     rule_field!(item_level);
@@ -533,6 +534,20 @@ pub fn EditRule(
     });
 
     // Dropdowns
+    let data_context: DataContext = expect_context();
+
+    let item_name = RwSignal::new(None);
+    Effect::new(move |_| {
+        with_selected_rule(selected_rule, loot_filter, |rule| {
+            item_name.set(rule.item_name.clone())
+        });
+    });
+    Effect::new(move |_| {
+        update_selected_rule(selected_rule, loot_filter, |rule| {
+            rule.item_name = item_name.get()
+        });
+    });
+
     let rule_type = RwSignal::new(FilterRuleType::Pickup);
     Effect::new(move |_| {
         with_selected_rule(selected_rule, loot_filter, |rule| {
@@ -584,6 +599,13 @@ pub fn EditRule(
         )
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
+
+    Effect::new(move |_| {
+        let options = item_name_options(data_context, item_category.get(), item_rarity.get());
+        if !options.contains_key(&item_name.get()) {
+            item_name.set(None);
+        }
+    });
 
     let affix_filters: [(_, _); AFFIX_FILTERS_AMOUNT] = std::array::from_fn(|_| {
         (
@@ -640,21 +662,17 @@ pub fn EditRule(
             </div>
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
-                    <ValidatedInput
-                        id="item_name"
-                        label="Item Name:"
-                        input_type="text"
-                        placeholder="Enter item name"
-                        bind=item_name
-                    />
-
-                    <ValidatedInput
-                        id="item_level"
-                        label="Item Level:"
-                        input_type="number"
-                        placeholder="Enter item level"
-                        bind=item_level
-                    />
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Name:"</span>
+                        {move || {
+                            let options = item_name_options(
+                                data_context,
+                                item_category.get(),
+                                item_rarity.get(),
+                            );
+                            view! { <SearchableDropdownMenu options chosen_option=item_name /> }
+                        }}
+                    </div>
 
                     <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Category:"</span>
@@ -662,6 +680,11 @@ pub fn EditRule(
                             options=item_category_options
                             chosen_option=item_category
                         />
+                    </div>
+
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Rarity:"</span>
+                        <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
                     </div>
                 </div>
 
@@ -682,10 +705,14 @@ pub fn EditRule(
                         bind=req_affix_level
                     />
 
-                    <div class="flex items-center justify-between text-zinc-400 text-sm">
-                        <span>"Item Rarity:"</span>
-                        <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
-                    </div>
+                    <ValidatedInput
+                        id="item_level"
+                        label="Item Level:"
+                        input_type="number"
+                        placeholder="Enter item level"
+                        bind=item_level
+                    />
+
                 </div>
             </div>
 

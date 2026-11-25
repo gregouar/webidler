@@ -4,6 +4,7 @@ pub mod affix_filters;
 pub mod bag_grid;
 pub mod inventory;
 pub mod item_card;
+pub mod item_filters;
 pub mod leaderboard;
 pub mod loot_filter;
 pub mod news;

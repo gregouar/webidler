@@ -386,12 +386,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if item_name
         .as_ref()
-        .map(|item_name| {
-            !item_base
-                .name
-                .to_lowercase()
-                .contains(&item_name.to_lowercase())
-        })
+        .map(|item_name| item_base.name.as_str() != item_name.as_str())
         .unwrap_or_default()
     {
         return false;

@@ -21,9 +21,11 @@ use shared::{
 use crate::components::{
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
+    data_context::DataContext,
     shared::{
         affix_filters::AffixFilters,
         inventory::loot_filter_category_to_str,
+        item_filters::item_name_options,
         resources::{GemsCounter, GemsIcon, GoldIcon},
         stat_filters::{StatFilterSignals, StatFilters},
     },
@@ -210,7 +212,7 @@ impl From<MarketItem> for SelectedMarketItem {
 
 pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
     match item_rarity {
-        None => "Any",
+        None => "Any Rarity",
         Some(ItemRarity::Normal) => "Common",
         Some(ItemRarity::Magic) => "Magical",
         Some(ItemRarity::Rare) => "Rare",
@@ -1079,7 +1081,6 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         };
     }
 
-    rule_field!(item_name);
     rule_field!(min_req_level);
     rule_field!(max_req_level);
     rule_field!(min_power_level);
@@ -1098,6 +1099,16 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(item_block);
 
     // Dropdowns
+    let data_context: DataContext = expect_context();
+
+    let item_name = RwSignal::new(None);
+    Effect::new(move || item_name.set(filters.read().item_name.clone()));
+    Effect::new(move || {
+        let item_name = item_name.get();
+        if filters.read_untracked().item_name != item_name {
+            filters.write().item_name = item_name;
+        }
+    });
 
     let item_rarity = RwSignal::new(None);
     Effect::new(move || item_rarity.set(filters.read().item_rarity));
@@ -1128,6 +1139,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         )
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
+
+    Effect::new(move |_| {
+        let options = item_name_options(data_context, item_category.get(), item_rarity.get());
+        if !options.contains_key(&item_name.get()) {
+            item_name.set(None);
+        }
+    });
 
     let order_by = RwSignal::new(Default::default());
     Effect::new(move || order_by.set(filters.read().order_by));
@@ -1178,28 +1196,23 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
-                    <ValidatedInput
-                        id="item_name"
-                        label="Item Name:"
-                        input_type="text"
-                        placeholder="Item Name substring"
-                        bind=item_name
-                    />
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Name:"</span>
+                        {move || {
+                            let options = item_name_options(
+                                data_context,
+                                item_category.get(),
+                                item_rarity.get(),
+                            );
+                            view! { <SearchableDropdownMenu options chosen_option=item_name /> }
+                        }}
+                    </div>
 
-                    <div class="w-full flex gap-2">
-                        <ValidatedInput
-                            id="min_req_level"
-                            label="Min Required Level:"
-                            input_type="number"
-                            placeholder="Min Required Level"
-                            bind=min_req_level
-                        />
-                        <ValidatedInput
-                            id="max_req_level"
-                            label="Max Required Level:"
-                            input_type="number"
-                            placeholder="Max Required Level"
-                            bind=max_req_level
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Category:"</span>
+                        <SearchableDropdownMenu
+                            options=item_category_options
+                            chosen_option=item_category
                         />
                     </div>
 
@@ -1220,22 +1233,6 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <ValidatedInput
-                        id="price"
-                        label="Max Price:"
-                        input_type="number"
-                        placeholder="Maximum Price"
-                        bind=price
-                    />
-
-                    <div class="flex items-center justify-between text-zinc-400 text-sm">
-                        <span>"Item Category:"</span>
-                        <SearchableDropdownMenu
-                            options=item_category_options
-                            chosen_option=item_category
-                        />
-                    </div>
-
                     <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Rarity:"</span>
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
@@ -1244,6 +1241,31 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Order by:"</span>
                         <DropdownMenu options=order_by_options chosen_option=order_by />
+                    </div>
+
+                    <ValidatedInput
+                        id="price"
+                        label="Max Price:"
+                        input_type="number"
+                        placeholder="Maximum Price"
+                        bind=price
+                    />
+
+                    <div class="w-full flex gap-2">
+                        <ValidatedInput
+                            id="min_req_level"
+                            label="Min Required Level:"
+                            input_type="number"
+                            placeholder="Min Required Level"
+                            bind=min_req_level
+                        />
+                        <ValidatedInput
+                            id="max_req_level"
+                            label="Max Required Level:"
+                            input_type="number"
+                            placeholder="Max Required Level"
+                            bind=max_req_level
+                        />
                     </div>
                 </div>
             </div>

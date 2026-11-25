@@ -643,6 +643,6 @@ pub fn loot_filter_category_to_str(opt: Option<ItemCategory>) -> &'static str {
             Soul => "Soul",
             Remnant => "Remnant",
         },
-        None => "Any Item",
+        None => "Any Category",
     }
 }
