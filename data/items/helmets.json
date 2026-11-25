@@ -1373,9 +1373,9 @@
     "upgrade_effects": []
   },
   "gas_mask": {
-    "name": "Gas Mask",
+    "name": "Respirator",
     "icon": "items/helmets/gas_mask.webp",
-    "description": null,
+    "description": "Initially engineered to neutralize cheese fumes, it proved surprisingly effective against other airborne contaminants.",
     "slot": "Helmet",
     "extra_slots": [],
     "categories": [
@@ -1389,6 +1389,22 @@
         "effects": [
           {
             "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              200.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
               "DamageTaken": {
                 "skill_type": null,
                 "damage_type": "Poison"
@@ -1397,6 +1413,59 @@
             "modifier": "More",
             "scope": "Global",
             "value": -100.0
+          },
+          {
+            "stat": {
+              "StatusResistance": {
+                "status_id": "stinky",
+                "skill_type": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          },
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "cheese",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 10.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              20.0,
+              30.0
+            ]
           }
         ],
         "is_unique": true

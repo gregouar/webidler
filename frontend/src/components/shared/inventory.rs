@@ -512,7 +512,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
     let bag = inventory_bag_config(&inventory, sell_queue);
 
     view! {
-        <MenuCard class="h-full w-[70%]">
+        <MenuCard class="h-full w-[70%]" clip_content=false>
             <div class="px-4 relative z-10 flex items-center justify-between gap-2">
                 <div class="flex flex-row items-center gap-1 xl:gap-2">
                     <CardTitle>"Inventory"</CardTitle>
@@ -557,7 +557,7 @@ fn BagCard(inventory: InventoryConfig, open: RwSignal<bool>) -> impl IntoView {
                 </div>
             </div>
 
-            <CardInset class="relative min-h-0 flex-1">
+            <CardInset class="relative min-h-0 flex-1" composited_scroll=true>
                 <BagGrid config=bag.clone() compact=false />
             </CardInset>
 

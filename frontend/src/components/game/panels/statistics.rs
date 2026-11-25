@@ -421,8 +421,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     label="Movement Cooldown"
                                     value=move || {
                                         format!(
-                                            "{:.2}s",
-                                            game_context.player_specs.read().movement_cooldown.get(),
+                                            "{:.1}s",
+                                            game_context.player_specs.read().movement_cooldown.get()
+                                                * 0.1,
                                         )
                                     }
                                 />

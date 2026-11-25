@@ -60,7 +60,7 @@ pub fn MonstersGrid() -> impl IntoView {
                         all_monsters_dead.set(true);
                     }
                 },
-                if game_context.player_specs.read().movement_cooldown.get() < 2.0 {
+                if game_context.player_specs.read().movement_cooldown.get() < 20.0 {
                     std::time::Duration::from_millis(100)
                 } else {
                     std::time::Duration::from_secs(1)
@@ -117,7 +117,7 @@ pub fn MonstersGrid() -> impl IntoView {
             format!(
                 "flex-1 min-h-0
                 grid grid-rows-2 grid-cols-3 p-1 xl:p-2 gap-1 xl:gap-2
-                items-center 
+                items-center
                 will-change-transform-opacity transform-gpu
                 {}
                 ",
@@ -493,43 +493,40 @@ fn MonsterCard(
         <div
             class=move || {
                 format!(
-                    "grid {} h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate {}",
+                    "relative grid {} h-full rounded-md gap-1 xl:gap-2 p-1 xl:p-2 isolate",
                     match specs.character_specs.character_static.size {
                         CharacterSize::Huge => "grid-cols-5",
                         _ => "grid-cols-4",
                     },
-                    match settings.graphics_quality() {
-                        GraphicsQuality::High => {
-                            "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
-                        }
-                        GraphicsQuality::Medium => "border border-[#6c5734]/50",
-                        GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
-                    },
                 )
             }
-            style=move || {
-                let background_style = match settings.graphics_quality() {
-                    GraphicsQuality::High => {
-                        format!(
-                            "
-                            background-image: url('{}');
-                            ",
-                            img_asset("ui/dark_stone.webp"),
-                        )
-                    }
-                    GraphicsQuality::Medium => {
-                        format!(
-                            "
-                            background-image: url('{}');
-                            ",
-                            img_asset("ui/dark_stone.webp"),
-                        )
-                    }
-                    GraphicsQuality::Low => "".to_string(),
-                };
-                format!("contain: layout paint style; {background_style}")
-            }
+            style="contain: layout paint style;"
         >
+            <div
+                class=move || {
+                    format!(
+                        "pointer-events-none absolute inset-0 -z-10 rounded-md {}",
+                        match settings.graphics_quality() {
+                            GraphicsQuality::High => {
+                                "border border-[#6c5734]/45 shadow-[inset_2px_2px_1px_rgba(255,255,255,0.06),inset_-2px_-2px_1px_rgba(0,0,0,0.15)]"
+                            }
+                            GraphicsQuality::Medium => "border border-[#6c5734]/50",
+                            GraphicsQuality::Low => "border border-[#4f4532] bg-zinc-800",
+                        },
+                    )
+                }
+                style=move || {
+                    if settings.uses_textures() {
+                        format!(
+                            "background-image: url('{}'); contain: paint;",
+                            img_asset("ui/dark_stone.webp"),
+                        )
+                    } else {
+                        "contain: paint;".to_string()
+                    }
+                }
+                aria-hidden="true"
+            />
             <div
                 class=format!(
                     "relative flex flex-col gap-1 xl:gap-2 {} h-full min-h-0",

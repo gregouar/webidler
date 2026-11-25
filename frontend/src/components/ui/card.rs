@@ -270,17 +270,29 @@ pub fn CardInset(
     #[prop(optional)] class: Option<&'static str>,
     #[prop(default = true)] gap: bool,
     #[prop(default = true)] pad: bool,
+    #[prop(default = true)] scrollable: bool,
+    #[prop(default = false)] composited_scroll: bool,
     children: Children,
 ) -> impl IntoView {
     view! {
         <div class=move || {
             format!(
-                "flex flex-col overflow-y-auto overscroll-none
+                "flex flex-col
                 bg-neutral-900 shadow-[inset_0_0_32px_rgba(0,0,0,0.6)] ring-1 ring-zinc-950 
-                {} {} {}",
+                {} {} {} {} {}",
                 class.unwrap_or_default(),
                 if gap { "gap-1 xl:gap-2" } else { "" },
                 if pad { "p-1 xl:p-3" } else { "" },
+                if scrollable {
+                    "overflow-y-auto overscroll-none"
+                } else {
+                    "overflow-hidden"
+                },
+                if composited_scroll {
+                    "isolate transform-gpu [contain:paint] [will-change:scroll-position]"
+                } else {
+                    ""
+                },
             )
         }>{children()}</div>
     }

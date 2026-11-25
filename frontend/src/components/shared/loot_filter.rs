@@ -195,7 +195,7 @@ pub fn LootFilterPanel(
             {
                 let on_export = on_export.clone();
                 view! {
-                    <MenuCard class="w-full h-full">
+                    <MenuCard class="w-full h-full" clip_content=false>
                         <CardHeader title="Loot Filter" on_close=move || open.set(false)>
                             <div class="flex gap-4 mx-4">
                                 <MenuButton on:click=move |_| new_rule()>"New Rule"</MenuButton>
@@ -255,7 +255,7 @@ pub fn RulesList(
     selected_rule: RwSignal<Option<Uuid>>,
 ) -> impl IntoView {
     view! {
-        <CardInset>
+        <CardInset composited_scroll=true>
             <div class="gap-2 flex flex-col">
                 <p class="text-xs xl:text-sm font-medium text-zinc-400">
                     "Rules are evaluated in order, from top to bottom."
@@ -646,7 +646,7 @@ pub fn EditRule(
     });
 
     view! {
-        <CardInset>
+        <CardInset composited_scroll=true>
             <div class="flex justify-between items-center px-4 pb-4 border-b border-zinc-700">
                 <ValidatedInput
                     id="rule_name"

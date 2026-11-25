@@ -133,7 +133,7 @@ async fn control_entities(
     if !game_data.player_state.character_state.is_alive {
         game_data.area_threat.cooldown = Default::default();
         game_data.monster_wave_delay =
-            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get() * 0.1);
 
         if game_data.player_respawn_delay.is_zero() {
             respawn_player(game_data, master_store);
@@ -221,7 +221,7 @@ async fn control_entities(
         }
     } else {
         game_data.monster_wave_delay =
-            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get() * 0.1);
         monsters_controller::control_monsters(
             &master_store.statuses_store,
             events_queue,

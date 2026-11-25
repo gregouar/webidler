@@ -10,7 +10,7 @@ use crate::data::{
     skill::BaseSkillSpecs,
     skill_mastery::PlayerSkillMasteries,
     stat_effect::StatEffect,
-    values::{AtLeastOne, NonNegative},
+    values::{MovementCooldown, NonNegative},
 };
 
 pub use super::character::{CharacterSpecs, CharacterState};
@@ -31,7 +31,7 @@ pub struct PlayerBaseSpecs {
     pub experience_needed: NonNegative,
     pub max_level: u8,
 
-    pub movement_cooldown: AtLeastOne,
+    pub movement_cooldown: MovementCooldown,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,
 
@@ -44,7 +44,7 @@ pub struct PlayerSpecs {
 
     pub max_level: u8,
 
-    pub movement_cooldown: AtLeastOne,
+    pub movement_cooldown: MovementCooldown,
     pub gold_find: NonNegative,
     pub threat_gain: NonNegative,
 

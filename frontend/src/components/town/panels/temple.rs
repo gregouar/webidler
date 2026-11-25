@@ -49,7 +49,7 @@ pub fn TemplePanel(
 
     view! {
         <MenuPanel open=open>
-            <MenuCard class="h-full">
+            <MenuCard class="h-full" clip_content=false>
                 <CardHeader title="Temple" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {
@@ -75,7 +75,7 @@ pub fn TemplePanel(
                             }
                         })}
                 </CardHeader>
-                <CardInset>
+                <CardInset composited_scroll=true>
                     <BenedictionsList player_benedictions cost view_only />
                 </CardInset>
             </MenuCard>

@@ -42,7 +42,7 @@ body {
   --text-shadow-xl: 0 8px 16px rgb(0, 0, 0);
 
   --animate-monster-fade-in: monster-fade-in 1s ease-out both;
-  --animate-monster-fade-out: monster-fade-out 1s ease-in both;
+  --animate-monster-fade-out: monster-fade-out 0.7s ease-in both;
   --animate-monster-flee: monster-flee 1s ease-out both;
 
 
@@ -70,7 +70,7 @@ body {
     }
     to {
       opacity: 0;
-      transform: translateY(50%);
+      transform: translateY(30%);
     }
   }
 
@@ -189,6 +189,29 @@ body {
 
   /* Portraits */
   .champion-shimmer {
+    overflow: hidden;
+    pointer-events: none;
+    contain: paint;
+  }
+
+  .boss-shimmer {
+    overflow: hidden;
+    pointer-events: none;
+    contain: paint;
+  }
+
+  .champion-shimmer::before,
+  .boss-shimmer::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 500%;
+    transform: translate3d(20%, 0, 0);
+    will-change: transform;
+  }
+
+  .champion-shimmer::before {
     background: linear-gradient(
       130deg,
       rgba(255, 255, 255, 0) 40%,
@@ -196,13 +219,10 @@ body {
       rgba(59, 130, 246, 0.35) 60%,
       rgba(255, 255, 255, 0) 70%
     );
-    background-size: 500% 100%;
-    background-repeat: repeat;
     animation: shimmerMove 8s infinite linear;
-    pointer-events: none;
   }
 
-  .boss-shimmer {
+  .boss-shimmer::before {
     background: linear-gradient(
       130deg,
       rgba(255, 255, 255, 0) 40%,
@@ -210,18 +230,15 @@ body {
       rgba(139, 0, 0, 0.4) 60%,
       rgba(255, 255, 255, 0) 70%
     );
-    background-size: 500% 100%;
-    background-repeat: repeat;
     animation: shimmerMove 12s infinite linear;
-    pointer-events: none;
   }
 
   @keyframes shimmerMove {
-    0% {
-      background-position: -100% 0;
+    0%, 25.001%, 50.001%, 75.001% {
+      transform: translate3d(20%, 0, 0);
     }
-    100% {
-      background-position: 400% 0;
+    25%, 50%, 75%, 100% {
+      transform: translate3d(-80%, 0, 0);
     }
   }
 

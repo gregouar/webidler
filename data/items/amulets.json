@@ -637,6 +637,28 @@
             "modifier": "More",
             "scope": "Global",
             "value": 50.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
           }
         ],
         "is_unique": true
@@ -694,6 +716,15 @@
                 }
               },
               {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -701,15 +732,6 @@
                   "skill_type": null,
                   "skill_id": null,
                   "min_max": null
-                }
-              },
-              {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
                 }
               }
             ],
@@ -1061,6 +1083,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
+                      "min_stacks": 0,
                       "not": false,
                       "counting": true
                     }
@@ -1100,6 +1123,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Blessing",
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1138,6 +1162,7 @@
                       "damage_type": null,
                       "debuff": null,
                       "skill_type": "Curse",
+                      "min_stacks": 0,
                       "not": false,
                       "counting": false
                     }
@@ -1246,6 +1271,7 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": "Curse",
+                    "min_stacks": 0,
                     "not": false,
                     "counting": false
                   }

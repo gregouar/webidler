@@ -271,7 +271,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open>
-            <MenuCard class="h-full" gap=false>
+            <MenuCard class="h-full" gap=false clip_content=false>
                 <CardHeader title="Stash" on_close=move || open.set(false)>
                     <div class="flex h-full ml-2 xl:ml-4 gap-2 xl:gap-4 overflow-clip">
                         <TabButton
@@ -312,7 +312,11 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                     </div>
                 </CardHeader>
                 <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
-                    <CardInset class="min-w-0 min-h-0" pad=false>
+                    <CardInset
+                        class="min-w-0 min-h-0"
+                        pad=false
+                        scrollable=false
+                    >
                         <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                             <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
                                 "Inventory"
@@ -327,12 +331,16 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }}
                             </span>
                         </div>
-                        <div class="min-h-0 flex-1 overflow-y-auto pb-2">
+                        <div class="min-h-0 flex-1 overflow-y-auto overscroll-none pb-2 isolate transform-gpu [contain:paint] [will-change:scroll-position]">
                             <BagGrid config=inventory_bag.get_value() compact=true />
                         </div>
                     </CardInset>
                     <div class="flex min-w-0 min-h-0 flex-col gap-2">
-                        <CardInset class="min-h-0 flex-1" pad=false>
+                        <CardInset
+                            class="min-h-0 flex-1"
+                            pad=false
+                            scrollable=false
+                        >
                             <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                                 <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
                                     {move || match stash_type.get() {
@@ -348,7 +356,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }}
                                 </span>
                             </div>
-                            <div class="min-h-0 flex-1 overflow-y-auto pb-2">
+                            <div class="min-h-0 flex-1 overflow-y-auto overscroll-none pb-2 isolate transform-gpu [contain:paint] [will-change:scroll-position]">
                                 <Show when=move || stash_capacity.get() == 0>
                                     <p class="p-4 text-center text-zinc-400">
                                         "Buy this stash to store items."

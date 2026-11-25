@@ -151,6 +151,12 @@ bounded_value! {
 }
 
 bounded_value! {
+    pub struct MovementCooldown(f64);
+    min = 10.0;
+    max = 50.0;
+}
+
+bounded_value! {
     pub struct Cooldown(f64);
     min = 0.0;
     max = 1.0;

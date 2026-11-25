@@ -24,7 +24,7 @@ use shared::{
             EventTrigger, HitTrigger, TriggerEffect, TriggerEffectModifier,
             TriggerEffectModifierSource, TriggerSpecs, TriggerTarget,
         },
-        values::{AtLeastOne, Damage, Finite, NonNegative, Percent},
+        values::{AtLeastOne, Damage, Finite, MovementCooldown, NonNegative, Percent},
     },
 };
 use strum::IntoEnumIterator;
@@ -76,7 +76,7 @@ pub fn init_player_base_specs(
         skills: Default::default(),
         level: 1,
         experience_needed: 20.0.into(),
-        movement_cooldown: 3.0.into(),
+        movement_cooldown: 30.0.into(),
         gold_find: 100.0.into(),
         threat_gain: 100.0.into(),
         max_level: DEFAULT_MAX_LEVEL,
@@ -506,7 +506,7 @@ type StatusOnHitMap = HashMap<
 #[derive(Clone, Default)]
 struct ModifiablePlayerSpecs {
     max_player_level: ModifiableValue<f64>,
-    movement_cooldown: ModifiableValue<AtLeastOne>,
+    movement_cooldown: ModifiableValue<MovementCooldown>,
     gold_find: ModifiableValue<NonNegative>,
     threat_gain: ModifiableValue<NonNegative>,
 
