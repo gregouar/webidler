@@ -25,7 +25,7 @@ pub struct DataContext {
     pub skill_specs: RwSignal<HashMap<String, BaseSkillSpecs>>,
     pub skill_mastery_specs: RwSignal<IndexMap<String, SkillMasterySpecs>>,
     pub statuses_specs: RwSignal<HashMap<StatusId, StatusSpecs>>,
-    pub cosmetics_specs: RwSignal<HashMap<String, CosmeticType>>,
+    pub cosmetics_specs: RwSignal<IndexMap<String, CosmeticType>>,
     pub pets_specs: RwSignal<HashMap<String, PetSpecs>>,
     pub achievements: RwSignal<IndexMap<String, AchievementSpecs>>,
     pub passives_tree_specs: RwSignal<PassivesTreeSpecs>,

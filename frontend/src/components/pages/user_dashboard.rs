@@ -220,10 +220,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                                         cosmetic,
                                         CosmeticType::Portrait(specs)
                                         if !specs.locked
-                                            || user_unlocks
-                                                .read_untracked()
-                                                .cosmetics
-                                                .contains(*id)
+                                            || user_unlocks.read_untracked().cosmetics.contains(*id)
                                     )
                                 })
                                 .map(|(id, _)| id.clone())
@@ -825,7 +822,7 @@ pub fn CreateCharacterPanel(
 
     view! {
         <MenuPanel open=open w_full=false h_full=false class:items-center>
-            <MenuCard class="w-full max-w-lg xl:max-w-xl mx-auto">
+            <MenuCard class="w-xl xl:max-w-xl mx-auto">
                 <CardTitle>
                     {move || match selected_character_id.read().is_some() {
                         true => "Edit Character",
@@ -920,7 +917,7 @@ pub fn CreateCharacterPanel(
                                 view! {
                                     <div
                                         class="relative aspect-square rounded-lg
-                                        overflow-clip border-2 cursor-pointer 
+                                        overflow-clip border-2 cursor-pointer
                                         transition hover:scale-105 active:scale-95"
                                         style=format!(
                                             "background-image: url('{}');",

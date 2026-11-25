@@ -49,7 +49,7 @@ pub type MonstersSpecsStore = HashMap<String, BaseMonsterSpecs>;
 pub type LootTablesStore = HashMap<String, LootTable>;
 pub type AreaBlueprintStore = HashMap<String, AreaBlueprint>;
 pub type AchievementsStore = IndexMap<String, AchievementSpecs>;
-pub type CosmeticsStore = HashMap<String, CosmeticType>;
+pub type CosmeticsStore = IndexMap<String, CosmeticType>;
 pub type PetsStore = HashMap<String, PetSpecs>;
 
 #[derive(Debug, Clone)]

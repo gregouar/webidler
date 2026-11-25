@@ -179,7 +179,7 @@ pub struct GetMasterDataResponse {
     pub skills: HashMap<String, BaseSkillSpecs>,
     pub skill_masteries: IndexMap<String, SkillMasterySpecs>,
     pub statuses: HashMap<StatusId, StatusSpecs>,
-    pub cosmetics: HashMap<String, CosmeticType>,
+    pub cosmetics: IndexMap<String, CosmeticType>,
     pub pets: HashMap<String, PetSpecs>,
     pub achievements: IndexMap<String, AchievementSpecs>,
     pub passives_tree_specs: PassivesTreeSpecs,
