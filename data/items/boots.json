@@ -1557,8 +1557,16 @@
             "stat": "MovementSpeed",
             "modifier": "Increased",
             "scope": "Global",
-            "value": 40.0
-          },
+            "value": [
+              30.0,
+              40.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
           {
             "stat": {
               "StatConditionalModifier": {
@@ -1571,7 +1579,10 @@
             },
             "modifier": "Flat",
             "scope": "Global",
-            "value": -20.0
+            "value": [
+              -25.0,
+              -15.0
+            ]
           }
         ],
         "is_unique": true

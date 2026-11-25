@@ -1758,7 +1758,10 @@
             },
             "modifier": "More",
             "scope": "Global",
-            "value": 300.0
+            "value": [
+              200.0,
+              300.0
+            ]
           }
         ],
         "is_unique": true
