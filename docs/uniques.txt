@@ -14,9 +14,9 @@ Shields: 5 + 1
 Ranged: 5 + 2
 Wand: 7
 ----
-Total: 83 + 11
+Total: 83 + 12
 
-Runes: 9 + 1 + 4
+Runes: 9 + 5
 Maps: 9 + 3
 
 
