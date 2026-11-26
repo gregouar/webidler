@@ -318,9 +318,17 @@ fn MarketStashUpgradeButton() -> impl IntoView {
     };
     view! {
         <MenuButton on:click=do_upgrade disabled>
-            <span class="flex items-center gap-1 whitespace-nowrap">
-                {move || if stash.read().max_items == 0 { "Buy Stash" } else { "Upgrade Stash" }}
-                " (" {move || format_number(upgrade.get().1.get()).to_string()}<GoldIcon />")"
+            <span class="flex items-center gap-1 whitespace-nowrap text-zinc-400">
+                <span class="text-white font-bold">
+                    {move || {
+                        if stash.read().max_items == 0 { "Buy Stash" } else { "Upgrade Stash" }
+                    }}
+                </span>
+                " for "
+                <span class="text-amber-200 font-bold">
+                    {move || format_number(upgrade.get().1.get()).to_string()}
+                </span>
+                <GoldIcon />
             </span>
         </MenuButton>
     }

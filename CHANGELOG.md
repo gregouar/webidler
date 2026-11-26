@@ -14,7 +14,7 @@ Features:
 
 Content:
 
-- New Areas: final 2 Areas concluding the campaign.
+- New Areas: last two Areas concluding the campaign.
 - New Skill: Taunt, which partially refresh Enemy Skill Cooldowns at the cost of taking more damage.
 - New Skill: Spark, imbue yourself with electricity to repeatedly shock enemies.
 - New Skill: Summon Bees, and they'll scream NO! NOT THE BEES!

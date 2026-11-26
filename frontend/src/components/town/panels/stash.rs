@@ -302,21 +302,27 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             disabled=Signal::derive(move || busy.get() || loading.get())
                         />
                         <MenuButton on:click=do_upgrade disabled=upgrade_disabled>
-                            <span class="flex items-center gap-1">
-                                {move || {
-                                    if stash_capacity.get() == 0 { "Buy" } else { "Upgrade" }
-                                }} " ("{move || format_number(upgrade.get().1.get()).to_string()}
-                                <GoldIcon />")"
+                            <span class="flex items-center gap-1 text-zinc-400">
+                                <span class="text-white font-bold">
+                                    {move || {
+                                        if stash_capacity.get() == 0 {
+                                            "Buy Stash"
+                                        } else {
+                                            "Upgrade Stash"
+                                        }
+                                    }}
+                                </span>
+                                " for "
+                                <span class="text-amber-200 font-bold">
+                                    {move || format_number(upgrade.get().1.get()).to_string()}
+                                </span>
+                                <GoldIcon />
                             </span>
                         </MenuButton>
                     </div>
                 </CardHeader>
                 <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
-                    <CardInset
-                        class="min-w-0 min-h-0"
-                        pad=false
-                        scrollable=false
-                    >
+                    <CardInset class="min-w-0 min-h-0" pad=false scrollable=false>
                         <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                             <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
                                 "Inventory"
@@ -336,11 +342,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                         </div>
                     </CardInset>
                     <div class="flex min-w-0 min-h-0 flex-col gap-2">
-                        <CardInset
-                            class="min-h-0 flex-1"
-                            pad=false
-                            scrollable=false
-                        >
+                        <CardInset class="min-h-0 flex-1" pad=false scrollable=false>
                             <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                                 <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
                                     {move || match stash_type.get() {
