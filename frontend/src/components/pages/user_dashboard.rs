@@ -873,22 +873,22 @@ pub fn CreateCharacterPanel(
                 <CardInset class="flex-1 min-h-0">
                     <Show when=move || selected_character_id.read().is_some()>
                         <div class="grid grid-cols-1 gap-3 text-left xl:grid-cols-2 my-1 text-center">
-                            <label class="flex flex-col gap-1.5">
+                            <div class="flex flex-col gap-1.5">
                                 <span class="text-sm font-medium text-zinc-400">"Title"</span>
                                 <DropdownMenu
                                     options=title_options.get_value()
                                     chosen_option=selected_character_title
                                     missing_text="-"
                                 />
-                            </label>
-                            <label class="flex flex-col gap-1.5">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
                                 <span class="text-sm font-medium text-zinc-400">"Badge"</span>
                                 <DropdownMenu
                                     options=badge_options.get_value()
                                     chosen_option=selected_character_badge
                                     missing_text="-"
                                 />
-                            </label>
+                            </div>
                         </div>
                     </Show>
                     <span class="block text-sm font-medium text-zinc-400">"Choose a Portrait"</span>

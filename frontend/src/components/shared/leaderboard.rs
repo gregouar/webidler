@@ -235,7 +235,7 @@ fn LeaderboardContent(open: RwSignal<bool>) -> impl IntoView {
 fn LeaderboardLoadingColumn(area_name: &'static str, show_arrows: bool) -> impl IntoView {
     view! {
         <CardInset class="min-h-[18rem] lg:min-h-0" pad=false>
-            <div class="sticky top-0 z-10 px-3 pt-2">
+            <div class="sticky top-0 z-10 bg-neutral-900 px-3 pt-2 shadow-[inset_0_16px_20px_-16px_rgba(0,0,0,0.6),inset_16px_0_20px_-16px_rgba(0,0,0,0.6),inset_-16px_0_20px_-16px_rgba(0,0,0,0.6)]">
                 <CardInsetTitle>
                     <div class="flex w-full items-center justify-center gap-1 xl:gap-2">
                         <button
@@ -277,7 +277,7 @@ fn LeaderboardColumn(
 ) -> impl IntoView {
     view! {
         <CardInset class="min-h-[18rem] lg:min-h-0" pad=false>
-            <div class="sticky top-0 z-10 px-3 pt-2">
+            <div class="sticky top-0 z-10 bg-neutral-900 px-3 pt-2 shadow-[inset_0_16px_20px_-16px_rgba(0,0,0,0.6),inset_16px_0_20px_-16px_rgba(0,0,0,0.6),inset_-16px_0_20px_-16px_rgba(0,0,0,0.6)]">
                 <CardInsetTitle>
                     <div class="flex w-full items-center justify-center gap-1 xl:gap-2">
                         <button
@@ -316,7 +316,7 @@ fn SelectableLeaderboardColumn(
 
     view! {
         <CardInset class="min-h-[18rem] lg:min-h-0" pad=false>
-            <div class="sticky top-0 z-10 px-3 pt-2">
+            <div class="sticky top-0 z-10 bg-neutral-900 px-3 pt-2 shadow-[inset_0_16px_20px_-16px_rgba(0,0,0,0.6),inset_16px_0_20px_-16px_rgba(0,0,0,0.6),inset_-16px_0_20px_-16px_rgba(0,0,0,0.6)]">
                 <CardInsetTitle>
                     <div class="flex w-full items-center justify-center gap-1 xl:gap-2">
                         <button
