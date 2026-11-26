@@ -120,8 +120,8 @@ pub async fn read_full_market_stash_items<'c>(
     sqlx::query_as::<_, MarketEntry>(
         r#"
         SELECT 
-            market.market_id as "market_id!",
-            stash_items.stash_item_id as "stash_item_id!",
+            market.market_id,
+            stash_items.stash_item_id,
             owner.user_id AS owner_id, 
             owner.username AS owner_name,
             market.recipient_id, 
