@@ -22,7 +22,7 @@ use shared::{
     data::realms::Realm,
     messages::{
         client::{ClientConnectMessage, ClientMessage},
-        server::{ErrorMessage, ErrorType, ServerDownMessage},
+        server::{ConnectMessage, ErrorMessage, ErrorType, ServerDownMessage},
     },
 };
 
@@ -90,6 +90,16 @@ async fn handle_socket(socket: WebSocket, addr: SocketAddr, app_state: AppState)
                 return;
             }
         };
+
+        if pending_connect.as_ref().is_none_or(|connect| {
+            auth::authorize_access_jwt(&app_state.app_settings, &connect.jwt).is_none()
+        }) {
+            pending_connect = None;
+            if let Err(e) = conn.send(&ConnectMessage {}.into()).await {
+                tracing::error!(%addr, "failed to request refreshed connection: {e}");
+                return;
+            }
+        }
     }
 
     tracing::debug!("waiting for client to connect...");

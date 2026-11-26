@@ -50,23 +50,29 @@ pub fn GameInstance() -> impl IntoView {
     let conn = expect_context::<WebsocketContext>();
     let server_down_until = RwSignal::new(None::<DateTime<Utc>>);
 
-    Effect::new({
+    let connect = Callback::new({
         let conn = conn.clone();
+        move |()| {
+            let conn = conn.clone();
+            spawn_local(async move {
+                if let Ok(jwt) = backend.get_access_token().await {
+                    conn.send(
+                        &ClientConnectMessage {
+                            jwt,
+                            character_id: get_character_id_storage.get_untracked(),
+                            area_config: get_area_config_storage.get_untracked(),
+                        }
+                        .into(),
+                    );
+                }
+            });
+        }
+    });
+
+    Effect::new({
         move |_| {
             if conn.connected.get() {
-                let conn = conn.clone();
-                spawn_local(async move {
-                    if let Ok(jwt) = backend.get_access_token().await {
-                        conn.send(
-                            &ClientConnectMessage {
-                                jwt,
-                                character_id: get_character_id_storage.get_untracked(),
-                                area_config: get_area_config_storage.get_untracked(),
-                            }
-                            .into(),
-                        );
-                    }
-                });
+                connect.run(());
             }
         }
     });
@@ -75,7 +81,13 @@ pub fn GameInstance() -> impl IntoView {
         let conn = conn.clone();
         move |_| {
             if let Some(message) = conn.message.get() {
-                handle_message(&game_context, server_down_until, message);
+                if matches!(&message, ServerMessage::Connect(_)) {
+                    // The server can request a fresh access token after holding
+                    // this socket open for a scheduled start.
+                    connect.run(());
+                } else {
+                    handle_message(&game_context, server_down_until, message);
+                }
             }
         }
     });
