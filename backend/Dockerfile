@@ -1,4 +1,4 @@
-FROM rust:1.91.0-slim-bookworm AS base
+FROM rust:1.94.0-slim-bookworm AS base
 
 FROM base AS builder
 WORKDIR /app  
