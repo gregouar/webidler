@@ -1,23 +1,21 @@
 {
-  "name": "Crow's Nest",
+  "name"    : "Crow's Nest",
   "portrait": "monsters/island/pirate_lookout.webp",
   "max_life": 12,
-  "size": "Tall",
-  "armor": { "Physical": 50, "Storm": 50 },
-  "skills": [
+  "size"    : "Tall",
+  "armor"   : {"Physical": 50, "Storm": 50},
+  "skills"  : [
     {
-      "name": "Predict Weather",
-      "icon": "skills/chain_lightning.svg",
+      "name"      : "Predict Weather",
+      "icon"      : "skills/chain_lightning.svg",
       "skill_type": "Spell",
-      "cooldown": 4.0,
-      "targets": [
+      "cooldown"  : 40,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 30 ]
-                }
+                "damage": { "Storm": [0, 30] }
               }
             }
           ]
@@ -25,21 +23,16 @@
       ]
     },
     {
-      "name": "Lookout!",
-      "icon": "skills/crow_nest.svg",
-      "cooldown": 8.0,
+      "name"      : "Lookout!",
+      "icon"      : "skills/crow_nest.svg",
+      "cooldown"  : 80,
       "skill_type": "Blessing",
-      "targets": [
+      "targets"   : [
         {
           "target_type": "Friend",
-          "shape": "All",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "lookout",
-                "value": 200
-              }
-            }
+          "shape"      : "All",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "lookout", "value": 200} }
           ]
         }
       ]

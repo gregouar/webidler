@@ -1,8 +1,8 @@
-[
-  {
+{
+  "item_inc_restore_t1" : {
     "name"        : "Tonic",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 1,
@@ -17,10 +17,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t2" : {
     "name"        : "Soothing",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 2,
@@ -35,10 +35,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t3" : {
     "name"        : "Allaying",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 3,
@@ -53,10 +53,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t4" : {
     "name"        : "Beneficial",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 4,
@@ -71,10 +71,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t5" : {
     "name"        : "Analeptic",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 5,
@@ -89,10 +89,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t6" : {
     "name"        : "Therapeutic",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 6,
@@ -107,10 +107,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t7" : {
     "name"        : "Remedial",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 7,
@@ -125,10 +125,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t8" : {
     "name"        : "Curative",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 8,
@@ -143,10 +143,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t9" : {
     "name"        : "Restorative",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 9,
@@ -161,10 +161,10 @@
       }
     ]
   },
-  {
+  "item_inc_restore_t10": {
     "name"        : "Salutary",
     "family"      : "inc_restore",
-    "tags"        : ["Mana", "Life"],
+    "tags"        : ["Life"],
     "affix_type"  : "Prefix",
     "restrictions": ["Body"],
     "tier"        : 10,
@@ -179,4 +179,4 @@
       }
     ]
   }
-]
+}

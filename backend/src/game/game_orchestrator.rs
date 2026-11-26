@@ -41,7 +41,13 @@ pub async fn tick(
         return Ok(());
     }
 
+    game_data.tick_number = game_data.tick_number.wrapping_add(1);
+    events_queue.register_event(GameEvent::Tick {
+        tick_number: game_data.tick_number,
+    });
+
     update_threat(events_queue, game_data, elapsed_time);
+    update_entities(events_queue, game_data, master_store, elapsed_time).await;
 
     if game_data.area_state.read().rush_mode {
         game_data.player_stamina = game_data.player_stamina.saturating_sub(elapsed_time);
@@ -61,10 +67,10 @@ pub async fn tick(
         game_data.player_state.character_state.dirty_specs = false;
 
         *game_data.player_specs.mutate() = player_updater::update_player_specs(
+            &master_store.items_store,
             &master_store.skill_masteries_store,
             &master_store.statuses_store,
             game_data.player_base_specs.read(),
-            // game_data.player_specs.read(),
             &game_data.player_state,
             game_data.player_inventory.read(),
             &game_data.passives_tree_specs,
@@ -74,6 +80,21 @@ pub async fn tick(
         );
     }
 
+    control_entities(events_queue, game_data, master_store).await?;
+    update_monster_specs(game_data, master_store);
+    events_resolver::resolve_events(events_queue, game_data, master_store).await;
+    // Some effects need to chain before next tick (eg. retaliate bleed)
+    if !events_queue.is_empty() {
+        events_resolver::resolve_events(events_queue, game_data, master_store).await;
+    }
+    // Old position, but moved to avoid have dot do effect immediately when applied:
+    // update_entities(events_queue, game_data, master_store, elapsed_time).await;
+
+    game_data.game_stats.elapsed_time += elapsed_time;
+    Ok(())
+}
+
+fn update_monster_specs(game_data: &mut GameInstanceData, master_store: &MasterStore) {
     if game_data
         .monster_states
         .iter()
@@ -95,22 +116,13 @@ pub async fn tick(
                     base_specs,
                     monster_specs,
                     monster_state,
+                    &game_data.player_specs.read().character_specs.effects,
                     &game_data.area_threat,
                 );
+                game_data.monster_specs_to_patch.insert(i);
             }
         }
     }
-
-    control_entities(events_queue, game_data, master_store).await?;
-    events_resolver::resolve_events(events_queue, game_data, master_store).await;
-    // Some effects need to chain before next tick (eg. retaliate bleed)
-    if !events_queue.is_empty() {
-        events_resolver::resolve_events(events_queue, game_data, master_store).await;
-    }
-    update_entities(events_queue, game_data, master_store, elapsed_time).await;
-
-    game_data.game_stats.elapsed_time += elapsed_time;
-    Ok(())
 }
 
 async fn control_entities(
@@ -121,7 +133,7 @@ async fn control_entities(
     if !game_data.player_state.character_state.is_alive {
         game_data.area_threat.cooldown = Default::default();
         game_data.monster_wave_delay =
-            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get() * 0.1);
 
         if game_data.player_respawn_delay.is_zero() {
             respawn_player(game_data, master_store);
@@ -209,7 +221,7 @@ async fn control_entities(
         }
     } else {
         game_data.monster_wave_delay =
-            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get());
+            Duration::from_secs_f64(game_data.player_specs.read().movement_cooldown.get() * 0.1);
         monsters_controller::control_monsters(
             &master_store.statuses_store,
             events_queue,
@@ -281,15 +293,16 @@ async fn update_entities(
 }
 
 fn respawn_player(game_data: &mut GameInstanceData, master_store: &MasterStore) {
+    game_data.area_state.mutate().incense_lit = false;
     game_data.monster_base_specs.mutate().clear();
     game_data.monster_specs.clear();
     game_data.monster_states.clear();
 
     *game_data.player_specs.mutate() = player_updater::update_player_specs(
+        &master_store.items_store,
         &master_store.skill_masteries_store,
         &master_store.statuses_store,
         game_data.player_base_specs.read(),
-        // game_data.player_specs.read(),
         &game_data.player_state,
         game_data.player_inventory.read(),
         &game_data.passives_tree_specs,

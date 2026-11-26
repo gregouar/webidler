@@ -10,23 +10,27 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 30.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -47,23 +51,27 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 60.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -84,66 +92,82 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 60.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "Mana",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          5.0,
-          10.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              5.0,
+              10.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -154,14 +178,14 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": "Fire",
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "baguette_fromage",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Any",
@@ -191,7 +215,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -249,23 +274,27 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 90.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 90.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -286,23 +315,27 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 120.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 120.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -323,98 +356,123 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 120.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 120.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Storm",
-            "min_max": null,
-            "is_hit": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Spell",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          12.0,
-          16.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "SkillRepeat": {
-            "skill_type": null,
-            "skill_id": "magic_missile"
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              12.0,
+              16.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SkillRepeat": {
+                "skill_type": null,
+                "skill_id": "magic_missile",
+                "apply_triggers": false
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -504,23 +562,27 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 150.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 150.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -541,68 +603,10 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 150.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          150.0,
-          250.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Spell",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          25.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": "Spell",
@@ -612,20 +616,16 @@
                 "is_hit": null
               }
             },
-            "conditions": [
-              "MaximumMana"
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": 150.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": -300.0,
-        "ignore_quality": true
+        ],
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+      "unique_1": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": "Spell",
@@ -635,25 +635,115 @@
                 "is_hit": null
               }
             },
-            "conditions": [
-              "LowMana"
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              150.0,
+              250.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 300.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": "Mana",
-        "modifier": "More",
-        "scope": "Global",
-        "value": -300.0,
-        "ignore_quality": true
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              20.0,
+              25.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Spell",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "MaximumMana"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": -300.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Spell",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowMana"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 300.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "More",
+            "scope": "Global",
+            "value": -300.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -697,53 +787,65 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 150.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 150.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              200.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -787,23 +889,27 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 180.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 180.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -824,78 +930,94 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 180.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 180.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          160.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              160.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          150.0,
-          200.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "burning_ray",
-            "range": null,
-            "shape": null,
-            "repeat": {
-              "min_value": 3,
-              "max_value": 3,
-              "target": "Any"
-            }
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              150.0,
+              200.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "burning_ray",
+                "range": null,
+                "shape": null,
+                "repeat": {
+                  "min_value": 3,
+                  "max_value": 3,
+                  "target": "Any"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -954,23 +1076,27 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 210.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 210.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -991,90 +1117,110 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 210.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 210.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          250.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              250.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          250.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": "curse_putridity_hit",
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              250.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "poison_cloud_vulnerability",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": "curse_putridity_hit",
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "poison_cloud_vulnerability",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1148,23 +1294,27 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 240.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 240.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1187,141 +1337,181 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 240.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 240.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          400.0,
-          600.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Description": "Use both Hands"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SkillLevel": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              400.0,
+              600.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 8.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "meditate_damage",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Spell",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Blessing",
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Description": "Use both Hands"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Restore": {
-            "restore_type": "Mana",
-            "skill_type": null,
-            "skill_id": null,
-            "modifier_description": "Flat"
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "SkillLevel": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 6.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": "Mana",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 200.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "ManaCost": {
-            "skill_type": null,
-            "skill_id": null
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "meditate_damage",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 70.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Blessing",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Mana",
+                "skill_type": null,
+                "skill_id": null,
+                "modifier_description": "Flat"
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_8": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 200.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_9": {
+        "effects": [
+          {
+            "stat": {
+              "ManaCost": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1359,7 +1549,7 @@
             }
           },
           "modifier": "Flat",
-          "value": 2.0
+          "value": 1.0
         }
       }
     ]
@@ -1375,23 +1565,27 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 270.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 270.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1412,23 +1606,27 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_spell_damage": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 300.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 300.0,
-        "ignore_quality": false
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,

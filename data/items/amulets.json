@@ -11,15 +11,19 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 20.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -41,15 +45,19 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 40.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -71,126 +79,158 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 40.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          80.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": "Fire",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          80.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": "burn",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusStacks": {
-            "status_id": "burn",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 25.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SuccessChance": {
-            "skill_type": null,
-            "skill_id": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "debuff": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
               }
-            }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              40.0,
+              80.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          5.0,
-          10.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Fire",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              40.0,
+              80.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          -20.0,
-          -10.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "burn",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "burn",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 25.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": null,
+                "skill_id": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "burn",
+                    "debuff": null
+                  }
+                }
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              5.0,
+              10.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              -20.0,
+              -10.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -263,15 +303,19 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 60.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -293,72 +337,92 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 60.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": false
       },
-      {
-        "stat": {
-          "CritDamage": {
-            "skill_type": null,
-            "skill_id": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 5.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          50.0,
-          150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Storm",
-            "min_max": null,
-            "is_hit": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              50.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          80.0,
-          125.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Storm",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              80.0,
+              125.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -436,15 +500,19 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 80.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 80.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -466,67 +534,136 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 80.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "StatusStacks": {
-            "status_id": "bleed",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 80.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "bleed",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "bleed",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "bleed",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
+          },
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "bleed",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 50.0
+          },
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -536,13 +673,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "barbed_collar",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -579,6 +716,15 @@
                 }
               },
               {
+                "Damage": {
+                  "skill_type": null,
+                  "skill_id": null,
+                  "damage_type": null,
+                  "min_max": null,
+                  "is_hit": null
+                }
+              },
+              {
                 "StatusPower": {
                   "status_id": null,
                   "damage_type": null,
@@ -587,21 +733,13 @@
                   "skill_id": null,
                   "min_max": null
                 }
-              },
-              {
-                "Damage": {
-                  "skill_type": null,
-                  "skill_id": null,
-                  "damage_type": null,
-                  "min_max": null,
-                  "is_hit": null
-                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -675,15 +813,19 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -705,73 +847,93 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": true
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": -1e300,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": "poison",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": true
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": -1e+300
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": "Mana",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          15.0,
-          20.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusEscalation": {
+                "status_id": "poison",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 30.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              15.0,
+              20.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -832,15 +994,19 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 120.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 120.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -862,143 +1028,173 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 120.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 120.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+      "unique_2": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
+              "StatusDuration": {
+                "status_id": null,
                 "damage_type": null,
-                "min_max": null,
-                "is_hit": null
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null
               }
             },
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": "Curse",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": "Blessing",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": -100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SkillConditionalModifier": {
-            "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": "Curse",
-                  "not": false
-                }
-              }
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
             ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          150.0,
-          200.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          150.0,
-          200.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": "Curse",
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": true
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": "Blessing",
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": -100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": "Curse",
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              150.0,
+              200.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              150.0,
+              200.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1036,12 +1232,12 @@
               },
               "conditions": [
                 {
-                  "HasStatus": {
+                  "StatusStacks": {
                     "status_id": null,
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": "Curse",
-                    "not": false
+                    "min_stacks": 0
                   }
                 }
               ],
@@ -1075,7 +1271,9 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": "Curse",
-                    "not": false
+                    "min_stacks": 0,
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]
@@ -1099,15 +1297,19 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 140.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 140.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1129,87 +1331,111 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 140.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "ManaCost": {
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 140.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
+        ],
+        "is_unique": false
       },
-      {
-        "stat": {
-          "SkillLevel": {
-            "skill_type": null,
-            "skill_id": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": "ManaRegen",
-            "conditions": [
-              "LowMana"
-            ],
-            "conditions_duration": 0
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+      "unique_2": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
+              "ManaCost": {
                 "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
+                "skill_id": null
               }
             },
-            "conditions": [
-              "MaximumLife"
-            ],
-            "conditions_duration": 20
+            "modifier": "More",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          250.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "SkillLevel": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": "ManaRegen",
+                "conditions": [
+                  "LowMana"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "MaximumLife"
+                ],
+                "conditions_duration": 20
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              250.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1276,15 +1502,19 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 160.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 160.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1306,89 +1536,113 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 160.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "StatusFaster": {
-            "status_id": null,
-            "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 160.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": null,
-            "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": false,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": -50.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": "Any",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          300.0,
-          400.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          400.0,
-          600.0
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "StatusFaster": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
         ],
-        "ignore_quality": false
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusEscalation": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": false,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": -50.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": "Any",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              300.0,
+              400.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              400.0,
+              600.0
+            ]
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1439,15 +1693,19 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 180.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 180.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1456,6 +1714,181 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "sheriff_star": {
+    "name": "Sheriff Star",
+    "icon": "items/amulets/sheriff_star.webp",
+    "description": "Look at me, I'm the Law now!",
+    "slot": "Amulet",
+    "extra_slots": [],
+    "categories": [
+      "Jewelry",
+      "Amulet"
+    ],
+    "min_area_level": 500,
+    "rarity": "Unique",
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 180.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "SkillLevel": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 6.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": null
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              300.0,
+              400.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "ThreatGain",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              250.0,
+              500.0
+            ]
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [
+      {
+        "OnThreatIncreased": null,
+        "description": null,
+        "trigger_id": "sheriff_star",
+        "target": "Enemy",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Any",
+        "skill_shape": "All",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "wanted",
+              "value": 2000.0,
+              "value_factor": 1.0,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": 10,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "GoldFind",
+          "modifier": "More",
+          "value": 20.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "SkillLevel": {
+              "skill_type": null,
+              "skill_id": null
+            }
+          },
+          "modifier": "Flat",
+          "value": 1.0
+        }
+      }
+    ]
   },
   "amulet_10": {
     "name": "Royal Parure",
@@ -1469,15 +1902,19 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": 200.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_gold_find": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": 200.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,

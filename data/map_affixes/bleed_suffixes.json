@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_extra_bleed_damage_t1": {
     "name"        : "of Lesion",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -11,21 +11,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 40
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 20},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 4}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  4}
     ]
   },
-  {
+  "map_extra_bleed_damage_t2": {
     "name"        : "of Laceration",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -37,21 +31,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 80
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 40},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 8}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  8}
     ]
   },
-  {
+  "map_extra_bleed_damage_t3": {
     "name"        : "of Wounding",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -63,21 +51,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 120
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 60},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 12}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value": 12}
     ]
   },
-  {
+  "map_extra_bleed_damage_t4": {
     "name"        : "of Hemorrhage",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -89,21 +71,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 160
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 80},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 16}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value": 16}
     ]
   },
-  {
+  "map_extra_bleed_damage_t5": {
     "name"        : "of Gushing",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -115,21 +91,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 200
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 100},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 20}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  20}
     ]
   },
-  {
+  "map_extra_bleed_damage_t6": {
     "name"        : "of Slicing",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -141,21 +111,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 240
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 120},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 24}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  24}
     ]
   },
-  {
+  "map_extra_bleed_damage_t7": {
     "name"        : "of Severing",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -167,21 +131,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 280
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 140},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 28}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  28}
     ]
   },
-  {
+  "map_extra_bleed_damage_t8": {
     "name"        : "of Evisceration",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -193,21 +151,15 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 320
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 160},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 32}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  32}
     ]
   },
-  {
+  "map_extra_bleed_damage_t9": {
     "name"        : "of Exsanguination",
     "family"      : "extra_bleed_damage",
     "tags"        : ["Physical"],
@@ -219,18 +171,12 @@
     "effects"     : [
       {
         "scope"   : "Local",
-        "stat"    : {
-          "StatConverter": {
-            "source"  : {"DamageOverTime": {}},
-            "stat"    : { "StatusPower": {"status_id": "bleed"} },
-            "is_extra": true
-          }
-        },
+        "stat"    : { "StatusOnHit": {"status_id": "bleed"} },
         "modifier": "Flat",
         "value"   : 400
       },
       {"scope": "Global", "stat": "ItemRarity", "modifier": "Increased", "value": 200},
-      {"scope": "Global", "stat": "ItemLevel", "modifier": "Flat", "value": 40}
+      {"scope": "Global", "stat": "ItemLevel",  "modifier": "Flat",      "value":  40}
     ]
   }
-]
+}

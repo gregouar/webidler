@@ -32,7 +32,7 @@ pub fn compute_stats_effects_damage_value(
             } if skill_filter.skill_id.is_none()
                 && min_max.is_none()
                 && skill_filter.is_match_with_skill(skill_type, &String::new())
-                && compare_options(effect_damage_type, &Some(damage_type))
+                && compare_options(effect_damage_type, &Some(damage_type.into()))
                 && compare_options(effect_is_hit, &Some(is_hit)) =>
             {
                 factor.apply_effect(&effect);
@@ -322,7 +322,7 @@ pub fn compute_stats_effects_status_value(
         } = &effect.stat
             && compare_options(is_hit, &Some(false))
             && status_damage_type.is_some()
-            && compare_options(&status_damage_type, damage_type)
+            && compare_options(&status_damage_type.map(Into::into), damage_type)
             && skill_filter.is_match_with_skill(skill_type, skill_id)
         {
             factor.apply_effect(&effect);

@@ -8,6 +8,7 @@ pub fn MenuListRow(
     #[prop(optional, into)] state_class: Option<Signal<String>>,
     #[prop(optional, into)] selected: Option<Signal<bool>>,
     #[prop(optional, into)] on_click: Option<Callback<()>>,
+    #[prop(optional)] title: Option<&'static str>,
     children: Children,
 ) -> impl IntoView {
     let settings: SettingsContext = expect_context();
@@ -16,6 +17,7 @@ pub fn MenuListRow(
 
     view! {
         <div
+            title=title
             class=move || {
                 let quality = settings.graphics_quality();
                 format!(
@@ -87,7 +89,7 @@ pub fn MenuListRow(
             <Show when=move || settings.uses_heavy_effects()>
                 <div class="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[#edd39a]/40 to-transparent"></div>
             </Show>
-            <div class="relative w-full">{children()}</div>
+            <div class="relative h-full w-full">{children()}</div>
         </div>
     }
 }

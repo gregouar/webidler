@@ -7,14 +7,8 @@ use shared::{
     computations,
     data::{
         item::{ItemCategory, ItemRarity},
-        market::{MarketFilters, MarketItem, MarketOrderBy, MarketStatFilter},
-        modifier::Modifier,
-        skill::{DamageType, RestoreType, SkillType},
+        market::{MarketAffixFilter, MarketFilters, MarketItem, MarketOrderBy, MarketStatFilter},
         stash::{Stash, StashType},
-        stat_effect::{
-            ArmorStatType, StatSkillEffectType, StatSkillFilter, StatStatusFilter, StatType,
-            StatusDamageType,
-        },
     },
     http::client::{
         BrowseMarketItemsRequest, BuyMarketItemRequest, EditMarketItemRequest,
@@ -27,10 +21,13 @@ use shared::{
 use crate::components::{
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
+    data_context::DataContext,
     shared::{
+        affix_filters::AffixFilters,
         inventory::loot_filter_category_to_str,
+        item_filters::item_name_options,
         resources::{GemsCounter, GemsIcon, GoldIcon},
-        tooltips::effects_tooltip::{format_flat_stat, format_multiplier_stat_name},
+        stat_filters::{StatFilterSignals, StatFilters},
     },
     town::{
         TownContext,
@@ -43,13 +40,11 @@ use crate::components::{
         Separator,
         buttons::{MenuButton, MenuButtonRed, TabButton},
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
-        checkbox::Checkbox,
         dropdown::{DropdownMenu, SearchableDropdownMenu},
-        input::{Input, ValidatedInput},
+        input::ValidatedInput,
         menu_panel::MenuPanel,
         number::{format_datetime, format_number},
         toast::*,
-        tooltip::{StaticTooltip, StaticTooltipPosition},
     },
 };
 
@@ -217,11 +212,11 @@ impl From<MarketItem> for SelectedMarketItem {
 
 pub fn item_rarity_str(item_rarity: Option<ItemRarity>) -> &'static str {
     match item_rarity {
-        None => "Any",
+        None => "Any Rarity",
         Some(ItemRarity::Normal) => "Common",
         Some(ItemRarity::Magic) => "Magical",
         Some(ItemRarity::Rare) => "Rare",
-        Some(ItemRarity::Masterwork) => "Masterwork",
+        Some(ItemRarity::Masterwork) => "Soulforged",
         Some(ItemRarity::Unique) => "Unique",
     }
 }
@@ -239,7 +234,7 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
         move |_| {
             let stash_id = stash.read_untracked().stash_id;
             let amount =
-                ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default();
+                ItemPrice::try_new(stash.read_untracked().resource_gems.get()).unwrap_or_default();
             spawn_local({
                 async move {
                     match backend
@@ -268,14 +263,14 @@ pub fn RevenueGems(stash: RwSignal<Stash>) -> impl IntoView {
         }
     };
 
-    let disabled = Signal::derive(move || value.get() == 0.0);
+    let disabled = Signal::derive(move || value.get().get() == 0.0);
 
     view! {
         <div class="flex gap-2 items-center">
             <span class="hidden xl:inline text-zinc-400 text-xs xl:text-base font-medium">
                 "Revenue:"
             </span>
-            <GemsCounter value w_full=true />
+            <GemsCounter value=move || value.get().get() w_full=true />
             <MenuButton on:click=do_take disabled>
                 "Take"
             </MenuButton>
@@ -291,8 +286,9 @@ fn MarketStashUpgradeButton() -> impl IntoView {
     let stash = town.market_stash;
     let busy = RwSignal::new(false);
     let upgrade = Memo::new(move |_| computations::stash_upgrade(&stash.get()));
-    let disabled =
-        Signal::derive(move || busy.get() || upgrade.get().1 > town.character.read().resource_gold);
+    let disabled = Signal::derive(move || {
+        busy.get() || upgrade.get().1.get() > town.character.read().resource_gold.get()
+    });
     let do_upgrade = move |_| {
         if disabled.get_untracked() {
             return;
@@ -322,9 +318,17 @@ fn MarketStashUpgradeButton() -> impl IntoView {
     };
     view! {
         <MenuButton on:click=do_upgrade disabled>
-            <span class="flex items-center gap-1 whitespace-nowrap">
-                {move || if stash.read().max_items == 0 { "Buy Stash" } else { "Upgrade Stash" }}
-                " (" {move || format_number(upgrade.get().1).to_string()}<GoldIcon />")"
+            <span class="flex items-center gap-1 whitespace-nowrap text-zinc-400">
+                <span class="text-white font-bold">
+                    {move || {
+                        if stash.read().max_items == 0 { "Buy Stash" } else { "Upgrade Stash" }
+                    }}
+                </span>
+                " for "
+                <span class="text-amber-200 font-bold">
+                    {move || format_number(upgrade.get().1.get()).to_string()}
+                </span>
+                <GoldIcon />
             </span>
         </MenuButton>
     }
@@ -508,7 +512,7 @@ pub fn BuyDetails(selected_item: RwSignal<SelectedItem>) -> impl IntoView {
             !own_item()
                 && selected_item.with(|selected_item| match selected_item {
                     SelectedItem::InMarket(selected_item) => {
-                        selected_item.price > town_context.character.read().resource_gems
+                        selected_item.price > town_context.character.read().resource_gems.get()
                     }
                     _ => true,
                 })
@@ -1085,7 +1089,6 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         };
     }
 
-    rule_field!(item_name);
     rule_field!(min_req_level);
     rule_field!(max_req_level);
     rule_field!(min_power_level);
@@ -1104,6 +1107,16 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
     rule_field!(item_block);
 
     // Dropdowns
+    let data_context: DataContext = expect_context();
+
+    let item_name = RwSignal::new(None);
+    Effect::new(move || item_name.set(filters.read().item_name.clone()));
+    Effect::new(move || {
+        let item_name = item_name.get();
+        if filters.read_untracked().item_name != item_name {
+            filters.write().item_name = item_name;
+        }
+    });
 
     let item_rarity = RwSignal::new(None);
     Effect::new(move || item_rarity.set(filters.read().item_rarity));
@@ -1134,6 +1147,13 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         )
         .map(|category| (category, loot_filter_category_to_str(category).into()))
         .collect();
+
+    Effect::new(move |_| {
+        let options = item_name_options(data_context, item_category.get(), item_rarity.get());
+        if !options.contains_key(&item_name.get()) {
+            item_name.set(None);
+        }
+    });
 
     let order_by = RwSignal::new(Default::default());
     Effect::new(move || order_by.set(filters.read().order_by));
@@ -1174,6 +1194,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     let new_filters = MarketFilters {
                         max_req_level: Some(town_context.character.read_untracked().max_area_level),
                         stat_filters: filters.read_untracked().stat_filters.clone(),
+                        affix_filters: filters.read_untracked().affix_filters.clone(),
                         ..Default::default()
                     };
                     *filters.write() = new_filters;
@@ -1183,28 +1204,23 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 p-4 border-b border-zinc-700">
                 <div class="flex flex-col gap-4">
-                    <ValidatedInput
-                        id="item_name"
-                        label="Item Name:"
-                        input_type="text"
-                        placeholder="Item Name substring"
-                        bind=item_name
-                    />
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Name:"</span>
+                        {move || {
+                            let options = item_name_options(
+                                data_context,
+                                item_category.get(),
+                                item_rarity.get(),
+                            );
+                            view! { <SearchableDropdownMenu options chosen_option=item_name /> }
+                        }}
+                    </div>
 
-                    <div class="w-full flex gap-2">
-                        <ValidatedInput
-                            id="min_req_level"
-                            label="Min Required Level:"
-                            input_type="number"
-                            placeholder="Min Required Level"
-                            bind=min_req_level
-                        />
-                        <ValidatedInput
-                            id="max_req_level"
-                            label="Max Required Level:"
-                            input_type="number"
-                            placeholder="Max Required Level"
-                            bind=max_req_level
+                    <div class="flex items-center justify-between text-zinc-400 text-sm">
+                        <span>"Item Category:"</span>
+                        <SearchableDropdownMenu
+                            options=item_category_options
+                            chosen_option=item_category
                         />
                     </div>
 
@@ -1225,22 +1241,6 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                 </div>
 
                 <div class="flex flex-col gap-4">
-                    <ValidatedInput
-                        id="price"
-                        label="Max Price:"
-                        input_type="number"
-                        placeholder="Maximum Price"
-                        bind=price
-                    />
-
-                    <div class="flex items-center justify-between text-zinc-400 text-sm">
-                        <span>"Item Category:"</span>
-                        <SearchableDropdownMenu
-                            options=item_category_options
-                            chosen_option=item_category
-                        />
-                    </div>
-
                     <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Item Rarity:"</span>
                         <DropdownMenu options=item_rarity_options chosen_option=item_rarity />
@@ -1249,6 +1249,31 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
                     <div class="flex items-center justify-between text-zinc-400 text-sm">
                         <span>"Order by:"</span>
                         <DropdownMenu options=order_by_options chosen_option=order_by />
+                    </div>
+
+                    <ValidatedInput
+                        id="price"
+                        label="Max Price:"
+                        input_type="number"
+                        placeholder="Maximum Price"
+                        bind=price
+                    />
+
+                    <div class="w-full flex gap-2">
+                        <ValidatedInput
+                            id="min_req_level"
+                            label="Min Required Level:"
+                            input_type="number"
+                            placeholder="Min Required Level"
+                            bind=min_req_level
+                        />
+                        <ValidatedInput
+                            id="max_req_level"
+                            label="Max Required Level:"
+                            input_type="number"
+                            placeholder="Max Required Level"
+                            bind=max_req_level
+                        />
                     </div>
                 </div>
             </div>
@@ -1342,7 +1367,7 @@ pub fn MainFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
 
 #[component]
 pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
-    let stat_filters = filters.get_untracked().stat_filters.map(|stat_filter| {
+    let stat_filters: StatFilterSignals = filters.get_untracked().stat_filters.map(|stat_filter| {
         (
             RwSignal::new(
                 stat_filter
@@ -1362,6 +1387,21 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
             ),
         )
     });
+    let affix_filters = filters.get_untracked().affix_filters.map(|affix_filter| {
+        (
+            RwSignal::new(affix_filter.as_ref().map(|affix_filter| {
+                (
+                    affix_filter.base_item_id.clone(),
+                    affix_filter.affix_group_id.clone(),
+                )
+            })),
+            RwSignal::new(
+                affix_filter
+                    .as_ref()
+                    .and_then(|affix_filter| affix_filter.min_level),
+            ),
+        )
+    });
 
     Effect::new(move || {
         for (i, (stat_type, stat_value, stat_excluded)) in stat_filters.iter().enumerate() {
@@ -1375,376 +1415,30 @@ pub fn StatsFilters(filters: RwSignal<MarketFilters>) -> impl IntoView {
         }
     });
 
+    Effect::new(move || {
+        for (index, (affix_group_id, min_level)) in affix_filters.iter().enumerate() {
+            filters.write().affix_filters[index] =
+                affix_group_id
+                    .get()
+                    .map(|(base_item_id, affix_group_id)| MarketAffixFilter {
+                        base_item_id,
+                        affix_group_id,
+                        min_level: min_level.get(),
+                    });
+        }
+    });
+
     view! {
         <div class="w-full min-h-0 flex-1 flex flex-col gap-2 xl:gap-4 relative">
             <CardInsetTitle>"Stat Filters"</CardInsetTitle>
 
-            <div class="flex flex-col gap-2 xl:gap-4 p-2 xl:p-4">
-                {stat_filters
-                    .map(|(stat_type, stat_value, stat_excluded)| {
-                        view! {
-                            <div class="flex gap-2 xl:gap-4 items-center">
-                                {move || {
-                                    stat_type
-                                        .read()
-                                        .is_some()
-                                        .then(|| {
-                                            view! {
-                                                <MenuButton
-                                                    class:flex-none
-                                                    on:click=move |_| {
-                                                        stat_type.set(None);
-                                                        stat_value.set(None);
-                                                        stat_excluded.set(false);
-                                                    }
-                                                >
-                                                    "❌"
-                                                </MenuButton>
-                                            }
-                                        })
-                                }}
-                                <span class=move || {
-                                    if stat_type.read().is_none() {
-                                        "flex-1 text-center"
-                                    } else {
-                                        "flex-1"
-                                    }
-                                }>
-                                    <StatDropdown chosen_option=stat_type />
-                                </span>
-                                {move || {
-                                    stat_type
-                                        .read()
-                                        .is_some()
-                                        .then(|| {
-                                            view! {
-                                                <div class="w-36">
-                                                    <Input
-                                                        id="stat_value_1"
-                                                        input_type="number"
-                                                        placeholder="Value"
-                                                        bind=stat_value
-                                                    />
-                                                </div>
-                                                <StaticTooltip
-                                                    position=StaticTooltipPosition::Top
-                                                    tooltip=|| {
-                                                        "Require the stat to be absent or below the given value."
-                                                    }
-                                                >
-                                                    <Checkbox
-                                                        label="Exclude".to_string()
-                                                        checked=stat_excluded
-                                                        on_change=move |checked| { stat_excluded.set(checked) }
-                                                    />
-                                                </StaticTooltip>
-                                            }
-                                        })
-                                }}
+            <StatFilters stat_filters />
 
-                            </div>
-                        }
-                    })}
-            </div>
+            <CardInsetTitle>"Affix Filters"</CardInsetTitle>
+            <AffixFilters
+                affix_filters
+                item_category=Signal::derive(move || filters.get().item_category)
+            />
         </div>
-    }
-}
-
-#[component]
-pub fn StatDropdown(chosen_option: RwSignal<Option<(StatType, Modifier)>>) -> impl IntoView {
-    let available_stats = vec![
-        (StatType::Life, Modifier::Increased),
-        (StatType::Life, Modifier::Flat),
-        (StatType::LifeRegen, Modifier::Flat),
-        (StatType::Mana, Modifier::Increased),
-        (StatType::Mana, Modifier::Flat),
-        (StatType::ManaRegen, Modifier::Flat),
-        (StatType::Armor(Some(ArmorStatType::Fire)), Modifier::Flat),
-        (StatType::Armor(Some(ArmorStatType::Poison)), Modifier::Flat),
-        (StatType::Armor(Some(ArmorStatType::Storm)), Modifier::Flat),
-        (
-            StatType::Armor(Some(ArmorStatType::Elemental)),
-            Modifier::Flat,
-        ),
-        (StatType::Armor(None), Modifier::Increased),
-        (StatType::Evade(None), Modifier::Flat),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: StatSkillFilter {
-                    skill_type: Some(SkillType::Attack),
-                    ..Default::default()
-                },
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: StatSkillFilter {
-                    skill_type: Some(SkillType::Attack),
-                    ..Default::default()
-                },
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: StatSkillFilter {
-                    skill_type: Some(SkillType::Spell),
-                    ..Default::default()
-                },
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: StatSkillFilter {
-                    skill_type: Some(SkillType::Spell),
-                    ..Default::default()
-                },
-                damage_type: None,
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Physical),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Physical),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Fire),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Fire),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Poison),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Poison),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Storm),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::Damage {
-                skill_filter: Default::default(),
-                damage_type: Some(DamageType::Storm),
-                min_max: None,
-                is_hit: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::CritDamage(Default::default()),
-            Modifier::Increased,
-        ),
-        (
-            StatType::CritChance(Default::default()),
-            Modifier::Increased,
-        ),
-        (
-            StatType::CritChance(StatSkillFilter {
-                skill_type: Some(SkillType::Spell),
-                ..Default::default()
-            }),
-            Modifier::Increased,
-        ),
-        (
-            StatType::StatusPower {
-                status_filter: StatStatusFilter {
-                    status_id: None,
-                    damage_type: Some(StatusDamageType::Any),
-                    debuff: None,
-                },
-                skill_filter: Default::default(),
-                min_max: None,
-            },
-            Modifier::More,
-        ),
-        (
-            StatType::StatusPower {
-                status_filter: Default::default(),
-                skill_filter: StatSkillFilter {
-                    skill_type: Some(SkillType::Curse),
-                    ..Default::default()
-                },
-                min_max: None,
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::StatusDuration {
-                status_filter: StatStatusFilter {
-                    debuff: Some(true),
-                    ..Default::default()
-                },
-                skill_filter: Default::default(),
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::StatusDuration {
-                status_filter: StatStatusFilter {
-                    debuff: Some(false),
-                    ..Default::default()
-                },
-                skill_filter: Default::default(),
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::SuccessChance {
-                skill_filter: Default::default(),
-                effect_type: Some(StatSkillEffectType::ApplyStatus {
-                    status_id: None,
-                    debuff: Some(true),
-                }),
-            },
-            Modifier::Increased,
-        ),
-        (
-            StatType::Restore {
-                restore_type: Some(RestoreType::Life),
-                skill_filter: Default::default(),
-                modifier_description: Default::default(),
-            },
-            Modifier::Increased,
-        ),
-        (StatType::Speed(Default::default()), Modifier::Increased),
-        (
-            StatType::Speed(StatSkillFilter {
-                skill_type: Some(SkillType::Attack),
-                ..Default::default()
-            }),
-            Modifier::Increased,
-        ),
-        (
-            StatType::Speed(StatSkillFilter {
-                skill_type: Some(SkillType::Spell),
-                ..Default::default()
-            }),
-            Modifier::Increased,
-        ),
-        (
-            StatType::ManaCost {
-                skill_filter: StatSkillFilter {
-                    skill_type: Some(SkillType::Spell),
-                    ..Default::default()
-                },
-            },
-            Modifier::Increased,
-        ),
-        (StatType::MovementSpeed, Modifier::Increased),
-        (StatType::GoldFind, Modifier::More),
-        (StatType::ThreatGain, Modifier::Increased),
-        (
-            StatType::RestoreOnHit {
-                restore_type: RestoreType::Life,
-                skill_type: Some(SkillType::Attack),
-            },
-            Modifier::Flat,
-        ),
-        (
-            StatType::RestoreOnHit {
-                restore_type: RestoreType::Mana,
-                skill_type: Some(SkillType::Attack),
-            },
-            Modifier::Flat,
-        ),
-        (StatType::SkillLevel(Default::default()), Modifier::Flat),
-        (StatType::ItemRarity, Modifier::Increased),
-        (StatType::ItemAreaChance, Modifier::Increased),
-        (StatType::ItemLevel, Modifier::Flat),
-        (StatType::GemsFind, Modifier::Increased),
-    ];
-
-    let options = available_stats
-        .into_iter()
-        .map(|(stat_type, modifier)| {
-            (
-                Some((stat_type.clone(), modifier)),
-                format_stat_filter(&stat_type, modifier),
-            )
-        })
-        .collect();
-
-    view! {
-        <SearchableDropdownMenu
-            options
-            chosen_option
-            class:w-full
-            missing_text="+ Add Stat Filter"
-        />
-    }
-}
-
-fn format_stat_filter(stat_type: &StatType, modifier: Modifier) -> String {
-    match modifier {
-        Modifier::Increased => format!("#% Increased {}", format_multiplier_stat_name(stat_type)),
-        Modifier::More => format!("#% More {}", format_multiplier_stat_name(stat_type)),
-        Modifier::Flat => format_flat_stat(stat_type, None),
     }
 }

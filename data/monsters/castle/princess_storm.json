@@ -11,7 +11,7 @@
     {
       "name"      : "Grieving Tear",
       "icon"      : "skills/chain_lightning.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Spell",
       "targets"   : [
         {
@@ -29,7 +29,7 @@
       "name"      : "Neverending Cry",
       "icon"      : "skills/haste.svg",
       "skill_type": "Blessing",
-      "cooldown"  : 0.0,
+      "cooldown"  : 0,
       "triggers"  : [
         {
           "trigger_id" : "grieving_call",

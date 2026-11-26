@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_attack_speed_t1" : {
     "name"        : "Nimble",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t2" : {
     "name"        : "Quick",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t3" : {
     "name"        : "Swift",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t4" : {
     "name"        : "Brisk",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t5" : {
     "name"        : "Sudden",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t6" : {
     "name"        : "Impulsive",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t7" : {
     "name"        : "Precipitate",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t8" : {
     "name"        : "Abrupt",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t9" : {
     "name"        : "Immediate",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_speed_t10": {
     "name"        : "Unforeseen",
     "family"      : "inc_attack_speed",
     "tags"        : ["Attack", "Speed"],
@@ -179,7 +179,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t1"  : {
     "name"        : "Spiraling",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -197,7 +197,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t2"  : {
     "name"        : "Veering",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -215,7 +215,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t3"  : {
     "name"        : "Surging",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -233,7 +233,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t4"  : {
     "name"        : "Soaring",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -251,7 +251,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t5"  : {
     "name"        : "Warping",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -269,7 +269,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t6"  : {
     "name"        : "Distorting",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -287,7 +287,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t7"  : {
     "name"        : "Skewed",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -305,7 +305,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t8"  : {
     "name"        : "Displaced",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -323,7 +323,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t9"  : {
     "name"        : "Anomalous",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -341,7 +341,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_speed_t10" : {
     "name"        : "Paradoxical",
     "family"      : "inc_spell_speed",
     "tags"        : ["Spell", "Speed"],
@@ -359,4 +359,4 @@
       }
     ]
   }
-]
+}

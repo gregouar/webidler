@@ -8,7 +8,7 @@
     {
       "name"      : "Lash",
       "icon"      : "skills/claw.svg",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -26,7 +26,7 @@
     {
       "name"      : "Bite",
       "icon"      : "skills/snake_bite.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Attack",
       "targets"   : [
         {

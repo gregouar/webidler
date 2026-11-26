@@ -198,8 +198,9 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
         });
     });
     let upgrade = Memo::new(move |_| computations::stash_upgrade(&stash.get().get()));
-    let upgrade_disabled =
-        Signal::derive(move || busy.get() || upgrade.get().1 > town.character.read().resource_gold);
+    let upgrade_disabled = Signal::derive(move || {
+        busy.get() || upgrade.get().1.get() > town.character.read().resource_gold.get()
+    });
     let do_upgrade = move |_| {
         if upgrade_disabled.get_untracked() {
             return;
@@ -270,7 +271,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
 
     view! {
         <MenuPanel open>
-            <MenuCard class="h-full" gap=false>
+            <MenuCard class="h-full" gap=false clip_content=false>
                 <CardHeader title="Stash" on_close=move || open.set(false)>
                     <div class="flex h-full ml-2 xl:ml-4 gap-2 xl:gap-4 overflow-clip">
                         <TabButton
@@ -301,17 +302,27 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                             disabled=Signal::derive(move || busy.get() || loading.get())
                         />
                         <MenuButton on:click=do_upgrade disabled=upgrade_disabled>
-                            <span class="flex items-center gap-1">
-                                {move || {
-                                    if stash_capacity.get() == 0 { "Buy" } else { "Upgrade" }
-                                }} " ("{move || format_number(upgrade.get().1).to_string()}
-                                <GoldIcon />")"
+                            <span class="flex items-center gap-1 text-zinc-400">
+                                <span class="text-white font-bold">
+                                    {move || {
+                                        if stash_capacity.get() == 0 {
+                                            "Buy Stash"
+                                        } else {
+                                            "Upgrade Stash"
+                                        }
+                                    }}
+                                </span>
+                                " for "
+                                <span class="text-amber-200 font-bold">
+                                    {move || format_number(upgrade.get().1.get()).to_string()}
+                                </span>
+                                <GoldIcon />
                             </span>
                         </MenuButton>
                     </div>
                 </CardHeader>
                 <div class="grid grid-cols-2 gap-2 xl:gap-4 min-h-0 flex-1">
-                    <CardInset class="min-w-0 min-h-0" pad=false>
+                    <CardInset class="min-w-0 min-h-0" pad=false scrollable=false>
                         <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                             <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
                                 "Inventory"
@@ -326,12 +337,12 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                 }}
                             </span>
                         </div>
-                        <div class="min-h-0 flex-1 overflow-y-auto pb-2">
+                        <div class="min-h-0 flex-1 overflow-y-auto overscroll-none pb-2 isolate transform-gpu [contain:paint] [will-change:scroll-position]">
                             <BagGrid config=inventory_bag.get_value() compact=true />
                         </div>
                     </CardInset>
                     <div class="flex min-w-0 min-h-0 flex-col gap-2">
-                        <CardInset class="min-h-0 flex-1" pad=false>
+                        <CardInset class="min-h-0 flex-1" pad=false scrollable=false>
                             <div class="flex shrink-0 items-center justify-between gap-2 px-2 xl:px-3 py-2">
                                 <h2 class="text-shadow-lg/100 shadow-gray-950 text-amber-300 text-sm xl:text-base font-display font-bold leading-none tracking-tight">
                                     {move || match stash_type.get() {
@@ -347,7 +358,7 @@ pub fn StashPanel(open: RwSignal<bool>) -> impl IntoView {
                                     }}
                                 </span>
                             </div>
-                            <div class="min-h-0 flex-1 overflow-y-auto pb-2">
+                            <div class="min-h-0 flex-1 overflow-y-auto overscroll-none pb-2 isolate transform-gpu [contain:paint] [will-change:scroll-position]">
                                 <Show when=move || stash_capacity.get() == 0>
                                     <p class="p-4 text-center text-zinc-400">
                                         "Buy this stash to store items."
@@ -391,7 +402,8 @@ fn Gems(stash: RwSignal<Stash>, busy: RwSignal<bool>) -> impl IntoView {
             let stash_id = stash.read_untracked().stash_id;
             if let Some(amount) = amount.get() {
                 let amount = amount.unwrap_or(
-                    ItemPrice::try_new(stash.read_untracked().resource_gems).unwrap_or_default(),
+                    ItemPrice::try_new(stash.read_untracked().resource_gems.get())
+                        .unwrap_or_default(),
                 );
                 busy.set(true);
                 spawn_local({
@@ -431,7 +443,7 @@ fn Gems(stash: RwSignal<Stash>, busy: RwSignal<bool>) -> impl IntoView {
             let stash_id = stash.read_untracked().stash_id;
             if let Some(amount) = amount.get() {
                 let amount = amount.unwrap_or(
-                    ItemPrice::try_new(town_context.character.read_untracked().resource_gems)
+                    ItemPrice::try_new(town_context.character.read_untracked().resource_gems.get())
                         .unwrap_or_default(),
                 );
                 busy.set(true);
@@ -466,13 +478,14 @@ fn Gems(stash: RwSignal<Stash>, busy: RwSignal<bool>) -> impl IntoView {
         }
     };
 
-    let disable_take =
-        Signal::derive(move || busy.get() || value.get() == 0.0 || stash.read().max_items == 0);
+    let disable_take = Signal::derive(move || {
+        busy.get() || value.get().get() == 0.0 || stash.read().max_items == 0
+    });
     let disable_store = Signal::derive(move || busy.get() || stash.read().max_items == 0);
 
     view! {
         <div class="flex min-w-0 items-center gap-2">
-            <GemsCounter value w_full=true />
+            <GemsCounter value=move || value.get().get() w_full=true />
             <MenuButton on:click=do_store disabled=disable_store>
                 "Store"
             </MenuButton>

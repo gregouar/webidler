@@ -1,0 +1,52 @@
+{
+    "hanged"       : {
+        "name"       : "Hanged",
+        "icon"       : "skills/slipknot.svg",
+        "damage_type": "Physical",
+        "avoidable"  : true,
+        "debuff"     : true,
+        "duration"   : 50,
+        "max_stacks" : 1,
+        "effects"    : [
+            { "DamageOverTime": {"damage_type": "Physical"}, "value": 100, "modifier": "Percent" },
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "More", "debuff": true},
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "carrion_feast": {
+        "name"      : "Carrion Feast",
+        "icon"      : "skills/carrion.svg",
+        "debuff"    : false,
+        "duration"  : 600,
+        "max_stacks": 3,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "Life", "modifier": "More", "debuff": false},
+                "value"       : 100,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "prospect"     : {
+        "name"      : "Analyzed",
+        "icon"      : "skills/prospect.svg",
+        "debuff"    : true,
+        "duration"  : 600,
+        "max_stacks": 10,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    }
+}

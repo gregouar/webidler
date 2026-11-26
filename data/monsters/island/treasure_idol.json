@@ -1,34 +1,21 @@
 {
-  "name": "Idol of the Serpent",
-  "portrait": "monsters/island/treasure_idol.webp",
-  "rarity": "Boss",
-  "max_life": 150,
-  "armor": {
-    "Poison": 100
-  },
-  "stun_lockout": 3,
-  "status_resistances": [
+  "name"              : "Idol of the Serpent",
+  "portrait"          : "monsters/island/treasure_idol.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 150,
+  "armor"             : {"Poison": 100},
+  "stun_lockout"      : 3,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Dangerous Incantation",
-      "icon": "skills/poison_cloud.svg",
-      "cooldown": 5,
+      "name"      : "Dangerous Incantation",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 50,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 10,
-                "escalation": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 10, "escalation": 50} }
           ]
         }
       ]

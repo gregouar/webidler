@@ -1,50 +1,38 @@
 {
-  "name": "Gilded Chest",
-  "portrait": "monsters/island/treasure_chest.webp",
-  "rarity": "Boss",
-  "max_life": 200,
-  "armor": { "Physical": 50, "Poison": 50 },
-  "stun_lockout": 3.0,
-  "status_resistances": [
+  "name"              : "Gilded Chest",
+  "portrait"          : "monsters/island/treasure_chest.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 200,
+  "armor"             : {"Physical": 50, "Poison": 50},
+  "stun_lockout"      : 3.0,
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Protective Hull",
-      "icon": "skills/chest.svg",
-      "cooldown": 10.0,
+      "name"      : "Protective Hull",
+      "icon"      : "skills/chest.svg",
+      "cooldown"  : 100,
       "skill_type": "Blessing",
-      "targets": [
+      "targets"   : [
         {
           "target_type": "Friend",
-          "shape": "All",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "chest_protection",
-                "value": 50
-              }
-            }
+          "shape"      : "All",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "chest_protection", "value": 50} }
           ]
         }
       ]
     },
     {
-      "name": "Finger Snap",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name"      : "Finger Snap",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 1, 1 ]
-                }
+                "damage": { "Physical": [1, 1] }
               }
             }
           ]

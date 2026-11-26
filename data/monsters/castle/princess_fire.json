@@ -11,7 +11,7 @@
     {
       "name"      : "Wrathful Strike",
       "icon"      : "skills/fireball.svg",
-      "cooldown"  : 2.0,
+      "cooldown"  : 20,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -28,12 +28,12 @@
     {
       "name"      : "Burning Hate",
       "icon"      : "skills/burning_ray.svg",
-      "cooldown"  : 10.0,
+      "cooldown"  : 100,
       "skill_type": "Spell",
       "targets"   : [
         {
           "effects": [
-            { "ApplyStatus": {"status_id": "burn", "duration": 5, "value": 5} }
+            { "ApplyStatus": {"status_id": "burn", "duration": 50, "value": 5} }
           ]
         }
       ]

@@ -5,16 +5,18 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::{AreaSpecs, AreaState, AreaThreat},
+    cosmetics::CharacterCosmetics,
     game_stats::GameStats,
     grind::GrindRewards,
     item::ItemSpecs,
     loot::QueuedLoot,
-    monster::{MonsterSpecs, MonsterState},
+    monster::{MonsterSpecs, MonsterSpecsPatch, MonsterState},
     passive::{PassivesTreeSpecs, PassivesTreeState, PurchasedNodes},
+    pets::PlayerPets,
     player::{PlayerBaseSpecs, PlayerInventory, PlayerResources, PlayerSpecs, PlayerState},
     realms::Realm,
     skill::SkillSpecs,
-    user::UserCharacterId,
+    user::{UserCharacterId, UserUnlocks},
 };
 
 use super::macros::impl_into_message;
@@ -27,6 +29,7 @@ impl_into_message! {
         Error(ErrorMessage),
         InitGame(InitGameMessage),
         UpdateGame(SyncGameStateMessage),
+        AchievementsUnlocked(AchievementsUnlockedMessage),
         Disconnect,
     }
 }
@@ -46,6 +49,11 @@ pub struct ErrorMessage {
     pub must_disconnect: bool,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct AchievementsUnlockedMessage {
+    pub achievement_ids: Vec<String>,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub enum ErrorType {
     Server,
@@ -55,6 +63,10 @@ pub enum ErrorType {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InitGameMessage {
     pub character_id: UserCharacterId,
+    pub character_cosmetics: CharacterCosmetics,
+    pub user_unlocks: UserUnlocks,
+    pub achievements: HashMap<String, DateTime<Utc>>,
+    pub has_ever_looted_gems: bool,
     pub realm: Realm,
     pub area_id: String,
     pub map_item: Option<ItemSpecs>,
@@ -68,6 +80,7 @@ pub struct InitGameMessage {
     pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
     pub player_specs: PlayerSpecs,
     pub player_state: PlayerState,
+    pub player_pets: PlayerPets,
     pub auto_skills: Vec<bool>,
 }
 
@@ -85,6 +98,7 @@ pub struct SyncGameStateMessage {
     pub player_resources: Option<PlayerResources>,
     pub player_stamina: Duration,
     pub monster_specs: Option<Vec<MonsterSpecs>>,
+    pub monster_specs_patch: Option<Vec<(u8, MonsterSpecsPatch)>>,
     pub monster_states: Vec<MonsterState>,
     pub queued_loot: Option<Vec<QueuedLoot>>,
     pub game_stats: GameStats,

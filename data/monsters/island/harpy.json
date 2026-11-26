@@ -1,21 +1,19 @@
 {
-  "name": "Furious Siren",
+  "name"    : "Furious Siren",
   "portrait": "monsters/island/harpy.webp",
   "max_life": 12,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Vicious Bite",
-      "icon": "skills/bite.svg",
-      "cooldown": 5.0,
+      "name"      : "Vicious Bite",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 50,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 5, 10 ]
-                }
+                "damage": { "Physical": [5, 10] }
               }
             }
           ]
@@ -23,18 +21,16 @@
       ]
     },
     {
-      "name": "Scratch",
-      "icon": "skills/claw.svg",
-      "cooldown": 3.0,
+      "name"      : "Scratch",
+      "icon"      : "skills/bird_claw.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 6 ]
-                }
+                "damage": { "Physical": [3, 6] }
               }
             }
           ]

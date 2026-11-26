@@ -1,11 +1,16 @@
 use sqlx::{FromRow, Transaction};
 
 use shared::data::{
+    cosmetics::CharacterCosmetics,
     realms::{Realm, RealmId},
     user::{UserCharacterId, UserId},
+    values::NonNegative,
 };
 
-use crate::db::{self, pool::Database};
+use crate::{
+    db::{self, pool::Database},
+    rest::AppError,
+};
 
 use super::{
     pool::{DbExecutor, DbPool},
@@ -22,6 +27,8 @@ pub struct CharacterEntry {
 
     pub character_name: String,
     pub portrait: String,
+    pub cosmetic_title: Option<String>,
+    pub cosmetic_badge: Option<String>,
     pub max_area_level: i32,
     pub resource_gems: f64,
     pub resource_shards: f64,
@@ -39,7 +46,7 @@ pub struct CharacterEntry {
 }
 
 #[derive(Debug, FromRow)]
-pub struct CharacterResources {
+pub struct CharacterResourcesEntry {
     pub resource_gems: f64,
     pub resource_shards: f64,
     pub resource_gold: f64,
@@ -47,6 +54,14 @@ pub struct CharacterResources {
 }
 
 #[derive(Debug, FromRow)]
+pub struct CharacterResources {
+    pub resource_gems: NonNegative,
+    pub resource_shards: NonNegative,
+    pub resource_gold: NonNegative,
+    pub played_time_seconds: f64,
+}
+
+#[derive(Debug, Clone, FromRow)]
 pub struct CharacterAreaEntry {
     pub character_id: UserCharacterId,
     pub area_id: String,
@@ -54,8 +69,31 @@ pub struct CharacterAreaEntry {
     pub max_power_shard_level: i32,
     pub quest_completed: bool,
 
+    pub monsters_killed: i64,
+    pub champion_monsters_killed: i64,
+    pub bosses_killed: i64,
+    pub areas_completed: i64,
+    pub edicts_spent: i64,
+    pub gems_obtained: i64,
+    pub player_deaths: i64,
+    pub elapsed_time_seconds: i64,
+
     pub created_at: UtcDateTime,
     pub updated_at: UtcDateTime,
+}
+
+pub struct CharacterAreaProgressUpdate {
+    pub max_area_level_ever: i32,
+    pub max_power_shard_level_ever: i32,
+    pub quest_completed: bool,
+    pub monsters_killed: i64,
+    pub champion_monsters_killed: i64,
+    pub bosses_killed: i64,
+    pub areas_completed: i64,
+    pub edicts_spent: i64,
+    pub gems_obtained: i64,
+    pub player_deaths: i64,
+    pub elapsed_time_seconds: i64,
 }
 
 pub async fn create_character<'c>(
@@ -123,6 +161,8 @@ pub async fn read_character<'c>(
             is_ssf as "is_ssf!",
             character_name,
             portrait,
+            cosmetic_title,
+            cosmetic_badge,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
@@ -145,6 +185,25 @@ pub async fn read_character<'c>(
     .await
 }
 
+pub async fn read_character_cosmetics<'c>(
+    executor: impl DbExecutor<'c>,
+    character_id: &UserCharacterId,
+) -> Result<Option<CharacterCosmetics>, sqlx::Error> {
+    sqlx::query_as!(
+        CharacterCosmetics,
+        r#"
+        SELECT
+            cosmetic_title as title,
+            cosmetic_badge as badge
+        FROM characters
+        WHERE characters.character_id = $1
+        "#,
+        character_id
+    )
+    .fetch_optional(executor)
+    .await
+}
+
 pub async fn read_character_area_completed<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
@@ -159,6 +218,14 @@ pub async fn read_character_area_completed<'c>(
             max_area_level as "max_area_level!: i32",
             max_power_shard_level as "max_power_shard_level!: i32",
             quest_completed as "quest_completed!: bool",
+            monsters_killed as "monsters_killed!: i64",
+            champion_monsters_killed as "champion_monsters_killed!: i64",
+            bosses_killed as "bosses_killed!: i64",
+            areas_completed as "areas_completed!: i64",
+            edicts_spent as "edicts_spent!: i64",
+            gems_obtained as "gems_obtained!: i64",
+            player_deaths as "player_deaths!: i64",
+            elapsed_time_seconds as "elapsed_time_seconds!: i64",
             created_at,
             updated_at
          FROM character_area_completed 
@@ -184,6 +251,14 @@ pub async fn read_character_areas_completed<'c>(
             max_area_level as "max_area_level!: i32",
             max_power_shard_level as "max_power_shard_level!: i32",
             quest_completed as "quest_completed!: bool",
+            monsters_killed as "monsters_killed!: i64",
+            champion_monsters_killed as "champion_monsters_killed!: i64",
+            bosses_killed as "bosses_killed!: i64",
+            areas_completed as "areas_completed!: i64",
+            edicts_spent as "edicts_spent!: i64",
+            gems_obtained as "gems_obtained!: i64",
+            player_deaths as "player_deaths!: i64",
+            elapsed_time_seconds as "elapsed_time_seconds!: i64",
             created_at,
             updated_at
          FROM character_area_completed WHERE character_id = $1
@@ -208,6 +283,8 @@ pub async fn read_all_user_characters<'c>(
             is_ssf as "is_ssf!",
             character_name,
             portrait,
+            cosmetic_title,
+            cosmetic_badge,
             max_area_level as "max_area_level!: i32",
             resource_gems,
             resource_shards,
@@ -252,19 +329,24 @@ pub async fn update_character<'c>(
     character_id: &UserCharacterId,
     name: &str,
     portrait: &str,
+    cosmetics: &CharacterCosmetics,
 ) -> Result<Option<()>, sqlx::Error> {
     let res = sqlx::query!(
         r#"
         UPDATE characters 
         SET
             character_name = $2,
-            portrait = $3
+            portrait = $3,
+            cosmetic_title = $4, 
+            cosmetic_badge = $5
         WHERE
             character_id = $1
         "#,
         character_id,
         name,
-        portrait
+        portrait,
+        cosmetics.title,
+        cosmetics.badge
     )
     .execute(executor)
     .await;
@@ -276,7 +358,7 @@ pub async fn update_character<'c>(
     }
 }
 
-/// Add/remove resources and played time to character.
+/// Add/remove resources and played time to character.pub async fn update_character_resources<'c>(
 pub async fn update_character_resources<'c>(
     executor: impl DbExecutor<'c>,
     character_id: &UserCharacterId,
@@ -284,9 +366,14 @@ pub async fn update_character_resources<'c>(
     resource_shards: f64,
     resource_gold: f64,
     played_time_seconds: f64,
-) -> Result<CharacterResources, sqlx::Error> {
-    sqlx::query_as!(
-        CharacterResources,
+) -> Result<CharacterResources, AppError> {
+    let CharacterResourcesEntry {
+        resource_gems,
+        resource_shards,
+        resource_gold,
+        played_time_seconds,
+    } = sqlx::query_as!(
+        CharacterResourcesEntry,
         r#"
         UPDATE characters
         SET
@@ -305,8 +392,56 @@ pub async fn update_character_resources<'c>(
         played_time_seconds,
     )
     .fetch_one(executor)
-    .await
+    .await?;
+
+    if resource_gold < 0.0 {
+        return Err(AppError::UserError("not enough gold".to_string()));
+    }
+    if resource_gems < 0.0 {
+        return Err(AppError::UserError("not enough gems".to_string()));
+    }
+    if resource_shards < 0.0 {
+        return Err(AppError::UserError("not enough power shards".to_string()));
+    }
+
+    Ok(CharacterResources {
+        resource_gems: resource_gems.into(),
+        resource_shards: resource_shards.into(),
+        resource_gold: resource_gold.into(),
+        played_time_seconds,
+    })
 }
+
+// pub async fn update_character_resources<'c>(
+//     executor: impl DbExecutor<'c>,
+//     character_id: &UserCharacterId,
+//     resource_gems: Finite,
+//     resource_shards: Finite,
+//     resource_gold: Finite,
+//     played_time_seconds: f64,
+// ) -> Result<CharacterResources, sqlx::Error> {
+//     let resources = sqlx::query_as!(
+//         CharacterResourcesEntry,
+//         r#"
+//         UPDATE characters
+//         SET
+//             resource_gems = resource_gems + $2,
+//             resource_shards = resource_shards + $3,
+//             resource_gold = resource_gold + $4,
+//             played_time_seconds = played_time_seconds + $5,
+//             updated_at = CURRENT_TIMESTAMP
+//         WHERE character_id = $1
+//         RETURNING resource_gems, resource_shards, resource_gold, played_time_seconds
+//         "#,
+//         character_id,
+//         resource_gems.get(),
+//         resource_shards.get(),
+//         resource_gold.get(),
+//         played_time_seconds,
+//     )
+//     .fetch_one(executor)
+//     .await
+// }
 
 pub async fn set_character_stamina<'c>(
     executor: impl DbExecutor<'c>,
@@ -356,13 +491,14 @@ pub async fn update_character_area_progress<'c>(
     executor: &mut Transaction<'c, Database>,
     character_id: &UserCharacterId,
     area_id: &str,
-    max_area_level_ever: i32,
-    max_power_shard_level_ever: i32,
-    quest_completed: bool,
+    progress: &CharacterAreaProgressUpdate,
 ) -> Result<(), sqlx::Error> {
-    if max_area_level_ever > 0 || quest_completed {
-        sqlx::query!(
-        "INSERT INTO character_area_completed (character_id, area_id, max_area_level,max_power_shard_level,quest_completed) VALUES ($1, $2, $3, $4, $5)
+    sqlx::query!(
+        "INSERT INTO character_area_completed (
+            character_id, area_id, max_area_level, max_power_shard_level, quest_completed,
+            monsters_killed, champion_monsters_killed, bosses_killed, areas_completed,
+            edicts_spent, gems_obtained, player_deaths, elapsed_time_seconds
+         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
          ON CONFLICT(character_id, area_id) DO UPDATE 
          SET max_area_level = CASE
             WHEN EXCLUDED.max_area_level > character_area_completed.max_area_level
@@ -378,16 +514,31 @@ pub async fn update_character_area_progress<'c>(
             WHEN EXCLUDED.quest_completed THEN TRUE
             ELSE character_area_completed.quest_completed
          END,
+         monsters_killed = character_area_completed.monsters_killed + EXCLUDED.monsters_killed,
+         champion_monsters_killed = character_area_completed.champion_monsters_killed + EXCLUDED.champion_monsters_killed,
+         bosses_killed = character_area_completed.bosses_killed + EXCLUDED.bosses_killed,
+         areas_completed = character_area_completed.areas_completed + EXCLUDED.areas_completed,
+         edicts_spent = character_area_completed.edicts_spent + EXCLUDED.edicts_spent,
+         gems_obtained = character_area_completed.gems_obtained + EXCLUDED.gems_obtained,
+         player_deaths = character_area_completed.player_deaths + EXCLUDED.player_deaths,
+         elapsed_time_seconds = character_area_completed.elapsed_time_seconds + EXCLUDED.elapsed_time_seconds,
          updated_at = CURRENT_TIMESTAMP;",
         character_id,
         area_id,
-        max_area_level_ever,
-        max_power_shard_level_ever,
-        quest_completed
+        progress.max_area_level_ever,
+        progress.max_power_shard_level_ever,
+        progress.quest_completed,
+        progress.monsters_killed,
+        progress.champion_monsters_killed,
+        progress.bosses_killed,
+        progress.areas_completed,
+        progress.edicts_spent,
+        progress.gems_obtained,
+        progress.player_deaths,
+        progress.elapsed_time_seconds,
     )
     .execute(&mut **executor)
     .await?;
-    }
 
     Ok(())
 }

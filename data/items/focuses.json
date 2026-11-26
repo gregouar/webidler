@@ -10,15 +10,19 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 20.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 20.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -39,15 +43,19 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 30.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -68,74 +76,94 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 40.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null,
-            "min_max": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          3.0,
-          5.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              3.0,
+              5.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -146,7 +174,9 @@
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": "Curse",
-                "not": false
+                "min_stacks": 0,
+                "not": false,
+                "counting": false
               }
             }
           ]
@@ -155,7 +185,6 @@
         "trigger_id": "vile_codex",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -175,6 +204,7 @@
               "status_id": "vile_codex",
               "value": 200.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -185,7 +215,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -268,15 +299,19 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 40.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -297,94 +332,119 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 40.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          80.0,
-          120.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              80.0,
+              120.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "CritDamage": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          140.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "fireball",
-            "range": null,
-            "shape": null,
-            "repeat": {
-              "min_value": 2,
-              "max_value": 2,
-              "target": "Any"
-            }
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 1.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              140.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "fireball",
+                "item_slot": null,
+                "range": null,
+                "shape": null,
+                "repeat": {
+                  "min_value": 2,
+                  "max_value": 2,
+                  "target": "Any"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 1.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -474,15 +534,19 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -503,78 +567,98 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          120.0,
-          160.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": "bleed",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              120.0,
+              160.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusEscalation": {
+                "status_id": "bleed",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -585,7 +669,8 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": "Physical",
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
@@ -606,10 +691,10 @@
             "factor": 0.5,
             "source": {
               "HitDamage": "Physical"
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Spell",
         "skill_range": "Melee",
@@ -629,6 +714,7 @@
               "status_id": "bleed",
               "value": 0.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -649,7 +735,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -731,15 +818,19 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 60.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -760,102 +851,126 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 60.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": "Mana",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          12.0,
-          16.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": "Poison",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 60.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              12.0,
+              16.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
+              "StatusDuration": {
+                "status_id": null,
                 "damage_type": "Poison",
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "conditions": [
-              "LowLife"
-            ],
-            "conditions_duration": 0
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 400.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": {
-              "SuccessChance": {
+                "debuff": null,
                 "skill_type": null,
-                "skill_id": null,
-                "effect_type": {
-                  "ApplyStatus": {
-                    "status_id": "treasure_idol",
-                    "debuff": null
-                  }
-                }
+                "skill_id": null
               }
             },
-            "conditions": [
-              "LowLife"
-            ],
-            "conditions_duration": 0
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": -10000.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": "Poison",
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 400.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "SuccessChance": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "effect_type": {
+                      "ApplyStatus": {
+                        "status_id": "treasure_idol",
+                        "debuff": null
+                      }
+                    }
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": -10000.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -865,13 +980,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "treasure_idol",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Any",
@@ -891,6 +1006,7 @@
               "status_id": "treasure_idol",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -898,6 +1014,15 @@
               "replace_on_value_only": false
             },
             "ignore_stat_effects": [
+              {
+                "StatusEscalation": {
+                  "status_id": null,
+                  "damage_type": null,
+                  "debuff": null,
+                  "skill_type": null,
+                  "skill_id": null
+                }
+              },
               {
                 "StatusDuration": {
                   "status_id": null,
@@ -925,21 +1050,13 @@
                   "skill_id": null,
                   "min_max": null
                 }
-              },
-              {
-                "StatusEscalation": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "skill_id": null
-                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1010,15 +1127,19 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 70.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 70.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1039,98 +1160,122 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 70.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": "Max",
-            "is_hit": null
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 70.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          200.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          240.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          60.0,
-          80.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "CritDamage": {
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Lucky": {
-            "skill_type": null,
-            "skill_id": null,
-            "roll_type": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
               "Damage": {
-                "damage_type": null
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": "Max",
+                "is_hit": null
               }
-            }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              200.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              240.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              60.0,
+              80.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "Lucky": {
+                "skill_type": null,
+                "skill_id": null,
+                "roll_type": {
+                  "Damage": {
+                    "damage_type": null
+                  }
+                }
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1197,15 +1342,19 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 80.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 80.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1226,15 +1375,19 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 90.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 90.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1243,6 +1396,253 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "hive": {
+    "name": "Firewasp Nest",
+    "icon": "items/focuses/hive.webp",
+    "description": "Their stings burn as fiercely as the desert from which they came.",
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 410,
+    "rarity": "Unique",
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 90.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              200.0,
+              250.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              150.0,
+              250.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": true,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [
+      {
+        "OnHit": {
+          "skill_type": null,
+          "range": null,
+          "is_crit": null,
+          "is_blocked": null,
+          "is_hurt": null,
+          "is_triggered": null,
+          "damage_type": null,
+          "skill_id": "bees",
+          "item_slot": null,
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "hive",
+        "target": "SameTarget",
+        "modifiers": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "factor": 0.3,
+            "source": {
+              "HitDamage": "Physical"
+            },
+            "hidden": false
+          }
+        ],
+        "trigger_propagate": false,
+        "skill_type": "Spell",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 25.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "burn",
+              "value": 0.0,
+              "value_factor": 1.0,
+              "stacks": 1,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [
+              {
+                "Damage": {
+                  "skill_type": "Spell",
+                  "skill_id": "bees",
+                  "damage_type": "Physical",
+                  "min_max": null,
+                  "is_hit": true
+                }
+              }
+            ],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      500,
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Mana",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Armor": "Fire"
+          },
+          "modifier": "Flat",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": null,
+              "skill_id": null,
+              "damage_type": "Fire",
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      }
+    ]
   },
   "focus_9": {
     "name": "Alchemical Jewel",
@@ -1255,15 +1655,19 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1272,6 +1676,305 @@
     "ignore_quality": false,
     "upgrade_levels": [],
     "upgrade_effects": []
+  },
+  "life_focus": {
+    "name": "Wendigo's Hunger",
+    "icon": "items/focuses/life_focus.webp",
+    "description": "His cold heart can only be satiated with fresh meat.",
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 500,
+    "rarity": "Unique",
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Description": "Grant Life instead of Mana"
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 1.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              300.0,
+              350.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Attack",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              80.0,
+              100.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  "LowLife"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 500.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_8": {
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": "ManaRegen",
+                "stat": "LifeRegen",
+                "is_extra": false,
+                "skill_type": null,
+                "skill_id": null,
+                "uncapped": false
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [
+      {
+        "OnTick": {
+          "tick_interval": 10,
+          "conditions": [
+            "NotLowLife"
+          ]
+        },
+        "description": null,
+        "trigger_id": "life_focus",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Curse",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "hunger",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          },
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "hunger",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "stacks": 1,
+              "duration": null,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": true,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [
+      600
+    ],
+    "upgrade_effects": [
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": "Life",
+          "modifier": "Flat",
+          "value": 10.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Attack",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      },
+      {
+        "scope": "Global",
+        "stat_effect": {
+          "stat": {
+            "Damage": {
+              "skill_type": "Spell",
+              "skill_id": null,
+              "damage_type": null,
+              "min_max": null,
+              "is_hit": null
+            }
+          },
+          "modifier": "More",
+          "value": 50.0
+        }
+      }
+    ]
   },
   "focus_10": {
     "name": "Phylactery",
@@ -1284,16 +1987,187 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 120.0
+          }
+        ],
+        "is_unique": false
+      }
+    },
+    "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": null,
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "brain_jar": {
+    "name": "Brain in a Jar",
+    "icon": "items/focuses/brain_jar.webp",
+    "description": "The visiting beings have methods which make these extractions easy and almost normal.",
+    "slot": "Shield",
+    "extra_slots": [],
+    "categories": [
+      "Focus"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "base_mana": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 120.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              300.0,
+              400.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_madness": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "madness",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              5.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              25.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": "ManaRegen",
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "madness",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 3.0
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [
       {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 120.0,
-        "ignore_quality": false
+        "OnKill": {
+          "conditions": []
+        },
+        "description": null,
+        "trigger_id": "brain_jar",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "madness",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "stacks": 1,
+              "duration": 200.0,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
       }
     ],
-    "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
     "rune_specs": null,

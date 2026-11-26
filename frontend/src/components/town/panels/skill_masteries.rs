@@ -10,7 +10,7 @@ use shared::{
             PlayerSkillMasteries, SkillMasteryState, SkillMasteryUpgrade,
             SkillMasteryUpgradeEffect, SkillMasteryUpgradeEffectType,
         },
-        values::NonNegative,
+        values::Damage,
     },
     http::client::{SaveFavoriteSkillsRequest, SaveSkillMasteryUpgradesRequest},
 };
@@ -50,13 +50,10 @@ pub fn SkillMasteriesPanel(
     let skill_masteries = RwSignal::new(PlayerSkillMasteries::default());
     let show_all_skills = RwSignal::new(false);
 
-    let reset = move || {
-        skill_masteries.set(town_context.player_skill_masteries.get_untracked());
-    };
-
     Effect::new(move || {
+        let player_skill_masteries = town_context.player_skill_masteries.get();
         if open.get() {
-            reset();
+            skill_masteries.set(player_skill_masteries);
         }
     });
 
@@ -324,7 +321,7 @@ fn MasterySkillShop(
                 let mastery = player_skill_masteries
                     .masteries
                     .get(skill_id)
-                    .filter(|mastery| mastery.experience > 0.0)
+                    .filter(|mastery| mastery.experience.get() > 0.0)
                     .cloned();
                 let base_skill_specs = skill_specs.get(skill_id)?;
                 if mastery.is_none() && (!show_all_skills.get() || base_skill_specs.hidden) {
@@ -987,7 +984,7 @@ fn format_mastery_upgrade_effect(
             affect_triggers:_,
         } => {
             Some(
-                skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None)
+                skill_tooltip::format_skill_effect((**skill_effect).clone(), false, None, None, None,None)
                     .into_any(),
             )
         },
@@ -1002,14 +999,16 @@ fn format_mastery_upgrade_effect(
             let old_status_str = data_context.status_name(old_status_id);
             let new_status_str = data_context.status_name(new_status_id);
             let status_specs = data_context.statuses_specs.read().get(new_status_id).cloned()?;
-            let value: ModifiableValue<_> = NonNegative::new(100.0).into();
+            let value: ModifiableValue<_> = Damage::new(100.0).into();
             Some(view! {
                 <EffectLi>"Apply "{new_status_str}" instead of "{old_status_str}</EffectLi>
                 {status_tooltip::format_status_effects(
+                    new_status_id,
                     status_specs,
                     &(value.into()),
                     None,
                     1,
+                    None,
                     None,
                     None,
                 )}
@@ -1026,6 +1025,7 @@ fn format_mastery_upgrade_effect(
                     )}
                     {conditions_tooltip::format_skill_modifier_conditions_post(
                         &auto_use_conditions,
+                        "",
                         "",
                     )}
                 </EffectLi>

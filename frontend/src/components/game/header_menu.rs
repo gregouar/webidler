@@ -4,7 +4,11 @@ use crate::components::{
     chat::chat_context::ChatContext,
     events::{EventsContext, Key},
     game::websocket::WebsocketContext,
-    shared::resources::{GemsCounter, GoldCounter, ShardsCounter},
+    icons::header_icons::{AchievementsIcon, InventoryIcon, PassivesIcon, PetsIcon, StatsIcon},
+    shared::{
+        achievements::are_rewards_available,
+        resources::{GemsCounter, GoldCounter, ShardsCounter},
+    },
     ui::{
         buttons::{MenuButton, MenuButtonRed},
         fullscreen::FullscreenButton,
@@ -22,6 +26,32 @@ pub fn HeaderMenu() -> impl IntoView {
     let game_context: GameContext = expect_context();
     let chat_context: ChatContext = expect_context();
     let events_context: EventsContext = expect_context();
+
+    let inventory_tip_triggered = RwSignal::new(false);
+    let inventory_tip_has_triggered = RwSignal::new(false);
+    let is_first_grind = game_context
+        .area_id
+        .with_untracked(|area_id| area_id == "inn_basement.json")
+        && game_context.area_state.read_untracked().max_area_level_ever == 0;
+    let previous_bag_empty = RwSignal::new(true);
+
+    Effect::new(move || {
+        let bag_empty = game_context.player_inventory.read().bag.is_empty();
+
+        if is_first_grind
+            && !inventory_tip_has_triggered.get_untracked()
+            && previous_bag_empty.get_untracked()
+            && !bag_empty
+        {
+            inventory_tip_has_triggered.set(true);
+            inventory_tip_triggered.set(true);
+        }
+
+        previous_bag_empty.set(bag_empty);
+    });
+
+    let show_inventory_tutorial =
+        Signal::derive(move || inventory_tip_triggered.get() && !game_context.open_inventory.get());
     let show_passive_point_tutorial = Signal::derive(move || {
         game_context
             .area_id
@@ -34,6 +64,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 .is_empty()
             && game_context.player_resources.read().passive_points > 0
             && !game_context.open_passives.get()
+            && !show_inventory_tutorial.get()
     });
     let power_shard_tip_triggered = RwSignal::new(false);
     let previous_max_power_shard_level = RwSignal::new(
@@ -60,6 +91,20 @@ pub fn HeaderMenu() -> impl IntoView {
         previous_max_power_shard_level.set(max_power_shard_level);
     });
 
+    let switch_panel = move |open_signal: RwSignal<bool>| {
+        let open_value = !open_signal.get_untracked();
+
+        game_context.open_inventory.set(false);
+        game_context.open_passives.set(false);
+        game_context.open_statistics.set(false);
+        game_context.open_skills.set(false);
+        game_context.open_end_grind.set(false);
+        game_context.open_achievements.set(false);
+        game_context.open_pets.set(false);
+
+        open_signal.set(open_value);
+    };
+
     let stop_grind = {
         let conn: WebsocketContext = expect_context();
         move |_| {
@@ -73,7 +118,7 @@ pub fn HeaderMenu() -> impl IntoView {
                     .into(),
                 );
             } else {
-                game_context.open_end_grind.set(true);
+                switch_panel(game_context.open_end_grind);
             }
         }
     };
@@ -95,9 +140,9 @@ pub fn HeaderMenu() -> impl IntoView {
             )
         })
     });
-    let gold = Signal::derive(move || resources.get().0);
-    let gems = Signal::derive(move || resources.get().1);
-    let shards = Signal::derive(move || resources.get().2);
+    let gold = Signal::derive(move || resources.get().0.get());
+    let gems = Signal::derive(move || resources.get().1.get());
+    let shards = Signal::derive(move || resources.get().2.get());
 
     let shard_level_exceeded = Signal::derive(move || {
         let area_specs = game_context.area_specs.read();
@@ -106,11 +151,11 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_inventory = move || {
-        game_context
-            .open_inventory
-            .set(!game_context.open_inventory.get_untracked());
-        game_context.open_statistics.set(false);
-        game_context.open_passives.set(false);
+        if !game_context.open_inventory.get_untracked() {
+            inventory_tip_triggered.set(false);
+            game_context.has_unseen_filtered_loot.set(false);
+        }
+        switch_panel(game_context.open_inventory);
     };
 
     Effect::new(move || {
@@ -120,11 +165,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_passives = move || {
-        game_context.open_inventory.set(false);
-        game_context
-            .open_passives
-            .set(!game_context.open_passives.get_untracked());
-        game_context.open_statistics.set(false);
+        switch_panel(game_context.open_passives);
     };
 
     Effect::new(move || {
@@ -134,11 +175,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_stats = move || {
-        game_context.open_inventory.set(false);
-        game_context.open_passives.set(false);
-        game_context
-            .open_statistics
-            .set(!game_context.open_statistics.get_untracked());
+        switch_panel(game_context.open_statistics);
     };
 
     Effect::new(move || {
@@ -146,6 +183,14 @@ pub fn HeaderMenu() -> impl IntoView {
             open_stats()
         }
     });
+
+    let open_pets = move || {
+        switch_panel(game_context.open_pets);
+    };
+
+    let open_achievements = move || {
+        switch_panel(game_context.open_achievements);
+    };
 
     view! {
         <BaseHeaderMenu>
@@ -198,25 +243,41 @@ pub fn HeaderMenu() -> impl IntoView {
                 />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
-                <MenuButton on:click=move |_| open_inventory()>
-                    <span class="inline xl:hidden">"Inv."</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
-                </MenuButton>
+                <TutorialPopup
+                    show=show_inventory_tutorial
+                    position=TutorialPopupPosition::BelowRight
+                    message="You picked up your first item. Click here to equip it."
+                >
+                    <MenuButton on:click=move |_| open_inventory() title="Inventory">
+                        <InventoryIcon class:text-amber-300=move || {
+                            game_context.has_unseen_filtered_loot.get()
+                        } />
+                    </MenuButton>
+                </TutorialPopup>
                 <TutorialPopup
                     show=show_passive_point_tutorial
                     position=TutorialPopupPosition::BelowRight
                     message="Click here to spend your Passive Point on a node in your current Grind."
                 >
-                    <MenuButton on:click=move |_| open_passives()>
-                        <span class="inline xl:hidden">"Pas."</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
-                        {move || {
-                            let points = resources.get().3;
-                            if points > 0 { format!(" ({points})") } else { "".to_string() }
-                        }}
+                    <MenuButton on:click=move |_| open_passives() title="Passives">
+                        <PassivesIcon class:text-amber-300=move || { resources.get().3 > 0 } />
                     </MenuButton>
                 </TutorialPopup>
-                <MenuButton on:click=move |_| open_stats()>"Stats"</MenuButton>
+                <MenuButton on:click=move |_| open_stats() title="Stats">
+                    <StatsIcon />
+                </MenuButton>
+                <MenuButton
+                    on:click=move |_| { open_pets() }
+                    disabled=move || game_context.user_unlocks.read().pets.is_empty()
+                    title="Pets"
+                >
+                    <PetsIcon />
+                </MenuButton>
+                <MenuButton on:click=move |_| { open_achievements() } title="Achievements">
+                    <AchievementsIcon class:text-amber-300=move || are_rewards_available(
+                        game_context.user_unlocks,
+                    ) />
+                </MenuButton>
                 <TutorialPopup
                     show=power_shard_tip_triggered
                     position=TutorialPopupPosition::BelowRight

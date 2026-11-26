@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_add_evade_t1": {
     "name"        : "Dodging",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -14,7 +14,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  2 }
     ]
   },
-  {
+  "map_add_evade_t2": {
     "name"        : "Evasive",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -29,7 +29,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  4 }
     ]
   },
-  {
+  "map_add_evade_t3": {
     "name"        : "Footwork",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -44,7 +44,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  6 }
     ]
   },
-  {
+  "map_add_evade_t4": {
     "name"        : "Agile",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -59,7 +59,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  8 }
     ]
   },
-  {
+  "map_add_evade_t5": {
     "name"        : "Elusive",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -74,7 +74,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value": 10 }
     ]
   },
-  {
+  "map_add_evade_t6": {
     "name"        : "Fleet",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -89,7 +89,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value": 12 }
     ]
   },
-  {
+  "map_add_evade_t7": {
     "name"        : "Phasing",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -104,7 +104,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value": 14 }
     ]
   },
-  {
+  "map_add_evade_t8": {
     "name"        : "Ghosting",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -119,7 +119,7 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value": 16 }
     ]
   },
-  {
+  "map_add_evade_t9": {
     "name"        : "Intangible",
     "family"      : "add_evade",
     "tags"        : ["Armor", "Stealth"],
@@ -134,4 +134,4 @@
       { "scope": "Global", "stat": "ItemLevel",     "modifier": "Flat",      "value":  20 }
     ]
   }
-]
+}

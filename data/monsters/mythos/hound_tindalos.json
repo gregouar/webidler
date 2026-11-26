@@ -1,0 +1,29 @@
+{
+    "name"    : "Hound of Tindalos",
+    "portrait": "monsters/mythos/hound_tindalos.webp",
+    "max_life": 8,
+    "armor"   : {"Storm": 200},
+    "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+    "skills"  : [
+        {
+            "name"      : "Extra-dimensional Bite",
+            "icon"      : "skills/bite.svg",
+            "skill_type": "Attack",
+            "cooldown"  : 30,
+            "targets"   : [
+                {
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Physical": [4, 8] }
+                            }
+                        },
+                        {
+                            "ApplyStatus": { "status_id": "bleed", "value": [3, 5] }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

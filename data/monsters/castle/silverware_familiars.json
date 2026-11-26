@@ -1,30 +1,25 @@
 {
-  "name": "Silverware Familiars",
+  "name"    : "Silverware Familiars",
   "portrait": "monsters/castle/silverware_familiars.webp",
   "max_life": 8,
-  "armor": { "Physical": 50 },
-  "skills": [
+  "armor"   : {"Physical": 50},
+  "skills"  : [
     {
-      "name": "Spiked Ball",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name"      : "Spiked Ball",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "range": "Melee",
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 5 ]
-                }
+                "damage": { "Physical": [3, 5] }
               }
             },
             {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "value": [ 2, 3 ]
-              }
+              "ApplyStatus": { "status_id": "burn", "value": [2, 3] }
             }
           ]
         }

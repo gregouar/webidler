@@ -7,7 +7,7 @@
     {
       "name"      : "Burning Kitchen Spill",
       "icon"      : "skills/fireball.svg",
-      "cooldown"  : 4.0,
+      "cooldown"  : 40,
       "skill_type": "Attack",
       "targets"   : [
         {

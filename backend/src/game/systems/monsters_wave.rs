@@ -10,6 +10,7 @@ use shared::{
     },
     data::{
         area::{AreaLevel, AreaSpecs, AreaState},
+        item_affix::AffixEffectScope,
         modifier::Modifier,
         monster::{MonsterRarity, MonsterSpecs, MonsterState},
         stat_effect::{StatEffect, StatType},
@@ -55,6 +56,12 @@ pub fn generate_monsters_wave(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
+    if !computations::can_light_incense(area_state) {
+        area_state.incense_lit = false;
+    }
+    if area_state.incense_lit {
+        area_state.used_wave_indices.clear();
+    }
     let (monster_specs, is_boss) = generate_monsters_wave_specs(
         monsters_specs_store,
         statuses_store,
@@ -65,6 +72,14 @@ pub fn generate_monsters_wave(
     )?;
     let monster_states = monster_specs.iter().map(MonsterState::init).collect();
     area_state.is_boss = is_boss;
+    if area_state.incense_lit {
+        if is_boss {
+            area_state.incense_lit = false;
+        } else {
+            area_state.demonic_incense = area_state.demonic_incense.saturating_sub(1);
+            area_state.incense_lit = area_state.demonic_incense > 0;
+        }
+    }
     Ok((monster_specs, monster_states))
 }
 
@@ -96,6 +111,7 @@ fn generate_monsters_wave_specs(
                     area_specs,
                     area_state,
                     &boss.spawns,
+                    false,
                 ),
                 true,
             ));
@@ -103,6 +119,7 @@ fn generate_monsters_wave_specs(
     }
 
     if let Some(wave) = pick_monster_wave(waves, area_state) {
+        let force_champions = area_state.incense_lit;
         return Ok((
             generate_all_monsters_specs(
                 monsters_specs_store,
@@ -110,6 +127,7 @@ fn generate_monsters_wave_specs(
                 area_specs,
                 area_state,
                 &wave.spawns,
+                force_champions,
             ),
             false,
         ));
@@ -159,6 +177,7 @@ fn generate_all_monsters_specs(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     spawns: &[MonsterWaveSpawnBlueprint],
+    force_champions: bool,
 ) -> Vec<MonsterSpecs> {
     let mut grid = [[true; 3]; 2];
     let mut monsters = Vec::with_capacity(6);
@@ -193,6 +212,7 @@ fn generate_all_monsters_specs(
                     area_specs,
                     area_state,
                     base_monster_specs,
+                    force_champions,
                 );
                 specs.character_specs.character_static.position_x = (x + 1) as u8;
                 specs.character_specs.character_static.position_y = (y + 1) as u8;
@@ -240,6 +260,7 @@ fn generate_monster_specs(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
     base_monster_specs: &BaseMonsterSpecs,
+    force_champion: bool,
 ) -> MonsterSpecs {
     let mut monster_specs = MonsterSpecs::init(base_monster_specs);
     let mut monster_level = area_state.area_level + *area_specs.power_level;
@@ -247,25 +268,31 @@ fn generate_monster_specs(
     // TODO: Add owner?
     monster_specs.character_specs.triggers = area_specs.triggers.clone();
 
-    if monster_specs.rarity == MonsterRarity::Normal
-        && rng::random_range(0.0..=1.0).unwrap_or(1.0) < computations::gem_chance(area_state)
-    {
-        // area_state.last_champion_spawn = area_state.area_level;
+    if force_champion && monster_specs.rarity != MonsterRarity::Champion {
         monster_specs.rarity = MonsterRarity::Champion;
         monster_level += CHAMPION_LEVEL_INC;
     };
 
     // Level power
-    monster_specs.experience_reward *= computations::exponential(
-        area_state.area_level + *area_specs.power_level / 2,
-        MONSTER_REWARD_INCREASE_FACTOR,
+    monster_specs.experience_reward = (monster_specs.experience_reward.get()
+        * computations::exponential(
+            area_state.area_level + *area_specs.power_level / 2,
+            MONSTER_REWARD_INCREASE_FACTOR,
+        ))
+    .round()
+    .into();
+    monster_specs.gold_reward.apply_modifier(
+        (computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR) - 1.0)
+            * 100.0,
+        Modifier::More,
     );
-    monster_specs.gold_reward *=
-        computations::exponential(area_state.area_level, MONSTER_REWARD_INCREASE_FACTOR);
-    monster_specs.skill_reward *= computations::exponential(
-        area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,
-        SKILL_REWARD_INCREASE_FACTOR,
-    );
+    monster_specs.skill_reward = (monster_specs.skill_reward.get()
+        * computations::exponential(
+            area_state.area_level + *area_specs.power_level + *area_specs.item_level_modifier,
+            SKILL_REWARD_INCREASE_FACTOR,
+        ))
+    .round()
+    .into();
     monster_specs
         .character_specs
         .character_attrs
@@ -295,7 +322,11 @@ fn generate_monster_specs(
             if base_skill_specs.upgrade_effects.is_empty() {
                 skills_updater::update_skill_specs(
                     statuses_store,
-                    "".to_string(),
+                    skills_updater::init_skill_specs(
+                        "monster".to_string(),
+                        base_skill_specs,
+                        &upgrade_effects,
+                    ),
                     base_skill_specs,
                     1,
                     &upgrade_effects,
@@ -307,11 +338,16 @@ fn generate_monster_specs(
                 let effects: Vec<_> = (&skills_updater::compute_skill_upgrade_effects(
                     base_skill_specs,
                     monster_level,
+                    AffixEffectScope::Local,
                 ))
                     .into();
                 skills_updater::update_skill_specs(
                     statuses_store,
-                    "".to_string(),
+                    skills_updater::init_skill_specs(
+                        "monster".to_string(),
+                        base_skill_specs,
+                        &effects,
+                    ),
                     base_skill_specs,
                     1,
                     &effects,
@@ -334,7 +370,12 @@ fn generate_monster_specs(
 
     let effects = &monster_specs.character_specs.effects;
     for skill_specs in monster_specs.character_specs.skills_specs.iter_mut() {
-        skills_updater::apply_effects_to_skill_specs(statuses_store, skill_specs, effects.iter());
+        skills_updater::apply_effects_to_skill_specs(
+            statuses_store,
+            skill_specs,
+            false,
+            effects.iter(),
+        );
     }
 
     monster_specs

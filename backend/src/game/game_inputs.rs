@@ -2,7 +2,9 @@ use std::ops::ControlFlow;
 use tokio::task::yield_now;
 
 use shared::{
+    computations,
     constants::MAX_AREA_LEVEL,
+    data::area::AreaLevel,
     messages::{
         client::ClientMessage,
         server::{ErrorMessage, ErrorType},
@@ -10,7 +12,10 @@ use shared::{
 };
 
 use crate::{
-    game::{data::master_store::MasterStore, systems::grind_controller},
+    game::{
+        data::master_store::MasterStore,
+        systems::{characters_controller, grind_controller},
+    },
     websocket::WebSocketConnection,
 };
 
@@ -85,11 +90,9 @@ fn handle_client_message(
         }
         ClientMessage::LevelUpSkill(m) => {
             for _ in 0..m.amount {
-                if let Some((_, player_base_skill)) = game_data
-                    .player_base_specs
-                    .mutate()
-                    .skills
-                    .get_index_mut(m.skill_index as usize)
+                let player_base_specs = game_data.player_base_specs.mutate();
+                if let Some(skill_id) = player_base_specs.skills_in_use.get(m.skill_index as usize)
+                    && let Some(player_base_skill) = player_base_specs.skills.get_mut(skill_id)
                 {
                     skills_controller::level_up_skill(
                         player_base_skill,
@@ -111,6 +114,7 @@ fn handle_client_message(
             for _ in 0..m.amount {
                 player_controller::level_up(
                     game_data.player_base_specs.mutate(),
+                    game_data.player_specs.read(),
                     &mut game_data.player_state,
                     game_data.player_resources.mutate(),
                 );
@@ -131,6 +135,13 @@ fn handle_client_message(
                     must_disconnect: false,
                 });
             }
+            for monster_state in game_data.monster_states.iter_mut() {
+                characters_controller::reset_statuses(
+                    &master_store.statuses_store,
+                    &mut monster_state.character_state,
+                    true,
+                )
+            }
         }
         ClientMessage::UnequipItem(m) => {
             if let Err(err) = player_controller::unequip_item_to_bag(
@@ -146,6 +157,13 @@ fn handle_client_message(
                     message: err.to_string(),
                     must_disconnect: false,
                 });
+            }
+            for monster_state in game_data.monster_states.iter_mut() {
+                characters_controller::reset_statuses(
+                    &master_store.statuses_store,
+                    &mut monster_state.character_state,
+                    true,
+                )
             }
         }
         ClientMessage::SheathItem(m) => {
@@ -210,15 +228,37 @@ fn handle_client_message(
             let area_state = game_data.area_state.mutate();
             if m.amount >= 0 {
                 area_state.auto_progress = false;
-            } else if !game_data.area_specs.training {
-                return None;
             }
-            area_state.going_back = area_state
+            let going_back = area_state
                 .going_back
                 .saturating_add(m.amount)
                 .clamp(-(MAX_AREA_LEVEL as i32), MAX_AREA_LEVEL as i32);
+            let target_area_level = (area_state.area_level as i32)
+                .saturating_sub(going_back)
+                .clamp(1, MAX_AREA_LEVEL as i32) as AreaLevel;
+
+            if m.amount < 0
+                && !game_data.area_specs.training
+                && target_area_level > area_state.max_area_level
+            {
+                return None;
+            }
+
+            area_state.going_back = going_back;
         }
-        ClientMessage::SetRushMode(m) => game_data.area_state.mutate().rush_mode = m.value,
+        ClientMessage::SetRushMode(m) => {
+            let area_state = game_data.area_state.mutate();
+            area_state.rush_mode = m.value && !area_state.incense_lit;
+        }
+        ClientMessage::ToggleIncense => {
+            let area_state = game_data.area_state.mutate();
+            if area_state.incense_lit {
+                area_state.incense_lit = false;
+            } else if computations::can_light_incense(area_state) {
+                area_state.incense_lit = true;
+                area_state.rush_mode = false;
+            }
+        }
         ClientMessage::PurchasePassive(m) => {
             if let Err(e) = passives_controller::purchase_node(
                 game_data.player_resources.mutate(),

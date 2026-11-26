@@ -1,6 +1,6 @@
 use std::{f64::consts::LOG10_2, time::Duration};
 
-use crate::data::{area::AreaLevel, item::ItemCategory, stash::StashPrice};
+use crate::data::{area::AreaLevel, item::ItemCategory, stash::StashPrice, values::NonNegative};
 
 // TODO: put in some game config file
 pub const DEFAULT_MAX_CHARACTERS: u8 = 5;
@@ -8,9 +8,9 @@ pub const PLAYER_LIFE_PER_LEVEL: f64 = 2.0;
 pub const DEFAULT_MAX_LEVEL: u8 = 70;
 pub const DEFAULT_SKILL_SLOTS: u8 = 1;
 pub const MAX_SKILL_SLOTS: u8 = 4;
-pub const CHAMPION_BASE_CHANCE: f64 = 0.0001;
-pub const CHAMPION_INC_CHANCE: f64 = 0.000005;
-pub const CHAMPION_LEVEL_INC: AreaLevel = 5;
+pub const INCENSE_BASE_CHANCE: f64 = 0.001;
+pub const INCENSE_INC_CHANCE: f64 = 0.00005;
+pub const CHAMPION_LEVEL_INC: AreaLevel = 1;
 
 pub const WAVES_PER_AREA_LEVEL: u8 = 5;
 pub const RUSH_MODE_SPEED_MULTIPLIER: usize = 12;
@@ -27,7 +27,7 @@ pub const MONSTER_REWARD_INCREASE_FACTOR: f64 = 0.10; // X10 every 10 levels
 pub const SKILL_COST_INCREASE_FACTOR: f64 = LOG10_2; // X2 every level
 pub const XP_INCREASE_FACTOR: f64 = 0.40;
 
-pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.005; // X10 every 200 levels
+pub const SKILL_REWARD_INCREASE_FACTOR: f64 = 0.003; // X10 every about 300 levels
 pub const SKILL_MASTERY_BASE_COST: f64 = 10_000.0;
 pub const SKILL_MASTERY_INCREASE_COST: f64 = 0.04;
 
@@ -59,27 +59,27 @@ pub const ITEM_REWARDS_RARE_FACTOR: f64 = 69.0;
 pub const UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR: f64 = 20.0;
 
 pub const STASH_CHARACTER_PRICE: StashPrice = StashPrice {
-    start_price: 1e5,
+    start_price: NonNegative(1e5),
     start_size: 40,
-    upgrade_price: 1e5,
+    upgrade_price: NonNegative(1e5),
     upgrade_size: 10,
 };
 
 pub const STASH_USER_PRICE: StashPrice = StashPrice {
-    start_price: 1e9,
+    start_price: NonNegative(1e9),
     start_size: 10,
-    upgrade_price: 1e5,
+    upgrade_price: NonNegative(1e5),
     upgrade_size: 5,
 };
 
 pub const STASH_MARKET_PRICE: StashPrice = StashPrice {
-    start_price: 1e7,
+    start_price: NonNegative(1e7),
     start_size: 20,
-    upgrade_price: 1e5,
+    upgrade_price: NonNegative(1e5),
     upgrade_size: 10,
 };
 
-pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 14] = [
+pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 15] = [
     None,
     Some(ItemCategory::MeleeWeapon1H),
     Some(ItemCategory::MeleeWeapon2H),
@@ -94,4 +94,5 @@ pub const GAMBLE_ITEM_CATEGORIES: [Option<ItemCategory>; 14] = [
     Some(ItemCategory::Accessory),
     Some(ItemCategory::Amulet),
     Some(ItemCategory::Ring),
+    Some(ItemCategory::Map),
 ];

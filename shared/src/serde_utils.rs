@@ -9,3 +9,7 @@ pub fn default_true() -> bool {
 pub fn default_1f64() -> f64 {
     1.0
 }
+
+pub fn default_one() -> u8 {
+    1
+}

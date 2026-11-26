@@ -11,7 +11,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -36,7 +36,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -61,47 +61,63 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 20.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 20.0
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          20.0,
-          30.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              20.0,
+              30.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -109,7 +125,6 @@
         "trigger_id": "pathwalker_remains",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -137,7 +152,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -211,7 +227,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -236,49 +252,65 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Life",
-            "skill_type": "Spell"
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": "Life",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 25.0,
-        "ignore_quality": true
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Life",
+                "skill_type": "Spell"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 25.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -288,13 +320,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "leech_boots",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -314,6 +346,7 @@
               "status_id": "mosquito_sword_buff",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -324,7 +357,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -402,7 +436,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -427,18 +461,22 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -446,7 +484,6 @@
         "trigger_id": "storm_claquettes",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -492,7 +529,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -510,7 +548,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -521,6 +560,7 @@
               "status_id": "storm_claquettes",
               "value": 100.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -531,7 +571,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -585,7 +626,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -610,15 +651,19 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -628,7 +673,6 @@
         "trigger_id": "treasure_compass_blessing",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -648,6 +692,7 @@
               "status_id": "compass_speed",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -658,7 +703,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -669,6 +715,7 @@
               "status_id": "compass_damage",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -679,7 +726,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -690,6 +738,7 @@
               "status_id": "compass_regen",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -700,7 +749,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       },
@@ -712,7 +762,6 @@
         "trigger_id": "treasure_compass_curse",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Curse",
         "skill_range": "Melee",
@@ -732,6 +781,7 @@
               "status_id": "compass_resistance",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -742,7 +792,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           },
           {
             "success_chance": {
@@ -753,6 +804,7 @@
               "status_id": "compass_degen",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -763,7 +815,8 @@
             "conditional_modifiers": [],
             "independent_application": true,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -808,7 +861,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -833,79 +886,103 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": "Life",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          60.0,
-          80.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          60.0,
-          80.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": "blizzard"
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatusStacks": {
-            "status_id": "blizzard_vulnerability",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              60.0,
+              80.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatusResistance": {
-            "status_id": "chill",
-            "skill_type": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              60.0,
+              80.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": "blizzard"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "blizzard_vulnerability",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": {
+              "StatusResistance": {
+                "status_id": "chill",
+                "skill_type": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnWaveCompleted": null,
@@ -913,7 +990,6 @@
         "trigger_id": "yeti_boots_stinky",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -933,6 +1009,7 @@
               "status_id": "stinky",
               "value": 30.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -943,7 +1020,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1013,57 +1091,73 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 20.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": "Poison",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 20.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Poison",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -1073,13 +1167,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "sabatons_unique",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1099,6 +1193,7 @@
               "status_id": "drake_voyage",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1109,7 +1204,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1181,7 +1277,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1206,42 +1302,54 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Evade": null
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          10.0,
-          15.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              10.0,
+              15.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          40.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              20.0,
+              40.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          150.0,
-          200.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              150.0,
+              200.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -1251,7 +1359,6 @@
         "trigger_id": "spirit_walker",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1271,6 +1378,7 @@
               "status_id": "spirit_walker",
               "value": 1.0,
               "value_factor": 1.0,
+              "stacks": 1,
               "duration": null,
               "escalation": null,
               "max_stacks": null,
@@ -1281,7 +1389,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1344,7 +1453,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1369,7 +1478,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1394,8 +1503,171 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
+    "weapon_specs": null,
+    "armor_specs": {
+      "armor": 100.0,
+      "block": 0.0
+    },
+    "rune_specs": null,
+    "map_specs": null,
+    "ignore_quality": false,
+    "upgrade_levels": [],
+    "upgrade_effects": []
+  },
+  "mad_boots": {
+    "name": "Stairways to Sarkomand",
+    "icon": "items/boots/mad_boots.webp",
+    "description": "Black nitrous stairways guarded by winged diorite lions lead down from dreamland to the lower gulfs.",
+    "slot": "Boots",
+    "extra_slots": [],
+    "categories": [
+      "Armor",
+      "Boots"
+    ],
+    "min_area_level": 600,
+    "rarity": "Unique",
+    "affixes": {
+      "unique_madness": {
+        "effects": [
+          {
+            "stat": {
+              "StatusStacks": {
+                "status_id": "madness",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              5.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              40.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": "LifeRegen",
+                "conditions": [
+                  "ThreatLevel"
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              -25.0,
+              -15.0
+            ]
+          }
+        ],
+        "is_unique": true
+      }
+    },
+    "triggers": [
+      {
+        "OnWaveCompleted": null,
+        "description": null,
+        "trigger_id": "mad_boots_wave",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "ApplyStatus": {
+              "status_id": "madness",
+              "value": 100.0,
+              "value_factor": 1.0,
+              "stacks": 3,
+              "duration": 100.0,
+              "escalation": null,
+              "max_stacks": null,
+              "avoidable": null,
+              "replace_on_value_only": false
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      },
+      {
+        "OnThreatIncreased": null,
+        "description": null,
+        "trigger_id": "mad_boots_threat",
+        "target": "Me",
+        "modifiers": [],
+        "trigger_propagate": false,
+        "skill_type": "Other",
+        "skill_range": "Melee",
+        "skill_shape": "Single",
+        "skill_repeat": {
+          "value": 1,
+          "target": "Same",
+          "repeat_cooldown": 0.3
+        },
+        "effects": [
+          {
+            "success_chance": {
+              "value": 100.0,
+              "lucky_chance": 0.0
+            },
+            "RefreshStatus": {
+              "status_id": "madness",
+              "damage_type": null,
+              "debuff": null,
+              "value": 100.0,
+              "modifier": "Percent"
+            },
+            "ignore_stat_effects": [],
+            "conditional_modifiers": [],
+            "independent_application": false,
+            "optional_application": false,
+            "description": null,
+            "as_skill_type": null
+          }
+        ]
+      }
+    ],
     "weapon_specs": null,
     "armor_specs": {
       "armor": 100.0,

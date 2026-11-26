@@ -10,12 +10,12 @@
   "skills"            : [
     {
       "name"      : "Crushing Tail",
-      "icon"      : "skills/attack.svg",
+      "icon"      : "skills/spiked_ball.svg",
       "skill_type": "Attack",
-      "cooldown"  : 3.0,
+      "cooldown"  : 30,
       "targets"   : [
         {
-          "range"  : "Melee",
+          "range": "Melee",
           "effects": [
             {
               "FlatDamage": {
@@ -29,18 +29,18 @@
     {
       "name"      : "Incinerating Breath",
       "icon"      : "skills/burning_ray.svg",
-      "skill_type": "Attack",
-      "cooldown"  : 10.0,
+      "skill_type": "Spell",
+      "cooldown"  : 100,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {
                 "damage": { "Fire": [10, 20] }
               }
             },
-            { "ApplyStatus": {"status_id": "burn", "duration": 10, "value": 15} }
+            { "ApplyStatus": {"status_id": "burn", "duration": 100, "value": 15} }
           ]
         }
       ]
@@ -49,7 +49,7 @@
       "name"      : "Abal's Fury",
       "icon"      : "skills/dragon_head.svg",
       "skill_type": "Blessing",
-      "cooldown"  : 20.0,
+      "cooldown"  : 200,
       "targets"   : [
         {
           "target_type": "Me",

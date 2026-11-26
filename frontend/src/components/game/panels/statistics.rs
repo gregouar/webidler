@@ -5,9 +5,10 @@ use leptos::{html::*, prelude::*};
 use shared::data::{
     chance::BoundedChance,
     character_status::StatusId,
+    modifier::Modifier,
     skill::{DamageType, RestoreType, SkillEffect, SkillEffectType, SkillType},
     stat_effect::{EffectsMap, StatSkillFilter, StatType},
-    trigger::TriggerSpecs,
+    trigger::{TriggerEffectModifier, TriggerSpecs},
 };
 use strum::IntoEnumIterator;
 
@@ -56,6 +57,39 @@ struct DamageMultiplierStat {
     multiplier: f64,
 }
 
+fn add_hit_damage_kinds(
+    kinds: &mut BTreeSet<HitDamageKind>,
+    skill_type: SkillType,
+    effect: &SkillEffect,
+    trigger_modifiers: &[TriggerEffectModifier],
+) {
+    let SkillEffectType::FlatDamage { damage, .. } = &effect.effect_type else {
+        return;
+    };
+
+    for (damage_type, value) in damage {
+        let has_flat_trigger_damage = trigger_modifiers.iter().any(|modifier| {
+            modifier.modifier == Modifier::Flat
+                && matches!(
+                    &modifier.stat,
+                    StatType::Damage {
+                        damage_type: modifier_damage_type,
+                        ..
+                    } if modifier_damage_type.is_none_or(|modifier_damage_type| {
+                        modifier_damage_type.is_match(damage_type)
+                    })
+                )
+        });
+
+        if value.min.get() > 0.0 || value.max.get() > 0.0 || has_flat_trigger_damage {
+            kinds.insert(HitDamageKind {
+                skill_type,
+                damage_type,
+            });
+        }
+    }
+}
+
 #[component]
 pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
     let game_context = expect_context::<GameContext>();
@@ -94,23 +128,20 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                 |source_id: &String,
                  skill_type: SkillType,
                  effect: &SkillEffect,
-                 allow_zero_status: bool| match &effect.effect_type {
-                    SkillEffectType::FlatDamage { damage, .. } => {
-                        for &damage_type in damage
-                            .iter()
-                            .filter(|(_, value)| value.min.get() > 0.0 || value.max.get() > 0.0)
-                            .map(|(damage_type, _)| damage_type)
-                        {
-                            kinds.insert(HitDamageKind {
-                                skill_type,
-                                damage_type,
-                            });
-                        }
-                    }
-                    SkillEffectType::ApplyStatus {
-                        status_id, value, ..
-                    } if value.min.get() > 0.0 || value.max.get() > 0.0 || allow_zero_status => {
-                        if let Some(status_specs) = statuses_specs.get(status_id)
+                 trigger_modifiers: &[TriggerEffectModifier]| {
+                    add_hit_damage_kinds(&mut kinds, skill_type, effect, trigger_modifiers);
+
+                    if let SkillEffectType::ApplyStatus {
+                        status_id,
+                        value,
+                        computed_status_triggers,
+                        ..
+                    } = &effect.effect_type
+                    {
+                        if (value.min.get() > 0.0
+                            || value.max.get() > 0.0
+                            || !trigger_modifiers.is_empty())
+                            && let Some(status_specs) = statuses_specs.get(status_id)
                             && let Some(damage_type) = status_specs.damage_type
                         {
                             status_multipliers
@@ -127,8 +158,21 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     )
                                 });
                         }
+
+                        for trigger_effect in computed_status_triggers
+                            .iter()
+                            .flat_map(|triggers| triggers.values())
+                        {
+                            for trigger_effect_skill_effect in &trigger_effect.effects {
+                                add_hit_damage_kinds(
+                                    &mut kinds,
+                                    trigger_effect.skill_type,
+                                    trigger_effect_skill_effect,
+                                    &trigger_effect.modifiers,
+                                );
+                            }
+                        }
                     }
-                    _ => {}
                 };
 
             for skill in player_specs
@@ -142,7 +186,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                     .iter()
                     .flat_map(|target| target.effects.iter())
                 {
-                    add_damage_effect(&skill.skill_id, skill.skill_type, effect, false);
+                    add_damage_effect(&skill.skill_id, skill.skill_type, effect, &[]);
                 }
             }
 
@@ -158,7 +202,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                         &trigger_effect.trigger_id,
                         trigger_effect.skill_type,
                         effect,
-                        !trigger_effect.modifiers.is_empty(),
+                        &trigger_effect.modifiers,
                     );
                 }
             }
@@ -325,10 +369,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .character_specs
                                             .character_attrs
                                             .life_regen * 0.1;
-                                        if value == 0.0 {
+                                        if value.get() == 0.0 {
                                             "-".into()
                                         } else {
-                                            format!("{:.1}%", value)
+                                            format!("{:.1}%", value.get())
                                         }
                                     }
                                 />
@@ -355,10 +399,10 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                             .character_specs
                                             .character_attrs
                                             .mana_regen * 0.1;
-                                        if value == 0.0 {
+                                        if value.get() == 0.0 {
                                             "-".into()
                                         } else {
-                                            format!("{:.1}%", value)
+                                            format!("{:.1}%", value.get())
                                         }
                                     }
                                 />
@@ -377,8 +421,9 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     label="Movement Cooldown"
                                     value=move || {
                                         format!(
-                                            "{:.2}s",
-                                            game_context.player_specs.read().movement_cooldown.get(),
+                                            "{:.1}s",
+                                            game_context.player_specs.read().movement_cooldown.get()
+                                                * 0.1,
                                         )
                                     }
                                 />
@@ -390,15 +435,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Physical)
+                                                .get(DamageType::Physical)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -407,15 +453,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Fire)
+                                                .get(DamageType::Fire)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -424,15 +471,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Poison)
+                                                .get(DamageType::Poison)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -441,15 +489,16 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                     value=move || {
                                         format!(
                                             "{:.0}",
-                                            *game_context
+                                            game_context
                                                 .player_specs
                                                 .read()
                                                 .character_specs
                                                 .character_attrs
                                                 .armor
-                                                .get(&DamageType::Storm)
+                                                .get(DamageType::Storm)
                                                 .cloned()
-                                                .unwrap_or_default(),
+                                                .unwrap_or_default()
+                                                .get(),
                                         )
                                     }
                                 />
@@ -575,17 +624,17 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                         (
                                             DamageType::Physical,
                                             evades
-                                                .get(&DamageType::Physical)
+                                                .get(DamageType::Physical)
                                                 .copied()
                                                 .unwrap_or_default(),
                                         ),
                                         (
                                             DamageType::Fire,
-                                            evades.get(&DamageType::Fire).copied().unwrap_or_default(),
+                                            evades.get(DamageType::Fire).copied().unwrap_or_default(),
                                         ),
                                         (
                                             DamageType::Poison,
-                                            evades.get(&DamageType::Poison).copied().unwrap_or_default(),
+                                            evades.get(DamageType::Poison).copied().unwrap_or_default(),
                                         ),
                                     ]);
                                     evade_stats
@@ -614,7 +663,7 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                 .character_attrs
                                                 .damage_taken
                                                 .get(&(SkillType::Attack, damage_type))
-                                                .map(|x| **x)
+                                                .map(|x| x.get())
                                                 .unwrap_or(100.0);
                                             (value != 100.0)
                                                 .then(|| {
@@ -628,6 +677,41 @@ pub fn StatisticsPanel(open: RwSignal<bool>) -> impl IntoView {
                                                         />
                                                     }
                                                 })
+                                        })
+                                        .collect::<Vec<_>>()
+                                }}
+                                {move || {
+                                    let crit_damage_taken_stats = collapse_equal_crit_damage_taken_stats(
+                                        SkillType::iter()
+                                            .map(|skill_type| {
+                                                (
+                                                    skill_type,
+                                                    game_context
+                                                        .player_specs
+                                                        .read()
+                                                        .character_specs
+                                                        .character_attrs
+                                                        .crit_damage_taken
+                                                        .get(&skill_type)
+                                                        .map(|value| value.get())
+                                                        .unwrap_or(100.0)
+                                                        .max(0.0),
+                                                )
+                                            })
+                                            .collect(),
+                                    );
+                                    crit_damage_taken_stats
+                                        .into_iter()
+                                        .map(|(skill_type, value)| {
+                                            view! {
+                                                <Stat
+                                                    label=format!(
+                                                        "{}Critical Hit Damage Taken",
+                                                        skill_type_str(skill_type),
+                                                    )
+                                                    value=move || { format!("{}%", format_number(value)) }
+                                                />
+                                            }
                                         })
                                         .collect::<Vec<_>>()
                                 }}
@@ -919,6 +1003,24 @@ fn collapse_equal_evade_stats(
             .into_iter()
             .filter(|(_, evade)| evade.value.get() != 0.0)
             .map(|(damage_type, evade)| (Some(damage_type), evade))
+            .collect()
+    }
+}
+
+fn collapse_equal_crit_damage_taken_stats(
+    stats: Vec<(SkillType, f64)>,
+) -> Vec<(Option<SkillType>, f64)> {
+    let Some(first_value) = stats.first().map(|(_, value)| *value) else {
+        return Vec::new();
+    };
+
+    if first_value != 100.0 && stats.iter().all(|(_, value)| *value == first_value) {
+        vec![(None, first_value)]
+    } else {
+        stats
+            .into_iter()
+            .filter(|(_, value)| *value != 100.0)
+            .map(|(skill_type, value)| (Some(skill_type), value))
             .collect()
     }
 }

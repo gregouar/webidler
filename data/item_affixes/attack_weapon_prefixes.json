@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_damage_local_t1"     : {
     "name"        : "Vicious",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -9,10 +9,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 1,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [20, 35] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [25, 45] }
     ]
   },
-  {
+  "item_inc_damage_local_t2"     : {
     "name"        : "Brutal",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -22,10 +22,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 50,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [45, 55] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [55, 70] }
     ]
   },
-  {
+  "item_inc_damage_local_t3"     : {
     "name"        : "Severe",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -35,10 +35,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 100,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [65, 75] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [80, 95] }
     ]
   },
-  {
+  "item_inc_damage_local_t4"     : {
     "name"        : "Ruthless",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -48,10 +48,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 150,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [85, 95] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [105, 120] }
     ]
   },
-  {
+  "item_inc_damage_local_t5"     : {
     "name"        : "Savage",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -61,10 +61,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 200,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [105, 115] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [130, 145] }
     ]
   },
-  {
+  "item_inc_damage_local_t6"     : {
     "name"        : "Ferocious",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -74,10 +74,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 260,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [130, 145] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [160, 180] }
     ]
   },
-  {
+  "item_inc_damage_local_t7"     : {
     "name"        : "Merciless",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -87,10 +87,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 330,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [160, 180] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [195, 220] }
     ]
   },
-  {
+  "item_inc_damage_local_t8"     : {
     "name"        : "Relentless",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -100,10 +100,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 410,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [195, 220] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [235, 265] }
     ]
   },
-  {
+  "item_inc_damage_local_t9"     : {
     "name"        : "Unstoppable",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -113,10 +113,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 500,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [235, 270] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [280, 320] }
     ]
   },
-  {
+  "item_inc_damage_local_t10"    : {
     "name"        : "Dominating",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -126,10 +126,10 @@
     "restrictions": ["AttackWeapon"],
     "item_level"  : 600,
     "effects"     : [
-      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [300, 350] }
+      { "scope": "Local", "stat": {"Damage": {}}, "modifier": "Increased", "value": [350, 400] }
     ]
   },
-  {
+  "item_add_physical_damage_t1"  : {
     "name"        : "Sharp",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -153,7 +153,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t2"  : {
     "name"        : "Strong",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -177,7 +177,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t3"  : {
     "name"        : "Mighty",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -201,7 +201,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t4"  : {
     "name"        : "Overwhelming",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -225,7 +225,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t5"  : {
     "name"        : "Colossal",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -249,7 +249,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t6"  : {
     "name"        : "Monstrous",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -273,7 +273,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t7"  : {
     "name"        : "Enormous",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -297,7 +297,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t8"  : {
     "name"        : "Gargantuan",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -321,7 +321,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t9"  : {
     "name"        : "Titanic",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -345,7 +345,7 @@
       }
     ]
   },
-  {
+  "item_add_physical_damage_t10" : {
     "name"        : "Almighty",
     "family"      : "add_physical_damage",
     "tags"        : ["Physical", "Attack"],
@@ -369,7 +369,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t1"   : {
     "name"        : "Smouldering",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -393,7 +393,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t1"   : {
     "name"        : "Smouldering",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -417,7 +417,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t2"   : {
     "name"        : "Searing",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -441,7 +441,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t2"   : {
     "name"        : "Searing",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -465,7 +465,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t3"   : {
     "name"        : "Burning",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -489,7 +489,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t3"   : {
     "name"        : "Burning",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -513,7 +513,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t4"   : {
     "name"        : "Blistering",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -537,7 +537,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t4"   : {
     "name"        : "Blistering",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -561,7 +561,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t5"   : {
     "name"        : "Flaming",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -585,7 +585,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t5"   : {
     "name"        : "Flaming",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -609,7 +609,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t6"   : {
     "name"        : "Scorching",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -633,7 +633,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t6"   : {
     "name"        : "Scorching",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -657,7 +657,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t7"   : {
     "name"        : "Blazing",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -681,7 +681,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t7"   : {
     "name"        : "Blazing",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -705,7 +705,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t8"   : {
     "name"        : "Combusting",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -729,7 +729,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t8"   : {
     "name"        : "Combusting",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -753,7 +753,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t9"   : {
     "name"        : "Incinerating",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -777,7 +777,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t9"   : {
     "name"        : "Incinerating",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -801,7 +801,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_1h_t10"  : {
     "name"        : "Immolating",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -825,7 +825,7 @@
       }
     ]
   },
-  {
+  "item_add_fire_damage_2h_t10"  : {
     "name"        : "Immolating",
     "family"      : "add_fire_damage",
     "tags"        : ["Fire", "Attack"],
@@ -849,7 +849,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t1" : {
     "name"        : "Nauseous",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -873,7 +873,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t1" : {
     "name"        : "Nauseous",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -897,7 +897,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t2" : {
     "name"        : "Noxious",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -921,7 +921,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t2" : {
     "name"        : "Noxious",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -945,7 +945,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t3" : {
     "name"        : "Foul",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -969,7 +969,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t3" : {
     "name"        : "Foul",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -993,7 +993,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t4" : {
     "name"        : "Toxic",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1017,7 +1017,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t4" : {
     "name"        : "Toxic",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1041,7 +1041,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t5" : {
     "name"        : "Venomous",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1065,7 +1065,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t5" : {
     "name"        : "Venomous",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1089,7 +1089,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t6" : {
     "name"        : "Virulent",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1113,7 +1113,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t6" : {
     "name"        : "Virulent",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1137,7 +1137,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t7" : {
     "name"        : "Corrosive",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1161,7 +1161,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t7" : {
     "name"        : "Corrosive",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1185,7 +1185,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t8" : {
     "name"        : "Caustic",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1209,7 +1209,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t8" : {
     "name"        : "Caustic",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1233,7 +1233,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t9" : {
     "name"        : "Acid",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1257,7 +1257,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t9" : {
     "name"        : "Acid",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1281,7 +1281,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_1h_t10": {
     "name"        : "Malignant",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1305,7 +1305,7 @@
       }
     ]
   },
-  {
+  "item_add_poison_damage_2h_t10": {
     "name"        : "Malignant",
     "family"      : "add_poison_damage",
     "tags"        : ["Poison", "Attack"],
@@ -1329,7 +1329,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t1"  : {
     "name"        : "Crackling",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1347,7 +1347,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t1"  : {
     "name"        : "Crackling",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1365,7 +1365,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t2"  : {
     "name"        : "Shocking",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1383,7 +1383,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t2"  : {
     "name"        : "Shocking",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1401,7 +1401,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t3"  : {
     "name"        : "Electrifying",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1419,7 +1419,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t3"  : {
     "name"        : "Electrifying",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1437,7 +1437,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t4"  : {
     "name"        : "Tumultuous",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1455,7 +1455,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t4"  : {
     "name"        : "Tumultuous",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1473,7 +1473,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t5"  : {
     "name"        : "Thunderous",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1491,7 +1491,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t5"  : {
     "name"        : "Thunderous",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1509,7 +1509,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t6"  : {
     "name"        : "Tempestuous",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1527,7 +1527,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t6"  : {
     "name"        : "Tempestuous",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1545,7 +1545,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t7"  : {
     "name"        : "Storming",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1563,7 +1563,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t7"  : {
     "name"        : "Storming",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1581,7 +1581,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t8"  : {
     "name"        : "Catastrophic",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1599,7 +1599,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t8"  : {
     "name"        : "Catastrophic",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1617,7 +1617,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t9"  : {
     "name"        : "Cataclysmic",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1635,7 +1635,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t9"  : {
     "name"        : "Cataclysmic",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1653,7 +1653,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_1h_t10" : {
     "name"        : "Apocalyptic",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1671,7 +1671,7 @@
       }
     ]
   },
-  {
+  "item_add_storm_damage_2h_t10" : {
     "name"        : "Apocalyptic",
     "family"      : "add_storm_damage",
     "tags"        : ["Storm", "Attack"],
@@ -1689,4 +1689,4 @@
       }
     ]
   }
-]
+}

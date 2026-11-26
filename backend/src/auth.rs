@@ -3,7 +3,7 @@ use aes_gcm::aead::Aead;
 use anyhow::anyhow;
 use argon2::{
     Argon2,
-    password_hash::{PasswordHash, PasswordHasher, PasswordVerifier, SaltString, rand_core::OsRng},
+    password_hash::{PasswordHasher, PasswordVerifier, phc::PasswordHash},
 };
 use axum::{
     body::Body,
@@ -21,7 +21,7 @@ use chrono::{Duration, Utc};
 
 use headers::{Authorization, authorization::Bearer};
 use jsonwebtoken::{Header, TokenData, Validation, decode, encode};
-use rand::RngCore;
+use rand::RngExt;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
@@ -214,7 +214,7 @@ pub fn expired_refresh_cookie() -> String {
 }
 
 pub fn hash_password(password: &str) -> anyhow::Result<String> {
-    match Argon2::default().hash_password(password.as_ref(), &SaltString::generate(&mut OsRng)) {
+    match Argon2::default().hash_password(password.as_ref()) {
         Ok(password_hash) => Ok(password_hash.to_string()),
         Err(e) => Err(anyhow!("failed to hash password: {e}")),
     }
@@ -241,7 +241,7 @@ impl From<db::users::UserEntry> for User {
 #[allow(deprecated)]
 pub fn encrypt_email(app_settings: &AppSettings, email: &str) -> anyhow::Result<Vec<u8>> {
     let mut nonce = [0u8; 12];
-    rand::rng().fill_bytes(&mut nonce);
+    rand::rng().fill(&mut nonce);
 
     let ciphertext = app_settings
         .aes_key
@@ -276,7 +276,7 @@ pub fn hash_content(app_settings: &AppSettings, email: &str) -> Vec<u8> {
 
 pub fn generate_token() -> String {
     let mut token_data = [0u8; 32];
-    rand::rng().fill_bytes(&mut token_data);
+    rand::rng().fill(&mut token_data);
 
     B64_ENGINE.encode(token_data)
 }

@@ -39,6 +39,7 @@ impl_into_message! {
         SetAutoProgress(SetAutoProgressMessage),
         GoBack(GoBackLevelMessage),
         SetRushMode(SetRushModeMessage),
+        ToggleIncense,
     }
 }
 

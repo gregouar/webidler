@@ -2,13 +2,16 @@ use std::iter;
 
 use itertools::all;
 use shared::{
+    computations,
     constants::{ITEM_REWARDS_BOSS_FACTOR, POWER_SHARD_LEVELS_NEEDED, WAVES_PER_AREA_LEVEL},
     data::{
         area::{AreaLevel, ThreatLevel},
         character::CharacterId,
+        monster::MonsterRarity,
+        player::{CharacterSpecs, CharacterState},
         skill::TargetType,
         stat_effect::compare_options,
-        trigger::EventTrigger,
+        trigger::{EventTrigger, OwnedTrigger},
     },
 };
 
@@ -23,6 +26,7 @@ use crate::game::{
         stats_updater::check_condition,
         triggers_controller,
     },
+    utils::rng,
 };
 
 use super::{
@@ -40,6 +44,9 @@ pub async fn resolve_events(
     let events = events_queue.consume_events();
     for event in events.iter() {
         match event {
+            GameEvent::Tick { tick_number } => {
+                handle_tick_event(&mut trigger_contexts, game_data, master_store, *tick_number)
+            }
             GameEvent::Hit(hit_event) => {
                 handle_hit_event(&mut trigger_contexts, game_data, master_store, hit_event)
             }
@@ -76,9 +83,75 @@ pub async fn resolve_events(
     );
 }
 
-fn handle_hit_event<'a>(
+fn handle_tick_event<'a>(
     trigger_contexts: &mut Vec<TriggerContext<'a>>,
     game_data: &mut GameInstanceData,
+    master_store: &MasterStore,
+    tick_number: usize,
+) {
+    let characters = iter::once((
+        CharacterId::Player,
+        &game_data.player_specs.read().character_specs,
+        &game_data.player_state.character_state,
+    ))
+    .chain(
+        game_data
+            .monster_specs
+            .iter()
+            .zip(game_data.monster_states.iter())
+            .enumerate()
+            .map(|(idx, (monster_specs, monster_state))| {
+                (
+                    CharacterId::Monster(idx),
+                    &monster_specs.character_specs,
+                    &monster_state.character_state,
+                )
+            }),
+    );
+
+    for (character_id, character_specs, character_state) in characters {
+        for (trigger, owned_triggers) in character_specs.triggers.iter() {
+            let tick_trigger = match trigger {
+                EventTrigger::OnTick(t) => t,
+                _ => continue,
+            };
+
+            if !tick_number.is_multiple_of(tick_trigger.tick_interval) {
+                continue;
+            }
+
+            if tick_trigger.conditions.iter().any(|condition| {
+                check_condition(
+                    &master_store.statuses_store,
+                    &game_data.area_threat,
+                    &character_specs.character_attrs,
+                    character_state,
+                    None,
+                    condition,
+                ) <= 0.0
+            }) {
+                continue;
+            }
+
+            trigger_contexts.extend(owned_triggers.iter().cloned().map(|owned_trigger| {
+                TriggerContext {
+                    owned_trigger,
+                    source: CharacterId::Player, // TODO?
+                    target: character_id,
+                    hit_context: None,
+                    status_context: None,
+                    restore_context: None,
+                    level: 0,
+                    trigger_depth: 0,
+                }
+            }));
+        }
+    }
+}
+
+fn handle_hit_event<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &GameInstanceData,
     master_store: &MasterStore,
     hit_event: &'a HitEvent,
 ) {
@@ -98,89 +171,153 @@ fn handle_hit_event<'a>(
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
-            let hit_trigger = match trigger {
-                EventTrigger::OnHit(ht) if hit_event.source == character_id => ht,
-                EventTrigger::OnTakeHit(ht) if hit_event.target == character_id => ht,
-                _ => continue,
-            };
-
-            let (target_specs, target_state) = match hit_event.target {
-                CharacterId::Player => (
-                    &game_data.player_specs.read().character_specs,
-                    &game_data.player_state.character_state,
-                ),
-
-                CharacterId::Monster(idx) => {
-                    match game_data
-                        .monster_specs
-                        .get(idx)
-                        .zip(game_data.monster_states.get(idx))
-                    {
-                        Some((specs, state)) => (&specs.character_specs, &state.character_state),
-                        None => continue,
-                    }
-                }
-            };
-
-            if !compare_options(&hit_trigger.skill_type, &Some(hit_event.skill_type))
-                || !compare_options(&hit_trigger.range, &Some(hit_event.range))
-                || !compare_options(&hit_trigger.is_crit, &Some(hit_event.crit_damage.is_some()))
-                || !compare_options(&hit_trigger.is_blocked, &Some(hit_event.is_blocked))
-                || !compare_options(&hit_trigger.is_hurt, &Some(hit_event.is_hurt))
-                || !compare_options(
-                    &hit_trigger.is_triggered,
-                    &Some(hit_event.trigger_depth > 0),
-                )
-                || hit_trigger
-                    .damage_type
-                    .map(|damage_type| {
-                        hit_event
-                            .damage
-                            .get(&damage_type)
-                            .map(|d| d.get())
-                            .unwrap_or_default()
-                            <= 0.0
-                    })
-                    .unwrap_or_default()
-                || hit_trigger
-                    .skill_ids
-                    .as_ref()
-                    .map(|skill_ids| !skill_ids.contains(&hit_event.skill_id))
-                    .unwrap_or_default()
-                || hit_trigger.conditions.iter().any(|condition| {
-                    check_condition(
-                        &master_store.statuses_store,
-                        &game_data.area_threat,
-                        &target_specs.character_attrs,
-                        target_state,
-                        None,
-                        condition,
-                    ) <= 0.0
-                })
-            {
-                continue;
-            }
-
-            trigger_contexts.extend(
-                owned_triggers
-                    .iter()
-                    .filter(|owned_trigger| {
-                        hit_event.skill_id != owned_trigger.trigger_effect.trigger_id
-                    })
-                    .cloned()
-                    .map(|owned_trigger| TriggerContext {
-                        owned_trigger,
-                        source: hit_event.source,
-                        target: hit_event.target,
-                        hit_context: Some(hit_event),
-                        status_context: None,
-                        restore_context: None,
-                        level: game_data.area_state.read().area_level as usize,
-                        trigger_depth: hit_event.trigger_depth,
-                    }),
+            try_register_hit_trigger(
+                master_store,
+                trigger_contexts,
+                game_data,
+                hit_event,
+                character_id,
+                trigger,
+                owned_triggers,
+            );
+            try_register_hit_damage_trigger(
+                trigger_contexts,
+                game_data,
+                hit_event,
+                character_id,
+                trigger,
+                owned_triggers,
             );
         }
     }
+}
+
+fn try_register_hit_trigger<'a>(
+    master_store: &MasterStore,
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &GameInstanceData,
+    hit_event: &'a HitEvent,
+    character_id: CharacterId,
+    trigger: &EventTrigger,
+    owned_triggers: &[OwnedTrigger],
+) {
+    let hit_trigger = match trigger {
+        EventTrigger::OnHit(ht) if hit_event.source == character_id => ht,
+        EventTrigger::OnTakeHit(ht) if hit_event.target == character_id => ht,
+        _ => return,
+    };
+
+    let Some((target_specs, target_state)) = resolve_target(game_data, hit_event.target) else {
+        return;
+    };
+
+    if !compare_options(&hit_trigger.skill_type, &Some(hit_event.skill_type))
+        || !compare_options(&hit_trigger.range, &Some(hit_event.range))
+        || !compare_options(&hit_trigger.is_crit, &Some(hit_event.crit_damage.is_some()))
+        || !compare_options(&hit_trigger.is_blocked, &Some(hit_event.is_blocked))
+        || !compare_options(&hit_trigger.is_hurt, &Some(hit_event.is_hurt))
+        || !compare_options(
+            &hit_trigger.is_triggered,
+            &Some(hit_event.trigger_depth > 0),
+        )
+        || hit_trigger
+            .damage_type
+            .map(|damage_type| {
+                hit_event
+                    .damage
+                    .get(damage_type)
+                    .map(|d| d.get())
+                    .unwrap_or_default()
+                    <= 0.0
+            })
+            .unwrap_or_default()
+        || !compare_options(&hit_trigger.skill_id.as_ref(), &Some(&hit_event.skill_id))
+        || hit_trigger
+            .item_slot
+            .map(|item_slot| {
+                !hit_event
+                    .item_slot
+                    .is_some_and(|hit_item_slot| item_slot == hit_item_slot)
+            })
+            .unwrap_or_default()
+        || hit_trigger.conditions.iter().any(|condition| {
+            check_condition(
+                &master_store.statuses_store,
+                &game_data.area_threat,
+                &target_specs.character_attrs,
+                target_state,
+                None,
+                condition,
+            ) <= 0.0
+        })
+    {
+        return;
+    }
+
+    trigger_contexts.extend(
+        owned_triggers
+            .iter()
+            .filter(|owned_trigger| hit_event.skill_id != owned_trigger.trigger_effect.trigger_id)
+            .cloned()
+            .map(|owned_trigger| TriggerContext {
+                owned_trigger,
+                source: hit_event.source,
+                target: hit_event.target,
+                hit_context: Some(hit_event),
+                status_context: None,
+                restore_context: None,
+                level: game_data.area_state.read().area_level as usize,
+                trigger_depth: hit_event.trigger_depth,
+            }),
+    );
+}
+
+fn try_register_hit_damage_trigger<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &GameInstanceData,
+    hit_event: &'a HitEvent,
+    character_id: CharacterId,
+    trigger: &EventTrigger,
+    owned_triggers: &[OwnedTrigger],
+) {
+    let damage_trigger = match trigger {
+        EventTrigger::OnTakeDamage(dt) if hit_event.target == character_id => dt,
+        _ => return,
+    };
+
+    if !hit_event.is_hurt
+        || !compare_options(&damage_trigger.skill_type, &Some(hit_event.skill_type))
+        || damage_trigger
+            .damage_type
+            .map(|damage_type| {
+                hit_event
+                    .damage
+                    .get(damage_type)
+                    .map(|d| d.get())
+                    .unwrap_or_default()
+                    <= 0.0
+            })
+            .unwrap_or_default()
+    {
+        return;
+    }
+
+    trigger_contexts.extend(
+        owned_triggers
+            .iter()
+            .filter(|owned_trigger| hit_event.skill_id != owned_trigger.trigger_effect.trigger_id)
+            .cloned()
+            .map(|owned_trigger| TriggerContext {
+                owned_trigger,
+                source: hit_event.source,
+                target: hit_event.target,
+                hit_context: Some(hit_event),
+                status_context: None,
+                restore_context: None,
+                level: game_data.area_state.read().area_level as usize,
+                trigger_depth: hit_event.trigger_depth,
+            }),
+    );
 }
 
 fn handle_status_event<'a>(
@@ -205,81 +342,139 @@ fn handle_status_event<'a>(
 
     for (character_id, character_specs) in characters {
         for (trigger, owned_triggers) in character_specs.triggers.iter() {
-            match trigger {
-                EventTrigger::OnApplyStatus(_) if status_event.source == character_id => {}
-                EventTrigger::OnReceiveStatus(_) if status_event.target == character_id => {}
-                _ => continue,
-            };
+            try_register_status_trigger(
+                master_store,
+                trigger_contexts,
+                game_data,
+                status_event,
+                character_id,
+                trigger,
+                owned_triggers,
+            );
 
-            let status_trigger = match trigger {
-                EventTrigger::OnApplyStatus(status_trigger)
-                | EventTrigger::OnReceiveStatus(status_trigger) => status_trigger,
-                _ => continue,
-            };
-
-            let (target_specs, target_state) = match status_event.target {
-                CharacterId::Player => (
-                    &game_data.player_specs.read().character_specs,
-                    &game_data.player_state.character_state,
-                ),
-
-                CharacterId::Monster(idx) => {
-                    match game_data
-                        .monster_specs
-                        .get(idx)
-                        .zip(game_data.monster_states.get(idx))
-                    {
-                        Some((specs, state)) => (&specs.character_specs, &state.character_state),
-                        None => continue,
-                    }
-                }
-            };
-
-            if !compare_options(&status_trigger.skill_type, &Some(status_event.skill_type))
-                || !compare_options(
-                    &status_trigger.is_triggered,
-                    &Some(status_event.trigger_depth > 0),
-                )
-                || !status_trigger.status_filter.is_match_with_status(
-                    &status_event.status_id,
-                    status_event.damage_type,
-                    status_event.debuff,
-                )
-                || !compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
-                || status_trigger.conditions.iter().any(|condition| {
-                    check_condition(
-                        &master_store.statuses_store,
-                        &game_data.area_threat,
-                        &target_specs.character_attrs,
-                        target_state,
-                        None,
-                        condition,
-                    ) <= 0.0
-                })
-            {
-                continue;
-            }
-
-            trigger_contexts.extend(
-                owned_triggers
-                    .iter()
-                    .filter(|owned_trigger| {
-                        status_event.skill_id != owned_trigger.trigger_effect.trigger_id
-                    })
-                    .cloned()
-                    .map(|owned_trigger| TriggerContext {
-                        owned_trigger,
-                        source: status_event.source,
-                        target: status_event.target,
-                        hit_context: None,
-                        status_context: Some(status_event),
-                        restore_context: None,
-                        level: game_data.area_state.read().area_level as usize,
-                        trigger_depth: status_event.trigger_depth,
-                    }),
+            try_register_status_damage_trigger(
+                trigger_contexts,
+                game_data,
+                status_event,
+                character_id,
+                trigger,
+                owned_triggers,
             );
         }
     }
+}
+
+fn try_register_status_trigger<'a>(
+    master_store: &MasterStore,
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &GameInstanceData,
+    status_event: &'a StatusEvent,
+    character_id: CharacterId,
+    trigger: &EventTrigger,
+    owned_triggers: &[OwnedTrigger],
+) {
+    let status_trigger = match trigger {
+        EventTrigger::OnApplyStatus(status_trigger) if status_event.source == character_id => {
+            status_trigger
+        }
+        EventTrigger::OnReceiveStatus(status_trigger) if status_event.target == character_id => {
+            status_trigger
+        }
+        _ => return,
+    };
+
+    let Some((target_specs, target_state)) = resolve_target(game_data, status_event.target) else {
+        return;
+    };
+
+    if !compare_options(&status_trigger.skill_type, &Some(status_event.skill_type))
+        || !compare_options(
+            &status_trigger.is_triggered,
+            &Some(status_event.trigger_depth > 0),
+        )
+        || !status_trigger.status_filter.is_match_with_status(
+            &status_event.status_id,
+            status_event.damage_type,
+            status_event.debuff,
+        )
+        || !compare_options(&status_trigger.is_evaded, &Some(status_event.is_evaded))
+        || !compare_options(
+            &status_trigger.is_max_stacks,
+            &Some(status_event.is_max_stacks),
+        )
+        || status_trigger.conditions.iter().any(|condition| {
+            check_condition(
+                &master_store.statuses_store,
+                &game_data.area_threat,
+                &target_specs.character_attrs,
+                target_state,
+                None,
+                condition,
+            ) <= 0.0
+        })
+    {
+        return;
+    }
+
+    trigger_contexts.extend(
+        owned_triggers
+            .iter()
+            .filter(|owned_trigger| {
+                status_event.skill_id != owned_trigger.trigger_effect.trigger_id
+            })
+            .cloned()
+            .map(|owned_trigger| TriggerContext {
+                owned_trigger,
+                source: status_event.source,
+                target: status_event.target,
+                hit_context: None,
+                status_context: Some(status_event),
+                restore_context: None,
+                level: game_data.area_state.read().area_level as usize,
+                trigger_depth: status_event.trigger_depth,
+            }),
+    );
+}
+
+fn try_register_status_damage_trigger<'a>(
+    trigger_contexts: &mut Vec<TriggerContext<'a>>,
+    game_data: &GameInstanceData,
+    status_event: &'a StatusEvent,
+    character_id: CharacterId,
+    trigger: &EventTrigger,
+    owned_triggers: &[OwnedTrigger],
+) {
+    let damage_trigger = match trigger {
+        EventTrigger::OnTakeDamage(dt) if status_event.target == character_id => dt,
+        _ => return,
+    };
+
+    if status_event.damage_type.is_none()
+        || status_event.value.get() <= 0.0
+        || !compare_options(&damage_trigger.skill_type, &Some(status_event.skill_type))
+        || !compare_options(&damage_trigger.damage_type, &status_event.damage_type)
+    {
+        return;
+    }
+
+    trigger_contexts.extend(
+        owned_triggers
+            .iter()
+            .filter(|owned_trigger| {
+                status_event.skill_id != owned_trigger.trigger_effect.trigger_id
+            })
+            .cloned()
+            .map(|owned_trigger| TriggerContext {
+                owned_trigger,
+                source: status_event.source,
+                target: status_event.target,
+                hit_context: None,
+                status_context: Some(status_event),
+                restore_context: None,
+                level: game_data.area_state.read().area_level as usize,
+                trigger_depth: status_event.trigger_depth,
+            }),
+    );
 }
 
 fn handle_restore_event<'a>(
@@ -367,6 +562,9 @@ fn handle_kill_event(
             }
 
             game_data.game_stats.monsters_killed += 1;
+            if monster_specs.rarity == MonsterRarity::Champion {
+                game_data.game_stats.champion_monsters_killed += 1;
+            }
 
             let (gold_reward, gems_reward) = player_controller::reward_player(
                 game_data.player_resources.mutate(),
@@ -472,7 +670,7 @@ fn handle_area_completed_event(
         && area_state.area_level <= game_data.area_specs.max_power_shard_level
     {
         area_state.max_power_shard_level_ever = area_level;
-        game_data.player_resources.mutate().shards += 1.0;
+        game_data.player_resources.mutate().shards += 1.0.into();
     }
 
     let power_level = area_state
@@ -486,6 +684,13 @@ fn handle_area_completed_event(
     let new_max = area_state.area_level > area_state.max_area_level;
 
     if new_max {
+        if game_data.area_specs.can_reward_gems()
+            && rng::random_range(0.0..=1.0).unwrap_or(1.0)
+                < computations::incense_chance(area_state)
+        {
+            area_state.demonic_incense = area_state.demonic_incense.saturating_add(1);
+            area_state.last_incense_drop = area_state.area_level;
+        }
         game_data.game_stats.elapsed_time_at_max_level = game_data.game_stats.elapsed_time;
         area_state.max_area_level = area_state.area_level;
         area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);
@@ -495,9 +700,6 @@ fn handle_area_completed_event(
         match loot_generator::generate_loot(
             &game_data.area_blueprint.loot_table,
             &master_store.items_store,
-            &master_store.item_affixes_table,
-            &master_store.item_adjectives_table,
-            &master_store.item_nouns_table,
             if new_max {
                 &DEFAULT_LOOT_TEMPLATE
             } else {
@@ -513,6 +715,7 @@ fn handle_area_completed_event(
                     1.0
                 },
             game_data.player_specs.read().gold_find.get(),
+            None,
         ) {
             Some(item_specs) => {
                 for item_specs in
@@ -532,6 +735,9 @@ fn handle_area_completed_event(
     area_controller::auto_increase_area_level(area_state, 1);
 
     game_data.game_stats.areas_completed += 1;
+    if is_boss_level {
+        game_data.game_stats.bosses_killed += 1;
+    }
 }
 
 fn handle_wave_completed_event(
@@ -608,6 +814,28 @@ fn handle_threat_increased_event(
                     trigger_depth: 0,
                 }
             }));
+        }
+    }
+}
+
+fn resolve_target(
+    game_data: &GameInstanceData,
+    target: CharacterId,
+) -> Option<(&CharacterSpecs, &CharacterState)> {
+    match target {
+        CharacterId::Player => Some((
+            &game_data.player_specs.read().character_specs,
+            &game_data.player_state.character_state,
+        )),
+        CharacterId::Monster(idx) => {
+            match game_data
+                .monster_specs
+                .get(idx)
+                .zip(game_data.monster_states.get(idx))
+            {
+                Some((specs, state)) => Some((&specs.character_specs, &state.character_state)),
+                None => None,
+            }
         }
     }
 }

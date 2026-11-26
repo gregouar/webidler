@@ -5,7 +5,7 @@ use strum_macros::EnumIter;
 use crate::{
     data::{
         area::AreaLevel,
-        item::{ItemCategory, ItemRarity, ItemSpecs},
+        item::{BaseItemId, ItemCategory, ItemRarity, ItemSpecs},
         modifier::Modifier,
         stat_effect::StatType,
         user::UserCharacterId,
@@ -34,6 +34,7 @@ pub struct MarketItem {
 }
 
 pub const STAT_FILTERS_AMOUNT: usize = 5;
+pub const AFFIX_FILTERS_AMOUNT: usize = 5;
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub struct MarketStatFilter {
@@ -42,6 +43,14 @@ pub struct MarketStatFilter {
     pub value: Option<f64>,
     #[serde(default)]
     pub exclude: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq)]
+pub struct MarketAffixFilter {
+    pub base_item_id: Option<BaseItemId>,
+    pub affix_group_id: String,
+    #[serde(default)]
+    pub min_level: Option<AreaLevel>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -55,7 +64,6 @@ pub struct MarketFilters {
 
     pub min_power_level: Option<AreaLevel>,
     pub min_upgrade_level: Option<u8>,
-    #[serde(default)]
     pub min_max_power_shard_level: Option<AreaLevel>,
 
     pub item_rarity: Option<ItemRarity>,
@@ -73,6 +81,7 @@ pub struct MarketFilters {
     pub item_block: Option<f64>,
 
     pub stat_filters: [Option<MarketStatFilter>; STAT_FILTERS_AMOUNT],
+    pub affix_filters: [Option<MarketAffixFilter>; AFFIX_FILTERS_AMOUNT],
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, EnumIter, Hash, PartialEq, Eq)]

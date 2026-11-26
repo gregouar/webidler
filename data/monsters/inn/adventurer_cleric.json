@@ -1,37 +1,23 @@
 {
-  "name": "Baernur",
-  "portrait": "monsters/inn/adventurer_cleric.webp",
-  "rarity": "Boss",
-  "max_life": 150,
-  "stun_lockout": 5,
-  "armor": {
-    "Physical": 100,
-    "Storm": 100,
-    "Poison": 100
-  },
-  "status_resistances": [
+  "name"              : "Baernur",
+  "portrait"          : "monsters/inn/adventurer_cleric.webp",
+  "rarity"            : "Boss",
+  "max_life"          : 150,
+  "stun_lockout"      : 5,
+  "armor"             : {"Physical": 100, "Storm": 100, "Poison": 100},
+  "status_resistances": [ {"status_id": "stun", "value": 30} ],
+  "skills"            : [
     {
-      "status_id": "stun",
-      "value": 30
-    }
-  ],
-  "skills": [
-    {
-      "name": "Spiritual Strike",
-      "icon": "skills/attack.svg",
-      "cooldown": 2,
+      "name"      : "Spiritual Strike",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [
-                    0,
-                    10
-                  ]
-                }
+                "damage": { "Storm": [0, 10] }
               }
             }
           ]
@@ -39,21 +25,16 @@
       ]
     },
     {
-      "name": "Prayer",
-      "icon": "skills/blessing_renewal.svg",
+      "name"      : "Prayer",
+      "icon"      : "skills/blessing_renewal.svg",
       "skill_type": "Blessing",
-      "cooldown": 10,
-      "targets": [
+      "cooldown"  : 100,
+      "targets"   : [
         {
           "target_type": "Friend",
-          "shape": "All",
-          "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "life_regen",
-                "value": 50
-              }
-            }
+          "shape"      : "All",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "life_regen", "value": 50} }
           ]
         }
       ]

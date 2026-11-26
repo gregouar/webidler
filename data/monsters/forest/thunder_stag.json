@@ -1,22 +1,20 @@
 {
-  "name": "Thunder Stag",
+  "name"    : "Thunder Stag",
   "portrait": "monsters/forest/thunder_stag.webp",
   "max_life": 12,
-  "armor": { "Storm": 50, "Physical": 50 },
-  "skills": [
+  "armor"   : {"Storm": 50, "Physical": 50},
+  "skills"  : [
     {
-      "name": "Headbutt",
-      "icon": "skills/attack.svg",
-      "cooldown": 3.0,
+      "name"      : "Headbutt",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 4, 8 ]
-                }
+                "damage": { "Physical": [4, 8] }
               }
             }
           ]
@@ -24,18 +22,16 @@
       ]
     },
     {
-      "name": "Call of Thunder",
-      "icon": "skills/chain_lightning.svg",
-      "cooldown": 7.0,
+      "name"      : "Call of Thunder",
+      "icon"      : "skills/chain_lightning.svg",
+      "cooldown"  : 70,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 10 ]
-                }
+                "damage": { "Storm": [0, 10] }
               }
             }
           ]

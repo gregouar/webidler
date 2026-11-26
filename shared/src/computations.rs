@@ -2,15 +2,16 @@ use std::time::Duration;
 
 use crate::{
     constants::{
-        self, CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
+        self, INCENSE_BASE_CHANCE, INCENSE_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
         SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST, UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR,
         XP_INCREASE_FACTOR,
     },
     data::{
         area::{AreaLevel, AreaState},
-        item::{ItemRarity, ItemSpecs},
+        item::ItemRarity,
         player::{PlayerBaseSkill, PlayerBaseSpecs},
         stash::{Stash, StashType},
+        values::NonNegative,
     },
 };
 
@@ -31,13 +32,16 @@ pub fn diminishing(amount: f64, factor: f64) -> f64 {
     amount / (amount + factor)
 }
 
-pub fn skill_cost_increase(player_base_skill: &PlayerBaseSkill) -> f64 {
-    player_base_skill.next_upgrade_cost
-        + (10.0 * exponential(player_base_skill.upgrade_level, SKILL_COST_INCREASE_FACTOR)).round()
+pub fn skill_cost_increase(player_base_skill: &PlayerBaseSkill) -> NonNegative {
+    (player_base_skill.next_upgrade_cost.get()
+        + (10.0 * exponential(player_base_skill.upgrade_level, SKILL_COST_INCREASE_FACTOR)).round())
+    .into()
 }
 
-pub fn player_level_up_cost(player_specs: &PlayerBaseSpecs) -> f64 {
-    (20.0 * exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR)).round()
+pub fn player_level_up_cost(player_specs: &PlayerBaseSpecs) -> NonNegative {
+    (20.0 * exponential(player_specs.level as AreaLevel, XP_INCREASE_FACTOR))
+        .round()
+        .into()
 }
 
 pub fn skill_mastery_next_level_cost(level: u16) -> f64 {
@@ -86,19 +90,25 @@ pub fn skill_mastery_level(experience: f64) -> u16 {
     }
 }
 
-pub fn gem_chance(area_state: &AreaState) -> f64 {
-    if area_state.area_level > area_state.last_champion_spawn {
-        CHAMPION_BASE_CHANCE
-            + (CHAMPION_INC_CHANCE
+pub fn incense_chance(area_state: &AreaState) -> f64 {
+    if area_state.area_level > area_state.last_incense_drop {
+        INCENSE_BASE_CHANCE
+            + (INCENSE_INC_CHANCE
                 * (area_state
                     .area_level
-                    .saturating_sub(area_state.last_champion_spawn)) as f64)
+                    .saturating_sub(area_state.last_incense_drop)) as f64)
     } else {
         0.0
     }
 }
 
-pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
+pub fn can_light_incense(area_state: &AreaState) -> bool {
+    area_state.demonic_incense > 0
+        && !area_state.is_boss
+        && area_state.area_level >= area_state.max_area_level
+}
+
+pub fn stash_upgrade(stash: &Stash) -> (usize, NonNegative) {
     let stash_price = match stash.stash_type {
         StashType::User => constants::STASH_USER_PRICE,
         StashType::Market => constants::STASH_MARKET_PRICE,
@@ -115,8 +125,11 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
         .div_euclid(stash_price.upgrade_size)
         .saturating_add(1);
 
-    let next_stash_price =
-        stash_price.start_price * stash_price.upgrade_price.powi(next_stash_level as i32);
+    let next_stash_price = stash_price.start_price
+        * stash_price
+            .upgrade_price
+            .get()
+            .powi(next_stash_level as i32);
 
     (
         stash_price.start_size + stash_price.upgrade_size.saturating_mul(next_stash_level),
@@ -124,19 +137,19 @@ pub fn stash_upgrade(stash: &Stash) -> (usize, f64) {
     )
 }
 
-pub fn gamble_price(item_level: AreaLevel) -> f64 {
-    (item_level as f64 / 20.0).floor() + 10.0
-}
-
-pub fn item_gems_price(item_level: AreaLevel, item_rarity: ItemRarity, is_ssf: bool) -> f64 {
+pub fn item_gems_price(
+    item_level: AreaLevel,
+    item_rarity: ItemRarity,
+    is_ssf: bool,
+) -> NonNegative {
     if is_ssf && item_rarity == ItemRarity::Unique {
-        (item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0
+        ((item_level as f64 / UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR).floor() + 1.0).into()
     } else {
-        0.0
+        Default::default()
     }
 }
 
-pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
+pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> NonNegative {
     let rarity_multiplier = match item_rarity {
         ItemRarity::Normal => 1.0,
         ItemRarity::Magic => 2.0,
@@ -144,16 +157,6 @@ pub fn item_gold_price(item_level: AreaLevel, item_rarity: ItemRarity) -> f64 {
         ItemRarity::Masterwork | ItemRarity::Unique => 8.0,
     };
 
-    10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR)
-}
-
-pub fn upgrade_item_price(item_specs: &ItemSpecs) -> Option<f64> {
-    item_specs
-        .base
-        .upgrade_levels
-        .get(item_specs.modifiers.upgrade_level as usize)
-        .and_then(|next_upgrade_level| {
-            (*next_upgrade_level <= item_specs.modifiers.level)
-                .then_some((*next_upgrade_level / 2 + item_specs.base.min_area_level) as f64)
-        })
+    (10.0 * rarity_multiplier * exponential(item_level, constants::MONSTER_REWARD_INCREASE_FACTOR))
+        .into()
 }

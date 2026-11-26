@@ -1,0 +1,63 @@
+{
+    "shell_protection": {
+        "name"      : "Protective Shell",
+        "icon"      : "skills/shell.svg",
+        "debuff"    : false,
+        "duration"  : 50,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
+    "brainless"       : {
+        "name"      : "Brainless",
+        "icon"      : "skills/frontal_lobe.svg",
+        "debuff"    : true,
+        "duration"  : 30,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "ManaRegen", "modifier": "More", "debuff": true},
+                "value"       : 1e300,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "time_trap"       : {
+        "name"      : "Lost in Time and Space",
+        "icon"      : "skills/time_trap.svg",
+        "debuff"    : true,
+        "duration"  : 30,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"Speed": {}}, "modifier": "More", "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
+    },
+    "terror"          : {
+        "name"      : "Terror",
+        "icon"      : "skills/terror.svg",
+        "debuff"    : true,
+        "duration"  : 30,
+        "max_stacks": 1,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"SuccessChance": {}}, "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": { "stat": {"CritChance": {}}, "debuff": true },
+                "value"       : 100,
+                "modifier"    : "Flat"
+            }
+        ]
+    }
+}

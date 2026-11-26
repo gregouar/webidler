@@ -1,0 +1,43 @@
+{
+  "name"    : "Abysmal Conch",
+  "portrait": "monsters/mythos/deep_one_conch.webp",
+  "max_life": 20,
+  "size"    : "Large",
+  "armor"   : {"Physical": 100, "Poison": 100},
+  "block"   : {"Attack": 30, "Spell": 20},
+  "skills"  : [
+    {
+      "name"      : "Tentacles Strike",
+      "icon"      : "skills/tentacle.svg",
+      "cooldown"  : 50,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "repeat": {"value": 3, "target": "Same", "repeat_cooldown": 0.5},
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Physical": [10, 20] }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name"      : "Protective Shell",
+      "icon"      : "skills/shell.svg",
+      "cooldown"  : 100,
+      "skill_type": "Blessing",
+      "targets"   : [
+        {
+          "target_type": "Friend",
+          "shape"      : "All",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "shell_protection", "value": 100} }
+          ]
+        }
+      ]
+    }
+  ]
+}

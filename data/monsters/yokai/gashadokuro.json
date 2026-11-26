@@ -13,14 +13,14 @@
             "name"      : "Crushing Left Hand",
             "icon"      : "skills/skeletal_hand.svg",
             "skill_type": "Attack",
-            "cooldown"  : 3.0,
+            "cooldown"  : 30,
             "targets"   : [
                 {
-                    "range"  : "Melee",
+                    "range": "Melee",
                     "effects": [
                         {
                             "FlatDamage": {
-                                "damage": { "Physical": [20, 40] }
+                                "damage": { "Physical": [10, 30] }
                             }
                         }
                     ]
@@ -31,14 +31,14 @@
             "name"      : "Crushing Right Hand",
             "icon"      : "skills/skeletal_hand.svg",
             "skill_type": "Attack",
-            "cooldown"  : 3.0,
+            "cooldown"  : 30,
             "targets"   : [
                 {
-                    "range"  : "Melee",
+                    "range": "Melee",
                     "effects": [
                         {
                             "FlatDamage": {
-                                "damage": { "Physical": [20, 40] }
+                                "damage": { "Physical": [10, 30] }
                             }
                         }
                     ]
@@ -49,12 +49,12 @@
             "name"      : "Gachi Gachi",
             "icon"      : "skills/skull.svg",
             "skill_type": "Curse",
-            "cooldown"  : 8.0,
+            "cooldown"  : 80,
             "targets"   : [
                 {
-                    "range"  : "Any",
+                    "range": "Any",
                     "effects": [
-                        { "ApplyStatus": {"status_id": "chill", "duration": 4, "value": 100} }
+                        { "ApplyStatus": {"status_id": "chill", "duration": 40, "value": 100} }
                     ]
                 }
             ]

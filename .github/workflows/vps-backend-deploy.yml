@@ -119,7 +119,7 @@ jobs:
             echo "HMAC_KEY=${{ secrets.HMAC_KEY }}" >> /webidler/tmp/.env
             echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> /webidler/tmp/.env
             echo "DISCORD_BOT_TOKEN=${{ secrets.DISCORD_BOT_TOKEN }}" >> /webidler/tmp/.env
-            echo "GAME_START_AT_UTC=2026-08-14T19:00:00Z" >> /webidler/tmp/.env
+            echo "GAME_START_AT_UTC=2026-11-26T20:00:00Z" >> /webidler/tmp/.env
             docker load < /webidler/tmp/backend.tar
 
             BACKUP_DIR="/webidler/backups"
@@ -132,7 +132,8 @@ jobs:
             MAX_BACKUPS=10
             ls -1t $BACKUP_DIR/db_backup_*.sql | tail -n +$((MAX_BACKUPS + 1)) | xargs -r rm -f
 
-            docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend
+            # Reset nginx for cache
+            docker compose -f /webidler/tmp/docker-compose.yml up -d --force-recreate backend nginx
 
             # docker compose -f /webidler/tmp/docker-compose.yml stop
             # docker compose -f /webidler/tmp/docker-compose.yml down

@@ -53,16 +53,17 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
     let stats = move || game_context.game_stats.read();
 
     let gold_donation_value = Signal::derive(move || {
-        game_context.player_resources.read().gold_total
+        (game_context.player_resources.read().gold_total
             * computations::exponential(
                 *game_context.area_specs.read().item_level_modifier
                     + *game_context.area_specs.read().power_level,
                 constants::MONSTER_REWARD_INCREASE_FACTOR,
-            )
+            ))
+        .get()
     });
 
-    let gems_value = Signal::derive(move || game_context.player_resources.read().gems);
-    let shards_value = Signal::derive(move || game_context.player_resources.read().shards);
+    let gems_value = Signal::derive(move || game_context.player_resources.read().gems.get());
+    let shards_value = Signal::derive(move || game_context.player_resources.read().shards.get());
     let stamina_kept =
         Signal::derive(move || computations::stamina_spill(game_context.player_stamina.get()));
 
@@ -145,9 +146,9 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
         }
     });
 
-    let primary_action = {
+    let do_primary_action = Arc::new({
         let conn: WebsocketContext = expect_context();
-        move |_| {
+        move || {
             if game_context.grind_rewards.read_untracked().is_none() {
                 end_quest_requested.set(true);
                 conn.send(&ClientMessage::EndGrind);
@@ -162,6 +163,22 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                     }
                     .into(),
                 );
+            }
+        }
+    });
+
+    let primary_action = {
+        let confirm_context: ConfirmContext = expect_context();
+        let do_primary_action = do_primary_action.clone();
+        move |_| {
+            let incense = game_context.area_state.read_untracked().demonic_incense;
+            if incense > 0 {
+                let message = format!(
+                    "You still have {incense} Demonic Incense. Incense resets when the Grind ends, so any remaining stacks will be wasted. Are you sure you want to end the Grind?"
+                );
+                (confirm_context.confirm)(message, do_primary_action.clone());
+            } else {
+                do_primary_action.clone()();
             }
         }
     };
@@ -413,7 +430,7 @@ fn SkillMasteryRewards() -> impl IntoView {
                     .get(&skill_specs.skill_id)
                     .copied()
                     .unwrap_or_default();
-                if experience_gained <= 0.0 {
+                if experience_gained.get() <= 0.0 {
                     return None;
                 }
 
@@ -788,7 +805,7 @@ fn ItemRewardBackface(
 
 fn predicted_item_rewards_amount(area_level: u16, training: bool, reward_slots: u8) -> u8 {
     if area_level >= ITEM_REWARDS_MIN_LEVEL && !training {
-        reward_slots
+        reward_slots.min(4)
     } else {
         0
     }

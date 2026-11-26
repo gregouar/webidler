@@ -7,7 +7,9 @@ use leptos::{
     prelude::*,
     web_sys,
 };
-use leptos_use::{use_mouse, use_window_size};
+use leptos_use_mouse::use_mouse;
+use leptos_use_on_click_outside::on_click_outside;
+use leptos_use_window_size::use_window_size;
 
 #[derive(Clone, Debug, Copy)]
 pub struct DynamicTooltipContext {
@@ -218,7 +220,7 @@ pub fn DynamicTooltipTarget(
     //     }
     // });
 
-    let _ = leptos_use::on_click_outside(node_ref, move |_| hide_tooltip());
+    let _ = on_click_outside(node_ref, move |_| hide_tooltip());
     on_cleanup(hide_tooltip);
 
     let children = StoredValue::new(children);
@@ -311,7 +313,7 @@ where
 
     let container_ref = NodeRef::<Div>::new();
     let tooltip_ref = NodeRef::<Div>::new();
-    let _ = leptos_use::on_click_outside(container_ref, move |_| is_open.set(false));
+    let _ = on_click_outside(container_ref, move |_| is_open.set(false));
 
     let tooltip_pos = RwSignal::new(Default::default());
 
@@ -416,7 +418,7 @@ where
                     <Portal>
                         <div
                             node_ref=tooltip_ref
-                            class="p-2  fixed z-50"
+                            class="p-2 fixed z-50"
                             style=move || {
                                 let (x, y) = tooltip_pos.get();
                                 format!("position: fixed; left:{}px; top:{}px; ", x, y)

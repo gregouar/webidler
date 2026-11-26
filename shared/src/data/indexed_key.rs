@@ -2,6 +2,7 @@ use std::{
     cmp::Ordering,
     fmt,
     hash::{Hash, Hasher},
+    ops::Deref,
 };
 
 use serde::{Deserialize, Serialize};
@@ -58,6 +59,12 @@ impl From<&str> for IndexedKey<String> {
     }
 }
 
+impl From<&String> for IndexedKey<String> {
+    fn from(value: &String) -> Self {
+        Self::new(value)
+    }
+}
+
 impl From<IndexedKey<String>> for String {
     fn from(value: IndexedKey<String>) -> Self {
         value.value
@@ -105,5 +112,13 @@ impl PartialEq<&str> for IndexedKey<String> {
 impl<T: Hash> Hash for IndexedKey<T> {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.value.hash(state);
+    }
+}
+
+impl Deref for IndexedKey<String> {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        self.value.as_str()
     }
 }

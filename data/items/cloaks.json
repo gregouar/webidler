@@ -11,17 +11,21 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 25.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 25.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -43,17 +47,21 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -75,25 +83,56 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
+          }
+        ],
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatConverter": {
-            "source": {
-              "Damage": {
-                "damage_type": "Storm",
-                "min_max": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "StatConverter": {
+                "source": {
+                  "Damage": {
+                    "damage_type": "Storm",
+                    "min_max": null
+                  }
+                },
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": "Fire",
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "is_extra": false,
+                "skill_type": null,
+                "skill_id": null,
+                "uncapped": false
               }
             },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": null,
@@ -103,77 +142,71 @@
                 "is_hit": null
               }
             },
-            "is_extra": false,
-            "skill_type": null,
-            "uncapped": false
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": null,
-            "is_hit": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              30.0,
+              60.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          30.0,
-          60.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Spell",
-            "skill_id": null
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Spell",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnTakeHit": {
@@ -184,14 +217,14 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": "Storm",
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "drink_storm",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -221,7 +254,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -299,17 +333,21 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 75.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 75.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -331,61 +369,81 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 75.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Evade": null
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          4.0,
-          6.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 75.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": "MovementSpeed",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 10.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              4.0,
+              6.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "MovementSpeed",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 10.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnReceiveStatus": {
@@ -395,13 +453,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": true,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "backstab_cloak",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -431,7 +489,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -523,17 +582,21 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -555,107 +618,132 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": "ThreatGain",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": "Poison",
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "ThreatGain",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Evade": null
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          5.0,
-          10.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": "Poison",
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "SkillConditionalModifier": {
+      "unique_3": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": null,
+                "damage_type": "Poison",
                 "min_max": null,
                 "is_hit": null
               }
             },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": "poison",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null,
-                  "not": false
-                }
-              }
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
             ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              5.0,
+              10.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": "poison",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -720,7 +808,8 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": null,
-                    "not": false
+                    "not": false,
+                    "counting": false
                   }
                 }
               ]
@@ -754,17 +843,21 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 125.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 125.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -786,88 +879,112 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 125.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 125.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 125.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          140.0,
-          160.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "open_wound",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 125.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          50.0,
-          100.0
         ],
-        "ignore_quality": true
+        "is_unique": false
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              140.0,
+              160.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          15.0,
-          20.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          100.0,
-          150.0
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              50.0,
+              100.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              15.0,
+              20.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnKill": {
@@ -878,7 +995,8 @@
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
-                "not": false
+                "not": false,
+                "counting": false
               }
             }
           ]
@@ -900,16 +1018,16 @@
             "modifier": "Flat",
             "factor": 0.1,
             "source": {
-              "StatusValue": {
+              "TargetStatusValue": {
                 "status_id": "open_wound",
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null
               }
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -950,7 +1068,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1021,17 +1140,21 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 150.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 150.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1052,53 +1175,69 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          500.0,
-          1000.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              500.0,
+              1000.0
+            ]
+          }
         ],
-        "ignore_quality": false
+        "is_unique": false
       },
-      {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": -30.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "DamageTaken": {
-            "skill_type": null,
-            "damage_type": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": -30.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": "blessing_gold_fast_gold",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null,
-            "min_max": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "DamageTaken": {
+                "skill_type": null,
+                "damage_type": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": "blessing_gold_fast_gold",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1134,17 +1273,21 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 175.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 175.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1166,97 +1309,118 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 175.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "StatusResistance": {
-            "status_id": null,
-            "skill_type": "Curse"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusPower": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Blessing",
-            "skill_id": null,
-            "min_max": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": -99999999.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": null,
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 175.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusResistance": {
+                "status_id": null,
+                "skill_type": "Curse"
               }
             },
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": "Blessing",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 100.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          250.0,
-          300.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusPower": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Blessing",
+                "skill_id": null,
+                "min_max": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": -1e+300
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": "Blessing",
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              250.0,
+              300.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1300,7 +1464,8 @@
                     "damage_type": null,
                     "debuff": null,
                     "skill_type": "Blessing",
-                    "not": false
+                    "not": false,
+                    "counting": false
                   }
                 }
               ],
@@ -1325,17 +1490,21 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 200.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 200.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1357,115 +1526,132 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          20.0,
-          30.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
             "stat": {
-              "Damage": {
-                "skill_type": "Attack",
-                "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
-                "is_hit": null
-              }
-            },
-            "conditions": [
-              {
-                "HasItem": {
-                  "item_slot": null,
-                  "item_category": "RangedWeapon",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          250.0,
-          300.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": {
-              "CritChance": {
+              "Speed": {
                 "skill_type": "Attack",
                 "skill_id": null
               }
             },
-            "conditions": [
-              {
-                "HasItem": {
-                  "item_slot": null,
-                  "item_category": "RangedWeapon",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              20.0,
+              30.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 10.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+      "unique_2": {
+        "effects": [
+          {
             "stat": {
-              "CritDamage": {
-                "skill_type": null,
-                "skill_id": null
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon",
+                      "not": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
               }
             },
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "focus",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null
-                }
-              },
-              {
-                "HasItem": {
-                  "item_slot": null,
-                  "item_category": "RangedWeapon",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              250.0,
+              300.0
+            ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 30.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "CritChance": {
+                    "skill_type": "Attack",
+                    "skill_id": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon",
+                      "not": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 10.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "CritDamage": {
+                    "skill_type": null,
+                    "skill_id": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "focus",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  },
+                  {
+                    "HasItem": {
+                      "item_slot": null,
+                      "item_category": "RangedWeapon",
+                      "not": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 30.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1521,17 +1707,21 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 225.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 225.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,
@@ -1553,17 +1743,21 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 250.0,
-        "ignore_quality": false
+    "affixes": {
+      "base_armor_elemental": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 250.0
+          }
+        ],
+        "is_unique": false
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": null,

@@ -1,0 +1,184 @@
+{
+    "kill_monsters"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/meat_grinder.svg",
+        "name"       : "Meat Grinder",
+        "description": "Kill 5,000,000 Monsters across your Grinds.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_monsters"} ]
+    },
+    "many_deaths"            : {
+        "category"   : "Grind",
+        "icon"       : "achievements/grave.svg",
+        "name"       : "Skill Issue",
+        "description": "Die 5,000 times.",
+        "goals"      : [
+            { "PlayerDeath": {"value": 5000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_many_deaths"} ]
+    },
+    "area_levels"            : {
+        "category"   : "Grind",
+        "icon"       : "achievements/doorway.svg",
+        "name"       : "Are We There Yet!?",
+        "description": "Complete 50,000 Area Levels.",
+        "goals"      : [
+            { "AreaCompleted": {"value": 50000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_area_levels"} ]
+    },
+    "many_grinds"            : {
+        "category"   : "Grind",
+        "icon"       : "achievements/big_gear.svg",
+        "name"       : "Grind to Grind",
+        "description": "Complete 500 Grinds.",
+        "goals"      : [
+            { "Counter": {"value": 500, "counter": "GrindCompleted"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_many_grinds"} ]
+    },
+    "gems_hoarder"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/gems.svg",
+        "name"       : "Gems Are a Grind's Best Friend",
+        "description": "Collect a grand total of 50,000 Gems across your Grinds.",
+        "goals"      : [
+            { "GemsObtained": {"value": 50000} }
+        ],
+        "rewards": [ {"Cosmetic": "title_gems_hoarder"} ]
+    },
+    "kill_champions"         : {
+        "category"   : "Grind",
+        "icon"       : "achievements/crown.svg",
+        "name"       : "Champion of Champions",
+        "description": "Defeat 5,000 Champion Monsters.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "monster_rarity": "Champion"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_champions"} ]
+    },
+    "add_affix_600"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/magic_axe.svg",
+        "name"       : "Fine, I'll Do It Myself",
+        "description": "Affix 10 Prefixes or Suffixes requiring Power Level 600 on Equipment Items.",
+        "goals"      : [
+            { "Counter": {"counter": "AddAffix600", "value": 10} }
+        ],
+        "rewards": [ {"Cosmetic": "title_add_affix_600"} ]
+    },
+    "sacrifice_equipment_600": {
+        "category"   : "Grind",
+        "icon"       : "achievements/hammer_break.svg",
+        "name"       : "Garbage Collector",
+        "description": "Sacrifice 100 Equipment Items requiring Power Level 600.",
+        "goals"      : [
+            { "Counter": {"counter": "SacrificeEquipment600", "value": 100} }
+        ],
+        "rewards": [ {"Cosmetic": "title_sacrifice_equipment_600"} ]
+    },
+    "gamble_uniques"         : {
+        "category"   : "Grind",
+        "icon"       : "achievements/slot_machine.svg",
+        "name"       : "Slot Machine",
+        "description": "Obtain 20 Unique Items through Gambling.",
+        "goals"      : [
+            { "Counter": {"counter": "GambleUnique", "value": 20} }
+        ],
+        "rewards": [ {"Cosmetic": "title_gambler"} ]
+    },
+    "imbue_unique"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/soul.svg",
+        "name"       : "Soul Binder",
+        "description": "Imbue 10 Unique Souls into Items.",
+        "goals"      : [
+            { "Counter": {"counter": "ImbueUniqueSoul", "value": 10} }
+        ],
+        "rewards": [ {"Cosmetic": "title_imbue_unique"} ]
+    },
+    "edicts_100"             : {
+        "category"   : "Grind",
+        "icon"       : "achievements/scroll.svg",
+        "name"       : "Edicts Addiction",
+        "description": "Use a total of 100 Edicts.",
+        "goals"      : [
+            { "AreaCompleted": {"value": 100, "with_edict": true} }
+        ],
+        "rewards": [ {"Cosmetic": "title_edicts_100"} ]
+    },
+    "unique_grinds"          : {
+        "category"   : "Grind",
+        "icon"       : "achievements/seal.svg",
+        "name"       : "Only the Finest Things in Life",
+        "description": "Complete 30 Unique Edicts.",
+        "goals"      : [
+            { "Counter": {"value": 30, "counter": "UniqueGrindCompleted"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_unique_grinds"} ]
+    },
+    "kill_mosquitoes"        : {
+        "category"   : "Grind",
+        "icon"       : "achievements/amber_mosquito.svg",
+        "name"       : "Swat and Awe",
+        "description": "Kill 50,000 Mosquitoes.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 50000, "area_id": "forest_mosquito.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_mosquitoes"} ]
+    },
+    "kill_mummies"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/mummy_head.svg",
+        "name"       : "Goodnight Mummy",
+        "description": "Kill 50,000 Mummies.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 50000, "area_id": "desert_mummy.json"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_mummies"} ]
+    },
+    "kill_witches"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/cauldron.svg",
+        "name"       : "Arach-nope",
+        "description": "Kill 5,000 Spider Witches before they complete their ritual.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "area_id": "witch_lair.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_witches"} ]
+    },
+    "kill_dragons"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/dragon_head.svg",
+        "name"       : "Imagine no Dragons",
+        "description": "Kill 5,000 Adult Dragons.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "area_id": "peaks.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_dragons"} ]
+    },
+    "kill_horrors"           : {
+        "category"   : "Grind",
+        "icon"       : "achievements/worms.svg",
+        "name"       : "Die, maggot!",
+        "description": "Kill 5,000 Horrors from the Depths.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 5000, "area_id": "mythos.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_horrors"} ]
+    },
+    "kill_uber_bosses"       : {
+        "category"   : "Grind",
+        "icon"       : "achievements/daemon_skull.svg",
+        "name"       : "Who is the Boss now?",
+        "description": "Kill 500 times each Uber Boss.",
+        "goals"      : [
+            { "MonstersKilled": {"value": 500, "area_id": "witch_lair_2.json", "monster_rarity": "Boss"} },
+            { "MonstersKilled": {"value": 500, "area_id": "peaks_dragon.json", "monster_rarity": "Boss"} },
+            { "MonstersKilled": {"value": 500, "area_id": "mythos_stars.json", "monster_rarity": "Boss"} }
+        ],
+        "rewards": [ {"Cosmetic": "title_kill_uber_bosses"} ]
+    }
+}

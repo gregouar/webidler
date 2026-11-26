@@ -11,7 +11,7 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -36,32 +36,40 @@
     ],
     "min_area_level": 0,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": -1e300,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SkillLevel": {
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": -1e+300
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          1.0,
-          7.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "SkillLevel": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              1.0,
+              7.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -86,7 +94,7 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -111,66 +119,87 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Restore": {
-            "restore_type": "Life",
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Restore": {
+                "restore_type": "Life",
+                "skill_type": null,
+                "skill_id": null,
+                "modifier_description": "Flat"
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "LifeRegen",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "Life",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          8.0,
-          10.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              8.0,
+              10.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          40.0,
-          60.0
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              40.0,
+              60.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "Mana",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          20.0,
-          40.0
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "Mana",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              20.0,
+              40.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -241,7 +270,7 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -266,7 +295,7 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -291,73 +320,97 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": -1e300,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Block": "Attack"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          10.0,
-          20.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": -1e+300
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Block": "Spell"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          10.0,
-          20.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Block": "Attack"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              10.0,
+              20.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Evade": null
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          10.0,
-          20.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Block": "Spell"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              10.0,
+              20.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          6.0,
-          10.0
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Evade": null
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              10.0,
+              20.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          6.0,
-          10.0
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              6.0,
+              10.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              6.0,
+              10.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -406,7 +459,7 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -431,70 +484,94 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": "LifeRegen",
-        "modifier": "More",
-        "scope": "Global",
-        "value": -1e300,
-        "ignore_quality": true
-      },
-      {
-        "stat": "Life",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 500.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          80.0,
-          120.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "More",
+            "scope": "Global",
+            "value": -1e+300
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Storm"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          90.0,
-          150.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 500.0
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          60.0,
-          100.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              80.0,
+              120.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Poison"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          60.0,
-          100.0
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Storm"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              90.0,
+              150.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              60.0,
+              100.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Poison"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              60.0,
+              100.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -576,7 +653,7 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -601,52 +678,68 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              150.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Armor": "Fire"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Fire"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "Life",
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          8.0,
-          12.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": "Life",
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              8.0,
+              12.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": [
-          200.0,
-          300.0
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": [
+              200.0,
+              300.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnApplyStatus": {
@@ -656,13 +749,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": false,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "breastplate_unique",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -690,7 +783,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -762,7 +856,7 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -787,88 +881,110 @@
     ],
     "min_area_level": 330,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": -100.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": "focus",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 40.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
             "stat": {
-              "DamageTaken": {
+              "Armor": "Physical"
+            },
+            "modifier": "More",
+            "scope": "Local",
+            "value": -100.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": "focus",
+                "damage_type": null,
+                "debuff": null,
                 "skill_type": null,
-                "damage_type": null
+                "skill_id": null
               }
             },
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "focus",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "More",
+            "scope": "Global",
+            "value": 40.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": -10.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
-            "stat": "LifeRegen",
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "focus",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null
-                }
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "DamageTaken": {
+                    "skill_type": null,
+                    "damage_type": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "focus",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ],
+                "conditions_duration": 0
               }
-            ],
-            "conditions_duration": 0
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": -10.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": "GoldFind",
-        "modifier": "More",
-        "scope": "Global",
-        "value": -50.0,
-        "ignore_quality": true
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": "LifeRegen",
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "focus",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "GoldFind",
+            "modifier": "More",
+            "scope": "Global",
+            "value": -50.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -924,7 +1040,7 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -949,64 +1065,84 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Armor": "Physical"
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 200.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Armor": "Elemental"
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 250.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": false,
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Physical"
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 200.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          80.0,
-          100.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "ManaRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          10.0,
-          20.0
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Armor": "Elemental"
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 250.0
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": "LifeRegen",
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": [
-          10.0,
-          20.0
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": false,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              80.0,
+              100.0
+            ]
+          }
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": "ManaRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              10.0,
+              20.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": "LifeRegen",
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": [
+              10.0,
+              20.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnReceiveStatus": {
@@ -1016,13 +1152,13 @@
           "debuff": null,
           "is_triggered": null,
           "is_evaded": null,
+          "is_max_stacks": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "solar_armor",
         "target": "Enemy",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Blessing",
         "skill_range": "Any",
@@ -1052,7 +1188,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1120,7 +1257,7 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {
@@ -1145,7 +1282,7 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": null,
     "armor_specs": {

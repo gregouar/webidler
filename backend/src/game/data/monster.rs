@@ -43,12 +43,13 @@ impl DataInit<&BaseMonsterSpecs> for MonsterSpecs {
             CharacterSize::Large | CharacterSize::Tall => 2.0,
             CharacterSize::Huge => 4.0,
             CharacterSize::Gargantuan => 6.0,
-        };
+        }
+        .into();
         let mut monster_specs = Self {
             character_specs: specs.character_specs.clone(),
             rarity: specs.rarity,
             experience_reward: reward_factor,
-            gold_reward: reward_factor,
+            gold_reward: reward_factor.into(),
             skill_reward: reward_factor,
         };
 

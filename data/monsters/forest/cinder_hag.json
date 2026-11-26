@@ -1,41 +1,31 @@
 {
-  "name": "Cinder Hag",
+  "name"    : "Cinder Hag",
   "portrait": "monsters/forest/cinder_hag.webp",
   "max_life": 7,
-  "armor": { "Fire": 50 },
-  "skills": [
+  "armor"   : {"Fire": 50},
+  "skills"  : [
     {
-      "name": "Blazing Finger",
-      "icon": "skills/fireball.svg",
+      "name"      : "Blazing Finger",
+      "icon"      : "skills/fireball.svg",
       "skill_type": "Spell",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "burn",
-                "value": 3
-              }
-            }
+            { "ApplyStatus": {"status_id": "burn", "value": 3} }
           ]
         }
       ]
     },
     {
-      "name": "Burned Witch Revenge",
-      "icon": "skills/curse_flammability.svg",
+      "name"      : "Burned Witch Revenge",
+      "icon"      : "skills/curse_flammability.svg",
       "skill_type": "Curse",
-      "cooldown": 5.0,
-      "targets": [
+      "cooldown"  : 50,
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "hag_flammability",
-                "value": 30
-              }
-            }
+            { "ApplyStatus": {"status_id": "hag_flammability", "value": 30} }
           ]
         }
       ]

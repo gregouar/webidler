@@ -1,0 +1,26 @@
+{
+  "name"    : "Bigfoot",
+  "portrait": "monsters/farwest/bigfoot.webp",
+  "max_life": 30,
+  "size"    : "Tall",
+  "armor"   : {"Physical": 50, "Storm": 50},
+  "skills"  : [
+    {
+      "name"      : "Stomp",
+      "icon"      : "skills/stomp.svg",
+      "cooldown"  : 50,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Storm": [0, 30], "Physical": [10, 20] }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

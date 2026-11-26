@@ -543,15 +543,32 @@ pub fn NodeTooltipContent(
             <Separator />
         }
     });
-    let locked_text = move || {
-        is_locked().then(|| {
-            view! {
-                <Separator />
-                <ul class="list-none xl:space-y-1">
-                    <li class="text-red-500 text-sm ">"Locked"</li>
-                </ul>
-            }
-        })
+    let locked_text = {
+        let node_specs = node_specs.clone();
+        move || {
+            is_locked().then(|| {
+                view! {
+                    <Separator />
+                    <ul class="list-none xl:space-y-1">
+                        <li class="text-sm text-zinc-400">
+                            <span class="text-red-500">"Locked"</span>
+                            {show_upgrade
+                                .then(|| {
+                                    view! {
+                                        " | Unlock Cost: "
+                                        <span class="text-cyan-300">
+                                            <span class="font-semibold">
+                                                {node_specs.next_ascend_cost(node_level())}
+                                            </span>
+                                            " Power Shard(s)"
+                                        </span>
+                                    }
+                                })}
+                        </li>
+                    </ul>
+                }
+            })
+        }
     };
 
     let socket_text = {
@@ -577,7 +594,7 @@ pub fn NodeTooltipContent(
     let upgrade_text = {
         let node_specs = node_specs.clone();
         move || {
-            if is_locked() {
+            if is_locked() && !show_upgrade {
                 Some(
                     view! {
                         <Separator />

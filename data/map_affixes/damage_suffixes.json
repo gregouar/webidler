@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_inc_damage_t1": {
     "name"        : "of Pain",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -15,7 +15,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  4 }
     ]
   },
-  {
+  "map_inc_damage_t2": {
     "name"        : "of Ache",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -31,7 +31,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  8 }
     ]
   },
-  {
+  "map_inc_damage_t3": {
     "name"        : "of Agony",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -47,7 +47,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  12 }
     ]
   },
-  {
+  "map_inc_damage_t4": {
     "name"        : "of Torment",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -63,7 +63,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  16 }
     ]
   },
-  {
+  "map_inc_damage_t5": {
     "name"        : "of Anguish",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -79,7 +79,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  20 }
     ]
   },
-  {
+  "map_inc_damage_t6": {
     "name"        : "of Suffering",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -95,7 +95,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  24 }
     ]
   },
-  {
+  "map_inc_damage_t7": {
     "name"        : "of Misery",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -111,7 +111,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  28 }
     ]
   },
-  {
+  "map_inc_damage_t8": {
     "name"        : "of Excruciation",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -127,7 +127,7 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  32 }
     ]
   },
-  {
+  "map_inc_damage_t9": {
     "name"        : "of Persecution",
     "family"      : "inc_damage",
     "tags"        : ["Attack"],
@@ -143,4 +143,4 @@
       { "scope": "Global", "stat": "ItemLevel",    "modifier": "Flat",      "value":  40 }
     ]
   }
-]
+}

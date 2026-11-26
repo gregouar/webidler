@@ -51,7 +51,7 @@ pub fn format_number(value: f64) -> String {
 
 pub fn format_number_without_context(value: f64, scientific_notation: bool) -> String {
     if value.is_nan() || value.is_infinite() {
-        return value.to_string();
+        return "Max".to_string();
     }
 
     if value < 0.0 {
@@ -103,7 +103,7 @@ fn format_scientific_number(value: f64) -> String {
     }
 }
 
-fn comma_format(value: f64) -> String {
+pub fn comma_format(value: f64) -> String {
     let value_str = value.round().to_string();
     let n_chars = value_str.chars().count();
 
@@ -156,6 +156,13 @@ pub fn format_duration(duration: Duration, show_seconds: bool) -> String {
 pub fn format_datetime(dt: DateTime<Utc>) -> String {
     Date::new(&JsValue::from_str(&dt.to_rfc3339()))
         .to_locale_string("default", &JsValue::UNDEFINED)
+        .as_string()
+        .unwrap_or_default()
+}
+
+pub fn format_local_date(dt: DateTime<Utc>) -> String {
+    Date::new(&JsValue::from_str(&dt.to_rfc3339()))
+        .to_locale_date_string("default", &JsValue::UNDEFINED)
         .as_string()
         .unwrap_or_default()
 }

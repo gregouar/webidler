@@ -24,19 +24,27 @@ pub enum Condition {
         #[serde(default)]
         skill_type: Option<SkillType>,
         #[serde(default)]
+        min_stacks: u8,
+        #[serde(default)]
         not: bool,
+        #[serde(default)]
+        counting: bool,
     },
     StatusStacks {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        min_stacks: u8,
     },
     StatusDuration {
         #[serde(flatten)]
         status_filter: StatStatusFilter,
         #[serde(default)]
         skill_type: Option<SkillType>,
+        #[serde(default)]
+        use_max_duration: bool,
     },
     Slowed,
     // StatusValue(Option<StatStatusType>),
@@ -44,7 +52,9 @@ pub enum Condition {
     MaximumLife,
     MaximumMana,
     LowLife,
+    NotLowLife,
     LowMana,
+    NotLowMana,
     ThreatLevel,
     HasItem {
         #[serde(default)]

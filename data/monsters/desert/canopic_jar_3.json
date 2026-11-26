@@ -8,11 +8,11 @@
     {
       "name"      : "Horus' Bolt",
       "icon"      : "skills/chain_lightning.svg",
-      "cooldown"  : 4.0,
+      "cooldown"  : 40,
       "skill_type": "Spell",
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
             {
               "FlatDamage": {

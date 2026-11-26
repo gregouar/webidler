@@ -1,22 +1,28 @@
+use std::collections::HashMap;
+
 use anyhow::Result;
 
+use chrono::Utc;
 use shared::{
     computations,
     constants::{self, RUSH_MODE_SPEED_MULTIPLIER},
-    data::{realms::Realm, user::UserCharacterId},
-    messages::server::{ErrorMessage, ErrorType, ServerMessage},
-};
-
-use super::{
-    data::{event::EventsQueue, master_store::MasterStore},
-    game_data::GameInstanceData,
-    game_inputs, game_orchestrator, game_sync,
-    game_timer::GameTimer,
+    data::{
+        realms::Realm,
+        user::{UserCharacterId, UserId},
+    },
+    messages::server::{AchievementsUnlockedMessage, ErrorMessage, ErrorType, ServerMessage},
 };
 
 use crate::{
-    app_state::SessionsStore,
+    app_state::{MasterStore, SessionsStore},
     db::{self, DbPool},
+    game::{
+        data::event::EventsQueue,
+        game_data::GameInstanceData,
+        game_inputs, game_orchestrator, game_sync,
+        game_timer::GameTimer,
+        systems::achievements_controller::{self, AchievementContext, AreaAchievementStatistics},
+    },
     integration::chat::ChatIntegration,
     websocket::WebSocketConnection,
 };
@@ -27,14 +33,17 @@ pub struct GameInstance<'a> {
     chat_integration: ChatIntegration,
     master_store: MasterStore,
     sessions_store: SessionsStore,
+    user_id: UserId,
     character_id: &'a UserCharacterId,
     game_data: &'a mut GameInstanceData,
     events_queue: EventsQueue,
 }
 
 impl<'a> GameInstance<'a> {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         client_conn: &'a mut WebSocketConnection,
+        user_id: UserId,
         character_id: &'a UserCharacterId,
         game_data: &'a mut GameInstanceData,
         db_pool: DbPool,
@@ -44,6 +53,7 @@ impl<'a> GameInstance<'a> {
     ) -> Self {
         GameInstance {
             client_conn,
+            user_id,
             character_id,
             db_pool,
             chat_integration,
@@ -62,12 +72,35 @@ impl<'a> GameInstance<'a> {
                 .ok()
                 .flatten()
                 .unwrap_or_default();
+        let character_cosmetics =
+            db::characters::read_character_cosmetics(&self.db_pool, self.character_id)
+                .await
+                .ok()
+                .flatten()
+                .unwrap_or_default();
+        let player_pets =
+            db::characters_data::load_character_pets(&self.db_pool, self.character_id)
+                .await
+                .unwrap_or_default();
+        let user_unlocks = db::user_unlocks::load_user_unlocks(&self.db_pool, &self.user_id)
+            .await
+            .unwrap_or_default();
+
+        let has_ever_looted_gems = self
+            .game_data
+            .old_areas_statistics
+            .iter()
+            .any(|area| area.gems_obtained > 0);
 
         game_sync::sync_init_game(
             self.client_conn,
             self.character_id,
             self.game_data,
             passives_tree_build,
+            character_cosmetics,
+            user_unlocks,
+            player_pets,
+            has_ever_looted_gems,
         )
         .await?;
 
@@ -119,6 +152,14 @@ impl<'a> GameInstance<'a> {
 
             if game_timer.should_autosave() {
                 self.auto_save();
+            }
+            if game_timer.should_check_achievements() {
+                self.check_achievements().await.unwrap_or_else(|error| {
+                    tracing::error!(
+                        "failed to update in-game achievements for user '{}': {error}",
+                        self.user_id
+                    )
+                });
             }
 
             if self
@@ -177,6 +218,76 @@ impl<'a> GameInstance<'a> {
         });
     }
 
+    async fn check_achievements(&mut self) -> Result<()> {
+        if self.game_data.area_specs.training {
+            return Ok(());
+        }
+
+        let area_levels = HashMap::from([(
+            self.game_data.area_id.clone(),
+            self.game_data.area_state.read().max_area_level_ever,
+        )]);
+        let context = AchievementContext {
+            counters: &self.game_data.achievements_counters,
+            area_levels: &area_levels,
+            power_level: self.game_data.player_base_specs.read().max_area_level,
+            player_level: self.game_data.player_base_specs.read().level,
+            skill_masteries: &self.game_data.player_base_specs.read().skill_masteries,
+            ascension: &self.game_data.passives_tree_state.read().ascension,
+            purchased_nodes: Some(&self.game_data.player_specs.read().purchased_nodes),
+            inventory: self.game_data.player_inventory.read(),
+            area_statistics: AreaAchievementStatistics::with_current_grind(
+                &self.game_data.old_areas_statistics,
+                &self.game_data.area_id,
+                &self.game_data.game_stats,
+                self.game_data.player_resources.read().gems.get(),
+                self.game_data.map_item.is_some(),
+            ),
+            player_state: Some(&self.game_data.player_state),
+        };
+
+        let new_achievements = achievements_controller::check_achievements(
+            &self.master_store,
+            &self.game_data.achievements,
+            &context,
+        );
+
+        if new_achievements.is_empty() {
+            return Ok(());
+        }
+
+        for achievement_id in new_achievements.iter() {
+            self.game_data
+                .achievements
+                .insert(achievement_id.clone(), Utc::now());
+        }
+
+        self.client_conn
+            .send(
+                &AchievementsUnlockedMessage {
+                    achievement_ids: new_achievements.clone(),
+                }
+                .into(),
+            )
+            .await?;
+
+        let (db_pool, user_id, character_id) =
+            (self.db_pool.clone(), self.user_id, *self.character_id);
+        tokio::spawn(async move {
+            update_achievements_impl(db_pool, user_id, character_id, new_achievements)
+                .await
+                .unwrap_or_else(|error| {
+                    tracing::error!(
+                        "failed to update achievements for character '{}': {}",
+                        character_id,
+                        error
+                    )
+                });
+        });
+
+        Ok(())
+    }
+
     async fn terminate_grind(&self) -> Result<()> {
         let mut tx = self.db_pool.begin().await?;
 
@@ -205,7 +316,7 @@ impl<'a> GameInstance<'a> {
                     .masteries
                     .entry(skill_id.clone())
                     .or_default()
-                    .experience += experience;
+                    .experience += *experience;
             }
             db::characters_data::save_character_skill_masteries(
                 &mut *tx,
@@ -217,9 +328,9 @@ impl<'a> GameInstance<'a> {
             let character_resources = db::characters::update_character_resources(
                 &mut *tx,
                 self.character_id,
-                self.game_data.player_resources.read().gems,
-                self.game_data.player_resources.read().shards,
-                self.game_data.player_resources.read().gold_total
+                self.game_data.player_resources.read().gems.get(),
+                self.game_data.player_resources.read().shards.get(),
+                self.game_data.player_resources.read().gold_total.get()
                     * computations::exponential(
                         *self.game_data.area_specs.item_level_modifier
                             + *self.game_data.area_specs.power_level,
@@ -260,9 +371,26 @@ impl<'a> GameInstance<'a> {
                 &mut tx,
                 self.character_id,
                 &self.game_data.area_id,
-                max_area_level_ever,
-                max_power_shard_level_ever,
-                quest_completed,
+                &db::characters::CharacterAreaProgressUpdate {
+                    max_area_level_ever,
+                    max_power_shard_level_ever,
+                    quest_completed,
+                    monsters_killed: self.game_data.game_stats.monsters_killed as i64,
+                    champion_monsters_killed: self.game_data.game_stats.champion_monsters_killed
+                        as i64,
+                    bosses_killed: self.game_data.game_stats.bosses_killed as i64,
+                    areas_completed: self.game_data.game_stats.areas_completed as i64,
+                    edicts_spent: i64::from(self.game_data.map_item.is_some()),
+                    gems_obtained: self.game_data.player_resources.read().gems.get() as i64,
+                    player_deaths: self.game_data.game_stats.player_deaths as i64,
+                    elapsed_time_seconds: self.game_data.game_stats.elapsed_time.as_secs() as i64,
+                },
+            )
+            .await?;
+            db::character_achievements::write_counters(
+                &mut tx,
+                self.character_id,
+                &self.game_data.achievements_counters,
             )
             .await?;
 
@@ -283,48 +411,6 @@ impl<'a> GameInstance<'a> {
                 .await
                 {
                     tracing::error!("failed to save game stats '{}': {}", self.character_id, err);
-                }
-
-                let power_level = self.game_data.player_base_specs.read().max_area_level;
-                match db::leaderboard::update_leaderboard(
-                    &mut tx,
-                    self.character_id,
-                    &realm_id,
-                    constants::POWER_LEVEL_LEADERBOARD_AREA_ID,
-                    power_level as i32,
-                    character_resources.played_time_seconds,
-                )
-                .await
-                {
-                    Ok(true) => {
-                        if let Err(err) = self
-                            .chat_integration
-                            .broadcast_message(
-                                format!(
-                                    "'{}'{} is the first to reach Power Level {}!",
-                                    self.game_data
-                                        .player_base_specs
-                                        .read()
-                                        .character_static
-                                        .name,
-                                    realm_label,
-                                    power_level,
-                                ),
-                                None,
-                            )
-                            .await
-                        {
-                            tracing::error!("failed to broadcast power level highscore: {}", err);
-                        }
-                    }
-                    Err(err) => {
-                        tracing::error!(
-                            "failed to update power level leaderboard '{}': {}",
-                            self.character_id,
-                            err
-                        );
-                    }
-                    _ => {}
                 }
 
                 match db::leaderboard::update_leaderboard(
@@ -359,12 +445,54 @@ impl<'a> GameInstance<'a> {
                             )
                             .await
                         {
-                            tracing::error!("failed to broadcast highscore: {}", err);
+                            tracing::error!("failed to broadcast highs core: {}", err);
                         }
                     }
                     Err(err) => {
                         tracing::error!(
                             "failed to update leaderboard '{}': {}",
+                            self.character_id,
+                            err
+                        );
+                    }
+                    _ => {}
+                }
+
+                let power_level = self.game_data.player_base_specs.read().max_area_level;
+                match db::leaderboard::update_leaderboard(
+                    &mut tx,
+                    self.character_id,
+                    &realm_id,
+                    constants::POWER_LEVEL_LEADERBOARD_AREA_ID,
+                    power_level as i32,
+                    character_resources.played_time_seconds,
+                )
+                .await
+                {
+                    Ok(true) => {
+                        if let Err(err) = self
+                            .chat_integration
+                            .broadcast_message(
+                                format!(
+                                    "'{}'{} is the first to reach Power Level {}!",
+                                    self.game_data
+                                        .player_base_specs
+                                        .read()
+                                        .character_static
+                                        .name,
+                                    realm_label,
+                                    power_level,
+                                ),
+                                None,
+                            )
+                            .await
+                        {
+                            tracing::error!("failed to broadcast power level high score: {}", err);
+                        }
+                    }
+                    Err(err) => {
+                        tracing::error!(
+                            "failed to update power level leaderboard '{}': {}",
                             self.character_id,
                             err
                         );
@@ -398,6 +526,20 @@ async fn auto_save_impl(
     // .await?;
     db::game_instances::save_game_instance_data(&mut *tx, &character_id, game_data).await?;
 
+    tx.commit().await?;
+
+    Ok(())
+}
+
+async fn update_achievements_impl(
+    db_pool: DbPool,
+    user_id: UserId,
+    character_id: UserCharacterId,
+    new_achievements: Vec<String>,
+) -> Result<()> {
+    let mut tx = db_pool.begin().await?;
+    achievements_controller::unlock_achievements(&mut tx, user_id, character_id, &new_achievements)
+        .await?;
     tx.commit().await?;
 
     Ok(())

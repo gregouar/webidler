@@ -2,13 +2,13 @@ use std::sync::Arc;
 
 use leptos::{html::*, prelude::*, reactive::traits::Track};
 
-use leptos_use::watch_throttled;
+use leptos_use_watch_debounce_throttle::watch_throttled;
 use shared::{
     computations,
     data::{
         area::AreaLevel,
         item::{ItemRarity, ItemSpecs},
-        item_affix::AffixEffectScope,
+        item_affix::{AffixEffectScope, affix_group_id, aggregate_effects},
         loot::{LootState, QueuedLoot},
         modifier::invert_formatted_effect_value,
         player::EquippedSlot,
@@ -19,6 +19,7 @@ use shared::{
 
 use crate::components::{
     accessibility::AccessibilityContext,
+    data_context::DataContext,
     game::{GameContext, websocket::WebsocketContext},
     settings::SettingsContext,
     shared::{
@@ -35,6 +36,7 @@ pub fn LootQueue() -> impl IntoView {
     let accessibility: AccessibilityContext = expect_context();
     let settings: SettingsContext = expect_context();
     let game_context: GameContext = expect_context();
+    let data_context: DataContext = expect_context();
     let toaster: Toasts = expect_context();
 
     let pickup_loot = {
@@ -115,7 +117,7 @@ pub fn LootQueue() -> impl IntoView {
     let position_style = move |loot_identifier| {
         format!(
             "left: {}%;",
-            4 + position_index_untracked(loot_identifier).clamp(0, 4) * 20
+            10 + position_index_untracked(loot_identifier).clamp(0, 4) * 18
         )
     };
 
@@ -158,13 +160,16 @@ pub fn LootQueue() -> impl IntoView {
             let sell_loot = sell_loot.clone();
             move |queued_loot: &Option<QueuedLoot>, _, _| {
                 if let Some(queued_loot) = queued_loot {
-                    match filter_loot(loot_filter, &queued_loot.item_specs) {
+                    match filter_loot(data_context, loot_filter, &queued_loot.item_specs) {
                         Some(FilterRuleType::Pickup) => {
                             if game_context.player_inventory.read_untracked().bag.len()
                                 < game_context.player_inventory.read_untracked().max_bag_size
                                     as usize
                             {
                                 pickup_loot(queued_loot.identifier);
+                                if !game_context.open_inventory.get_untracked() {
+                                    game_context.has_unseen_filtered_loot.set(true);
+                                }
                                 no_more_space.set(false);
                             } else {
                                 no_more_space.set(true);
@@ -252,7 +257,7 @@ pub fn LootQueue() -> impl IntoView {
                                         format!(
                                             "
                                             relative
-                                            transition-all duration-200 ease-in-out 
+                                            transition-all duration-200 ease-in-out
                                             translate-y-1/2 hover:translate-y-1/4
                                             {}
                                             ",
@@ -295,7 +300,6 @@ pub fn LootQueue() -> impl IntoView {
                                     <ItemCard
                                         comparable_item_specs=loot
                                             .item_specs
-                                            .base
                                             .slot
                                             .and_then(|slot| {
                                                 game_context
@@ -335,6 +339,7 @@ pub fn LootQueue() -> impl IntoView {
 }
 
 fn filter_loot(
+    data_context: DataContext,
     loot_filter: RwSignal<LootFilter>,
     item_specs: &ItemSpecs,
 ) -> Option<FilterRuleType> {
@@ -344,14 +349,18 @@ fn filter_loot(
         .values()
         .filter(|rule| rule.enabled)
     {
-        if verify_filter_rule(rule, item_specs) {
+        if verify_filter_rule(data_context, rule, item_specs) {
             return Some(rule.rule_type);
         }
     }
     None
 }
 
-fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool {
+fn verify_filter_rule(
+    data_context: DataContext,
+    filter_rule: &FilterRule,
+    item_specs: &ItemSpecs,
+) -> bool {
     let FilterRule {
         rule_type,
         rule_name: _,
@@ -363,6 +372,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         max_power_shard_level,
         item_rarity,
         item_category,
+        affix_filters,
         item_damages,
         item_damage_physical,
         item_damage_fire,
@@ -380,22 +390,18 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return true;
     }
 
+    let item_base = data_context.get_item_base(item_specs);
+
     if item_name
         .as_ref()
-        .map(|item_name| {
-            !item_specs
-                .base
-                .name
-                .to_lowercase()
-                .contains(&item_name.to_lowercase())
-        })
+        .map(|item_name| item_base.name.as_str() != item_name.as_str())
         .unwrap_or_default()
     {
         return false;
     }
 
     if item_category
-        .map(|item_category| !item_specs.base.categories.contains(&item_category))
+        .map(|item_category| !item_specs.categories.contains(&item_category))
         .unwrap_or_default()
     {
         return false;
@@ -411,6 +417,21 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return false;
     }
 
+    for affix_filter in affix_filters.iter().flatten() {
+        if !item_specs.affixes.iter().any(|affix| {
+            affix.base_item_id == affix_filter.base_item_id
+                && affix_group_id(&affix.affix_id) == affix_filter.affix_group_id
+                && affix_filter
+                    .min_level
+                    .is_none_or(|min_level| match rule_type {
+                        FilterRuleType::Pickup => affix.item_level >= min_level,
+                        FilterRuleType::Sell => affix.item_level <= min_level,
+                    })
+        }) {
+            return false;
+        }
+    }
+
     if item_level
         .map(|item_level| !match rule_type {
             FilterRuleType::Pickup => item_specs.modifiers.level >= item_level,
@@ -423,8 +444,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
 
     if req_item_level
         .map(|req_item_level| !match rule_type {
-            FilterRuleType::Pickup => item_specs.required_level >= req_item_level,
-            FilterRuleType::Sell => item_specs.required_level <= req_item_level,
+            FilterRuleType::Pickup => item_base.min_area_level >= req_item_level,
+            FilterRuleType::Sell => item_base.min_area_level <= req_item_level,
         })
         .unwrap_or_default()
     {
@@ -434,12 +455,10 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
     if req_affix_level
         .map(|req_affix_level| !match rule_type {
             FilterRuleType::Pickup => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .any(|affix| affix.item_level >= req_affix_level),
             FilterRuleType::Sell => item_specs
-                .modifiers
                 .affixes
                 .iter()
                 .all(|affix| affix.item_level <= req_affix_level),
@@ -588,8 +607,8 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                 .map(|weapon_specs| {
                     let weapon_crit_damage = *weapon_specs.crit_damage;
                     match rule_type {
-                        FilterRuleType::Pickup => weapon_crit_damage < item_crit_damage,
-                        FilterRuleType::Sell => weapon_crit_damage > item_crit_damage,
+                        FilterRuleType::Pickup => weapon_crit_damage.get() < item_crit_damage,
+                        FilterRuleType::Sell => weapon_crit_damage.get() > item_crit_damage,
                     }
                 })
                 .unwrap_or(true)
@@ -605,7 +624,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
                 .weapon_specs
                 .as_ref()
                 .map(|weapon_specs| {
-                    let weapon_cooldown = weapon_specs.cooldown.get();
+                    let weapon_cooldown = weapon_specs.cooldown.get() * 0.1;
                     match rule_type {
                         FilterRuleType::Pickup => weapon_cooldown > item_cooldown,
                         FilterRuleType::Sell => weapon_cooldown < item_cooldown,
@@ -656,10 +675,7 @@ fn verify_filter_rule(filter_rule: &FilterRule, item_specs: &ItemSpecs) -> bool 
         return false;
     }
 
-    let effects = item_specs
-        .modifiers
-        .aggregate_effects(AffixEffectScope::Global, true)
-        .0;
+    let effects = aggregate_effects(&item_specs.affixes, AffixEffectScope::Global, true).0;
     for stat_filter in stat_filters.iter() {
         if let Some(((stat_type, stat_modifier), stat_value, stat_excluded)) = stat_filter.as_ref()
         {

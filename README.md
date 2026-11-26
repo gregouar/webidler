@@ -1,6 +1,6 @@
 # webidler
 
-Exprimental web-based idler game, with both backend (axum) and frontend (leptos) in rust :rocket:.
+Experimental web-based idler game, with both backend (axum) and frontend (leptos) in rust :rocket:.
 
 ## Art
 

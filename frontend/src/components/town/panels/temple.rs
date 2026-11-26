@@ -3,27 +3,25 @@ use std::sync::Arc;
 use leptos::{html::*, prelude::*, task::spawn_local};
 
 use shared::{
-    data::temple::{BenedictionEffect, BenedictionSpecs, BenedictionsCategory, PlayerBenedictions},
+    data::{
+        temple::{BenedictionEffect, BenedictionSpecs, BenedictionsCategory, PlayerBenedictions},
+        values::NonNegative,
+    },
     http::client::BuyBenedictionsRequest,
 };
 
 use crate::components::{
     backend_client::BackendClient,
+    data_context::DataContext,
     events::{EventsContext, Key},
-    settings::SettingsContext,
-    shared::{
-        resources::{GoldCounter, GoldIcon},
-        tooltips::effects_tooltip,
-    },
+    shared::{resources::GoldCounter, tooltips::effects_tooltip},
     town::TownContext,
     ui::{
         TitleSeparator,
         buttons::MenuButton,
         card::{CardHeader, CardInset, CardInsetTitle, MenuCard},
-        confirm::ConfirmContext,
         list_row::MenuListRow,
         menu_panel::MenuPanel,
-        number::{format_number, format_number_without_context},
         toast::*,
     },
 };
@@ -35,11 +33,11 @@ pub fn TemplePanel(
 ) -> impl IntoView {
     let town_context = expect_context::<TownContext>();
 
-    let cost = RwSignal::new(0.0);
+    let cost = RwSignal::new(NonNegative(0.0));
     let player_benedictions = RwSignal::new(PlayerBenedictions::default());
 
     let reset = move || {
-        cost.set(0.0);
+        cost.set(Default::default());
         player_benedictions.set(town_context.player_benedictions.get_untracked());
     };
 
@@ -51,7 +49,7 @@ pub fn TemplePanel(
 
     view! {
         <MenuPanel open=open>
-            <MenuCard class="h-full">
+            <MenuCard class="h-full" clip_content=false>
                 <CardHeader title="Temple" on_close=move || open.set(false)>
                     {(!view_only)
                         .then(|| {
@@ -59,7 +57,8 @@ pub fn TemplePanel(
                                 <div class="flex-1" />
 
                                 <div class="flex h-full items-center gap-1 text-sm xl:text-base text-zinc-300 mb-1">
-                                    "Benedictions Cost: " <GoldCounter value=cost w_full=true />
+                                    "Benedictions Cost: "
+                                    <GoldCounter value=move || cost.get().get() w_full=true />
                                 </div>
 
                                 <div class="flex-1" />
@@ -67,16 +66,16 @@ pub fn TemplePanel(
                                 <div class="flex  h-full items-center gap-2">
                                     <MenuButton
                                         on:click=move |_| reset()
-                                        disabled=Signal::derive(move || cost.get() == 0.0)
+                                        disabled=Signal::derive(move || cost.get().get() == 0.0)
                                     >
                                         "Cancel"
                                     </MenuButton>
-                                    <ConfirmButton player_benedictions cost open />
+                                    <ConfirmButton player_benedictions open />
                                 </div>
                             }
                         })}
                 </CardHeader>
-                <CardInset>
+                <CardInset composited_scroll=true>
                     <BenedictionsList player_benedictions cost view_only />
                 </CardInset>
             </MenuCard>
@@ -87,7 +86,7 @@ pub fn TemplePanel(
 #[component]
 fn ConfirmButton(
     player_benedictions: RwSignal<PlayerBenedictions>,
-    cost: RwSignal<f64>,
+    // cost: RwSignal<f64>,
     open: RwSignal<bool>,
 ) -> impl IntoView {
     let backend = expect_context::<BackendClient>();
@@ -125,27 +124,27 @@ fn ConfirmButton(
         }
     });
 
-    let try_buy = {
-        let confirm_context: ConfirmContext = expect_context();
-        let settings_context: SettingsContext = expect_context();
-        move |_| {
-            let cost_str = format_number_without_context(
-                cost.get(),
-                settings_context.read_settings().scientific_notation,
-            );
-            (confirm_context.confirm)(
-                format! {"Do you confirm buying Temple points for {} Gold?", cost_str },
-                do_buy.clone(),
-            );
-        }
-    };
+    // let try_buy = {
+    //     let confirm_context: ConfirmContext = expect_context();
+    //     let settings_context: SettingsContext = expect_context();
+    //     move |_| {
+    //         let cost_str = format_number_without_context(
+    //             cost.get(),
+    //             settings_context.read_settings().scientific_notation,
+    //         );
+    //         (confirm_context.confirm)(
+    //             format! {"Do you confirm buying Temple points for {} Gold?", cost_str },
+    //             do_buy.clone(),
+    //         );
+    //     }
+    // };
 
     let disabled = Signal::derive(move || {
         *town_context.player_benedictions.read() == *player_benedictions.read()
     });
 
     view! {
-        <MenuButton on:click=try_buy disabled=disabled>
+        <MenuButton on:click=move |_| do_buy() disabled=disabled>
             "Confirm"
         </MenuButton>
     }
@@ -154,15 +153,15 @@ fn ConfirmButton(
 #[component]
 fn BenedictionsList(
     player_benedictions: RwSignal<PlayerBenedictions>,
-    cost: RwSignal<f64>,
+    cost: RwSignal<NonNegative>,
     view_only: bool,
 ) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
+    let data_context = expect_context::<DataContext>();
 
     view! {
-        <div class="w-full space-y-12">
+        <div class="grid w-full grid-cols-1 items-start gap-x-6 gap-y-12 xl:grid-cols-2">
             <For
-                each=move || town_context.benedictions_specs.get().into_iter()
+                each=move || data_context.benedictions_specs.get().into_iter()
                 key=|(category_id, _)| category_id.clone()
                 let:((category_id, category_specs))
             >
@@ -183,17 +182,12 @@ fn BenedictionCategorySection(
     category_id: String,
     category_specs: BenedictionsCategory,
     player_benedictions: RwSignal<PlayerBenedictions>,
-    cost: RwSignal<f64>,
+    cost: RwSignal<NonNegative>,
     view_only: bool,
 ) -> impl IntoView {
-    let town_context = expect_context::<TownContext>();
-    let events_context: EventsContext = expect_context();
-
     let category_title = category_specs.title.clone();
-    let max_level_text = category_specs
-        .max_upgrade_level
-        .map(|max_level| max_level.to_string())
-        .unwrap_or_else(|| "No cap".to_string());
+    let max_level_text = category_specs.max_upgrade_level.to_string();
+    // l_max_upgrade_levelvel = category_specs.max_upgrade_level;
     let price = Memo::new({
         let category_specs = category_specs.clone();
         let category_id = category_id.clone();
@@ -232,87 +226,8 @@ fn BenedictionCategorySection(
             })
         }
     });
-    let max_level_reached = Signal::derive({
-        let max_upgrade_level = category_specs.max_upgrade_level;
-        move || {
-            max_upgrade_level
-                .map(|max_upgrade_level| bought_points.get() >= max_upgrade_level)
-                .unwrap_or_default()
-        }
-    });
-    let buy_disabled = Signal::derive(move || {
-        max_level_reached.get()
-            || cost.get() + price.get() > town_context.character.read().resource_gold
-    });
+    // let max_level_reached = Signal::derive(move || bought_points.get() >= max_upgrade_level);
     let reset_disabled = Signal::derive(move || allocated_points.get() == 0);
-
-    let buy_points_batch = Memo::new({
-        let category_specs = category_specs.clone();
-        let category_id = category_id.clone();
-        move |_| {
-            let mut amount = 0;
-            let mut total_cost = 0.0;
-            let mut upgrade_level = player_benedictions.with(|player_benedictions| {
-                player_benedictions
-                    .categories
-                    .get(&category_id)
-                    .map(|category| category.upgrade_level)
-                    .unwrap_or_default()
-            });
-            let available_gold = town_context.character.read().resource_gold - cost.get();
-
-            #[allow(clippy::explicit_counter_loop)]
-            for _ in 0..10 {
-                if category_specs
-                    .max_upgrade_level
-                    .map(|max_upgrade_level| upgrade_level >= max_upgrade_level)
-                    .unwrap_or_default()
-                {
-                    break;
-                }
-
-                let next_price = category_specs.compute_price(upgrade_level);
-                if total_cost + next_price > available_gold {
-                    break;
-                }
-
-                amount += 1;
-                total_cost += next_price;
-                upgrade_level += 1;
-            }
-
-            (amount, total_cost)
-        }
-    });
-
-    let buy_point = {
-        let category_id = category_id.clone();
-        move |_| {
-            let (amount, total_price) = if events_context.key_pressed(Key::Ctrl) {
-                buy_points_batch.get_untracked()
-            } else if max_level_reached.get_untracked()
-                || cost.get_untracked() + price.get_untracked()
-                    > town_context.character.read_untracked().resource_gold
-            {
-                (0, 0.0)
-            } else {
-                (1, price.get_untracked())
-            };
-
-            if amount == 0 {
-                return;
-            }
-
-            cost.update(|cost| *cost += total_price);
-            player_benedictions.update(|player_benedictions| {
-                player_benedictions
-                    .categories
-                    .entry(category_id.clone())
-                    .or_default()
-                    .upgrade_level += amount;
-            });
-        }
-    };
 
     let reset_category = {
         let category_id = category_id.clone();
@@ -325,7 +240,7 @@ fn BenedictionCategorySection(
         }
     };
     let benedictions = category_specs.benedictions.clone();
-    let max_upgrade_level = category_specs.max_upgrade_level;
+    let category_specs_for_rows = category_specs.clone();
 
     view! {
         <section class="w-full min-w-0">
@@ -345,7 +260,7 @@ fn BenedictionCategorySection(
                         <span class="font-bold text-zinc-100">{move || bought_points.get().saturating_sub(allocated_points.get())}</span>
                         <span class="text-zinc-400">"/"</span>
                         <span class="font-bold text-zinc-400">{move || bought_points.get()}</span>
-                        <span class="font-semibold text-zinc-400">" Remaining Points"</span>
+                        <span class="font-semibold text-zinc-400">" Available"</span>
                     </div>
 
                 </div>
@@ -354,7 +269,7 @@ fn BenedictionCategorySection(
                     <CardInsetTitle separator=false>{category_title}</CardInsetTitle>
                 </div>
 
-                <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 justify-end">
+                <div class="flex flex-nowrap items-center justify-end gap-x-2 whitespace-nowrap">
 
                     <div class="flex gap-1">
                         <span class="font-semibold text-zinc-400">"Prayed"</span>
@@ -366,30 +281,37 @@ fn BenedictionCategorySection(
                     {(!view_only)
                         .then(|| {
                             view! {
-                                <MenuButton on:click=buy_point disabled=buy_disabled>
-                                    <div class="flex items-center gap-1">
-                                        {move || {
-                                            if max_level_reached.get() {
-                                                view! { "Max" }.into_any()
-                                            } else {
-                                                view! {
-                                                    "Pray"
-                                                    <span class="text-amber-200 font-bold font-number w-[8ch] text-right">
-                                                        {format_number(price.get())}
-                                                    </span>
-                                                    <GoldIcon />
-                                                }
-                                                    .into_any()
-                                            }
-                                        }}
-                                    </div>
-                                </MenuButton>
+                                <div class="flex items-center gap-1">
+                                    <GoldCounter
+                                        value=move || price.get().map(|x| x.get()).unwrap_or(f64::INFINITY)
+                                        w_full=true
+                                    />
+                                    // {move || {
+                                    //     if max_level_reached.get() {
+                                    //         view! {
+                                    //             <span class="font-number font-semibold text-amber-200">
+                                    //                 "Max"
+                                    //             </span>
+                                    //             <GoldIcon />
+                                    //         }
+                                    //             .into_any()
+                                    //     } else {
+                                    //         view! {
+                                    //             <GoldCounter
+                                    //                 value=Signal::derive(move || price.get())
+                                    //                 w_full=true
+                                    //             />
+                                    //         }
+                                    //             .into_any()
+                                    //     }
+                                    // }}
+                                </div>
                             }
                         })}
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 xl:grid-cols-2 gap-2 items-start">
+            <div class="grid grid-cols-1 gap-2 items-start">
                 <For
                     each=move || benedictions.clone().into_iter()
                     key=|(benediction_id, _)| benediction_id.clone()
@@ -399,8 +321,9 @@ fn BenedictionCategorySection(
                         category_id=category_id.clone()
                         benediction_id
                         benediction_specs
-                        max_upgrade_level
+                        category_specs=category_specs_for_rows.clone()
                         player_benedictions
+                        cost
                         view_only
                     />
                 </For>
@@ -414,11 +337,14 @@ fn BenedictionRow(
     category_id: String,
     benediction_id: String,
     benediction_specs: BenedictionSpecs,
-    max_upgrade_level: Option<u64>,
+    category_specs: BenedictionsCategory,
     player_benedictions: RwSignal<PlayerBenedictions>,
+    cost: RwSignal<NonNegative>,
     view_only: bool,
 ) -> impl IntoView {
     let events_context: EventsContext = expect_context();
+    let town_context = expect_context::<TownContext>();
+    let max_upgrade_level = category_specs.max_upgrade_level;
 
     let upgrade_level = Memo::new({
         let category_id = category_id.clone();
@@ -447,45 +373,146 @@ fn BenedictionRow(
             })
         }
     });
-    let can_add = Signal::derive(move || !view_only && available_points.get() > 0);
+    let can_buy_point = Memo::new({
+        let category_id = category_id.clone();
+        let category_specs = category_specs.clone();
+        move |_| {
+            let bought_points = player_benedictions.with(|player_benedictions| {
+                player_benedictions
+                    .categories
+                    .get(&category_id)
+                    .map(|category| category.upgrade_level)
+                    .unwrap_or_default()
+            });
+            let next_price = category_specs.compute_price(bought_points);
+
+            bought_points < max_upgrade_level
+                && next_price.is_some_and(|next_price| {
+                    (cost.get() + next_price).get()
+                        <= town_context.character.read().resource_gold.get()
+                })
+        }
+    });
+    let can_add = Signal::derive(move || {
+        !view_only
+            && upgrade_level.get() < max_upgrade_level
+            && (available_points.get() > 0 || can_buy_point.get())
+    });
     let can_remove = Signal::derive(move || !view_only && upgrade_level.get() > 0);
 
     let add_point = {
         let category_id = category_id.clone();
         let benediction_id = benediction_id.clone();
+        let category_specs = category_specs.clone();
         move |_| {
-            let amount = if events_context.key_pressed(Key::Ctrl) {
+            let requested_amount = if events_context.key_pressed(Key::Ctrl) {
                 10
             } else {
                 1
             };
 
+            let player_benedictions_snapshot = player_benedictions.get_untracked();
+            let category = player_benedictions_snapshot.categories.get(&category_id);
+            let bought_points = category
+                .map(|category| category.upgrade_level)
+                .unwrap_or_default();
+            let allocated_points = category
+                .map(|category| category.purchased_benedictions.values().sum::<u64>())
+                .unwrap_or_default();
+            let benediction_level = category
+                .and_then(|category| category.purchased_benedictions.get(&benediction_id))
+                .copied()
+                .unwrap_or_default();
+
+            let amount = requested_amount.min(max_upgrade_level.saturating_sub(benediction_level));
+            let available_points = bought_points.saturating_sub(allocated_points);
+            let available_points_to_allocate = amount.min(available_points);
+            let points_to_buy = amount.saturating_sub(available_points_to_allocate);
+            let available_gold =
+                town_context.character.read_untracked().resource_gold - cost.get_untracked();
+
+            let mut bought_points_to_allocate = 0;
+            let mut purchase_cost = NonNegative(0.0);
+            while bought_points_to_allocate < points_to_buy
+                && bought_points + bought_points_to_allocate < max_upgrade_level
+            {
+                let next_price =
+                    category_specs.compute_price(bought_points + bought_points_to_allocate);
+
+                let Some(next_price) = next_price else {
+                    break;
+                };
+
+                if (purchase_cost + next_price).get() > available_gold.get() {
+                    break;
+                }
+
+                purchase_cost += next_price;
+                bought_points_to_allocate += 1;
+            }
+
+            let amount_to_allocate = available_points_to_allocate + bought_points_to_allocate;
+            if amount_to_allocate == 0 {
+                return;
+            }
+
+            cost.update(|cost| *cost += purchase_cost);
             player_benedictions.update(|player_benedictions| {
                 let category = player_benedictions
                     .categories
                     .entry(category_id.clone())
                     .or_default();
-                let allocated_points = category.purchased_benedictions.values().sum::<u64>();
-                let available_points = category.upgrade_level.saturating_sub(allocated_points);
-
-                if available_points > 0 {
-                    *category
-                        .purchased_benedictions
-                        .entry(benediction_id.clone())
-                        .or_default() += amount.min(available_points);
-                }
+                category.upgrade_level += bought_points_to_allocate;
+                *category
+                    .purchased_benedictions
+                    .entry(benediction_id.clone())
+                    .or_default() += amount_to_allocate;
             });
         }
     };
     let remove_point = {
         let category_id = category_id.clone();
         let benediction_id = benediction_id.clone();
+        let category_specs = category_specs.clone();
         move |_| {
-            let amount = if events_context.key_pressed(Key::Ctrl) {
+            let requested_amount = if events_context.key_pressed(Key::Ctrl) {
                 10
             } else {
                 1
             };
+
+            let current_benedictions = player_benedictions.get_untracked();
+            let Some(current_category) = current_benedictions.categories.get(&category_id) else {
+                return;
+            };
+            let benediction_level = current_category
+                .purchased_benedictions
+                .get(&benediction_id)
+                .copied()
+                .unwrap_or_default();
+            let amount_to_remove = requested_amount.min(benediction_level);
+            if amount_to_remove == 0 {
+                return;
+            }
+
+            let confirmed_bought_points = town_context
+                .player_benedictions
+                .get_untracked()
+                .categories
+                .get(&category_id)
+                .map(|category| category.upgrade_level)
+                .unwrap_or_default();
+            let refundable_points = current_category
+                .upgrade_level
+                .saturating_sub(confirmed_bought_points);
+            let points_to_refund = amount_to_remove.min(refundable_points);
+            let refund = (0..points_to_refund)
+                .filter_map(|offset| {
+                    category_specs.compute_price(current_category.upgrade_level - offset - 1)
+                })
+                .map(|x| x.get())
+                .sum::<f64>()
+                .into();
 
             player_benedictions.update(|player_benedictions| {
                 let Some(category) = player_benedictions.categories.get_mut(&category_id) else {
@@ -496,11 +523,13 @@ fn BenedictionRow(
                     return;
                 };
 
-                *upgrade_level = upgrade_level.saturating_sub(amount);
+                *upgrade_level = upgrade_level.saturating_sub(amount_to_remove);
                 if *upgrade_level == 0 {
                     category.purchased_benedictions.remove(&benediction_id);
                 }
+                category.upgrade_level = category.upgrade_level.saturating_sub(points_to_refund);
             });
+            cost.update(|cost| *cost -= refund);
         }
     };
 
@@ -593,8 +622,8 @@ fn BenedictionRow(
 
 pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> String {
     match benediction_effect {
-        BenedictionEffect::StartingGold => "Starting Gold".to_string(),
-        BenedictionEffect::StartingLevel => "Starting Level".to_string(),
+        // BenedictionEffect::StartingGold => "Starting Gold".to_string(),
+        BenedictionEffect::StartingLevel => "Starting Player Level".to_string(),
         BenedictionEffect::SkillSlots => "Skill Slots".to_string(),
         BenedictionEffect::StatEffect { stat, .. } => {
             effects_tooltip::format_multiplier_stat_name(stat)
@@ -606,7 +635,7 @@ pub fn format_benediction_title(benediction_effect: &BenedictionEffect) -> Strin
 pub fn EffectDescription(
     benediction_specs: BenedictionSpecs,
     upgrade_level: Signal<u64>,
-    max_upgrade_level: Option<u64>,
+    max_upgrade_level: u64,
 ) -> impl IntoView {
     let value = {
         let benediction_specs = benediction_specs.clone();
@@ -616,24 +645,21 @@ pub fn EffectDescription(
     view! {
         <ul class="text-xs xl:text-sm text-amber-100 break-words">
             {move || {
-                if max_upgrade_level
-                    .map(|max_upgrade_level| upgrade_level.get() > max_upgrade_level)
-                    .unwrap_or(false)
-                {
+                if upgrade_level.get() > max_upgrade_level {
                     return view! { <li class="text-zinc-400">"Max Level"</li> }.into_any();
                 }
-
                 value()
                     .map(|value| match benediction_specs.effect.clone() {
-                        BenedictionEffect::StartingGold => {
-                            view! {
-                                {effects_tooltip::effect_li(
-                                    format!("+{} Starting Gold", format_number(value)),
-                                )}
-                            }
-                                .into_any()
-                        }
                         BenedictionEffect::StartingLevel => {
+                            // BenedictionEffect::StartingGold => {
+
+                            // view! {
+                            // {effects_tooltip::effect_li(
+                            // format!("+{} Starting Gold", format_number(value)),
+                            // )}
+                            // }
+                            // .into_any()
+                            // }
                             view! {
                                 {effects_tooltip::effect_li(
                                     format!("+{:0} Starting Player Level", value),
@@ -664,4 +690,31 @@ pub fn EffectDescription(
             }}
         </ul>
     }
+}
+
+pub fn are_benedictions_available() -> bool {
+    let town_context: TownContext = expect_context();
+    let data_context: DataContext = expect_context();
+
+    data_context
+        .benedictions_specs
+        .read()
+        .iter()
+        .any(|(category_id, category_specs)| {
+            let bought_points = town_context
+                .player_benedictions
+                .with(|player_benedictions| {
+                    player_benedictions
+                        .categories
+                        .get(category_id)
+                        .map(|category| category.upgrade_level)
+                        .unwrap_or_default()
+                });
+            let next_price = category_specs.compute_price(bought_points);
+
+            bought_points < category_specs.max_upgrade_level
+                && next_price.is_some_and(|next_price| {
+                    next_price.get() <= town_context.character.read().resource_gold.get()
+                })
+        })
 }

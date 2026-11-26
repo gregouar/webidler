@@ -3,7 +3,7 @@
         "name"      : "Drunk",
         "icon"      : "skills/beer_stein.svg",
         "debuff"    : true,
-        "duration"  : 3,
+        "duration"  : 30,
         "max_stacks": 5,
         "effects"   : [
             {
@@ -26,11 +26,30 @@
             }
         ]
     },
+    "wanted"  : {
+        "name"      : "Wanted",
+        "icon"      : "statuses/wanted.svg",
+        "debuff"    : true,
+        "duration"  : 1e300,
+        "max_stacks": 100,
+        "effects"   : [
+            {
+                "StatModifier": { "stat": {"DamageTaken": {}}, "modifier": "More", "debuff": false },
+                "value"       : 10.0,
+                "modifier"    : "Percent"
+            },
+            {
+                "StatModifier": {"stat": "GoldFind", "modifier": "More", "debuff": false},
+                "value"       : 5.0,
+                "modifier"    : "Percent"
+            }
+        ]
+    },
     "enwebbed": {
         "name"      : "Enwebbed",
         "icon"      : "statuses/spider_web.svg",
         "debuff"    : true,
-        "duration"  : 5.0,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {

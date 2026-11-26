@@ -7,7 +7,7 @@
     {
       "name"      : "Suck Me Dry",
       "icon"      : "skills/needle_drill.svg",
-      "cooldown"  : 4.0,
+      "cooldown"  : 40,
       "skill_type": "Attack",
       "targets"   : [
         {

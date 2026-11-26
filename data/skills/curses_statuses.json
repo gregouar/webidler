@@ -3,7 +3,7 @@
         "name"      : "Curse of Conductivity",
         "icon"      : "skills/curse_conductivity.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -22,7 +22,7 @@
         "name"      : "Curse of Flammability",
         "icon"      : "skills/curse_flammability.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -41,7 +41,7 @@
         "name"      : "Curse of Frailty",
         "icon"      : "skills/curse_frailty.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -60,7 +60,7 @@
         "name"      : "Broken Armor",
         "icon"      : "statuses/debuff_armor.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -75,7 +75,7 @@
         "name"      : "Curse of Putridity",
         "icon"      : "skills/curse_putridity.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -94,7 +94,7 @@
         "name"      : "Curse of Weakness",
         "icon"      : "skills/curse_weakness.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -113,7 +113,7 @@
         "name"      : "Clumsiness",
         "icon"      : "skills/curse_clumsy.svg",
         "debuff"    : true,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -134,7 +134,7 @@
         "name"      : "Curse of Vampirism",
         "icon"      : "skills/curse_vampirism.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -158,14 +158,14 @@
         "name"      : "Covered in Blood",
         "icon"      : "skills/blood.svg",
         "debuff"    : false,
-        "duration"  : 5,
+        "duration"  : 50,
         "max_stacks": 20,
         "effects"   : [
             {
                 "StatModifier": {
                     "stat"    : {
                         "StatConditionalModifier": {
-                            "stat"      : {"Damage": {}},
+                            "stat": {"Damage": {}},
                             "conditions": [
                                 { "HasStatus": {"status_id": "curse_vampirism"} }
                             ]

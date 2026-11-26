@@ -1,5 +1,4 @@
 use anyhow;
-
 use chrono::{DateTime, Utc};
 use sqlx::FromRow;
 
@@ -11,7 +10,7 @@ use shared::data::{
 use crate::{
     app_state::MasterStore,
     constants::DATA_VERSION,
-    db::utc_datetime::UtcDateTime,
+    db::{character_achievements, characters, utc_datetime::UtcDateTime},
     game::{data::master_store, game_data::GameInstanceData},
 };
 
@@ -73,15 +72,25 @@ async fn upsert_saved_game_instance<'c>(
     Ok(())
 }
 
-pub async fn load_game_instance_data<'c>(
-    executor: impl DbExecutor<'c>,
+pub async fn load_game_instance_data(
+    db_pool: &DbPool,
     master_store: &master_store::MasterStore,
     character_id: &UserCharacterId,
 ) -> anyhow::Result<Option<(GameInstanceData, DateTime<Utc>)>> {
-    let saved_game_instance = load_saved_game_instance(executor, character_id).await?;
+    let saved_game_instance = load_saved_game_instance(db_pool, character_id).await?;
+    let achievements_counters =
+        character_achievements::read_counters(db_pool, character_id).await?;
+    let achievements = character_achievements::read_achievements(db_pool, character_id).await?;
+    let area_statistics = characters::read_character_areas_completed(db_pool, character_id).await?;
     if let Some(instance) = saved_game_instance {
         Ok(Some((
-            GameInstanceData::from_bytes(master_store, &instance.game_data)?,
+            GameInstanceData::from_bytes(
+                master_store,
+                &instance.game_data,
+                area_statistics,
+                achievements_counters,
+                achievements,
+            )?,
             instance.saved_at.into(),
         )))
     } else {

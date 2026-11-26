@@ -1,26 +1,21 @@
 {
-  "name": "Royal Guard",
+  "name"    : "Royal Guard",
   "portrait": "monsters/castle/royal_guard.webp",
   "max_life": 15,
-  "armor": { "Physical": 100 },
-  "block": {
-    "Attack": 40,
-    "Spell": 20
-  },
-  "skills": [
+  "armor"   : {"Physical": 100},
+  "block"   : {"Attack": 40, "Spell": 20},
+  "skills"  : [
     {
-      "name": "Royal Smite",
-      "icon": "skills/attack.svg",
-      "cooldown": 2.0,
+      "name"      : "Royal Smite",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 20,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 6, 12 ]
-                }
+                "damage": { "Physical": [6, 12] }
               }
             }
           ]

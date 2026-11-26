@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_attack_damage_t1"       : {
     "name"        : "of Ire",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -17,7 +17,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t2"       : {
     "name"        : "of Temper",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -35,7 +35,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t3"       : {
     "name"        : "of Wrath",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -53,7 +53,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t4"       : {
     "name"        : "of Belligerence",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -71,7 +71,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t5"       : {
     "name"        : "of Ferocity",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -89,7 +89,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t6"       : {
     "name"        : "of Aggression",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -107,7 +107,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t7"       : {
     "name"        : "of Rage",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -125,7 +125,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t8"       : {
     "name"        : "of Hatred",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -143,7 +143,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t9"       : {
     "name"        : "of Fury",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -161,7 +161,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_t10"      : {
     "name"        : "of Bloodlust",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack"],
@@ -179,7 +179,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t1" : {
     "name"        : "of Caution",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -203,7 +203,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t2" : {
     "name"        : "of Carefulness",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -227,7 +227,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t3" : {
     "name"        : "of Attention",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -251,7 +251,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t4" : {
     "name"        : "of Watchfulness",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -275,7 +275,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t5" : {
     "name"        : "of Deliberation",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -299,7 +299,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t6" : {
     "name"        : "of Focus",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -323,7 +323,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t7" : {
     "name"        : "of Calculation",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -347,7 +347,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t8" : {
     "name"        : "of Discipline",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -371,7 +371,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t9" : {
     "name"        : "of Control",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -395,7 +395,7 @@
       }
     ]
   },
-  {
+  "item_inc_attack_damage_speed_t10": {
     "name"        : "of Reckoning",
     "family"      : "inc_attack_damage",
     "tags"        : ["Attack", "Speed"],
@@ -419,7 +419,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t1"        : {
     "name"        : "of Spellcasting",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -437,7 +437,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t2"        : {
     "name"        : "of Wizardry",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -455,7 +455,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t3"        : {
     "name"        : "of Sorcery",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -473,7 +473,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t4"        : {
     "name"        : "of Thaumaturgy",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -491,7 +491,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t5"        : {
     "name"        : "of Arcanum",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -509,7 +509,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t6"        : {
     "name"        : "of Theurgy",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -527,7 +527,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t7"        : {
     "name"        : "of Enchantment",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -545,7 +545,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t8"        : {
     "name"        : "of Incantation",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -563,7 +563,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t9"        : {
     "name"        : "of Conjuration",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -581,7 +581,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_t10"       : {
     "name"        : "of Invocation",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell"],
@@ -599,7 +599,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t1"   : {
     "name"        : "of Confidence",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -623,7 +623,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t2"   : {
     "name"        : "of Presumption",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -647,7 +647,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t3"   : {
     "name"        : "of Vanity",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -671,7 +671,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t4"   : {
     "name"        : "of Arrogance",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -695,7 +695,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t5"   : {
     "name"        : "of Conceit",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -719,7 +719,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t6"   : {
     "name"        : "of Audacity",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -743,7 +743,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t7"   : {
     "name"        : "of Insolence",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -767,7 +767,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t8"   : {
     "name"        : "of Pride",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -791,7 +791,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t9"   : {
     "name"        : "of Ego",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -815,7 +815,7 @@
       }
     ]
   },
-  {
+  "item_inc_spell_damage_mana_t10"  : {
     "name"        : "of Hubris",
     "family"      : "inc_spell_damage",
     "tags"        : ["Spell", "Mana"],
@@ -839,4 +839,4 @@
       }
     ]
   }
-]
+}

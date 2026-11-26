@@ -1,24 +1,18 @@
 {
-  "name": "Rotcap Shambler",
+  "name"    : "Rotcap Shambler",
   "portrait": "monsters/forest/rotcap_shambler.webp",
   "max_life": 5,
-  "armor": { "Poison": 100 },
-  "skills": [
+  "armor"   : {"Poison": 100},
+  "skills"  : [
     {
-      "name": "Toxic Spore",
-      "icon": "skills/poison_cloud.svg",
-      "cooldown": 5.0,
+      "name"      : "Toxic Spore",
+      "icon"      : "skills/poison_cloud.svg",
+      "cooldown"  : 50,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
-            {
-              "ApplyStatus": {
-                "status_id": "poison",
-                "value": 5,
-                "escalation": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 20} }
           ]
         }
       ]

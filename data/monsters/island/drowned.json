@@ -1,23 +1,20 @@
 {
-  "name": "Drowned Sailor",
+  "name"    : "Drowned Sailor",
   "portrait": "monsters/island/drowned.webp",
   "max_life": 15,
-  "armor": { "Physical": 50, "Storm": 50 },
-  "skills": [
+  "armor"   : {"Physical": 50, "Storm": 50},
+  "skills"  : [
     {
-      "name": "Drowning Slap",
-      "icon": "skills/attack.svg",
-      "cooldown": 3.0,
+      "name"      : "Drowning Slap",
+      "icon"      : "skills/attack.svg",
+      "cooldown"  : 30,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 4, 6 ],
-                  "Storm": [ 0, 10 ]
-                }
+                "damage": { "Physical": [4, 6], "Storm": [0, 10] }
               }
             }
           ]

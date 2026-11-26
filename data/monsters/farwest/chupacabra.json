@@ -1,0 +1,34 @@
+{
+    "name"    : "Chupacabra",
+    "portrait": "monsters/farwest/chupacabra.webp",
+    "max_life": 8,
+    "armor"   : {"Physical": 100},
+    "skills"  : [
+        {
+            "name"      : "Vampiric Bite",
+            "icon"      : "skills/bite.svg",
+            "skill_type": "Attack",
+            "cooldown"  : 30,
+            "targets"   : [
+                {
+                    "effects": [
+                        {
+                            "FlatDamage": {
+                                "damage": { "Physical": [4, 8] }
+                            }
+                        },
+                        {
+                            "ApplyStatus": { "status_id": "bleed", "value": [3, 5] }
+                        }
+                    ]
+                },
+                {
+                    "target_type": "Me",
+                    "effects"    : [
+                        { "ApplyStatus": {"status_id": "life_regen", "value": 100, "duration": 20} }
+                    ]
+                }
+            ]
+        }
+    ]
+}

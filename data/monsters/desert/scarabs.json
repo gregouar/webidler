@@ -8,7 +8,7 @@
     {
       "name"      : "Crawl under the Skin",
       "icon"      : "skills/scarab_beetle.svg",
-      "cooldown"  : 3,
+      "cooldown"  : 30,
       "skill_type": "Attack",
       "targets"   : [
         {

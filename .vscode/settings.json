@@ -1,5 +1,10 @@
 
 {
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true,
+        "files.trimTrailingWhitespace": true
+    },
     "rust-analyzer.rustfmt.overrideCommand": [
         "leptosfmt",
         "--stdin",
@@ -10,11 +15,13 @@
         "contininuously",
         "cooldown",
         "Crit",
+        "debuff",
         "diminishingly",
         "regen",
         "RESPAWN",
         "Syncer",
         "syncers",
+        "unblockable",
         "Unequip"
     ]
 }

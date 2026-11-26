@@ -96,7 +96,9 @@ pub struct AreaState {
     pub max_area_level: AreaLevel,      // Max for this grind
     pub max_area_level_ever: AreaLevel, // Max for all grind of this area
     pub max_power_shard_level_ever: AreaLevel, // Max for all grind of this area
-    pub last_champion_spawn: AreaLevel,
+    pub last_incense_drop: AreaLevel,
+    pub demonic_incense: u16,
+    pub incense_lit: bool,
 
     pub auto_progress: bool,
     pub going_back: i32,

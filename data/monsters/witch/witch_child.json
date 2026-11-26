@@ -1,29 +1,22 @@
 {
-  "name": "Amelia's Child",
+  "name"    : "Amelia's Child",
   "portrait": "monsters/witch/witch_child.webp",
   "max_life": 10,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Child's Play",
-      "icon": "skills/carousel.svg",
-      "cooldown": 3.0,
+      "name"      : "Child's Play",
+      "icon"      : "skills/carousel.svg",
+      "cooldown"  : 30,
       "skill_type": "Spell",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 3, 6 ]
-                }
+                "damage": { "Physical": [3, 6] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "child_play",
-                "value": 200
-              }
-            }
+            { "ApplyStatus": {"status_id": "child_play", "value": 200} }
           ]
         }
       ]

@@ -1,11 +1,10 @@
+use anyhow::{Context, Result};
 use std::{
     collections::HashMap,
     time::{Duration, Instant},
 };
 
-use anyhow::{Context, Result};
-use backend_shared::http::users::UserId;
-use serde::Deserialize;
+use backend_shared::http::users::{CharacterCosmetics, GetUserCharactersResponse, UserId};
 use shared_chat::types::CharacterId;
 
 const REFRESH_COOLDOWN: Duration = Duration::from_secs(10);
@@ -14,8 +13,14 @@ pub struct CharacterResolver {
     http_client: reqwest::Client,
     backend_url: String,
     user_id: UserId,
-    characters: HashMap<CharacterId, String>,
+    characters: HashMap<CharacterId, CharacterPresentation>,
     last_refresh_attempt: Option<Instant>,
+}
+
+#[derive(Clone)]
+pub struct CharacterPresentation {
+    pub name: String,
+    pub cosmetics: CharacterCosmetics,
 }
 
 impl CharacterResolver {
@@ -31,13 +36,23 @@ impl CharacterResolver {
         Ok(resolver)
     }
 
-    pub async fn resolve(&mut self, character_id: Option<CharacterId>) -> Result<Option<String>> {
+    pub async fn resolve(
+        &mut self,
+        character_id: Option<CharacterId>,
+    ) -> Result<Option<CharacterPresentation>> {
         let Some(character_id) = character_id else {
             return Ok(None);
         };
 
-        if let Some(character_name) = self.characters.get(&character_id) {
-            return Ok(Some(character_name.clone()));
+        if self.can_refresh() {
+            self.last_refresh_attempt = Some(Instant::now());
+            if let Ok(characters) = self.fetch_characters().await {
+                self.characters = characters;
+            }
+        }
+
+        if let Some(character) = self.characters.get(&character_id) {
+            return Ok(Some(character.clone()));
         }
 
         if !self.can_refresh() {
@@ -63,7 +78,7 @@ impl CharacterResolver {
             .is_none_or(|last_attempt| last_attempt.elapsed() >= REFRESH_COOLDOWN)
     }
 
-    async fn fetch_characters(&self) -> Result<HashMap<CharacterId, String>> {
+    async fn fetch_characters(&self) -> Result<HashMap<CharacterId, CharacterPresentation>> {
         let res = self
             .http_client
             .get(format!(
@@ -84,18 +99,15 @@ impl CharacterResolver {
             .await?
             .characters
             .into_iter()
-            .map(|character| (character.character_id, character.name))
+            .map(|character| {
+                (
+                    character.character_id,
+                    CharacterPresentation {
+                        name: character.name,
+                        cosmetics: character.cosmetics,
+                    },
+                )
+            })
             .collect())
     }
-}
-
-#[derive(Deserialize)]
-struct GetUserCharactersResponse {
-    characters: Vec<UserCharacter>,
-}
-
-#[derive(Deserialize)]
-struct UserCharacter {
-    character_id: CharacterId,
-    name: String,
 }

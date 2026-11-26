@@ -14,12 +14,12 @@
     ],
     "min_area_level": 0,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           4.0,
@@ -54,12 +54,12 @@
     ],
     "min_area_level": 40,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           6.0,
@@ -94,102 +94,123 @@
     ],
     "min_area_level": 50,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "More",
-        "scope": "Local",
-        "value": -1e300,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": "Min",
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 6.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Fire",
-            "min_max": "Max",
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 18.0,
-        "ignore_quality": false
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          40.0,
-          60.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SkillConditionalModifier": {
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
-                "skill_type": "Attack",
+                "skill_type": null,
                 "skill_id": null,
-                "damage_type": "Fire",
+                "damage_type": "Physical",
                 "min_max": null,
                 "is_hit": null
               }
             },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": "burn",
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": null
-                }
+            "modifier": "More",
+            "scope": "Local",
+            "value": -1e+300
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": "Min",
+                "is_hit": null
               }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 6.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Fire",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 18.0
+          }
+        ],
+        "is_unique": false
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              40.0,
+              60.0
             ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": "Attack",
+                    "skill_id": null,
+                    "damage_type": "Fire",
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": "burn",
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "min_stacks": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 5.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -200,14 +221,14 @@
           "is_hurt": true,
           "is_triggered": null,
           "damage_type": "Fire",
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "sootreaver_burn_refresh",
         "target": "SameTarget",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -234,7 +255,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -242,7 +264,7 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           6.0,
@@ -335,12 +357,12 @@
     ],
     "min_area_level": 90,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           8.0,
@@ -375,74 +397,90 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": "Min",
-            "is_hit": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": "Min",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              30.0,
+              40.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          30.0,
-          40.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": "Max",
-            "is_hit": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              40.0,
+              50.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          40.0,
-          50.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              200.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          200.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": null,
-            "skill_id": null
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": -10.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": -1.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -453,14 +491,14 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
         "trigger_id": "oversized_axe",
         "target": "Me",
         "modifiers": [],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -480,7 +518,7 @@
               "status_id": "rage",
               "value": 100.0,
               "value_factor": 1.0,
-              "duration": 10.0,
+              "duration": 100.0,
               "escalation": null,
               "max_stacks": null,
               "avoidable": null,
@@ -490,7 +528,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -498,7 +537,7 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           8.0,
@@ -590,76 +629,92 @@
     ],
     "min_area_level": 100,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": "open_wound",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SuccessChance": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "effect_type": {
-              "ApplyStatus": {
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "StatusEscalation": {
                 "status_id": "open_wound",
-                "debuff": null
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
               }
-            }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": -1e200,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Life",
-            "skill_type": "Attack"
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 3.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "SuccessChance": {
+                "skill_type": "Spell",
+                "skill_id": null,
+                "effect_type": {
+                  "ApplyStatus": {
+                    "status_id": "open_wound",
+                    "debuff": null
+                  }
+                }
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": -1e+200
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 3.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           8.0,
@@ -764,12 +819,12 @@
     ],
     "min_area_level": 140,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           10.0,
@@ -804,91 +859,10 @@
     ],
     "min_area_level": 150,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          80.0,
-          120.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Min",
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 10.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": "Max",
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          15.0,
-          20.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Mana",
-            "skill_type": "Attack"
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 3.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusDuration": {
-            "status_id": null,
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": "Curse",
-            "skill_id": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Global",
-        "value": [
-          30.0,
-          50.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SkillConditionalModifier": {
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": null,
@@ -898,62 +872,174 @@
                 "is_hit": null
               }
             },
-            "skill_type": null,
-            "skill_id": null,
-            "conditions": [
-              {
-                "StatusStacks": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": "Curse"
-                }
-              }
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              80.0,
+              120.0
             ]
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 140.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "StatConditionalModifier": {
+      "unique_2": {
+        "effects": [
+          {
             "stat": {
               "Damage": {
                 "skill_type": null,
                 "skill_id": null,
-                "damage_type": null,
-                "min_max": null,
+                "damage_type": "Poison",
+                "min_max": "Min",
                 "is_hit": null
               }
             },
-            "conditions": [
-              {
-                "HasStatus": {
-                  "status_id": null,
-                  "damage_type": null,
-                  "debuff": null,
-                  "skill_type": "Curse",
-                  "not": false
-                }
-              }
-            ],
-            "conditions_duration": 0
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 10.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": 100.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              15.0,
+              20.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Mana",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 3.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "StatusDuration": {
+                "status_id": null,
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": "Curse",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Global",
+            "value": [
+              30.0,
+              50.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_6": {
+        "effects": [
+          {
+            "stat": {
+              "SkillConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "skill_type": null,
+                "skill_id": null,
+                "conditions": [
+                  {
+                    "StatusStacks": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": "Curse",
+                      "min_stacks": 0
+                    }
+                  }
+                ]
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 140.0
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_7": {
+        "effects": [
+          {
+            "stat": {
+              "StatConditionalModifier": {
+                "stat": {
+                  "Damage": {
+                    "skill_type": null,
+                    "skill_id": null,
+                    "damage_type": null,
+                    "min_max": null,
+                    "is_hit": null
+                  }
+                },
+                "conditions": [
+                  {
+                    "HasStatus": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": "Curse",
+                      "min_stacks": 0,
+                      "not": false,
+                      "counting": false
+                    }
+                  }
+                ],
+                "conditions_duration": 0
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": 100.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           10.0,
@@ -1049,7 +1135,8 @@
                     "status_id": null,
                     "damage_type": null,
                     "debuff": null,
-                    "skill_type": "Curse"
+                    "skill_type": "Curse",
+                    "min_stacks": 0
                   }
                 }
               ]
@@ -1089,12 +1176,12 @@
     ],
     "min_area_level": 190,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           12.0,
@@ -1129,74 +1216,90 @@
     ],
     "min_area_level": 200,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "CritDamage": {
-            "skill_type": null,
-            "skill_id": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "CritDamage": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 300.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 300.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          100.0,
-          150.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": "Min",
-            "is_hit": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              100.0,
+              150.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          4.0,
-          8.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Physical",
-            "min_max": "Max",
-            "is_hit": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": "Min",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              4.0,
+              8.0
+            ]
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": [
-          15.0,
-          20.0
         ],
-        "ignore_quality": true
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Physical",
+                "min_max": "Max",
+                "is_hit": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": [
+              15.0,
+              20.0
+            ]
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -1207,7 +1310,8 @@
           "is_hurt": null,
           "is_triggered": false,
           "damage_type": null,
-          "skill_ids": null,
+          "skill_id": null,
+          "item_slot": null,
           "conditions": []
         },
         "description": null,
@@ -1227,11 +1331,11 @@
             "modifier": "Flat",
             "factor": 0.1,
             "source": {
-              "HitDamage": null
-            }
+              "HitDamage": "Physical"
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": false,
         "skill_type": "Attack",
         "skill_range": "Any",
@@ -1262,12 +1366,6 @@
             },
             "ignore_stat_effects": [
               {
-                "CritDamage": {
-                  "skill_type": null,
-                  "skill_id": null
-                }
-              },
-              {
                 "Damage": {
                   "skill_type": "Attack",
                   "skill_id": null,
@@ -1281,12 +1379,19 @@
                   "skill_type": null,
                   "skill_id": null
                 }
+              },
+              {
+                "CritDamage": {
+                  "skill_type": null,
+                  "skill_id": null
+                }
               }
             ],
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1294,7 +1399,7 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           12.0,
@@ -1384,12 +1489,12 @@
     ],
     "min_area_level": 250,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           14.0,
@@ -1424,74 +1529,91 @@
     ],
     "min_area_level": 260,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              150.0,
+              200.0
+            ]
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          150.0,
-          200.0
         ],
-        "ignore_quality": true
+        "is_unique": true
       },
-      {
-        "stat": {
-          "CritChance": {
-            "skill_type": null,
-            "skill_id": null
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "CritChance": {
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 5.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 5.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "Speed": {
-            "skill_type": "Attack",
-            "skill_id": null
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Speed": {
+                "skill_type": "Attack",
+                "skill_id": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": 50.0
           }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": 50.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "SkillTargetModifier": {
-            "skill_type": null,
-            "skill_id": "whirlwind",
-            "range": null,
-            "shape": null,
-            "repeat": {
-              "min_value": 4,
-              "max_value": 8,
-              "target": "Any"
-            }
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "SkillTargetModifier": {
+                "skill_type": null,
+                "skill_id": "whirlwind",
+                "item_slot": null,
+                "range": null,
+                "shape": null,
+                "repeat": {
+                  "min_value": 4,
+                  "max_value": 8,
+                  "target": "Any"
+                }
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 200.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 200.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           14.0,
@@ -1580,12 +1702,12 @@
     ],
     "min_area_level": 320,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           16.0,
@@ -1620,12 +1742,12 @@
     ],
     "min_area_level": 400,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           18.0,
@@ -1660,86 +1782,103 @@
     ],
     "min_area_level": 410,
     "rarity": "Unique",
-    "affixes": [
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": "Poison",
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Local",
-        "value": 20.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "StatusEscalation": {
-            "status_id": "open_wound",
-            "damage_type": null,
-            "debuff": null,
-            "skill_type": null,
-            "skill_id": null
-          }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 50.0,
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "Damage": {
-            "skill_type": null,
-            "skill_id": null,
-            "damage_type": null,
-            "min_max": null,
-            "is_hit": null
-          }
-        },
-        "modifier": "Increased",
-        "scope": "Local",
-        "value": [
-          400.0,
-          500.0
-        ],
-        "ignore_quality": true
-      },
-      {
-        "stat": {
-          "SuccessChance": {
-            "skill_type": "Spell",
-            "skill_id": null,
-            "effect_type": {
-              "ApplyStatus": {
-                "status_id": "open_wound",
-                "debuff": null
+    "affixes": {
+      "unique_1": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": "Poison",
+                "min_max": null,
+                "is_hit": null
               }
-            }
+            },
+            "modifier": "Flat",
+            "scope": "Local",
+            "value": 20.0
           }
-        },
-        "modifier": "More",
-        "scope": "Global",
-        "value": -1e200,
-        "ignore_quality": true
+        ],
+        "is_unique": true
       },
-      {
-        "stat": {
-          "RestoreOnHit": {
-            "restore_type": "Life",
-            "skill_type": "Attack"
+      "unique_2": {
+        "effects": [
+          {
+            "stat": {
+              "StatusEscalation": {
+                "status_id": "open_wound",
+                "damage_type": null,
+                "debuff": null,
+                "skill_type": null,
+                "skill_id": null
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 50.0
           }
-        },
-        "modifier": "Flat",
-        "scope": "Global",
-        "value": 8.0,
-        "ignore_quality": true
+        ],
+        "is_unique": true
+      },
+      "unique_3": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": null,
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "Increased",
+            "scope": "Local",
+            "value": [
+              400.0,
+              500.0
+            ]
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_4": {
+        "effects": [
+          {
+            "stat": {
+              "Damage": {
+                "skill_type": null,
+                "skill_id": "voodoo_doll",
+                "damage_type": null,
+                "min_max": null,
+                "is_hit": null
+              }
+            },
+            "modifier": "More",
+            "scope": "Global",
+            "value": -1e+300
+          }
+        ],
+        "is_unique": true
+      },
+      "unique_5": {
+        "effects": [
+          {
+            "stat": {
+              "RestoreOnHit": {
+                "restore_type": "Life",
+                "skill_type": "Attack"
+              }
+            },
+            "modifier": "Flat",
+            "scope": "Global",
+            "value": 8.0
+          }
+        ],
+        "is_unique": true
       }
-    ],
+    },
     "triggers": [
       {
         "OnHit": {
@@ -1750,9 +1889,8 @@
           "is_hurt": null,
           "is_triggered": null,
           "damage_type": null,
-          "skill_ids": [
-            "voodoo_doll"
-          ],
+          "skill_id": "voodoo_doll",
+          "item_slot": null,
           "conditions": [
             {
               "HasStatus": {
@@ -1760,7 +1898,9 @@
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null,
-                "not": false
+                "min_stacks": 0,
+                "not": false,
+                "counting": false
               }
             }
           ]
@@ -1782,16 +1922,16 @@
             "modifier": "Flat",
             "factor": 0.5,
             "source": {
-              "StatusValue": {
+              "TargetStatusValue": {
                 "status_id": "open_wound",
                 "damage_type": null,
                 "debuff": null,
                 "skill_type": null
               }
-            }
+            },
+            "hidden": false
           }
         ],
-        "inherit_source_effects": false,
         "trigger_propagate": true,
         "skill_type": "Other",
         "skill_range": "Melee",
@@ -1831,7 +1971,8 @@
             "conditional_modifiers": [],
             "independent_application": false,
             "optional_application": false,
-            "description": null
+            "description": null,
+            "as_skill_type": null
           }
         ]
       }
@@ -1839,7 +1980,7 @@
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           18.0,
@@ -1939,12 +2080,12 @@
     ],
     "min_area_level": 490,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           20.0,
@@ -1979,12 +2120,12 @@
     ],
     "min_area_level": 590,
     "rarity": "Normal",
-    "affixes": [],
+    "affixes": {},
     "triggers": [],
     "weapon_specs": {
       "range": "Melee",
       "shape": "Vertical2",
-      "cooldown": 3.0,
+      "cooldown": 30.0,
       "damage": {
         "Physical": [
           22.0,

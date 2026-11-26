@@ -1,6 +1,6 @@
 {
     "area_specific": true,
-    "entries": [
+    "entries"      : [
         {"item_id": "cloth_wraps_unique",    "weight": 9999, "min_area_level": 5},
         {"item_id": "dagger_unique",         "weight": 9999, "min_area_level": 5},
         {"item_id": "poop_knife",            "weight":  999, "min_area_level": 5},
@@ -9,6 +9,6 @@
         {"item_id": "leather_boots_unique",  "weight": 9999                     },
         {"item_id": "wand_unique",           "weight": 9999                     },
         {"item_id": "butcher_apron",         "weight": 9999                     },
-        {"item_id": "edict_menu",            "weight": 3999                     }
+        {"item_id": "edict_menu",            "weight": 1999                     }
     ]
 }

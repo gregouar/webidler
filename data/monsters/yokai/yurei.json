@@ -1,35 +1,23 @@
 {
-  "name": "Yurei",
+  "name"    : "Yurei",
   "portrait": "monsters/yokai/yurei.webp",
   "max_life": 7,
-  "evade": {
-    "Physical": 20,
-    "Fire": 20,
-    "Storm": 20,
-    "Poison": 20
-  },
-  "skills": [
+  "evade"   : {"Physical": 20, "Fire": 20, "Storm": 20, "Poison": 20},
+  "skills"  : [
     {
-      "name": "Haunting",
-      "icon": "skills/curse_conductivity.svg",
+      "name"      : "Haunting",
+      "icon"      : "skills/curse_conductivity.svg",
       "skill_type": "Spell",
-      "cooldown": 3.0,
-      "targets": [
+      "cooldown"  : 30,
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Storm": [ 0, 8 ]
-                }
+                "damage": { "Storm": [0, 8] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "vulnerability_storm",
-                "value": 50
-              }
-            }
+            { "ApplyStatus": {"status_id": "vulnerability_storm", "value": 50} }
           ]
         }
       ]

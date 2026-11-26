@@ -8,12 +8,12 @@
     {
       "name"      : "Three Thousand Years Smell",
       "icon"      : "skills/mummy_head.svg",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "skill_type": "Spell",
       "targets"   : [
         {
           "effects": [
-            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 50, "duration": 4} }
+            { "ApplyStatus": {"status_id": "poison", "value": 5, "escalation": 50, "duration": 40} }
           ]
         }
       ]

@@ -1,5 +1,5 @@
-[
-  {
+{
+  "map_inc_crit_damage_t1": {
     "name"        : "of Destruction",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -15,7 +15,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":   4 }
     ]
   },
-  {
+  "map_inc_crit_damage_t2": {
     "name"        : "of Havoc",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -31,7 +31,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":   8 }
     ]
   },
-  {
+  "map_inc_crit_damage_t3": {
     "name"        : "of Demolition",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -47,7 +47,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  12 }
     ]
   },
-  {
+  "map_inc_crit_damage_t4": {
     "name"        : "of Annihilation",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -63,7 +63,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  16 }
     ]
   },
-  {
+  "map_inc_crit_damage_t5": {
     "name"        : "of Obliteration",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -79,7 +79,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  20 }
     ]
   },
-  {
+  "map_inc_crit_damage_t6": {
     "name"        : "of Rampage",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -95,7 +95,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  24 }
     ]
   },
-  {
+  "map_inc_crit_damage_t7": {
     "name"        : "of Ruination",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -111,7 +111,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  28 }
     ]
   },
-  {
+  "map_inc_crit_damage_t8": {
     "name"        : "of Devastation",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -127,7 +127,7 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  32 }
     ]
   },
-  {
+  "map_inc_crit_damage_t9": {
     "name"        : "of Extermination",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -143,4 +143,4 @@
       { "scope": "Global", "stat": "ItemLevel",        "modifier": "Flat",      "value":  40 }
     ]
   }
-]
+}

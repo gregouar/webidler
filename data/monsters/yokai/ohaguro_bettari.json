@@ -1,29 +1,22 @@
 {
-  "name": "Ohaguro Bettari",
+  "name"    : "Ohaguro Bettari",
   "portrait": "monsters/yokai/ohaguro_bettari.webp",
   "max_life": 10,
-  "skills": [
+  "skills"  : [
     {
-      "name": "Forbidden Kiss",
-      "icon": "skills/bite.svg",
-      "cooldown": 5.0,
+      "name"      : "Forbidden Kiss",
+      "icon"      : "skills/bite.svg",
+      "cooldown"  : 50,
       "skill_type": "Attack",
-      "targets": [
+      "targets"   : [
         {
           "effects": [
             {
               "FlatDamage": {
-                "damage": {
-                  "Physical": [ 5, 10 ]
-                }
+                "damage": { "Physical": [5, 10] }
               }
             },
-            {
-              "ApplyStatus": {
-                "status_id": "bleed",
-                "value": 20
-              }
-            }
+            { "ApplyStatus": {"status_id": "bleed", "value": 20} }
           ]
         }
       ]

@@ -1,6 +1,6 @@
 use indexmap::IndexMap;
 use leptos::{prelude::*, web_sys};
-use leptos_use::on_click_outside;
+use leptos_use_on_click_outside::on_click_outside;
 
 use crate::components::{
     events::keyboard_event_key,
@@ -12,6 +12,7 @@ pub fn DropdownMenu<T>(
     options: IndexMap<T, String>,
     chosen_option: RwSignal<T>,
     #[prop(default = "Select an option")] missing_text: &'static str,
+    #[prop(default = "w-60")] width_class: &'static str,
 ) -> impl IntoView
 where
     T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
@@ -28,7 +29,10 @@ where
     };
 
     view! {
-        <div class="relative w-60 text-sm xl:text-base text-white" node_ref=node_ref>
+        <div
+            class=format!("relative {width_class} text-sm xl:text-base text-white")
+            node_ref=node_ref
+        >
             <button
                 on:click=toggle
                 class=move || {
@@ -128,7 +132,7 @@ where
                     let quality = settings.graphics_quality();
                     format!(
                         "dropdown-transition absolute mt-1 w-full rounded-[6px] {}
-                    max-h-80 overflow-auto z-20 {}",
+                    max-h-80 overflow-auto overscroll-contain z-20 {}",
                         match quality {
                             GraphicsQuality::High => {
                                 "border border-[#6c5329] shadow-[0_10px_24px_rgba(0,0,0,0.42),0_1px_0_rgba(26,17,10,0.95),inset_0_1px_0_rgba(230,208,154,0.12)]"
@@ -180,6 +184,7 @@ pub fn SearchableDropdownMenu<T>(
     options: IndexMap<T, String>,
     chosen_option: RwSignal<T>,
     #[prop(default = "Select an option")] missing_text: &'static str,
+    #[prop(default = "w-60")] width_class: &'static str,
 ) -> impl IntoView
 where
     T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
@@ -220,7 +225,10 @@ where
     });
 
     view! {
-        <div class="relative w-60 text-sm xl:text-base text-white" node_ref=node_ref>
+        <div
+            class=format!("relative {width_class} text-sm xl:text-base text-white")
+            node_ref=node_ref
+        >
             <button
                 on:click=toggle
                 class=move || {
@@ -376,7 +384,7 @@ where
 
                 </div>
 
-                <ul class="max-h-80 overflow-auto text-left">
+                <ul class="max-h-80 overflow-auto overscroll-contain text-left">
                     {move || {
                         filtered_options
                             .get()

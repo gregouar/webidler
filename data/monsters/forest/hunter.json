@@ -11,7 +11,7 @@
     {
       "name"      : "Piercing Shot",
       "icon"      : "skills/attack.svg",
-      "cooldown"  : 2.5,
+      "cooldown"  : 25,
       "skill_type": "Attack",
       "targets"   : [
         {
@@ -32,12 +32,12 @@
       "name"      : "Toxic Barrage",
       "icon"      : "skills/poison_coating.svg",
       "skill_type": "Attack",
-      "cooldown"  : 5.0,
+      "cooldown"  : 50,
       "targets"   : [
         {
-          "range"  : "Distance",
+          "range": "Distance",
           "effects": [
-            { "ApplyStatus": {"status_id": "poison", "duration": 5, "value": 3, "escalation": 20} },
+            { "ApplyStatus": {"status_id": "poison", "duration": 50, "value": 3, "escalation": 20} },
             {
               "FlatDamage": {
                 "damage": { "Physical": [2, 6] }
@@ -51,7 +51,7 @@
       "name"      : "Lost of a Friend",
       "icon"      : "skills/hunting_horn.svg",
       "skill_type": "Blessing",
-      "cooldown"  : 0.0,
+      "cooldown"  : 0,
       "triggers"  : [
         {
           "trigger_id" : "hunter_vengeance",
@@ -61,7 +61,7 @@
           "target"     : "Me",
           "effects"    : [
             { "Restore": {"restore_type": "Life", "value": 100, "modifier": "Percent"} },
-            { "ApplyStatus": {"status_id": "hunter_vengeance", "value": 100} }
+            { "ApplyStatus": {"status_id": "hunter_vengeance", "value": 100}, "independent_application": true }
           ]
         }
       ]

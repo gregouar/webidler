@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_add_armor_local_t1" : {
     "name"        : "Patched",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -12,7 +12,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [5, 10] }
     ]
   },
-  {
+  "item_add_armor_local_t2" : {
     "name"        : "Reinforced",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -25,7 +25,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [15, 20] }
     ]
   },
-  {
+  "item_add_armor_local_t3" : {
     "name"        : "Fortified",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -38,7 +38,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [25, 30] }
     ]
   },
-  {
+  "item_add_armor_local_t4" : {
     "name"        : "Bolstered",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -51,7 +51,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [35, 40] }
     ]
   },
-  {
+  "item_add_armor_local_t5" : {
     "name"        : "Hardened",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -64,7 +64,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [45, 50] }
     ]
   },
-  {
+  "item_add_armor_local_t6" : {
     "name"        : "Adamant",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -77,7 +77,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [55, 60] }
     ]
   },
-  {
+  "item_add_armor_local_t7" : {
     "name"        : "Impenetrable",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -90,7 +90,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [65, 70] }
     ]
   },
-  {
+  "item_add_armor_local_t8" : {
     "name"        : "Unyielding",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -103,7 +103,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [75, 80] }
     ]
   },
-  {
+  "item_add_armor_local_t9" : {
     "name"        : "Unassailable",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -116,7 +116,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [85, 90] }
     ]
   },
-  {
+  "item_add_armor_local_t10": {
     "name"        : "Invincible",
     "family"      : "add_armor",
     "tags"        : ["Physical", "Armor"],
@@ -129,7 +129,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Flat", "value": [95, 100] }
     ]
   },
-  {
+  "item_inc_armor_local_t1" : {
     "name"        : "Tough",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -142,7 +142,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [20, 35] }
     ]
   },
-  {
+  "item_inc_armor_local_t2" : {
     "name"        : "Sturdy",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -155,7 +155,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [45, 55] }
     ]
   },
-  {
+  "item_inc_armor_local_t3" : {
     "name"        : "Reinforcing",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -168,7 +168,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [65, 75] }
     ]
   },
-  {
+  "item_inc_armor_local_t4" : {
     "name"        : "Bulwarked",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -181,7 +181,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [85, 95] }
     ]
   },
-  {
+  "item_inc_armor_local_t5" : {
     "name"        : "Protective",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -194,7 +194,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [105, 115] }
     ]
   },
-  {
+  "item_inc_armor_local_t6" : {
     "name"        : "Defensive",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -207,7 +207,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [125, 135] }
     ]
   },
-  {
+  "item_inc_armor_local_t7" : {
     "name"        : "Guardian",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -220,7 +220,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [145, 155] }
     ]
   },
-  {
+  "item_inc_armor_local_t8" : {
     "name"        : "Sentinel",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -233,7 +233,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [165, 175] }
     ]
   },
-  {
+  "item_inc_armor_local_t9" : {
     "name"        : "Bastion",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -246,7 +246,7 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [185, 195] }
     ]
   },
-  {
+  "item_inc_armor_local_t10": {
     "name"        : "Fortress",
     "family"      : "inc_armor",
     "tags"        : ["Physical", "Armor"],
@@ -259,4 +259,4 @@
       { "scope": "Local", "stat": {"Armor": "Physical"}, "modifier": "Increased", "value": [205, 220] }
     ]
   }
-]
+}

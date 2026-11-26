@@ -5,17 +5,23 @@ use std::{collections::HashMap, fmt, time::Duration};
 use serde::{Deserialize, Serialize};
 
 use crate::data::{
+    achievements::AchievementSpecs,
     area::{AreaLevel, AreaSpecs},
     character_status::{StatusId, StatusSpecs},
+    cosmetics::CosmeticType,
+    item::{BaseItemId, ItemBase},
+    item_affix::ItemAffixBlueprint,
     market::MarketItem,
     passive::{PassivesTreeAscension, PassivesTreeSpecs, PurchasedNodes},
+    pets::{PetSpecs, PlayerPets},
     player::PlayerInventory,
     realms::Realm,
     skill::{BaseSkillSpecs, SkillSpecs},
     skill_mastery::{PlayerSkillMasteries, SkillMasterySpecs, SkillMasteryState},
     stash::{Stash, StashItem},
     temple::{BenedictionsCategory, PlayerBenedictions},
-    user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId},
+    user::{User, UserCharacter, UserCharacterId, UserDetails, UserGrindArea, UserId, UserUnlocks},
+    values::NonNegative,
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -114,6 +120,7 @@ pub struct CreateCharacterResponse {
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct GetUserCharactersResponse {
     pub characters: Vec<UserCharacter>,
+    pub user_unlocks: UserUnlocks,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -127,14 +134,39 @@ pub struct GetCharacterDetailsResponse {
     pub skill_masteries: PlayerSkillMasteries,
     pub skill_mastery_skill_specs: HashMap<String, SkillSpecs>,
 
+    pub user_unlocks: UserUnlocks, // Needed for claim rewards...
+    pub achievements: HashMap<String, DateTime<Utc>>,
+    pub pets: PlayerPets,
+
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
     pub market_stash: Option<Stash>,
-    // pub last_grind: Option<GrindStats>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpdateCharacterResponse {}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct GetAccountUserUnlocksResponse {
+    pub user_unlocks: UserUnlocks,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ReconcileAchievementsResponse {
+    pub user_unlocks: UserUnlocks,
+    pub achievements: HashMap<String, DateTime<Utc>>,
+    pub newly_unlocked_achievements: Vec<String>,
+    // Specific to current character
+    pub achievements_progress: HashMap<String, u64>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct ClaimRewardAchievementResponse {
+    pub user_unlocks: UserUnlocks,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct UpdateCharacterPetsResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct DeleteCharacterResponse {}
@@ -142,29 +174,18 @@ pub struct DeleteCharacterResponse {}
 // Game
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetAreasResponse {
+pub struct GetMasterDataResponse {
     pub areas: HashMap<String, AreaSpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetSkillsResponse {
     pub skills: HashMap<String, BaseSkillSpecs>,
     pub skill_masteries: IndexMap<String, SkillMasterySpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetStatusesResponse {
     pub statuses: HashMap<StatusId, StatusSpecs>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetPassivesResponse {
+    pub cosmetics: IndexMap<String, CosmeticType>,
+    pub pets: HashMap<String, PetSpecs>,
+    pub achievements: IndexMap<String, AchievementSpecs>,
     pub passives_tree_specs: PassivesTreeSpecs,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
-pub struct GetBenedictionsResponse {
     pub benedictions_specs: IndexMap<String, BenedictionsCategory>,
+    pub item_bases: HashMap<BaseItemId, ItemBase>,
+    pub item_affixes: HashMap<String, ItemAffixBlueprint>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -218,7 +239,7 @@ pub struct EditMarketItemResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct BuyMarketItemResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
@@ -229,13 +250,13 @@ pub struct RejectMarketItemResponse {}
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct UpgradeStashResponse {
-    pub resource_gold: f64,
+    pub resource_gold: NonNegative,
     pub stash: Stash,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct ExchangeGemsStashResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub stash: Stash,
 }
 // #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -270,19 +291,42 @@ pub struct TakeStashItemResponse {
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeAffixResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ForgeUpgradeResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeTemperResponse {
+    pub resource_gems: NonNegative,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeRerollResponse {
+    pub resource_gems: NonNegative,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeSacrificeResponse {
+    pub resource_gems: NonNegative,
+    pub inventory: PlayerInventory,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct ForgeImbueResponse {
     pub inventory: PlayerInventory,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct GambleItemResponse {
-    pub resource_gems: f64,
+    pub resource_gems: NonNegative,
     pub inventory: PlayerInventory,
 }
 
@@ -301,10 +345,10 @@ pub struct InventoryUnequipResponse {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InventoryDeleteResponse {
     pub inventory: PlayerInventory,
-    pub resource_gold: f64,
-    pub resource_gems: f64,
-    pub gold_reward: f64,
-    pub gems_reward: f64,
+    pub resource_gold: NonNegative,
+    pub resource_gems: NonNegative,
+    pub gold_reward: NonNegative,
+    pub gems_reward: NonNegative,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

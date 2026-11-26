@@ -42,7 +42,7 @@ body {
   --text-shadow-xl: 0 8px 16px rgb(0, 0, 0);
 
   --animate-monster-fade-in: monster-fade-in 1s ease-out both;
-  --animate-monster-fade-out: monster-fade-out 1s ease-in both;
+  --animate-monster-fade-out: monster-fade-out 0.7s ease-in both;
   --animate-monster-flee: monster-flee 1s ease-out both;
 
 
@@ -70,7 +70,7 @@ body {
     }
     to {
       opacity: 0;
-      transform: translateY(50%);
+      transform: translateY(30%);
     }
   }
 
@@ -189,6 +189,29 @@ body {
 
   /* Portraits */
   .champion-shimmer {
+    overflow: hidden;
+    pointer-events: none;
+    contain: paint;
+  }
+
+  .boss-shimmer {
+    overflow: hidden;
+    pointer-events: none;
+    contain: paint;
+  }
+
+  .champion-shimmer::before,
+  .boss-shimmer::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 500%;
+    transform: translate3d(20%, 0, 0);
+    will-change: transform;
+  }
+
+  .champion-shimmer::before {
     background: linear-gradient(
       130deg,
       rgba(255, 255, 255, 0) 40%,
@@ -196,13 +219,10 @@ body {
       rgba(59, 130, 246, 0.35) 60%,
       rgba(255, 255, 255, 0) 70%
     );
-    background-size: 500% 100%;
-    background-repeat: repeat;
     animation: shimmerMove 8s infinite linear;
-    pointer-events: none;
   }
 
-  .boss-shimmer {
+  .boss-shimmer::before {
     background: linear-gradient(
       130deg,
       rgba(255, 255, 255, 0) 40%,
@@ -210,18 +230,15 @@ body {
       rgba(139, 0, 0, 0.4) 60%,
       rgba(255, 255, 255, 0) 70%
     );
-    background-size: 500% 100%;
-    background-repeat: repeat;
     animation: shimmerMove 12s infinite linear;
-    pointer-events: none;
   }
 
   @keyframes shimmerMove {
-    0% {
-      background-position: -100% 0;
+    0%, 25.001%, 50.001%, 75.001% {
+      transform: translate3d(20%, 0, 0);
     }
-    100% {
-      background-position: 400% 0;
+    25%, 50%, 75%, 100% {
+      transform: translate3d(-80%, 0, 0);
     }
   }
 
@@ -507,11 +524,173 @@ body {
     transform: rotateY(180deg);
     animation: reward-reveal 0.6s ease-out forwards;
   }
+
+  /* Achievement claim celebration */
+  .achievement-claim-effect {
+    animation: achievement-claim-fade 1.3s ease-out both;
+    isolation: isolate;
+  }
+
+  .achievement-claim-glow {
+    background:
+      radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.2), transparent 64%),
+      linear-gradient(90deg, transparent, rgba(253, 230, 138, 0.1), transparent);
+    animation: achievement-claim-glow 1.1s ease-out both;
+  }
+
+  .achievement-claim-sweep {
+    left: -45%;
+    width: 36%;
+    transform: skewX(-18deg);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(253, 230, 138, 0.12) 24%,
+      rgba(255, 251, 235, 0.82) 50%,
+      rgba(251, 191, 36, 0.18) 76%,
+      transparent
+    );
+    filter: blur(1px) drop-shadow(0 0 8px rgba(251, 191, 36, 0.65));
+    animation: achievement-claim-sweep 900ms cubic-bezier(0.2, 0.75, 0.25, 1) 90ms both;
+  }
+
+  .achievement-claim-sparkle {
+    left: var(--sparkle-x);
+    top: var(--sparkle-y);
+    width: var(--sparkle-size);
+    height: var(--sparkle-size);
+    border-radius: 999px;
+    background: #fff7d6;
+    box-shadow:
+      0 0 4px #fff7d6,
+      0 0 10px rgba(251, 191, 36, 0.95);
+    opacity: 0;
+    animation: achievement-claim-sparkle 640ms ease-out var(--sparkle-delay) both;
+  }
+
+  .achievement-claim-sparkle::before,
+  .achievement-claim-sparkle::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: rgba(255, 251, 235, 0.95);
+    transform: translate(-50%, -50%);
+  }
+
+  .achievement-claim-sparkle::before {
+    width: 280%;
+    height: 1px;
+  }
+
+  .achievement-claim-sparkle::after {
+    width: 1px;
+    height: 280%;
+  }
+
+  @keyframes achievement-claim-fade {
+    0%, 72% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes achievement-claim-glow {
+    0% { opacity: 0; }
+    24% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes achievement-claim-sweep {
+    0% { left: -45%; opacity: 0; }
+    12% { opacity: 1; }
+    78% { opacity: 1; }
+    100% { left: 118%; opacity: 0; }
+  }
+
+  @keyframes achievement-claim-sparkle {
+    0% { opacity: 0; transform: scale(0.2) rotate(0deg); }
+    28% { opacity: 1; transform: scale(1.15) rotate(35deg); }
+    100% { opacity: 0; transform: translateY(-12px) scale(0.1) rotate(90deg); }
+  }
 }
 
 @layer components {
   .btn {
     @apply cursor-pointer disabled:cursor-auto disabled:pointer-events-none;
+  }
+
+  .btn * {
+    cursor: inherit;
+  }
+
+  .button-press-high.button-auto-pressed,
+  .button-auto-pressed .button-press-high {
+    animation: button-auto-press-high 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-high.button-auto-pressed::before,
+  .button-auto-pressed .button-press-high::before {
+    animation: button-auto-press-highlight 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-medium.button-auto-pressed,
+  .button-auto-pressed .button-press-medium {
+    animation: button-auto-press-medium 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-low.button-auto-pressed,
+  .button-auto-pressed .button-press-low {
+    animation: button-auto-press-low 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+
+  .button-press-skill-slot.button-auto-pressed,
+  .button-auto-pressed .button-press-skill-slot {
+    animation: button-auto-press-skill-slot 550ms cubic-bezier(0.22, 0.8, 0.3, 1) 250ms both;
+  }
+}
+
+@keyframes button-auto-press-high {
+  20%,
+  100% {
+    translate: 0 1px;
+    filter: brightness(0.9);
+    color: white;
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.45),
+      0 1px 0 rgba(26, 17, 10, 0.95),
+      inset 0 3px 5px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+  }
+}
+
+@keyframes button-auto-press-highlight {
+  20%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes button-auto-press-medium {
+  20%,
+  100% {
+    translate: 0 1px;
+    filter: brightness(0.9);
+    color: white;
+  }
+}
+
+@keyframes button-auto-press-low {
+  20%,
+  100% {
+    translate: 0 1px;
+    filter: brightness(0.95);
+  }
+}
+
+@keyframes button-auto-press-skill-slot {
+  20%,
+  100% {
+    translate: 0 2px;
+    filter: brightness(0.5) sepia(1);
   }
 }
 

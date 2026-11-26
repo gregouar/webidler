@@ -23,7 +23,9 @@ impl DataInit<&AreaSpecs> for AreaState {
             max_area_level: 0,
             max_area_level_ever: 0,
             max_power_shard_level_ever: 0,
-            last_champion_spawn: 0,
+            last_incense_drop: 0,
+            demonic_incense: 0,
+            incense_lit: false,
             auto_progress: true,
             going_back: 0,
             rush_mode: false,
@@ -71,9 +73,11 @@ impl DataInit<&PlayerBaseSpecs> for PlayerSpecs {
                 effects: specs.effects.clone(),
                 conditional_modifiers: Default::default(),
             },
+            max_level: specs.max_level,
             movement_cooldown: specs.movement_cooldown,
             gold_find: specs.gold_find,
             threat_gain: specs.threat_gain,
+            purchased_nodes: Default::default(),
         }
     }
 }
@@ -90,8 +94,8 @@ impl DataInit<&MonsterSpecs> for MonsterState {
     fn init(specs: &MonsterSpecs) -> Self {
         let mut monster_state = MonsterState {
             character_state: CharacterState::init(&specs.character_specs),
-            gold_reward: 0.0,
-            gems_reward: 0.0,
+            gold_reward: Default::default(),
+            gems_reward: Default::default(),
         };
 
         for skill_state in monster_state.character_state.skills_states.iter_mut() {

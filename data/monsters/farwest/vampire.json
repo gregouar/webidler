@@ -1,0 +1,29 @@
+{
+  "name"    : "Vampire",
+  "portrait": "monsters/farwest/vampire.webp",
+  "max_life": 10,
+  "armor"   : {"Poison": 100},
+  "skills"  : [
+    {
+      "name"      : "Drain Life",
+      "icon"      : "skills/vampire.svg",
+      "cooldown"  : 50,
+      "skill_type": "Spell",
+      "targets"   : [
+        {
+          "effects": [
+            {
+              "ApplyStatus": { "status_id": "bleed", "value": [10, 20] }
+            }
+          ]
+        },
+        {
+          "target_type": "Me",
+          "effects"    : [
+            { "ApplyStatus": {"status_id": "life_regen", "value": 200, "duration": 30} }
+          ]
+        }
+      ]
+    }
+  ]
+}

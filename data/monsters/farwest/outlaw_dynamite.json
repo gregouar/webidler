@@ -1,0 +1,29 @@
+{
+  "name"    : "Outlaw",
+  "portrait": "monsters/farwest/outlaw_dynamite.webp",
+  "max_life": 10,
+  "armor"   : {"Fire": 100},
+  "skills"  : [
+    {
+      "name"      : "Boom",
+      "icon"      : "skills/dynamite.svg",
+      "cooldown"  : 80,
+      "skill_type": "Attack",
+      "targets"   : [
+        {
+          "range": "Distance",
+          "effects": [
+            {
+              "FlatDamage": {
+                "damage": { "Fire": [20, 40] }
+              }
+            },
+            {
+              "ApplyStatus": { "duration": [30, 60], "status_id": "burn", "value": 8 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

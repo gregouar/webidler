@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::data::{
     area::AreaLevel,
-    item::{ItemCategory, ItemRarity, ItemSpecs},
+    item::{BaseItemId, ItemCategory, ItemRarity, ItemSpecs},
 };
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -22,7 +22,7 @@ pub struct QuestSpecs {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum QuestReward {
     Item {
-        item_id: String,
+        item_id: BaseItemId,
         level: AreaLevel,
         #[serde(default)]
         item_rarity: Option<ItemRarity>,

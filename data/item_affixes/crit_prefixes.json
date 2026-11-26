@@ -1,5 +1,5 @@
-[
-  {
+{
+  "item_inc_crit_damage_t1" : {
     "name"        : "Harmful",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -12,7 +12,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [25, 45] }
     ]
   },
-  {
+  "item_inc_crit_damage_t2" : {
     "name"        : "Dangerous",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -25,7 +25,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [55, 70] }
     ]
   },
-  {
+  "item_inc_crit_damage_t3" : {
     "name"        : "Grievous",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -38,7 +38,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [80, 95] }
     ]
   },
-  {
+  "item_inc_crit_damage_t4" : {
     "name"        : "Lethal",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -51,7 +51,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [105, 120] }
     ]
   },
-  {
+  "item_inc_crit_damage_t5" : {
     "name"        : "Mortal",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -64,7 +64,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [130, 145] }
     ]
   },
-  {
+  "item_inc_crit_damage_t6" : {
     "name"        : "Deadly",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -77,7 +77,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [160, 180] }
     ]
   },
-  {
+  "item_inc_crit_damage_t7" : {
     "name"        : "Fatal",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -90,7 +90,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [195, 220] }
     ]
   },
-  {
+  "item_inc_crit_damage_t8" : {
     "name"        : "Grim",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -103,7 +103,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [235, 265] }
     ]
   },
-  {
+  "item_inc_crit_damage_t9" : {
     "name"        : "Terrible",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -116,7 +116,7 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [280, 320] }
     ]
   },
-  {
+  "item_inc_crit_damage_t10": {
     "name"        : "Terminal",
     "family"      : "inc_crit_damage",
     "tags"        : ["Attack", "Critical"],
@@ -129,4 +129,4 @@
       { "scope": "Global", "stat": {"CritDamage": {}}, "modifier": "Increased", "value": [350, 400] }
     ]
   }
-]
+}

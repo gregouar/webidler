@@ -3,7 +3,7 @@
         "name"      : "Vile Incantation",
         "icon"      : "statuses/evil_book.svg",
         "debuff"    : false,
-        "duration"  : 10,
+        "duration"  : 100,
         "max_stacks": 1,
         "effects"   : [
             {
@@ -30,7 +30,7 @@
         "name"      : "Venom of the Serpent Queen",
         "icon"      : "statuses/cobra.svg",
         "debuff"    : false,
-        "duration"  : 4,
+        "duration"  : 40,
         "max_stacks": 20,
         "effects"   : [
             {
@@ -55,6 +55,25 @@
                 },
                 "value"       : 50.0,
                 "modifier"    : "Flat"
+            }
+        ]
+    },
+    "hunger"       : {
+        "name"      : "Curse of Hunger",
+        "icon"      : "statuses/hunger.svg",
+        "debuff"    : false,
+        "duration"  : 15,
+        "max_stacks": 50,
+        "effects"   : [
+            {
+                "StatModifier": {"stat": "LifeRegen", "modifier": "Flat", "debuff": true},
+                "value"       : 10,
+                "modifier"    : "Flat"
+            },
+            {
+                "StatModifier": { "stat": {"Damage": {}}, "modifier": "More", "debuff": false },
+                "value"       : 30,
+                "modifier"    : "Percent"
             }
         ]
     }

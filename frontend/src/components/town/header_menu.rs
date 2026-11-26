@@ -5,11 +5,16 @@ use crate::components::{
     chat::chat_context::ChatContext,
     data_context::DataContext,
     events::{EventsContext, Key},
+    icons::header_icons::{
+        AchievementsIcon, ForgeIcon, InventoryIcon, MarketIcon, PassivesIcon, PetsIcon, SkillsIcon,
+        StashIcon, TempleIcon,
+    },
     shared::{
+        achievements::are_rewards_available,
         inventory::InventoryEquipFilter,
         resources::{GemsCounter, GoldCounter, ShardsCounter},
     },
-    town::TownContext,
+    town::{TownContext, panels::temple},
     ui::{
         buttons::MenuButton,
         fullscreen::FullscreenButton,
@@ -27,7 +32,7 @@ pub fn HeaderMenu() -> impl IntoView {
     let events_context: EventsContext = expect_context();
 
     let show_ascension_tutorial = Signal::derive(move || {
-        town_context.character.read().resource_shards >= 1.0
+        town_context.character.read().resource_shards.get() >= 1.0
             && town_context
                 .passives_tree_ascension
                 .read()
@@ -37,8 +42,8 @@ pub fn HeaderMenu() -> impl IntoView {
             && !town_context.open_ascend.get()
     });
     let show_temple_tutorial = Signal::derive(move || {
-        town_context.character.read().resource_gold >= 100.0
-            && !has_bought_extra_skill_slot(town_context)
+        town_context.character.read().resource_gold.get() >= 100.0
+            && !has_bought_extra_skill_slot(town_context, data_context)
             && !town_context.open_temple.get()
             && !town_context.open_ascend.get()
             && !show_ascension_tutorial.get()
@@ -51,10 +56,36 @@ pub fn HeaderMenu() -> impl IntoView {
             && !show_ascension_tutorial.get()
             && !show_temple_tutorial.get()
     });
+    let favorite_skill_has_unspent_mastery_points = Signal::derive(move || {
+        let mastery_specs = data_context.skill_mastery_specs.read();
+        let skill_masteries = town_context.player_skill_masteries.read();
 
-    let gold = Signal::derive(move || town_context.character.read().resource_gold);
-    let gems = Signal::derive(move || town_context.character.read().resource_gems);
-    let shards = Signal::derive(move || town_context.character.read().resource_shards);
+        skill_masteries.favorite_skills.iter().any(|skill_id| {
+            let Some(mastery) = skill_masteries.masteries.get(skill_id) else {
+                return false;
+            };
+            let Some(specs) = mastery_specs.get(skill_id) else {
+                return false;
+            };
+
+            let spent_points = mastery
+                .upgrades_bought
+                .iter()
+                .filter_map(|(upgrade_id, upgrade_level)| {
+                    specs
+                        .upgrades
+                        .get(upgrade_id)
+                        .map(|upgrade| upgrade.compute_cost(*upgrade_level))
+                })
+                .fold(0u16, u16::saturating_add);
+
+            mastery.level(specs.max_level) > spent_points
+        })
+    });
+
+    let gold = Signal::derive(move || town_context.character.read().resource_gold.get());
+    let gems = Signal::derive(move || town_context.character.read().resource_gems.get());
+    let shards = Signal::derive(move || town_context.character.read().resource_shards.get());
 
     let navigate_quit = {
         let navigate = leptos_router::hooks::use_navigate();
@@ -66,15 +97,34 @@ pub fn HeaderMenu() -> impl IntoView {
     let disable_panels = Signal::derive(move || town_context.character.read().max_area_level == 0);
     let disable_trade = Signal::derive(move || town_context.character.read().is_ssf);
 
+    let switch_panel = move |open_signal: RwSignal<bool>| {
+        let open_value = !open_signal.get_untracked();
+        town_context.open_inventory.set(false);
+        town_context.open_stash.set(false);
+        town_context.open_ascend.set(false);
+        town_context.open_market.set(false);
+        town_context.open_forge.set(false);
+        town_context.open_temple.set(false);
+        town_context.open_skill_masteries.set(false);
+        town_context.open_skill_mastery_details.set(false);
+        town_context.open_achievements.set(false);
+        town_context.open_pets.set(false);
+        open_signal.set(open_value);
+    };
+
     let open_inventory = move || {
         town_context
             .open_inventory
             .set(!town_context.open_inventory.get_untracked());
+        town_context.equip_filter.set(InventoryEquipFilter::Slot);
+
         town_context.open_ascend.set(false);
+        town_context.open_market.set(false);
         town_context.open_temple.set(false);
         town_context.open_skill_masteries.set(false);
         town_context.open_skill_mastery_details.set(false);
-        town_context.equip_filter.set(InventoryEquipFilter::Slot);
+        town_context.open_achievements.set(false);
+        town_context.open_pets.set(false);
     };
 
     Effect::new(move || {
@@ -84,16 +134,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_stash = move || {
-        town_context
-            .open_stash
-            .set(!town_context.open_stash.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
+        switch_panel(town_context.open_stash);
     };
 
     Effect::new(move || {
@@ -103,16 +144,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_market = move || {
-        town_context
-            .open_market
-            .set(!town_context.open_market.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
+        switch_panel(town_context.open_market);
     };
 
     Effect::new(move || {
@@ -122,16 +154,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_forge = move || {
-        town_context
-            .open_forge
-            .set(!town_context.open_forge.get_untracked());
-        town_context.open_market.set(false);
-        town_context.open_ascend.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
+        switch_panel(town_context.open_forge);
     };
 
     Effect::new(move || {
@@ -141,16 +164,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_ascend = move || {
-        town_context
-            .open_ascend
-            .set(!town_context.open_ascend.get_untracked());
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_temple.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
+        switch_panel(town_context.open_ascend);
     };
 
     Effect::new(move || {
@@ -160,16 +174,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_temple = move || {
-        town_context
-            .open_temple
-            .set(!town_context.open_temple.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_stash.set(false);
-        town_context.open_skill_masteries.set(false);
-        town_context.open_skill_mastery_details.set(false);
+        switch_panel(town_context.open_temple);
     };
 
     Effect::new(move || {
@@ -179,16 +184,7 @@ pub fn HeaderMenu() -> impl IntoView {
     });
 
     let open_skill_masteries = move || {
-        town_context
-            .open_skill_masteries
-            .set(!town_context.open_skill_masteries.get_untracked());
-        town_context.open_ascend.set(false);
-        town_context.open_market.set(false);
-        town_context.open_forge.set(false);
-        town_context.open_inventory.set(false);
-        town_context.open_skill_mastery_details.set(false);
-        town_context.open_stash.set(false);
-        town_context.open_temple.set(false);
+        switch_panel(town_context.open_skill_masteries);
     };
 
     view! {
@@ -215,39 +211,50 @@ pub fn HeaderMenu() -> impl IntoView {
                 <ShardsCounter value=shards w_full=true />
             </div>
             <div class="flex justify-end space-x-1 xl:space-x-2">
-                <MenuButton on:click=move |_| open_inventory() disabled=disable_panels>
-                    <span class="inline xl:hidden">"Inv."</span>
-                    <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
+                <MenuButton
+                    title="Inventory"
+                    on:click=move |_| open_inventory()
+                    disabled=disable_panels
+                >
+                    <InventoryIcon />
+                // <span class="inline xl:hidden">"Inv."</span>
+                // <span class="hidden xl:inline font-variant:small-caps">"Inventory"</span>
                 </MenuButton>
-                <MenuButton on:click=move |_| open_stash() disabled=disable_panels>
-                    "Stash"
+                <MenuButton title="Stashes" on:click=move |_| open_stash() disabled=disable_panels>
+                    <StashIcon />
                 </MenuButton>
                 {move || {
                     (!disable_trade.get())
                         .then(|| {
                             view! {
-                                <MenuButton on:click=move |_| open_market() disabled=disable_panels>
-                                    "Market"
-                                    {move || {
-                                        (town_context.market_stash.read().resource_gems > 0.0)
-                                            .then_some(" [!]")
-                                    }}
-
+                                <MenuButton
+                                    title="Market"
+                                    on:click=move |_| open_market()
+                                    disabled=disable_panels
+                                >
+                                    <MarketIcon class:text-amber-300=move || {
+                                        town_context.market_stash.read().resource_gems.get() > 0.0
+                                    } />
                                 </MenuButton>
                             }
                         })
                 }}
-                <MenuButton on:click=move |_| open_forge() disabled=disable_panels>
-                    "Forge"
+                <MenuButton title="Forge" on:click=move |_| open_forge() disabled=disable_panels>
+                    <ForgeIcon />
                 </MenuButton>
                 <TutorialPopup
                     show=show_ascension_tutorial
                     position=TutorialPopupPosition::BelowRight
                     message="Spend a Power Shard to permanently Ascend a passive node."
                 >
-                    <MenuButton on:click=move |_| open_ascend() disabled=disable_panels>
-                        <span class="inline xl:hidden">"Pas"</span>
-                        <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
+                    <MenuButton
+                        title="Passives"
+                        on:click=move |_| open_ascend()
+                        disabled=disable_panels
+                    >
+                        <PassivesIcon />
+                    // <span class="inline xl:hidden">"Pas"</span>
+                    // <span class="hidden xl:inline font-variant:small-caps">"Passives"</span>
                     </MenuButton>
                 </TutorialPopup>
                 <TutorialPopup
@@ -255,8 +262,14 @@ pub fn HeaderMenu() -> impl IntoView {
                     position=TutorialPopupPosition::BelowRight
                     message="Buy a Skill Slot to use another skill during Grinds."
                 >
-                    <MenuButton on:click=move |_| open_temple() disabled=disable_panels>
-                        "Temple"
+                    <MenuButton
+                        title="Temple"
+                        on:click=move |_| open_temple()
+                        disabled=disable_panels
+                    >
+                        <TempleIcon class:text-amber-300=move || {
+                            temple::are_benedictions_available()
+                        } />
                     </MenuButton>
                 </TutorialPopup>
                 <TutorialPopup
@@ -265,23 +278,49 @@ pub fn HeaderMenu() -> impl IntoView {
                     message="Open Skills to spend your Skill Mastery Point on an upgrade."
                 >
                     <MenuButton
+                        title="Skills"
                         on:click=move |_| open_skill_masteries()
                         disabled=move || {
                             disable_panels.get()
                                 || town_context.player_skill_masteries.read().masteries.is_empty()
                         }
                     >
-                        "Skills"
+                        <SkillsIcon class:text-amber-300=move || {
+                            favorite_skill_has_unspent_mastery_points.get()
+                        } />
                     </MenuButton>
                 </TutorialPopup>
+                <MenuButton
+                    title="Pets"
+                    on:click=move |_| { switch_panel(town_context.open_pets) }
+                    disabled=move || {
+                        !data_context
+                            .pets_specs
+                            .read()
+                            .keys()
+                            .any(|id| { town_context.user_unlocks.read().pets.contains(id) })
+                    }
+                >
+                    <PetsIcon />
+                </MenuButton>
+                <MenuButton
+                    title="Achievements"
+                    on:click=move |_| { switch_panel(town_context.open_achievements) }
+                >
+                    <AchievementsIcon class:text-amber-300=move || are_rewards_available(
+                        town_context.user_unlocks,
+                    ) />
+                // <span class="inline xl:hidden">"Ach."</span>
+                // <span class="hidden xl:inline">"Achievements"</span>
+                </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>
     }
 }
 
-fn has_bought_extra_skill_slot(town_context: TownContext) -> bool {
-    let benedictions_specs = town_context.benedictions_specs.read();
+fn has_bought_extra_skill_slot(town_context: TownContext, data_context: DataContext) -> bool {
+    let benedictions_specs = data_context.benedictions_specs.read();
     town_context
         .player_benedictions
         .read()
