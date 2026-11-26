@@ -4579,6 +4579,7 @@
                   "status_id": "legionnaire_stance",
                   "value": 20.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -8257,6 +8258,7 @@
                   "status_id": "pyromaniac",
                   "value": 15.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -9068,6 +9070,7 @@
                   "status_id": "vulnerability_storm",
                   "value": 100.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -9119,6 +9122,7 @@
                   "status_id": "vulnerability_poison",
                   "value": 100.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -9168,6 +9172,7 @@
                   "status_id": "vulnerability_fire",
                   "value": 100.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -10737,6 +10742,7 @@
                   "status_id": "focus",
                   "value": 100.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -11231,6 +11237,7 @@
                   "status_id": "sickening_concoction",
                   "value": 1.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -11656,7 +11663,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 3.0
+            "value": 4.0
           }
         ],
         "triggers": [],
@@ -11670,7 +11677,7 @@
               }
             },
             "modifier": "Increased",
-            "value": 1.0
+            "value": 2.0
           }
         ],
         "max_upgrade_level": 5,
@@ -12091,6 +12098,7 @@
                   "status_id": "burn",
                   "value": 0.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -12255,6 +12263,7 @@
                   "status_id": "focus",
                   "value": 100.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -13447,6 +13456,7 @@
                   "status_id": "bonfire",
                   "value": 1.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -13742,6 +13752,7 @@
                   "status_id": "open_wound",
                   "value": 0.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
@@ -14716,6 +14727,7 @@
                   "status_id": "bleed",
                   "value": 0.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": 0.0,
                   "escalation": null,
                   "max_stacks": null,
@@ -14742,16 +14754,6 @@
                     }
                   },
                   {
-                    "StatusPower": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null,
-                      "min_max": null
-                    }
-                  },
-                  {
                     "StatusFaster": {
                       "status_id": null,
                       "damage_type": null,
@@ -14767,6 +14769,16 @@
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
+                    }
+                  },
+                  {
+                    "StatusPower": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null,
+                      "min_max": null
                     }
                   }
                 ],
@@ -14862,6 +14874,7 @@
                   "status_id": "burn",
                   "value": 0.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": 0.0,
                   "escalation": null,
                   "max_stacks": null,
@@ -15008,6 +15021,7 @@
                   "status_id": "poison",
                   "value": 0.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": 0.0,
                   "escalation": null,
                   "max_stacks": null,
@@ -15025,30 +15039,12 @@
                     }
                   },
                   {
-                    "StatusDuration": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
-                    }
-                  },
-                  {
                     "Damage": {
                       "skill_type": null,
                       "skill_id": null,
                       "damage_type": null,
                       "min_max": null,
                       "is_hit": null
-                    }
-                  },
-                  {
-                    "StatusFaster": {
-                      "status_id": null,
-                      "damage_type": null,
-                      "debuff": null,
-                      "skill_type": null,
-                      "skill_id": null
                     }
                   },
                   {
@@ -15059,6 +15055,24 @@
                       "skill_type": null,
                       "skill_id": null,
                       "min_max": null
+                    }
+                  },
+                  {
+                    "StatusDuration": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
+                    }
+                  },
+                  {
+                    "StatusFaster": {
+                      "status_id": null,
+                      "damage_type": null,
+                      "debuff": null,
+                      "skill_type": null,
+                      "skill_id": null
                     }
                   }
                 ],
@@ -15897,6 +15911,7 @@
                   "status_id": "stun",
                   "value": 1.0,
                   "value_factor": 1.0,
+                  "stacks": 1,
                   "duration": null,
                   "escalation": null,
                   "max_stacks": null,
