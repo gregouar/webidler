@@ -125,7 +125,7 @@ pub fn reroll_price(affixes: &[ItemAffix]) -> NonNegative {
         .map(|affix| affix.item_level as f64)
         .max_by(|a, b| a.total_cmp(b))
         .unwrap_or_default()
-        / 20.0
+        / 15.0
         + 1.0)
         .round()
         .into()
