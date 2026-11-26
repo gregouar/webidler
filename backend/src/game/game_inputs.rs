@@ -4,6 +4,7 @@ use tokio::task::yield_now;
 use shared::{
     computations,
     constants::MAX_AREA_LEVEL,
+    data::area::AreaLevel,
     messages::{
         client::ClientMessage,
         server::{ErrorMessage, ErrorType},
@@ -227,13 +228,23 @@ fn handle_client_message(
             let area_state = game_data.area_state.mutate();
             if m.amount >= 0 {
                 area_state.auto_progress = false;
-            } else if !game_data.area_specs.training {
-                return None;
             }
-            area_state.going_back = area_state
+            let going_back = area_state
                 .going_back
                 .saturating_add(m.amount)
                 .clamp(-(MAX_AREA_LEVEL as i32), MAX_AREA_LEVEL as i32);
+            let target_area_level = (area_state.area_level as i32)
+                .saturating_sub(going_back)
+                .clamp(1, MAX_AREA_LEVEL as i32) as AreaLevel;
+
+            if m.amount < 0
+                && !game_data.area_specs.training
+                && target_area_level > area_state.max_area_level
+            {
+                return None;
+            }
+
+            area_state.going_back = going_back;
         }
         ClientMessage::SetRushMode(m) => {
             let area_state = game_data.area_state.mutate();

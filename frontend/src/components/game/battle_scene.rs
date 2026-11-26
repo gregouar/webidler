@@ -100,11 +100,26 @@ pub fn BattleSceneHeader() -> impl IntoView {
     let go_forth = {
         let conn: WebsocketContext = expect_context();
         move |_| {
-            let amount = if events_context.key_pressed(Key::Ctrl) {
-                -10
+            let requested_amount = if events_context.key_pressed(Key::Ctrl) {
+                10
             } else {
-                -1
+                1
             };
+            let amount = {
+                let area_state = game_context.area_state.read_untracked();
+                let max_area_level = if game_context.area_specs.read_untracked().training {
+                    MAX_AREA_LEVEL
+                } else {
+                    area_state.max_area_level
+                };
+                let target_area_level = (area_state.area_level as i32)
+                    .saturating_sub(area_state.going_back)
+                    .clamp(1, MAX_AREA_LEVEL as i32) as u16;
+                -i32::from(requested_amount.min(max_area_level.saturating_sub(target_area_level)))
+            };
+            if amount == 0 {
+                return;
+            }
             conn.send(&GoBackLevelMessage { amount }.into());
             game_context.area_state.update(|area_state| {
                 area_state.going_back = area_state.going_back.saturating_add(amount);
@@ -153,6 +168,19 @@ pub fn BattleSceneHeader() -> impl IntoView {
     let disable_rush = Memo::new(move |_| {
         game_context.player_stamina.read().is_zero() || game_context.area_state.read().incense_lit
     });
+    let disable_go_forth = Memo::new(move |_| {
+        game_context.area_state.with(|area_state| {
+            let max_area_level = if game_context.area_specs.read().training {
+                MAX_AREA_LEVEL
+            } else {
+                area_state.max_area_level
+            };
+            let target_area_level = (area_state.area_level as i32)
+                .saturating_sub(area_state.going_back)
+                .clamp(1, MAX_AREA_LEVEL as i32) as u16;
+            target_area_level >= max_area_level
+        })
+    });
 
     view! {
         <div
@@ -179,36 +207,30 @@ pub fn BattleSceneHeader() -> impl IntoView {
                 </StaticTooltip>
             </div>
 
-            {
-                let go_forth = go_forth.clone();
-                move || {
-                    let go_forth = go_forth.clone();
-                    game_context
-                        .area_specs
-                        .read()
-                        .training
-                        .then(move || {
-                            view! {
-                                <div class="w-12 flex justify-start">
-                                    <StaticTooltip
-                                        position=StaticTooltipPosition::Right
-                                        tooltip=|| "Go Forth one Area Level"
-                                    >
-                                        <button
-                                            class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
-                                            hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
-                                            active:scale-90 active:brightness-125 transition"
-                                            title="Go Forth One Level"
-                                            on:click=go_forth
-                                        >
-                                            "→"
-                                        </button>
-                                    </StaticTooltip>
-                                </div>
-                            }
-                        })
-                }
-            }
+            <div class="w-12 flex justify-start">
+                <StaticTooltip
+                    position=StaticTooltipPosition::Right
+                    tooltip=move || {
+                        if disable_go_forth.get() {
+                            "Maximum beaten Area Level reached"
+                        } else {
+                            "Go Forth one Area Level"
+                        }
+                    }
+                >
+                    <button
+                        class="btn text-2xl xl:text-4xl text-amber-300 font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]
+                        hover:text-amber-400 hover:drop-shadow-[0_0_8px_rgba(255,200,50,1)]
+                        active:scale-90 active:brightness-125 transition
+                        disabled:text-zinc-500 disabled:drop-shadow-none disabled:cursor-not-allowed"
+                        title="Go Forth One Level"
+                        on:click=go_forth
+                        disabled=disable_go_forth
+                    >
+                        "→"
+                    </button>
+                </StaticTooltip>
+            </div>
 
             <div class="flex-1 text-center relative">
                 <div class="absolute inset-0 bg-gradient-to-r from-transparent via-zinc-950 to-transparent blur-lg"></div>
