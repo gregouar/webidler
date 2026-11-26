@@ -196,6 +196,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
         character_cosmetics,
         user_unlocks,
         achievements,
+        has_ever_looted_gems,
         realm,
         area_id,
         map_item,
@@ -218,6 +219,7 @@ fn init_game(game_context: &GameContext, init_message: InitGameMessage) {
     game_context.player_pets.set(player_pets);
     game_context.user_unlocks.set(user_unlocks);
     game_context.achievements.set(achievements);
+    game_context.has_ever_looted_gems.set(has_ever_looted_gems);
     game_context.area_id.set(area_id);
     game_context.realm.set(realm);
     game_context.map_item.set(map_item);

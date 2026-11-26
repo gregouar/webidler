@@ -122,15 +122,16 @@ pub struct SavedGameData {
     player_controller: PlayerController,
     queued_loot: Vec<QueuedLoot>,
     game_stats: GameStats,
-    last_champion_spawn: AreaLevel,
+    last_incense_drop: AreaLevel,
     auto_progress: bool,
     max_area_level: AreaLevel,
     player_stamina: Duration,
 
     end_grind: bool,
     grind_rewards: Option<GrindRewards>,
-    #[serde(default)]
     quest_completed: bool,
+    demonic_incense: u16,
+    incense_lit: bool,
 }
 
 impl std::ops::Deref for SavedGameData {
@@ -307,7 +308,9 @@ impl GameInstanceData {
             player_controller: self.player_controller,
             queued_loot: self.queued_loot.unwrap(),
             game_stats: self.game_stats,
-            last_champion_spawn: self.area_state.read().last_champion_spawn,
+            last_incense_drop: self.area_state.read().last_incense_drop,
+            demonic_incense: self.area_state.read().demonic_incense,
+            incense_lit: self.area_state.read().incense_lit,
             auto_progress: self.area_state.read().auto_progress,
             end_grind: self.end_grind,
             grind_rewards: self.grind_rewards.read().clone(),
@@ -339,7 +342,9 @@ impl GameInstanceData {
             player_controller,
             queued_loot,
             game_stats,
-            last_champion_spawn,
+            last_incense_drop,
+            demonic_incense,
+            incense_lit,
             auto_progress,
             end_grind: end_quest,
             grind_rewards: quest_rewards,
@@ -368,7 +373,9 @@ impl GameInstanceData {
 
         s.area_state.mutate().area_level = area_level;
         s.area_state.mutate().max_area_level = max_area_level;
-        s.area_state.mutate().last_champion_spawn = last_champion_spawn;
+        s.area_state.mutate().last_incense_drop = last_incense_drop;
+        s.area_state.mutate().demonic_incense = demonic_incense;
+        s.area_state.mutate().incense_lit = incense_lit;
         s.area_state.mutate().auto_progress = auto_progress;
         s.queued_loot.mutate().extend(queued_loot);
         s.game_stats = game_stats;

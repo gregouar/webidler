@@ -2,6 +2,7 @@ use std::ops::ControlFlow;
 use tokio::task::yield_now;
 
 use shared::{
+    computations,
     constants::MAX_AREA_LEVEL,
     messages::{
         client::ClientMessage,
@@ -234,7 +235,19 @@ fn handle_client_message(
                 .saturating_add(m.amount)
                 .clamp(-(MAX_AREA_LEVEL as i32), MAX_AREA_LEVEL as i32);
         }
-        ClientMessage::SetRushMode(m) => game_data.area_state.mutate().rush_mode = m.value,
+        ClientMessage::SetRushMode(m) => {
+            let area_state = game_data.area_state.mutate();
+            area_state.rush_mode = m.value && !area_state.incense_lit;
+        }
+        ClientMessage::ToggleIncense => {
+            let area_state = game_data.area_state.mutate();
+            if area_state.incense_lit {
+                area_state.incense_lit = false;
+            } else if computations::can_light_incense(area_state) {
+                area_state.incense_lit = true;
+                area_state.rush_mode = false;
+            }
+        }
         ClientMessage::PurchasePassive(m) => {
             if let Err(e) = passives_controller::purchase_node(
                 game_data.player_resources.mutate(),

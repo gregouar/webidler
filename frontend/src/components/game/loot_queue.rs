@@ -117,7 +117,7 @@ pub fn LootQueue() -> impl IntoView {
     let position_style = move |loot_identifier| {
         format!(
             "left: {}%;",
-            4 + position_index_untracked(loot_identifier).clamp(0, 4) * 20
+            10 + position_index_untracked(loot_identifier).clamp(0, 4) * 18
         )
     };
 
@@ -257,7 +257,7 @@ pub fn LootQueue() -> impl IntoView {
                                         format!(
                                             "
                                             relative
-                                            transition-all duration-200 ease-in-out 
+                                            transition-all duration-200 ease-in-out
                                             translate-y-1/2 hover:translate-y-1/4
                                             {}
                                             ",

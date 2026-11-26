@@ -146,9 +146,9 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
         }
     });
 
-    let primary_action = {
+    let do_primary_action = Arc::new({
         let conn: WebsocketContext = expect_context();
-        move |_| {
+        move || {
             if game_context.grind_rewards.read_untracked().is_none() {
                 end_quest_requested.set(true);
                 conn.send(&ClientMessage::EndGrind);
@@ -163,6 +163,22 @@ fn EndGrind(open: RwSignal<bool>) -> impl IntoView {
                     }
                     .into(),
                 );
+            }
+        }
+    });
+
+    let primary_action = {
+        let confirm_context: ConfirmContext = expect_context();
+        let do_primary_action = do_primary_action.clone();
+        move |_| {
+            let incense = game_context.area_state.read_untracked().demonic_incense;
+            if incense > 0 {
+                let message = format!(
+                    "You still have {incense} Demonic Incense. Incense resets when the Grind ends, so any remaining stacks will be wasted. Are you sure you want to end the Grind?"
+                );
+                (confirm_context.confirm)(message, do_primary_action.clone());
+            } else {
+                do_primary_action.clone()();
             }
         }
     };

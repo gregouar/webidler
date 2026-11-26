@@ -23,6 +23,7 @@ pub async fn sync_init_game(
     character_cosmetics: CharacterCosmetics,
     user_unlocks: UserUnlocks,
     player_pets: PlayerPets,
+    has_ever_looted_gems: bool,
 ) -> Result<()> {
     game_data.reset_syncers();
     client_conn
@@ -32,6 +33,7 @@ pub async fn sync_init_game(
                 character_cosmetics,
                 user_unlocks,
                 achievements: game_data.achievements.clone(),
+                has_ever_looted_gems,
                 realm: game_data.realm,
                 area_id: game_data.area_id.clone(),
                 map_item: game_data.map_item.clone(),

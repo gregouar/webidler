@@ -418,7 +418,7 @@ where
                     <Portal>
                         <div
                             node_ref=tooltip_ref
-                            class="p-2  fixed z-50"
+                            class="p-2 fixed z-50"
                             style=move || {
                                 let (x, y) = tooltip_pos.get();
                                 format!("position: fixed; left:{}px; top:{}px; ", x, y)
