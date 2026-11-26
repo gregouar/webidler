@@ -103,14 +103,9 @@ pub fn incense_chance(area_state: &AreaState) -> f64 {
 }
 
 pub fn can_light_incense(area_state: &AreaState) -> bool {
-    area_state.demonic_incense > 0 && !area_state.incense_lit && !area_state.is_boss
-}
-
-pub fn incense_gems_multiplier(area_state: &AreaState) -> f64 {
-    let levels_below_max = area_state
-        .max_area_level
-        .saturating_sub(area_state.area_level);
-    (1.0 - f64::from(levels_below_max) * 0.03).clamp(0.1, 1.0)
+    area_state.demonic_incense > 0
+        && !area_state.is_boss
+        && area_state.area_level >= area_state.max_area_level
 }
 
 pub fn stash_upgrade(stash: &Stash) -> (usize, NonNegative) {

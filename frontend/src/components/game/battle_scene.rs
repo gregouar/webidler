@@ -1,7 +1,7 @@
 use leptos::{html::*, prelude::*};
 
 use shared::{
-    computations::{self, incense_gems_multiplier},
+    computations,
     constants::{MAX_AREA_LEVEL, WAVES_PER_AREA_LEVEL},
     messages::client::{
         ClientMessage, GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage,
@@ -446,13 +446,12 @@ pub fn DemonicIncense() -> impl IntoView {
 
     let tooltip = move || {
         let area_state = game_context.area_state.get();
-        let reward = incense_gems_multiplier(&area_state) * 100.0;
 
-        let description = if area_state.incense_lit {
-            format!(
-                "Demonic Incense is lit. The next wave will consist only of Champions, giving {:.0}% Gem rewards at this level.",
-                reward
-            )
+        let description = if game_context.area_specs.read().training {
+            "Demonic Incense not available.".to_string()
+        } else if area_state.incense_lit {
+            "Demonic Incense is lit. The next wave will consist only of Champions, rewarding Gems."
+                .to_string()
         } else if area_state.demonic_incense == 0 {
             let mut chance_state = area_state.clone();
             chance_state.area_level = chance_state.max_area_level.saturating_add(1);
@@ -462,18 +461,19 @@ pub fn DemonicIncense() -> impl IntoView {
                 1.0 / chance
             )
         } else {
-            format!(
-                "Demonic Incense is Extinguished. Champions would give {:.0}% Gem rewards at this level.",
-                reward
-            )
+            "Demonic Incense is extinguished.".to_string()
         };
 
-        let action_str = if area_state.incense_lit {
+        let action_str = if game_context.area_specs.read().training {
+            ""
+        } else if area_state.incense_lit {
             "Click to Extinguish."
         } else if area_state.is_boss {
-            "Demonic Incense cannot be lit on a Boss Level."
+            "Cannot be lit on a Boss Level."
+        } else if area_state.area_level < area_state.max_area_level {
+            "Can only be lit at your highest beaten Area Level or higher."
         } else {
-            "Click to Light Demonic Incense."
+            "Click to Light."
         };
 
         view! {
@@ -521,9 +521,7 @@ pub fn DemonicIncense() -> impl IntoView {
                         disabled:active:scale-100 disabled:active:brightness-100"
                         class:grayscale=move || game_context.area_state.read().demonic_incense == 0
                         class:brightness-150=move || game_context.area_state.read().incense_lit
-                        disabled=move || {
-                            !game_context.area_state.read().incense_lit && !can_light.get()
-                        }
+                        disabled=move || { !can_light.get() }
                         on:click=toggle_incense
                         title="Demonic Incense"
                         aria-label=move || {
