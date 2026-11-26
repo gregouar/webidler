@@ -346,6 +346,31 @@
       }
     ]
   },
+  "remnant_focus_mana_regen"      : {
+    "name"        : "Cogitating",
+    "family"      : "remnant_affix",
+    "tags"        : ["Mana", "Status", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["Focus"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : {
+          "StatConditionalModifier": {
+            "stat": "ManaRegen",
+            "conditions": [
+              { "StatusStacks": {"status_id": "focus"} }
+            ]
+          }
+        },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 5
+      }
+    ]
+  },
   "remnant_culling_attack"        : {
     "name"        : "Culling",
     "family"      : "remnant_affix",
