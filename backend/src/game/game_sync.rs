@@ -15,6 +15,7 @@ use super::game_data::GameInstanceData;
 
 use crate::websocket::WebSocketConnection;
 
+#[allow(clippy::too_many_arguments)]
 pub async fn sync_init_game(
     client_conn: &mut WebSocketConnection,
     character_id: &UserCharacterId,

@@ -56,6 +56,9 @@ pub fn generate_monsters_wave(
     area_specs: &AreaSpecs,
     area_state: &mut AreaState,
 ) -> Result<(Vec<MonsterSpecs>, Vec<MonsterState>)> {
+    if !computations::can_light_incense(area_state) {
+        area_state.incense_lit = false;
+    }
     if area_state.incense_lit {
         area_state.used_wave_indices.clear();
     }
