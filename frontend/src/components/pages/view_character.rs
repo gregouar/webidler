@@ -10,6 +10,7 @@ use crate::components::{
     backend_client::BackendClient,
     chat::chat_context::ChatContext,
     data_context::DataContext,
+    icons::header_icons::{AchievementsIcon, InventoryIcon, PassivesIcon, SkillsIcon, TempleIcon},
     shared::{
         achievements::AchievementsPanel,
         player_count::PlayerCount,
@@ -135,6 +136,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                                 open=town_context.open_achievements
                                 user_unlocks=town_context.user_unlocks
                                 achievements=town_context.achievements
+                                view_only=true
                             />
                             <SettingsModal open=town_context.open_settings />
                         </div>
@@ -201,16 +203,7 @@ pub fn HeaderMenu() -> impl IntoView {
             <div class="flex justify-end space-x-1 xl:space-x-2">
                 <FullscreenButton />
                 <MenuButton
-                    on:click=move |_| {
-                        let new_value = !town_context.open_temple.get();
-                        town_context.close_all_panels();
-                        town_context.open_temple.set(new_value);
-                    }
-                    disabled=disable_inventory
-                >
-                    "Temple"
-                </MenuButton>
-                <MenuButton
+                    title="Inventory"
                     on:click=move |_| {
                         let new_value = !town_context.open_inventory.get();
                         town_context.close_all_panels();
@@ -218,9 +211,10 @@ pub fn HeaderMenu() -> impl IntoView {
                     }
                     disabled=disable_inventory
                 >
-                    "Inventory"
+                    <InventoryIcon />
                 </MenuButton>
                 <MenuButton
+                    title="Passives"
                     on:click=move |_| {
                         let new_value = !town_context.open_ascend.get();
                         town_context.close_all_panels();
@@ -228,9 +222,21 @@ pub fn HeaderMenu() -> impl IntoView {
                     }
                     disabled=disable_inventory
                 >
-                    "Passives"
+                    <PassivesIcon />
                 </MenuButton>
                 <MenuButton
+                    title="Temple"
+                    on:click=move |_| {
+                        let new_value = !town_context.open_temple.get();
+                        town_context.close_all_panels();
+                        town_context.open_temple.set(new_value);
+                    }
+                    disabled=disable_inventory
+                >
+                    <TempleIcon />
+                </MenuButton>
+                <MenuButton
+                    title="Skills"
                     on:click=move |_| {
                         let new_value = !town_context.open_skill_masteries.get();
                         town_context.close_all_panels();
@@ -238,13 +244,18 @@ pub fn HeaderMenu() -> impl IntoView {
                     }
                     disabled=disable_inventory
                 >
-                    "Skills"
+                    <SkillsIcon />
                 </MenuButton>
-                <MenuButton on:click=move |_| {
-                    let new_value = !town_context.open_achievements.get();
-                    town_context.close_all_panels();
-                    town_context.open_achievements.set(new_value);
-                }>"Achievements"</MenuButton>
+                <MenuButton
+                    title="Achievements"
+                    on:click=move |_| {
+                        let new_value = !town_context.open_achievements.get();
+                        town_context.close_all_panels();
+                        town_context.open_achievements.set(new_value);
+                    }
+                >
+                    <AchievementsIcon />
+                </MenuButton>
                 <MenuButton on:click=navigate_quit>"Back"</MenuButton>
             </div>
         </BaseHeaderMenu>

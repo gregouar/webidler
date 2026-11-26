@@ -52,6 +52,7 @@ pub fn AchievementsPanel(
     #[prop(into)] user_unlocks: RwSignal<UserUnlocks>,
     #[prop(optional, into)] achievements: Option<Signal<HashMap<String, DateTime<Utc>>>>,
     #[prop(optional, into)] achievements_progress: Option<Signal<HashMap<String, u64>>>,
+    #[prop(optional)] view_only: bool,
 ) -> impl IntoView {
     let data_context = expect_context::<DataContext>();
     let settings = expect_context::<SettingsContext>();
@@ -173,7 +174,7 @@ pub fn AchievementsPanel(
                                 let rewards_available = Memo::new({
                                     let achievement = achievement.clone();
                                     move |_| {
-                                        achieved.get()
+                                        !view_only && achieved.get()
                                             && user_unlocks
                                                 .with(|user_unlocks| {
                                                     is_claimable(&achievement, user_unlocks)
@@ -274,20 +275,25 @@ pub fn AchievementsPanel(
                                                 </div>
                                                 <div class="mt-2 flex min-h-[38px] items-end justify-between gap-3 pt-2 text-xs xl:min-h-[50px]">
                                                     <div class="min-w-0">
-                                                        <span class="font-semibold tracking-wide text-zinc-500">
-                                                            "Rewards: "
-                                                        </span>
-                                                        <span class=move || {
-                                                            if achieved.get() && !rewards_available.get() {
-                                                                "text-amber-300"
-                                                            } else {
-                                                                "text-zinc-400"
-                                                            }
-                                                        }>{move || rewards.get()}</span>
+                                                        {(!view_only)
+                                                            .then(|| {
+                                                                view! {
+                                                                    <span class="font-semibold tracking-wide text-zinc-500">
+                                                                        "Rewards: "
+                                                                    </span>
+                                                                    <span class=move || {
+                                                                        if achieved.get() && !rewards_available.get() {
+                                                                            "text-amber-300"
+                                                                        } else {
+                                                                            "text-zinc-400"
+                                                                        }
+                                                                    }>{move || rewards.get()}</span>
+                                                                }
+                                                            })}
                                                     </div>
                                                     {move || {
                                                         let achievement_id = id.clone();
-                                                        if rewards_available.get() {
+                                                        if !view_only && rewards_available.get() {
                                                             Some(
                                                                 view! {
                                                                     <MenuButton on:click=move |_| claim_rewards(

@@ -408,7 +408,7 @@ fn CharacterSlot(
                         refresh_trigger.update(|n| *n += 1);
                         show_toast(
                             toaster,
-                            "Character deleted".to_string(),
+                            "Character deleted!".to_string(),
                             ToastVariant::Success,
                         );
                     }
