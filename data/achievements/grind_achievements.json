@@ -53,9 +53,9 @@
         "category"   : "Grind",
         "icon"       : "achievements/crown.svg",
         "name"       : "Champion of Champions",
-        "description": "Defeat 1,000 Champion Monsters.",
+        "description": "Defeat 5,000 Champion Monsters.",
         "goals"      : [
-            { "MonstersKilled": {"value": 1000, "monster_rarity": "Champion"} }
+            { "MonstersKilled": {"value": 5000, "monster_rarity": "Champion"} }
         ],
         "rewards": [ {"Cosmetic": "title_kill_champions"} ]
     },
