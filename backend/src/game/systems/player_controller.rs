@@ -194,7 +194,7 @@ pub fn reward_player(
         && area_specs.can_reward_gems()
     {
         ((area_state.area_level + *area_specs.item_level_modifier + *area_specs.power_level) as f64
-            / 5.0
+            / 10.0
             * *area_specs.gems_find
             * 0.01)
             .floor()
