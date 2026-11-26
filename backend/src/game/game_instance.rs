@@ -86,6 +86,12 @@ impl<'a> GameInstance<'a> {
             .await
             .unwrap_or_default();
 
+        let has_ever_looted_gems = self
+            .game_data
+            .old_areas_statistics
+            .iter()
+            .any(|area| area.gems_obtained > 0);
+
         game_sync::sync_init_game(
             self.client_conn,
             self.character_id,
@@ -94,6 +100,7 @@ impl<'a> GameInstance<'a> {
             character_cosmetics,
             user_unlocks,
             player_pets,
+            has_ever_looted_gems,
         )
         .await?;
 

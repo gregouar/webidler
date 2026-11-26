@@ -293,6 +293,7 @@ async fn update_entities(
 }
 
 fn respawn_player(game_data: &mut GameInstanceData, master_store: &MasterStore) {
+    game_data.area_state.mutate().incense_lit = false;
     game_data.monster_base_specs.mutate().clear();
     game_data.monster_specs.clear();
     game_data.monster_states.clear();

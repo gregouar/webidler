@@ -2,6 +2,7 @@ use std::iter;
 
 use itertools::all;
 use shared::{
+    computations,
     constants::{ITEM_REWARDS_BOSS_FACTOR, POWER_SHARD_LEVELS_NEEDED, WAVES_PER_AREA_LEVEL},
     data::{
         area::{AreaLevel, ThreatLevel},
@@ -25,6 +26,7 @@ use crate::game::{
         stats_updater::check_condition,
         triggers_controller,
     },
+    utils::rng,
 };
 
 use super::{
@@ -682,6 +684,13 @@ fn handle_area_completed_event(
     let new_max = area_state.area_level > area_state.max_area_level;
 
     if new_max {
+        if game_data.area_specs.can_reward_gems()
+            && rng::random_range(0.0..=1.0).unwrap_or(1.0)
+                < computations::incense_chance(area_state)
+        {
+            area_state.demonic_incense = area_state.demonic_incense.saturating_add(1);
+            area_state.last_incense_drop = area_state.area_level;
+        }
         game_data.game_stats.elapsed_time_at_max_level = game_data.game_stats.elapsed_time;
         area_state.max_area_level = area_state.area_level;
         area_state.max_area_level_ever = area_state.max_area_level_ever.max(area_state.area_level);

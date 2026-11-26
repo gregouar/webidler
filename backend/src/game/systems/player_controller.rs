@@ -193,7 +193,6 @@ pub fn reward_player(
     let gems_reward = if let MonsterRarity::Champion = monster_specs.rarity
         && area_specs.can_reward_gems()
     {
-        area_state.last_champion_spawn = area_state.area_level;
         ((area_state.area_level + *area_specs.item_level_modifier + *area_specs.power_level) as f64
             / 5.0
             * *area_specs.gems_find

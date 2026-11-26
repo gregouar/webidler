@@ -3,7 +3,9 @@ use leptos::{html::*, prelude::*};
 use shared::{
     computations,
     constants::{MAX_AREA_LEVEL, WAVES_PER_AREA_LEVEL},
-    messages::client::{GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage},
+    messages::client::{
+        ClientMessage, GoBackLevelMessage, SetAutoProgressMessage, SetRushModeMessage,
+    },
 };
 
 use crate::{
@@ -21,9 +23,10 @@ use crate::{
         },
         ui::{
             card::Card,
-            number::format_duration,
+            number::{NumberInset, format_duration},
             progress_bars::{VerticalProgressBar, predictive_cooldown},
             tooltip::{StaticTooltip, StaticTooltipPosition},
+            tutorial_popup::{TutorialPopup, TutorialPopupPosition},
         },
     },
 };
@@ -162,7 +165,9 @@ pub fn BattleSceneHeader() -> impl IntoView {
         }
     };
 
-    let disable_rush = Memo::new(move |_| game_context.player_stamina.read().is_zero());
+    let disable_rush = Memo::new(move |_| {
+        game_context.player_stamina.read().is_zero() || game_context.area_state.read().incense_lit
+    });
     let disable_go_forth = Memo::new(move |_| {
         game_context.area_state.with(|area_state| {
             let max_area_level = if game_context.area_specs.read().training {
@@ -370,7 +375,7 @@ pub fn BattleSceneFooter() -> impl IntoView {
 
     let footer_background = move || {
         format!(
-            "background-image: url('{}'); contain: layout paint;",
+            "background-image: url('{}');",
             img_asset(&game_context.area_specs.read().footer_background)
         )
     };
@@ -397,22 +402,18 @@ pub fn BattleSceneFooter() -> impl IntoView {
             place-items-center"
             style=footer_background
         >
-            <div class="flex items-center justify-start h-full w-full">
-                <div class="relative px-4 py-1 xl:py-2">
-                    <div class="absolute inset-0 blur-lg
-                    bg-gradient-to-r from-transparent via-zinc-950 via-[percentage:10%_90%] to-transparent"></div>
-                    <p class="relative text-shadow-lg/100 shadow-gray-950 text-amber-200 text-base xl:text-2xl font-bold leading-none">
-                        {wave_info}
-                    </p>
-                </div>
+            <div class="relative flex items-center justify-start h-full w-full z-20">
+                <DemonicIncense />
             </div>
 
             <div class="relative flex items-center justify-center h-full px-2
             gap-2
             text-yellow-500
             text-base xl:text-2xl drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
-                <GemsLoot />
                 <NewAreaLevel />
+                <p class="text-shadow-lg/100 shadow-gray-950 text-amber-200 font-bold leading-none whitespace-nowrap">
+                    {wave_info}
+                </p>
             </div>
 
             <div class="flex items-center justify-end h-full w-full">
@@ -433,32 +434,140 @@ pub fn BattleSceneFooter() -> impl IntoView {
 }
 
 #[component]
-pub fn GemsLoot() -> impl IntoView {
+pub fn DemonicIncense() -> impl IntoView {
     let game_context = expect_context::<GameContext>();
+    let conn = expect_context::<WebsocketContext>();
 
-    let gems_chance = Memo::new(move |_| game_context.area_state.with(computations::gem_chance));
+    let can_light = Memo::new(move |_| {
+        game_context.area_state.with(|area_state| {
+            let mut target_state = area_state.clone();
+            target_state.area_level = (area_state.area_level as i32)
+                .saturating_sub(area_state.going_back)
+                .clamp(1, MAX_AREA_LEVEL as i32) as u16;
+            computations::can_light_incense(&target_state)
+        })
+    });
 
     let tooltip = move || {
-        let gems_chance = gems_chance.get();
-        if gems_chance > 0.0 {
+        let mut area_state = game_context.area_state.get();
+        area_state.area_level = (area_state.area_level as i32)
+            .saturating_sub(area_state.going_back)
+            .clamp(1, MAX_AREA_LEVEL as i32) as u16;
+
+        let description = if game_context.area_specs.read().training {
+            "Demonic Incense not available.".to_string()
+        } else if area_state.incense_lit {
+            "Demonic Incense is lit. The next wave will consist only of Champions, rewarding Gems."
+                .to_string()
+        } else if area_state.demonic_incense == 0 {
+            let mut chance_state = area_state.clone();
+            chance_state.area_level = chance_state.max_area_level.saturating_add(1);
+            let chance = computations::incense_chance(&chance_state);
             format!(
-                "1/{:.0} Chance to find Champion Monster carrying Gems.",
-                1.0 / gems_chance
+                "No Demonic Incense available. The next new Area Level has a 1/{:.0} chance to reward one.",
+                1.0 / chance
             )
         } else {
-            "No more Gems can be found at this Level.".into()
+            "Demonic Incense is extinguished.".to_string()
+        };
+
+        let action_str = if game_context.area_specs.read().training {
+            ""
+        } else if area_state.area_level < area_state.max_area_level {
+            "Can only be lit at your highest beaten Area Level or higher."
+        } else if area_state.incense_lit {
+            "Click to Extinguish."
+        } else if area_state.is_boss {
+            "Cannot be lit on a Boss Level."
+        } else {
+            "Click to Light."
+        };
+
+        view! {
+            <div class="flex w-72 max-w-[calc(100vw-2rem)] flex-col whitespace-normal break-words text-center text-sm xl:space-y-1">
+                <span class="font-semibold text-white">{"Demonic Incense"}</span>
+                <span class="text-zinc-300">{description}</span>
+                <span class="text-xs italic text-zinc-400">{action_str}</span>
+            </div>
         }
     };
+
+    let toggle_incense = move |_| conn.send(&ClientMessage::ToggleIncense);
+    let incense_tutorial_completed = RwSignal::new(false);
+    Effect::new(move || {
+        if game_context.area_state.read().incense_lit {
+            incense_tutorial_completed.set(true);
+        }
+    });
+    let show_incense_tutorial = Signal::derive(move || {
+        !incense_tutorial_completed.get()
+            && !game_context.has_ever_looted_gems.get()
+            && game_context.player_resources.read().gems.get() == 0.0
+            && game_context.area_state.read().demonic_incense > 0
+            && !game_context.area_state.read().incense_lit
+    });
+
     view! {
-        <StaticTooltip tooltip=tooltip position=StaticTooltipPosition::Top>
-            <img
-                draggable="false"
-                src=img_asset("ui/gems.webp")
-                alt="Gems Loot"
-                class="h-[2em] aspect-square"
-                class:grayscale=move || gems_chance.get() == 0.0
-            />
-        </StaticTooltip>
+        <div class="flex items-center h-full">
+            <StaticTooltip
+                tooltip=tooltip
+                position=StaticTooltipPosition::Top
+                class="relative h-full w-14  xl:w-24  shrink-0"
+            >
+                <TutorialPopup
+                    show=show_incense_tutorial
+                    position=TutorialPopupPosition::AboveLeft
+                    class="h-full"
+                    message="Light Demonic Incense to make the next wave consist entirely of Champions, which reward Gems."
+                >
+                    <button
+                        class="btn absolute inset-0 font-bold cursor-pointer
+                        transition duration-150 hover:brightness-125 active:scale-90 active:brightness-150
+                        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500
+                        disabled:cursor-not-allowed disabled:hover:brightness-100
+                        disabled:active:scale-100 disabled:active:brightness-100"
+                        class:grayscale=move || game_context.area_state.read().demonic_incense == 0
+                        class:brightness-150=move || game_context.area_state.read().incense_lit
+                        disabled=move || { !can_light.get() }
+                        on:click=toggle_incense
+                        title="Demonic Incense"
+                        aria-label=move || {
+                            if game_context.area_state.read().incense_lit {
+                                "Extinguish Demonic Incense"
+                            } else {
+                                "Light Demonic Incense"
+                            }
+                        }
+                        aria-pressed=move || game_context.area_state.read().incense_lit.to_string()
+                    >
+                        <img
+                            draggable="false"
+                            src=move || {
+                                if game_context.area_state.read().incense_lit {
+                                    img_asset("ui/incense_enabled_hi.webp")
+                                } else {
+                                    img_asset("ui/incense_disabled_hi.webp")
+                                }
+                            }
+                            alt="Demonic Incense"
+                            class="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2
+                            w-14 xl:w-24 max-w-none object-contain"
+                        />
+                    </button>
+                </TutorialPopup>
+            </StaticTooltip>
+            <NumberInset>
+                <div class="w-[2ch] font-number text-base xl:text-2xl font-bold ">
+                    <span class=move || {
+                        if game_context.area_state.read().demonic_incense == 0 {
+                            "text-zinc-400"
+                        } else {
+                            "text-red-500"
+                        }
+                    }>{move || game_context.area_state.read().demonic_incense}</span>
+                </div>
+            </NumberInset>
+        </div>
     }
 }
 

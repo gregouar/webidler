@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use crate::{
     constants::{
-        self, CHAMPION_BASE_CHANCE, CHAMPION_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
+        self, INCENSE_BASE_CHANCE, INCENSE_INC_CHANCE, SKILL_COST_INCREASE_FACTOR,
         SKILL_MASTERY_BASE_COST, SKILL_MASTERY_INCREASE_COST, UNIQUE_ITEM_SELL_GEMS_LEVEL_DIVISOR,
         XP_INCREASE_FACTOR,
     },
@@ -90,16 +90,22 @@ pub fn skill_mastery_level(experience: f64) -> u16 {
     }
 }
 
-pub fn gem_chance(area_state: &AreaState) -> f64 {
-    if area_state.area_level > area_state.last_champion_spawn {
-        CHAMPION_BASE_CHANCE
-            + (CHAMPION_INC_CHANCE
+pub fn incense_chance(area_state: &AreaState) -> f64 {
+    if area_state.area_level > area_state.last_incense_drop {
+        INCENSE_BASE_CHANCE
+            + (INCENSE_INC_CHANCE
                 * (area_state
                     .area_level
-                    .saturating_sub(area_state.last_champion_spawn)) as f64)
+                    .saturating_sub(area_state.last_incense_drop)) as f64)
     } else {
         0.0
     }
+}
+
+pub fn can_light_incense(area_state: &AreaState) -> bool {
+    area_state.demonic_incense > 0
+        && !area_state.is_boss
+        && area_state.area_level >= area_state.max_area_level
 }
 
 pub fn stash_upgrade(stash: &Stash) -> (usize, NonNegative) {

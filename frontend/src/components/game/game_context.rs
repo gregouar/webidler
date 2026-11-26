@@ -36,6 +36,7 @@ pub struct GameContext {
     pub character_cosmetics: RwSignal<CharacterCosmetics>,
     pub user_unlocks: RwSignal<UserUnlocks>,
     pub achievements: RwSignal<HashMap<String, DateTime<Utc>>>,
+    pub has_ever_looted_gems: RwSignal<bool>,
 
     pub realm: RwSignal<Realm>,
     pub area_id: RwSignal<String>,
@@ -99,6 +100,7 @@ impl GameContext {
             character_cosmetics: Default::default(),
             user_unlocks: Default::default(),
             achievements: Default::default(),
+            has_ever_looted_gems: Default::default(),
 
             realm: Default::default(),
             area_id: Default::default(),
