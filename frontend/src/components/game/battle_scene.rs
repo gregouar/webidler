@@ -439,13 +439,20 @@ pub fn DemonicIncense() -> impl IntoView {
     let conn = expect_context::<WebsocketContext>();
 
     let can_light = Memo::new(move |_| {
-        game_context
-            .area_state
-            .with(computations::can_light_incense)
+        game_context.area_state.with(|area_state| {
+            let mut target_state = area_state.clone();
+            target_state.area_level = (area_state.area_level as i32)
+                .saturating_sub(area_state.going_back)
+                .clamp(1, MAX_AREA_LEVEL as i32) as u16;
+            computations::can_light_incense(&target_state)
+        })
     });
 
     let tooltip = move || {
-        let area_state = game_context.area_state.get();
+        let mut area_state = game_context.area_state.get();
+        area_state.area_level = (area_state.area_level as i32)
+            .saturating_sub(area_state.going_back)
+            .clamp(1, MAX_AREA_LEVEL as i32) as u16;
 
         let description = if game_context.area_specs.read().training {
             "Demonic Incense not available.".to_string()
@@ -466,12 +473,12 @@ pub fn DemonicIncense() -> impl IntoView {
 
         let action_str = if game_context.area_specs.read().training {
             ""
+        } else if area_state.area_level < area_state.max_area_level {
+            "Can only be lit at your highest beaten Area Level or higher."
         } else if area_state.incense_lit {
             "Click to Extinguish."
         } else if area_state.is_boss {
             "Cannot be lit on a Boss Level."
-        } else if area_state.area_level < area_state.max_area_level {
-            "Can only be lit at your highest beaten Area Level or higher."
         } else {
             "Click to Light."
         };

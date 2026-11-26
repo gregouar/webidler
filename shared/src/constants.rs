@@ -9,7 +9,7 @@ pub const DEFAULT_MAX_LEVEL: u8 = 70;
 pub const DEFAULT_SKILL_SLOTS: u8 = 1;
 pub const MAX_SKILL_SLOTS: u8 = 4;
 pub const INCENSE_BASE_CHANCE: f64 = 0.001;
-pub const INCENSE_INC_CHANCE: f64 = 0.0001;
+pub const INCENSE_INC_CHANCE: f64 = 0.00005;
 pub const CHAMPION_LEVEL_INC: AreaLevel = 1;
 
 pub const WAVES_PER_AREA_LEVEL: u8 = 5;
