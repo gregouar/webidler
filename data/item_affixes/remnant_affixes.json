@@ -346,6 +346,24 @@
       }
     ]
   },
+  "remnant_unavoidable"           : {
+    "name"        : "Creeping",
+    "family"      : "remnant_affix",
+    "tags"        : ["Spell", "Speed", "Unique"],
+    "affix_type"  : "Soul",
+    "tier"        : 10,
+    "weight"      : 100,
+    "restrictions": ["SpellWeapon"],
+    "item_level"  : 600,
+    "effects"     : [
+      {
+        "stat"    : { "SkillEffectModifier": {"skill_type": "Spell", "avoidable": false} },
+        "modifier": "Flat",
+        "scope"   : "Global",
+        "value"   : 1
+      }
+    ]
+  },
   "remnant_focus_mana_regen"      : {
     "name"        : "Cogitating",
     "family"      : "remnant_affix",
