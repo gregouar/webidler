@@ -124,7 +124,7 @@
     "tier"        : 10,
     "weight"      : 100,
     "restrictions": ["Rune"],
-    "item_level"  : 600,
+    "item_level"  : 900,
     "effects"     : [
       { "scope": "Global", "stat": "Life", "modifier": "Increased", "value": [19, 20] }
     ]

@@ -18,7 +18,7 @@
     "tags"        : ["Mana"],
     "affix_type"  : "Prefix",
     "tier"        : 2,
-    "weight"      : 100,
+    "weight"      : 1000,
     "restrictions": ["Rune"],
     "item_level"  : 50,
     "effects"     : [
