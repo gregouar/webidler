@@ -209,9 +209,23 @@ pub fn UserDashboardPage() -> impl IntoView {
                 }>
                     {move || {
                         Suspend::new(async move {
-                            let (areas, user_details, characters, user_unlocks_data) = async_data
+                            let (areas, user_details, mut characters, user_unlocks_data) = async_data
                                 .await
                                 .unwrap_or_default();
+                            characters
+                                .sort_by(|a, b| {
+                                    let a_is_grinding = matches!(
+                                        a.activity,
+                                        UserCharacterActivity::Grinding(_, _)
+                                    );
+                                    let b_is_grinding = matches!(
+                                        b.activity,
+                                        UserCharacterActivity::Grinding(_, _)
+                                    );
+                                    b_is_grinding
+                                        .cmp(&a_is_grinding)
+                                        .then_with(|| b.updated_at.cmp(&a.updated_at))
+                                });
                             user_unlocks.set(user_unlocks_data);
                             let cosmetics = data_context.cosmetics_specs.read_untracked();
                             let portraits = cosmetics

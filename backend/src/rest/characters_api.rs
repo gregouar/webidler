@@ -553,6 +553,7 @@ impl From<db::characters::CharacterEntry> for UserCharacter {
             } else {
                 UserCharacterActivity::Rusting
             },
+            updated_at: val.updated_at.into(),
         }
     }
 }

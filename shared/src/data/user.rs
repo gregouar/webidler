@@ -56,6 +56,8 @@ pub struct UserCharacter {
 
     pub activity: UserCharacterActivity,
     pub played_time: Duration,
+
+    pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
