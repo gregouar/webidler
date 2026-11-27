@@ -172,6 +172,7 @@ async fn read_character_details(
     let (
         user_unlocks,
         achievements,
+        counters,
         pets,
         areas_completed,
         character_data,
@@ -182,6 +183,7 @@ async fn read_character_details(
     ) = tokio::join!(
         db::user_unlocks::load_user_unlocks(&db_pool, &character.user_id),
         db::character_achievements::read_achievements(&db_pool, &character_id),
+        db::character_achievements::read_counters(&db_pool, &character_id),
         db::characters_data::load_character_pets(&db_pool, &character_id),
         db::characters::read_character_areas_completed(&db_pool, &character_id),
         db::characters_data::load_character_data(&db_pool, &character_id),
@@ -192,6 +194,7 @@ async fn read_character_details(
     );
 
     let user_unlocks = user_unlocks?;
+    let counters = counters?;
     let achievements = achievements?;
     let pets = pets?;
     let areas_completed = areas_completed?;
@@ -251,6 +254,25 @@ async fn read_character_details(
         &skill_masteries,
     );
 
+    let area_levels = areas_completed
+        .iter()
+        .map(|area| (area.area_id.clone(), area.max_area_level as AreaLevel))
+        .collect();
+    let achievement_context = AchievementContext {
+        counters: &counters,
+        area_levels: &area_levels,
+        power_level: character.max_area_level as AreaLevel,
+        player_level: 0,
+        skill_masteries: &skill_masteries,
+        ascension: &ascension,
+        purchased_nodes: None,
+        inventory: &inventory,
+        area_statistics: AreaAchievementStatistics::persisted(&areas_completed),
+        player_state: None,
+    };
+    let achievements_progress =
+        achievements_controller::achievements_progress(&master_store, &achievement_context);
+
     let character: UserCharacter = character.into();
 
     Ok(MsgPack(GetCharacterDetailsResponse {
@@ -268,6 +290,7 @@ async fn read_character_details(
         skill_mastery_skill_specs,
         user_unlocks,
         achievements,
+        achievements_progress,
         pets,
     }))
 }

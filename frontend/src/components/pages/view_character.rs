@@ -83,6 +83,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                         skill_mastery_skill_specs,
                         user_unlocks,
                         achievements,
+                        achievements_progress,
                         pets,
                     }) => {
                         town_context.character.set(character);
@@ -97,6 +98,9 @@ pub fn ViewCharacterPage() -> impl IntoView {
                             .set(skill_mastery_skill_specs);
                         town_context.user_unlocks.set(user_unlocks);
                         town_context.achievements.set(achievements);
+                        town_context
+                            .achievements_progress
+                            .set(achievements_progress);
                         town_context.player_pets.set(pets);
                         // town_context.last_grind.set(last_grind);
                     }
@@ -136,6 +140,7 @@ pub fn ViewCharacterPage() -> impl IntoView {
                                 open=town_context.open_achievements
                                 user_unlocks=town_context.user_unlocks
                                 achievements=town_context.achievements
+                                achievements_progress=town_context.achievements_progress
                                 view_only=true
                             />
                             <SettingsModal open=town_context.open_settings />

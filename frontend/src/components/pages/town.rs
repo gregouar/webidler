@@ -137,6 +137,7 @@ pub fn TownPage() -> impl IntoView {
                     skill_mastery_skill_specs,
                     user_unlocks,
                     achievements,
+                    achievements_progress,
                     pets,
                 }) => {
                     if let UserCharacterActivity::Grinding(_, _) = character.activity {
@@ -159,6 +160,9 @@ pub fn TownPage() -> impl IntoView {
 
                     town_context.user_unlocks.set(user_unlocks);
                     town_context.achievements.set(achievements);
+                    town_context
+                        .achievements_progress
+                        .set(achievements_progress);
                     if let Some(character_stash) = character_stash {
                         town_context.character_stash.set(character_stash);
                     }

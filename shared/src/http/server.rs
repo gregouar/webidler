@@ -141,6 +141,9 @@ pub struct GetCharacterDetailsResponse {
     pub character_stash: Option<Stash>,
     pub user_stash: Option<Stash>,
     pub market_stash: Option<Stash>,
+
+    #[serde(default)]
+    pub achievements_progress: HashMap<String, u64>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
@@ -156,7 +159,6 @@ pub struct ReconcileAchievementsResponse {
     pub user_unlocks: UserUnlocks,
     pub achievements: HashMap<String, DateTime<Utc>>,
     pub newly_unlocked_achievements: Vec<String>,
-    // Specific to current character
     pub achievements_progress: HashMap<String, u64>,
 }
 

@@ -464,16 +464,25 @@ fn is_claimable(achievement: &AchievementSpecs, user_unlocks: &UserUnlocks) -> b
     })
 }
 
-pub fn are_rewards_available(user_unlock: RwSignal<UserUnlocks>) -> bool {
+pub fn are_rewards_available(
+    user_unlocks: RwSignal<UserUnlocks>,
+    character_achievements: Option<RwSignal<HashMap<String, DateTime<Utc>>>>,
+) -> bool {
     let data_context: DataContext = expect_context();
     let achievements = data_context.achievements.read();
-    let user_unlocks = user_unlock.read();
-    for achievement_id in user_unlocks.achievements.keys() {
-        if let Some(achievement) = achievements.get(achievement_id)
-            && is_claimable(achievement, &user_unlocks)
-        {
-            return true;
-        }
-    }
-    false
+
+    user_unlocks.with(|user_unlocks| match character_achievements {
+        Some(character_achievements) => character_achievements.with(|character_achievements| {
+            character_achievements.keys().any(|achievement_id| {
+                achievements
+                    .get(achievement_id)
+                    .is_some_and(|achievement| is_claimable(achievement, user_unlocks))
+            })
+        }),
+        None => user_unlocks.achievements.keys().any(|achievement_id| {
+            achievements
+                .get(achievement_id)
+                .is_some_and(|achievement| is_claimable(achievement, user_unlocks))
+        }),
+    })
 }

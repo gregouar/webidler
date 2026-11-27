@@ -309,6 +309,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 >
                     <AchievementsIcon class:text-amber-300=move || are_rewards_available(
                         town_context.user_unlocks,
+                        Some(town_context.achievements),
                     ) />
                 // <span class="inline xl:hidden">"Ach."</span>
                 // <span class="hidden xl:inline">"Achievements"</span>

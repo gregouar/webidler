@@ -471,17 +471,18 @@ pub fn DemonicIncense() -> impl IntoView {
             "Demonic Incense is extinguished.".to_string()
         };
 
-        let action_str = if game_context.area_specs.read().training {
-            ""
-        } else if area_state.area_level < area_state.max_area_level {
-            "Can only be lit at your highest beaten Area Level or higher."
-        } else if area_state.incense_lit {
-            "Click to Extinguish."
-        } else if area_state.is_boss {
-            "Cannot be lit on a Boss Level."
-        } else {
-            "Click to Light."
-        };
+        let action_str =
+            if game_context.area_specs.read().training || area_state.demonic_incense == 0 {
+                ""
+            } else if area_state.area_level < area_state.max_area_level {
+                "Can only be lit at your highest beaten Area Level or higher."
+            } else if area_state.incense_lit {
+                "Click to Extinguish."
+            } else if area_state.is_boss {
+                "Cannot be lit on a Boss Level."
+            } else {
+                "Click to Light."
+            };
 
         view! {
             <div class="flex w-72 max-w-[calc(100vw-2rem)] flex-col whitespace-normal break-words text-center text-sm xl:space-y-1">

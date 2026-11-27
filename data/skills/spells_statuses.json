@@ -12,7 +12,7 @@
                     "trigger_id"           : "spark",
                     "target"               : "Enemy",
                     "skill_type"           : "Spell",
-                    "skill_repeat"         : {"value": 1, "target": "Any", "repeat_cooldown": 0.3},
+                    "skill_repeat"         : {"value": 1, "target": "Any", "repeat_cooldown": 0.1},
                     "OnTick"               : {"tick_interval": 3},
                     "effects"              : [
                         {

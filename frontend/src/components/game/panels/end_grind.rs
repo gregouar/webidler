@@ -34,7 +34,7 @@ pub fn EndGrindPanel() -> impl IntoView {
     let open = game_context.open_end_grind;
 
     Effect::new(move || {
-        if game_context.grind_rewards.read().is_some() {
+        if game_context.grind_rewards.read().is_some() && !open.get_untracked() {
             open.set(true);
         }
     });

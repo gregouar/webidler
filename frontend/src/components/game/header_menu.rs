@@ -276,6 +276,7 @@ pub fn HeaderMenu() -> impl IntoView {
                 <MenuButton on:click=move |_| { open_achievements() } title="Achievements">
                     <AchievementsIcon class:text-amber-300=move || are_rewards_available(
                         game_context.user_unlocks,
+                        Some(game_context.achievements),
                     ) />
                 </MenuButton>
                 <TutorialPopup

@@ -183,6 +183,7 @@ pub fn UserDashboardPage() -> impl IntoView {
                     >
                         <AchievementsIcon class:text-amber-300=move || are_rewards_available(
                             user_unlocks,
+                            None,
                         ) />
                     </MenuButton>
                     <MenuButton on:click=move |_| {

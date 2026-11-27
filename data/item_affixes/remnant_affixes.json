@@ -47,8 +47,8 @@
     "restrictions": ["MeleeWeapon2H"],
     "item_level"  : 600,
     "effects"     : [
-      { "stat": {"RemoveSlotUse": "Shield"              }, "modifier": "Flat", "scope": "Local", "value":   1 },
-      { "stat": {                           "Damage": {}}, "modifier": "More", "scope": "Local", "value": -43 }
+      { "stat": {"RemoveSlotUse": "Shield"              }, "modifier": "Flat", "scope": "Local", "value":    1 },
+      { "stat": {                           "Damage": {}}, "modifier": "More", "scope": "Local", "value": -100 }
     ]
   },
   "remnant_crit_immune"           : {
