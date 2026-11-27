@@ -3,9 +3,11 @@
         "category"   : "Global",
         "icon"       : "achievements/big_gear.svg",
         "name"       : "Let the Grind begin",
-        "description": "Reach Player Level 70 during any Grind.",
-        "goals"      : [ {"PlayerLevel": 70} ],
-        "rewards"    : [ {"Pet": "pet_chicken"} ]
+        "description": "Complete the Inn Basement Quest.",
+        "goals"      : [
+            { "AreaLevel": {"value": 50, "area_id": "inn_basement.json"} }
+        ],
+        "rewards": [ {"Pet": "pet_rat"} ]
     },
     "all_base_areas"         : {
         "category"   : "Global",
@@ -73,7 +75,7 @@
         "goals"      : [
             { "PassiveLevel": {"value": 1, "amount": 70} }
         ],
-        "rewards": [ {"Pet": "pet_rat"} ]
+        "rewards": [ {"Pet": "pet_chicken"} ]
     },
     "all_max_passives"       : {
         "category"   : "Global",

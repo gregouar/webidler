@@ -3,7 +3,7 @@ use shared::{
     constants::ARMOR_FACTOR,
     data::{
         character::{CharacterAttrs, CharacterId, CharacterState},
-        character_status::{StatusEffectType, StatusId},
+        character_status::{StatusEffectType, StatusId, StatusState},
         item::{ItemSlot, SkillRange},
         modifier::{BaseModifiableValue, ModifiableValue},
         player::CharacterSpecs,
@@ -469,22 +469,17 @@ pub fn apply_status(
             status_stacks.push(statuses_controller::initialize_status_state(
                 attacker, skill_type, *value, *duration, escalation,
             ));
-        } else if let Some(cur_status_state) = status_stacks.iter_mut().find(|cur_status_state| {
-            compute_effect_weight(*value, *duration, escalation, false)
-                > compute_effect_weight(
-                    cur_status_state.base_value,
-                    cur_status_state.duration,
-                    cur_status_state.escalation,
-                    false,
-                )
-        }) {
-            cur_status_state.owner = attacker;
-            cur_status_state.base_value = *value;
-            cur_status_state.value = *value;
-            cur_status_state.duration = *duration;
-            cur_status_state.escalation = escalation;
-            cur_status_state.max_duration = *duration;
-            cur_status_state.skill_type = skill_type;
+        } else if let Some((weakest_status_state, weakest_weight)) =
+            weakest_status_stack(status_stacks)
+            && compute_effect_weight(*value, *duration, escalation, false) > weakest_weight
+        {
+            weakest_status_state.owner = attacker;
+            weakest_status_state.base_value = *value;
+            weakest_status_state.value = *value;
+            weakest_status_state.duration = *duration;
+            weakest_status_state.escalation = escalation;
+            weakest_status_state.max_duration = *duration;
+            weakest_status_state.skill_type = skill_type;
         } else {
             applied = false;
         }
@@ -558,6 +553,21 @@ fn compute_effect_weight(
     } else {
         value * duration.get().min(99999.0)
     }
+}
+
+fn weakest_status_stack(status_stacks: &mut [StatusState]) -> Option<(&mut StatusState, f64)> {
+    status_stacks
+        .iter_mut()
+        .map(|status_state| {
+            let weight = compute_effect_weight(
+                status_state.base_value,
+                status_state.duration,
+                status_state.escalation,
+                false,
+            );
+            (status_state, weight)
+        })
+        .min_by(|(_, left_weight), (_, right_weight)| left_weight.total_cmp(right_weight))
 }
 
 pub fn refresh_status_cooldown(

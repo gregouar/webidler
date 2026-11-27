@@ -557,25 +557,23 @@ fn handle_kill_event(
                 return;
             };
 
-            if monster_state.character_state.resurrected {
-                return;
+            if !monster_state.character_state.resurrected {
+                game_data.game_stats.monsters_killed += 1;
+                if monster_specs.rarity == MonsterRarity::Champion {
+                    game_data.game_stats.champion_monsters_killed += 1;
+                }
+
+                let (gold_reward, gems_reward) = player_controller::reward_player(
+                    game_data.player_resources.mutate(),
+                    game_data.player_specs.read(),
+                    monster_specs,
+                    &game_data.area_specs,
+                    game_data.area_state.mutate(),
+                );
+
+                monster_state.gold_reward = gold_reward;
+                monster_state.gems_reward = gems_reward;
             }
-
-            game_data.game_stats.monsters_killed += 1;
-            if monster_specs.rarity == MonsterRarity::Champion {
-                game_data.game_stats.champion_monsters_killed += 1;
-            }
-
-            let (gold_reward, gems_reward) = player_controller::reward_player(
-                game_data.player_resources.mutate(),
-                game_data.player_specs.read(),
-                monster_specs,
-                &game_data.area_specs,
-                game_data.area_state.mutate(),
-            );
-
-            monster_state.gold_reward = gold_reward;
-            monster_state.gems_reward = gems_reward;
 
             for (trigger, owned_triggers) in game_data
                 .player_specs

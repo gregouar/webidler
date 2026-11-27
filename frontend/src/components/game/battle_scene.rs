@@ -552,7 +552,7 @@ pub fn DemonicIncense() -> impl IntoView {
                             }
                             alt="Demonic Incense"
                             class="pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2
-                            w-14 xl:w-24 max-w-none object-contain"
+                            w-14 xl:w-24 max-w-none object-contain drop-shadow-lg"
                         />
                     </button>
                 </TutorialPopup>

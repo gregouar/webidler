@@ -646,6 +646,7 @@ pub fn format_skill_effect(
                         trigger_status_value,
                         triggering_status,
                     );
+                    let value_str = trigger_modifier_str.is_none().then(|| format_min_max(value));
                     let unblockable_str = unblockable.then_some("Unblockable ");
                     if value.max.get() > 0.0 || trigger_modifier_str.is_some() {
                         damage_lines
@@ -655,7 +656,7 @@ pub fn format_skill_effect(
                                         {success_chance}"Hit for "
                                         <span class=format!(
                                             "font-semibold {damage_color}",
-                                        )>{format_min_max(value)}</span> {trigger_modifier_str}" "
+                                        )>{value_str}</span> {trigger_modifier_str}" "
                                         {unblockable_str} {damage_type_str(Some(damage_type))}
                                         "Damage"
                                     </EffectLi>
